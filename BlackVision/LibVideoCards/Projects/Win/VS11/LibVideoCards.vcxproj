@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\Channel.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoCapture.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
+    <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
+    <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\Channel.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoBuffer.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoCapture.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoCardManagerUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
+      <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\TCPServer\Projects\Win\VS11\TCPServer.vcxproj">
+      <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C3A7884F-3133-4C87-ACE7-B8BC935426CC}</ProjectGuid>
+    <RootNamespace>LibVideoCards</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>VideoCardsD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>VideoCardsD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>VideoCards</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>VideoCards</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

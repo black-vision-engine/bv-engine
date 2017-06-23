@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Project.cpp" />
+    <ClCompile Include="..\..\..\Source\ProjectManager.cpp" />
+    <ClCompile Include="..\..\..\Source\SceneDescriptor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\AssetCategory.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\MeshAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
+    <ClInclude Include="..\..\..\Source\Project.h" />
+    <ClInclude Include="..\..\..\Source\ProjectManager.h" />
+    <ClInclude Include="..\..\..\Source\SceneDescriptor.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9FA5A3B8-FA25-4AA0-A3AC-DFCA1283D6D2}</ProjectGuid>
+    <RootNamespace>LibProjectManager</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>LibProjectManagerD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>LibProjectManagerD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>LibProjectManager</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>LibProjectManager</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

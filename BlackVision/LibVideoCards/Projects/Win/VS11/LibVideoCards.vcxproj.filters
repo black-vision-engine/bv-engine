@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Models">
+      <UniqueIdentifier>{c37bbb49-1d14-4b2c-bb13-4557dc6562b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models\BlackMagic">
+      <UniqueIdentifier>{a2673a93-5fdf-4dc9-90da-ae3ae07d209a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models\BlueFish">
+      <UniqueIdentifier>{8d68cc69-43b9-4206-be28-41a412ead2cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{889608f3-1e44-4bad-8852-04d42962c23a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoCapture.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoBuffer.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\Channel.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h">
+      <Filter>Models\BlackMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h">
+      <Filter>Models\BlackMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h">
+      <Filter>Models\BlackMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h">
+      <Filter>Models\BlackMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.h">
+      <Filter>Models\BlackMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoCapture.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoBuffer.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\Channel.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c">
+      <Filter>Models\BlackMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp">
+      <Filter>Models\BlackMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoCardManagerUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp">
+      <Filter>Models\BlackMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp">
+      <Filter>Models\BlackMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.cpp">
+      <Filter>Models\BlackMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

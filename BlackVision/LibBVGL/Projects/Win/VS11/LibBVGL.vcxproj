@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVGL.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLPluginFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\BVGLResourceTrackingPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingAggregates.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingDescriptors.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\TrackableResources.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp" />
+    <ClCompile Include="..\..\..\Source\GLCore\src\glad.c">
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVGL.h" />
+    <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLPluginFactory.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\BVGLResourceTrackingPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingAggregates.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingDescriptors.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\TrackableResources.h" />
+    <ClInclude Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.h" />
+    <ClInclude Include="..\..\..\Source\BVGLTools\BVGLTranslator.h" />
+    <ClInclude Include="..\..\..\Source\GLCore\include\glad\glad.h" />
+    <ClInclude Include="..\..\..\Source\GLCore\include\KHR\khrplatform.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B0E6C314-5B08-40F7-87EF-17141A389BA5}</ProjectGuid>
+    <RootNamespace>LibBVGL</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>LibBVGLD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>LibBVGLD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>LibBVGL</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>LibBVGL</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\Source\GLCore\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\CoreEnums.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h" />
+    <ClInclude Include="..\..\..\Source\CoreDEF.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\CircularBufferConcurrent.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Deque.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Hash.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Queue.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrentLimited.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Semaphore.h" />
+    <ClInclude Include="..\..\..\Source\DeclareWinTypes.h" />
+    <ClInclude Include="..\..\..\Source\Expected.h" />
+    <ClInclude Include="..\..\..\Source\IO\DirIO.h" />
+    <ClInclude Include="..\..\..\Source\IO\FileIO.h" />
+    <ClInclude Include="..\..\..\Source\IO\NamedPipe.h" />
+    <ClInclude Include="..\..\..\Source\IO\SharedMemoryBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
+    <ClInclude Include="..\..\..\Source\Memory\AVFrame.h" />
+    <ClInclude Include="..\..\..\Source\Memory\LinearAllocator.h" />
+    <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
+    <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\stdafxCore.h" />
+    <ClInclude Include="..\..\..\Source\System\Env.h" />
+    <ClInclude Include="..\..\..\Source\System\InitSubsystem.h" />
+    <ClInclude Include="..\..\..\Source\System\Path.h" />
+    <ClInclude Include="..\..\..\Source\System\Time.h" />
+    <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
+    <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
+    <ClInclude Include="..\..\..\Source\Threading\StoppableThread.h" />
+    <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Base64.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h" />
+    <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h" />
+    <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
+    <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
+    <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
+    <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\Util\Audio\AudioUtils.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h" />
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h" />
+    <ClInclude Include="..\..\..\Source\Util\IEventServer.h" />
+    <ClInclude Include="..\..\..\Source\Util\IObservable.h" />
+    <ClInclude Include="..\..\..\Source\Util\IObserver.h" />
+    <ClInclude Include="..\..\..\Source\Util\Observable.h" />
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp" />
+    <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp" />
+    <ClCompile Include="..\..\..\Source\IO\DirIO.cpp" />
+    <ClCompile Include="..\..\..\Source\IO\FileIO.cpp" />
+    <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp" />
+    <ClCompile Include="..\..\..\Source\IO\SharedMemoryBuffer.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
+    <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp" />
+    <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp" />
+    <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp" />
+    <ClCompile Include="..\..\..\Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Env.cpp" />
+    <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp" />
+    <ClCompile Include="..\..\..\Source\System\Path.cpp" />
+    <ClCompile Include="..\..\..\Source\System\Time.cpp" />
+    <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
+    <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
+    <ClCompile Include="..\..\..\Source\Threading\StoppableThread.cpp" />
+    <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Base64.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\Audio\AudioUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Util\Observable.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
+    <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}</ProjectGuid>
+    <RootNamespace>LibCore</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>LibCoreD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>LibCoreD</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>LibCore</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>LibCore</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderFile>stdafxCore.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

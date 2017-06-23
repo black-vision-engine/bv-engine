@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4F825938-1541-4001-B161-C6FDF38F8CA7}</ProjectGuid>
+    <RootNamespace>EnginePrototyper</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS11\LibWindowApp.vcxproj">
+      <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
+      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
+    <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype3.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\TexturesDataImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Multipass\MultipassTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototypeBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\BaseTextureTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DArrayTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DArrayTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture3DTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeArrayTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\VBOCube.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h" />
+    <ClInclude Include="..\..\..\Source\Common\PrototyperCore.h" />
+    <ClInclude Include="..\..\..\Source\Common\VBORect.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IRenderable.h" />
+    <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype3.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\TexturesDataImpl.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Multipass\MultipassTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototypeBase.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\BaseTextureTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DArrayTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DArrayTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture3DTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeArrayTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeTest.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\VBOCube.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DataTypes">
+      <UniqueIdentifier>{154b5666-6116-46ba-b1a4-b2573c6628ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{d8434119-e378-41d7-9858-55a53128efeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{b4acd7b5-653f-4a89-9f10-8c5edfe415cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{003cdea1-18ac-4c44-b42c-f285f12f5d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{f4b1aaa9-24f3-4bfe-9541-de481c7430de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{acaec9cd-6541-4c9d-b24d-30491987af65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Logger">
+      <UniqueIdentifier>{486e0344-793b-4e99-a7ab-70c551821e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Profiler">
+      <UniqueIdentifier>{9d5799c7-b685-4bd8-8d11-3be2322f86e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{65e8b6fd-9954-403b-afb9-796cfe42452d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization">
+      <UniqueIdentifier>{096691c0-1b91-409d-a3bb-9c50c39f62de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\XML">
+      <UniqueIdentifier>{c09a5317-3f03-4950-b688-edd1cfe4a1b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mathematics">
+      <UniqueIdentifier>{685a3969-2774-4166-8983-7caa43abd050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mathematics\Core">
+      <UniqueIdentifier>{e6820752-5089-4e3a-92bc-a517e579bc30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mathematics\Util">
+      <UniqueIdentifier>{cdcfc625-fb5c-44f1-8df4-1917a89c654a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\FFmpeg">
+      <UniqueIdentifier>{8764c851-0fbb-4183-9db8-a70287735211}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\Audio">
+      <UniqueIdentifier>{1c391b13-e8f4-414a-9fb1-fe0b9a91ff38}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\CoreDEF.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Hash.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Queue.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\DirIO.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\FileIO.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\HRTimer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\Thread.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Env.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\InitSubsystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Utils.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h">
+      <Filter>Tools\Profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Path.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Base64.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Time.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Expected.h" />
+    <ClInclude Include="..\..\..\Source\Util\Observable.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\IObserver.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\IObservable.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
+      <Filter>Serialization\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h">
+      <Filter>Serialization\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DeclareWinTypes.h" />
+    <ClInclude Include="..\..\..\Source\Memory\LinearAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrentLimited.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Semaphore.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\CircularBufferConcurrent.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Deque.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\SharedMemoryBuffer.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\StoppableThread.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h">
+      <Filter>Mathematics\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
+      <Filter>Mathematics\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\AVFrame.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\FFmpeg\FFmpegDef.h">
+      <Filter>Util\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\CoreEnums.h" />
+    <ClInclude Include="..\..\..\Source\Util\IEventServer.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Util\Audio\AudioUtils.h">
+      <Filter>Util\Audio</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\stdafxCore.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
+      <Filter>DataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\DirIO.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\FileIO.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\Thread.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Env.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Utils.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp">
+      <Filter>Tools\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Path.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp">
+      <Filter>Tools\Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Base64.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Time.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\Observable.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp">
+      <Filter>Serialization\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
+      <Filter>Serialization\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\stdafx.cpp" />
+    <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\SharedMemoryBuffer.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\StoppableThread.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp">
+      <Filter>Mathematics\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp">
+      <Filter>Mathematics\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
+      <Filter>Mathematics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
+      <Filter>Mathematics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegUtils.cpp">
+      <Filter>Util\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\FFmpeg\FFmpegPacket.cpp">
+      <Filter>Util\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Util\Audio\AudioUtils.cpp">
+      <Filter>Util\Audio</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">
+      <Filter>Tools\Profiler</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
+      <Filter>Serialization</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_PropertySheetDisplayName>Lib_3rdParty</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalLibraryDirectories>$(BOOST_LIB)\msvs-11-$(PlatformName)-$(Configuration);$(ThirdPartyDir)\FreeType\Dist\msvc-11\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\FreeImage\Dist\msvc-11\$(PlatformName);$(ThirdPartyDir)\hashlib2plus\Dist\msvc-11\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\sqlite\Dist\msvc-11\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\FFmpeg\lib\$(PlatformName);$(ThirdPartyDir)\jsoncpp\lib\msvc-11\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\FBX\lib\$(PlatformName);$(ThirdPartyDir)\OpenAL\lib\$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)'=='Debug'">sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;libboost_chrono.lib;libboost_date_time.lib;libboost_regex.lib;libboost_log.lib;libboost_log_setup.lib;winmm.lib;jsoncpp.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;libfbxsdk.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)'=='Release'">sqlite.lib;hashlib2plus.lib;freetype250.lib;opengl32.lib;glu32.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;libboost_chrono.lib;libboost_date_time.lib;libboost_regex.lib;libboost_log.lib;libboost_log_setup.lib;winmm.lib;jsoncpp.lib;avcodec.lib;avformat.lib;avutil.lib;swscale.lib;swresample.lib;libfbxsdk.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile />
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
