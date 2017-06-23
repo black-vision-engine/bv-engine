@@ -7,8 +7,6 @@
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
-#include <glm/gtx/vector_angle.hpp>
-
 #include <cmath>
 #include <map>
 #include <algorithm>

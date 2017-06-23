@@ -9,7 +9,7 @@
 
 #include "DataTypes/Hash.h"
 
-#include <glm/gtc/type_ptr.hpp>
+#include "Mathematics/glm_inc.h"
 
 
 #include "Memory/MemoryLeaks.h"

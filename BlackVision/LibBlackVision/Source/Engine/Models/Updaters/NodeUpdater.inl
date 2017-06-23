@@ -1,12 +1,9 @@
-#define GLM_FORCE_SSE2
-
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/BoundingVolume.h"
 #include "UpdatersHelpers.h"
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h" // FIXME
 
-#include "glm/gtx/simd_mat4.hpp"
 
 
 namespace bv {

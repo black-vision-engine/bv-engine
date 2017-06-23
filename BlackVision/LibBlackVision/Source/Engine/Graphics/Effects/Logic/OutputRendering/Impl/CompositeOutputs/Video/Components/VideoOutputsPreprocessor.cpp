@@ -143,7 +143,7 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
 
         m_avFramesBuffer[ vic ] = boost::circular_buffer< AVFramePtr >( BUFFER_SIZE );
 
-        for( SizeType i = 0; i < BUFFER_SIZE; ++i )
+        for( SizeType j = 0; j < BUFFER_SIZE; ++j )
         {
             auto avFrame = AVFrame::Create();
             avFrame->m_audioData = MemoryChunk::Create( audioFrameSize );

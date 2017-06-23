@@ -1,6 +1,6 @@
 #include "PolylineValidator.h"
 
-#include "glm/glm.hpp"
+#include "glm.hpp"
 
 #include <algorithm>
 

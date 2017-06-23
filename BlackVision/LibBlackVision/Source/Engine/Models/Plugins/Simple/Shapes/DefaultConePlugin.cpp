@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "DefaultConePlugin.h"
-#include "glm/gtx/vector_angle.hpp"
+#include "Mathematics/glm_inc.h"
 
 #include "Memory/MemoryLeaks.h"
 

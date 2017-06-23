@@ -288,11 +288,11 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 			//	<< m_outQueue.Size();
 			
 			{	// Removing to old frames from the out queue. (older than 150 miliseconds are removed)
-				AVMediaData data;
+				AVMediaData oldData;
 
                 auto s = m_outQueue.Size();
 
-				m_outQueue.TryPopUntil( data, [ = ] ( const AVMediaData & avm )
+				m_outQueue.TryPopUntil( oldData, [ = ] ( const AVMediaData & avm )
 				{
 					return avm.framePTS + 100 < time;
 				} );
