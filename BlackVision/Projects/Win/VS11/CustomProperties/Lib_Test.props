@@ -7,9 +7,9 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(ThirdPartyDir)\gtest\Lib\msvc-11\$(PlatformName);$(ThirdPartyDir)\unittest-cpp\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+	  <AdditionalLibraryDirectories>$(ThirdPartyDir)\gtest\Lib\msvc-14\$(PlatformName);$(ThirdPartyDir)\unittest-cpp\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies Condition="'$(Configuration)'=='Debug'">gtestD.lib;UnitTest++.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies Condition="'$(Configuration)'=='Release'">gtest.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)'=='Release'">gtest.lib;UnitTest++.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile />
   </ItemDefinitionGroup>
