@@ -19,28 +19,28 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\_Builds\x64-v110-Debug\Applications\ProfilerEditor\</OutputPath>
-    <BaseIntermediateOutputPath>..\..\_Temp\x64-v110-Debug\Applications\ProfilerEditor\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\_Builds\x64-v140-Debug\Applications\ProfilerEditor\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\_Temp\x64-v140-Debug\Applications\ProfilerEditor\</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <IntermediateOutputPath>..\..\_Temp\x64-v110-Debug\Applications\ProfilerEditor\</IntermediateOutputPath>
+    <IntermediateOutputPath>..\..\_Temp\x64-v140-Debug\Applications\ProfilerEditor\</IntermediateOutputPath>
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\_Builds\x64-v110-Release\Applications\ProfilerEditor\</OutputPath>
-    <BaseIntermediateOutputPath>..\..\_Temp\x64-v110-Release\Applications\ProfilerEditor\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\_Builds\x64-v140-Release\Applications\ProfilerEditor\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\_Temp\x64-v140-Release\Applications\ProfilerEditor\</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <IntermediateOutputPath>..\..\_Temp\x64-v110-Release\Applications\ProfilerEditor\</IntermediateOutputPath>
+    <IntermediateOutputPath>..\..\_Temp\x64-v140-Release\Applications\ProfilerEditor\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DetectLeaks|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
