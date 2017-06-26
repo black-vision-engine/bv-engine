@@ -7,6 +7,7 @@ syntax: glob
 BlackVision/_Builds/*
 BlackVision/_Temp/*
 BlackVision/Dep/3rdParty/NuGetPackages/
+BlackVision/TestReports/
 *.nvuser
 app/cache/*
 *.orig

@@ -8,13 +8,15 @@ set scriptDirectory=%~dp0
 set testOutputDir=%4
 set consoleReport=""
 
+if "%4"=="" set consoleReport=-ReportToConsole
+
 
 cd %scriptDirectory%
 
 set TEST_EXECUTABLES_DIRECTORY=_Builds\%arch%-%toolset%-%configuration%\Tests\
 
 
-cd %TEST_EXECUTABLES_DIRECTORY%
+cd %scriptDirectory%%TEST_EXECUTABLES_DIRECTORY%
 
 for /r %%g in (*.exe) do (
 	set fileDir=%%~dpg
@@ -25,7 +27,7 @@ for /r %%g in (*.exe) do (
 	echo Working directory: !fileDir!
 	
 	echo Executing test: !fileName!
-	call !fileWithExt! -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog
+	call !fileWithExt! -o %scriptDirectory%%testOutputDir%!fileName!.xml -FileLog %scriptDirectory%%testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog %consoleReport%
 	echo Execution ended
 	
 	cd %scriptDirectory%%TEST_EXECUTABLES_DIRECTORY%
