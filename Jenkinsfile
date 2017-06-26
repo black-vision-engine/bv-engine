@@ -106,7 +106,7 @@ node {
     def buildDir = 'BlackVision\\_Builds\\'
     def tempDir = 'BlackVision\\_Temp\\'
     
-    def testResPath = 'test_reports'
+    def testResPath = 'TestReports'
     
     def configurations = ['Debug', 'Release']
     def platforms = ['Win32', 'x64']
@@ -176,7 +176,7 @@ node {
     		
     		//make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
     		
-     	    generate_tests_report( testResPath	)
+     	    generate_tests_report( "BlackVision\\" + testResPath )
         } catch( e ){
             currentBuild.result = "FAILED"
             throw e
