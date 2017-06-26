@@ -29,15 +29,15 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
 }
 
 def get_tests_dir( buildDir, conf, platform ) {
-     return buildDir + platform + '-v110-' + conf + '\\Tests\\'
+     return buildDir + platform + '-v140-' + conf + '\\Tests\\'
 }
 
 def get_app_dir( buildDir, conf, platform ) {
-     return buildDir + platform + '-v110-' + conf + '\\Applications\\'
+     return buildDir + platform + '-v140-' + conf + '\\Applications\\'
 }
 
 def get_auto_tester_path( buildDir, conf, platform ) {
-     return buildDir + platform + '-v110-' + conf + '\\DevTools\\AutomaticTester\\AutomaticTester.exe'
+     return buildDir + platform + '-v140-' + conf + '\\DevTools\\AutomaticTester\\AutomaticTester.exe'
 }
 
 def make_auto_tests( buildDir, conf, platform, outputDir ) {
@@ -56,7 +56,7 @@ def make_auto_tests( buildDir, conf, platform, outputDir ) {
 def make_build( conf, platform ) {
     def info = conf + '|' + platform
     echo 'Building ' + info
-	bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS11\\BlackVision.sln /p:Configuration=\"" + conf + "\" /maxcpucount:4 /p:Platform=\"" + platform + "\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
+	bat "\"${tool 'MSBuild'}\" BlackVision\\Projects\\Win\\VS14\\BlackVision.sln /p:Configuration=\"" + conf + "\" /maxcpucount:4 /p:Platform=\"" + platform + "\" /p:ProductVersion=1.0.0.${env.BUILD_NUMBER}"
 	echo 'Building ' + info + ' FINISHED'
 }
 
@@ -71,7 +71,7 @@ def list_test_execs( buildDir, conf, platform ) {
 }
 
 def make_archive( buildDir, conf, platform, fEnabled ) {
-    def d = buildDir + conf + '-v110-' + platform
+    def d = buildDir + conf + '-v140-' + platform
     def includes_app = get_app_dir( buildDir, conf, platform ) + '/**'
     def includes_tests = get_tests_dir( buildDir, conf, platform ) + '/**'
     archiveArtifacts artifacts: includes_app, fingerprint: fEnabled
@@ -147,7 +147,7 @@ node {
         }
   	}
 	//stage('Open BV') {
-	//	def bvExecutablePath = buildDir + currentPlatform + "-v110-" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
+	//	def bvExecutablePath = buildDir + currentPlatform + "-v140-" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
 	//	
 	//	copyFile( 'BlackVision\\Test\\Configs\\DefaultConfig.xml', get_app_dir( buildDir, currentConfiguration, currentPlatform ) + 'BlackVision\\config.xml' )
 	//	
@@ -172,7 +172,7 @@ node {
      		//    }
      		//}
 			
-			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v110 ' + testResPath + '/'
+			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
     		
     		//make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
     		
