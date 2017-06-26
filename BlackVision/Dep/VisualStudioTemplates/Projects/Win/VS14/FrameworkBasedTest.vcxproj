@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{03C7685D-8541-413A-9BA9-74E9A6E32788}</ProjectGuid>
-    <RootNamespace>TestTestFramework</RootNamespace>
-    <ProjectName>TestTestFramework</ProjectName>
+    <RootNamespace>FrameworkBasedTest</RootNamespace>
+    <ProjectName>FrameworkBasedTest_Rename_me</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -121,10 +121,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\main.cpp" />
-    <ClCompile Include="..\..\..\Source\NonFrameworkTest.cpp" />
-    <ClCompile Include="..\..\..\Source\SecondTest.cpp" />
-    <ClCompile Include="..\..\..\Source\TestTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

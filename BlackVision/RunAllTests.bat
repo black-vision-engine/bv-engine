@@ -13,10 +13,11 @@ if "%4"=="" set consoleReport=-ReportToConsole
 
 cd %scriptDirectory%
 
-set TEST_EXECUTABLES_DIRECTORY=_Builds\%arch%-%toolset%-%configuration%\Tests\
+set GTEST_EXECUTABLES_DIRECTORY=_Builds\%arch%-%toolset%-%configuration%\Tests\GTest\
+set FRAMEWORKTEST_EXECUTABLES_DIRECTORY=_Builds\%arch%-%toolset%-%configuration%\Tests\Framework\
 
 
-cd %scriptDirectory%%TEST_EXECUTABLES_DIRECTORY%
+cd %scriptDirectory%%FRAMEWORKTEST_EXECUTABLES_DIRECTORY%
 
 for /r %%g in (*.exe) do (
 	set fileDir=%%~dpg
@@ -30,6 +31,9 @@ for /r %%g in (*.exe) do (
 	call !fileWithExt! -o %scriptDirectory%%testOutputDir%!fileName!.xml -FileLog %scriptDirectory%%testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog %consoleReport%
 	echo Execution ended
 	
-	cd %scriptDirectory%%TEST_EXECUTABLES_DIRECTORY%
+	cd %scriptDirectory%%FRAMEWORKTEST_EXECUTABLES_DIRECTORY%
 )
+
+
+
 
