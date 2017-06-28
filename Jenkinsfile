@@ -81,8 +81,8 @@ def make_archive( buildDir, conf, platform, fEnabled ) {
 def generate_tests_report( testResPath ) {
     step([$class: 'XUnitBuilder',
     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-    tools: [[$class: 'JUnitType', pattern: testResPath + '/*.xml'],
-			[$class: 'UnitTest++Type', pattern: testResPath + '/*.xml']]])
+    tools: [[$class: 'GooogleTestType', pattern: testResPath + '/*.xml'],
+			[$class: 'CppUnitType', pattern: testResPath + '/*.xml']]])
 }
 
 def copyFile( src, dest ) {
