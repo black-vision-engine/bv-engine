@@ -81,7 +81,8 @@ def make_archive( buildDir, conf, platform, fEnabled ) {
 def generate_tests_report( testResPath ) {
     step([$class: 'XUnitBuilder',
     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-    tools: [[$class: 'JUnitType', pattern: testResPath + '/*.xml']]])
+    tools: [[$class: 'JUnitType', pattern: testResPath + '/*.xml'],
+			[$class: 'GoogleTestType', pattern: testResPath + '/*.xml']]])
 }
 
 def copyFile( src, dest ) {
@@ -114,13 +115,13 @@ node {
     def currentConfiguration = configurations[0]
     def currentPlatform = platforms[1]
     
-    stage('Clean') {
-        removeDir( buildDir )
-        removeDir( tempDir )
-        removeDir( testResPath )
-        removeDir( 'generatedJUnitFiles' )
-        removeDir( 'DefaultPMDir' )
-    }
+    //stage('Clean') {
+    //    removeDir( buildDir )
+    //    removeDir( tempDir )
+    //    removeDir( testResPath )
+    //    removeDir( 'generatedJUnitFiles' )
+    //    removeDir( 'DefaultPMDir' )
+    //}
      stage('Build') {
         try {
             notifyBuild('STARTED', 'Build')
