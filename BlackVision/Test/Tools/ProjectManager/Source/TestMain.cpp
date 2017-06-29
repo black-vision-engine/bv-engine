@@ -178,9 +178,9 @@ TEST( AddingProjects, ProjectManager )
 
 TEST( AddingAssets, ProjectManager )
 {
-	g_pm0->AddAsset( "proj00", "textures", "flagi/pol.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
-	g_pm0->AddAsset( "proj01", "textures", "flagi/ger.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
-	g_pm0->AddAsset( "proj02", "textures", "flagi/rus.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
+	g_pm0->AddAsset( "proj00", "textures", "flagi/pol.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/checker.png", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
+	g_pm0->AddAsset( "proj01", "textures", "flagi/ger.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/checker.png", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
+	g_pm0->AddAsset( "proj02", "textures", "flagi/rus.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/checker.png", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 
 	auto assets = g_pm0->ListAssetsPaths( "", "", "", true );
 
