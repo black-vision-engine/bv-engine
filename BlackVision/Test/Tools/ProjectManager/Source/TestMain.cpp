@@ -200,22 +200,22 @@ TEST( AddingScene, ProjectManager )
     g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
 }
 
-TEST( ExportingProject, ProjectManager )
-{
-    g_pm0->ExportProjectToFile( "proj00", "test.exp" );
-}
+//TEST( ExportingProject, ProjectManager )
+//{
+//    g_pm0->ExportProjectToFile( "proj00", "test.exp" );
+//}
 
 TEST( ExportingScene, ProjectManager )
 {
     g_pm0->ExportSceneToFile( "proj00", "scene1/s.scn", "exported_scene1.exp" );
 }
 
-TEST( RemovingUnusedAssets, ProjectManager )
-{
-    g_pm0->RemoveUnusedAssets( "proj01", "textures" );
-    g_pm0->RemoveUnusedAssets( "proj00" );
-    g_pm0->RemoveUnusedAssets();
-}
+//TEST( RemovingUnusedAssets, ProjectManager )
+//{
+//    g_pm0->RemoveUnusedAssets( "proj01", "textures" );
+//    g_pm0->RemoveUnusedAssets( "proj00" );
+//    g_pm0->RemoveUnusedAssets();
+//}
 
 TEST( SavingPresets, ProjectManager )
 {
@@ -234,7 +234,8 @@ TEST( ListingPresets, ProjectManager )
 
 TEST( LoadingPresets, ProjectManager )
 {
-    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", nullptr ) != nullptr ); // FIXME: 
+    //auto timeline = bv::model::OffsetTimeEvaluator::Create( "Dummy", 0.0f );
+    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", nullptr/*timeline */) != nullptr ); // FIXME: 
 }
 
 TEST( CreatingSecondPM, ProjectManager )
@@ -270,11 +271,11 @@ TEST( ImportingScene, ProjectManager )
     g_pm1->ImportSceneFromFile( "proj01", "scene1exp/s.scn", "exported_scene1.exp" );
 }
 
-TEST( ImportingProject, ProjectManager )
-{
-    g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
-    g_pm1->ImportProjectFromFile( "test.exp", "proj01" );
-}
+//TEST( ImportingProject, ProjectManager )
+//{
+//    g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
+//    g_pm1->ImportProjectFromFile( "test.exp", "proj01" );
+//}
 
 int main( int argc, char **argv )
 {
