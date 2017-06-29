@@ -6,7 +6,7 @@
 
 #include "UnitTest++.h"
 #include "TestReporterStdout.h"
-#include "XmlTestReporter.h"
+#include "XmlGTestReporter.h"
 
 #include "MultiframeTestRunner.h"
 

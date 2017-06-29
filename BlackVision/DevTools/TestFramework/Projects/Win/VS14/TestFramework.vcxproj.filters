@@ -21,6 +21,9 @@
     <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -36,6 +39,9 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Framework\MultiframeTestRunner.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Framework\XmlGTestReporter.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>

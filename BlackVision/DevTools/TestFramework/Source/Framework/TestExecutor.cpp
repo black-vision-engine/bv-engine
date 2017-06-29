@@ -11,7 +11,7 @@ namespace bv
 // Note: initialization order matters.
 TestExecutor::TestExecutor      ( BVTestAppLogic * appLogic, UnitTest::Test * test, const std::string & filePath )
     :   m_resultFile( File::Open( filePath, File::OpenMode::FOMReadWrite ) )
-    ,   m_reporter( new UnitTest::XmlTestReporter( *m_resultFile.StreamBuf() ) )
+    ,   m_reporter( new UnitTest::XmlGTestReporter( *m_resultFile.StreamBuf() ) )
     ,   m_runner( *m_reporter )
     ,   m_testList( test )
     ,   m_curTest( test )
@@ -24,7 +24,7 @@ TestExecutor::TestExecutor      ( BVTestAppLogic * appLogic, UnitTest::Test * te
 // Note: initialization order matters.
 TestExecutor::TestExecutor      ( BVTestAppLogic * appLogic, UnitTest::Test * test, const std::string & filePath, bool reportStdOut )
     : m_resultFile( File::Open( filePath, File::OpenMode::FOMReadWrite ) )
-    , m_reporter( reportStdOut ? ( UnitTest::TestReporter * )new UnitTest::TestReporterStdout() : ( UnitTest::TestReporter * )new UnitTest::XmlTestReporter( *m_resultFile.StreamBuf() ) )
+    , m_reporter( reportStdOut ? ( UnitTest::TestReporter * )new UnitTest::TestReporterStdout() : ( UnitTest::TestReporter * )new UnitTest::XmlGTestReporter( *m_resultFile.StreamBuf() ) )
     , m_runner( *m_reporter )
     , m_testList( test )
     , m_curTest( test )
