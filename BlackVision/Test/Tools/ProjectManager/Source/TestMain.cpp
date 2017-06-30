@@ -49,6 +49,9 @@ bv::model::SceneModelPtr CreateTestScene0()
 	auto timeline = scene->GetTimeline();
 
     model::TimelineManager::GetInstance()->AddTimeline( timeline );
+    
+    auto defaultTimeline = bv::model::OffsetTimeEvaluator::Create( "default", 0.0f );
+    model::TimelineManager::GetInstance()->AddTimelineToTimeline( defaultTimeline, timeline );
 
     std::vector< model::IPluginDescriptor * > descriptors;
 
@@ -234,8 +237,12 @@ TEST( ListingPresets, ProjectManager )
 
 TEST( LoadingPresets, ProjectManager )
 {
-    auto timeline = bv::model::OffsetTimeEvaluator::Create( "Dummy", 0.0f );
-    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", timeline ) != nullptr ); // FIXME: 
+    auto scene = CreateTestScene0();
+    auto timeline = bv::model::TimelineManager::GetInstance()->GetTimeEvaluator( scene->GetName() );
+    auto offsetTimeline = std::dynamic_pointer_cast< model::OffsetTimeEvaluator >( timeline );
+
+    ASSERT_TRUE( offsetTimeline != nullptr );
+    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", offsetTimeline ) != nullptr ); // FIXME: 
 }
 
 TEST( CreatingSecondPM, ProjectManager )
