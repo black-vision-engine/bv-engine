@@ -89,7 +89,30 @@ TEST( AddKeyframe )
 }
 
 
+TEST( StopOnKeyframe )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 1.0f, timeline.get() );
+    timeline->AddKeyFrame( stopKeyframe );
 
+    REQUIRE( timeline );
+    REQUIRE( stopKeyframe );
+
+    timeline->Play();
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.8f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+
+    CHECK( timeline->GetLocalTime() == 1.0f );
+    
+    timeline->Play();
+    timeline->SetGlobalTime( bv::TimeType( 1.6f ) );
+
+    CHECK( abs( timeline->GetLocalTime() - 1.4f ) < 0.00001 );
+}
 
 
 }
