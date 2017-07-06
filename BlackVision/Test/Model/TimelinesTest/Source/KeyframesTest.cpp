@@ -8,6 +8,8 @@
 using namespace bv::model;
 
 
+
+
 // ***********************
 //
 template< typename KeyframeType >
@@ -115,14 +117,53 @@ TEST( StopOnKeyframe )
     timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
     timeline->SetGlobalTime( bv::TimeType( 1.6f ) );
 
+    // Here StopKeyframe should stop timeline
     CHECK( timeline->GetLocalTime() == 1.0f );
     
     timeline->Play();
-    timeline->SetGlobalTime( bv::TimeType( 2.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.65f ) );
 
-    CHECK( abs( timeline->GetLocalTime() - 1.4f ) < 0.00001 );
+    CHECK( abs( timeline->GetLocalTime() - 1.05f ) < 0.00001 );
 }
 
+
+// ***********************
+// Bug https://www.pivotaltracker.com/story/show/148410315
+// Sending events sequence Goto -> Play doesn't work in debug mode. The reason is too low FPS
+// which causes that time offset between first and second frame after clicking play is greater then GEvtTimeSeparation
+// from DefaultTimeline.cpp file. SetGlobalTime function which is called in second update, first sets field
+// m_triggeredEvent to nullptr, and then tries to find next keyframe event. Since m_prevTime is still 0, function
+// CurrentEvent chooses the same stop event which stops timeline.
+// Note that if time offset between frames is less then GEvtTimeSeparation, stop event will be deactivated in third frame
+// and bug wouldn't occure.
+TEST( StopOnKeyframeAndPlay )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.0f, timeline.get() );
+    REQUIRE( timeline->AddKeyFrame( stopKeyframe ) );
+
+    REQUIRE( timeline );
+    REQUIRE( stopKeyframe );
+
+    timeline->Play();
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.2f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.4f ) );
+
+    // Here StopKeyframe should stop timeline
+    CHECK( timeline->GetLocalTime() == 0.0f );
+
+    // This offset should be greater than GEvtTimeSeparation in DefaultTimeline.cpp to see this bug.
+    bv::TimeType timelineOffset = 0.41f;
+    bv::TimeType stopDurationOffset = timelineOffset + 0.4f;
+
+    timeline->Play();
+    timeline->SetGlobalTime( bv::TimeType( stopDurationOffset ) );
+
+    CHECK( abs( timeline->GetLocalTime() - timelineOffset ) < 0.00001 );
+}
 
 }
 
