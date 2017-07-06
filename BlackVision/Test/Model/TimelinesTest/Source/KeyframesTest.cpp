@@ -30,12 +30,17 @@ SUITE( DefaultTimelineTest )
 {
 
 
+    // ***********************
+    //
 TEST( StopKeyframe )
 {
     auto keyframe = TimelineEventStop::Create( "StopKeyframe", 1.0f );
     TestBaseKeyframe( bv::TimelineEventType::TET_STOP, keyframe, "StopKeyframe" );
 }
 
+
+// ***********************
+//
 TEST( GotoKeyframe )
 {
     auto keyframe = TimelineEventLoop::Create( "GotoKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 300, 1.2f, nullptr );
@@ -49,7 +54,8 @@ TEST( GotoKeyframe )
     CHECK( keyframe->GetTargetTime() == 1.4f );
 }
 
-
+// ***********************
+//
 TEST( AddKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
@@ -68,7 +74,7 @@ TEST( AddKeyframe )
 
     // Add goto Loop keyframe before stop keyframe
     auto gotoKeyframe = TimelineEventLoop::Create( "GotoKeyframe", 0.5f, bv::LoopEventAction::LEA_GOTO, std::numeric_limits< unsigned int >::max(), 0.65f, timeline.get() );
-    timeline->AddKeyFrame( gotoKeyframe );
+    REQUIRE( timeline->AddKeyFrame( gotoKeyframe ) );
 
     CHECK( gotoKeyframe->GetOwnerTimeline() == timeline.get() );
 
@@ -89,11 +95,13 @@ TEST( AddKeyframe )
 }
 
 
+// ***********************
+// Keyframe stops timeline. Timeline is stoped until someone calls play.
 TEST( StopOnKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 1.0f, timeline.get() );
-    timeline->AddKeyFrame( stopKeyframe );
+    REQUIRE( timeline->AddKeyFrame( stopKeyframe ) );
 
     REQUIRE( timeline );
     REQUIRE( stopKeyframe );
@@ -105,11 +113,12 @@ TEST( StopOnKeyframe )
     timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.8f ) );
     timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.6f ) );
 
     CHECK( timeline->GetLocalTime() == 1.0f );
     
     timeline->Play();
-    timeline->SetGlobalTime( bv::TimeType( 1.6f ) );
+    timeline->SetGlobalTime( bv::TimeType( 2.0f ) );
 
     CHECK( abs( timeline->GetLocalTime() - 1.4f ) < 0.00001 );
 }

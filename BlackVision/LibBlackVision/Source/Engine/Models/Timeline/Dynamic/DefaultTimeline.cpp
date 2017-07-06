@@ -26,7 +26,7 @@
 
 
 
-#include "Memory/MemoryLeaks.h"
+#include "UseLoggerLibBlackVision.h"
 
 
 
@@ -68,7 +68,7 @@ DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType durati
     : Parent( name )
     , m_timeEvalImpl( duration, TimelinePlayDirection::TPD_FORWAD, preMethod, postMethod )
     , m_prevTime( TimeType( 0.0 ) )
-    , m_activeEvent( nullptr )
+    , m_triggeredEvent( nullptr )
 {
 }
 
@@ -374,8 +374,8 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( unsign
     assert( idx < m_keyFrameEvents.size() );
 
     auto evn = m_keyFrameEvents[ idx ];
-    if( evn.get() == m_activeEvent )
-        m_activeEvent = nullptr;
+    if( evn.get() == m_triggeredEvent )
+        m_triggeredEvent = nullptr;
 
     m_keyFrameEvents.erase( m_keyFrameEvents.begin() + idx );
 
@@ -392,8 +392,8 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( const 
         if ( (*it)->GetName() == name )
         {
             auto evn = *it;
-            if( evn.get() == m_activeEvent )
-                m_activeEvent = nullptr;
+            if( evn.get() == m_triggeredEvent )
+                m_triggeredEvent = nullptr;
 
 
             m_keyFrameEvents.erase( it );
@@ -409,14 +409,14 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( const 
 //
 void                                DefaultTimeline::DeactivateEvent    ( ITimelineEvent * evt )
 {
-    assert( m_activeEvent == evt || m_activeEvent == nullptr );
+    assert( m_triggeredEvent == evt || m_triggeredEvent == nullptr );
 
-    if( m_activeEvent != evt )
+    if( m_triggeredEvent != evt )
     {
         //printf( "Deactivating %s \n", evt->GetName().c_str() );
 
-        m_activeEvent = evt;
-        m_activeEvent->SetActive( false ); //FIXME: not necessarily useful
+        m_triggeredEvent = evt;
+        m_triggeredEvent->SetActive( false ); //FIXME: not necessarily useful
     }
 }
 
@@ -469,12 +469,12 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 {
     auto evt = CurrentEvent( curTime, prevTime );
 
-    if( evt == nullptr || evt == m_activeEvent || !evt->IsActive() )
+    if( evt == nullptr || evt == m_triggeredEvent || !evt->IsActive() )
     {
         return;
     }
 
-    assert( m_activeEvent == nullptr );
+    assert( m_triggeredEvent == nullptr );
 
     DeactivateEvent( evt );
 
@@ -486,9 +486,9 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             evt->SetActive( false );
             SetLocalTime( evt->GetEventTime() );
             m_timeEvalImpl.Stop();
-            //printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
-            //printf( "Event STOP %s \n", evt->GetName().c_str() );
-            
+
+            LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] stoppped on event [" << evt->GetName() << "] at time [" << curTime << "], (previous time [" << prevTime << "]) event time [" << evt->GetEventTime() << "]";
+
             keyframeType = TimelineKeyframeEvent::KeyframeType::StopKeyframe;
 
             break;
@@ -506,8 +506,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     m_prevTime = evtImpl->GetTargetTime();
 
-                    m_activeEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
-                    m_activeEvent = nullptr;
+                    m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
+                    m_triggeredEvent = nullptr;
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
 
@@ -518,8 +518,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     m_prevTime = TimeType( 0.0 );
 
-                    m_activeEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
-                    m_activeEvent = nullptr;
+                    m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
+                    m_triggeredEvent = nullptr;
 
                     Play(); //FIXME: really start or should we wait for the user to trigger this timeline?
 
@@ -549,7 +549,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
         {
             auto evtImpl = static_cast< TimelineEventTrigger * >( evt );
             evtImpl->SetActive( false );
-            m_activeEvent = nullptr;
+            m_triggeredEvent = nullptr;
 
             evtImpl->SendEvents();
 
@@ -593,15 +593,20 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 //
 void                                DefaultTimeline::PostUpdateEventStep    ()
 {
-    if( m_activeEvent && !m_activeEvent->IsActive() )
+    if( m_triggeredEvent && !m_triggeredEvent->IsActive() )
     {
         auto t = GetLocalTime();
      
-        if( std::abs( t - m_activeEvent->GetEventTime() ) > GEvtTimeSeparation * 0.5f )
+        // We can null m_triggeredEvent when current time will pass 0.5 * GEvtTimeSeparation.
+        // But we must avoid situation, that the same event will be selected again. This may happen
+        // for example when m_prevTime i still before event trigger time.
+        if( std::abs( t - m_triggeredEvent->GetEventTime() ) > GEvtTimeSeparation * 0.5f /*&&
+            CurrentEvent( t, m_prevTime ) != m_triggeredEvent*/ )
         {
-            //printf( "Activating: %s at %.4f evtt: %.4f\n", m_activeEvent->GetName().c_str(), t, m_activeEvent->GetEventTime() );
-            m_activeEvent->SetActive( true );
-            m_activeEvent = nullptr;
+            LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] activating event: [" << m_triggeredEvent->GetName() << "], timeline time: [" << t << "], event time: [" << m_triggeredEvent->GetEventTime() << "]";
+
+            m_triggeredEvent->SetActive( true );
+            m_triggeredEvent = nullptr;
         }
     }
 }
