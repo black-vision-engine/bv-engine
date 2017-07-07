@@ -67,7 +67,7 @@ void            CamerasLogic::Deserialize             ( const IDeserializer & de
 //
 void            CamerasLogic::Serialize               ( ISerializer & ser ) const
 {
-    ser.EnterChild( "cameras" );
+    ser.EnterArray( "cameras" );
 
     int currCameraIdx = -1;
 
