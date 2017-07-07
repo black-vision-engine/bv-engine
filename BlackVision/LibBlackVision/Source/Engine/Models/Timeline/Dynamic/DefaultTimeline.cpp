@@ -511,7 +511,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
 
-                    //printf( "Event LOOP -> GOTO: %.4f %s\n", evtImpl->GetTargetTime(), evt->GetName().c_str() );
+                    LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] goto keyframe [" << evt->GetName() << "] jumped to [" << evtImpl->GetTargetTime() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
                     break;
                 case LoopEventAction::LEA_RESTART:
                     m_timeEvalImpl.Reset();

@@ -126,6 +126,37 @@ TEST( StopOnKeyframe )
     CHECK( abs( timeline->GetLocalTime() - 1.05f ) < 0.00001 );
 }
 
+// ***********************
+// Timeline should jump one time on keframe. In next loop it should pass keyframe time value.
+TEST( GotoOnKeyframe )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    auto gotoKeyframe = TimelineEventLoop::Create( "GotoKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 1, 0.2f, timeline.get() );
+    REQUIRE( timeline->AddKeyFrame( gotoKeyframe ) );
+
+    REQUIRE( timeline );
+    REQUIRE( gotoKeyframe );
+
+    timeline->Play();
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.8f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+
+    // Keyframe should jump to time 0.2f
+    CHECK( abs( timeline->GetLocalTime() - 0.2f ) < 0.00001 );
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 1.7f ) );
+    timeline->SetGlobalTime( bv::TimeType( 2.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 2.4f ) );
+
+    // Keyframe shouldn't jump this time since loop count is set to 1.
+    CHECK( abs( timeline->GetLocalTime() - 1.4f ) < 0.00001 );
+}
+
 
 // ***********************
 // Bug https://www.pivotaltracker.com/story/show/148410315
