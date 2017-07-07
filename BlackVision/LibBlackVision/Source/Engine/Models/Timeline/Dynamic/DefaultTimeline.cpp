@@ -525,7 +525,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe;
 
-                    //printf( "Event LOOP -> RESTART %s\n", evt->GetName().c_str() );                    
+                    LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] restart keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
                     break;
                 case LoopEventAction::LEA_REVERSE:
                     Reverse();

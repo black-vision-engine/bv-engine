@@ -159,6 +159,29 @@ TEST( GotoOnKeyframe )
 
 
 // ***********************
+//
+TEST( RestartKeyframe )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    auto restartKeyframe = TimelineEventLoop::Create( "RestartKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 1, 0.2f, timeline.get() );
+    REQUIRE( timeline->AddKeyFrame( restartKeyframe ) );
+
+    REQUIRE( timeline );
+    REQUIRE( restartKeyframe );
+
+    timeline->Play();
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+
+    // Keyframe should restart timeline. Local time should be equal to 0.2.
+    CHECK( abs( timeline->GetLocalTime() - 0.2f ) < 0.00001 );
+}
+
+
+// ***********************
 // Bug https://www.pivotaltracker.com/story/show/148410315
 // Sending events sequence Goto -> Play doesn't work in debug mode. The reason is too low FPS
 // which causes that time offset between first and second frame after clicking play is greater then GEvtTimeSeparation
