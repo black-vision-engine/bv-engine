@@ -3,6 +3,8 @@
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventLoop.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventTrigger.h"
 
 
 using namespace bv::model;
@@ -254,6 +256,33 @@ TEST( StopOnKeyframeAndPlay )
 
     CHECK( abs( timeline->GetLocalTime() - ( timelineOffset + 0.2f ) ) < 0.00001 );
 }
+
+
+// ***********************
+// If there are two keyframes to near from each other, the second can be lost.
+TEST( TwoNearKeyframes )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    REQUIRE( timeline );
+
+    // Add fake keyframe
+    auto nullKeyframe = TimelineEventNull::Create( "NullKeyframe", 0.2f, timeline.get() );
+    REQUIRE( timeline->AddKeyFrame( nullKeyframe ) );
+
+    // Add stop keyframe which could be lost.
+    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.4f, timeline.get() );
+    REQUIRE( timeline->AddKeyFrame( stopKeyframe ) );
+
+    timeline->Play();
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.6f ) );
+
+    CHECK( abs( timeline->GetLocalTime() - 0.4f ) < 0.00001 );
+}
+
+
 
 }
 
