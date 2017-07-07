@@ -600,8 +600,8 @@ void                                DefaultTimeline::PostUpdateEventStep    ()
         // We can null m_triggeredEvent when current time will pass 0.5 * GEvtTimeSeparation.
         // But we must avoid situation, that the same event will be selected again. This may happen
         // for example when m_prevTime i still before event trigger time.
-        if( std::abs( t - m_triggeredEvent->GetEventTime() ) > GEvtTimeSeparation * 0.5f /*&&
-            CurrentEvent( t, m_prevTime ) != m_triggeredEvent*/ )
+        if( std::abs( t - m_triggeredEvent->GetEventTime() ) > GEvtTimeSeparation * 0.5f &&
+            CurrentEvent( t, m_prevTime ) != m_triggeredEvent )
         {
             LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] activating event: [" << m_triggeredEvent->GetName() << "], timeline time: [" << t << "], event time: [" << m_triggeredEvent->GetEventTime() << "]";
 

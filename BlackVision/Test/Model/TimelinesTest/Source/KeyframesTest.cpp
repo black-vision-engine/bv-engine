@@ -34,7 +34,7 @@ SUITE( DefaultTimelineTest )
 
     // ***********************
     //
-TEST( StopKeyframe )
+TEST( AddStopKeyframe )
 {
     auto keyframe = TimelineEventStop::Create( "StopKeyframe", 1.0f );
     TestBaseKeyframe( bv::TimelineEventType::TET_STOP, keyframe, "StopKeyframe" );
@@ -43,7 +43,7 @@ TEST( StopKeyframe )
 
 // ***********************
 //
-TEST( GotoKeyframe )
+TEST( AddGotoKeyframe )
 {
     auto keyframe = TimelineEventLoop::Create( "GotoKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 300, 1.2f, nullptr );
     TestBaseKeyframe( bv::TimelineEventType::TET_LOOP, keyframe, "GotoKeyframe" );
@@ -58,7 +58,7 @@ TEST( GotoKeyframe )
 
 // ***********************
 //
-TEST( AddKeyframe )
+TEST( AddMultipleKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
 
@@ -135,11 +135,11 @@ TEST( StopOnKeyframe )
 // m_triggeredEvent to nullptr, and then tries to find next keyframe event. Since m_prevTime is still 0, function
 // CurrentEvent chooses the same stop event which stops timeline.
 // Note that if time offset between frames is less then GEvtTimeSeparation, stop event will be deactivated in third frame
-// and bug wouldn't occure.
+// and bug wouldn't occur.
 TEST( StopOnKeyframeAndPlay )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
-    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.0f, timeline.get() );
+    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.2f, timeline.get() );
     REQUIRE( timeline->AddKeyFrame( stopKeyframe ) );
 
     REQUIRE( timeline );
@@ -150,10 +150,10 @@ TEST( StopOnKeyframeAndPlay )
     // Simulate bv updates
     timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.2f ) );
-    timeline->SetGlobalTime( bv::TimeType( 0.4f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.4f ) );        // Note: without this line bug doesn't occur. m_prevTime is 0.2f then.
 
     // Here StopKeyframe should stop timeline
-    CHECK( timeline->GetLocalTime() == 0.0f );
+    CHECK( timeline->GetLocalTime() == 0.2f );
 
     // This offset should be greater than GEvtTimeSeparation in DefaultTimeline.cpp to see this bug.
     bv::TimeType timelineOffset = 0.41f;
@@ -162,7 +162,7 @@ TEST( StopOnKeyframeAndPlay )
     timeline->Play();
     timeline->SetGlobalTime( bv::TimeType( stopDurationOffset ) );
 
-    CHECK( abs( timeline->GetLocalTime() - timelineOffset ) < 0.00001 );
+    CHECK( abs( timeline->GetLocalTime() - ( timelineOffset + 0.2f ) ) < 0.00001 );
 }
 
 }
