@@ -163,7 +163,7 @@ TEST( GotoOnKeyframe )
 TEST( RestartKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
-    auto restartKeyframe = TimelineEventLoop::Create( "RestartKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 1, 0.2f, timeline.get() );
+    auto restartKeyframe = TimelineEventLoop::Create( "RestartKeyframe", 1.0f, bv::LoopEventAction::LEA_RESTART, 1, 0.2f, timeline.get() );
     REQUIRE( timeline->AddKeyFrame( restartKeyframe ) );
 
     REQUIRE( timeline );
@@ -176,8 +176,44 @@ TEST( RestartKeyframe )
     timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
     timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
 
-    // Keyframe should restart timeline. Local time should be equal to 0.2.
+    // Keyframe should restart timeline. Local time should be equal to 0.0.
+    CHECK( abs( timeline->GetLocalTime() - 0.0f ) < 0.00001 );
+
+    // Timeline is started after Restart.
+    timeline->SetGlobalTime( bv::TimeType( 1.4f ) );
     CHECK( abs( timeline->GetLocalTime() - 0.2f ) < 0.00001 );
+}
+
+
+// ***********************
+//
+TEST( ReverseKeyframe )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    auto restartKeyframe = TimelineEventLoop::Create( "ReversesKeyframe", 1.0f, bv::LoopEventAction::LEA_REVERSE, 1, 0.2f, timeline.get() );
+    REQUIRE( timeline->AddKeyFrame( restartKeyframe ) );
+
+    REQUIRE( timeline );
+    REQUIRE( restartKeyframe );
+
+    timeline->Play();
+
+    // Simulate bv updates
+    timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+
+    // Keyframe should reverse timeline direction.
+    // FIXME: This test checks currently implemented behavior. Maybe timeline shouldn't reach 1.2
+    // and time should be equal to 0.8 here.
+    CHECK( abs( timeline->GetLocalTime() - 1.2f ) < 0.00001 );
+
+    timeline->SetGlobalTime( bv::TimeType( 1.4f ) );
+    CHECK( abs( timeline->GetLocalTime() - 1.0f ) < 0.00001 );
+
+
+    timeline->SetGlobalTime( bv::TimeType( 1.8f ) );
+    CHECK( abs( timeline->GetLocalTime() - 0.6f ) < 0.00001 );
 }
 
 

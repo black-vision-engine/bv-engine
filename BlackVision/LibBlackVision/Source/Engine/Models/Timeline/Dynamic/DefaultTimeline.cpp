@@ -532,7 +532,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe;
 
-                    //printf( "Event LOOP -> REVERSE %s\n", evt->GetName().c_str() );
+                    LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] reverse keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
                     
                     break;
                 default:
