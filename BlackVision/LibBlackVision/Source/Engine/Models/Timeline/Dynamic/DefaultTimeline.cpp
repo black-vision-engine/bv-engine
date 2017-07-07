@@ -555,8 +555,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
             keyframeType = TimelineKeyframeEvent::KeyframeType::TriggerEventKeyframe;
 
-            //printf( "Event Trigger\n" );
-
+            LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] trigger keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
             break;
         }
         case TimelineEventType::TET_NULL:
@@ -566,8 +565,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
             keyframeType = TimelineKeyframeEvent::KeyframeType::NullKeyframe;
 
-            //printf( "Event NULL\n" );
-
+            LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] null keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
             break;
         }
         default:
