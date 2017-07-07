@@ -1,13 +1,8 @@
-#include "gtest/gtest.h"
+#include "Framework/bvAppTest.h"
 
 
+// Registers initializers for BlackVisionApp instance and other usufull things like loggers etc.
+bool bv::BlackVisionAppFramework::m_configOverrideInitialized = bv::BlackVisionAppFramework::OverrideConfig( "TestConfigs/DefaultConfig.xml" );
+bool bv::BlackVisionApp::m_sWindowedApplicationInitialized = bv::BlackVisionAppFramework::RegisterFrameworkInitializer();
 
-
-int main( int argc, char **argv )
-{
-	::testing::InitGoogleTest( &argc, argv );
-	return RUN_ALL_TESTS();
-}
-
-
-
+#include "Application/Main.h"

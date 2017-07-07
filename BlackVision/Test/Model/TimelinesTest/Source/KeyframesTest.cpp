@@ -260,6 +260,8 @@ TEST( StopOnKeyframeAndPlay )
 
 // ***********************
 // If there are two keyframes to near from each other, the second can be lost.
+// Note: this is example problem. This bug has never occured in real situation but we need to think what
+// to do in this case.
 TEST( TwoNearKeyframes )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );

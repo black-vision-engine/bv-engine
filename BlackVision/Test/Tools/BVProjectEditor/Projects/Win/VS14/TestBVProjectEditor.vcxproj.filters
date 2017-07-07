@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
-    <ClCompile Include="..\..\..\Source\Utils\ProjectEditorUtils.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp">
       <Filter>NodesTests</Filter>
     </ClCompile>
@@ -18,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\Utils\ProjectEditorUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\TwoScenesFixture.h">
       <Filter>Utils</Filter>
     </ClInclude>
