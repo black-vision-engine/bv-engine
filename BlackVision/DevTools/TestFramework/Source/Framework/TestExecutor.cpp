@@ -1,4 +1,5 @@
 #include "TestExecutor.h"
+#include "BVTestAppLogic.h"
 
 #include <fstream>
 
@@ -75,6 +76,9 @@ bool        TestExecutor::Execute           ()
 
         m_curTest = FetchNextTest();
         m_failedTests = m_runner.GetTestResults()->GetFailedTestCount();
+
+        // Clean engine bfore next test.
+        m_appLogic->UnloadScenes();
     }
 
     m_runner.RunSingleTest( m_curTest, nullptr, 0 );
