@@ -80,6 +80,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestTestFramework", "..\..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestTimelines", "..\..\..\Test\Model\TimelinesTest\Projects\Win\VS14\TimelinesTest.vcxproj", "{31CE6746-D02C-41C5-956B-1D82B9C6711A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSerializers", "..\..\..\Test\Tools\TestSerializers\Projects\Win\VS14\TestSerializers.vcxproj", "{C307615F-D82C-47C9-BC4D-6CEC72D3393F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -619,6 +621,20 @@ Global
 		{31CE6746-D02C-41C5-956B-1D82B9C6711A}.Release|Win32.Build.0 = Release|Win32
 		{31CE6746-D02C-41C5-956B-1D82B9C6711A}.Release|x64.ActiveCfg = Release|x64
 		{31CE6746-D02C-41C5-956B-1D82B9C6711A}.Release|x64.Build.0 = Release|x64
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|Win32.Build.0 = Debug|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|x64.ActiveCfg = Debug|x64
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Debug|x64.Build.0 = Debug|x64
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|Any CPU.ActiveCfg = Release|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|Win32.ActiveCfg = Release|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|Win32.Build.0 = Release|Win32
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|x64.ActiveCfg = Release|x64
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -653,5 +669,6 @@ Global
 		{8A1A370E-7C9E-496B-9A55-974807CC630A} = {42BED5C7-ABA5-4BFD-AC21-2356DDD56684}
 		{03C7685D-8541-413A-9BA9-74E9A6E32788} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{31CE6746-D02C-41C5-956B-1D82B9C6711A} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{C307615F-D82C-47C9-BC4D-6CEC72D3393F} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 EndGlobal

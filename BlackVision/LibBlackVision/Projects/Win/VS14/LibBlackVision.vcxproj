@@ -1291,6 +1291,9 @@
     <ProjectReference Include="..\..\..\..\Tools\LibMipMapBuilder\Projects\Win\VS14\LibMipMapBuilder.vcxproj">
       <Project>{6a33f496-e3c1-4c91-a4e1-049c0c3b762e}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Tools\Triangulator\Projects\Win\VS14\Triangulator.vcxproj">
       <Project>{78ab5093-c110-4e57-97eb-a13bdd956729}</Project>
     </ProjectReference>
