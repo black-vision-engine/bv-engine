@@ -5,6 +5,9 @@
     <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp">
       <Filter>NodesTests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp">
+      <Filter>NodesTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">

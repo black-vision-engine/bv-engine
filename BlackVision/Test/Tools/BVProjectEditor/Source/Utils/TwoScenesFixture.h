@@ -4,10 +4,28 @@
 #include "Engine/Models/BVProjectEditor.h"
 
 
+
+inline void         CreateOneScene      ( bv::BVProjectEditor * editor );
 inline void         CreateTwoScenes     ( bv::BVProjectEditor * editor );
+
 inline void         VerifyDefaultScene  ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 inline void         AddHierarchy        ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 
+
+
+// ***********************
+//
+inline void             CreateOneScene          ( bv::BVProjectEditor * editor )
+{
+    editor->AddScene( "FirstScene" );
+
+    auto scene1 = editor->GetModelScene( "FirstScene" );
+
+    REQUIRE( scene1 != nullptr );
+
+    VerifyDefaultScene( scene1, editor );
+    AddHierarchy( scene1, editor );
+}
 
 // ***********************
 //
