@@ -144,6 +144,14 @@ void            SimpleDeserializeTest       ( IDeserializer & deser )
     ASSERT_TRUE( deser.ExitChild() );
     ASSERT_TRUE( deser.ExitChild() );
 
+    // Access Food object for the second time.
+    ASSERT_TRUE( deser.EnterChild( "Food" ) );
+    EXPECT_EQ( deser.GetAttribute( "Tomatoe" ), "2" );
+    ASSERT_TRUE( deser.ExitChild() );
+
     // Negative tests
     ASSERT_FALSE( deser.EnterChild( "root" ) );
+    //
+
+    ASSERT_TRUE( deser.ExitChild() );
 }

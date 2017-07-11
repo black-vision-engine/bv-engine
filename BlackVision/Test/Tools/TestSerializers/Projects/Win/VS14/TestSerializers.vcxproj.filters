@@ -9,5 +9,8 @@
     <ClCompile Include="..\..\..\Source\SerializeDeserialize.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\DoublePassArrayAccess.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
