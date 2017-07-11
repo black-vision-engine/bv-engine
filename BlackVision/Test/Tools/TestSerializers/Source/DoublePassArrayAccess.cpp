@@ -55,10 +55,9 @@ void            TestDeserialization         ( const IDeserializer & deser )
 
     // Access first array element.
     EXPECT_TRUE( deser.EnterChild( "interpolation" ) );
-    EXPECT_FALSE( deser.NextChild() );
-
     ASSERT_EQ( deser.GetAttribute( "controlField" ), "interpolator1" );
-
+    EXPECT_FALSE( deser.NextChild() );
+    
     ASSERT_TRUE( deser.ExitChild() );
 
     // Access the same array for the second time.
@@ -74,8 +73,7 @@ void            TestDeserialization         ( const IDeserializer & deser )
 
     // Access first array element.
     EXPECT_TRUE( deser.EnterChild( "interpolation" ) );
-    EXPECT_FALSE( deser.NextChild() );
-
     ASSERT_EQ( deser.GetAttribute( "controlField" ), "interpolator2" );
 
+    EXPECT_FALSE( deser.NextChild() );
 }
