@@ -418,6 +418,9 @@
     <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
       <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Async">
+      <UniqueIdentifier>{893158b3-72dd-4191-bdef-e379229dfe83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1972,6 +1975,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp">
       <Filter>Engine\Audio\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Async\AssetsThread.cpp">
+      <Filter>Assets\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5191,6 +5198,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h">
       <Filter>Engine\Audio\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Async\LoadAssetRequest.h">
+      <Filter>Assets\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Async\AssetsThread.h">
+      <Filter>Assets\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.h">
+      <Filter>Assets\Async</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
