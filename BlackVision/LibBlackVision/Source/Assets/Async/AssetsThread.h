@@ -20,7 +20,6 @@ private:
     QueueConcurrent< LoadAssetRequest >         m_assetRequests;
     
     std::thread                 m_thread;
-    std::atomic< bool >         m_endMessage;
 
 public:
 

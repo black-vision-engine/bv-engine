@@ -6,6 +6,8 @@
 
 #include "Engine/Interfaces/IConfig.h"
 
+#include "Assets/Async/AssetsThread.h"
+
 
 
 namespace bv {
@@ -25,6 +27,9 @@ namespace model {
     class IModelNodeEffect;
     DEFINE_PTR_TYPE( IModelNodeEffect );
 } // model
+
+class AssetAsyncLoadFinishedEvent;
+DEFINE_PTR_TYPE( AssetAsyncLoadFinishedEvent );
 
 class BVProject;
 class SceneNode;
@@ -49,6 +54,8 @@ private:
     TScenesMapping              m_scenesMapping;
 
     SceneModelVec               m_detachedScenes;
+
+    AssetsThread                m_assetsThread;
 
 private:
 
@@ -220,7 +227,9 @@ public:
 /* ASSETS */
 
     bool                    LoadAsset                   ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData );
+    bool                    LoadAssetAsync              ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData, Int32 requestId = -1 );
     bool                    LoadAsset                   ( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
+    void                    LoadAssetAsyncCallback      ( IEventPtr evt );
 
 /* LIGHTS */
 

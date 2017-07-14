@@ -29,6 +29,7 @@
 #include "Tools/PrefixHelper.h"
 
 #include "Serialization/SerializationHelper.h"
+#include "Engine/Events/EventHandlerHelpers.h"
 #include "UseLoggerLibBlackVision.h"
 
 #include "Engine/Models/BoundingVolume.h"
@@ -49,6 +50,8 @@
 #include "Engine/Events/InnerEvents/Other/CameraRemovedEvent.h"
 #include "Engine/Events/InnerEvents/Other/LightAddedEvent.h"
 #include "Engine/Events/InnerEvents/Other/LightRemovedEvent.h"
+
+#include "Assets/Async/AssetAsyncLoadFinishedEvent.h"
 
 #include "Engine/Models/NodeLogics/NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 
@@ -1053,41 +1056,41 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
 //
 bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName, bool enableUndo )
 {
-    if( !srcScene || !destScene )
-    {
-        return false;
-    }
+if( !srcScene || !destScene )
+{
+    return false;
+}
 
-    bool success = true;
-    if( srcScene == destScene )
+bool success = true;
+if( srcScene == destScene )
+{
+    if( DetachPlugin( srcNode, pluginName ) )
     {
-        if( DetachPlugin( srcNode, pluginName ) )
+        auto plugin = srcNode->GetModelNodeEditor()->GetDetachedPlugin();
+        auto pluginIdx = srcNode->GetModelNodeEditor()->GetDetachedPluginIdx();
+        srcScene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( srcNode, plugin, pluginIdx ) ) );
+        auto result = AttachPlugin( destNode, destIdx );
+
+        if( result )
         {
-            auto plugin = srcNode->GetModelNodeEditor()->GetDetachedPlugin();
-            auto pluginIdx = srcNode->GetModelNodeEditor()->GetDetachedPluginIdx();
-            srcScene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( srcNode, plugin, pluginIdx ) ) );
-            auto result = AttachPlugin( destNode, destIdx );
-            
-            if( result )
-            {
-                destScene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation>( new AddPluginOperation( destNode, plugin, destIdx ) ) );
-            }
-
-            NotifyPluginMoved( std::static_pointer_cast< model::BasePlugin >( plugin ), srcNode, destNode );
-
-            return result;
+            destScene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation>( new AddPluginOperation( destNode, plugin, destIdx ) ) );
         }
+
+        NotifyPluginMoved( std::static_pointer_cast< model::BasePlugin >( plugin ), srcNode, destNode );
+
+        return result;
     }
-    else
+}
+else
+{
+    if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName, enableUndo ) )
     {
-        if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName, enableUndo ) )
-        {
-            auto result = DeletePlugin( srcNode, pluginName );
-            return ( result.first != nullptr );
-        }
+        auto result = DeletePlugin( srcNode, pluginName );
+        return ( result.first != nullptr );
     }
+}
 
-    return success;
+return success;
 }
 
 // *******************************
@@ -1097,14 +1100,30 @@ bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std
     auto assetDesc = AssetManager::GetInstance().CreateDesc( serializedAssetData );
 
     auto node = GetNode( sceneName, nodePath );
-    
+
     model::IPluginPtr plugin = nullptr;
     if( node )
     {
         plugin = node->GetPlugin( pluginName );
     }
-    
+
     return LoadAsset( plugin, assetDesc );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::LoadAssetAsync             ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData, Int32 requestId )
+{
+    auto assetDesc = AssetManager::GetInstance().CreateDesc( serializedAssetData );
+    if( assetDesc )
+    {
+        LoadAssetRequest request( sceneName, nodePath, pluginName, assetDesc, requestId );
+        m_assetsThread.QueueRequest( std::move( request ) );
+
+        return true;
+    }
+
+    return false;
 }
 
 // *******************************
@@ -1123,6 +1142,36 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
     }
 
     return false;
+}
+
+// ***********************
+//
+void            BVProjectEditor::LoadAssetAsyncCallback     ( IEventPtr evt )
+{
+    if( evt->GetEventType() == AssetAsyncLoadFinishedEvent::Type() )
+    {
+        AssetAsyncLoadFinishedEventPtr loadedEvent = std::static_pointer_cast< AssetAsyncLoadFinishedEvent >( evt );
+
+        auto node = GetNode( loadedEvent->Request.SceneName, loadedEvent->Request.NodePath );
+
+        model::IPluginPtr plugin = nullptr;
+        if( node )
+        {
+            plugin = node->GetPlugin( loadedEvent->Request.PluginName );
+        }
+
+        // This code will load asset for the second time. Since we loaded this asset already,
+        // this code will only find asset on list and call plugin initialization of asset.
+        if( !LoadAsset( plugin, loadedEvent->Request.Descriptor ) )
+        {
+            // Loading failed. We must inform editor.
+
+        }
+        else
+        {
+
+        }
+    }
 }
 
 // ========================================================================= //
