@@ -15,7 +15,7 @@
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
+#include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 
 

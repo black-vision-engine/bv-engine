@@ -13,7 +13,7 @@
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
+#include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 #include "Tools/StringHeplers.h"
 

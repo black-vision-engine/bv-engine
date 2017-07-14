@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/UndoRedo/IRevertable.h"
+#include "Engine/Editors/UndoRedo/IRevertable.h"
 
 
 
@@ -18,24 +18,24 @@ DEFINE_PTR_TYPE( IModelNode );
 } // model
 
 
-
-class RemoveNodeOperation : public IRevertable
+// Add node and copy node operation.
+class AddNodeOperation : public IRevertable
 {
 private:
 
     model::SceneModelPtr        m_scene;
     model::IModelNodePtr        m_parentNode;
-    model::IModelNodePtr        m_removedNode;
+    model::IModelNodePtr        m_addedNode;
 
 public:
 
-    RemoveNodeOperation         ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::IModelNodePtr removedNode );
+    AddNodeOperation            ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::IModelNodePtr addedNode );
 
 
     virtual bool        Undo    ( BVProjectEditor * editor );
     virtual bool        Redo    ( BVProjectEditor * editor );
 };
 
-DEFINE_UPTR_TYPE( RemoveNodeOperation )
+DEFINE_UPTR_TYPE( AddNodeOperation )
 
 }	// bv

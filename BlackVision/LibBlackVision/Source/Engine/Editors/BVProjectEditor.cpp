@@ -60,23 +60,23 @@
 
 // Undo/Redo operations
     // Nodes
-#include "Engine/Models/UndoRedo/Nodes/AddNodeOperation.h"
-#include "Engine/Models/UndoRedo/Nodes/MoveNodeOperation.h"
-#include "Engine/Models/UndoRedo/Nodes/RemoveNodeOperation.h"
+#include "Engine/Editors/UndoRedo/Nodes/AddNodeOperation.h"
+#include "Engine/Editors/UndoRedo/Nodes/MoveNodeOperation.h"
+#include "Engine/Editors/UndoRedo/Nodes/RemoveNodeOperation.h"
     // Node logics
-#include "Engine/Models/UndoRedo/Plugins/AddNodeLogicOperation.h"
-#include "Engine/Models/UndoRedo/Plugins/RemoveNodeLogicOperation.h"
+#include "Engine/Editors/UndoRedo/Plugins/AddNodeLogicOperation.h"
+#include "Engine/Editors/UndoRedo/Plugins/RemoveNodeLogicOperation.h"
     // Timelines
-#include "Engine/Models/UndoRedo/Timelines/AssignTimelineOperation.h"
-#include "Engine/Models/UndoRedo/Timelines/AddTimelineOperation.h"
-#include "Engine/Models/UndoRedo/Timelines/DeleteTimelineOperation.h"
-#include "Engine/Models/UndoRedo/Timelines/RenameTimelineOperation.h"
+#include "Engine/Editors/UndoRedo/Timelines/AssignTimelineOperation.h"
+#include "Engine/Editors/UndoRedo/Timelines/AddTimelineOperation.h"
+#include "Engine/Editors/UndoRedo/Timelines/DeleteTimelineOperation.h"
+#include "Engine/Editors/UndoRedo/Timelines/RenameTimelineOperation.h"
     // Plugins
-#include "Engine/Models/UndoRedo/Plugins/PluginOperations.h"
+#include "Engine/Editors/UndoRedo/Plugins/PluginOperations.h"
     // Effects
-#include "Engine/Models/UndoRedo/Plugins/EffectsOperations.h"
+#include "Engine/Editors/UndoRedo/Plugins/EffectsOperations.h"
     // Lights
-#include "Engine/Models/UndoRedo/Lights/LightOperations.h"
+#include "Engine/Editors/UndoRedo/Lights/LightOperations.h"
 
 #include <memory>
 

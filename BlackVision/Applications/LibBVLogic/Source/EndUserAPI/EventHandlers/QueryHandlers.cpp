@@ -14,7 +14,7 @@
 #include "Engine/Editors/BVProjectTools.h"
 #include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Graphics/SceneGraph/SceneNodePerformance.h"
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
+#include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"
