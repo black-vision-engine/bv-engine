@@ -9,7 +9,7 @@
 #include "Engine/Models/Cameras/CameraModel.h"
 #include "Engine/Models/Interfaces/IModelLight.h"
 
-#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
 #include "Engine/Models/ModelState.h"
 
 #include <unordered_map>

@@ -1,12 +1,12 @@
 #include "stdafx.h"
 
 #include "BVProjectEditor.h"
-#include "ModelState.h"
+#include "Engine/Models/ModelState.h"
 
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 #include "Engine/Models/Updaters/SceneUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/BVProjectTools.h"
+#include "Engine/Editors/BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneEditor.h"
@@ -14,8 +14,8 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 
-#include "Engine/Models/ModelNodeEditor.h"
-#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Editors/ModelNodeEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 #include "Engine/Models/Lights/HelperModelLights.h"

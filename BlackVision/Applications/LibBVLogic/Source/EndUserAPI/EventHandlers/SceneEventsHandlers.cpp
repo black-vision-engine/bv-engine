@@ -2,7 +2,7 @@
 
 #include "SceneEventsHandlers.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
 

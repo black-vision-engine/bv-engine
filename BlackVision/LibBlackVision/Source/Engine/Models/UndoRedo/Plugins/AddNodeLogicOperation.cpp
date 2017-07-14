@@ -5,7 +5,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 

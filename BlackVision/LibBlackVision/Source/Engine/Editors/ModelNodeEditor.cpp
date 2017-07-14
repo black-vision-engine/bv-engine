@@ -2,7 +2,7 @@
 
 #include "ModelNodeEditor.h"
 
-#include "Engine/Models/BVProjectTools.h"
+#include "Engine/Editors/BVProjectTools.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"

@@ -2,7 +2,7 @@
 
 #include "TestEditorsKeyboardHandler.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 

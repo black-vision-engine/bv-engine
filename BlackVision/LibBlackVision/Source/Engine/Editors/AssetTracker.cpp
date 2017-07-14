@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Audio/AudioRenderer.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"

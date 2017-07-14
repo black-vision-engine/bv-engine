@@ -13,7 +13,7 @@
 #include "BVConfig.h"
 
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
 
 

@@ -16,7 +16,7 @@
 #include "Tools/StringHeplers.h"
 
 #include "ProjectManager.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
 
 #include "System/Time.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UnitTest++.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 

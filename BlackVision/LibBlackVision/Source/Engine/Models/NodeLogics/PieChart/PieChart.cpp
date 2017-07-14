@@ -19,7 +19,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Tools/StringHeplers.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 namespace bv {

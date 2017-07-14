@@ -421,6 +421,9 @@
     <Filter Include="Assets\Async">
       <UniqueIdentifier>{893158b3-72dd-4191-bdef-e379229dfe83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Editors">
+      <UniqueIdentifier>{af5bfeaf-8e8f-4813-bd8e-df08a0f77333}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -957,12 +960,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
@@ -1104,15 +1101,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
@@ -1121,9 +1109,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp">
       <Filter>Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp">
-      <Filter>Engine\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp">
       <Filter>Engine\Models\Builder</Filter>
@@ -1979,6 +1964,24 @@
       <Filter>Assets\Async</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetTracker.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProject.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectTools.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2683,12 +2686,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -3372,12 +3369,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
@@ -4177,15 +4168,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProject.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -4210,9 +4192,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl">
       <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h">
-      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h">
       <Filter>Engine\Interfaces</Filter>
@@ -5207,6 +5186,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.h">
       <Filter>Assets\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetTracker.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProject.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectTools.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.h">
+      <Filter>Engine\Editors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

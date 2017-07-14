@@ -12,7 +12,7 @@
 #include "Engine/Models/SceneModel.h"
 #include "Engine/Graphics/SceneGraph/Scene.h"
 
-#include "Engine/Models/AssetTracker.h"
+#include "Engine/Editors/AssetTracker.h"
 
 #include "Engine/Interfaces/IConfig.h"
 

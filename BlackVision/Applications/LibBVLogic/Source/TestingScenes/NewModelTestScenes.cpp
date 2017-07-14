@@ -32,8 +32,8 @@
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
-#include "Engine/Models/ModelSceneEditor.h"
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/ModelSceneEditor.h"
+#include "Engine/Editors/BVProject.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 

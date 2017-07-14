@@ -4,7 +4,7 @@
 #include "TestAI/TestKeyboardHandler.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffect.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 namespace bv {

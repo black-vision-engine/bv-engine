@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 #include "BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
@@ -18,7 +18,7 @@
 
 #include "Engine/Models/Updaters/NodeUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/AssetTracker.h"
+#include "Engine/Editors/AssetTracker.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffectFactory.h"
 

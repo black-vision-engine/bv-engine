@@ -129,6 +129,12 @@
     <ClCompile Include="..\..\..\Source\Assets\Async\AssetsThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetTracker.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProject.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectTools.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
@@ -426,14 +432,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\RendererStateInstance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Types\Transform.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Cameras\CamerasLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp" />
@@ -449,8 +451,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelPointLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Lights\ModelSpotLight.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper1.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.cpp" />
@@ -584,6 +584,12 @@
     <ClInclude Include="..\..\..\Source\Assets\Async\AssetsThread.h" />
     <ClInclude Include="..\..\..\Source\Assets\Async\LoadAssetRequest.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetTracker.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProject.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectTools.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <FileType>CppCode</FileType>
@@ -852,7 +858,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamNormalMatrixM.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Cameras\CameraModel.h" />
@@ -912,8 +917,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IAudioChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
@@ -1029,8 +1032,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectEditor.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\INodeLogic.h" />
@@ -1040,7 +1041,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimelineEvent.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProject.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.h" />

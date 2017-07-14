@@ -8,8 +8,8 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/ModelSceneEditor.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "Mathematics/Transform/MatTransform.h"
 

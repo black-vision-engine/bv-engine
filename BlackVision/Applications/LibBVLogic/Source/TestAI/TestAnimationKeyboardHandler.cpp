@@ -2,7 +2,7 @@
 
 #include "TestAnimationKeyboardHandler.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "TestingScenes/MockScenes.h"
 #include "BVAppLogic.h"

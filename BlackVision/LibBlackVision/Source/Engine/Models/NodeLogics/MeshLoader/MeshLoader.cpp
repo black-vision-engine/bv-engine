@@ -14,7 +14,7 @@
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultNormalMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultParallaxMapPlugin.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "System/Path.h"
 

@@ -6,7 +6,7 @@
 #include "Engine/Graphics/SceneGraph/LightsLayout.h"
 #include "Engine/Graphics/SceneGraph/Lines.h"
 
-#include "Engine/Models/BVProjectTools.h"
+#include "Engine/Editors/BVProjectTools.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/VertexBuffer.h"

@@ -4,7 +4,7 @@
 #include "ModelState.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
-#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
 #include "Engine/Models/Updaters/UpdatersHelpers.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"

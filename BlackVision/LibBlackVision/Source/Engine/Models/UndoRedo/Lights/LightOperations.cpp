@@ -2,7 +2,7 @@
 
 #include "LightOperations.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 
