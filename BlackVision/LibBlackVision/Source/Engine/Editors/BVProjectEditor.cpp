@@ -1117,10 +1117,20 @@ bool            BVProjectEditor::LoadAssetAsync             ( const std::string 
     auto assetDesc = AssetManager::GetInstance().CreateDesc( serializedAssetData );
     if( assetDesc )
     {
-        LoadAssetRequest request( sceneName, nodePath, pluginName, assetDesc, requestId );
-        m_assetsThread.QueueRequest( std::move( request ) );
+        auto scene = GetModelScene( sceneName );
+        auto node = GetNode( sceneName, nodePath );
+        
+        if( scene && node )
+        {
+            auto plugin = node->GetPlugin( pluginName );
+            if( plugin )
+            {
+                LoadAssetRequest request( scene, QueryTyped( node ), plugin, assetDesc, requestId );
+                m_assetsThread.QueueRequest( std::move( request ) );
 
-        return true;
+                return true;
+            }
+        }
     }
 
     return false;
@@ -1152,26 +1162,30 @@ void            BVProjectEditor::LoadAssetAsyncCallback     ( IEventPtr evt )
     {
         AssetAsyncLoadFinishedEventPtr loadedEvent = std::static_pointer_cast< AssetAsyncLoadFinishedEvent >( evt );
 
-        auto node = GetNode( loadedEvent->Request.SceneName, loadedEvent->Request.NodePath );
-
-        model::IPluginPtr plugin = nullptr;
-        if( node )
-        {
-            plugin = node->GetPlugin( loadedEvent->Request.PluginName );
-        }
-
         // This code will load asset for the second time. Since we loaded this asset already,
         // this code will only find asset on list and call plugin initialization of asset.
-        if( !LoadAsset( plugin, loadedEvent->Request.Descriptor ) )
-        {
-            // Loading failed. We must inform editor.
+        bool result = LoadAsset( loadedEvent->Request.Plugin, loadedEvent->Request.Descriptor );
 
-        }
-        else
-        {
-
-        }
+        // Inform editor about result.
+        LoadedAssetResponse( loadedEvent, result );
     }
+}
+
+// ***********************
+//
+void            BVProjectEditor::LoadedAssetResponse        ( AssetAsyncLoadFinishedEventPtr loadedEvent, bool result )
+{
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, LoadAssetEvent::Command::LoadAsset, loadedEvent->Request.RequestID, result );
+
+    auto & request = loadedEvent->Request;
+    request.Descriptor->Serialize( ser );
+
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, request.Scene->GetName() );
+    ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, model::ModelState::GetInstance().QueryNodePath( request.Node.get() ) );
+    ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, request.Plugin->GetName() );
+
+    SendResponse( ser, SEND_BROADCAST_EVENT, request.RequestID );
 }
 
 // ========================================================================= //

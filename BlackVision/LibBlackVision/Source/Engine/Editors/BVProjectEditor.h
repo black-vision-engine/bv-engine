@@ -229,7 +229,13 @@ public:
     bool                    LoadAsset                   ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData );
     bool                    LoadAssetAsync              ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData, Int32 requestId = -1 );
     bool                    LoadAsset                   ( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
+
+private:
+
     void                    LoadAssetAsyncCallback      ( IEventPtr evt );
+    void                    LoadedAssetResponse         ( AssetAsyncLoadFinishedEventPtr loadedEvent, bool result );
+
+public:
 
 /* LIGHTS */
 

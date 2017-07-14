@@ -2,6 +2,10 @@
 
 #include "Assets/AssetDescriptor.h"
 
+#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/SceneModel.h"
+#include "Engine/Models/Plugins/Plugin.h"
+
 #include <string>
 
 
@@ -13,9 +17,10 @@ namespace bv
 // Asynchronous asset loading request info.
 struct LoadAssetRequest
 {
-    std::string             SceneName;
-    std::string             NodePath;
-    std::string             PluginName;
+    model::SceneModelPtr    Scene;
+    model::BasicNodePtr     Node;
+    model::IPluginPtr       Plugin;
+
     AssetDescConstPtr       Descriptor;
     Int32                   RequestID;
 
@@ -27,10 +32,10 @@ struct LoadAssetRequest
         ,   RequestID( -1 )
     {}
 
-    explicit LoadAssetRequest( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, AssetDescConstPtr desc, Int32 requestId )
-        :   SceneName( sceneName )
-        ,   NodePath( nodePath )
-        ,   PluginName( pluginName )
+    explicit LoadAssetRequest( model::SceneModelPtr scene, model::BasicNodePtr node, model::IPluginPtr plugin, AssetDescConstPtr desc, Int32 requestId )
+        :   Scene( scene )
+        ,   Node( node )
+        ,   Plugin( plugin )
         ,   Descriptor( desc )
         ,   RequestID( requestId )
     {}
