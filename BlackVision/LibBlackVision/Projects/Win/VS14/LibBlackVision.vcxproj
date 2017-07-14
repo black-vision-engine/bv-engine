@@ -125,11 +125,11 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Async\AssetsThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetTracker.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\BVProject.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectTools.cpp" />
@@ -593,11 +593,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultWallPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
-    <ClInclude Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Async\AssetsThread.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Async\LoadAssetRequest.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetTracker.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\LoadAssetRequest.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\BVProject.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectTools.h" />

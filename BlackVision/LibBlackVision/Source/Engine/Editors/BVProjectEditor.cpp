@@ -51,7 +51,7 @@
 #include "Engine/Events/InnerEvents/Other/LightAddedEvent.h"
 #include "Engine/Events/InnerEvents/Other/LightRemovedEvent.h"
 
-#include "Assets/Async/AssetAsyncLoadFinishedEvent.h"
+#include "Engine/Editors/AssetsLoading/Async/AssetAsyncLoadFinishedEvent.h"
 
 #include "Engine/Models/NodeLogics/NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 

@@ -6,7 +6,7 @@
 
 #include "Engine/Interfaces/IConfig.h"
 
-#include "Assets/Async/AssetsThread.h"
+#include "Engine/Editors/AssetsLoading/Async/AssetsThread.h"
 
 
 

@@ -18,7 +18,7 @@
 
 #include "Engine/Models/Updaters/NodeUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Editors/AssetTracker.h"
+#include "Engine/Editors/AssetsLoading/AssetTracker.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffectFactory.h"
 

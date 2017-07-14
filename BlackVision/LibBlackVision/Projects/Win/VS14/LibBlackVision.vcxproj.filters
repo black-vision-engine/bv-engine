@@ -397,9 +397,6 @@
     <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
       <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\Async">
-      <UniqueIdentifier>{893158b3-72dd-4191-bdef-e379229dfe83}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Editors">
       <UniqueIdentifier>{af5bfeaf-8e8f-4813-bd8e-df08a0f77333}</UniqueIdentifier>
     </Filter>
@@ -423,6 +420,12 @@
     </Filter>
     <Filter Include="Engine\Editors\EditorVariables\ParametersDescriptors">
       <UniqueIdentifier>{94567ba5-1a21-4a2a-b61b-1e3c4988eab2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\AssetsLoading">
+      <UniqueIdentifier>{71e29981-2f54-496f-84ab-ad3ed1f081c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\AssetsLoading\Async">
+      <UniqueIdentifier>{38ea006c-2360-40e2-915d-e04909046873}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1909,13 +1912,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp">
       <Filter>Engine\Audio\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Async\AssetsThread.cpp">
-      <Filter>Assets\Async</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetTracker.cpp">
-      <Filter>Engine\Editors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Editors\BVProject.cpp">
       <Filter>Engine\Editors</Filter>
     </ClCompile>
@@ -1981,6 +1977,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp">
       <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.cpp">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.cpp">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp">
+      <Filter>Engine\Editors\AssetsLoading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5118,18 +5123,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h">
       <Filter>Engine\Audio\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Async\LoadAssetRequest.h">
-      <Filter>Assets\Async</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Async\AssetsThread.h">
-      <Filter>Assets\Async</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Async\AssetAsyncLoadFinishedEvent.h">
-      <Filter>Assets\Async</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetTracker.h">
-      <Filter>Engine\Editors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Editors\BVProject.h">
       <Filter>Engine\Editors</Filter>
     </ClInclude>
@@ -5198,6 +5191,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h">
       <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\LoadAssetRequest.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h">
+      <Filter>Engine\Editors\AssetsLoading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
