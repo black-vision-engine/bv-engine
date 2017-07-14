@@ -110,6 +110,15 @@ BVProjectEditor::BVProjectEditor                ( BVProject * project, const ICo
 
     project->m_engineSceneRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
     m_engineSceneEditor = new SceneEditor( project->m_renderer, project->m_engineSceneRoot );
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVProjectEditor::LoadAssetAsyncCallback ), AssetAsyncLoadFinishedEvent::Type() );
+}
+
+// ***********************
+//
+BVProjectEditor::~BVProjectEditor()
+{
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVProjectEditor::LoadAssetAsyncCallback ), AssetAsyncLoadFinishedEvent::Type() );
 }
 
 // *******************************

@@ -64,6 +64,7 @@ private:
 private:
 
                             BVProjectEditor       ( BVProject * project, const IConfig* config );
+                            ~BVProjectEditor      ();
 
 public:
 
