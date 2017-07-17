@@ -14,6 +14,8 @@ static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache/";
 
 TEST( TestCache, HardDriveRawDataCacheTest )
 {
+    HardDriveRawDataCache cache;
+
     auto chunk = MemoryChunk::Create( 512 );
     for( int i = 0; i < chunk->Size(); ++i )
         ( chunk->GetWritable() )[ i ] = (char)i;
@@ -29,13 +31,13 @@ TEST( TestCache, HardDriveRawDataCacheTest )
 
 
     // Add chunk to cache.
-    ASSERT_TRUE( HardDriveRawDataCache::GetInstance().Add( chunkHash, chunk, true ) );
+    ASSERT_TRUE( cache.Add( chunkHash, chunk, true ) );
 
     // Check if file was written to disk.
     EXPECT_TRUE( Path::Exists( fileName ) );
 
     // Try to get this data from cache.
-    auto returnChunk = HardDriveRawDataCache::GetInstance().Get( chunkHash );
+    auto returnChunk = cache.Get( chunkHash );
     ASSERT_TRUE( returnChunk.get() != nullptr && returnChunk->Get() != nullptr );
 
     // Compare chunk content loaded from disk.

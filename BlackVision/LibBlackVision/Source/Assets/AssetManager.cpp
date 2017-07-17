@@ -171,7 +171,6 @@ void AssetManager::RegisterBasicLoaders()
     RegisterLoader( SVGAssetDescriptor::UID(),          std::make_shared< SVGLoader >() );
 
     RawDataCache::GetInstance();
-    HardDriveRawDataCache::GetInstance();
 }
 
 

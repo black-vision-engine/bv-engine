@@ -79,13 +79,6 @@ HardDriveRawDataCache::HardDriveRawDataCache				()
 HardDriveRawDataCache::~HardDriveRawDataCache				()
 {}
 
-// ******************************
-// 
-HardDriveRawDataCache & HardDriveRawDataCache::GetInstance()
-{
-	static HardDriveRawDataCache instance;
-	return instance;
-}
 
 // ******************************
 // 
