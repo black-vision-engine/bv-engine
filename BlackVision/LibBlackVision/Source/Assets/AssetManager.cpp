@@ -44,29 +44,59 @@ AssetDescConstPtr AssetManager::CreateDesc( const IDeserializer& deserializer )
 //
 AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
 {
+    std::unique_lock< std::mutex > guard( m_lock );
+
     if( m_assetCache.Exists( desc ) )
         return m_assetCache.Get( desc );
     else
     {
-        auto it = m_loaders.find( desc->GetUID() );
+        auto result = m_loadBarrier.RequestAsset( desc );
+        
+        guard.unlock();
 
-        if( it != m_loaders.end() )
+        WaitingAsset* assetWait = result.first;
+        bool needWait = result.second;
+
+        if( needWait )
         {
-            auto asset = it->second->LoadAsset( desc );
-            if( asset != nullptr )
-            {
-                if( m_assetCache.Add( desc, asset ) )
-                {
-                    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
-                }
+            m_loadBarrier.WaitUntilLoaded( assetWait );
 
-                return asset;
-            }
+            // Loaded asset should be in assets list.
+            // FIXME: really ? Better return asset from WaitUntilLoaded
+            return m_assetCache.Get( desc );
         }
-
-        return nullptr;
+        else
+        {
+            return LoadAssetImpl( desc );
+        }
     }
 }
+
+// ***********************
+//
+AssetConstPtr       AssetManager::LoadAssetImpl ( const AssetDescConstPtr & desc )
+{
+    auto it = m_loaders.find( desc->GetUID() );
+
+    if( it != m_loaders.end() )
+    {
+        auto asset = it->second->LoadAsset( desc );
+        if( asset != nullptr )
+        {
+            if( m_assetCache.Add( desc, asset ) )
+            {
+                GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
+            }
+
+            m_loadBarrier.LoadingCompleted( desc );
+
+            return asset;
+        }
+    }
+
+    return nullptr;
+}
+
 
 // ***********************
 //
@@ -172,6 +202,7 @@ void AssetManager::RegisterBasicLoaders()
 
     RawDataCache::GetInstance();
 }
+
 
 
 

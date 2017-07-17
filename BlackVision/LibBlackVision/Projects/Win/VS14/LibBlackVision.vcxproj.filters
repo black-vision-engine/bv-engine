@@ -427,6 +427,9 @@
     <Filter Include="Engine\Editors\AssetsLoading\Async">
       <UniqueIdentifier>{38ea006c-2360-40e2-915d-e04909046873}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\AsyncLoading">
+      <UniqueIdentifier>{fdfbb725-9a0a-4d8b-8bc4-5bcfa468718a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1986,6 +1989,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp">
       <Filter>Engine\Editors\AssetsLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
+      <Filter>Assets\AsyncLoading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5203,6 +5209,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h">
       <Filter>Engine\Editors\AssetsLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h">
+      <Filter>Assets\AsyncLoading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
