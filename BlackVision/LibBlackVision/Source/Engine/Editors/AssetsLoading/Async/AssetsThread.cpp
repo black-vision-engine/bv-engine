@@ -41,7 +41,7 @@ void            AssetsThread::EndThread         ()
     LoadAssetRequest emptyRequest;
     emptyRequest.Descriptor = nullptr;
 
-    QueueRequest( std::move( emptyRequest ) );
+    m_assetRequests.Push( std::move( emptyRequest ) );
 }
 
 // ***********************

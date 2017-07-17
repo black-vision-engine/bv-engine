@@ -34,7 +34,7 @@ private:
 
 private:
     
-    mutable std::mutex                      m_lock;
+    mutable std::recursive_mutex            m_lock;
 
     Renderer *                              m_renderer;
     audio::AudioRenderer *                  m_audioRenderer;
