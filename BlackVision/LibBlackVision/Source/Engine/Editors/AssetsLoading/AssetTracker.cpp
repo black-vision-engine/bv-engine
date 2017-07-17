@@ -39,6 +39,8 @@ namespace bv {
 //
 void                    AssetTracker::ClearCache            ()
 {
+    std::lock_guard< std::mutex > guard( m_lock );
+
     for( auto it = m_uidsRegisterOrder.cbegin(); it != m_uidsRegisterOrder.cend(); )
     {
         auto uid = *it;
@@ -84,6 +86,8 @@ void                    AssetTracker::ClearCache            ()
 //
 std::vector< AssetTracker::AssetUID >   AssetTracker::GetUnusedAssetUIDs    () const
 {
+    std::lock_guard< std::mutex > guard( m_lock );
+
     std::vector< AssetUID > ret;
 
     for( auto & uid : m_registeredUIDs )
@@ -103,6 +107,8 @@ void                                    AssetTracker::ProcessEvent          ( IE
 {
     if( evt->GetEventType() == AssetTrackerInternalEvent::Type() )
     {
+        std::lock_guard< std::mutex > guard( m_lock );
+
         auto typedEvent = std::static_pointer_cast< AssetTrackerInternalEvent >( evt );
         switch( typedEvent->EventCommand )
         {
@@ -191,6 +197,7 @@ void                                    AssetTracker::ProcessEvent          ( IE
 //
 void                    AssetTracker::RegisterAsset                     ( AssetUID uid )
 {
+    std::lock_guard< std::mutex > guard( m_lock );
     RegisterAsset( m_registeredUIDs, uid, m_uidsRegisterOrder );
 }
 
@@ -198,6 +205,7 @@ void                    AssetTracker::RegisterAsset                     ( AssetU
 //
 void                    AssetTracker::RegisterAsset                     ( AssetKey key )
 {
+    std::lock_guard< std::mutex > guard( m_lock );
     RegisterAsset( m_registeredKeys, key, m_keysRegisterOrder );
 }
 
@@ -205,6 +213,7 @@ void                    AssetTracker::RegisterAsset                     ( AssetK
 //
 void                    AssetTracker::UnregisterAsset                   ( AssetUID uid )
 {
+    std::lock_guard< std::mutex > guard( m_lock );
     UnregisterAsset( m_registeredUIDs, uid );
 }
 
@@ -212,6 +221,7 @@ void                    AssetTracker::UnregisterAsset                   ( AssetU
 //
 void                    AssetTracker::UnregisterAsset                   ( AssetKey key )
 {
+    std::lock_guard< std::mutex > guard( m_lock );
     UnregisterAsset( m_registeredKeys, key );
 }
 

@@ -83,7 +83,7 @@ HardDriveRawDataCache::~HardDriveRawDataCache				()
 // 
 HardDriveRawDataCache & HardDriveRawDataCache::GetInstance()
 {
-	static HardDriveRawDataCache instance = HardDriveRawDataCache();
+	static HardDriveRawDataCache instance;
 	return instance;
 }
 
@@ -91,8 +91,9 @@ HardDriveRawDataCache & HardDriveRawDataCache::GetInstance()
 // 
 MemoryChunkConstPtr	HardDriveRawDataCache::Get		( const Hash & key ) const
 {
-	auto it = m_entries.find( key );
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
 
+	auto it = m_entries.find( key );
 	if( it != m_entries.end() )
 	{
 		return Load( key );
@@ -107,6 +108,8 @@ MemoryChunkConstPtr	HardDriveRawDataCache::Get		( const Hash & key ) const
 // 
 bool HardDriveRawDataCache::Exists					( const Hash & key ) const
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
 	return m_entries.find( key ) != m_entries.end();
 }
 
@@ -114,6 +117,8 @@ bool HardDriveRawDataCache::Exists					( const Hash & key ) const
 // 
 bool HardDriveRawDataCache::Add					( const Hash & key, const MemoryChunkConstPtr & memory, bool rewriteIfExists )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
 	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
 
 	auto exists = Path::Exists( fileName );
@@ -121,6 +126,8 @@ bool HardDriveRawDataCache::Add					( const Hash & key, const MemoryChunkConstPt
 	if( !exists || rewriteIfExists )
 	{
 		File::Write( memory->Get(), memory->Size(), fileName, false );
+
+        m_entries.insert( key );
 
 		return true;
 	}

@@ -4,6 +4,8 @@
 #include "Memory/MemoryChunk.h"
 
 #include <map>
+#include <mutex>
+
 
 namespace bv
 {
@@ -42,7 +44,9 @@ private:
 
     MemoryChunkConstPtr     Find( const Hash & key ) const;
 
-    std::map< Hash, MemoryChunkConstPtr > m_data;
+    std::map< Hash, MemoryChunkConstPtr >   m_data;
+    mutable std::recursive_mutex            m_lock;
+
 };
 
 } // bv

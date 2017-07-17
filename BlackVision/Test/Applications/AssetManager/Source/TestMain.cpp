@@ -56,6 +56,8 @@ TEST(LoadingTexture, AssetManager)
 
 TEST(LoadingTexturePowefOf2Texture, AssetManager)
 {
+    // FIXME: If this test fails, maybe solution is to clean cache directory.
+    // FIXME: What is exepcted solution, when texture is loaded from cache ?
     auto typedRes = LoadTextureAsset( PMFilePrefix + imagePath_512x512, MipMapFilterType::BILINEAR );
     ASSERT_TRUE( typedRes->GetOriginal()->GetData() == typedRes->GetMipMaps()->GetLevel( 0 )->GetData() );
 }  

@@ -7,6 +7,9 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/Events.h"
 
+#include "Assets/Cache/RawDataCache.h"
+#include "Assets/Cache/HardDriveRawDataCache.h"
+
 #include <memory>
 
 
@@ -138,7 +141,7 @@ AssetConstPtr AssetManager::GetFromCache    ( const std::string & assetKey )
 //
 AssetManager & AssetManager::GetInstance()
 {
-    static auto instance = AssetManager();
+    static AssetManager instance;
     return instance;
 }
 
@@ -166,6 +169,9 @@ void AssetManager::RegisterBasicLoaders()
     RegisterLoader( MeshAssetDesc::UID(),	            std::make_shared< MeshLoader >() );
     RegisterLoader( DataArrayAssetDescriptor::UID(),	std::make_shared< DataArrayLoader >() );
     RegisterLoader( SVGAssetDescriptor::UID(),          std::make_shared< SVGLoader >() );
+
+    RawDataCache::GetInstance();
+    HardDriveRawDataCache::GetInstance();
 }
 
 

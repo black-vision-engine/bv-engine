@@ -9,6 +9,9 @@
 #include "Engine/Events/Events.h"
 #include "Engine/Events/EventManager.h"
 
+#include <mutex>
+
+
 
 namespace bv { 
 
@@ -31,6 +34,8 @@ private:
 
 private:
     
+    mutable std::mutex                      m_lock;
+
     Renderer *                              m_renderer;
     audio::AudioRenderer *                  m_audioRenderer;
 
