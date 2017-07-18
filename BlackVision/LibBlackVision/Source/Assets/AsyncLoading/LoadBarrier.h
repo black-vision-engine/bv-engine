@@ -24,33 +24,37 @@ class WaitingAsset
     friend class LoadBarrier;
 private:
 
-    AssetDescConstPtr			m_assetDesc;
-    std::atomic< UInt16	>		m_numWaiting;
-    bool						m_ready;
+    AssetDescConstPtr               m_assetDesc;
+    std::atomic< UInt16 >           m_numWaiting;
+    bool                            m_ready;
 
-    std::condition_variable		m_condition;
-    std::mutex					m_lock;
+    std::condition_variable         m_condition;
+    std::mutex                      m_lock;
+
+    AssetConstPtr                   m_loadedAsset;
 
 public:
-    WaitingAsset		() = default;
-    WaitingAsset		( AssetDescConstPtr assetDesc );
-    ~WaitingAsset		();
+    WaitingAsset        () = default;
+    WaitingAsset        ( AssetDescConstPtr assetDesc );
+    ~WaitingAsset       ();
 
 
 private:
 
     /**@brief Function blocks until resource will be loaded.
     @return Returns true if it was last waiting thread.*/
-    bool				WaitUntilLoaded		();
+    bool                WaitUntilLoaded     ();
 
     /**@brief Increments loading threads count.*/
-    void				RequestAsset		();
+    void                RequestAsset        ();
 
     /**@brief Notify all threads waiting for this asset.*/
-    void				LoadingCompleted	();
+    void                LoadingCompleted    ( AssetConstPtr asset );
 
     /**@brief Check if file is during laoding.*/
-    bool				Compare				( AssetDescConstPtr assetDesc );
+    bool                Compare             ( AssetDescConstPtr assetDesc );
+
+    AssetConstPtr       GetAsset            () const { return m_loadedAsset; }
 };
 
 
@@ -60,8 +64,8 @@ class LoadBarrier
 {
 private:
 
-    std::vector< WaitingAsset* >	m_waitingAssets;
-    std::mutex						m_lock;
+    std::vector< WaitingAsset* >        m_waitingAssets;
+    std::mutex                          m_lock;
 
 public:
     ~LoadBarrier();
@@ -70,14 +74,14 @@ public:
     Otherwise new WaitingAsset object is created to block future loads.
     @return Function returns true if asset already existed. If WaitingAsset was created in this function call function returns true.
     Note: WaitingAsset should never be nullptr.*/
-    std::pair< WaitingAsset*, bool >		RequestAsset		( AssetDescConstPtr assetDesc );
+    std::pair< WaitingAsset*, bool >        RequestAsset            ( AssetDescConstPtr assetDesc );
 
     /**@brief Function waits until asset will be loaded.*/
-    void									WaitUntilLoaded		( WaitingAsset* asset );
+    AssetConstPtr                           WaitUntilLoaded         ( WaitingAsset* asset );
 
     /**@brief Notify all threads waiting for this asset.*/
-    void									LoadingCompleted	( AssetDescConstPtr assetDesc );
+    void                                    LoadingCompleted        ( AssetDescConstPtr assetDesc, AssetConstPtr asset );
 };
 
 
-}	// sw
+}    // sw

@@ -46,9 +46,8 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
 {
     std::unique_lock< std::mutex > guard( m_lock );
 
-    if( m_assetCache.Exists( desc ) )
-        return m_assetCache.Get( desc );
-    else
+    auto asset = m_assetCache.Get( desc );
+    if( !asset )
     {
         auto result = m_loadBarrier.RequestAsset( desc );
         
@@ -58,18 +57,12 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
         bool needWait = result.second;
 
         if( needWait )
-        {
-            m_loadBarrier.WaitUntilLoaded( assetWait );
-
-            // Loaded asset should be in assets list.
-            // FIXME: really ? Better return asset from WaitUntilLoaded
-            return m_assetCache.Get( desc );
-        }
+            asset = m_loadBarrier.WaitUntilLoaded( assetWait );
         else
-        {
-            return LoadAssetImpl( desc );
-        }
+            asset = LoadAssetImpl( desc );
     }
+
+    return asset;
 }
 
 // ***********************
@@ -88,7 +81,7 @@ AssetConstPtr       AssetManager::LoadAssetImpl ( const AssetDescConstPtr & desc
                 GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
             }
 
-            m_loadBarrier.LoadingCompleted( desc );
+            m_loadBarrier.LoadingCompleted( desc, asset );
 
             return asset;
         }

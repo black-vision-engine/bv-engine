@@ -14,7 +14,7 @@ namespace bv
 
 // ================================ //
 //
-WaitingAsset::WaitingAsset	( AssetDescConstPtr assetDesc )
+WaitingAsset::WaitingAsset    ( AssetDescConstPtr assetDesc )
     : m_assetDesc( assetDesc )
     , m_numWaiting( 0 )
     , m_ready( false )
@@ -25,12 +25,12 @@ WaitingAsset::WaitingAsset	( AssetDescConstPtr assetDesc )
 WaitingAsset::~WaitingAsset()
 {
     // @todo It won't work :(
-    LoadingCompleted();
+    LoadingCompleted( nullptr );
 }
 
 // ================================ //
 //
-bool			WaitingAsset::WaitUntilLoaded		()
+bool            WaitingAsset::WaitUntilLoaded        ()
 {
     std::unique_lock< std::mutex > lock( m_lock );
     while( !m_ready )
@@ -46,16 +46,17 @@ bool			WaitingAsset::WaitUntilLoaded		()
 
 // ================================ //
 //
-void			WaitingAsset::RequestAsset			()
+void            WaitingAsset::RequestAsset            ()
 {
     m_numWaiting++;
 }
 
 // ================================ //
 //
-void			WaitingAsset::LoadingCompleted		()
+void            WaitingAsset::LoadingCompleted        ( AssetConstPtr asset )
 {
     m_lock.lock();
+    m_loadedAsset = asset;
     m_ready = true;
     m_lock.unlock();
 
@@ -64,15 +65,16 @@ void			WaitingAsset::LoadingCompleted		()
 
 // ================================ //
 //
-bool			WaitingAsset::Compare				( AssetDescConstPtr assetDesc )
+bool            WaitingAsset::Compare                ( AssetDescConstPtr assetDesc )
 {
-    assert( !"Implement me" );
+    if( m_assetDesc->GetUID() == assetDesc->GetUID() )
+        return m_assetDesc->GetKey() == assetDesc->GetKey();
     return false;
 }
 
 
 //====================================================================================//
-//				LoadBarrier
+//                LoadBarrier
 //====================================================================================//
 
 // ================================ //
@@ -85,7 +87,7 @@ LoadBarrier::~LoadBarrier()
 
 // ================================ //
 //
-std::pair< WaitingAsset*, bool >		LoadBarrier::RequestAsset		( AssetDescConstPtr assetDesc )
+std::pair< WaitingAsset*, bool >        LoadBarrier::RequestAsset        ( AssetDescConstPtr assetDesc )
 {
     std::unique_lock< std::mutex > lock( m_lock );
 
@@ -94,7 +96,7 @@ std::pair< WaitingAsset*, bool >		LoadBarrier::RequestAsset		( AssetDescConstPtr
     {
         if( asset->Compare( assetDesc ) )
         {
-            assert( assetWait == nullptr );		// Should be only one file in waiting vector.
+            assert( assetWait == nullptr );        // Should be only one file in waiting vector.
             assetWait = asset;
         }
     }
@@ -113,8 +115,10 @@ std::pair< WaitingAsset*, bool >		LoadBarrier::RequestAsset		( AssetDescConstPtr
 
 // ================================ //
 //
-void									LoadBarrier::WaitUntilLoaded	( WaitingAsset* asset )
+AssetConstPtr                           LoadBarrier::WaitUntilLoaded    ( WaitingAsset* asset )
 {
+    auto loadedAsset = asset->GetAsset();
+
     bool isLast = asset->WaitUntilLoaded();
     if( isLast )
     {
@@ -134,21 +138,23 @@ void									LoadBarrier::WaitUntilLoaded	( WaitingAsset* asset )
 
         assert( removed );
     }
+
+    return loadedAsset;
 }
 
 // ================================ //
 //
-void									LoadBarrier::LoadingCompleted	( AssetDescConstPtr assetDesc )
+void                                    LoadBarrier::LoadingCompleted    ( AssetDescConstPtr assetDesc, AssetConstPtr loadedAsset )
 {
     std::unique_lock< std::mutex > lock( m_lock );
 
     for( auto asset : m_waitingAssets )
     {
         if( asset->Compare( assetDesc ) )
-            asset->LoadingCompleted();
+            asset->LoadingCompleted( loadedAsset );
 
         // WaitingAsset will be removed when last thread will leave waiting lock.
     }
 }
 
-}	// sw
+}    // sw

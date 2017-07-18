@@ -147,8 +147,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\FakeAssets\FakeAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\FakeAssets\FakeDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\TestCache.cpp" />
+    <ClCompile Include="..\..\..\Source\TestLoadBarrier.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\FakeAssets\FakeAsset.h" />
+    <ClInclude Include="..\..\..\Source\FakeAssets\FakeDescriptor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
