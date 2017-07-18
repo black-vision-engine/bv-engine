@@ -13,17 +13,40 @@
 
 
 
+// ========================================================================= //
+// Load Barrier accessor class
+// ========================================================================= //
+
+
+namespace bv
+{
+
+
+class LoadBarrier_Tester
+{
+private:
+public:
+
+    static std::vector< WaitingAsset* > &       GetWaitingAssets    ( LoadBarrier & barrier )   { return barrier.m_waitingAssets;  }
+
+};
+
+}	// bv
+
+// ========================================================================= //
+// Test helper functions
+// ========================================================================= //
 
 const int numThreads = 4;
 
-bv::ThreadsBarrier        gPreAccessBarrier( numThreads );
-bv::ThreadsBarrier        gPreWaitBarrier( numThreads - 1 );
-bv::LoadBarrier            gLoadBarrier;
-std::vector< int >        gOrderChecker;
-std::mutex                gCheckerLock;
+bv::ThreadsBarrier          gPreAccessBarrier( numThreads );
+bv::ThreadsBarrier          gPreWaitBarrier( numThreads - 1 );
+bv::LoadBarrier             gLoadBarrier;
+std::vector< int >          gOrderChecker;
+std::mutex                  gCheckerLock;
 
-bv::FakeDescriptorConstPtr assetFile = std::make_shared< bv::FakeDescriptor >( "assets/wombat.jpg" );
-bv::FakeDescriptorConstPtr independentAsset = std::make_shared< bv::FakeDescriptor >( "assets/texture.jpg" );
+bv::FakeDescriptorConstPtr  assetFile = std::make_shared< bv::FakeDescriptor >( "assets/wombat.jpg" );
+bv::FakeDescriptorConstPtr  independentAsset = std::make_shared< bv::FakeDescriptor >( "assets/texture.jpg" );
 
 bool threadsInternalResult[ numThreads ];
 bool notNullWaitingAsset[ numThreads ];
@@ -102,12 +125,14 @@ void        IndependentAssetThread    ( int threadNum )
     // Independent thread should pass without blocking. result.second should be false.
     threadsInternalResult[ threadNum ] = result.second;
     notNullWaitingAsset[ threadNum ] = result.first != nullptr;
+
+    gLoadBarrier.LoadingCompleted( independentAsset, nullptr );
 }
 
 
 // ================================ //
 // Only one thread should enter loading at the same time. Rest should wait.
-TEST( AssetsLoading, LoadBarrierTest )
+TEST( LoadBarrierTest, AssetsLoading )
 {
     std::thread threads[ numThreads ];
 
@@ -138,5 +163,33 @@ TEST( AssetsLoading, LoadBarrierTest )
     EXPECT_TRUE( ( gOrderChecker[ 2 ] == 1 || gOrderChecker[ 2 ] == 2 ) );
     EXPECT_TRUE( ( gOrderChecker[ 3 ] == 1 || gOrderChecker[ 3 ] == 2 ) );
 
+
+    // Waiting assets list should be cleaned.
+    EXPECT_EQ( bv::LoadBarrier_Tester::GetWaitingAssets( gLoadBarrier ).size(), 0 );
+}
+
+
+
+bv::LoadBarrier     gBarrier;
+
+
+// ================================ //
+// Load asset from single thread. Barrier should end in clean state without waiting assets on list.
+// Note that this checks state cleaning in situation, when there're no other threads what differs
+// from previous test case.
+TEST( LoadBarrierTest, SingleAssetLoading )
+{
+    auto result = gBarrier.RequestAsset( assetFile );
+
+    // New Waiting asset should be created in this case.
+    ASSERT_EQ( result.second, false );
+    EXPECT_TRUE( result.first != nullptr );
+
+    // Here in real application should be loading code.
+
+    gBarrier.LoadingCompleted( assetFile, nullptr );
+
+    // Waiting assets list should be cleaned.
+    EXPECT_EQ( bv::LoadBarrier_Tester::GetWaitingAssets( gBarrier ).size(), 0 );
 }
 

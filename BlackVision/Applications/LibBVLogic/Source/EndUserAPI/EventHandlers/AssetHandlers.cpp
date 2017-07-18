@@ -65,7 +65,7 @@ void        AssetHandlers::LoadAsset            ( bv::IEventPtr eventPtr )
         }
 
         auto projectEditor = m_appLogic->GetBVProject()->GetProjectEditor();
-        bool result = projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
+        bool result = projectEditor->LoadAssetAsync( sceneName, nodeName, pluginName, assetData );
 
         SendSimpleResponse( LoadAssetEvent::Command::LoadAsset, eventLoadAsset->EventID, eventLoadAsset->SocketID, result );
     }

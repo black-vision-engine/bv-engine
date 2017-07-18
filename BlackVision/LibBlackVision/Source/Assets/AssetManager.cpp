@@ -87,6 +87,8 @@ AssetConstPtr       AssetManager::LoadAssetImpl ( const AssetDescConstPtr & desc
         }
     }
 
+    // Loading failed but we must wake all waiting threads.
+    m_loadBarrier.LoadingCompleted( desc, nullptr );
     return nullptr;
 }
 

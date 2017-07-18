@@ -62,7 +62,7 @@ void            AssetsThread::LoadingThread     ()
 
         // Send event
         AssetAsyncLoadFinishedEventPtr loadedEvt = std::make_shared< AssetAsyncLoadFinishedEvent >( asset, std::move( request ) );
-        GetDefaultEventManager().QueueEvent( loadedEvt );
+        GetDefaultEventManager().ConcurrentQueueEvent( loadedEvt );
     }
 }
 

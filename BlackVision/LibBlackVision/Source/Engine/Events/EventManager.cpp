@@ -241,7 +241,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         while ( !m_queues[ m_activeQueue ].IsEmpty() )
         {
             auto evt = m_queues[ m_activeQueue ].Front();
-            m_queues[ activeQueue ].Pop();
+            m_queues[ m_activeQueue ].Pop();
 
             tmp.push_back( evt );
         }

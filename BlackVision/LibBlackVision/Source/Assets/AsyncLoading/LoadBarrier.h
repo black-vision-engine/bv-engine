@@ -48,13 +48,17 @@ private:
     /**@brief Increments loading threads count.*/
     void                RequestAsset        ();
 
-    /**@brief Notify all threads waiting for this asset.*/
-    void                LoadingCompleted    ( AssetConstPtr asset );
+    /**@brief Notify all threads waiting for this asset.
+    @return Returns true if it was last thread requesting this asset.*/
+    bool                LoadingCompleted    ( AssetConstPtr asset );
 
     /**@brief Check if file is during laoding.*/
     bool                Compare             ( AssetDescConstPtr assetDesc );
 
     AssetConstPtr       GetAsset            () const { return m_loadedAsset; }
+
+private:
+    friend class LoadBarrier_Tester;
 };
 
 
@@ -81,7 +85,14 @@ public:
 
     /**@brief Notify all threads waiting for this asset.*/
     void                                    LoadingCompleted        ( AssetDescConstPtr assetDesc, AssetConstPtr asset );
+
+private:
+
+    bool                                    RemoveWaitingAsset      ( WaitingAsset* asset );
+
+private:
+    friend class LoadBarrier_Tester;
 };
 
 
-}    // sw
+}    // bv
