@@ -124,9 +124,9 @@ std::pair< WaitingAsset*, bool >        LoadBarrier::RequestAsset        ( Asset
 //
 AssetConstPtr                           LoadBarrier::WaitUntilLoaded    ( WaitingAsset* asset )
 {
+    bool isLast = asset->WaitUntilLoaded();
     auto loadedAsset = asset->GetAsset();
 
-    bool isLast = asset->WaitUntilLoaded();
     if( isLast )
     {
         std::unique_lock< std::mutex > lock( m_lock );

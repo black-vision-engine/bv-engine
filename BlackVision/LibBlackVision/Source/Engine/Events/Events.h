@@ -160,6 +160,7 @@ public:
     std::string                     SceneName;
     std::string                     PluginName;
     IDeserializer *                 AssetData;
+    bool                            AsyncLoad;
 
 public:
     explicit                        LoadAssetEvent      () { AssetData = nullptr; }
