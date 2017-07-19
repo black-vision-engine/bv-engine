@@ -30,7 +30,8 @@ EventManager::EventManager                  ()
 //
 EventManager::~EventManager                 ()
 {
-    LOG_MESSAGE( SeverityLevel::info ) << "Default Event Manager shutdown.";
+    // Static deitnitialization doesn't allow to use logger.
+    //LOG_MESSAGE( SeverityLevel::info ) << "Default Event Manager shutdown.";
 }
 
 // *******************************

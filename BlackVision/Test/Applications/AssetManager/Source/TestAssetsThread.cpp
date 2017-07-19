@@ -69,7 +69,7 @@ TEST( AssetsThreadTest, AssetLoading )
     GetDefaultEventManager().Update( 100 );
 
     // Check global variables state
-    EXPECT_TRUE( gLoadedAsset != nullptr );
+    ASSERT_TRUE( gLoadedAsset != nullptr );
     EXPECT_TRUE( std::static_pointer_cast< const FakeAsset >( gLoadedAsset )->GetPath() == "path" );
 
     EXPECT_TRUE( gLoadRequest.Descriptor == desc );

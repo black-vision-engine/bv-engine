@@ -6,11 +6,17 @@
 
 #include "Engine/Types/Enums.h"
 
+#include <mutex>
+
 
 namespace bv {
 
 class MeshLoader : public AssetLoader
 {
+private:
+
+    mutable std::mutex      m_lock;
+
 public:
 
     AssetConstPtr						LoadAsset			( const AssetDescConstPtr & desc ) const override;
