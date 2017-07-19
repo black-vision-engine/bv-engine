@@ -228,7 +228,9 @@ public:
 /* ASSETS */
 
     bool                    LoadAsset                   ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData );
+    bool                    LoadAsset                   ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, AssetDescConstPtr desc );
     bool                    LoadAssetAsync              ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData, Int32 requestId = -1 );
+    bool                    LoadAssetAsync              ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, AssetDescConstPtr desc, Int32 requestId = -1 );
     bool                    LoadAsset                   ( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
 
 private:

@@ -1107,7 +1107,13 @@ return success;
 bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData )
 {
     auto assetDesc = AssetManager::GetInstance().CreateDesc( serializedAssetData );
+    return LoadAsset( sceneName, nodePath, pluginName, assetDesc );
+}
 
+// ***********************
+//
+bool            BVProjectEditor::LoadAsset                  ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, AssetDescConstPtr assetDesc )
+{
     auto node = GetNode( sceneName, nodePath );
 
     model::IPluginPtr plugin = nullptr;
@@ -1124,11 +1130,18 @@ bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std
 bool            BVProjectEditor::LoadAssetAsync             ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData, Int32 requestId )
 {
     auto assetDesc = AssetManager::GetInstance().CreateDesc( serializedAssetData );
+    return LoadAssetAsync( sceneName, nodePath, pluginName, assetDesc, requestId );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::LoadAssetAsync             ( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, AssetDescConstPtr assetDesc, Int32 requestId )
+{
     if( assetDesc )
     {
         auto scene = GetModelScene( sceneName );
         auto node = GetNode( sceneName, nodePath );
-        
+
         if( scene && node )
         {
             auto plugin = node->GetPlugin( pluginName );
