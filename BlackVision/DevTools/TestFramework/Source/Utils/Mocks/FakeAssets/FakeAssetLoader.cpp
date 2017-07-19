@@ -24,7 +24,7 @@ AssetConstPtr               FakeAssetLoader::LoadAsset          ( const AssetDes
 
 // ***********************
 //
-AssetDescConstPtr           FakeAssetLoader::CreateDescriptor   ( const IDeserializer & deserializeObject ) const
+AssetDescConstPtr           FakeAssetLoader::CreateDescriptor   ( const IDeserializer & /*deser*/ ) const
 {
     assert( !"Implement when necessary" );
     return AssetDescConstPtr();
@@ -32,7 +32,7 @@ AssetDescConstPtr           FakeAssetLoader::CreateDescriptor   ( const IDeseria
 
 // ***********************
 //
-ThumbnailConstPtr           FakeAssetLoader::LoadThumbnail      ( const AssetDescConstPtr & desc ) const
+ThumbnailConstPtr           FakeAssetLoader::LoadThumbnail      ( const AssetDescConstPtr & /*desc*/ ) const
 {
     assert( !"Implement when necessary" );
     return ThumbnailConstPtr();

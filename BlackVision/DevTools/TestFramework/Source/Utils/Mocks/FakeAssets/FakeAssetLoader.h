@@ -6,6 +6,10 @@
 
 namespace bv {
 
+
+
+// ***********************
+//
 class FakeAssetLoader : public AssetLoader
 {
 public:
@@ -18,7 +22,7 @@ public:
     virtual								~FakeAssetLoader		(){}
 };
 
-
+DEFINE_PTR_TYPE( FakeAssetLoader )
 
 
 } // bv
