@@ -25,6 +25,9 @@
     <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h" />
     <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h" />
     <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
@@ -33,6 +36,9 @@
     <ClCompile Include="..\..\..\Source\Framework\MultiframeTestRunner.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\TestExecutor.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\XmlGTestReporter.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Applications\LibBVLogic\Projects\Win\VS14\LibBVLogic.vcxproj">

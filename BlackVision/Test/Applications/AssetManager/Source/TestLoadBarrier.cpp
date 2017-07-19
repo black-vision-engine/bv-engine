@@ -8,9 +8,8 @@
 #include "Threading/ThreadsBarrier.h"
 #include "Assets/AsyncLoading/LoadBarrier.h"
 
-#include "FakeAssets/FakeDescriptor.h"
-#include "FakeAssets/FakeAsset.h"
-
+#include "Utils/Mocks/FakeAssets/FakeAsset.h"
+#include "Utils/Mocks/FakeAssets/FakeDescriptor.h"
 
 
 // ========================================================================= //

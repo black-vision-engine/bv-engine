@@ -13,6 +13,14 @@ const std::string FakeDescriptor::uid = "FAKE_ASSET_DESC";
 //
 FakeDescriptor::FakeDescriptor( const std::string & path )
     :   m_path( path )
+    ,   m_sleepTime( 0 )
+{}
+
+// ***********************
+//
+FakeDescriptor::FakeDescriptor( const std::string & path, UInt32 sleepMillis )
+    :   m_path( path )
+    ,   m_sleepTime( sleepMillis )
 {}
 
 // ***********************

@@ -22,10 +22,12 @@ private:
     static const std::string						uid;
 
     std::string             m_path;
+    UInt32                  m_sleepTime;
 
 public:
 
     explicit                        FakeDescriptor              ( const std::string & path );
+    explicit                        FakeDescriptor              ( const std::string & path, UInt32 sleepMillis );
 
     virtual void                    Serialize                   ( ISerializer & ser ) const override;
     virtual VoidConstPtr            QueryThis                   () const override;
@@ -38,6 +40,8 @@ public:
 
     static const std::string &      UID					        ();
 
+    const std::string &             GetPath                     () const { return m_path;  }
+    UInt32                          GetSleepTime                () const { return m_sleepTime;  }
 };
 
 

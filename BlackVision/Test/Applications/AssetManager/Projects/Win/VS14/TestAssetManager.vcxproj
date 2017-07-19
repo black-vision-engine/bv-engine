@@ -134,6 +134,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\DevTools\TestFramework\Projects\Win\VS14\TestFramework.vcxproj">
+      <Project>{8a1a370e-7c9e-496b-9a55-974807cc630a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
@@ -147,15 +150,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\FakeAssets\FakeAsset.cpp" />
-    <ClCompile Include="..\..\..\Source\FakeAssets\FakeDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAssetsThread.cpp" />
     <ClCompile Include="..\..\..\Source\TestCache.cpp" />
     <ClCompile Include="..\..\..\Source\TestLoadBarrier.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Source\FakeAssets\FakeAsset.h" />
-    <ClInclude Include="..\..\..\Source\FakeAssets\FakeDescriptor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

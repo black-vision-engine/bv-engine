@@ -4,24 +4,6 @@
     <ClCompile Include="..\..\..\Source\TestCache.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
     <ClCompile Include="..\..\..\Source\TestLoadBarrier.cpp" />
-    <ClCompile Include="..\..\..\Source\FakeAssets\FakeDescriptor.cpp">
-      <Filter>FakeAssets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\FakeAssets\FakeAsset.cpp">
-      <Filter>FakeAssets</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="FakeAssets">
-      <UniqueIdentifier>{76c82bfe-fe3c-4bf9-acb4-86a1a84c053e}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Source\FakeAssets\FakeDescriptor.h">
-      <Filter>FakeAssets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\FakeAssets\FakeAsset.h">
-      <Filter>FakeAssets</Filter>
-    </ClInclude>
+    <ClCompile Include="..\..\..\Source\TestAssetsThread.cpp" />
   </ItemGroup>
 </Project>
