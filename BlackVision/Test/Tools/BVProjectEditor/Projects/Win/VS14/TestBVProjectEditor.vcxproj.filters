@@ -8,10 +8,13 @@
     <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp">
       <Filter>NodesTests</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\AssetsTest\SyncLoadingTest.cpp">
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestMixedSyncAsyncLoading.cpp">
       <Filter>AssetsTest</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\AssetsTest\MixedSyncAsyncLoadingTest.cpp">
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestSyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestAsyncLoading.cpp">
       <Filter>AssetsTest</Filter>
     </ClCompile>
   </ItemGroup>

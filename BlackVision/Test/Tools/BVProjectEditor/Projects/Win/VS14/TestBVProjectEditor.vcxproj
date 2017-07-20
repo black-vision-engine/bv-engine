@@ -141,8 +141,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\AssetsTest\MixedSyncAsyncLoadingTest.cpp" />
-    <ClCompile Include="..\..\..\Source\AssetsTest\SyncLoadingTest.cpp" />
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestAsyncLoading.cpp" />
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestMixedSyncAsyncLoading.cpp" />
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestSyncLoading.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
