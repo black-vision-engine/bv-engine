@@ -30,7 +30,8 @@ EventManager::EventManager                  ()
 //
 EventManager::~EventManager                 ()
 {
-    LOG_MESSAGE( SeverityLevel::info ) << "Default Event Manager shutdown.";
+    // Static deitnitialization doesn't allow to use logger.
+    //LOG_MESSAGE( SeverityLevel::info ) << "Default Event Manager shutdown.";
 }
 
 // *******************************
@@ -241,7 +242,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         while ( !m_queues[ m_activeQueue ].IsEmpty() )
         {
             auto evt = m_queues[ m_activeQueue ].Front();
-            m_queues[ activeQueue ].Pop();
+            m_queues[ m_activeQueue ].Pop();
 
             tmp.push_back( evt );
         }

@@ -193,9 +193,6 @@
     <Filter Include="Engine\Graphics\Rendering">
       <UniqueIdentifier>{a96ef61e-ff68-4bc1-a615-59e9c1661ba9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\EditorVariables">
-      <UniqueIdentifier>{7894fab9-865a-4c07-a90a-ddde56d8a731}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Lights">
       <UniqueIdentifier>{db65c1af-2082-49de-86c2-432b5bc6149a}</UniqueIdentifier>
     </Filter>
@@ -210,9 +207,6 @@
     </Filter>
     <Filter Include="Engine\Models\Cameras">
       <UniqueIdentifier>{4b96ea70-4824-40fe-bf3a-6c223213ee6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\EditorVariables\ParametersDescriptors">
-      <UniqueIdentifier>{2a31797a-f6db-4c21-b0dd-9af1d02cd771}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Models\Plugins\Simple\Shapes">
       <UniqueIdentifier>{8b2b74c7-c2c1-4d30-bf32-782e5c374df3}</UniqueIdentifier>
@@ -240,21 +234,6 @@
     </Filter>
     <Filter Include="Assets\DataArray">
       <UniqueIdentifier>{5d32f185-ad80-48ea-9a8a-5e09c272806f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo">
-      <UniqueIdentifier>{dbc18cb6-546e-4347-ba0b-7674605fc186}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Nodes">
-      <UniqueIdentifier>{984470cd-42c7-456c-a709-fefb57ba1d36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Plugins">
-      <UniqueIdentifier>{87e38c20-b06c-4d2b-b2c5-a37a39b12637}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Timelines">
-      <UniqueIdentifier>{33ef9e14-422b-46ea-ae62-c3d31d5c8383}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Lights">
-      <UniqueIdentifier>{69432d55-d2af-4c7d-9b40-3f4a2c4205d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets\SVG">
       <UniqueIdentifier>{799c203d-e583-420c-ab09-d67756fda036}</UniqueIdentifier>
@@ -417,6 +396,39 @@
     </Filter>
     <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
       <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors">
+      <UniqueIdentifier>{af5bfeaf-8e8f-4813-bd8e-df08a0f77333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo">
+      <UniqueIdentifier>{1cf04f19-8f9b-4aee-b50a-71c5b0be14d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\EditorVariables">
+      <UniqueIdentifier>{98d602c0-2c14-441a-9f45-909b5379ab5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Lights">
+      <UniqueIdentifier>{d38bc629-925b-4b74-9c4f-ce014e6be48c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Nodes">
+      <UniqueIdentifier>{126e5c3b-5082-40bf-b12b-d03a0f3a411d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Plugins">
+      <UniqueIdentifier>{2c702725-6231-4103-87b9-195ceac4831b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Timelines">
+      <UniqueIdentifier>{9f852bc7-616f-4023-85c4-442e17f4fd8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\EditorVariables\ParametersDescriptors">
+      <UniqueIdentifier>{94567ba5-1a21-4a2a-b61b-1e3c4988eab2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\AssetsLoading">
+      <UniqueIdentifier>{71e29981-2f54-496f-84ab-ad3ed1f081c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\AssetsLoading\Async">
+      <UniqueIdentifier>{38ea006c-2360-40e2-915d-e04909046873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\AsyncLoading">
+      <UniqueIdentifier>{fdfbb725-9a0a-4d8b-8bc4-5bcfa468718a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -954,12 +966,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
@@ -1101,15 +1107,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
@@ -1118,9 +1115,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp">
       <Filter>Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp">
-      <Filter>Engine\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp">
       <Filter>Engine\Models\Builder</Filter>
@@ -1179,9 +1173,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp">
-      <Filter>Engine\Models\EditorVariables</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
@@ -1297,14 +1288,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\ParamAddress.cpp">
       <Filter>Engine\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -1455,45 +1440,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.cpp">
       <Filter>Assets\DataArray</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp">
-      <Filter>Engine\Models\UndoRedo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\DeleteTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\EffectsOperations.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.cpp">
-      <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGLoader.cpp">
       <Filter>Assets\SVG</Filter>
@@ -1659,9 +1605,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.cpp">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Services\BVServiceProvider.cpp">
       <Filter>Services</Filter>
@@ -1971,6 +1914,84 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp">
       <Filter>Engine\Audio\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProject.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectTools.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\OperationHistory.cpp">
+      <Filter>Engine\Editors\UndoRedo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\SceneVariables.cpp">
+      <Filter>Engine\Editors\EditorVariables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\ParameterMapping.cpp">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Lights\LightOperations.cpp">
+      <Filter>Engine\Editors\UndoRedo\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\AddNodeOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\MoveNodeOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\RemoveNodeOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\AddNodeLogicOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\EffectsOperations.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\PluginOperations.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AddTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.cpp">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.cpp">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp">
+      <Filter>Engine\Editors\AssetsLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
+      <Filter>Assets\AsyncLoading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2676,12 +2697,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -3366,12 +3381,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -4053,12 +4062,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -4170,15 +4173,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProject.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -4203,9 +4197,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl">
       <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h">
-      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h">
       <Filter>Engine\Interfaces</Filter>
@@ -4282,9 +4273,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h">
-      <Filter>Engine\Models\EditorVariables</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -4421,17 +4409,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\CommonEventsStrings.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h">
       <Filter>Engine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -4597,48 +4579,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.h">
       <Filter>Assets\DataArray</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\IRevertable.h">
-      <Filter>Engine\Models\UndoRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h">
-      <Filter>Engine\Models\UndoRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.h">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.h">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.h">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\DeleteTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\EffectsOperations.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.h">
-      <Filter>Engine\Models\UndoRedo\Lights</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h">
       <Filter>Assets\SVG</Filter>
@@ -4861,9 +4801,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\ParameterMapping.h">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <Filter>Mathematics\Interpolators</Filter>
@@ -5191,6 +5128,90 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h">
       <Filter>Engine\Audio\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProject.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectTools.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\IRevertable.h">
+      <Filter>Engine\Editors\UndoRedo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\OperationHistory.h">
+      <Filter>Engine\Editors\UndoRedo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\SceneVariables.h">
+      <Filter>Engine\Editors\EditorVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\ParameterMapping.h">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Lights\LightOperations.h">
+      <Filter>Engine\Editors\UndoRedo\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\AddNodeOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\MoveNodeOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\RemoveNodeOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\AddNodeLogicOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\EffectsOperations.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\PluginOperations.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\RemoveNodeLogicOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AddTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\LoadAssetRequest.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h">
+      <Filter>Engine\Editors\AssetsLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h">
+      <Filter>Assets\AsyncLoading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

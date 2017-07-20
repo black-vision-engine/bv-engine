@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
 #include "EventHandlerHelpers.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
-#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
 
 #include "UseLoggerLibBlackVision.h"
 

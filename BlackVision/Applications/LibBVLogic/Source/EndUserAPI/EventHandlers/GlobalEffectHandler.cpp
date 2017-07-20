@@ -2,7 +2,7 @@
 
 #include "GlobalEffectHandler.h"
 #include "Engine/Events/EventHandlerHelpers.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Serialization/SerializationHelper.h"
 #include "BVAppLogic.h"
 

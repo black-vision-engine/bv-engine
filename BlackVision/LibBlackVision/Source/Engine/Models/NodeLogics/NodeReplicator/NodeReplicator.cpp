@@ -2,7 +2,7 @@
 
 #include "NodeReplicator.h"
 
-#include "Engine/Models/ModelNodeEditor.h"
+#include "Engine/Editors/ModelNodeEditor.h"
 
 #include "ShiftReplicationModifier.h"
 
@@ -10,7 +10,7 @@
 #include "Serialization/BV/BVSerializeContext.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
 

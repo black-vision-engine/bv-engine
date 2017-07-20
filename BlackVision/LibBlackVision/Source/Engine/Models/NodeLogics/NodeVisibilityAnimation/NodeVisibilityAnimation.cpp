@@ -15,8 +15,8 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
-#include "Engine/Models/BVProjectEditor.h"
-#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
 #include "Engine/Models/SceneModel.h"
 
 #include "Engine/Models/ModelState.h"

@@ -4,7 +4,7 @@
 
 #include "BVAppLogic.h"
 #include "ProjectManager.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Application/ApplicationContext.h"
 
 #include "Engine/Models/ModelState.h"

@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 
 #include "BVGL.h"
 

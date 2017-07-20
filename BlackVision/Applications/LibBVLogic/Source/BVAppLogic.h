@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"

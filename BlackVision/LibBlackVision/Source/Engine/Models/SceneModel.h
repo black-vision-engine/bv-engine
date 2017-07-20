@@ -3,13 +3,13 @@
 #include "Engine/Models/BasicNode.h"
 #include "Serialization/ISerializable.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
-#include "Engine/Models/EditorVariables/SceneVariables.h"
+#include "Engine/Editors/EditorVariables/SceneVariables.h"
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Models/Lights/ModelBaseLight.h"
 #include "Engine/Models/GridLines/GridLinesLogic.h"
 #include "Engine/Models/Cameras/CamerasLogic.h"
 
-#include "Engine/Models/UndoRedo/OperationHistory.h"
+#include "Engine/Editors/UndoRedo/OperationHistory.h"
 
 
 namespace bv { 

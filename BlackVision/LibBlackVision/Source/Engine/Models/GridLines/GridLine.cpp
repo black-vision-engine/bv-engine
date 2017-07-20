@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GridLine.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
 
 #include "Engine/Models/BoundingVolume.h"

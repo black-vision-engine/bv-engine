@@ -20,6 +20,9 @@ namespace bv {
 //
 AssetConstPtr MeshLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 {
+    // This lock sucks. But FBX SDK can't be used in multithreaded environment.
+    std::lock_guard< std::mutex > lock( m_lock );
+
     auto meshDesc = std::static_pointer_cast< const MeshAssetDesc >( desc );
     return MeshUtils::LoadMesh( meshDesc );
 }

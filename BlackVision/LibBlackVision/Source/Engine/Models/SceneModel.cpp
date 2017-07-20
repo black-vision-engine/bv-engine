@@ -4,7 +4,7 @@
 #include "ModelState.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
-#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Editors/ModelSceneEditor.h"
 #include "Engine/Models/Updaters/UpdatersHelpers.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
@@ -15,7 +15,7 @@
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
+#include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 
 

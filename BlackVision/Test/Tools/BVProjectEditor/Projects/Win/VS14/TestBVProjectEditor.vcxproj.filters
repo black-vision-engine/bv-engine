@@ -8,6 +8,15 @@
     <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp">
       <Filter>NodesTests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestMixedSyncAsyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestSyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestAsyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -15,6 +24,9 @@
     </Filter>
     <Filter Include="NodesTests">
       <UniqueIdentifier>{2e92c01d-8b19-4dc5-ab24-0546a112d069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AssetsTest">
+      <UniqueIdentifier>{11a21a3e-faa7-476c-b403-2bb00df321ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTimerPlugin.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
 
@@ -13,7 +13,7 @@
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
+#include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 #include "Tools/StringHeplers.h"
 
