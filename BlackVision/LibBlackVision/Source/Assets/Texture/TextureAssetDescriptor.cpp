@@ -195,7 +195,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
     if( !props.error.empty() )
     {
-        return nullptr;
+        // Return descriptor pointing to invalid texture. Extern code will deal with it.
+        return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ) );
     }
 
     return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ) );
@@ -209,7 +210,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
     if( !props.error.empty() )
     {
-        return nullptr;
+        // Return descriptor pointing to invalid texture. Extern code will deal with it.
+        return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ), mmFilter );
     }
 
     return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmFilter );
@@ -223,7 +225,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
     if( !props.error.empty() )
     {
-        return nullptr;
+        // Return descriptor pointing to invalid texture. Extern code will deal with it.
+        return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ) );
     }
 
     std::vector< SingleTextureAssetDescConstPtr > mmDescs;
@@ -234,7 +237,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
         if( !mmProps.error.empty() )
         {
-            return nullptr;
+            // Return descriptor pointing to invalid texture. Extern code will deal with it.
+            return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ) );
         }
 
         mmDescs.push_back( SingleTextureAssetDesc::Create( mmFilePath, mmProps.width, mmProps.height, EnumsUtils::Convert( mmProps.format ), isCacheable ) );

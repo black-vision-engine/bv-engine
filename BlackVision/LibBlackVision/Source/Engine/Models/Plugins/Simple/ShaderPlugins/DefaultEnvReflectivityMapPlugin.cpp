@@ -134,6 +134,13 @@ bool                            DefaultEnvReflectivityMapPlugin::LoadResource  (
     {
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvReflectivityMapPluginDesc::TextureName() );
 
+        // If texture doesn't exists, read fallback texture. 
+        if( txDesc == nullptr )
+        {
+            txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
+            txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvReflectivityMapPluginDesc::TextureName() );
+        }
+
         if( txDesc != nullptr )
         {
             auto txData = m_pixelShaderChannel->GetTexturesDataImpl();

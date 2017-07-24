@@ -17,6 +17,8 @@ namespace bv
                     DefaultAssets::DefaultAssets        ()
 {
     m_config.texture2DPath = "file:/Assets/DefaultAssets/textures/2D/default";
+    m_config.texture2DTransparentPath = "file:/Assets/DefaultAssets/textures/2D/defaultTransparent.png";
+    m_config.texture2DFallbackPath = "file:/Assets/DefaultAssets/textures/2D/default";       // Load from config.
 
     m_config.animation2DDir = "seq:/Assets/DefaultAssets/animations/2D";
     m_config.animationFilter = ".*";

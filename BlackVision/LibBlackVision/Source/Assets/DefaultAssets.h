@@ -25,6 +25,8 @@ public:
     struct Config
     {
         std::string     texture2DPath;
+        std::string     texture2DTransparentPath;
+        std::string     texture2DFallbackPath;
 
         std::string     fontName;
         UInt32          fontSize;
@@ -48,7 +50,10 @@ public:
     
     template< typename AssetDescType >
     inline std::shared_ptr< const AssetDescType >   GetDefaultDesc   ();
-    
+
+    template< typename AssetDescType >
+    inline std::shared_ptr< const AssetDescType >   GetFallbackDesc  ();
+
     static DefaultAssets &                          Instance    ();
 
 };

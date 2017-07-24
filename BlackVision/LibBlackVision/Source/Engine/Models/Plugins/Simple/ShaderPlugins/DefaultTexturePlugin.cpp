@@ -156,6 +156,13 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
 
+        // If texture doesn't exists, read fallback texture. 
+        if( txDesc == nullptr )
+        {
+            txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
+            txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
+        }
+
         if( txDesc != nullptr )
         {
             auto txData = m_psc->GetTexturesDataImpl();
