@@ -132,7 +132,7 @@ AssetConstPtr                           LoadBarrier::WaitUntilLoaded    ( Waitin
         std::unique_lock< std::mutex > lock( m_lock );
         bool removed = RemoveWaitingAsset( asset );
 
-        assert( removed );
+        assert( removed );      { removed; }
     }
 
     return loadedAsset;
