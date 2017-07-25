@@ -1,3 +1,4 @@
+#include "BVConfig.h"
 
 namespace bv
 {
@@ -295,6 +296,13 @@ inline bool                 BVConfig::UseVideoInputFeeding      () const
 inline bool                 BVConfig::EnableLockingQueue        () const
 {
     return m_enableQueueLocking;
+}
+
+// ***********************
+//
+inline const std::string &  BVConfig::OnFailedTexLoadBehavior   () const
+{
+    return m_onFailedTextureLoadBehavior;
 }
 
 } //bv

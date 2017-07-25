@@ -144,6 +144,7 @@ private:
     void                            InitializeKbdHandler();
     void                            InitializeRemoteCommunication();
     void                            InitializeCommandsDebugLayer();
+    void                            InitializeDefaultAssets();
 
     std::string                     GetEnvScene();
 

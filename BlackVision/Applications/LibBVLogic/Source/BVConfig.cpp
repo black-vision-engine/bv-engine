@@ -93,6 +93,8 @@ void    BVConfig::InitDefaultConfiguration()
     m_useVideoInputFeeding = false;
 
     m_enableQueueLocking = false;
+
+    m_onFailedTextureLoadBehavior = "LoadChecker";
 }
 
 // *********************************
@@ -220,6 +222,8 @@ BVConfig::BVConfig                      ()
         m_useVideoInputFeeding = SerializationHelper::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
 
         m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
+
+        m_onFailedTextureLoadBehavior = m_properties[ "Plugins/Textures/OnFailedLoadBehavior" ];
     }
     else
     {

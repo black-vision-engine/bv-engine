@@ -18,6 +18,7 @@
 #include "TestingScenes/MockScenes.h"
 #include "DefaultPlugins.h"
 #include "LibEffect.h"
+#include "Assets/DefaultAssets.h"
 
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
@@ -120,6 +121,7 @@ void BVAppLogic::Initialize         ()
     InitializeKbdHandler();
     InitializeRemoteCommunication();
     InitializeCommandsDebugLayer();
+    InitializeDefaultAssets();
 
     ProjectManager::SetPMFolder( DefaultConfig.PMFolder() );
 
@@ -333,6 +335,20 @@ void                            BVAppLogic::InitializeCommandsDebugLayer()
     {
         m_remoteController->InitializeDebugLayer( DefaultConfig.DebugFilePath() );
     }
+}
+
+// ***********************
+//
+void                            BVAppLogic::InitializeDefaultAssets()
+{
+    if( DefaultConfig.OnFailedTexLoadBehavior() == "LoadChecker" )
+        DefaultAssets::Instance().InitTex2DFallback( DefaultAssets::Tex2DFallback::Checker );
+    else if( DefaultConfig.OnFailedTexLoadBehavior() == "LoadTransparent" )
+        DefaultAssets::Instance().InitTex2DFallback( DefaultAssets::Tex2DFallback::Transparent );
+    else if( DefaultConfig.OnFailedTexLoadBehavior() == "LeavePrevious" )
+        DefaultAssets::Instance().InitTex2DFallback( DefaultAssets::Tex2DFallback::None );
+    else
+        DefaultAssets::Instance().InitTex2DFallback( DefaultAssets::Tex2DFallback::Checker );
 }
 
 

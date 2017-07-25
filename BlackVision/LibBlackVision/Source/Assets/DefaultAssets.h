@@ -38,6 +38,13 @@ public:
         TextureFormat   videoStreamFormat;
     };
 
+    enum class Tex2DFallback
+    {
+        None,
+        Checker,
+        Transparent
+    };
+
 private:
 
     Config              m_config;                
@@ -53,6 +60,12 @@ public:
 
     template< typename AssetDescType >
     inline std::shared_ptr< const AssetDescType >   GetFallbackDesc  ();
+
+public:
+
+    void                InitTex2DFallback       ( Tex2DFallback fallback );
+
+
 
     static DefaultAssets &                          Instance    ();
 
