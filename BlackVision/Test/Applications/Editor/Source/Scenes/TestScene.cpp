@@ -9,6 +9,7 @@
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Tools/PrefixHelper.h"
@@ -192,18 +193,32 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto node7 = editor->GetNode( SCENE_NAME, "/#0/#0/#2" );
         auto node8 = editor->GetNode( SCENE_NAME, "/#0/#0/#1" );
         auto node9 = editor->GetNode( SCENE_NAME, "/#1/child0/#2" );
-        bool success = true;
 
-        success &= ( node0->GetName() == "child01" );
-        success &= ( node1 == nullptr );
-        success &= ( node2->GetName() == "child0" );
-        success &= ( node3->GetName() == "child2" );
-        success &= ( node4 == nullptr );
-        success &= ( node5->GetName() == "child01" );
-        success &= ( node6->GetName() == "child02" );
-        success &= ( node6 == node7 );
-        success &= ( node0 == node8 );
-        success &= ( node9 == nullptr );
+        CHECK( node0->GetName() == "child01" );
+        CHECK( node1 == nullptr );
+        CHECK( node2->GetName() == "child0" );
+        CHECK( node3->GetName() == "child2" );
+        CHECK( node4 == nullptr );
+        CHECK( node5->GetName() == "child01" );
+        CHECK( node6->GetName() == "child02" );
+        CHECK( node6 == node7 );
+        CHECK( node0 == node8 );
+        CHECK( node9 == nullptr );
+    });
+
+    m_testSteps.push_back([&] 
+    {
+        auto editor = m_project->GetProjectEditor();
+        bool success = true;    { success; }
+
+        auto scene = editor->GetModelScene( SCENE_NAME );
+        auto root = scene->GetRootNode();
+        auto child = root->GetChild( 0 );
+
+        auto effect = SerializationHelper::String2T< NodeEffectType >( "alpha mask", NodeEffectType::NET_DEFAULT );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, "alpha mask", m_timeEvaluator );
+
+        editor->SetNodeEffect( child, newEffect );
 
         CHECK( success );
     });
@@ -217,23 +232,10 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto root = scene->GetRootNode();
         auto child = root->GetChild( 0 );
 
-        //auto effect = std::make_shared< model::ModelNodeEffectAlphaMask >( m_timeEvaluator );
+        auto nodeEffect = editor->GetNodeEffect( child );
+        REQUIRE CHECK( nodeEffect != nullptr );
 
-        //editor->SetNodeEffect( child, effect ); 
-
-        CHECK( success );
-    });
-
-    m_testSteps.push_back([&] 
-    {
-        auto editor = m_project->GetProjectEditor();
-        bool success = true;    { success; }
-
-        auto scene = editor->GetModelScene( SCENE_NAME );
-        auto root = scene->GetRootNode();
-        auto child = root->GetChild( 0 );
-
-        model::SetParameter( editor->GetNodeEffect( child )->GetParameter( "alpha" ), 0.f, 0.5f );
+        success = model::SetParameter( nodeEffect->GetParameter( "alpha" ), 0.f, 0.5f );
 
         CHECK( success );
     });

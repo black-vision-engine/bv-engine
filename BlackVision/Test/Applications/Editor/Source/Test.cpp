@@ -18,8 +18,8 @@ public:
 
     virtual void        PreEvents           () override;
     virtual void        PreModelUpdate      () override;
-    virtual void        PreRender           () override;
-    virtual void        PostRender          () override;
+    virtual void        RunImpl             () const override;
+
 } TestEditorInstance;
 
 UnitTest::ListAdder adderTestEditor ( UnitTest::Test::GetTestList(), &TestEditorInstance );
@@ -51,14 +51,15 @@ void        TestEditor::PreModelUpdate        ()
 
 // ***********************
 //
-void        TestEditor::PreRender           ()
+void        TestEditor::RunImpl               () const
 {
+    bool isLastFrame = false;
+    while( !isLastFrame )
+    {
+        FrameworkTest::RunImpl();
 
+        // Test could change this flag in RunImpl function.
+        isLastFrame = IsLastFrame();
+    }
 }
 
-// ***********************
-//
-void        TestEditor::PostRender            ()
-{
-
-}
