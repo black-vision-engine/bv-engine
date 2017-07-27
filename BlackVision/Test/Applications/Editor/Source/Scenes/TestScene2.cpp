@@ -1626,7 +1626,7 @@ void                    TestScene::Wait                     ( UInt32 sec )
 
 // ****************************
 //
-void					TestScene::TestEditor				( TimeType time )
+bool					TestScene::TestEditor				( TimeType time )
 {
     auto step = ( Int32 )std::floor( TestSceneUtils::SPEED * time );
     
@@ -1636,6 +1636,11 @@ void					TestScene::TestEditor				( TimeType time )
     }
     
     m_lastStep = step;
+
+    if( step - m_stepOffset >= ( Int32 )m_testSteps.size() )
+        return true;
+    return false;
+
 }
 
 } // bv

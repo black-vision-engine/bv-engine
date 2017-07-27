@@ -55,7 +55,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_FrameworkTest.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
@@ -71,7 +71,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_FrameworkTest.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
@@ -87,7 +87,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_FrameworkTest.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
@@ -103,7 +103,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_FrameworkTest.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
@@ -117,23 +117,40 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestScene2.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp" />
-    <ClCompile Include="..\..\..\Source\TestLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h" />
     <ClInclude Include="..\..\..\Source\Scenes\TestSceneUtils.h" />
-    <ClInclude Include="..\..\..\Source\TestLogic.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS14\LibWindowApp.vcxproj">
-      <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj">
-      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    <ProjectReference Include="..\..\..\..\..\..\DevTools\TestFramework\Projects\Win\VS14\TestFramework.vcxproj">
+      <Project>{8a1a370e-7c9e-496b-9a55-974807cc630a}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

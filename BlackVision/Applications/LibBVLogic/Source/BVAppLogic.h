@@ -125,6 +125,7 @@ public:
     const model::PluginsManager *   GetPluginsManager   () const;
     RenderLogic *                   GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
+    Renderer *                      GetRenderer         () const { return m_renderer; }
 
     void                            LoadScenes          ( const PathVec & pathVec );
 

@@ -27,6 +27,9 @@
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 
 
+#include "UnitTest++.h"
+
+
 namespace bv {
 
 const std::string	TestScene::COL_NODE		= "col";
@@ -145,16 +148,16 @@ void                    TestScene::InitTestModelSceneEditor ()
             SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root, child );
         }
-        assert( root->GetNumChildren() == 3 );
+        CHECK( root->GetNumChildren() == 3 );
 
-        for( unsigned int i = 0; i < 3; ++i )
+        for( unsigned int i = 0; i < root->GetNumChildren(); ++i )
         {
             auto child = TestSceneUtils::ColoredRectangle( timeline, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
             auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
             SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root->GetChild( "child0" ), child );
         }
-        assert( root->GetChild( "child0" )->GetNumChildren() == 3 );
+        CHECK( root->GetChild( "child0" )->GetNumChildren() == 3 );
     });
 
     m_testSteps.push_back([&] 
@@ -173,7 +176,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( node3->GetName() == "child2" );
         success &= ( node4 == nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -202,7 +205,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( node0 == node8 );
         success &= ( node9 == nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -218,7 +221,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         //editor->SetNodeEffect( child, effect ); 
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -232,7 +235,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         model::SetParameter( editor->GetNodeEffect( child )->GetParameter( "alpha" ), 0.f, 0.5f );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -251,7 +254,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( root->GetNumPlugins() == 1 );
         success &= ( root->GetPlugin( "transform" ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -261,7 +264,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success = editor->DetachScene( EMPTY_SCENE );
 
-        assert( success );
+        CHECK( success );
     });
 
     
@@ -272,7 +275,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
          success = editor->AttachScene( EMPTY_SCENE, 0 );
 
-        assert( success );
+         CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -289,7 +292,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( editor->GetModelScene( EMPTY_SCENE ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -307,7 +310,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto root = model::BasicNode::Create( "root", nullptr );
         success &= editor->AddChildNode( scene, nullptr, root );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -327,7 +330,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( "Copy_" + SCENE_NAME ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -349,7 +352,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         editor->RenameScene( "Copy_Copy_" + SCENE_NAME, "Copy1_" + SCENE_NAME );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -369,7 +372,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -389,7 +392,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
     
     m_testSteps.push_back([&] 
@@ -401,7 +404,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( root->GetName() == "root" );
         success &= ( root == std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) ) );
         
-        assert( success );
+        CHECK( success );
         
         auto child = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "newChild", 0.2f, 0.2f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
         auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
@@ -460,7 +463,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( root->GetChild( 0 )->GetName() == "newChild" );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -479,7 +482,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !child0->GetChild( "child00" ) );
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child0/child00" ) );
 
-        assert( success );
+        CHECK( success );
     });
     
     m_testSteps.push_back([&] 
@@ -497,7 +500,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !child0->GetChild( "child02" ) );
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child0/child02" ) );
     
-        assert( success );
+        CHECK( success );
     });
     
     m_testSteps.push_back([&] 
@@ -515,7 +518,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !child0->GetChild( "child01" ) );
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child0/child01" ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -528,7 +531,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( editor->DetachChildNode( SCENE_NAME, "/root/child0" ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -543,7 +546,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( root->GetChild( "child0" ) != nullptr );
         success &= ( !editor->AttachChildNode( scene, root ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -563,7 +566,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !editor->AttachChildNode( scene, root ) );
         success &= ( !editor->DeleteChildNode( SCENE_NAME, "/root/child0" ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -581,7 +584,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !editor->AttachChildNode( scene, root ) );
         success &= ( !editor->DeleteChildNode( SCENE_NAME, "/root/child1" ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -600,7 +603,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child1" ) );
         success &= ( !editor->DeleteChildNode( SCENE_NAME, "/root/child1" ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     /*m_testSteps.push_back([&] 
@@ -681,7 +684,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto root = scene->GetRootNode();
         success &= ( root == newRoot );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -699,7 +702,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         editor->AddChildNode( scene, root, newChild );
         success &= ( root->GetChild( "newChild" ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -738,7 +741,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -752,7 +755,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( !editor->GetModelScene( SCENE_NAME1 ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -765,7 +768,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -778,7 +781,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) == nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) == nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -791,7 +794,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) == nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
 }
@@ -835,7 +838,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
         success &= ( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -849,7 +852,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) == nullptr );
         success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -860,7 +863,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
         success &= editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -907,7 +910,7 @@ void					TestScene::InitTimelinesTest		()
         
         timeline->Stop();
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -972,7 +975,7 @@ void					TestScene::InitTimelinesTest		()
 
         timeline->SetTimeAndPlay( 0.0f );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -984,7 +987,7 @@ void					TestScene::InitTimelinesTest		()
 
         success &= ( editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) ) );
         
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -1009,7 +1012,7 @@ void					TestScene::InitTimelinesTest		()
 
         success &= ( !editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -1033,7 +1036,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
         success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -1073,7 +1076,7 @@ void					TestScene::InitTimelinesTest		()
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 2.f, 0.f );
         success &= ( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
 
-        assert( success );
+        CHECK( success );
     });
 
     Wait( 2 );
@@ -1090,7 +1093,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
         success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
 
-        assert( success );
+        CHECK( success );
     });
 
     Wait( 3 );
@@ -1108,7 +1111,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
         success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -1124,7 +1127,7 @@ void					TestScene::InitTimelinesTest		()
         success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
         success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -1418,7 +1421,7 @@ void					TestScene::InitCopyNodeTest	()
         destScene->Serialize( ser );
         ser.Save( "test.xml" );
 
-        assert( success );
+        CHECK( success );
     });
 
     m_testSteps.push_back( [&] 
@@ -1452,7 +1455,7 @@ void					TestScene::InitCopyNodeTest	()
         scene->Serialize( ser );
         ser.Save( "test.xml" );
 
-        assert( success );
+        CHECK( success );
     });
 }
 

@@ -54,7 +54,7 @@ public:
                             TestScene				( BVProject * scene, Renderer * renderer );
                             ~TestScene				();
 
-    void					TestEditor				( TimeType time );
+    bool					TestEditor				( TimeType time );
 
 private:
 

@@ -23,7 +23,7 @@ void            FrameworkTest::RunImpl      () const
 //
 void            FrameworkTest::RunImplNotConst  ()
 {
-    TimeType time = ComputeFrameTimeImpl();
+    m_frameTime = ComputeFrameTimeImpl();
 
     // Events
     PreEvents();
@@ -31,11 +31,11 @@ void            FrameworkTest::RunImplNotConst  ()
 
     // Model
     PreModelUpdate();
-    m_appLogic->ModelUpdatePhase( time );
+    m_appLogic->ModelUpdatePhase( m_frameTime );
 
     // Engine
     PreRender();
-    m_appLogic->RenderPhase( time, m_appLogic->m_renderer, m_appLogic->m_audioRenderer );
+    m_appLogic->RenderPhase( m_frameTime, m_appLogic->m_renderer, m_appLogic->m_audioRenderer );
     PostRender();
 
     GTimer.StartTimer();

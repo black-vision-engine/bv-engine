@@ -65,6 +65,14 @@ bool        TestExecutor::WantContinue      ( UnitTest::Test * curTest )
 //
 bool        TestExecutor::Execute           ()
 {
+    // Note: we can't restart timer earlier, because AppLogic isn't initialized.
+    static bool firstExecution = true;
+    if( firstExecution )
+    {
+        m_appLogic->RestartTimer();
+        firstExecution = false;
+    }
+
     if( !WantContinue( m_curTest ) )
     {
         // No tests anymore.
@@ -79,6 +87,7 @@ bool        TestExecutor::Execute           ()
 
         // Clean engine bfore next test.
         m_appLogic->UnloadScenes();
+        m_appLogic->RestartTimer();
     }
 
     m_runner.RunSingleTest( m_curTest, nullptr, 0 );

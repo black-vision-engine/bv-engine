@@ -9,6 +9,8 @@
 #include "XmlTestReporter.h"
 
 
+#include <limits>
+
 
 namespace bv
 {
@@ -67,6 +69,13 @@ void            BVTestAppLogic::LoadScene   ()
 void            BVTestAppLogic::PostFrameLogic()
 {
     // Empty. Test Framework doesn't compute frame statistics.
+}
+
+// ***********************
+//
+void            BVTestAppLogic::RestartTimer()
+{
+    m_renderMode.SetOffscreenRenderMode( 50.0f, std::numeric_limits< UInt64 >::max() );
 }
 
 

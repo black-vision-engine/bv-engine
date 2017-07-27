@@ -29,6 +29,8 @@ public:
 
     virtual void    PostFrameLogic      () override;
 
+    void            RestartTimer        ();
+
 private:
 
     void            EndExecution        ();

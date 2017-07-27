@@ -34,22 +34,32 @@ void        RenderMode::SetStartTime            ( unsigned long time )
 	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
     m_startTime = time - time % d;
     m_currentTime = TimeType( m_startTime ) * TimeType( 0.001 );
+    m_realTime = m_currentTime;
     m_frameNumber = 0;
 }
 
 // ***********************
 //
-void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, float requestedFPS, unsigned int numFrames )
+void        RenderMode::SetRenderToFileMode     ( const std::string & filePath, float requestedFPS, UInt64 numFrames )
+{
+    SetOffscreenRenderMode( requestedFPS, numFrames );
+
+    if( m_renderLogic )
+    {
+        auto outputLogic = m_renderLogic->GetOutputLogic();
+        outputLogic->RequestScreenshot( filePath, RenderChannelType::RCT_OUTPUT_1, (unsigned int)numFrames, false );
+    }
+}
+
+// ***********************
+//
+void        RenderMode::SetOffscreenRenderMode  ( float requestedFPS, UInt64 numFrames )
 {
     m_nextFrameOffset = TimeType( 1 / requestedFPS );
     m_framesToRender = numFrames;
 
-    if( m_renderLogic && m_renderer )
+    if( m_renderer )
     {
-        auto outputLogic = m_renderLogic->GetOutputLogic();
-
-        outputLogic->RequestScreenshot( filePath, RenderChannelType::RCT_OUTPUT_1, numFrames, false );
-
         m_renderer->SetVSync( false, 0 );
         m_renderer->SetFlushFinish( false, false );
     }
@@ -87,7 +97,8 @@ TimeType    RenderMode::StartFrame              ( unsigned long millis )
     else if( m_renderMode == RenderingMode::RM_RenderOffscreen )
     {
         if( m_framesToRender == 0 )
-        {// Rendering to file ended. Restore previous state.
+        {
+            // Offscreen Rendering ended. Restore previous state.
             m_renderMode = RenderingMode::RM_RenderRealTime;
 
             m_renderer->SetVSync( !DefaultConfig.GetRendererInput().m_DisableVerticalSync, DefaultConfig.GetRendererInput().m_VerticalBufferFrameCount );
