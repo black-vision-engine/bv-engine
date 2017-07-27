@@ -180,7 +180,7 @@ IModelNodePtr   ModelSceneEditor::GetNode           ( const std::string & path, 
         }
     }
 
-    return m_rootNode;
+    return nullptr;
 }
 
 } // model
