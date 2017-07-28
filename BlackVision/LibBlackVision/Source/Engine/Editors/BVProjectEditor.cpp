@@ -363,12 +363,14 @@ bool    BVProjectEditor::RemoveModelScene       ( model::SceneModelPtr sceneMode
 
     if( it != modelScenes.end() )
     {
-        sceneModel->GetModelSceneEditor()->DeleteRootNode( m_rootNode );
         m_project->m_globalTimeline->RemoveChild( sceneModel->GetTimeline() );
 
         auto modelSceneRoot = sceneModel->GetRootNode();
         if( modelSceneRoot )
         {
+            m_rootNode->DetachChildNodeOnly( modelSceneRoot );
+
+            model::ModelState::GetInstance().UnselectRecursive( modelSceneRoot );
             model::ModelState::GetInstance().UnregisterNode( modelSceneRoot.get() );
         }
 
