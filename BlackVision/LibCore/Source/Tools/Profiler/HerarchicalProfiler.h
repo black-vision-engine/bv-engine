@@ -239,6 +239,9 @@ inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
 
 } //bv
 
+
+#ifdef ENABLE_HIERARCHICAL_PROFILER
+
 #define HPROFILER_NEW_FRAME( thread )               ::bv::AutoFrameProfile COMBINE(frame_sample_,__LINE__) ( thread )
 
 #define HPROFILER_FUNCTION( name, thread )          ::bv::AutoProfile COMBINE(function_sample_,__LINE__) ( name, ::bv::AutoProfileType::APT_FUNCTION, thread )
@@ -250,5 +253,21 @@ inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
 #define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )	::bv::AutoFrameProfile::SetFramesToShow( n )
 #define HPROFILER_SET_DISPLAY_MODE( mode )			::bv::AutoFrameProfile::SetDisplayMode( mode )
 #define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) ::bv::AutoProfile::SetStatsDisplayWaitMs( millis )
+
+#else
+
+#define HPROFILER_NEW_FRAME( thread )
+
+#define HPROFILER_FUNCTION( name, thread )
+#define HPROFILER_SECTION( name, thread )
+
+#define HPROFILER_SET_FORCED_DISPLAY()
+#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )
+
+#define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )
+#define HPROFILER_SET_DISPLAY_MODE( mode )
+#define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis )
+
+#endif
 
 #include "HerarchicalProfiler.inl"
