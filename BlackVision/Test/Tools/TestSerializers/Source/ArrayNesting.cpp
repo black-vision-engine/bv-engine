@@ -48,7 +48,11 @@ void            TestArrayNesting        ( ISerializer & ser )
     ser.EnterArray( "FirstNesting" );
     ser.EnterArray( "SecondNesting" );
 
-    ser.EnterChild( "ArrayObject" );
+    ser.EnterChild( "ArrayObject1" );
+    ser.SetAttribute( "Attribute", "Value" );
+    ser.ExitChild();                    // ArrayObject
+
+    ser.EnterChild( "ArrayObject2" );
     ser.SetAttribute( "Attribute", "Value" );
     ser.ExitChild();                    // ArrayObject
 
