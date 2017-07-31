@@ -171,7 +171,9 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 //
 model::SceneModelPtr		SceneModel::Clone		() const
 {
-    return CloneViaSerialization::Clone( this, "scene", nullptr, nullptr ); // FIXME probably
+    auto assets = std::make_shared< AssetDescsWithUIDs >();
+
+    return CloneViaSerialization::Clone( this, "scene", assets, nullptr ); // FIXME probably
 }
 
 // *******************************

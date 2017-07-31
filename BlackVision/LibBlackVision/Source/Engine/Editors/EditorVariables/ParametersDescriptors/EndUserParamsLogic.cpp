@@ -150,7 +150,7 @@ EndUserParamDescriptor *      EndUserParamsLogic::GetDescriptor   ( const Parame
 //
 void            EndUserParamsLogic::Serialize       ( ISerializer & ser ) const
 {
-    ser.EnterArray( "endUserParams" );
+    ser.EnterChild( "endUserParams" );
 
     m_cameraDescs.Serialize( ser );
     m_effectDescs.Serialize( ser );
