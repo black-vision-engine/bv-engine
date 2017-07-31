@@ -12,5 +12,9 @@
     <ClCompile Include="..\..\..\Source\DoublePassArrayAccess.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\ArrayNesting.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

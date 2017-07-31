@@ -133,6 +133,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\ArrayNesting.cpp" />
     <ClCompile Include="..\..\..\Source\DoublePassArrayAccess.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\SerializeDeserialize.cpp" />
