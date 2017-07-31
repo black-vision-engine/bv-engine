@@ -83,8 +83,6 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 
     m_timelineManager = model::TimelineManager::GetInstance();
     m_timeEvaluator = m_timelineManager->GetRootTimeline();
-
-    InitTestEditor();
 }
 
 // ****************************
@@ -99,7 +97,7 @@ void					TestScene::InitTestEditor			()
 {
     InitTestModelSceneEditor();
 
-    //InitTimelinesTest();
+    InitTimelinesTest();
 
     //InitAssetsTest();
 

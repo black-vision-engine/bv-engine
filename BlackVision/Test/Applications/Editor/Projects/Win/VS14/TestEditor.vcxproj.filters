@@ -11,7 +11,12 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\main.cpp" />
-    <ClCompile Include="..\..\..\Source\Test.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestModelSceneEditor.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestTimelines.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h">
@@ -20,10 +25,16 @@
     <ClInclude Include="..\..\..\Source\Scenes\TestSceneUtils.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Scenes\TestEditorBase.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scenes">
       <UniqueIdentifier>{6612fa76-1229-42c7-bab5-276f4a970db9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCases">
+      <UniqueIdentifier>{7044fbf2-e4c0-4dbf-91e0-9d4ce2570535}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

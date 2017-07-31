@@ -9,39 +9,38 @@
 //
 class TestEditor : public bv::FrameworkTest
 {
-private:
+protected:
 
     bv::TestScenePtr        m_scene;
 
 public:
-    TestEditor() : bv::FrameworkTest( "TestEditor", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestEditor( char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0 )
+        :   bv::FrameworkTest( testName, suiteName, filename, lineNumber ) {}
 
     virtual void        PreEvents           () override;
     virtual void        PreModelUpdate      () override;
     virtual void        RunImpl             () const override;
 
-} TestEditorInstance;
+    virtual void        InitScene           () = 0;
 
-UnitTest::ListAdder adderTestEditor ( UnitTest::Test::GetTestList(), &TestEditorInstance );
+};
 
 
 
 // ***********************
 //
-void        TestEditor::PreEvents           ()
+inline void        TestEditor::PreEvents           ()
 {
     if( GetFrameNumber() == 0 )
     {
-        auto logic = GetAppLogic();
-        m_scene = std::make_shared< bv::TestScene >( logic->GetBVProject().get(), logic->GetRenderer() );
-
+        InitScene();
         EndTestAfterThisFrame( false );
     }
 }
 
 // ***********************
 //
-void        TestEditor::PreModelUpdate        ()
+inline void        TestEditor::PreModelUpdate        ()
 {
     bool last = m_scene->TestEditor( GetFrameTime() );
 
@@ -51,7 +50,7 @@ void        TestEditor::PreModelUpdate        ()
 
 // ***********************
 //
-void        TestEditor::RunImpl               () const
+inline void        TestEditor::RunImpl               () const
 {
     bool isLastFrame = false;
     while( !isLastFrame )
