@@ -263,6 +263,19 @@ public:
     bool                    Undo                        ( const std::string & sceneName, UInt16 numSteps );
     bool                    Redo                        ( const std::string & sceneName, UInt16 numSteps );
 
+
+/* GIZMOS */
+
+    bool                    CreateGizmo                 ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoOwnerType type, const std::string & functionalityName );
+
+    bool                    CreatePluginGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+    bool                    CreateLogicGizmo            ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+    bool                    CreateEffectGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+    bool                    CreateNodeGizmo             ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+    bool                    CreateSceneGizmo            ( model::SceneModelPtr scene, model::BasicNodePtr rootNode, const std::string & functionalityName );
+
+    bool                    AddGizmoNode                ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr childNode );
+
 /* HELPERS */
 
     SceneNode *             GetEngineNode               ( model::IModelNodePtr node ) const;

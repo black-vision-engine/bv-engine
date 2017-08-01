@@ -16,7 +16,7 @@ namespace model
 //
 enum class GizmoOwnerType
 {
-    Global,
+    Scene,
     Node,
     Logic,
     Plugin,

@@ -20,6 +20,8 @@
 namespace bv {
 
 
+// ***********************
+//
 model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodeWeakPtr logicParent )
 {
     const std::string & logicType = deser.GetAttribute( "type" );
@@ -82,6 +84,17 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
     }
 
     return nullptr;
+}
+
+// ***********************
+//
+model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner )
+{
+    gizmoName;
+    gizmoRoot;
+    gizmoOwner;
+
+    return model::IGizmoLogicPtr();
 }
 
 } //bv

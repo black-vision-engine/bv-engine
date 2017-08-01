@@ -54,6 +54,7 @@
 #include "Engine/Editors/AssetsLoading/Async/AssetAsyncLoadFinishedEvent.h"
 
 #include "Engine/Models/NodeLogics/NodeVisibilityAnimation/NodeVisibilityAnimation.h"
+#include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -1370,6 +1371,112 @@ bool            BVProjectEditor::Redo                        ( const std::string
         return modelScene->GetHistory().Redo( this, numSteps );
     else
         return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoOwnerType type, const std::string & functionalityName )
+{
+    switch( type )
+    {
+    case bv::model::GizmoOwnerType::Scene:
+        return CreateSceneGizmo( scene, gizmoOwner, functionalityName );
+    case bv::model::GizmoOwnerType::Node:
+        return CreateNodeGizmo( scene, gizmoOwner, functionalityName );
+    case bv::model::GizmoOwnerType::Logic:
+        return CreateLogicGizmo( scene, gizmoOwner, functionalityName );
+    case bv::model::GizmoOwnerType::Plugin:
+        return CreatePluginGizmo( scene, gizmoOwner, functionalityName );
+    case bv::model::GizmoOwnerType::Effect:
+        return CreateEffectGizmo( scene, gizmoOwner, functionalityName );
+    }
+
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreatePluginGizmo          ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    scene;
+    gizmoOwner;
+    functionalityName;
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreateLogicGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    scene;
+    gizmoOwner;
+    functionalityName;
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreateEffectGizmo          ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    scene;
+    gizmoOwner;
+    functionalityName;
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreateNodeGizmo            ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    auto gizmoRoot = model::BasicNode::Create( gizmoOwner->GetName() + "_gizmo_" + functionalityName, nullptr );
+    if( AddGizmoNode( scene, gizmoOwner, gizmoRoot ) )
+    {
+        auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( functionalityName, gizmoRoot, gizmoOwner );
+        return SetLogic( gizmoRoot, gizmoLogic, false );
+    }
+
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreateSceneGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr rootNode, const std::string & functionalityName )
+{
+    scene;
+    rootNode;
+    functionalityName;
+    return false;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::AddGizmoNode               ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot )
+{
+    scene;
+    gizmoOwner;
+    gizmoRoot;
+
+    //if( !scene || !childNode )
+    //{
+    //    return false;
+    //}
+
+    //if( gizmoOwner )
+    //{
+    //    auto engineParent = GetEngineNode( gizmoOwner );
+    //    auto engineChild = BVProjectTools::BuildEngineSceneNode( QueryTyped( childNode ), m_nodesMapping );
+
+    //    auto sceneEditor = scene->GetModelSceneEditor();
+    //    sceneEditor->AddChildNode( QueryTyped( gizmoOwner ), QueryTyped( childNode ) );
+
+    //    m_engineSceneEditor->AddChildNode( engineParent, engineChild );
+
+    //    return true;
+    //}
+    //else
+    //    return false;
+
+    return false;
 }
 
 // *******************************

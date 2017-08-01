@@ -10,6 +10,10 @@
 
 #include "Serialization/ISerializable.h"
 
+#include "Engine/Models/Gizmos/GizmoContainer.h"
+
+
+
 
 namespace bv { namespace model {
 
@@ -44,6 +48,8 @@ private:
     IModelNodeEffectPtr             m_modelNodeEffect;
 
     ModelNodeEditor *				m_modelNodeEditor;
+
+    GizmoContainerUPtr              m_gizmos;
 
 protected:
 

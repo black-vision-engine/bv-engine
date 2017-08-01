@@ -19,8 +19,8 @@ public:
     virtual model::INodeLogicPtr        CreateLogic         ( const IDeserializer & /*deser*/, model::BasicNodeWeakPtr /*logicParent*/ )
     { return nullptr; }
 
-    virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & /*gizmoName*/, model::BasicNodeWeakPtr /*gizmoRoot*/, model::BasicNodeWeakPtr /*gizmoOwner */)
-    { return nullptr; }
+    virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner )
+    {   gizmoName; gizmoRoot; gizmoOwner; return nullptr;    }
 };
 
 

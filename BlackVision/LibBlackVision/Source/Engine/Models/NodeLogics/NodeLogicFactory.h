@@ -13,9 +13,8 @@ public:
 
     virtual ~NodeLogicFactory() {}
 
-    virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer &   deser,
-                                                        model::BasicNodeWeakPtr logicParent
-                                                     )  override;
+    virtual model::INodeLogicPtr        CreateLogic         ( const IDeserializer &   deser, model::BasicNodeWeakPtr logicParent )                                      override;
+    virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner )    override;
 
 };
 
