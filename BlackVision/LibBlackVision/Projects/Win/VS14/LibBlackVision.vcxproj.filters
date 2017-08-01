@@ -430,6 +430,9 @@
     <Filter Include="Assets\AsyncLoading">
       <UniqueIdentifier>{fdfbb725-9a0a-4d8b-8bc4-5bcfa468718a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Gizmos">
+      <UniqueIdentifier>{668b5c5c-8d69-4996-b102-fcc1f41acb0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1992,6 +1995,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
       <Filter>Assets\AsyncLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5212,6 +5218,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h">
       <Filter>Assets\AsyncLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IGizmoLogic.h">
+      <Filter>Engine\Models\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h">
+      <Filter>Engine\Models\Gizmos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

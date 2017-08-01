@@ -2,6 +2,7 @@
 
 #include "Serialization/IDeserializer.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
+#include "Engine/Models/Interfaces/IGizmoLogic.h"
 #include "Engine/Models/BasicNode.h"
 
 namespace bv
@@ -15,9 +16,10 @@ public:
     virtual ~INodeLogicFactory() {};
 
 
-    virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer & /*deser*/,
-                                                        model::BasicNodeWeakPtr /*logicParent*/
-                                                     )
+    virtual model::INodeLogicPtr        CreateLogic         ( const IDeserializer & /*deser*/, model::BasicNodeWeakPtr /*logicParent*/ )
+    { return nullptr; }
+
+    virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & /*gizmoName*/, model::BasicNodeWeakPtr /*gizmoRoot*/, model::BasicNodeWeakPtr /*gizmoOwner */)
     { return nullptr; }
 };
 
