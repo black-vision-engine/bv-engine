@@ -1635,8 +1635,6 @@ bool						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePat
         
         ReplaceTimeline( scene, timeEval, newTimeEval );
         auto success = model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, sceneName );
-    
-        assert( !IsTimelineUsed( timeEval ) );
 
         // Undo/Redo
         if( success && enableUndo )

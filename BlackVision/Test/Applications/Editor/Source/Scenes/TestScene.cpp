@@ -807,61 +807,53 @@ void					TestScene::InitTimelinesTest		()
     {
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
-        
-        bool success = true;
 
         editor->AddTimeline( SCENE_NAME, TIMELINE_NAME, TimelineType::TT_DEFAULT );
 
-        success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
-        success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
 
         auto root = scene->GetRootNode();
-        success &= ( root->GetName() == "root" );
-        success &= ( root->GetPlugin( "transform" ) != nullptr );
+        CHECK( root->GetName() == "root" );
+        CHECK( root->GetPlugin( "transform" ) != nullptr );
 
         auto defaultTimeline = editor->GetSceneDefaultTimeline( scene );
         auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
         for( auto param : root->GetPlugin( "transform" )->GetParameters() )
         {
-            success &= ( param->GetTimeEvaluator() == defaultTimeline );
+            CHECK( param->GetTimeEvaluator() == defaultTimeline );
         }
 
-        success &= ( root->GetPlugin( "transform" )->GetPluginParamValModel()->GetTimeEvaluator() == defaultTimeline );
+        CHECK( root->GetPlugin( "transform" )->GetPluginParamValModel()->GetTimeEvaluator() == defaultTimeline );
         
-        success &= ( !editor->DeleteTimeline( defaultTimelinePath ) );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( !editor->DeleteTimeline( defaultTimelinePath ) );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        success &= ( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        success &= ( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
-        success &= ( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
-
-        CHECK( success );
+        CHECK( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
     });
 
     m_testSteps.push_back([&] 
     {
         auto editor = m_project->GetProjectEditor();
-        bool success = true;
 
         editor->RenameTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ), TIMELINE_NAME1 );
 
-        success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
-        success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) == nullptr );
-        success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) ) != nullptr );
-
-        CHECK( success );
+        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) == nullptr );
+        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) ) != nullptr );
     });
 
     m_testSteps.push_back([&] 
     {
         auto editor = m_project->GetProjectEditor();
-        bool success = true;
 
-        success &= ( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
-        success &= editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) );
+        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
+        bool success = editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) );
 
         CHECK( success );
     });
@@ -894,23 +886,20 @@ void					TestScene::InitTimelinesTest		()
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
         auto timeline = editor->GetSceneDefaultTimeline( scene );
-        bool success = true;
 
         auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
 
-        success &= ( !editor->DeleteTimeline( defaultTimelinePath ) );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( !editor->DeleteTimeline( defaultTimelinePath ) );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        success &= ( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        success &= ( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
-        success &= ( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
+        CHECK( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
         
         timeline->Stop();
-
-        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -918,12 +907,11 @@ void					TestScene::InitTimelinesTest		()
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
         auto child = scene->GetRootNode()->GetChild( ANIM_NODE );
-        bool success = true;
 
         auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 10000.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
         editor->AddTimeline( scene->GetTimeline(), timeline );
 
-        success &= ( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
+        CHECK( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
 
         for( auto param : child->GetParameters() )
         {
@@ -958,24 +946,21 @@ void					TestScene::InitTimelinesTest		()
         auto timeline = editor->GetSceneDefaultTimeline( scene );
         auto timelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
-        bool success = true;
         
-        success &= ( !editor->DeleteTimeline( timelinePath ) );
-        success &= ( editor->GetTimeline( timelinePath ) != nullptr );
+        CHECK( !editor->DeleteTimeline( timelinePath ) );
+        CHECK( editor->GetTimeline( timelinePath ) != nullptr );
 
-        success &= ( editor->ForceDeleteTimeline( timelinePath ) );
-        success &= ( editor->GetTimeline( timelinePath ) == nullptr );
-        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        CHECK( editor->ForceDeleteTimeline( timelinePath ) );
+        CHECK( editor->GetTimeline( timelinePath ) == nullptr );
+        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
         auto child = scene->GetRootNode()->GetChild( ANIM_NODE );
         for( auto param : child->GetParameters() )
         {
-            success &= ( param->GetTimeEvaluator() == timeline );
+            CHECK( param->GetTimeEvaluator() == timeline );
         }
 
         timeline->SetTimeAndPlay( 0.0f );
-
-        CHECK( success );
     });
 
     m_testSteps.push_back([&] 
@@ -983,11 +968,8 @@ void					TestScene::InitTimelinesTest		()
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
         auto root = scene->GetRootNode();
-        bool success = true;
 
-        success &= ( editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) ) );
-        
-        CHECK( success );
+        CHECK( editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) ) );
     });
 
     m_testSteps.push_back([&] 
@@ -1008,18 +990,14 @@ void					TestScene::InitTimelinesTest		()
     m_testSteps.push_back([&] 
     {
         auto editor = m_project->GetProjectEditor();
-        bool success = true;
 
-        success &= ( !editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) );
-
-        CHECK( success );
+        CHECK( !editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) );
     });
 
     m_testSteps.push_back([&] 
     {
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
-        bool success = true;
 
         auto oldTimeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         auto newTimeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 );
@@ -1029,14 +1007,12 @@ void					TestScene::InitTimelinesTest		()
         editor->AddTimeline( scene->GetTimeline(), timeline );
         timeline->Play();
         
-        success &= ( !editor->DeleteTimeline( oldTimeline ) );
+        CHECK( !editor->DeleteTimeline( oldTimeline ) );
         
         editor->ForceDeleteTimeline( oldTimeline, newTimeline );
 
-        success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
-        success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
-
-        CHECK( success );
+        CHECK( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
+        CHECK( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
     });
 
     m_testSteps.push_back([&] 
@@ -1055,7 +1031,6 @@ void					TestScene::InitTimelinesTest		()
     {
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
-        bool success = true;
 
         auto newTimeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         auto oldTimeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 );
@@ -1064,19 +1039,17 @@ void					TestScene::InitTimelinesTest		()
         editor->AddTimeline( scene->GetTimeline(), timeline );
         timeline->Play();
         
-        success &= (!editor->DeleteTimeline( oldTimeline ) );
+        CHECK(!editor->DeleteTimeline( oldTimeline ) );
         
         editor->ForceDeleteTimeline( oldTimeline, newTimeline );
 
-        success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
-        success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
+        CHECK( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
 
         auto child = scene->GetRootNode()->GetChild( TEX_NODE );
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 0.f, 1.f );
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 2.f, 0.f );
-        success &= ( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
-
-        CHECK( success );
+        CHECK( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
     });
 
     Wait( 2 );
@@ -1085,15 +1058,12 @@ void					TestScene::InitTimelinesTest		()
     {
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
-        bool success = true;
 
         auto timeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         editor->SetTimelineDuration( timeline, 3.f );
         
-        success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
-        success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
-
-        CHECK( success );
+        CHECK( m_timelineManager->GetTimeline( timeline ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
     });
 
     Wait( 3 );
@@ -1102,32 +1072,26 @@ void					TestScene::InitTimelinesTest		()
     {
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
-        bool success = true;
 
         auto timeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         editor->SetTimelineWrapPostBehavior( timeline, TimelineWrapMethod::TWM_CLAMP );
         
-        success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
-        success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
-        success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
-
-        CHECK( success );
+        CHECK( m_timelineManager->GetTimeline( timeline ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
+        CHECK( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
     });
 
     m_testSteps.push_back([&] 
     {
         auto editor = m_project->GetProjectEditor();
         auto scene = editor->GetModelScene( SCENE_NAME );
-        bool success = true;
 
         auto timeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         editor->SetTimelineDuration( timeline, 0.5f );
         
-        success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
-        success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
-        success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
-
-        CHECK( success );
+        CHECK( m_timelineManager->GetTimeline( timeline ) != nullptr );
+        CHECK( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
+        CHECK( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
     });
 
     m_testSteps.push_back([&] 
