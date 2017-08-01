@@ -793,6 +793,19 @@ void                BasicNode::RemoveGizmo  ( UInt32 idx )
 
 // ***********************
 //
+void                BasicNode::RemoveGizmo  ( IModelNodePtr gizmoRoot )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( gizmoRoot );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
 IModelNodePtr       BasicNode::GetGizmo     ( UInt32 idx ) const
 {
     if( m_gizmos )

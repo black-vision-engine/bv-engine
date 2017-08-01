@@ -29,7 +29,7 @@ public:
     bool                    DeleteChildNode     ( BasicNodePtr parentNode, BasicNodePtr childNode );
 
     void                    AddGizmoNode        ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot );
-    bool                    DeleteGizmoNode     ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot );
+    void                    DeleteGizmoNode     ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot );
 
     void                    AttachRootNode      ();
     bool                    DetachRootNode      ();

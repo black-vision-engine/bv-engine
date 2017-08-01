@@ -238,4 +238,85 @@ RenderableEntity * renderable( SceneNode * node )
     return renderable( node->GetRepr() );
 }
 
+
+// ========================================================================= //
+// Gizmo
+// ========================================================================= //
+
+// ***********************
+//
+void                SceneNode::AddGizmo ( SceneNode * gizmoRoot, UInt32 idx )
+{
+    if( gizmoRoot )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->AddGizmo( gizmoRoot, idx );
+    }
+}
+
+// ***********************
+//
+void                SceneNode::RemoveGizmo  ( UInt32 idx )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( idx );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+void                SceneNode::RemoveGizmo  ( SceneNode * gizmoRoot )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( gizmoRoot );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+SceneNode *        SceneNode::GetGizmo             ( UInt32 idx ) const
+{
+    if( m_gizmos )
+        return m_gizmos->GetGizmo( idx );
+    return nullptr;
+}
+
+// ***********************
+//
+UInt32              SceneNode::GetNumGizmos         () const
+{
+    if( m_gizmos )
+        return m_gizmos->GetNumGizmos();
+    return 0;
+}
+
+// ***********************
+//
+EngineGizmoContainer *      SceneNode::AllocateGizmos       ()
+{
+    if( !m_gizmos )
+        m_gizmos = std::make_unique< EngineGizmoContainer >();
+
+    return m_gizmos.get();
+}
+
+// ***********************
+// Releases gizmo container if it's empty.
+void                SceneNode::DeallocateGizmos     ()
+{
+    if( m_gizmos->GetNumGizmos() == 0 )
+        m_gizmos.release();
+}
+
+
+
+
 } //bv

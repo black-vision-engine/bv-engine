@@ -2002,6 +2002,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5230,6 +5233,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h">
       <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

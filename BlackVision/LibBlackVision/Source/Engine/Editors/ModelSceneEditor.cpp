@@ -81,15 +81,20 @@ bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr pare
 //
 void                    ModelSceneEditor::AddGizmoNode      ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot )
 {
-    assert( false );
+    if( gizmoOwner && gizmoRoot )
+    {
+        gizmoOwner->AddGizmo( gizmoRoot );
+    }
 }
 
 // ***********************
 //
-bool                    ModelSceneEditor::DeleteGizmoNode   ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot )
+void                    ModelSceneEditor::DeleteGizmoNode   ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot )
 {
-    assert( false );
-    return false;
+    if( gizmoOwner && gizmoRoot )
+    {
+        gizmoOwner->RemoveGizmo( gizmoRoot );
+    }
 }
 
 // ********************************

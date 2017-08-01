@@ -135,8 +135,9 @@ public:
 
 public:
 
-    void                                    AddGizmo                ( IModelNodePtr gizmoRoot, UInt32 idx );
+    void                                    AddGizmo                ( IModelNodePtr gizmoRoot, UInt32 idx = std::numeric_limits< UInt32 >::max() );
     void                                    RemoveGizmo             ( UInt32 idx );
+    void                                    RemoveGizmo             ( IModelNodePtr gizmoRoot );
 
     IModelNodePtr                           GetGizmo                ( UInt32 idx ) const;
     UInt32                                  GetNumGizmos            () const;
