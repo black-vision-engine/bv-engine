@@ -24,7 +24,14 @@ private:
 
 public:
 
+    void            AddGizmo        ( IModelNodePtr gizmoRoot );
+    void            AddGizmo        ( IModelNodePtr gizmoRoot, UInt32 idx );
+    void            RemoveGizmo     ( IModelNodePtr gizmoRoot );
+    void            RemoveGizmo     ( UInt32 idx );
 
+    IModelNodePtr   GetGizmo        ( UInt32 idx );
+
+    UInt32          GetNumGizmos    ();
 
 };
 

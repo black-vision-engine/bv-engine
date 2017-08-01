@@ -8,6 +8,10 @@
 namespace bv
 {
 
+class BVProjectEditor;
+
+
+
 // Implement INodeLogic creation in derived class.
 class INodeLogicFactory
 {
@@ -19,8 +23,8 @@ public:
     virtual model::INodeLogicPtr        CreateLogic         ( const IDeserializer & /*deser*/, model::BasicNodeWeakPtr /*logicParent*/ )
     { return nullptr; }
 
-    virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner )
-    {   gizmoName; gizmoRoot; gizmoOwner; return nullptr;    }
+    virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, BVProjectEditor * editor )
+    {   gizmoName; gizmoRoot; gizmoOwner; editor; return nullptr;    }
 };
 
 

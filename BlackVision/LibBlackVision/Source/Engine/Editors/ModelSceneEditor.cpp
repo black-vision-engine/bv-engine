@@ -77,6 +77,21 @@ bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr pare
     return false;
 }
 
+// ***********************
+//
+void                    ModelSceneEditor::AddGizmoNode      ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot )
+{
+    assert( false );
+}
+
+// ***********************
+//
+bool                    ModelSceneEditor::DeleteGizmoNode   ( BasicNodePtr gizmoOwner, BasicNodePtr gizmoRoot )
+{
+    assert( false );
+    return false;
+}
+
 // ********************************
 //
 void                    ModelSceneEditor::AttachRootNode     ()

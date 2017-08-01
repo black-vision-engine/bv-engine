@@ -67,6 +67,25 @@ bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * chil
     return false;
 }
 
+// ***********************
+//
+void        SceneEditor::AddGizmoNode       ( SceneNode * gizmoOwner, SceneNode * gizmoRoot )
+{
+    gizmoOwner;
+    gizmoRoot;
+    assert( false );
+}
+
+// ***********************
+//
+bool        SceneEditor::DeleteGizmoNode    ( SceneNode * gizmoOwner, SceneNode * gizmoRoot )
+{
+    gizmoOwner;
+    gizmoRoot;
+    assert( false );
+    return false;
+}
+
 // *******************************
 //
 bool		SceneEditor::AttachChildNode    ( SceneNode * parentNode )

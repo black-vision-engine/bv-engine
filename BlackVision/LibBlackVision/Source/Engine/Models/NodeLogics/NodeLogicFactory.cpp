@@ -88,11 +88,12 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
 
 // ***********************
 //
-model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner )
+model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, BVProjectEditor * editor )
 {
     gizmoName;
     gizmoRoot;
     gizmoOwner;
+    editor;
 
     return model::IGizmoLogicPtr();
 }

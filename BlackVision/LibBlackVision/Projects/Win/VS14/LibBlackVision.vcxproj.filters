@@ -1999,6 +1999,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">

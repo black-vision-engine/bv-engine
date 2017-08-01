@@ -1351,6 +1351,10 @@ bool            BVProjectEditor::SetCurrentCamera            ( model::SceneModel
     return false;
 }
 
+// ========================================================================= //
+// Undo/Redo
+// ========================================================================= //
+
 // ***********************
 //
 bool            BVProjectEditor::Undo                        ( const std::string & sceneName, UInt16 numSteps )
@@ -1372,6 +1376,10 @@ bool            BVProjectEditor::Redo                        ( const std::string
     else
         return false;
 }
+
+// ========================================================================= //
+// Gizmo
+// ========================================================================= //
 
 // ***********************
 //
@@ -1431,7 +1439,7 @@ bool            BVProjectEditor::CreateNodeGizmo            ( model::SceneModelP
     auto gizmoRoot = model::BasicNode::Create( gizmoOwner->GetName() + "_gizmo_" + functionalityName, nullptr );
     if( AddGizmoNode( scene, gizmoOwner, gizmoRoot ) )
     {
-        auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( functionalityName, gizmoRoot, gizmoOwner );
+        auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( functionalityName, gizmoRoot, gizmoOwner, this );
         return SetLogic( gizmoRoot, gizmoLogic, false );
     }
 
@@ -1452,31 +1460,20 @@ bool            BVProjectEditor::CreateSceneGizmo           ( model::SceneModelP
 //
 bool            BVProjectEditor::AddGizmoNode               ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot )
 {
-    scene;
-    gizmoOwner;
-    gizmoRoot;
+    if( !scene || !gizmoOwner || !gizmoRoot )
+    {
+        return false;
+    }
 
-    //if( !scene || !childNode )
-    //{
-    //    return false;
-    //}
+    auto engineGizmoOwner = GetEngineNode( gizmoOwner );
+    auto engineGizmoRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( gizmoRoot ), m_nodesMapping );
 
-    //if( gizmoOwner )
-    //{
-    //    auto engineParent = GetEngineNode( gizmoOwner );
-    //    auto engineChild = BVProjectTools::BuildEngineSceneNode( QueryTyped( childNode ), m_nodesMapping );
+    auto sceneEditor = scene->GetModelSceneEditor();
+    sceneEditor->AddGizmoNode( QueryTyped( gizmoOwner ), QueryTyped( gizmoRoot ) );
 
-    //    auto sceneEditor = scene->GetModelSceneEditor();
-    //    sceneEditor->AddChildNode( QueryTyped( gizmoOwner ), QueryTyped( childNode ) );
+    m_engineSceneEditor->AddGizmoNode( engineGizmoOwner, engineGizmoRoot );
 
-    //    m_engineSceneEditor->AddChildNode( engineParent, engineChild );
-
-    //    return true;
-    //}
-    //else
-    //    return false;
-
-    return false;
+    return true;
 }
 
 // *******************************
