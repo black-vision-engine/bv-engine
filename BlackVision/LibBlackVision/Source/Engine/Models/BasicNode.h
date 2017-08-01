@@ -132,6 +132,20 @@ public:
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
 
+
+public:
+
+    void                                    AddGizmo                ( IModelNodePtr gizmoRoot, UInt32 idx );
+    void                                    RemoveGizmo             ( UInt32 idx );
+
+    IModelNodePtr                           GetGizmo                ( UInt32 idx ) const;
+    UInt32                                  GetNumGizmos            () const;
+
+private:
+
+    GizmoContainer *                        AllocateGizmos          ();
+    void                                    DeallocateGizmos        ();
+
 public:
 
     /**@brief Remove prefix from path.

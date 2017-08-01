@@ -22,6 +22,9 @@ void            GizmoContainer::AddGizmo        ( IModelNodePtr gizmoRoot )
 //
 void            GizmoContainer::AddGizmo        ( IModelNodePtr gizmoRoot, UInt32 idx )
 {
+    if( idx > m_gizmoRoots.size() )
+        idx = m_gizmoRoots.size();
+
     m_gizmoRoots.insert( m_gizmoRoots.begin() + idx, gizmoRoot );
 }
 
@@ -42,7 +45,7 @@ void            GizmoContainer::RemoveGizmo     ( UInt32 idx )
 
 // ***********************
 //
-IModelNodePtr   GizmoContainer::GetGizmo        ( UInt32 idx )
+IModelNodePtr   GizmoContainer::GetGizmo        ( UInt32 idx ) const
 {
     assert( idx < m_gizmoRoots.size() );
     return m_gizmoRoots[ idx ];
@@ -50,7 +53,7 @@ IModelNodePtr   GizmoContainer::GetGizmo        ( UInt32 idx )
 
 // ***********************
 //
-UInt32          GizmoContainer::GetNumGizmos    ()
+UInt32          GizmoContainer::GetNumGizmos    () const
 {
     return (UInt32)m_gizmoRoots.size();
 }

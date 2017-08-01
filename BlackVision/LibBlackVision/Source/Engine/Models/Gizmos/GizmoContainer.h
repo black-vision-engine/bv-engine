@@ -29,9 +29,8 @@ public:
     void            RemoveGizmo     ( IModelNodePtr gizmoRoot );
     void            RemoveGizmo     ( UInt32 idx );
 
-    IModelNodePtr   GetGizmo        ( UInt32 idx );
-
-    UInt32          GetNumGizmos    ();
+    IModelNodePtr   GetGizmo        ( UInt32 idx ) const;
+    UInt32          GetNumGizmos    () const;
 
 };
 

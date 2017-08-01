@@ -767,6 +767,66 @@ void  BasicNode::SetVisible              ( bool visible )
     m_visible = visible;
 }
 
+// ***********************
+//
+void                BasicNode::AddGizmo ( IModelNodePtr gizmoRoot, UInt32 idx )
+{
+    if( gizmoRoot )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->AddGizmo( gizmoRoot, idx );
+    }
+}
+
+// ***********************
+//
+void                BasicNode::RemoveGizmo  ( UInt32 idx )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( idx );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+IModelNodePtr       BasicNode::GetGizmo     ( UInt32 idx ) const
+{
+    if( m_gizmos )
+        return m_gizmos->GetGizmo( idx );
+    return nullptr;
+}
+
+// ***********************
+//
+UInt32              BasicNode::GetNumGizmos () const
+{
+    if( m_gizmos )
+        return m_gizmos->GetNumGizmos();
+    return 0;
+}
+
+// ***********************
+//
+GizmoContainer *    BasicNode::AllocateGizmos   ()
+{
+    if( !m_gizmos )
+        m_gizmos = std::make_unique< GizmoContainer >();
+
+    return m_gizmos.get();
+}
+
+// ***********************
+// Releases gizmo container if it's empty.
+void                BasicNode::DeallocateGizmos ()
+{
+    if( m_gizmos->GetNumGizmos() == 0 )
+        m_gizmos.release();
+}
+
 // ********************************
 //
 INodeLogicPtr                       BasicNode::GetLogic				    () const
