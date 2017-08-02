@@ -25,7 +25,7 @@ class RenderMode
 {
 private:
 
-    RenderLogic * m_renderLogic;
+    RenderLogic *       m_renderLogic;
     Renderer *          m_renderer;
 
     unsigned int        m_frameNumber;
@@ -38,6 +38,8 @@ private:
     TimeType            m_nextFrameOffset;  ///< Only RenderToFile mode
 
 	unsigned long		m_fps;
+
+    bool                m_editMode;
 
 public:
 
@@ -58,6 +60,10 @@ public:
     TimeType        GetFrameTime                () const    { return m_currentTime; }
     unsigned int    GetFrameNumber              () const    { return m_frameNumber; }
     TimeType        GetRealTime                 () const    { return m_realTime; }
+
+    // Editor mode
+    void            SwitchToEditMode                 ( bool mode );
+    bool            IsEditMode                  () const;
 
     // AVFileOutput
     void            StartToAVFileRendering      ( const std::string & outputFilePath );

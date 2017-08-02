@@ -57,6 +57,14 @@ void            NodeEffectRenderLogic::Render  ( SceneNodeRepr * nodeRepr, Rende
     }    
 }
 
+// ***********************
+//
+void            NodeEffectRenderLogic::RenderDepth                          ( SceneNodeRepr * nodeRepr, RenderContext * ctx )
+{
+    nodeRepr;
+    ctx;
+}
+
 // *********************************
 //
 void            NodeEffectRenderLogic::GetRenderPasses_DIRTY_HACK          ( std::set< const RenderablePass * > * passes ) const

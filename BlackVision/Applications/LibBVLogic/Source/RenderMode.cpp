@@ -14,10 +14,11 @@ namespace bv
 // ***********************
 //
 RenderMode::RenderMode()
-    :   m_startTime( 0 ),
-        m_frameNumber( 0 ),
-        m_currentTime( 0 ),
-        m_renderMode( RenderingMode::RM_RenderRealTime )
+    :   m_startTime( 0 )
+    ,   m_frameNumber( 0 )
+    ,   m_currentTime( 0 )
+    ,   m_renderMode( RenderingMode::RM_RenderRealTime )
+    ,   m_editMode( false )
 {
     m_fps = DefaultConfig.TimerFPS();
 }
@@ -121,6 +122,24 @@ TimeType    RenderMode::StartFrame              ( unsigned long millis )
 TimeType	RenderMode::GetFramesDelta				() const
 {
 	return 1.f / (float) m_fps;
+}
+
+// ***********************
+//
+void        RenderMode::SwitchToEditMode            ( bool mode )
+{
+    if( m_editMode != mode )
+    {
+        m_editMode = mode;
+        m_renderLogic->SwitchEditMode( mode );
+    }
+}
+
+// ***********************
+//
+bool        RenderMode::IsEditMode                  () const
+{
+    return m_editMode;
 }
 
 // ***********************

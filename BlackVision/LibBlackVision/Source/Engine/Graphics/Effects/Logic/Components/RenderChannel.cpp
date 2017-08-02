@@ -18,6 +18,7 @@ RenderChannel::RenderChannel                                            ( Render
     , m_cachedReadbackTexture( nullptr )
     , m_cachedReadbackUpToDate( false )
     , m_isActive( false )
+    , m_gizmoRT( nullptr )
 {
     for( unsigned int i = 0; i < numTrackedRenderTargets; ++i )
     {
@@ -25,6 +26,10 @@ RenderChannel::RenderChannel                                            ( Render
 
         m_renderTargets.push_back( rt );
     }
+
+    // FIXME: This could be optimized. Gizmo render target is only used when engine is in edit mode.
+    // We should allocate render target in AllocGizmoRT function once and deallocate on demand in DeallocGizmoRT.
+    m_gizmoRT = allocator->CreateRenderTarget( RenderTarget::RTSemantic::S_DRAW_ONLY );
 }
 
 // **************************
@@ -67,6 +72,22 @@ const RenderTarget *    RenderChannel::GetRenderTarget                  ( int re
     int idx = (int) m_renderTargets.size() + reversedIdx - 1;
 
     return m_renderTargets[ ( idx + m_activeRenderTargetIdx ) % m_renderTargets.size() ];
+}
+
+// ***********************
+//
+const RenderTarget *    RenderChannel::AllocGizmoRT                     ()
+{
+    // FIXME: This function should allocate render target on demand and return it if it existed before.
+    // Now gizmoRT always exists.
+    return m_gizmoRT;
+}
+
+// ***********************
+//
+void                    RenderChannel::DeallocGizmoRT                   ()
+{
+    // FIXME: This function should delete m_gizmoRT.
 }
 
 // **************************

@@ -23,6 +23,7 @@ public:
                             RenderLogicCore    ();
 
     void                    Render              ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
+    void                    RenderDepth         ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
 
 private:
 

@@ -19,6 +19,7 @@ public:
                         ~NodeEffectImpl(); 
 
     virtual void        Render          ( SceneNodeRepr * node, RenderContext * ctx ) override;
+    virtual void        RenderDepth     ( SceneNodeRepr * node, RenderContext * ctx ) override;
 
     virtual IValuePtr   GetValue        ( const std::string & name ) const override;
 

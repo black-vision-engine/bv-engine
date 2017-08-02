@@ -33,7 +33,7 @@ RenderLogicCore::RenderLogicCore()
 
 // **************************
 //
-void    RenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+void    RenderLogicCore::Render             ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
 {
     // Invalidate all active output channels
     PreRender   ( result );
@@ -47,9 +47,37 @@ void    RenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsDa
     PostRender  ( result, ctx );
 }
 
+// ***********************
+//
+void    RenderLogicCore::RenderDepth        ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+{
+    // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
+    // override previously rendered scene. We have to do it here.
+    ClearActiveChannels( result, ctx );
+
+    // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
+    for( auto & scene : scenes )
+    {
+        auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
+        assert( outIdx < ( unsigned int )RenderChannelType::RCT_TOTAL );
+
+        auto outputType = ( RenderChannelType )outIdx;
+        auto outputRT = result->GetActiveRenderTarget( outputType );
+
+        NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
+
+        audio::AudioRenderChannelData & arcd = const_cast< RenderChannel * >( result->GetRenderChannel( outputType ) )->GetAudioRenderChannelData();
+        arcd.ClearBuffers();
+
+        NodeRenderLogic::RenderAudio( scene, ctx, arcd );
+
+        result->SetContainsValidData( outputType, true );
+    }
+}
+
 // **************************
 //
-void    RenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+void    RenderLogicCore::RenderScenes       ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
 {
     // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
     // override previously rendered scene. We have to do it here.

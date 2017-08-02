@@ -31,6 +31,7 @@ public:
                     ~NodeEffectRenderLogic     ();
 
     void            Render                      ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
+    void            RenderDepth                 ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
 
 	// FIXME: these two methods are added because no valid rendering scheme was designed and right now we mix sorting, blending and inverse z-sorting
 	// FIXME: with two queues used to implement that - this suxxx, because it is not consistent and requires query functions as presented belov

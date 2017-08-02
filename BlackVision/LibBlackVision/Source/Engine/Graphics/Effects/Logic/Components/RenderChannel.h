@@ -30,6 +30,7 @@ class RenderChannel
 private:
 
     std::vector< RenderTarget * >   m_renderTargets;
+    RenderTarget *                  m_gizmoRT;
 
     int                             m_activeRenderTargetIdx;
 
@@ -53,6 +54,9 @@ public:
     const RenderTarget *    GetPreviousRenderTarget     () const;
 
     const RenderTarget *    GetRenderTarget             ( int reversedIdx ) const;
+    
+    const RenderTarget *    AllocGizmoRT                ();
+    void                    DeallocGizmoRT              ();
 
     void                    UpdateActiveRenderTargetIdx ();
 
