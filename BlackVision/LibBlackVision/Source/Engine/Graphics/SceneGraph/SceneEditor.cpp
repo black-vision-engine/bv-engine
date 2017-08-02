@@ -71,19 +71,21 @@ bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * chil
 //
 void        SceneEditor::AddGizmoNode       ( SceneNode * gizmoOwner, SceneNode * gizmoRoot )
 {
-    gizmoOwner;
-    gizmoRoot;
-    assert( false );
+    if( gizmoOwner && gizmoRoot )
+    {
+        gizmoOwner->AddGizmo( gizmoRoot );
+    }
 }
 
 // ***********************
 //
-bool        SceneEditor::DeleteGizmoNode    ( SceneNode * gizmoOwner, SceneNode * gizmoRoot )
+void        SceneEditor::DeleteGizmoNode    ( SceneNode * gizmoOwner, SceneNode * gizmoRoot )
 {
-    gizmoOwner;
-    gizmoRoot;
-    assert( false );
-    return false;
+    if( gizmoOwner && gizmoRoot )
+    {
+        gizmoOwner->RemoveGizmo( gizmoRoot );
+        DeleteNode( gizmoRoot, m_renderer );
+    }
 }
 
 // *******************************

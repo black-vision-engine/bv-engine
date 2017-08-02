@@ -29,7 +29,7 @@ public:
     bool                    DeleteChildNode     ( SceneNode * parentNode, SceneNode * childNode );
 
     void                    AddGizmoNode        ( SceneNode * parentNode, SceneNode * childNode );
-    bool                    DeleteGizmoNode     ( SceneNode * parentNode, SceneNode * childNode );
+    void                    DeleteGizmoNode     ( SceneNode * parentNode, SceneNode * childNode );
 
 	bool                    AttachChildNode     ( SceneNode * parentNode );
 	bool                    AttachChildNode     ( SceneNode * parentNode, UInt32 idx );
