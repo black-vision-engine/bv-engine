@@ -9,6 +9,7 @@
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/DepthRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/GizmoRenderLogic.h"
 
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
@@ -64,6 +65,23 @@ void    RenderLogicCore::RenderDepth        ( const SceneVec & scenes, RenderedC
         auto outputRT = result->GetGizmoRenderTarget( outputType );
 
         DepthRenderLogic::RenderQueued( scene, outputRT, ctx );
+    }
+}
+
+// ***********************
+//
+void    RenderLogicCore::RenderGizmos       ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+{
+    // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
+    for( auto & scene : scenes )
+    {
+        auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
+        assert( outIdx < ( unsigned int )RenderChannelType::RCT_TOTAL );
+
+        auto outputType = ( RenderChannelType )outIdx;
+        auto outputRT = result->GetGizmoRenderTarget( outputType );
+
+        GizmoRenderLogic::Render( scene, outputRT, ctx );
     }
 }
 
