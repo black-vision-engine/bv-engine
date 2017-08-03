@@ -154,6 +154,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp" />
@@ -626,6 +627,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h" />

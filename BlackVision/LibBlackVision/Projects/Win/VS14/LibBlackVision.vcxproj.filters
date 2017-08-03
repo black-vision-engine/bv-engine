@@ -2005,6 +2005,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5236,6 +5239,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

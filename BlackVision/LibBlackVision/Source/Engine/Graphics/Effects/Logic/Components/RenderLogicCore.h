@@ -31,6 +31,7 @@ private:
     void                    RenderScene         ( Scene * scene, const RenderTarget * outputRT, RenderContext * ctx );
 
     void                    ClearActiveChannels ( RenderedChannelsData * result, RenderContext * ctx );
+    void                    ClearGizmoTargets   ( RenderedChannelsData * result, RenderContext * ctx );
 
     void                    PreRender           ( RenderedChannelsData * result );
     void                    PostRender          ( RenderedChannelsData * result, RenderContext * ctx );

@@ -7,6 +7,7 @@
 
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/DepthRenderLogic.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -252,6 +253,23 @@ void                RenderingQueue::Render              ( RenderContext * ctx )
 
 // ***********************
 //
+void                RenderingQueue::RenderDepth         ( RenderContext * ctx )
+{
+    // Opaque objects from front to back.
+    for( auto & renderItem : m_opaqueNodes )
+    {
+        RenderNodeDepth( renderItem, ctx );
+    }
+
+    // Transparent objects from back to front.
+    for( auto & renderItem : m_transparentNodes )
+    {
+        RenderNodeDepth( renderItem, ctx );
+    }
+}
+
+// ***********************
+//
 void                RenderingQueue::ClearQueue          ()
 {
     m_transparentNodes.clear();
@@ -273,7 +291,6 @@ void                RenderingQueue::RenderNode          ( RenderingQueue::Render
     //BEGIN_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
     BEGIN_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );
 
-    // FIXME: nrl - implement more expressive api in NodeRenderLogic so that bb and queue rendering is supported in a better way
     if( renderItem.UseEffect )
     {
         auto ownerNode = renderItem.Node->GetOwnerNode();
@@ -286,6 +303,22 @@ void                RenderingQueue::RenderNode          ( RenderingQueue::Render
 
     END_CPU_RENDER_MESSURE( ctx->GetRenderer(), renderItem.Node );
     //END_MESSURE_GPU_PERFORMANCE( ctx->GetRenderer(), renderItem.Node );
+}
+
+// ***********************
+//
+void                RenderingQueue::RenderNodeDepth     ( RenderingQueue::RenderItem & renderItem, RenderContext * ctx )
+{
+    if( renderItem.UseEffect )
+    {
+        auto ownerNode = renderItem.Node->GetOwnerNode();
+        DepthRenderLogic::Render( ownerNode, ctx );
+    }
+    else
+    {
+        // Use normal rendering function to render single node.
+        NodeRenderLogic::RenderRoot( renderItem.Node, ctx );
+    }
 }
 
 } // bv

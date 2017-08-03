@@ -8,6 +8,7 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/DepthRenderLogic.h"
 
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
@@ -51,9 +52,7 @@ void    RenderLogicCore::Render             ( const SceneVec & scenes, RenderedC
 //
 void    RenderLogicCore::RenderDepth        ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
 {
-    // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
-    // override previously rendered scene. We have to do it here.
-    ClearActiveChannels( result, ctx );
+    ClearGizmoTargets( result, ctx );
 
     // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
     for( auto & scene : scenes )
@@ -62,16 +61,9 @@ void    RenderLogicCore::RenderDepth        ( const SceneVec & scenes, RenderedC
         assert( outIdx < ( unsigned int )RenderChannelType::RCT_TOTAL );
 
         auto outputType = ( RenderChannelType )outIdx;
-        auto outputRT = result->GetActiveRenderTarget( outputType );
+        auto outputRT = result->GetGizmoRenderTarget( outputType );
 
-        NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
-
-        audio::AudioRenderChannelData & arcd = const_cast< RenderChannel * >( result->GetRenderChannel( outputType ) )->GetAudioRenderChannelData();
-        arcd.ClearBuffers();
-
-        NodeRenderLogic::RenderAudio( scene, ctx, arcd );
-
-        result->SetContainsValidData( outputType, true );
+        DepthRenderLogic::RenderQueued( scene, outputRT, ctx );
     }
 }
 
@@ -121,6 +113,20 @@ void    RenderLogicCore::ClearActiveChannels   ( RenderedChannelsData * result, 
         {
             auto rt = result->GetActiveRenderTarget( channelType );
 
+            NodeRenderLogic::Clear( rt, ctx );
+        }
+    }
+}
+
+// ***********************
+//
+void    RenderLogicCore::ClearGizmoTargets      ( RenderedChannelsData * result, RenderContext * ctx )
+{
+    for( auto channelType : m_allChannels )
+    {
+        if( result->IsActive( channelType ) )
+        {
+            auto rt = result->GetGizmoRenderTarget( channelType );
             NodeRenderLogic::Clear( rt, ctx );
         }
     }
