@@ -165,6 +165,16 @@ void            SceneNode::DeleteTransformable      ()
 void            SceneNode::Update                   ( const Transform & parentTransform )
 {
     m_repr->Update( parentTransform );
+
+    auto numGizmos = GetNumGizmos();
+    if( numGizmos > 0 )
+    {
+        // We treat gizmos like they were child of this node.
+        const auto & worldTransform = m_repr->GetTransformable()->WorldTransform();
+
+        for( UInt32 i = 0; i < numGizmos; ++i )
+            GetGizmo( i )->Update( worldTransform );
+    }
 }
 
 // ********************************
