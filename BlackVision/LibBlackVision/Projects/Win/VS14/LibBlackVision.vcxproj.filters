@@ -2017,6 +2017,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5259,6 +5262,9 @@
       <Filter>Engine\Models\Gizmos</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.h">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClInclude>
   </ItemGroup>

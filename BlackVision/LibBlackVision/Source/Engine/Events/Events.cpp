@@ -39,90 +39,95 @@ std::string ScreenShotRenderedEvent::m_sEventName           = "ScreenShotRendere
 // FIXME: MORE EVENTS IN ScrollerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
 
 
-const EventType LoadAssetEvent::m_sEventType        = EventManager::RegisterType();
 std::string LoadAssetEvent::m_sEventName            = "LoadAssetEvent";
+const EventType LoadAssetEvent::m_sEventType        = EventManager::RegisterType( LoadAssetEvent::Name(), LoadAssetEvent::Create );
 
-const EventType ParamKeyEvent::m_sEventType         = EventManager::RegisterType();
 std::string ParamKeyEvent::m_sEventName             = "ParamKeyEvent";
+const EventType ParamKeyEvent::m_sEventType         = EventManager::RegisterType( ParamKeyEvent::Name(), ParamKeyEvent::Create );
 
-const EventType NodeStructureEvent::m_sEventType    = EventManager::RegisterType();
 std::string NodeStructureEvent::m_sEventName        = "NodeStructureEvent";
+const EventType NodeStructureEvent::m_sEventType    = EventManager::RegisterType( NodeStructureEvent::Name(), NodeStructureEvent::Create );
 
-const EventType PluginStructureEvent::m_sEventType  = EventManager::RegisterType();
 std::string PluginStructureEvent::m_sEventName      = "PluginStructureEvent";
+const EventType PluginStructureEvent::m_sEventType  = EventManager::RegisterType( PluginStructureEvent::Name(), PluginStructureEvent::Create );
 
-const EventType ProjectEvent::m_sEventType          = EventManager::RegisterType();
 std::string ProjectEvent::m_sEventName              = "ProjectEvent";
+const EventType ProjectEvent::m_sEventType          = EventManager::RegisterType( ProjectEvent::Name(), ProjectEvent::Create );
 
-const EventType ResponseEvent::m_sEventType         = EventManager::RegisterType();
 std::string ResponseEvent::m_sEventName             = "ResponseEvent";
+const EventType ResponseEvent::m_sEventType         = EventManager::RegisterType();
 
-const EventType InfoEvent::m_sEventType             = EventManager::RegisterType();
 std::string InfoEvent::m_sEventName                 = "InfoEvent";
+const EventType InfoEvent::m_sEventType             = EventManager::RegisterType( InfoEvent::Name(), InfoEvent::Create );
 
-const EventType TimeLineEvent::m_sEventType         = EventManager::RegisterType();
 std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
+const EventType TimeLineEvent::m_sEventType         = EventManager::RegisterType( TimeLineEvent::Name(), TimeLineEvent::Create );
 
-const EventType TimerEvent::m_sEventType            = EventManager::RegisterType();
 std::string TimerEvent::m_sEventName                = "TimerEvent";
+const EventType TimerEvent::m_sEventType            = EventManager::RegisterType( TimerEvent::Name(), TimerEvent::Create );
 
-const EventType NodeLogicEvent::m_sEventType        = EventManager::RegisterType();
 std::string NodeLogicEvent::m_sEventName            = "NodeLogicEvent";
+const EventType NodeLogicEvent::m_sEventType        = EventManager::RegisterType( NodeLogicEvent::Name(), NodeLogicEvent::Create );
 
-const EventType VideoCardEvent::m_sEventType        = EventManager::RegisterType();
 std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
+const EventType VideoCardEvent::m_sEventType        = EventManager::RegisterType( VideoCardEvent::Name(), VideoCardEvent::Create );
 
-const EventType HightmapEvent::m_sEventType         = EventManager::RegisterType();
 std::string HightmapEvent::m_sEventName             = "HightmapEvent";
+const EventType HightmapEvent::m_sEventType         = EventManager::RegisterType( HightmapEvent::Name(), HightmapEvent::Create );
 
-const EventType EngineStateEvent::m_sEventType      = EventManager::RegisterType();
 std::string EngineStateEvent::m_sEventName          = "EngineStateEvent";
+const EventType EngineStateEvent::m_sEventType      = EventManager::RegisterType( EngineStateEvent::Name(), EngineStateEvent::Create );
 
-const EventType SceneEvent::m_sEventType            = EventManager::RegisterType();
 std::string SceneEvent::m_sEventName                = "SceneEvent";
+const EventType SceneEvent::m_sEventType            = EventManager::RegisterType( SceneEvent::Name(), SceneEvent::Create );
 
-const EventType AssetEvent::m_sEventType            = EventManager::RegisterType();
 std::string AssetEvent::m_sEventName                = "AssetEvent";
+const EventType AssetEvent::m_sEventType            = EventManager::RegisterType( AssetEvent::Name(), AssetEvent::Create );
 
 
-const EventType GlobalEffectEvent::m_sEventType     = EventManager::RegisterType();
 std::string GlobalEffectEvent::m_sEventName         = "GlobalEffectEvent";
+const EventType GlobalEffectEvent::m_sEventType     = EventManager::RegisterType( GlobalEffectEvent::Name(), GlobalEffectEvent::Create );
 
-const EventType TimelineKeyframeEvent::m_sEventType = EventManager::RegisterType();
 std::string TimelineKeyframeEvent::m_sEventName     = "TimelineKeyframeEvent";
+const EventType TimelineKeyframeEvent::m_sEventType = EventManager::RegisterType( TimelineKeyframeEvent::Name(), TimelineKeyframeEvent::Create );
 
-const EventType MouseEvent::m_sEventType            = EventManager::RegisterType();
 std::string MouseEvent::m_sEventName                = "MouseEvent";
+const EventType MouseEvent::m_sEventType            = EventManager::RegisterType( MouseEvent::Name(), MouseEvent::Create );
 
-const EventType SceneVariableEvent::m_sEventType    = EventManager::RegisterType();
 std::string SceneVariableEvent::m_sEventName        = "SceneVariableEvent";
+const EventType SceneVariableEvent::m_sEventType    = EventManager::RegisterType( SceneVariableEvent::Name(), SceneVariableEvent::Create );
 
-const EventType ConfigEvent::m_sEventType           = EventManager::RegisterType();
 std::string ConfigEvent::m_sEventName               = "ConfigEvent";
+const EventType ConfigEvent::m_sEventType           = EventManager::RegisterType( ConfigEvent::Name(), ConfigEvent::Create );
 
-const EventType GridLineEvent::m_sEventType         = EventManager::RegisterType();
 std::string GridLineEvent::m_sEventName             = "GridLineEvent";
+const EventType GridLineEvent::m_sEventType         = EventManager::RegisterType( GridLineEvent::Name(), GridLineEvent::Create );
 
-const EventType LightEvent::m_sEventType            = EventManager::RegisterType();
 std::string LightEvent::m_sEventName                = "LightEvent";
+const EventType LightEvent::m_sEventType            = EventManager::RegisterType( LightEvent::Name(), LightEvent::Create );
 
-const EventType CameraEvent::m_sEventType           = EventManager::RegisterType();
 std::string CameraEvent::m_sEventName               = "CameraEvent";
+const EventType CameraEvent::m_sEventType           = EventManager::RegisterType( CameraEvent::Name(), CameraEvent::Create );
 
-const EventType VideoDecoderEvent::m_sEventType     = EventManager::RegisterType();
 std::string VideoDecoderEvent::m_sEventName         = "VideoDecoderEvent";
+const EventType VideoDecoderEvent::m_sEventType     = EventManager::RegisterType();
 
-const EventType ParamDescriptorEvent::m_sEventType  = EventManager::RegisterType();
 std::string ParamDescriptorEvent::m_sEventName      = "ParamDescriptorEvent";
+const EventType ParamDescriptorEvent::m_sEventType  = EventManager::RegisterType( ParamDescriptorEvent::Name(), ParamDescriptorEvent::Create );
 
-const EventType UndoRedoEvent::m_sEventType         = EventManager::RegisterType();
 std::string UndoRedoEvent::m_sEventName             = "UndoRedoEvent";
+const EventType UndoRedoEvent::m_sEventType         = EventManager::RegisterType( UndoRedoEvent::Name(), UndoRedoEvent::Create );
 
+std::string AssetTrackerInternalEvent::m_sEventName = "AssetTrackerInternalEvent";
 const EventType AssetTrackerInternalEvent::m_sEventType     = EventManager::RegisterType();
-std::string AssetTrackerInternalEvent::m_sEventName         = "AssetTrackerInternalEvent";
 
-const EventType GenericEvent::m_sEventType          = EventManager::RegisterType();
 std::string GenericEvent::m_sEventName              = "GenericEvent";
+const EventType GenericEvent::m_sEventType          = EventManager::RegisterType( GenericEvent::Name(), GenericEvent::Create );
+
+std::string GizmoEvent::m_sEventName                = "GizmoEvent";
+const EventType GizmoEvent::m_sEventType            = EventManager::RegisterType( GizmoEvent::Name(), GizmoEvent::Create );
+
+
 
 
 // ************************************* Events Serialization *****************************************
@@ -706,6 +711,19 @@ std::pair< HightmapEvent::Command, const char* > HightmapEventCommandMapping[] =
 };
 
 IMPLEMENT_ENUM_SERIALIZATION( HightmapEvent::Command, HightmapEventCommandMapping );
+
+
+// ========================================================================= //
+// GizmoEvent
+// ========================================================================= //
+
+std::pair< GizmoEvent::Command, const char* > GizmoEventCommandMapping[] =
+{
+    std::make_pair( GizmoEvent::Command::CreateGizmo, "CreateGizmo" )
+    , std::make_pair( GizmoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+IMPLEMENT_ENUM_SERIALIZATION( GizmoEvent::Command, GizmoEventCommandMapping );
 
 }
 
@@ -2527,6 +2545,67 @@ bool                AssetTrackerInternalEvent::HasKey                   () const
 {
     return ( !AssetKey.empty() );
 }
+
+
+
+//******************* GizmoEvent *************
+
+// *************************************
+//
+void                GizmoEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( CommandName ) );
+    Address.Serialize( ser );
+}
+
+// *************************************
+//
+IEventPtr           GizmoEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        GizmoEventPtr newEvent = std::make_shared< GizmoEvent >();
+        newEvent->CommandName = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GizmoEvent::Command::Fail );
+        newEvent->Address = GizmoAddress::Create( deser );
+
+        return newEvent;
+    }
+    return nullptr;
+}
+// *************************************
+//
+IEventPtr           GizmoEvent::Clone             () const
+{
+    return IEventPtr( new GizmoEvent( *this ) );
+}
+
+// *************************************
+//
+EventType           GizmoEvent::Type()
+{
+    return m_sEventType;
+}
+// *************************************
+//
+std::string&        GizmoEvent::Name()
+{
+    return m_sEventName;
+}
+// *************************************
+//
+const std::string&  GizmoEvent::GetName() const
+{
+    return Name();
+}
+// *************************************
+//
+EventType           GizmoEvent::GetEventType() const
+{
+    return this->m_sEventType;
+}
+
+
 
 #pragma warning( pop )
 

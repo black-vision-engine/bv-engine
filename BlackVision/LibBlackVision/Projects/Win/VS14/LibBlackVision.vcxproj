@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp" />
@@ -633,6 +634,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h" />

@@ -7,7 +7,6 @@
 #include "Engine/Models/BasicNode.h"
 
 
-
 namespace bv
 {
 
@@ -18,6 +17,8 @@ namespace model
 }
 
 class BVProjectEditor;
+
+
 
 // ***********************
 // Per scene class for creating gizmos.

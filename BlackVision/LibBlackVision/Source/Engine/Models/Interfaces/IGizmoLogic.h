@@ -20,7 +20,9 @@ enum class GizmoType
     Node,
     Logic,
     Plugin,
-    Effect
+    Effect,
+
+    Total
 };
 
 
