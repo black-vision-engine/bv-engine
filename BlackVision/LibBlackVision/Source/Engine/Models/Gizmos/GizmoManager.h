@@ -11,7 +11,13 @@
 namespace bv
 {
 
+namespace model
+{
+    class SceneModel;
+    DEFINE_PTR_TYPE( SceneModel );
+}
 
+class BVProjectEditor;
 
 // ***********************
 // Per scene class for creating gizmos.
@@ -27,6 +33,8 @@ public:
 
     void                RegisterDefaultGizmos       ();
 
+
+    bool                CreateGizmo                 ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName );
 
 private:
 

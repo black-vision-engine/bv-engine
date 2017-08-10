@@ -1383,77 +1383,9 @@ bool            BVProjectEditor::Redo                        ( const std::string
 
 // ***********************
 //
-bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & functionalityName )
+bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
 {
-    switch( type )
-    {
-    case bv::model::GizmoType::Scene:
-        return CreateSceneGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoType::Node:
-        return CreateNodeGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoType::Logic:
-        return CreateLogicGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoType::Plugin:
-        return CreatePluginGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoType::Effect:
-        return CreateEffectGizmo( scene, gizmoOwner, functionalityName );
-    }
-
-    return false;
-}
-
-// ***********************
-//
-bool            BVProjectEditor::CreatePluginGizmo          ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
-{
-    scene;
-    gizmoOwner;
-    functionalityName;
-    return false;
-}
-
-// ***********************
-//
-bool            BVProjectEditor::CreateLogicGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
-{
-    scene;
-    gizmoOwner;
-    functionalityName;
-    return false;
-}
-
-// ***********************
-//
-bool            BVProjectEditor::CreateEffectGizmo          ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
-{
-    scene;
-    gizmoOwner;
-    functionalityName;
-    return false;
-}
-
-// ***********************
-//
-bool            BVProjectEditor::CreateNodeGizmo            ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
-{
-    auto gizmoRoot = model::BasicNode::Create( gizmoOwner->GetName() + "_gizmo_" + functionalityName, nullptr );
-    if( AddGizmoNode( scene, gizmoOwner, gizmoRoot ) )
-    {
-        auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( functionalityName, gizmoRoot, gizmoOwner, this );
-        return SetLogic( gizmoRoot, gizmoLogic, false );
-    }
-
-    return false;
-}
-
-// ***********************
-//
-bool            BVProjectEditor::CreateSceneGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr rootNode, const std::string & functionalityName )
-{
-    scene;
-    rootNode;
-    functionalityName;
-    return false;
+    return scene->GetGizmoManager().CreateGizmo( this, scene, gizmoOwner, type, ownerTypeName, functionalityName );
 }
 
 // ***********************

@@ -2,11 +2,48 @@
 #include "GizmoManager.h"
 
 
+#include "Engine/Editors/BVProjectEditor.h"
+
+#include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 
 namespace bv
 {
 
+
+
+// ========================================================================= //
+// Gizmo creation
+// ========================================================================= //
+
+
+// ***********************
+//
+bool                    GizmoManager::CreateGizmo           ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
+{
+    // If we create scene gizmo, we attach it always to root node. In this case user can pass nullptr.
+    if( !gizmoOwner && type == model::GizmoType::Scene )
+        gizmoOwner = scene->GetRootNode();
+
+    if( gizmoOwner )
+    {
+        auto gizmoLogicName = QueryGizmoLogicName( type, ownerTypeName, functionalityName );
+
+        if( !gizmoLogicName.empty() )
+        {
+            auto gizmoRoot = model::BasicNode::Create( "Gizmo_" + functionalityName, nullptr );
+            auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( gizmoLogicName, gizmoRoot, gizmoOwner, editor );
+
+            if( gizmoLogic && gizmoRoot )
+            {
+                gizmoRoot->SetLogic( gizmoLogic );
+                return editor->AddGizmoNode( scene, gizmoOwner, gizmoRoot );
+            }
+        }
+    }
+
+    return false;
+}
 
 
 // ========================================================================= //
