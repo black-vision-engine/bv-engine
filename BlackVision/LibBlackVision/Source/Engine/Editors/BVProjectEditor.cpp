@@ -1385,6 +1385,16 @@ bool            BVProjectEditor::Redo                        ( const std::string
 
 // ***********************
 //
+bool            BVProjectEditor::CreateGizmo                ( const std::string & sceneName, const std::string gizmoOwnerNodeName, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
+{
+    auto scene = GetModelScene( sceneName );
+    auto node = GetNode( sceneName, gizmoOwnerNodeName );
+
+    return CreateGizmo( scene, QueryTyped( node ), type, ownerTypeName, functionalityName );
+}
+
+// ***********************
+//
 bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
 {
     return m_gizmoManager.CreateGizmo( this, scene, gizmoOwner, type, ownerTypeName, functionalityName );

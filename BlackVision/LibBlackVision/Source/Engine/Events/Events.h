@@ -1406,7 +1406,7 @@ DEFINE_PTR_TYPE( AssetTrackerInternalEvent )
 
 
 // ************************************* GizmoEvent *************************************
-class GizmoEvent : public BaseEvent
+class GizmoEvent : public RemoteEvent
 {
 public:
 
