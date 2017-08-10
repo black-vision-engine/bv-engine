@@ -14,7 +14,7 @@ namespace model
 
 // ***********************
 //
-enum class GizmoOwnerType
+enum class GizmoType
 {
     Scene,
     Node,

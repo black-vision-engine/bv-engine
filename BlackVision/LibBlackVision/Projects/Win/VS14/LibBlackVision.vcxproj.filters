@@ -2011,6 +2011,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.cpp">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5248,6 +5254,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h">
+      <Filter>Engine\Models\Gizmos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -266,7 +266,7 @@ public:
 
 /* GIZMOS */
 
-    bool                    CreateGizmo                 ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoOwnerType type, const std::string & functionalityName );
+    bool                    CreateGizmo                 ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & functionalityName );
 
     bool                    CreatePluginGizmo           ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
     bool                    CreateLogicGizmo            ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );

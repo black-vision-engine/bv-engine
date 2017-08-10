@@ -1383,19 +1383,19 @@ bool            BVProjectEditor::Redo                        ( const std::string
 
 // ***********************
 //
-bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoOwnerType type, const std::string & functionalityName )
+bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & functionalityName )
 {
     switch( type )
     {
-    case bv::model::GizmoOwnerType::Scene:
+    case bv::model::GizmoType::Scene:
         return CreateSceneGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoOwnerType::Node:
+    case bv::model::GizmoType::Node:
         return CreateNodeGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoOwnerType::Logic:
+    case bv::model::GizmoType::Logic:
         return CreateLogicGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoOwnerType::Plugin:
+    case bv::model::GizmoType::Plugin:
         return CreatePluginGizmo( scene, gizmoOwner, functionalityName );
-    case bv::model::GizmoOwnerType::Effect:
+    case bv::model::GizmoType::Effect:
         return CreateEffectGizmo( scene, gizmoOwner, functionalityName );
     }
 
