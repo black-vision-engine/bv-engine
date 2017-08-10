@@ -8,7 +8,6 @@
 #include "Engine/Models/Lights/ModelBaseLight.h"
 #include "Engine/Models/GridLines/GridLinesLogic.h"
 #include "Engine/Models/Cameras/CamerasLogic.h"
-#include "Engine/Models/Gizmos/GizmoManager.h"
 
 #include "Engine/Editors/UndoRedo/OperationHistory.h"
 
@@ -44,7 +43,6 @@ private:
     EndUserParamsLogic *            m_endUserParams;
     
     OperationHistory                m_history;
-    GizmoManager                    m_gizmos;
 
     UInt32                          m_renderChannelIdx;
 
@@ -82,7 +80,6 @@ public:
     CamerasLogic &          GetCamerasLogic     ();
     EndUserParamsLogic &    GetEndUserParams    ();
     OperationHistory &      GetHistory          ();
-    GizmoManager &          GetGizmoManager     ();
 
     void                    SetRenderChannelIdx ( UInt32 channelIdx );
     UInt32                  GetRenderChannelIdx () const;

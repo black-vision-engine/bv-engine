@@ -112,6 +112,8 @@ BVProjectEditor::BVProjectEditor                ( BVProject * project, const ICo
     project->m_engineSceneRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
     m_engineSceneEditor = new SceneEditor( project->m_renderer, project->m_engineSceneRoot );
 
+    m_gizmoManager.RegisterDefaultGizmos();
+
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVProjectEditor::LoadAssetAsyncCallback ), AssetAsyncLoadFinishedEvent::Type() );
 }
 
@@ -1385,7 +1387,7 @@ bool            BVProjectEditor::Redo                        ( const std::string
 //
 bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
 {
-    return scene->GetGizmoManager().CreateGizmo( this, scene, gizmoOwner, type, ownerTypeName, functionalityName );
+    return m_gizmoManager.CreateGizmo( this, scene, gizmoOwner, type, ownerTypeName, functionalityName );
 }
 
 // ***********************

@@ -323,13 +323,6 @@ OperationHistory &          SceneModel::GetHistory          ()
     return m_history;
 }
 
-// ***********************
-//
-GizmoManager &              SceneModel::GetGizmoManager     ()
-{
-    return m_gizmos;
-}
-
 // *******************************
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )

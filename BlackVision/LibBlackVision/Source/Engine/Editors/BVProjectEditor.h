@@ -7,6 +7,7 @@
 #include "Engine/Interfaces/IConfig.h"
 
 #include "Engine/Editors/AssetsLoading/Async/AssetsThread.h"
+#include "Engine/Models/Gizmos/GizmoManager.h"
 
 
 
@@ -56,6 +57,7 @@ private:
     SceneModelVec               m_detachedScenes;
 
     AssetsThread                m_assetsThread;
+    GizmoManager                m_gizmoManager;
 
 private:
 
