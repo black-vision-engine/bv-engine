@@ -18,8 +18,8 @@ private:
     
     RenderLogicState               m_state;
 
-    RenderedChannelsData *          m_renderedChannelsData;
-    OutputLogic *                   m_outputLogic;
+    RenderedChannelsData *         m_renderedChannelsData;
+    OutputLogic *                  m_outputLogic;
 
     RenderLogicCore                m_renderLogicCore;
 
@@ -42,6 +42,7 @@ private:
     void                RenderQueued            ( const SceneVec & scenes );
     void                RenderDepth             ( const SceneVec & scenes );
     void                RenderGizmos            ( const SceneVec & scenes );
+    void                BlitGizmoTargets        ();
     void                Render                  ( SceneNode * sceneRoot );
 
 private:

@@ -85,6 +85,26 @@ void    RenderLogicCore::RenderGizmos       ( const SceneVec & scenes, RenderedC
     }
 }
 
+// ***********************
+//
+void    RenderLogicCore::BlitGizmoTargets   ( RenderedChannelsData * channels, RenderContext * ctx )
+{
+    for( int i = 0; i < ( int )RenderChannelType::RCT_TOTAL; ++i )
+    {
+        auto outputRT = channels->GetActiveRenderTarget( ( RenderChannelType)i );
+        auto gizmoRT = channels->GetGizmoRenderTarget( ( RenderChannelType )i );
+
+        //enable( ctx, outputRT );
+        
+        RenderedData input( 1 );
+        input.SetEntry( 0, gizmoRT );
+
+        m_blitWithAlphaEffect->Render( ctx, outputRT, input );
+
+        //disableBoundRT( ctx );
+    }
+}
+
 // **************************
 //
 void    RenderLogicCore::RenderScenes       ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )

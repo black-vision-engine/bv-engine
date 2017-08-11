@@ -47,7 +47,8 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
     if( m_state.IsEditMode() )
     {
         RenderDepth( scenes );
-        // Gizmos pass
+        RenderGizmos( scenes );
+        BlitGizmoTargets();
     }
 
     // 4. Low level rendere per frame cleanup
@@ -89,8 +90,14 @@ void            RenderLogicImpl::RenderDepth            ( const SceneVec & scene
 //
 void            RenderLogicImpl::RenderGizmos           ( const SceneVec & scenes )
 {
-    scenes;
-    assert( !"Implement me" );
+    m_renderLogicCore.RenderGizmos( scenes, m_renderedChannelsData, context( m_state ) );
+}
+
+// ***********************
+//
+void            RenderLogicImpl::BlitGizmoTargets       ()
+{
+    m_renderLogicCore.BlitGizmoTargets( m_renderedChannelsData, context( m_state ) );
 }
 
 // **************************

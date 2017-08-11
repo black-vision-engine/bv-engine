@@ -25,6 +25,7 @@ public:
     void                    Render              ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
     void                    RenderDepth         ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
     void                    RenderGizmos        ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
+    void                    BlitGizmoTargets    ( RenderedChannelsData * channels, RenderContext * ctx );
 
 private:
 
