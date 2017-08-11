@@ -75,6 +75,10 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     {
         HandleOutputEvent( stateEvent );
     }
+    else if( command == EngineStateEvent::Command::SwitchEditMode )
+    {
+        renderMode.SwitchToEditMode( !renderMode.IsEditMode() );
+    }
     else
     {
         SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );

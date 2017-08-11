@@ -6,6 +6,8 @@
 #include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 
+
+
 namespace bv
 {
 
@@ -58,6 +60,7 @@ bool                    GizmoManager::CreateGizmo           ( BVProjectEditor * 
 void                GizmoManager::RegisterDefaultGizmos     ()
 {
     // TODO: Here place registration of default scene and node gizmos.
+    m_sceneGizmos.RegisterFunctionality( "FPS", "ShowFPS" );
 }
 
 // ***********************

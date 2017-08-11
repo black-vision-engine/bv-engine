@@ -934,6 +934,7 @@ public:
         LockEventQueue,
 		SetGain,
         OutputCommand,
+        SwitchEditMode,
         Fail            ///< Wrong command
     } Command;
 private:
