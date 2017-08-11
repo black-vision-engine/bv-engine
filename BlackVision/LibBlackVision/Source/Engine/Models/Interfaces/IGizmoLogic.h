@@ -6,7 +6,12 @@
 
 
 
-namespace bv {
+namespace bv
+{
+
+class BVProjectEditor;
+
+
 namespace model
 {
 
@@ -34,10 +39,9 @@ enum class GizmoType
 class IGizmoLogic : public INodeLogic
 {
 private:
-
-
 public:
 
+    virtual void                CreateGizmoSubtree      ( BVProjectEditor  * editor ) = 0;
 
 };
 

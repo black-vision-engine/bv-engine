@@ -3,7 +3,6 @@
 
 
 #include "Engine/Editors/BVProjectEditor.h"
-
 #include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 
@@ -30,12 +29,16 @@ bool                    GizmoManager::CreateGizmo           ( BVProjectEditor * 
 
         if( !gizmoLogicName.empty() )
         {
+            auto timeline = editor->GetSceneDefaultTimeline( scene );
+            assert( timeline );
+
             auto gizmoRoot = model::BasicNode::Create( "Gizmo_" + functionalityName, nullptr );
-            auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( gizmoLogicName, gizmoRoot, gizmoOwner, editor );
+            auto gizmoLogic = GetNodeLogicFactory()->CreateGizmoLogic( gizmoLogicName, gizmoRoot, gizmoOwner, timeline );
 
             if( gizmoLogic && gizmoRoot )
             {
                 gizmoRoot->SetLogic( gizmoLogic );
+                gizmoLogic->CreateGizmoSubtree( editor );
                 return editor->AddGizmoNode( scene, gizmoOwner, gizmoRoot );
             }
         }

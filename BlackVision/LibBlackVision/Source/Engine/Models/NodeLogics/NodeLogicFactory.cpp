@@ -16,6 +16,9 @@
 #include "Cloner/Cloner.h"
 #include "NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 
+#include "Engine/Models/Gizmos/Logics/ShowFPS/ShowFPS.h"
+
+
 
 namespace bv {
 
@@ -88,14 +91,14 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
 
 // ***********************
 //
-model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, BVProjectEditor * editor )
+model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    gizmoName;
-    gizmoRoot;
-    gizmoOwner;
-    editor;
+    if( gizmoName == nodelogic::ShowFPS::Type() )
+    {
+        return std::make_shared< nodelogic::ShowFPS >( gizmoRoot, gizmoOwner, timeEvaluator );
+    }
 
-    return model::IGizmoLogicPtr();
+    return nullptr;
 }
 
 } //bv

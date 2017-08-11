@@ -433,6 +433,12 @@
     <Filter Include="Engine\Models\Gizmos">
       <UniqueIdentifier>{668b5c5c-8d69-4996-b102-fcc1f41acb0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics">
+      <UniqueIdentifier>{f3b94df6-a3a5-4659-bb12-dd9ef4566274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics\ShowFPS">
+      <UniqueIdentifier>{089e75b7-9031-4da3-be1c-b909d3fe34ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2019,6 +2025,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp">
+      <Filter>Engine\Models\Gizmos\Logics\ShowFPS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5266,6 +5275,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.h">
       <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.h">
+      <Filter>Engine\Models\Gizmos\Logics\ShowFPS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,9 @@ namespace model {
 
 // ***********************
 //
-GizmoLogicBase::GizmoLogicBase()
+GizmoLogicBase::GizmoLogicBase( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner )
+    : m_gizmoOwner( gizmoOwner )
+    , m_gizmoRoot( gizmoRoot )
 {
     m_paramValModel = std::make_shared< model::DefaultParamValModel >();
 }
@@ -66,6 +68,17 @@ bool                                            GizmoLogicBase::ParameterChanged
     assert( state );
     return state->StateChanged();
 
+}
+
+// ========================================================================= //
+// Commands handling
+// ========================================================================= //
+
+// ***********************
+//
+bool                                            GizmoLogicBase::HandleEvent     ( IDeserializer & /*eventDeser*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
+{
+    return false;
 }
 
 }   // model
