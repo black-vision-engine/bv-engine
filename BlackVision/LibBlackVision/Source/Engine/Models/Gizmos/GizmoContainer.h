@@ -32,6 +32,9 @@ public:
     IModelNodePtr   GetGizmo        ( UInt32 idx ) const;
     UInt32          GetNumGizmos    () const;
 
+    void            Update			    ( TimeType t );
+    void            PreNodeUpdate       ( TimeType t );
+    void            PostChildrenUpdate  ( TimeType t );
 };
 
 

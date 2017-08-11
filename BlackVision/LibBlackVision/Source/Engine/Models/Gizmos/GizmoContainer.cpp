@@ -59,6 +59,56 @@ UInt32          GizmoContainer::GetNumGizmos    () const
     return (UInt32)m_gizmoRoots.size();
 }
 
+// ========================================================================= //
+// Gizmos update
+// ========================================================================= //
+
+
+// ***********************
+//
+void            GizmoContainer::Update              ( TimeType t )
+{
+    for( auto & gizmoRoot : m_gizmoRoots )
+    {
+        BasicNodePtr node = std::static_pointer_cast< BasicNode >( gizmoRoot );
+        auto gizmoLogic = node->GetLogic();
+
+        assert( gizmoLogic );
+
+        gizmoLogic->Update( t );
+    }
+}
+
+// ***********************
+//
+void            GizmoContainer::PreNodeUpdate       ( TimeType t )
+{
+    for( auto & gizmoRoot : m_gizmoRoots )
+    {
+        BasicNodePtr node = std::static_pointer_cast< BasicNode >( gizmoRoot );
+        auto gizmoLogic = node->GetLogic();
+
+        assert( gizmoLogic );
+
+        gizmoLogic->PreNodeUpdate( t );
+    }
+}
+
+// ***********************
+//
+void            GizmoContainer::PostChildrenUpdate  ( TimeType t )
+{
+    for( auto & gizmoRoot : m_gizmoRoots )
+    {
+        BasicNodePtr node = std::static_pointer_cast< BasicNode >( gizmoRoot );
+        auto gizmoLogic = node->GetLogic();
+
+        assert( gizmoLogic );
+
+        gizmoLogic->PostChildrenUpdate( t );
+    }
+}
+
 
 }   // model
 }	// bv

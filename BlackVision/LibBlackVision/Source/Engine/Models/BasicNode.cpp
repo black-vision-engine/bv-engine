@@ -683,27 +683,28 @@ void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
     {
+        if( m_gizmos )
+            m_gizmos->PreNodeUpdate( t );
+
         if( m_nodeLogic )
-        {
             m_nodeLogic->PreNodeUpdate( t );
-        }
+
 
         if ( m_modelNodeEffect )
-        {
             m_modelNodeEffect->Update( t );
-        }
 
         m_pluginList->Update( t );
 
         if( m_boundingVolume )
-        {
             m_boundingVolume->UpdateOwnBox( m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel() );
-        }
+
 
         if( m_nodeLogic )
-        {
             m_nodeLogic->Update( t );
-        }
+
+        if( m_gizmos )
+            m_gizmos->Update( t );
+
 
         for( auto ch : m_children )
         {
@@ -713,9 +714,10 @@ void BasicNode::Update( TimeType t )
         m_boundingVolume->IncludeChildrenBox( GetBoundingBoxRecursive() );
 
         if( m_nodeLogic )
-        {
             m_nodeLogic->PostChildrenUpdate( t );
-        }
+
+        if( m_gizmos )
+            m_gizmos->PostChildrenUpdate( t );
     }
 }
 
