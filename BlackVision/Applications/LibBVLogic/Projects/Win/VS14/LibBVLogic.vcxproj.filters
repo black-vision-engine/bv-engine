@@ -171,7 +171,9 @@
     <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />

@@ -8,6 +8,7 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
+#include "Engine/Models/ModelState.h"
 #include "Engine/Editors/BVProjectEditor.h"
 
 
@@ -90,27 +91,33 @@ void                        ShowFPS::Update			( TimeType t )
 //
 void                        ShowFPS::CreateGizmoSubtree ( BVProjectEditor * editor )
 {
-    auto timeEvaluator = m_refreshFrequency.GetParameter().GetTimeEvaluator();
+    if( auto gizmoOwner = m_gizmoOwner.lock() )
+    {
+        auto gizmoRoot = m_gizmoRoot.lock();
+        auto scene = editor->GetModelScene( model::ModelState::GetInstance().QueryNodeScene( gizmoOwner.get() )->GetName() );
+        auto timeEvaluator = m_refreshFrequency.GetParameter().GetTimeEvaluator();
 
-    model::BasicNodePtr fpsLabel = model::BasicNode::Create( "fpsLabel", timeEvaluator );
-    model::BasicNodePtr fpsValue = model::BasicNode::Create( "fpsValue", timeEvaluator );
+        model::BasicNodePtr fpsLabel = model::BasicNode::Create( "fpsLabel", timeEvaluator );
+        model::BasicNodePtr fpsValue = model::BasicNode::Create( "fpsValue", timeEvaluator );
 
-    fpsLabel->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    fpsLabel->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
+        fpsLabel->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+        fpsLabel->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
 
-    SetTranslation( fpsLabel, glm::vec3( -0.5, 0.0, 0.0 ) );
-    SetText( fpsLabel, L"FPS" );
+        SetTranslation( fpsLabel, glm::vec3( -0.5, 0.0, 0.0 ) );
+        SetText( fpsLabel, L"FPS" );
 
 
-    fpsValue->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    fpsValue->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
+        fpsValue->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+        fpsValue->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
 
-    SetTranslation( fpsValue, glm::vec3( 0.0, 0.0, 0.0 ) );
-    SetText( fpsValue, L"0.0" );
+        SetTranslation( fpsValue, glm::vec3( 0.0, 0.0, 0.0 ) );
+        SetText( fpsValue, L"0.0" );
 
-    editor;
+        editor->AddChildNode( scene, gizmoRoot, fpsLabel, false );
+        editor->AddChildNode( scene, gizmoRoot, fpsValue, false );
 
-    m_fpsNode = fpsValue;
+        m_fpsNode = fpsValue;
+    }
 }
 
 

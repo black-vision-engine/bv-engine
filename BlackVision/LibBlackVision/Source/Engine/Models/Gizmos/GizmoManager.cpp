@@ -40,8 +40,12 @@ bool                    GizmoManager::CreateGizmo           ( BVProjectEditor * 
             if( gizmoLogic && gizmoRoot )
             {
                 gizmoRoot->SetLogic( gizmoLogic );
-                gizmoLogic->CreateGizmoSubtree( editor );
-                return editor->AddGizmoNode( scene, gizmoOwner, gizmoRoot );
+                
+                bool result = editor->AddGizmoNode( scene, gizmoOwner, gizmoRoot );
+                if( result )
+                    gizmoLogic->CreateGizmoSubtree( editor );
+
+                return result;
             }
         }
     }

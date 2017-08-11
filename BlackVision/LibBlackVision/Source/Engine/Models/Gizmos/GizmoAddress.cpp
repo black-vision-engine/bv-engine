@@ -24,9 +24,9 @@ std::pair< model::GizmoType, const char* > GizmoTypeMapping[] =
 IMPLEMENT_ENUM_SERIALIZATION( model::GizmoType, GizmoTypeMapping );
 
 
-const std::string GIZMO_TYPE_NAME = "GizmoType";
-const std::string ELEMENT_NAME = "ElementName";
-const std::string FUNCTIONALITY_NAME = "FunctionalityName";
+const std::string GIZMO_TYPE_NAME       = "GizmoType";
+const std::string ELEMENT_NAME          = "ElementName";
+const std::string FUNCTIONALITY_NAME    = "FunctionalityName";
 
 }   // SerializationHelper
 
