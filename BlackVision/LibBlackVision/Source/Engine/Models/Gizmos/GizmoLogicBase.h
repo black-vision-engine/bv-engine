@@ -43,6 +43,9 @@ public:
     virtual void                Update              ( TimeType )    override;
     virtual void                PostChildrenUpdate  ( TimeType )    override {}
 
+    virtual void                PreOwnerUpdate      ( TimeType ) override {}
+    virtual void                PostOwnerUpdate     ( TimeType ) override {}
+
     virtual void                Serialize       ( ISerializer & ser ) const;
     virtual void                Deserialize     ( const IDeserializer & ser );
 

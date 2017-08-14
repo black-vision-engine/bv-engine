@@ -684,7 +684,7 @@ void BasicNode::Update( TimeType t )
     if( IsVisible() )
     {
         if( m_gizmos )
-            m_gizmos->PreNodeUpdate( t );
+            m_gizmos->PreOwnerUpdate( t );
 
         if( m_nodeLogic )
             m_nodeLogic->PreNodeUpdate( t );
@@ -717,7 +717,7 @@ void BasicNode::Update( TimeType t )
             m_nodeLogic->PostChildrenUpdate( t );
 
         if( m_gizmos )
-            m_gizmos->PostChildrenUpdate( t );
+            m_gizmos->PostOwnerUpdate( t );
     }
 }
 

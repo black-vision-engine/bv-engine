@@ -43,6 +43,8 @@ public:
 
     virtual void                CreateGizmoSubtree      ( BVProjectEditor  * editor ) = 0;
 
+    virtual void                PreOwnerUpdate          ( TimeType t ) = 0;
+    virtual void                PostOwnerUpdate         ( TimeType t ) = 0;
 };
 
 DEFINE_PTR_TYPE( IGizmoLogic )

@@ -33,8 +33,12 @@ public:
     UInt32          GetNumGizmos    () const;
 
     void            Update			    ( TimeType t );
-    void            PreNodeUpdate       ( TimeType t );
-    void            PostChildrenUpdate  ( TimeType t );
+    void            PreOwnerUpdate      ( TimeType t );
+    void            PostOwnerUpdate     ( TimeType t );
+
+private:
+
+    IGizmoLogicPtr  GetGizmoLogic       ( const IModelNodePtr & node );
 };
 
 

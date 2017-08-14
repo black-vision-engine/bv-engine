@@ -71,43 +71,48 @@ void            GizmoContainer::Update              ( TimeType t )
     for( auto & gizmoRoot : m_gizmoRoots )
     {
         BasicNodePtr node = std::static_pointer_cast< BasicNode >( gizmoRoot );
-        auto gizmoLogic = node->GetLogic();
-
-        assert( gizmoLogic );
+        auto gizmoLogic = GetGizmoLogic( gizmoRoot );
 
         node->Update( t );
-        gizmoLogic->Update( t );
     }
 }
 
 // ***********************
 //
-void            GizmoContainer::PreNodeUpdate       ( TimeType t )
+void            GizmoContainer::PreOwnerUpdate       ( TimeType t )
 {
     for( auto & gizmoRoot : m_gizmoRoots )
     {
-        BasicNodePtr node = std::static_pointer_cast< BasicNode >( gizmoRoot );
-        auto gizmoLogic = node->GetLogic();
-
-        assert( gizmoLogic );
-
-        gizmoLogic->PreNodeUpdate( t );
+        auto gizmoLogic = GetGizmoLogic( gizmoRoot );
+        gizmoLogic->PreOwnerUpdate( t );
     }
 }
 
 // ***********************
 //
-void            GizmoContainer::PostChildrenUpdate  ( TimeType t )
+void            GizmoContainer::PostOwnerUpdate  ( TimeType t )
 {
     for( auto & gizmoRoot : m_gizmoRoots )
     {
-        BasicNodePtr node = std::static_pointer_cast< BasicNode >( gizmoRoot );
-        auto gizmoLogic = node->GetLogic();
-
-        assert( gizmoLogic );
-
+        auto gizmoLogic = GetGizmoLogic( gizmoRoot );
         gizmoLogic->PostChildrenUpdate( t );
     }
+}
+
+// ========================================================================= //
+// Private implementation
+// ========================================================================= //
+
+// ***********************
+//
+IGizmoLogicPtr  GizmoContainer::GetGizmoLogic   ( const IModelNodePtr & modelNode )
+{
+    BasicNodePtr node = std::static_pointer_cast< BasicNode >( modelNode );
+    auto gizmoLogic = std::static_pointer_cast< model::IGizmoLogic >( node->GetLogic() );
+
+    assert( gizmoLogic );
+
+    return gizmoLogic;
 }
 
 
