@@ -75,6 +75,7 @@ void            GizmoContainer::Update              ( TimeType t )
 
         assert( gizmoLogic );
 
+        node->Update( t );
         gizmoLogic->Update( t );
     }
 }

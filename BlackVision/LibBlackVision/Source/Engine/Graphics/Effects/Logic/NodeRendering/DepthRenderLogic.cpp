@@ -27,7 +27,7 @@ void            DepthRenderLogic::RenderQueued      ( Scene * scene, const Rende
     // FIXME: nrl - which does not belong there)
     renderer->EnableScene( scene );
 
-    enable( ctx, output );
+    ctx->EnableDepthOnly( output );
     DepthRenderLogic::RenderQueued( scene->GetRoot(), ctx );
 
     disableBoundRT( ctx );

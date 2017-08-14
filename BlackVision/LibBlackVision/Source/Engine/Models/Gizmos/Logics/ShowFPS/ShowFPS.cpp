@@ -101,17 +101,25 @@ void                        ShowFPS::CreateGizmoSubtree ( BVProjectEditor * edit
         model::BasicNodePtr fpsValue = model::BasicNode::Create( "fpsValue", timeEvaluator );
 
         fpsLabel->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+        fpsLabel->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         fpsLabel->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
 
-        SetTranslation( fpsLabel, glm::vec3( -0.5, 0.0, 0.0 ) );
+        SetTranslation( fpsLabel, glm::vec3( -2.0, 0.0, 7.0 ) );
         SetText( fpsLabel, L"FPS" );
+
+        auto labelColor = fpsLabel->GetPlugin( "solid color" );
+        model::QueryTypedParam< model::ParamVec4Ptr >( labelColor->GetParameter( "color" ) )->SetVal( glm::vec4( 1.0, 1.0, 1.0, 1.0 ), TimeType( 0.0 ) );
 
 
         fpsValue->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+        fpsValue->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         fpsValue->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
 
-        SetTranslation( fpsValue, glm::vec3( 0.0, 0.0, 0.0 ) );
+        SetTranslation( fpsValue, glm::vec3( 0.0, 0.0, 7.0 ) );
         SetText( fpsValue, L"0.0" );
+
+        auto fpsValueColor = fpsValue->GetPlugin( "solid color" );
+        model::QueryTypedParam< model::ParamVec4Ptr >( fpsValueColor->GetParameter( "color" ) )->SetVal( glm::vec4( 1.0, 1.0, 1.0, 1.0 ), TimeType( 0.0 ) );
 
         editor->AddChildNode( scene, gizmoRoot, fpsLabel, false );
         editor->AddChildNode( scene, gizmoRoot, fpsValue, false );
@@ -127,6 +135,7 @@ void                        ShowFPS::SetTranslation     ( model::BasicNodePtr no
 {
     auto nodeTransform = node->GetFinalizePlugin()->GetParamTransform();
     nodeTransform->SetTranslation( transform, time );
+    nodeTransform->SetScale( glm::vec3( 10.0, 10.0, 10.0 ), time );
 }
 
 // ***********************
