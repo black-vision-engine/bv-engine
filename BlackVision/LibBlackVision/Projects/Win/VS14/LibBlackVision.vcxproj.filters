@@ -439,6 +439,12 @@
     <Filter Include="Engine\Models\Gizmos\Logics\ShowFPS">
       <UniqueIdentifier>{089e75b7-9031-4da3-be1c-b909d3fe34ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics\BoundingBox">
+      <UniqueIdentifier>{83e4c78f-f0e5-4297-a637-fb3d6d3bd154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Plugins">
+      <UniqueIdentifier>{5f9733d9-59fb-4c27-9173-b9a6925a95e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2028,6 +2034,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp">
       <Filter>Engine\Models\Gizmos\Logics\ShowFPS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.cpp">
+      <Filter>Engine\Models\Gizmos\Logics\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.cpp">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5278,6 +5293,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.h">
       <Filter>Engine\Models\Gizmos\Logics\ShowFPS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.h">
+      <Filter>Engine\Models\Gizmos\Logics\BoundingBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.h">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.h">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

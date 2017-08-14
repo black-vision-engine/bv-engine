@@ -17,6 +17,7 @@
 #include "NodeVisibilityAnimation/NodeVisibilityAnimation.h"
 
 #include "Engine/Models/Gizmos/Logics/ShowFPS/ShowFPS.h"
+#include "Engine/Models/Gizmos/Logics/BoundingBox/BoundingBoxLogic.h"
 
 
 
@@ -96,6 +97,10 @@ model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std:
     if( gizmoName == nodelogic::ShowFPS::Type() )
     {
         return std::make_shared< nodelogic::ShowFPS >( gizmoRoot, gizmoOwner, timeEvaluator );
+    }
+    else if( gizmoName == nodelogic::BoundingBoxLogic::Type() )
+    {
+        return std::make_shared< nodelogic::BoundingBoxLogic >( gizmoRoot, gizmoOwner, timeEvaluator );
     }
 
     return nullptr;

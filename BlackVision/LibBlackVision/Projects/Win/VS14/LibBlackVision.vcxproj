@@ -164,7 +164,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp" />
@@ -640,7 +643,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IGizmoLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
