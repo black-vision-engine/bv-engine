@@ -13,6 +13,9 @@
 
 
 #include "Engine/Models/Plugins/Simple/TextPlugins/DefaultTextPlugin.h"
+#include "System/Time.h"
+
+#include "Tools/StringHeplers.h"
 
 
 
@@ -45,6 +48,7 @@ const std::string &     ShowFPS::GetType             () const
 //
 ShowFPS::ShowFPS             ( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )
     :   GizmoLogicBase( gizmoRoot, gizmoOwner )
+    ,   m_numFramesSinceRefresh( 0 )
 {
     model::ModelHelper h( timeEvaluator );
     h.SetOrCreatePluginModel();
@@ -81,6 +85,23 @@ void        ShowFPS::Deinitialize      ()
 void                        ShowFPS::Update			( TimeType t )
 {
     GizmoLogicBase::Update( t );
+
+    m_numFramesSinceRefresh++;
+
+    if( m_numFramesSinceRefresh >= m_refreshFrequency.GetValue() )
+    {
+        assert( m_numFramesSinceRefresh == m_refreshFrequency.GetValue() );
+
+        auto currentTime = Time::Now();
+        auto timeDiff = currentTime - m_lastRefreshTime;
+
+        auto fps = 1000.0f * ( double )m_numFramesSinceRefresh / ( double )timeDiff;
+
+        SetText( m_fpsNode.lock(), FormatFPS( (float)fps ) );
+
+        m_lastRefreshTime = currentTime;
+        m_numFramesSinceRefresh = 0;
+    }
 }
 
 // ========================================================================= //
@@ -104,7 +125,7 @@ void                        ShowFPS::CreateGizmoSubtree ( BVProjectEditor * edit
         fpsLabel->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         fpsLabel->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
 
-        SetTranslation( fpsLabel, glm::vec3( -2.0, 0.0, 7.0 ) );
+        SetTranslation( fpsLabel, glm::vec3( -3.0, 0.0, 7.0 ) );
         SetText( fpsLabel, L"FPS" );
 
         auto labelColor = fpsLabel->GetPlugin( "solid color" );
@@ -115,7 +136,7 @@ void                        ShowFPS::CreateGizmoSubtree ( BVProjectEditor * edit
         fpsValue->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         fpsValue->AddPlugin( "DEFAULT_TEXT", timeEvaluator );
 
-        SetTranslation( fpsValue, glm::vec3( 0.0, 0.0, 7.0 ) );
+        SetTranslation( fpsValue, glm::vec3( -2.5, 0.0, 7.0 ) );
         SetText( fpsValue, L"0.0" );
 
         auto fpsValueColor = fpsValue->GetPlugin( "solid color" );
@@ -125,6 +146,8 @@ void                        ShowFPS::CreateGizmoSubtree ( BVProjectEditor * edit
         editor->AddChildNode( scene, gizmoRoot, fpsValue, false );
 
         m_fpsNode = fpsValue;
+
+        m_lastRefreshTime = Time::Now();
     }
 }
 
@@ -135,7 +158,6 @@ void                        ShowFPS::SetTranslation     ( model::BasicNodePtr no
 {
     auto nodeTransform = node->GetFinalizePlugin()->GetParamTransform();
     nodeTransform->SetTranslation( transform, time );
-    nodeTransform->SetScale( glm::vec3( 10.0, 10.0, 10.0 ), time );
 }
 
 // ***********************
@@ -145,6 +167,13 @@ void                        ShowFPS::SetText            ( model::BasicNodePtr no
     auto nodeTextPlugin = node->GetPlugin( "text" );
     auto textParam = model::QueryTypedParam< model::ParamWStringPtr >( nodeTextPlugin->GetParameter( "text" ) );
     textParam->SetVal( text, time );
+}
+
+// ***********************
+//
+std::wstring                ShowFPS::FormatFPS          ( float fps )
+{
+    return StringToWString( SerializationHelper::T2String( fps ) );
 }
 
 

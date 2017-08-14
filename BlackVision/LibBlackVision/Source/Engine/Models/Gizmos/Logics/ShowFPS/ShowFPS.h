@@ -51,6 +51,8 @@ private:
     model::BasicNodeWeakPtr                 m_fpsNode;
 
     model::ValueParamState< Int32 >         m_refreshFrequency;
+    Int32                                   m_numFramesSinceRefresh;
+    UInt64                                  m_lastRefreshTime;
 
 public:
 
@@ -71,6 +73,7 @@ private:
     void            SetTranslation          ( model::BasicNodePtr node, const glm::vec3 & transform, TimeType time = 0.0f );
     void            SetText                 ( model::BasicNodePtr node, const std::wstring & text, TimeType time = 0.0f );
 
+    std::wstring    FormatFPS               ( float fps );
 
 private:
 
