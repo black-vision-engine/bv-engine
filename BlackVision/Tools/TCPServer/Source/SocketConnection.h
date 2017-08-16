@@ -11,6 +11,8 @@
 
 #include "win_sock.h"
 
+#include <atomic>
+
 
 namespace bv {
 
@@ -44,7 +46,7 @@ private:
 
     SocketConnectionState           m_state;
 
-    volatile bool                   m_end;
+    std::atomic< bool >             m_end;
 
 public:
 
