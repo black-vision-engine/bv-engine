@@ -107,24 +107,27 @@ void SocketConnection::MainThread()
 
                 // send the data
                 int bufferSent = 0;
-                while ( bufferSent < (int)bufferSize )
+                while( bufferSent < ( int )bufferSize )
                 {
-                    int sentSize = send( m_socketID, toSend.c_str() + bufferSent, (int)bufferSize - bufferSent, 0);
-					if (sentSize < 0)
-					{
-						int errorCode = WSAGetLastError();
-						if (errorCode == 10054)
-						{
-							LOG_MESSAGE(SeverityLevel::info) << "connection reset by client, WSA_errorCode: " << errorCode;
-							OnEndMainThread();
-							break;
-						}
-						LOG_MESSAGE(SeverityLevel::info) << "send error ... -1 " << errorCode;
-						if (errorCode == 10035)
-							Sleep(100);
-						if (errorCode == 10038)
-						{
-							OnEndMainThread();
+                    int sentSize = send( m_socketID, toSend.c_str() + bufferSent, ( int )bufferSize - bufferSent, 0 );
+                    if( sentSize < 0 )
+                    {
+                        int errorCode = WSAGetLastError();
+                        if( errorCode == 10054 )
+                        {
+                            LOG_MESSAGE( SeverityLevel::info ) << "connection reset by client, WSA_errorCode: " << errorCode;
+                            OnEndMainThread();
+                            break;
+                        }
+                        LOG_MESSAGE( SeverityLevel::info ) << "send error ... -1 " << errorCode;
+                        if( errorCode == 10035 )
+                        {
+                            Sleep( 100 );
+                            continue;
+                        }
+                        if( errorCode == 10038 )
+                        {
+                            OnEndMainThread();
 							break;
 						}
                         //OnEndMainThread();
