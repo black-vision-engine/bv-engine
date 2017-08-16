@@ -87,12 +87,15 @@ public:
 
 private:
 
-    static void            SetTranslation          ( model::BasicNodePtr node, const glm::vec3 & transform, TimeType time = 0.0f );
-    static void            SetColor                ( model::BasicNodePtr node, const glm::vec4 & transform, TimeType time = 0.0f );
-    static void            SetCenterSize           ( model::BasicNodePtr node, float size, TimeType time = 0.0f );
-    static void            SetBoxSize              ( model::BasicNodePtr node, const glm::vec3 & size, TimeType time = 0.0f );
+    static void             SetTranslation          ( model::BasicNodePtr node, const glm::vec3 & transform, TimeType time = 0.0f );
+    static void             SetColor                ( model::BasicNodePtr node, const glm::vec4 & transform, TimeType time = 0.0f );
+    static void             SetCenterSize           ( model::BasicNodePtr node, float size, TimeType time = 0.0f );
+    static void             SetBoxSize              ( model::BasicNodePtr node, const glm::vec3 & size, TimeType time = 0.0f );
 
-    static BoxInfo         ComputeBox              ( model::BasicNodePtr node );
+    static BoxInfo          ComputeBox              ( model::BasicNodePtr node );
+    static bool             NeedsBoxUpdate          ( model::BasicNodePtr node );
+
+    void                    UpdateBox               ();
 
 private:
 

@@ -68,7 +68,7 @@ protected:
 public:
 
     MainGenerator( float size )
-        : m_size( size )
+        : m_size( size / 2.0f )
     {}
 
 

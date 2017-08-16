@@ -51,8 +51,8 @@ BoundingBoxLogic::BoundingBoxLogic             ( model::BasicNodeWeakPtr gizmoRo
     
     h.SetOrCreatePluginModel();
     h.AddSimpleParam( PARAMETERS::CENTER_COLOR, glm::vec4( 1.0, 0.0, 0.0, 1.0 ), true, true );
-    h.AddSimpleParam( PARAMETERS::BOX_COLOR, glm::vec4( 1.0, 0.0, 0.0, 1.0 ), true, true );
-    h.AddSimpleParam( PARAMETERS::CENTER_SIZE, 12.0f, true, true );
+    h.AddSimpleParam( PARAMETERS::BOX_COLOR, glm::vec4( 0.0, 1.0, 0.0, 1.0 ), true, true );
+    h.AddSimpleParam( PARAMETERS::CENTER_SIZE, 3.0f, true, true );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 
@@ -95,16 +95,9 @@ void                        BoundingBoxLogic::Update			( TimeType t )
         if( m_centerColor.Changed() )
             SetColor( m_centerNode.lock(), m_centerColor.GetValue() );
 
-        //glm::vec3 center = ownerNode->GetFinalizePlugin()->GetParamTransform()->GetTransform().GetCenter( 0.0f );
-
-
-        //auto boundingVolume = ownerNode->GetBoundingVolume();
-        //if( boundingVolume )
-        //{
-        //    auto box = boundingVolume->GetBoundingBox();
-
-
-        //}
+        
+        if( NeedsBoxUpdate( ownerNode ) )
+            UpdateBox();
     }
 }
 
@@ -138,9 +131,9 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
 
         BoxInfo info = ComputeBox( gizmoOwner );
 
-        SetColor( centerNode, m_boxColor.GetValue() );
+        SetColor( boxNode, m_boxColor.GetValue() );
         SetBoxSize( boxNode, info.Size );
-        SetTranslation( gizmoOwner, -info.Center );
+        SetTranslation( boxNode, -info.Center );
 
         editor->AddChildNode( scene, gizmoRoot, centerNode, false );
         editor->AddChildNode( scene, gizmoRoot, boxNode, false );
@@ -204,6 +197,30 @@ BoundingBoxLogic::BoxInfo   BoundingBoxLogic::ComputeBox        ( model::BasicNo
     }
 
     return BoxInfo();
+}
+
+// ***********************
+//
+bool                        BoundingBoxLogic::NeedsBoxUpdate    ( model::BasicNodePtr node )
+{
+    auto boundingVolume = node->GetBoundingVolume();
+    if( boundingVolume )
+        return boundingVolume->IsUpdated();
+
+    return false;
+}
+
+// ***********************
+//
+void                        BoundingBoxLogic::UpdateBox         ()
+{
+    BoxInfo info = ComputeBox( m_gizmoOwner.lock() );
+
+    auto boxNode = m_bbNode.lock();
+
+    SetColor( boxNode, m_boxColor.GetValue() );
+    SetBoxSize( boxNode, info.Size );
+    SetTranslation( boxNode, -info.Center );
 }
 
 
