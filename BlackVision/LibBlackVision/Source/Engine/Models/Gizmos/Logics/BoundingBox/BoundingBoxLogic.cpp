@@ -226,7 +226,7 @@ void                        BoundingBoxLogic::UpdateBox         ()
 
     SetColor( boxNode, m_boxColor.GetValue() );
     SetBoxSize( boxNode, info.Size );
-    SetTranslation( boxNode, -info.Center );
+    SetTranslation( boxNode, info.Center );
 }
 
 
