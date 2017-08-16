@@ -31,7 +31,7 @@ public:
 
     struct PARAMS
     {
-        static const std::string        WIDTH;
+        static const std::string        SIZE;
     };
 
 protected:

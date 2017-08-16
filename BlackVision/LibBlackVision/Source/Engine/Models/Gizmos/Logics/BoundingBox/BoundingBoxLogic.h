@@ -37,6 +37,22 @@ class BoundingBoxLogic : public model::GizmoLogicBase, public std::enable_shared
 {
 private:
 
+    struct BoxInfo
+    {
+        glm::vec3       Size;
+        glm::vec3       Center;
+
+        // ***********************
+        //
+        BoxInfo()
+            :   Size( glm::vec3( 0.0f ) )
+            ,   Center( glm::vec3( 0.0f ) )
+        {}
+
+    };
+
+private:
+
     static const std::string            m_type;
 
     struct PARAMETERS
@@ -71,9 +87,12 @@ public:
 
 private:
 
-    void            SetTranslation          ( model::BasicNodePtr node, const glm::vec3 & transform, TimeType time = 0.0f );
-    void            SetColor                ( model::BasicNodePtr node, const glm::vec4 & transform, TimeType time = 0.0f );
-    void            SetCenterSize           ( model::BasicNodePtr node, float size, TimeType time = 0.0f );
+    static void            SetTranslation          ( model::BasicNodePtr node, const glm::vec3 & transform, TimeType time = 0.0f );
+    static void            SetColor                ( model::BasicNodePtr node, const glm::vec4 & transform, TimeType time = 0.0f );
+    static void            SetCenterSize           ( model::BasicNodePtr node, float size, TimeType time = 0.0f );
+    static void            SetBoxSize              ( model::BasicNodePtr node, const glm::vec3 & size, TimeType time = 0.0f );
+
+    static BoxInfo         ComputeBox              ( model::BasicNodePtr node );
 
 private:
 

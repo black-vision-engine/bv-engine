@@ -89,7 +89,11 @@ void                        BoundingBoxLogic::Update			( TimeType t )
 
     if( auto ownerNode = m_gizmoOwner.lock() )
     {
+        if( m_centerSize.Changed() )
+            SetCenterSize( m_centerNode.lock(), m_centerSize.GetValue() );
 
+        if( m_centerColor.Changed() )
+            SetColor( m_centerNode.lock(), m_centerColor.GetValue() );
 
         //glm::vec3 center = ownerNode->GetFinalizePlugin()->GetParamTransform()->GetTransform().GetCenter( 0.0f );
 
@@ -130,13 +134,19 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
 
         boxNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
         boxNode->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
-        //boxNode->AddPlugin( "BOUNDING_BOX_PLUGIN", timeEvaluator );
+        boxNode->AddPlugin( "BOUNDING_BOX_PLUGIN", timeEvaluator );
+
+        BoxInfo info = ComputeBox( gizmoOwner );
 
         SetColor( centerNode, m_boxColor.GetValue() );
-
+        SetBoxSize( boxNode, info.Size );
+        SetTranslation( gizmoOwner, -info.Center );
 
         editor->AddChildNode( scene, gizmoRoot, centerNode, false );
         editor->AddChildNode( scene, gizmoRoot, boxNode, false );
+
+        m_centerNode = centerNode;
+        m_bbNode = boxNode;
     }
 }
 
@@ -164,6 +174,36 @@ void                        BoundingBoxLogic::SetCenterSize     ( model::BasicNo
     auto centerPlugin = node->GetPlugin( "center" );
     auto sizeParam = model::QueryTypedParam< model::ParamFloatPtr >( centerPlugin->GetParameter( "size" ) );
     sizeParam->SetVal( size, time );
+}
+
+// ***********************
+//
+void                        BoundingBoxLogic::SetBoxSize        ( model::BasicNodePtr node, const glm::vec3 & size, TimeType time )
+{
+    auto boxPlugin = node->GetPlugin( "bounding box" );
+    auto sizeParam = model::QueryTypedParam< model::ParamVec3Ptr >( boxPlugin->GetParameter( "size" ) );
+    sizeParam->SetVal( size, time );
+}
+
+// ***********************
+//
+BoundingBoxLogic::BoxInfo   BoundingBoxLogic::ComputeBox        ( model::BasicNodePtr node )
+{
+    auto boundingVolume = node->GetBoundingVolume();
+    if( boundingVolume )
+    {
+        BoxInfo info;
+
+        auto box = boundingVolume->GetBoundingBox();
+        info.Center = box->Center();
+        info.Size.x = box->Width();
+        info.Size.y = box->Height();
+        info.Size.z = box->Depth();
+
+        return info;
+    }
+
+    return BoxInfo();
 }
 
 
