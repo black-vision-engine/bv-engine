@@ -445,6 +445,9 @@
     <Filter Include="Engine\Models\Gizmos\Plugins">
       <UniqueIdentifier>{5f9733d9-59fb-4c27-9173-b9a6925a95e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl">
+      <UniqueIdentifier>{b5dd1931-ca44-4f32-9517-e359105c5f1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2043,6 +2046,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp">
       <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5302,6 +5308,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.h">
       <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

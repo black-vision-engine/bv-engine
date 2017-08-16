@@ -6,6 +6,10 @@
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/NodeEffectRenderPass.h"
 
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/FinalizePass.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/DepthImpl/DefaultDepthFinalizeStep.h"
+
+
 
 namespace bv { 
 
@@ -24,6 +28,32 @@ NodeEffectRenderLogic::NodeEffectRenderLogic      ( const std::vector< NodeEffec
     }
 
     assert( passes.size() > 0 );
+
+    SetDefaultDepthPasses();
+}
+
+// ***********************
+//
+NodeEffectRenderLogic::NodeEffectRenderLogic    ( const std::vector< NodeEffectRenderPass * > & passes, const std::vector< NodeEffectRenderPass * > & depthPasses, bool useBlend, bool overrideDepth, float depth )
+    : m_passes( passes )
+    , m_depthPasses( depthPasses )
+    , m_useBlend( useBlend )
+    , m_overrideDepth( overrideDepth )
+    , m_depth( depth )
+{
+    for( auto pass : m_passes )
+    {
+        pass;
+        assert( pass != nullptr );
+    }
+
+    assert( passes.size() > 0 );
+
+    for( auto pass : m_depthPasses )
+    {
+        pass;
+        assert( pass != nullptr );
+    }
 }
 
 // *********************************
@@ -31,6 +61,11 @@ NodeEffectRenderLogic::NodeEffectRenderLogic      ( const std::vector< NodeEffec
 NodeEffectRenderLogic::~NodeEffectRenderLogic     ()
 {
     for( auto pass: m_passes )
+    {
+        delete pass;
+    }
+
+    for( auto pass : m_depthPasses )
     {
         delete pass;
     }
@@ -61,8 +96,21 @@ void            NodeEffectRenderLogic::Render  ( SceneNodeRepr * nodeRepr, Rende
 //
 void            NodeEffectRenderLogic::RenderDepth                          ( SceneNodeRepr * nodeRepr, RenderContext * ctx )
 {
-    nodeRepr;
-    ctx;
+    // This is the same logic as in render function but calls depth passes.
+    for( auto pass : m_depthPasses )
+    {
+        pass->ReadInputState();
+
+        if( !pass->IsIdle( nodeRepr ) )
+        {
+            pass->Apply( nodeRepr, ctx );
+        }
+
+        if( pass->IsFinal( nodeRepr ) )
+        {
+            return;
+        }
+    }
 }
 
 // *********************************
@@ -113,6 +161,17 @@ IValuePtr       NodeEffectRenderLogic::GetValue                            ( con
     }
 
     return res;
+}
+
+// ***********************
+//
+void            NodeEffectRenderLogic::SetDefaultDepthPasses                ()
+{
+    // Sets default pass, which renders whole subtree depth.
+    auto finalizeStep = new DefaultDepthFinalizeStep();
+    auto finPass = new FinalizePass( finalizeStep );
+
+    m_depthPasses.push_back( finPass );
 }
 
  

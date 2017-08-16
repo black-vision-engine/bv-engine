@@ -47,6 +47,18 @@ void            DepthRenderLogic::RenderQueued      ( SceneNode * node, RenderCo
 
 // ***********************
 //
+void            DepthRenderLogic::RenderQueued      ( SceneNodeRepr * nodeRepr, RenderContext * ctx )
+{
+    auto queue = queue_allocator( ctx )->Allocate();
+
+    queue->QueueNodeSubtree( nodeRepr, ctx );
+    queue->RenderDepth( ctx );
+
+    queue_allocator( ctx )->Free();
+}
+
+// ***********************
+//
 void            DepthRenderLogic::Render            ( SceneNode * node, RenderContext * ctx )
 {
     if( node->IsVisible() )

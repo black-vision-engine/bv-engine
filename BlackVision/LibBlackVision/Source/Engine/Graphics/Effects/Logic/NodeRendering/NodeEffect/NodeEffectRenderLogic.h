@@ -18,7 +18,8 @@ class NodeEffectRenderLogic
 {
 private:
 
-    std::vector< NodeEffectRenderPass * > m_passes;
+    std::vector< NodeEffectRenderPass * >   m_passes;
+    std::vector< NodeEffectRenderPass * >   m_depthPasses;
 
     // FIXME: Think about another solution.
     bool    m_useBlend;
@@ -28,6 +29,7 @@ private:
 public:
 
                     NodeEffectRenderLogic      ( const std::vector< NodeEffectRenderPass * > & passes, bool useBlend = true, bool overrideDepth = false, float depth = 0.0 );
+                    NodeEffectRenderLogic      ( const std::vector< NodeEffectRenderPass * > & passes, const std::vector< NodeEffectRenderPass * > & depthPasses, bool useBlend = true, bool overrideDepth = false, float depth = 0.0 );
                     ~NodeEffectRenderLogic     ();
 
     void            Render                      ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
@@ -43,6 +45,9 @@ public:
 
     IValuePtr       GetValue                        ( const std::string & name ) const;
 
+private:
+
+    void            SetDefaultDepthPasses           ();
 };
 
 

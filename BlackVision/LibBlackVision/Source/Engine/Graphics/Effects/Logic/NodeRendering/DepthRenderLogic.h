@@ -22,6 +22,7 @@ public:
     // PUBLIC API
     static void     RenderQueued        ( Scene * scene, const RenderTarget * output, RenderContext * ctx );
     static void     RenderQueued        ( SceneNode * node, RenderContext * ctx );
+    static void     RenderQueued        ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
 
     static void     Render              ( SceneNode * node, RenderContext * ctx );
 
