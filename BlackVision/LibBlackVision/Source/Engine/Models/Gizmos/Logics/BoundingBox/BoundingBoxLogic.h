@@ -60,6 +60,7 @@ private:
         static const std::string        BOX_COLOR;
         static const std::string        CENTER_COLOR;
         static const std::string        CENTER_SIZE;
+        static const std::string        INCLUDE_CHILDREN;
     };
 
 private:
@@ -70,6 +71,7 @@ private:
     model::ValueParamState< glm::vec4 >     m_boxColor;
     model::ValueParamState< glm::vec4 >     m_centerColor;
     model::ValueParamState< float >         m_centerSize;
+    model::ValueParamState< bool >          m_includeChildren;
 
 public:
 
@@ -92,8 +94,8 @@ private:
     static void             SetCenterSize           ( model::BasicNodePtr node, float size, TimeType time = 0.0f );
     static void             SetBoxSize              ( model::BasicNodePtr node, const glm::vec3 & size, TimeType time = 0.0f );
 
-    static BoxInfo          ComputeBox              ( model::BasicNodePtr node );
-    static bool             NeedsBoxUpdate          ( model::BasicNodePtr node );
+    static BoxInfo          ComputeBox              ( model::BasicNodePtr node, bool includeChildren );
+    bool                    NeedsBoxUpdate          ( model::BasicNodePtr node );
 
     void                    UpdateBox               ();
 

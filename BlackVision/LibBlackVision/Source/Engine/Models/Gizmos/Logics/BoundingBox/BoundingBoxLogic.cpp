@@ -25,6 +25,7 @@ const std::string       BoundingBoxLogic::m_type = "BoundingBoxLogic";
 const std::string       BoundingBoxLogic::PARAMETERS::BOX_COLOR         = "BoxColor";
 const std::string       BoundingBoxLogic::PARAMETERS::CENTER_COLOR      = "CenterColor";
 const std::string       BoundingBoxLogic::PARAMETERS::CENTER_SIZE       = "CenterSize";
+const std::string       BoundingBoxLogic::PARAMETERS::INCLUDE_CHILDREN  = "IncludeChildren";
 
 
 
@@ -53,12 +54,14 @@ BoundingBoxLogic::BoundingBoxLogic             ( model::BasicNodeWeakPtr gizmoRo
     h.AddSimpleParam( PARAMETERS::CENTER_COLOR, glm::vec4( 1.0, 0.0, 0.0, 1.0 ), true, true );
     h.AddSimpleParam( PARAMETERS::BOX_COLOR, glm::vec4( 0.0, 1.0, 0.0, 1.0 ), true, true );
     h.AddSimpleParam( PARAMETERS::CENTER_SIZE, 3.0f, true, true );
+    h.AddSimpleParam( PARAMETERS::INCLUDE_CHILDREN, true, true, true );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 
     m_boxColor      = model::GetValueParamState< glm::vec4 >( m_paramValModel.get(), PARAMETERS::BOX_COLOR );
     m_centerColor   = model::GetValueParamState< glm::vec4 >( m_paramValModel.get(), PARAMETERS::CENTER_COLOR );
     m_centerSize    = model::GetValueParamState< float >( m_paramValModel.get(), PARAMETERS::CENTER_SIZE );
+    m_includeChildren   = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::INCLUDE_CHILDREN );
 }
 
 // ***********************
@@ -129,7 +132,7 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
         boxNode->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         boxNode->AddPlugin( "BOUNDING_BOX_PLUGIN", timeEvaluator );
 
-        BoxInfo info = ComputeBox( gizmoOwner );
+        BoxInfo info = ComputeBox( gizmoOwner, m_includeChildren.GetValue() );
 
         SetColor( boxNode, m_boxColor.GetValue() );
         SetBoxSize( boxNode, info.Size );
@@ -180,14 +183,14 @@ void                        BoundingBoxLogic::SetBoxSize        ( model::BasicNo
 
 // ***********************
 //
-BoundingBoxLogic::BoxInfo   BoundingBoxLogic::ComputeBox        ( model::BasicNodePtr node )
+BoundingBoxLogic::BoxInfo   BoundingBoxLogic::ComputeBox        ( model::BasicNodePtr node, bool includeChildren )
 {
     auto boundingVolume = node->GetBoundingVolume();
     if( boundingVolume )
     {
         BoxInfo info;
-
-        auto box = boundingVolume->GetBoundingBox();
+        const mathematics::Box * box = includeChildren ? boundingVolume->GetChildrenBox() : boundingVolume->GetBoundingBox();
+        
         info.Center = box->Center();
         info.Size.x = box->Width();
         info.Size.y = box->Height();
@@ -203,6 +206,9 @@ BoundingBoxLogic::BoxInfo   BoundingBoxLogic::ComputeBox        ( model::BasicNo
 //
 bool                        BoundingBoxLogic::NeedsBoxUpdate    ( model::BasicNodePtr node )
 {
+    if( m_includeChildren.Changed() )
+        return true;
+
     auto boundingVolume = node->GetBoundingVolume();
     if( boundingVolume )
         return boundingVolume->IsUpdated();
@@ -214,7 +220,7 @@ bool                        BoundingBoxLogic::NeedsBoxUpdate    ( model::BasicNo
 //
 void                        BoundingBoxLogic::UpdateBox         ()
 {
-    BoxInfo info = ComputeBox( m_gizmoOwner.lock() );
+    BoxInfo info = ComputeBox( m_gizmoOwner.lock(), m_includeChildren.GetValue() );
 
     auto boxNode = m_bbNode.lock();
 
