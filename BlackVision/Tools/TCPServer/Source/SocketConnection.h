@@ -45,6 +45,7 @@ private:
     int                             m_logID;
 
     SocketConnectionState           m_state;
+    int                             m_numSocketErrors;      ///< Count errors so we can end thread if there's no hope for holding connection.
 
     std::atomic< bool >             m_end;
 

@@ -10,11 +10,16 @@
 
 namespace bv
 {
+
+const int gMaxSocketErorrs = 300;
+
+
 // ***********************
 //
 SocketConnection::SocketConnection( SOCKET socketID, QueueEventCallback callback )
-    :   m_socketID( socketID ),
-        m_sendCommandCallback( callback )
+    :   m_socketID( socketID )
+    ,   m_sendCommandCallback( callback )
+    ,   m_numSocketErrors( 0 )
 {
     m_logQueue = nullptr;
     m_logID = 0;
@@ -123,6 +128,16 @@ void SocketConnection::MainThread()
                         if( errorCode == 10035 )
                         {
                             Sleep( 100 );
+
+                            m_numSocketErrors++;
+                            
+                            // We must avoid inifinite loop here.
+                            if( m_numSocketErrors > gMaxSocketErorrs )
+                            {
+                                OnEndMainThread();
+                                break;
+                            }
+
                             continue;
                         }
                         if( errorCode == 10038 )
@@ -135,6 +150,7 @@ void SocketConnection::MainThread()
                     }
 
                     bufferSent += sentSize;
+                    m_numSocketErrors = 0;
                 }
             }
 		}
