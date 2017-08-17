@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -118,11 +118,14 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\TestLogic.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\TestLogic.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS14\LibWindowApp.vcxproj">
       <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\LibVideoCards\Projects\Win\VS14\LibVideoCards.vcxproj">
-      <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj">
       <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
@@ -131,16 +134,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\Source\TestLogic.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Source\TestLogic.h" />
-  </ItemGroup>
-  <ItemDefinitionGroup Label="CustomXML">
-    <ClCompile>
-      <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4458;4459;4714;4996;</DisableSpecificWarnings>
-    </ClCompile>
-  </ItemDefinitionGroup>
 </Project>

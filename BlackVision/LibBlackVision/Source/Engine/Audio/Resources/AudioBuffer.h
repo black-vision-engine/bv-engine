@@ -39,5 +39,7 @@ public:
 
 };
 
+typedef std::vector< AudioBufferConstPtr > AudioBufferVec;
+
 } // audio
 } // bv

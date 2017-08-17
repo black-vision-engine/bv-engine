@@ -5,6 +5,9 @@
 
 #include "System/Path.h"
 
+#include "ProjectManager.h"
+
+
 namespace bv
 {
 
@@ -86,14 +89,24 @@ MeshAssetDesc::MeshAssetDesc( const std::string & path, const std::string & grou
     : m_path( path )
     , m_groupName( groupName )
     , m_recursive( recursive )
+{}
+
+
+// ***********************
+//
+std::string	            MeshAssetDesc::GetKey	() const
 {
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
 }
 
 // ***********************
 //
-std::string				MeshAssetDesc::GetKey		() const
+std::string             MeshAssetDesc::ComputeKey() const
 {
-    return m_path + std::to_string( Path::GetTimestamp( m_path ) );
+    return m_path + std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_path ) ) );
 }
 
 // ***********************

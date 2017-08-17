@@ -27,18 +27,34 @@ namespace bv
 
 JsonDeserializeObject::JsonDeserializeObject()
     : m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
-{
-    m_currentNode = nullptr;
-}
+    , m_currentNode( nullptr )
+{}
 
-JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
-    :   m_root( initValue ),
-        m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+// ***********************
+//
+JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && serializer )
+    :   m_root( Json::nullValue )
+    ,   m_currentNode( nullptr )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
 {
-    m_currentNode = nullptr;
+    auto & steal = serializer.StealJson();
+    m_root.swap( steal );
+
     OnRootInit();
 }
 
+// ***********************
+//
+JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
+    :   m_root( initValue )
+    ,   m_currentNode( nullptr )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+{
+    OnRootInit();
+}
+
+// ***********************
+//
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
 
@@ -154,9 +170,12 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
             return false;
 
         m_nodeStack.push( m_currentNode );
-
-        m_indexStack.push( 0 );                     //After EnterChild we are always in first array element.
         m_currentNode = &( (*m_currentNode)[ 0 ] );
+
+        // Reset array index to 0. There are two cases:
+        // - we entered array for the first time and top element was set to zero before
+        // - we entered this array before and now we are making second pass. In this case index might be other then zero.
+        m_indexStack.top() = 0;
     }
     else
     {
@@ -165,6 +184,11 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
         auto& node = (*m_currentNode)[ name ];
         m_currentNode = &node;
     }
+
+    // After EnterChild we are always in first array element.
+    // Even with array is empty we should push 0.
+    if( m_currentNode->isArray() )
+        m_indexStack.push( 0 );
 
     if( m_currentNode->isNull() )
     {

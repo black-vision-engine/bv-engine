@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}</ProjectGuid>
+    <RootNamespace>LibBVLogic</RootNamespace>
+    <ProjectName>LibBVLogic</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common_App.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_3rdParty.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeaderFile>stdafxBVApp.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">-Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">-Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">-Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">-Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions);BV_TESTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ThirdPartyDir)/unittest-cpp/include;$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </Command>
+    </PreBuildEvent>
+    <Link>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <Link>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <Link>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UnitTest++.lib;BlueHancUtils.lib;BlueGpuDirect.lib;BlueVelvet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ThirdPartyDir)\unittest-cpp\lib\;$(ThirdPartyDir)/VideoCards/Bluefish/Lib/$(PlatformName)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Link>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
+      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibCore\Projects\Win\VS14\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibImage\Projects\Win\VS14\LibImage.vcxproj">
+      <Project>{33e2cc63-2591-46b1-9b24-2a284566f1d6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS14\LibBVGL.vcxproj">
+      <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibVideoCards\Projects\Win\VS14\LibVideoCards.vcxproj">
+      <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibAVEncoder\Projects\Win\VS14\LibAVEncoder.vcxproj">
+      <Project>{3d46a32f-4c62-4d4a-8048-54f569123733}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibEffect\Projects\Win\VS14\LibEffect.vcxproj">
+      <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\ConfigReader\Projects\Win\VS14\ConfigReader.vcxproj">
+      <Project>{00218970-e820-4bcc-b1da-48348059f6fe}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS14\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\RapidXML\Projects\Win\VS14\RapidXML.vcxproj">
+      <Project>{09c5ee56-18d0-4625-b632-b4980a620f4e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\TCPServer\Projects\Win\VS14\TCPServer.vcxproj">
+      <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Application\MainInitProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\bvApp.cpp" />
+    <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
+    <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
+    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
+    <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp" />
+    <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
+    <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
+    <ClCompile Include="..\..\..\Source\Statistics\FrameStatsService.cpp" />
+    <ClCompile Include="..\..\..\Source\Statistics\PerformanceMonitor.cpp" />
+    <ClCompile Include="..\..\..\Source\Statistics\StatsFormatters.cpp" />
+    <ClCompile Include="..\..\..\Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestInnerEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\AnotherTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\ExampleTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\MockScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestNodes.cpp" />
+    <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Application\Main.h" />
+    <ClInclude Include="..\..\..\Source\Application\MainInitProcess.h" />
+    <ClInclude Include="..\..\..\Source\Application\MainLoopProcess.h" />
+    <ClInclude Include="..\..\..\Source\bvApp.h" />
+    <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
+    <ClInclude Include="..\..\..\Source\BVConfig.h" />
+    <ClInclude Include="..\..\..\Source\BVForwards.h" />
+    <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
+    <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h" />
+    <ClInclude Include="..\..\..\Source\RenderMode.h" />
+    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />
+    <ClInclude Include="..\..\..\Source\PieChartNode.h" />
+    <ClInclude Include="..\..\..\Source\Statistics\FrameStatsService.h" />
+    <ClInclude Include="..\..\..\Source\Statistics\PerformanceMonitor.h" />
+    <ClInclude Include="..\..\..\Source\Statistics\StatsFormatters.h" />
+    <ClInclude Include="..\..\..\Source\stdafxBVApp.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestInnerEvents.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ExampleTestScenes.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\MockScenes.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionEvents.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.h" />
+    <ClInclude Include="..\..\..\Source\TestingScenes\NewModelTestNodes.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
+    <None Include="..\..\..\Source\BVConfig.inl" />
+    <None Include="..\..\..\Source\Statistics\FrameStatsService.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

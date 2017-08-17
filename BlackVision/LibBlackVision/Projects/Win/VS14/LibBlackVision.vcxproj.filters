@@ -10,9 +10,6 @@
     <Filter Include="Mathematics">
       <UniqueIdentifier>{43730b8b-4507-49ec-982a-d0fc06701406}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mathematics\Core">
-      <UniqueIdentifier>{a608c8e3-e0e3-429d-8a07-461e53f91293}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Mathematics\Interpolators">
       <UniqueIdentifier>{748c3ec0-2fff-425a-a41a-afefa02baa9b}</UniqueIdentifier>
     </Filter>
@@ -160,20 +157,8 @@
     <Filter Include="Serialization">
       <UniqueIdentifier>{68a74c00-da93-4352-a146-be6b6ea74fd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\VideoStream">
-      <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\NodeEffects">
       <UniqueIdentifier>{f4797669-e3c0-4f97-833c-4ea85f2ed340}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder">
-      <UniqueIdentifier>{2e59aefe-5105-4fc8-87df-8a8c3bbbb08d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces">
-      <UniqueIdentifier>{c9055392-946f-479d-9918-5f9ffd23dc2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg">
-      <UniqueIdentifier>{b85fcf6c-90be-4820-9c89-3f272705f078}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Models\Plugins\Channels\Transform\VertexShader">
       <UniqueIdentifier>{35597ded-e812-4814-8ade-2f4ce1473665}</UniqueIdentifier>
@@ -196,89 +181,17 @@
     <Filter Include="Assets\Thumbnail\Impl">
       <UniqueIdentifier>{d3b25ace-ed29-4d73-836e-65e757857713}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen">
-      <UniqueIdentifier>{db681d99-d172-4322-91a2-9d823125221e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic">
-      <UniqueIdentifier>{c2b20c88-d23c-4d95-acc8-390b1ad4225c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Utils">
       <UniqueIdentifier>{457dcf57-1339-4d32-820a-48f1f4c5fb5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic\VideoOutputRendering">
-      <UniqueIdentifier>{44035e72-4b3b-4ada-baaf-33b1ada04001}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect">
-      <UniqueIdentifier>{2ab7cdfd-ddff-495c-988b-7db7fbae6cfd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl">
-      <UniqueIdentifier>{a063a712-c340-48d7-a9fc-b6b5352529c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\Graph">
-      <UniqueIdentifier>{e71dc26a-36ca-4e84-9ba1-93b2d66212f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic">
-      <UniqueIdentifier>{43d446f0-5e12-4f1b-9635-b67e96810147}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PreImpl">
-      <UniqueIdentifier>{6f23f78e-197c-4dee-9498-fbf57a4c4278}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PostImpl">
-      <UniqueIdentifier>{376393a3-2168-46be-ba38-773c029d8d27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\NodeEffects\Effects">
-      <UniqueIdentifier>{3eb51f63-99ae-4a04-9561-8dec21ceef54}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen">
-      <UniqueIdentifier>{db681d99-d172-4322-91a2-9d823125221e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic">
-      <UniqueIdentifier>{c2b20c88-d23c-4d95-acc8-390b1ad4225c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Utils">
       <UniqueIdentifier>{457dcf57-1339-4d32-820a-48f1f4c5fb5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic\VideoOutputRendering">
-      <UniqueIdentifier>{44035e72-4b3b-4ada-baaf-33b1ada04001}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect">
-      <UniqueIdentifier>{2ab7cdfd-ddff-495c-988b-7db7fbae6cfd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl">
-      <UniqueIdentifier>{a063a712-c340-48d7-a9fc-b6b5352529c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\Graph">
-      <UniqueIdentifier>{e71dc26a-36ca-4e84-9ba1-93b2d66212f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic">
-      <UniqueIdentifier>{43d446f0-5e12-4f1b-9635-b67e96810147}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PreImpl">
-      <UniqueIdentifier>{6f23f78e-197c-4dee-9498-fbf57a4c4278}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PostImpl">
-      <UniqueIdentifier>{376393a3-2168-46be-ba38-773c029d8d27}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Models\NodeEffects\Effects">
       <UniqueIdentifier>{3eb51f63-99ae-4a04-9561-8dec21ceef54}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Graphics\Rendering">
       <UniqueIdentifier>{a96ef61e-ff68-4bc1-a615-59e9c1661ba9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Rendering\Logic">
-      <UniqueIdentifier>{0e33dbe7-8ce5-4e9d-b656-0fefb3a45d64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Rendering\Logic\OfflineRendering">
-      <UniqueIdentifier>{f6868f42-ca33-4cfc-9ac9-dc9299fedeaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl\FSECreators">
-      <UniqueIdentifier>{311d9919-a16e-4b3d-8281-d849d00bba2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\EditorVariables">
-      <UniqueIdentifier>{7894fab9-865a-4c07-a90a-ddde56d8a731}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mathematics\Util">
-      <UniqueIdentifier>{ef62563e-b8be-4fae-9264-9b3c6234fc0f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Models\Lights">
       <UniqueIdentifier>{db65c1af-2082-49de-86c2-432b5bc6149a}</UniqueIdentifier>
@@ -294,9 +207,6 @@
     </Filter>
     <Filter Include="Engine\Models\Cameras">
       <UniqueIdentifier>{4b96ea70-4824-40fe-bf3a-6c223213ee6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\EditorVariables\ParametersDescriptors">
-      <UniqueIdentifier>{2a31797a-f6db-4c21-b0dd-9af1d02cd771}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Models\Plugins\Simple\Shapes">
       <UniqueIdentifier>{8b2b74c7-c2c1-4d30-bf32-782e5c374df3}</UniqueIdentifier>
@@ -325,21 +235,6 @@
     <Filter Include="Assets\DataArray">
       <UniqueIdentifier>{5d32f185-ad80-48ea-9a8a-5e09c272806f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\UndoRedo">
-      <UniqueIdentifier>{dbc18cb6-546e-4347-ba0b-7674605fc186}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Nodes">
-      <UniqueIdentifier>{984470cd-42c7-456c-a709-fefb57ba1d36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Plugins">
-      <UniqueIdentifier>{87e38c20-b06c-4d2b-b2c5-a37a39b12637}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Timelines">
-      <UniqueIdentifier>{33ef9e14-422b-46ea-ae62-c3d31d5c8383}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Models\UndoRedo\Lights">
-      <UniqueIdentifier>{69432d55-d2af-4c7d-9b40-3f4a2c4205d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\SVG">
       <UniqueIdentifier>{799c203d-e583-420c-ab09-d67756fda036}</UniqueIdentifier>
     </Filter>
@@ -358,6 +253,186 @@
     <Filter Include="Assets\Font\2D">
       <UniqueIdentifier>{4d0e52f9-9413-4b4f-8bb2-283a0ecbc433}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder">
+      <UniqueIdentifier>{2e59aefe-5105-4fc8-87df-8a8c3bbbb08d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces">
+      <UniqueIdentifier>{c9055392-946f-479d-9918-5f9ffd23dc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg">
+      <UniqueIdentifier>{b85fcf6c-90be-4820-9c89-3f272705f078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders">
+      <UniqueIdentifier>{bc478c7d-4e8d-4468-83ca-a1f3acb644ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video">
+      <UniqueIdentifier>{7db99adf-cd5b-4300-b4db-0153fbffbe93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio">
+      <UniqueIdentifier>{baaba746-d279-4789-ad0f-186e58c4647b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer">
+      <UniqueIdentifier>{27b773b8-ef6e-46e5-9b3c-24d19db954c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\AVStream">
+      <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Plugins">
+      <UniqueIdentifier>{bf03ccb9-af65-4025-bbd4-03e7ddbf9a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Nodes">
+      <UniqueIdentifier>{52b22a14-75f1-4bb7-94ef-47bf16146d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Logics">
+      <UniqueIdentifier>{6a64e9e1-af20-453f-b465-b130a72b799a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\Other">
+      <UniqueIdentifier>{cb4deab8-4527-42a0-a3cc-07ecdbc9504b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{606be5cd-3097-4db8-8fe8-59db16f6903e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic">
+      <UniqueIdentifier>{bc366ba0-1cdb-45fb-87f0-f49378e3afbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\Components">
+      <UniqueIdentifier>{baef3bac-8c90-4568-b308-9f3ab60c63e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\Components\Initialization">
+      <UniqueIdentifier>{2f6aee3d-a0f0-454b-856e-f502010625db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\State">
+      <UniqueIdentifier>{b30cdc99-c427-435c-93a0-6f2c9e2cd881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\FullscreenRendering">
+      <UniqueIdentifier>{02fd7406-b110-426f-bb42-3fcdb4a6ab8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance">
+      <UniqueIdentifier>{562a463b-1ae0-45be-8e1d-1a2b14e75ac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\FullscreenRendering\Impl">
+      <UniqueIdentifier>{55196588-8a8e-45e8-b151-9c9076911cac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering">
+      <UniqueIdentifier>{ba9fdf0e-7c93-401f-911e-1dbc353fbd21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect">
+      <UniqueIdentifier>{ac9fe2c1-d734-4177-8596-81f7b8bd7f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components">
+      <UniqueIdentifier>{9e9da78c-a5fb-4559-b743-10ff7e6bfed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps">
+      <UniqueIdentifier>{b7dfa75b-5c14-433b-a7c1-12c3e306bfde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl">
+      <UniqueIdentifier>{8b903a3b-366c-4ece-a4b4-2ec77ab4192d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring">
+      <UniqueIdentifier>{1dd283fb-9795-44c4-a042-f928828e4a70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl">
+      <UniqueIdentifier>{ad1901a0-78ad-47fc-abb2-e39a20384bce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs">
+      <UniqueIdentifier>{6ec9f8d5-6b8a-416b-a1f3-cba906ca088b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers">
+      <UniqueIdentifier>{98a83ccd-bc15-42f9-873c-06e2474419b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video">
+      <UniqueIdentifier>{08b36e0b-2225-4582-a5e9-29312719aaa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components">
+      <UniqueIdentifier>{b72e5474-82da-4510-8417-9119d61837ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Stream">
+      <UniqueIdentifier>{d80fa784-5612-43f3-92ec-af76f43008b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Preview">
+      <UniqueIdentifier>{0adcc45a-8cd4-4ce4-90b8-78952314ac76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics">
+      <UniqueIdentifier>{b0ee0ee1-e858-49fc-a374-b1807bccec8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Counter">
+      <UniqueIdentifier>{7676b77a-1330-4ef6-8246-9282a08c23ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\NodeReplicator">
+      <UniqueIdentifier>{63329a90-a51e-4adf-ac15-d218e6a1ec9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Scroller">
+      <UniqueIdentifier>{e73d1f3b-ebbd-4ab2-8a05-dbca94cac44f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\MeshLoader">
+      <UniqueIdentifier>{55d431f0-b95c-4a01-9126-3b1a6a53ffaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\SmoothValueSetter">
+      <UniqueIdentifier>{7193afdc-bc06-4dbf-a63a-98d0b506b8e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\PieChart">
+      <UniqueIdentifier>{08eed812-3d86-4b67-b42a-d0f12fb2e5df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\AnalogWatch">
+      <UniqueIdentifier>{63b4d4b6-b90a-4a39-a2e0-d9666d695506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Arrange">
+      <UniqueIdentifier>{7eaed3c8-da7c-406e-b414-3ea2a3fb8068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Follow">
+      <UniqueIdentifier>{b312231f-34da-4c2a-99ab-81f043f1a261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\SlideShow">
+      <UniqueIdentifier>{63cd6641-f29f-433c-811e-30f200770429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\MaxSize">
+      <UniqueIdentifier>{0aefa2d8-ec90-4d77-ad19-835588e5328d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\Cloner">
+      <UniqueIdentifier>{2389fef9-ffdf-4a95-bca5-3884dee9e704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\NodeLogics\NodeVisibilityAnimation">
+      <UniqueIdentifier>{ea278f64-cd67-4099-9ebb-61da1719ceb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
+      <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors">
+      <UniqueIdentifier>{af5bfeaf-8e8f-4813-bd8e-df08a0f77333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo">
+      <UniqueIdentifier>{1cf04f19-8f9b-4aee-b50a-71c5b0be14d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\EditorVariables">
+      <UniqueIdentifier>{98d602c0-2c14-441a-9f45-909b5379ab5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Lights">
+      <UniqueIdentifier>{d38bc629-925b-4b74-9c4f-ce014e6be48c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Nodes">
+      <UniqueIdentifier>{126e5c3b-5082-40bf-b12b-d03a0f3a411d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Plugins">
+      <UniqueIdentifier>{2c702725-6231-4103-87b9-195ceac4831b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\UndoRedo\Timelines">
+      <UniqueIdentifier>{9f852bc7-616f-4023-85c4-442e17f4fd8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\EditorVariables\ParametersDescriptors">
+      <UniqueIdentifier>{94567ba5-1a21-4a2a-b61b-1e3c4988eab2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\AssetsLoading">
+      <UniqueIdentifier>{71e29981-2f54-496f-84ab-ad3ed1f081c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Editors\AssetsLoading\Async">
+      <UniqueIdentifier>{38ea006c-2360-40e2-915d-e04909046873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\AsyncLoading">
+      <UniqueIdentifier>{fdfbb725-9a0a-4d8b-8bc4-5bcfa468718a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\SpecialPlugins">
+      <UniqueIdentifier>{3fd2a421-7703-4b69-9c86-caa0afb264f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -371,12 +446,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp">
       <Filter>Application\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
-      <Filter>Mathematics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp">
-      <Filter>Mathematics\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp">
       <Filter>Mathematics\Interpolators</Filter>
@@ -900,12 +969,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
@@ -929,9 +992,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
       <Filter>Assets\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.cpp">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
@@ -987,17 +1047,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
@@ -1008,20 +1059,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp">
       <Filter>Assets</Filter>
@@ -1041,38 +1080,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectFactory.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp">
       <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
@@ -1083,173 +1095,20 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectFactory.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraphNode.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\CompositeFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenEffectData.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenVSShader.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\SimpleFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostFullScreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreFullScreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\RenderOffscreenPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectInstance.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\Effects\ModelNodeEffectMixChannels.cpp">
-      <Filter>Engine\Models\NodeEffects\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraphNode.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\CompositeFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenEffectData.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenVSShader.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\SimpleFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostFullScreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreFullScreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\RenderOffscreenPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectInstance.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\Effects\ModelNodeEffectMixChannels.cpp">
-      <Filter>Engine\Models\NodeEffects\Effects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp">
-      <Filter>Engine\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp">
       <Filter>Engine\Models</Filter>
@@ -1259,9 +1118,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp">
       <Filter>Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp">
-      <Filter>Engine\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp">
       <Filter>Engine\Models\Builder</Filter>
@@ -1300,9 +1156,6 @@
       <Filter>Mathematics\Transform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
@@ -1315,62 +1168,14 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.cpp">
       <Filter>Engine\Graphics\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp">
-      <Filter>Engine\Graphics\Rendering\Logic\OfflineRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\PreFullscreenEffectLogicUtils.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ShadowFSE.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ImageMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ImageMaskFSE.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.cpp">
-      <Filter>Engine\Models\EditorVariables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\LightScatteringPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp">
-      <Filter>Mathematics\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp">
-      <Filter>Mathematics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
@@ -1426,9 +1231,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp">
       <Filter>Engine\Events</Filter>
     </ClCompile>
@@ -1436,9 +1238,6 @@
       <Filter>Assets\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.cpp">
-      <Filter>Assets\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshLoader.cpp">
       <Filter>Assets\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshUtils.cpp">
@@ -1492,14 +1291,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\ParamAddress.cpp">
       <Filter>Engine\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -1606,24 +1399,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAudioDecoderPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAVDecoderPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\AVDecoderThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
     </ClCompile>
@@ -1644,21 +1419,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderer.cpp">
       <Filter>Engine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAsset.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.cpp">
-      <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultGeometryShaderChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
@@ -1684,45 +1444,6 @@
     <ClCompile Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.cpp">
       <Filter>Assets\DataArray</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.cpp">
-      <Filter>Engine\Models\UndoRedo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\DeleteTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.cpp">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\EffectsOperations.cpp">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.cpp">
-      <Filter>Engine\Models\UndoRedo\Lights</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGLoader.cpp">
       <Filter>Assets\SVG</Filter>
     </ClCompile>
@@ -1731,12 +1452,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAsset.cpp">
       <Filter>Assets\SVG</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.cpp">
-      <Filter>Engine\Events\InnerEvents</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.cpp">
       <Filter>Assets\SVG</Filter>
@@ -1786,9 +1501,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\3D\TextGeometry.cpp">
       <Filter>Assets\Font\3D</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamsDecoderThread.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.cpp">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
     </ClCompile>
@@ -1798,8 +1510,497 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelHelper1.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.cpp">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.cpp">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio\FFmpegAudioStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video\FFmpegVideoStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamsDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\AVDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAsset.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetDescriptor.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetLoader.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAssetUtils.cpp">
+      <Filter>Assets\AVStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\DefaultAudioDecoderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\DefaultAVDecoderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Services\BVServiceProvider.cpp">
+      <Filter>Services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.cpp">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogicImpl.cpp">
+      <Filter>Engine\Graphics\Effects\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderedChannelsData.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderLogicCore.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputDesc.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputLogicDesc.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputStaticData.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\RenderedChannelsDataDesc.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\RenderLogicDesc.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\VideoInputChannelDataDesc.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderChannel.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderContext.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\FullscreenEffectComponentState.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\FullscreenEffectRendererState.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\OutputState.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\RenderComponentState.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\RenderedData.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\RenderLogicState.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\SamplerEntry.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\Texture2DEntry.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffect.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectFactory.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FullscreenEffectHelpers.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FullscreenRenderableEffect.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FullscreenVSShader.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FulscreenEffectVisualComponent.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FulscreenEffectVisualComponentDesc.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance\CompositeFullscreenEffectInstance.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance\FullscreenEffectInstance.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance\SimpleFullscreenEffectInstance.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeRenderLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffect.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffectFactory.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffectImpl.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffectRenderLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\EmptyPass.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\FinalizePass.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\FullscreenEffectPass.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\NodeEffectRenderPass.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\FinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\FullscreenEffectStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\PreFullscreenEffectStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\RenderStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\AlphaMaskFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\AlphaMaskPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\BlurFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\BlurPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultFinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\GlowFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\GlowPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\LightScatteringFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\LightScatteringPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NodeMaskFinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NodeMaskFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NodeMaskPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ShadowFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ShadowPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\SoftMaskFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\SoftMaskPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ZSortFinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Output.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\OutputLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\OutputFactory.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\OutputInstance.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\OutputScreenshot.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\OutputCompositeVideo.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoOutputFactory.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\AVOutputsData.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoInputChannel.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoInputChannelsData.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsPreprocessor.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoResizedInputChannel.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\Preview\PreviewHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Preview</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.cpp">
+      <Filter>Engine\Models\NodeLogics\Counter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.cpp">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.cpp">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.cpp">
+      <Filter>Engine\Models\NodeLogics\MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\ParameterBinding.cpp">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\SmoothValueSetter.cpp">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.cpp">
+      <Filter>Engine\Models\NodeLogics\PieChart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp">
+      <Filter>Engine\Models\NodeLogics\AnalogWatch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp">
+      <Filter>Engine\Models\NodeLogics\Arrange</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.cpp">
+      <Filter>Engine\Models\NodeLogics\Follow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\SlideShow\SlideShow.cpp">
+      <Filter>Engine\Models\NodeLogics\SlideShow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.cpp">
+      <Filter>Engine\Models\NodeLogics\MaxSize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.cpp">
+      <Filter>Assets\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp">
+      <Filter>Engine\Models\NodeLogics\Cloner</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp">
       <Filter>Engine\Audio\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProject.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\BVProjectTools.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.cpp">
+      <Filter>Engine\Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\OperationHistory.cpp">
+      <Filter>Engine\Editors\UndoRedo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\SceneVariables.cpp">
+      <Filter>Engine\Editors\EditorVariables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.cpp">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamsLogic.cpp">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\ParameterMapping.cpp">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Lights\LightOperations.cpp">
+      <Filter>Engine\Editors\UndoRedo\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\AddNodeOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\MoveNodeOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\RemoveNodeOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\AddNodeLogicOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\EffectsOperations.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\PluginOperations.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\RemoveNodeLogicOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AddTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.cpp">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.cpp">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp">
+      <Filter>Engine\Editors\AssetsLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
+      <Filter>Assets\AsyncLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1811,18 +2012,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\AABB.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Defines.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Rect.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h">
-      <Filter>Mathematics\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h">
       <Filter>Mathematics\Interpolators</Filter>
@@ -2517,12 +2706,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -3135,9 +3318,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -3209,12 +3389,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
@@ -3825,9 +3999,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -3900,12 +4071,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
@@ -3927,26 +4092,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDef.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
@@ -3960,17 +4107,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
@@ -3978,33 +4116,12 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
@@ -4014,83 +4131,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectFactory.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraphNode.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\CompositeFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenEffectData.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenVSShader.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\SimpleFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostFullScreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreFullScreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\RenderOffscreenPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectInstance.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.h">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.h">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\Effects\ModelNodeEffectMixChannels.h">
-      <Filter>Engine\Models\NodeEffects\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.h">
       <Filter>Engine\Graphics\Resources\Textures</Filter>
@@ -4109,90 +4154,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectFactory.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraphNode.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\CompositeFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenEffectData.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenVSShader.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\SimpleFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostFullScreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreFullScreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\RenderOffscreenPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectInstance.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.h">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.h">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\Effects\ModelNodeEffectMixChannels.h">
-      <Filter>Engine\Models\NodeEffects\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.h">
       <Filter>Engine\Graphics\Resources\Textures</Filter>
@@ -4203,29 +4173,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProject.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectEditor.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h">
-      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h">
       <Filter>Engine\Models</Filter>
@@ -4251,9 +4206,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl">
       <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h">
-      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h">
       <Filter>Engine\Interfaces</Filter>
@@ -4313,9 +4265,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelState.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -4325,62 +4274,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h">
       <Filter>Engine\Graphics\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h">
-      <Filter>Engine\Graphics\Rendering\Logic\OfflineRendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\BoundingBoxPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\InputFullscreenEffectGraphNode.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\BoundingBoxEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\PreFullscreenEffectLogicUtils.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ShadowPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ShadowFSE.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\BlurFSE.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\ImageMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\ImageMaskFSE.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\SceneVariables.h">
-      <Filter>Engine\Models\EditorVariables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\LightScatteringPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FSECreators\LightScatteringFSE.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl\FSECreators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Util\Transformation.h">
-      <Filter>Mathematics\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -4445,9 +4346,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersHelpers.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\GridLinesEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
@@ -4461,9 +4359,6 @@
       <Filter>Assets\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetDescriptor.h">
-      <Filter>Assets\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshLoader.h">
       <Filter>Assets\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshUtils.h">
@@ -4523,20 +4418,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamV.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\CommonEventsStrings.h">
       <Filter>Engine\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\ParamAddress.h">
       <Filter>Engine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
-      <Filter>Engine\Models\EditorVariables\ParametersDescriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -4652,33 +4538,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAudioDecoderPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAVDecoderPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAudioStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxerThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\AVDecoderThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IAVDefs.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IAudioChannel.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
     </ClInclude>
@@ -4702,18 +4561,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderer.h">
       <Filter>Engine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAsset.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetDescriptor.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetLoader.h">
-      <Filter>Assets\VideoStream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\VideoStream\AVAssetUtils.h">
-      <Filter>Assets\VideoStream</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
@@ -4742,48 +4589,6 @@
     <ClInclude Include="..\..\..\Source\Assets\DataArray\DataArrayLoader.h">
       <Filter>Assets\DataArray</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\IRevertable.h">
-      <Filter>Engine\Models\UndoRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\OperationHistory.h">
-      <Filter>Engine\Models\UndoRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\AddNodeOperation.h">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\RemoveNodeOperation.h">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Nodes\MoveNodeOperation.h">
-      <Filter>Engine\Models\UndoRedo\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\AddNodeLogicOperation.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\RemoveNodeLogicOperation.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AddTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\AssignTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\DeleteTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Timelines\RenameTimelineOperation.h">
-      <Filter>Engine\Models\UndoRedo\Timelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\PluginOperations.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Plugins\EffectsOperations.h">
-      <Filter>Engine\Models\UndoRedo\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\UndoRedo\Lights\LightOperations.h">
-      <Filter>Engine\Models\UndoRedo\Lights</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGLoader.h">
       <Filter>Assets\SVG</Filter>
     </ClInclude>
@@ -4792,9 +4597,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAsset.h">
       <Filter>Assets\SVG</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\NodeRemovedEvent.h">
-      <Filter>Engine\Events\InnerEvents</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\SVG\SVGAssetDescriptor.h">
       <Filter>Assets\SVG</Filter>
@@ -4808,9 +4610,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\RendererPerformance.h">
       <Filter>Engine\Graphics\Renderers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegPacket.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
@@ -4904,14 +4703,530 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\TextAtlas.h">
       <Filter>Assets\Font\2D</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegStreamsDecoderThread.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.h">
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\ShaderParamUpdater.h">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio\FFmpegAudioStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video\FFmpegVideoStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders\FFmpegStreamsDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Decoders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDefs.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\AVDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAsset.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetDescriptor.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetLoader.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAssetUtils.h">
+      <Filter>Assets\AVStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\DefaultAudioDecoderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\DefaultAVDecoderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Types\TypeTraits.h">
+      <Filter>Engine\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeLogicRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Logics\NodeEffectAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Plugins\PluginMovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\CameraRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Other\LightRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Services\BVServiceProvider.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h">
+      <Filter>Engine\Graphics\Effects\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogicImpl.h">
+      <Filter>Engine\Graphics\Effects\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderedChannelsData.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderLogicCore.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputDesc.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputLogicDesc.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\OutputStaticData.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\RenderedChannelsDataDesc.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\RenderLogicDesc.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\Initialization\VideoInputChannelDataDesc.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components\Initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderChannel.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\Components\RenderContext.h">
+      <Filter>Engine\Graphics\Effects\Logic\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\FullscreenEffectComponentState.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\FullscreenEffectRendererState.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\OutputState.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\RenderComponentState.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\RenderedData.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\RenderLogicState.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\SamplerEntry.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\Texture2DEntry.h">
+      <Filter>Engine\Graphics\Effects\Logic\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffect.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectFactory.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FullscreenEffectHelpers.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FullscreenRenderableEffect.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FullscreenVSShader.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FulscreenEffectVisualComponent.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\Impl\FulscreenEffectVisualComponentDesc.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance\CompositeFullscreenEffectInstance.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance\FullscreenEffectInstance.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance\SimpleFullscreenEffectInstance.h">
+      <Filter>Engine\Graphics\Effects\Logic\FullscreenRendering\FullscreenEffectInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeRenderLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffect.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffectFactory.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffectImpl.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\NodeEffectRenderLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\EmptyPass.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\FinalizePass.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\FullscreenEffectPass.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\NodeEffectRenderPass.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\FinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\FullscreenEffectStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\PreFullscreenEffectStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\RenderStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\AlphaMaskFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\AlphaMaskPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\BlurFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\BlurPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultFinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\GlowFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\GlowPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\LightScatteringFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\LightScatteringPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NodeMaskFinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NodeMaskFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\NodeMaskPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ShadowFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ShadowPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\SoftMaskFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\SoftMaskPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ZSortFinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Output.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\OutputLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\OutputFactory.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\OutputInstance.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\OutputScreenshot.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\OutputCompositeVideo.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoOutputFactory.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\VideoTypes.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\AVOutputsData.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoInputChannel.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoInputChannelsData.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoOutputsPreprocessor.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\CompositeOutputs\Video\Components\VideoResizedInputChannel.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\CompositeOutputs\Video\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\FrameDataHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\Preview\PreviewHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\Stream\SharedMemHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Counter\Counter.h">
+      <Filter>Engine\Models\NodeLogics\Counter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.h">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\IReplicationModifier.h">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.h">
+      <Filter>Engine\Models\NodeLogics\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.h">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.h">
+      <Filter>Engine\Models\NodeLogics\Scroller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.h">
+      <Filter>Engine\Models\NodeLogics\MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\ParameterBinding.h">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SmoothValueSetter\SmoothValueSetter.h">
+      <Filter>Engine\Models\NodeLogics\SmoothValueSetter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.h">
+      <Filter>Engine\Models\NodeLogics\PieChart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h">
+      <Filter>Engine\Models\NodeLogics\AnalogWatch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h">
+      <Filter>Engine\Models\NodeLogics\Arrange</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Follow\Follow.h">
+      <Filter>Engine\Models\NodeLogics\Follow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\SlideShow\SlideShow.h">
+      <Filter>Engine\Models\NodeLogics\SlideShow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.h">
+      <Filter>Engine\Models\NodeLogics\MaxSize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Mesh\MeshAssetLoader.h">
+      <Filter>Assets\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h">
+      <Filter>Engine\Models\NodeLogics\Cloner</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.h">
+      <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\IConfig.h">
+      <Filter>Engine\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h">
       <Filter>Engine\Audio\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProject.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\BVProjectTools.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.h">
+      <Filter>Engine\Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\IRevertable.h">
+      <Filter>Engine\Editors\UndoRedo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\OperationHistory.h">
+      <Filter>Engine\Editors\UndoRedo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\SceneVariables.h">
+      <Filter>Engine\Editors\EditorVariables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamDescriptor.h">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\ParameterMapping.h">
+      <Filter>Engine\Editors\EditorVariables\ParametersDescriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Lights\LightOperations.h">
+      <Filter>Engine\Editors\UndoRedo\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\AddNodeOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\MoveNodeOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Nodes\RemoveNodeOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\AddNodeLogicOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\EffectsOperations.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\PluginOperations.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Plugins\RemoveNodeLogicOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AddTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h">
+      <Filter>Engine\Editors\UndoRedo\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetsThread.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\LoadAssetRequest.h">
+      <Filter>Engine\Editors\AssetsLoading\Async</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h">
+      <Filter>Engine\Editors\AssetsLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h">
+      <Filter>Assets\AsyncLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -4977,6 +5292,12 @@
     </None>
     <None Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.inl">
       <Filter>Engine\Events</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.inl">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderablePass.inl">
+      <Filter>Engine\Graphics\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

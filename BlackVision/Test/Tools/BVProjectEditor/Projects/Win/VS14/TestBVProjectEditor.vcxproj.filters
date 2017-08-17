@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\TestMain.cpp" />
+    <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp">
+      <Filter>NodesTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp">
+      <Filter>NodesTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestMixedSyncAsyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestSyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestAsyncLoading.cpp">
+      <Filter>AssetsTest</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{b4853f62-a2a9-46d5-b943-1bacef878cdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NodesTests">
+      <UniqueIdentifier>{2e92c01d-8b19-4dc5-ab24-0546a112d069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AssetsTest">
+      <UniqueIdentifier>{11a21a3e-faa7-476c-b403-2bb00df321ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Utils\TwoScenesFixture.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
@@ -49,9 +49,6 @@ protected:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    SizeType	                    m_textureWidth;
-    SizeType	                    m_textureHeight;
-
 	ValueParamState< bool >						m_blendEnabled;
 	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
 
@@ -69,9 +66,6 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
-
-    SizeType									GetTextureWidth             () const;
-    SizeType									GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 

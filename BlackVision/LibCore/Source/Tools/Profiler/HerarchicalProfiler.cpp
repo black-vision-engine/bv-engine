@@ -1,5 +1,9 @@
 #include "stdafxCore.h"
 
+#include <winsock2.h>
+#include <windows.h>
+
+
 #include "HerarchicalProfiler.h"
 
 #include <cassert>
@@ -64,13 +68,23 @@ unsigned int    AutoProfile::NumSamples         ( unsigned int threadID )
 
 // *******************************
 //
-LARGE_INTEGER    AutoProfile::QueryCounterFrequency   ()
+UInt64      AutoProfile::QueryCounterFrequency   ()
 {
     LARGE_INTEGER pf;
 
     QueryPerformanceFrequency( &pf );
 
-    return pf;
+    return pf.QuadPart;
+}
+
+// *******************************
+//
+UInt64          AutoProfile::QueryCounter()
+{
+    LARGE_INTEGER time;
+    QueryPerformanceCounter( &time );
+
+    return time.QuadPart;
 }
 
 // *******************************

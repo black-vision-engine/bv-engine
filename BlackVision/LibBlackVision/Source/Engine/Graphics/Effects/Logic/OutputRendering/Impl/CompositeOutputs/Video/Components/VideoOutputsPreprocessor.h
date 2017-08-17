@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/AVOutputsData.h"
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/Components/VideoInputChannelsData.h"
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 #include <vector>
 #include <boost/circular_buffer.hpp>
@@ -13,6 +13,7 @@ namespace bv {
 namespace audio {
     
 class AudioRenderer;
+class AudioMixer;
 
 }
 
@@ -33,9 +34,12 @@ private:
     AVFrameBuffersMap           m_avFramesBuffer;
     AVFramesMap                 m_currentAVFrames;
 
+    std::map< const VideoInputChannel *, audio::AudioMixer * >        m_audioMixers;
+
 public:
 
-                            VideoOutputsPreprocessor();
+                            VideoOutputsPreprocessor    ();
+    virtual                 ~VideoOutputsPreprocessor   ();
 
     const AVOutputsData &   Preprocess              ( RenderContext * ctx, RenderedChannelsData * input );
 

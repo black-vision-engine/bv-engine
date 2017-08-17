@@ -24,7 +24,7 @@ private:
     TimeSegmentEvalImpl             m_timeEvalImpl;
     TimeType                        m_prevTime;
 
-    ITimelineEvent *                m_activeEvent;
+    ITimelineEvent *                m_triggeredEvent;
 
     std::vector< ITimelineEventPtr > m_keyFrameEvents;
 

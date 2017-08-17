@@ -24,7 +24,7 @@
 //
 //// *********************************
 //// FIXME: move it to a valid BV windowed version of engine and wrap with a macro
-//void			WinApplicationTester::StaticInitializer	()
+//void			WinApplicationTester::MainInitializer	()
 //{
 //	bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
 //    bv::ApplicationBase::ApplicationInstance = new WinApplicationTester();
@@ -35,7 +35,7 @@
 //// FIXME: move it to valid BV windowed version of engine and wrap with a macro
 //bool			WinApplicationTester::RegisterInitializer	()
 //{
-//    bv::InitSubsystem::AddInitializer( WinApplicationTester::StaticInitializer );
+//    bv::InitSubsystem::AddInitializer( WinApplicationTester::MainInitializer );
 //
 //    return true;
 //}

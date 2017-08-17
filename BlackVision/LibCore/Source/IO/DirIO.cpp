@@ -92,7 +92,7 @@ bool                        Dir::Exists                ( const std::string & pat
 //
 bool                        Dir::CreateDir            ( const std::string & path, bool createRecusive )
 {
-    if( Exists( path ) )
+    if( path.empty() || Exists( path ) )
     {
         return true;
     }

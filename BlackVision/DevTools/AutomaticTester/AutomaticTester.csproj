@@ -13,9 +13,9 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\_Builds\x64-v110-Debug\DevTools\AutomaticTester\</OutputPath>
-    <BaseIntermediateOutputPath>..\..\_Temp\x64-v110-Debug\DevTools\AutomaticTester\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>..\..\_Temp\x64-v110-Debug\DevTools\AutomaticTester\</IntermediateOutputPath>
+    <OutputPath>..\..\_Builds\x64-v140-Debug\DevTools\AutomaticTester\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\_Temp\x64-v140-Debug\DevTools\AutomaticTester\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>..\..\_Temp\x64-v140-Debug\DevTools\AutomaticTester\</IntermediateOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -25,9 +25,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\_Builds\x64-v110-Release\DevTools\AutomaticTester\</OutputPath>
-    <BaseIntermediateOutputPath>..\..\_Temp\x64-v110-Release\DevTools\AutomaticTester\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>..\..\_Temp\x64-v110-Release\DevTools\AutomaticTester\</IntermediateOutputPath>
+    <OutputPath>..\..\_Builds\x64-v140-Release\DevTools\AutomaticTester\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\_Temp\x64-v140-Release\DevTools\AutomaticTester\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>..\..\_Temp\x64-v140-Release\DevTools\AutomaticTester\</IntermediateOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>

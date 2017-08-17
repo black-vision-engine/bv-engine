@@ -26,20 +26,17 @@ void    NodeRenderLogic::Clear             ( const RenderTarget * rt, RenderCont
 
 // *********************************
 //
-void    NodeRenderLogic::RenderAudio       ( Scene * scene, RenderContext * ctx, std::set< const audio::AudioEntity * > & audioEntities )
-
+void    NodeRenderLogic::RenderAudio       ( Scene * scene, RenderContext * ctx, audio::AudioRenderChannelData & arcd )
 {
     auto rootNode = scene->GetRoot();
 
     if( rootNode )
-    {
-        RenderAudio( rootNode, audio_renderer( ctx ), audioEntities );
-    }
+        RenderAudio( rootNode, audio_renderer( ctx ), arcd );
 }
 
 // *********************************
 //
-void    NodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRenderer * audio, std::set< const audio::AudioEntity * > & audioEntities )
+void    NodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRenderer * audio, audio::AudioRenderChannelData & arcd )
 {
     // FIXME: nrl - and what about node effects???
     if ( node->IsVisible() )
@@ -47,15 +44,10 @@ void    NodeRenderLogic::RenderAudio       ( SceneNode * node, audio::AudioRende
         auto nodeAudio = node->GetAudio();
 
         if( nodeAudio )
-        {
-            audio->Proccess( nodeAudio );
-            audioEntities.insert( nodeAudio );
-        }
+            audio->Proccess( nodeAudio, arcd );
 
         for( unsigned int i = 0; i < ( UInt32 )node->NumChildNodes(); ++i )
-        {
-            RenderAudio( node->GetChild( i ), audio, audioEntities );
-        }
+            RenderAudio( node->GetChild( i ), audio, arcd );
     }
 }
 
@@ -147,8 +139,9 @@ void     NodeRenderLogic::RenderImpl      ( SceneNode * node, RenderContext * ct
     }
     else 
     {
+        NodeRenderLogic::RenderRoot( node->GetRepr(), ctx );
         // FIXME: nrl - transition implementations
-        assert( false );
+        // assert( false );
     }
 }
 

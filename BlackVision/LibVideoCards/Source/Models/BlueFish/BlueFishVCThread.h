@@ -8,7 +8,7 @@
 #include "Threading/StoppableThread.h"
 #include "DataTypes/QueueConcurrentLimited.h"
 
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 #include "Channel.h"
 
 #include <boost/circular_buffer.hpp>
@@ -25,6 +25,8 @@ class BlueFishVCThread : public StoppableThread
 	boost::circular_buffer< MemoryChunkPtr > m_outputFramesBuffer;
 
 	FrameQueue					m_frameQueue;
+
+    MemoryChunkPtr              m_prevAudioData;
 
 	bool						m_odd;
     bool						m_interlaceEnabled;

@@ -22,10 +22,11 @@ private:
     float           m_alpha;
     int             m_maskIdx;
     int             m_fgIdx;
+    bool            m_isPreview;
 
 public:
 
-				                    NodeMaskPreFSEStep     ( IValuePtr alphaVal, float minAlphaThreshold );
+				                    NodeMaskPreFSEStep     ( IValuePtr alphaVal, IValuePtr maskPreviewVal, float minAlphaThreshold );
 
     virtual unsigned int            GetNumOutputs           () const override;
 
@@ -45,6 +46,7 @@ private:
     float                           GetAlpha                () const;
     int                             GetMaskIdx              () const;
     int                             GetFgIdx                () const;
+    bool                            GetIsPreview            () const;
 
 };
 

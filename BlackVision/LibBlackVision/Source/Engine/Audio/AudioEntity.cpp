@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "AudioEntity.h"
-#include "Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
 
 
 namespace bv { namespace audio {
@@ -82,7 +82,7 @@ void                        AudioEntity::PushData       ( MemoryChunkConstPtr da
 
 // ***********************
 //
-AudioEntity::AudioBufferVec AudioEntity::PopData        ()
+AudioBufferVec AudioEntity::PopData        ()
 {
     AudioBufferVec buffers;
 

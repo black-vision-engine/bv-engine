@@ -1,6 +1,6 @@
 #include "ProjectManagerImpl.h"
 
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
@@ -757,9 +757,9 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     // --- mesh ---
     StringVector meshExts;
-    meshExts.push_back( ".*\\.[oO][bB][jJ]" );
-    meshExts.push_back( ".*\\.[fF][bB][xX]" );
-    meshExts.push_back( ".*\\.[dD][aA][eE]" );
+    meshExts.push_back( ".*\\.obj" );
+    meshExts.push_back( ".*\\.fbx" );
+    meshExts.push_back( ".*\\.dae" );
 
     auto maa = MeshAssetAccessor::Create( GetRootDir() / "meshes", meshExts );
     RegisterCategory( AssetCategory::Create( "meshes", maa ) );

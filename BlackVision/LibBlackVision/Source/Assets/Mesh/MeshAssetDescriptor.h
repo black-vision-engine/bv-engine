@@ -22,6 +22,10 @@ private:
     std::string                         m_groupName;
     bool                                m_recursive;
     
+    mutable std::string                 m_key;
+
+private:
+
     explicit							MeshAssetDesc	    ( const std::string & path, const std::string & groupName, bool recursive );
 
 protected:
@@ -49,6 +53,10 @@ public:
 
     static const std::string &			UID					();
 
+
+private:
+
+    std::string                         ComputeKey          () const;
 };
 
 // ***********************

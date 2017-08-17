@@ -3,7 +3,7 @@
 #include "FFmpegStreamDecoder.h"
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/Demuxer/FFmpegDemuxer.h"
 
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+#include "Util/FFmpeg/FFmpegUtils.h"
 
 
 namespace bv {
@@ -129,11 +129,6 @@ bool			    FFmpegStreamDecoder::ProcessPacket      ( bool block )
         if( DecodePacket( packet->GetAVPacket() ) )
         {
             auto data = ConvertFrame();
-
-			if( !data.frameData )
-			{
-				data.frameData = data.frameData;
-			}
 
             m_bufferQueue.WaitAndPush( data );
 
@@ -293,11 +288,11 @@ bool				FFmpegStreamDecoder::NextDataReady      ( UInt64 time, bool block )
 			//	<< m_outQueue.Size();
 			
 			{	// Removing to old frames from the out queue. (older than 150 miliseconds are removed)
-				AVMediaData data;
+				AVMediaData oldData;
 
                 auto s = m_outQueue.Size();
 
-				m_outQueue.TryPopUntil( data, [ = ] ( const AVMediaData & avm )
+				m_outQueue.TryPopUntil( oldData, [ = ] ( const AVMediaData & avm )
 				{
 					return avm.framePTS + 100 < time;
 				} );

@@ -8,7 +8,7 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
 
 
 namespace bv { namespace model {

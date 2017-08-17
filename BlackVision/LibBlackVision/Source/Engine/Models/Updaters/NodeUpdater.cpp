@@ -7,7 +7,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 #include "Engine/Models/ModelState.h"
-
+#include "Engine/Models/NodeEffects/ModelNodeEffect.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -173,9 +173,23 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
         if( sceneNodeEffect )
         {
-            for( auto & val : nodeEffect->GetValues() )
+            if( nodeEffect->IsEnabled() )
             {
-                UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+                m_sceneNode->EnableNodeEffect();
+
+                for( auto & val : nodeEffect->GetValues() )
+                {
+                    auto vSrc = sceneNodeEffect->GetValue( val->GetName() );
+                    if( vSrc )
+                        UpdateValue( val, vSrc );
+                    else if( val->GetName() != model::ModelNodeEffect::EFFECT_ENABLED_PARAM_NAME )
+                        LOG_MESSAGE( SeverityLevel::warning ) << "Cannot find value [" << val->GetName() << "] in effect state.";
+                        
+                }
+            }
+            else
+            {
+                m_sceneNode->DisableNodeEffect();
             }
         }
         else

@@ -2,8 +2,6 @@
 
 #include "ModelSpotLight.h"
 
-#include <glm/gtx/euler_angles.hpp>
-
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Types/Values/ValuesFactory.h"
 

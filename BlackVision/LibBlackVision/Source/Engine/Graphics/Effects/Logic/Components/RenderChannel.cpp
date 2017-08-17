@@ -119,9 +119,16 @@ void                    RenderChannel::InvalidateCachedTexture          () const
 
 // **************************
 //
-std::set< const audio::AudioEntity * > & RenderChannel::AccessRenderChannelAudioEntities() const
+audio::AudioRenderChannelData & RenderChannel::GetAudioRenderChannelData()
 {
-    return m_renderChannelAudioEntities;
+    return m_audioRenderChannelData;
+}
+
+// **************************
+//
+const audio::AudioRenderChannelData & RenderChannel::GetAudioRenderChannelData() const
+{
+    return m_audioRenderChannelData;
 }
 
 } //bv

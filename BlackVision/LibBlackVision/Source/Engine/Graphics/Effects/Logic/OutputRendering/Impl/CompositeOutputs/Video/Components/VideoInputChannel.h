@@ -18,8 +18,6 @@ protected:
     
     mutable bool            m_lastFrameHadAudio;
 
-    // MemoryChunkPtr          m_audioData;
-
 protected:
 
                                 VideoInputChannel           ( const RenderChannel * wrappedChannel );

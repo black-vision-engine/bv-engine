@@ -24,7 +24,7 @@
 //
 //#include "Engine/Graphics/Renderers/Renderer.h"
 //
-//#include "gtest/gtest.h"
+#include "gtest/gtest.h"
 //
 //#include <windows.h>
 //
@@ -42,11 +42,11 @@
 //
 //}//bv
 //
-//int main( int argc, char **argv )
-//{
-//	::testing::InitGoogleTest( &argc, argv );
-//
-//	return RUN_ALL_TESTS();
-//}
-//
-//// enable intrinsic functions - w konfiguracji Common (dla Release na true)
+int main( int argc, char **argv )
+{
+	::testing::InitGoogleTest( &argc, argv );
+
+	return RUN_ALL_TESTS();
+}
+
+// enable intrinsic functions - w konfiguracji Common (dla Release na true)

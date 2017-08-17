@@ -1,10 +1,7 @@
 #include "stdafx.h"
 
 #include "ModelDirectionalLight.h"
-
-#include <glm/gtx/euler_angles.hpp>
-
-
+#include "Mathematics/glm_inc.h"
 
 
 #include "Memory/MemoryLeaks.h"

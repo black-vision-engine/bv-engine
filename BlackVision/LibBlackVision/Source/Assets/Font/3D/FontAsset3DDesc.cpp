@@ -114,7 +114,17 @@ const std::wstring &    FontAsset3DDesc::GetAtlasCharSetFile () const
 
 // ***********************
 //
-std::string             FontAsset3DDesc::GetKey		() const
+std::string	            FontAsset3DDesc::GetKey	() const
+{
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+// ***********************
+//
+std::string             FontAsset3DDesc::ComputeKey		() const
 {
     return m_fontFileName + "_" +
         std::to_string( Path::GetTimestamp( ProjectManager::GetInstance()->ToAbsPath( m_fontFileName ) ) ) + "_" +

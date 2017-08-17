@@ -2,7 +2,7 @@
 
 #include "Arrange.h"
 
-#include <glm/gtx/euler_angles.hpp>
+#include "Mathematics/glm_inc.h"
 
 #include "Engine/Models/BasicNode.h"
 

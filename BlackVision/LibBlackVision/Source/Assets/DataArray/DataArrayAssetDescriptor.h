@@ -23,6 +23,8 @@ private:
     std::vector< std::string >          m_rows;
     std::vector< ModelParamType >       m_rowTypes;
 
+    mutable std::string                 m_key;
+
 public:
     virtual void                        Serialize           ( ISerializer& ser ) const;
     virtual void                        Deserialize         ( const IDeserializer& deser );
@@ -51,6 +53,9 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 private:
+
+    std::string                         ComputeKey          () const;
+
     DataArrayAssetDescriptor    ( std::vector< std::string > && rowNames, std::vector< std::string > && rows, std::vector< ModelParamType > && types );
 };
 

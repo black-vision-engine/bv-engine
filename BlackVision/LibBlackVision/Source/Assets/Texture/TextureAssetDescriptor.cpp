@@ -172,6 +172,7 @@ const std::string & TextureAssetDesc::UID()
     return TextureAssetDesc::uid;
 }
 
+
 // ***********************
 //
 bool TextureAssetDesc::IsCacheable() const
@@ -194,7 +195,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
     if( !props.error.empty() )
     {
-        return nullptr;
+        // Return descriptor pointing to invalid texture. Extern code will deal with it.
+        return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ) );
     }
 
     return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ) );
@@ -208,7 +210,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
     if( !props.error.empty() )
     {
-        return nullptr;
+        // Return descriptor pointing to invalid texture. Extern code will deal with it.
+        return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ), mmFilter );
     }
 
     return Create( SingleTextureAssetDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmFilter );
@@ -222,7 +225,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
     if( !props.error.empty() )
     {
-        return nullptr;
+        // Return descriptor pointing to invalid texture. Extern code will deal with it.
+        return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ) );
     }
 
     std::vector< SingleTextureAssetDescConstPtr > mmDescs;
@@ -233,7 +237,8 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 
         if( !mmProps.error.empty() )
         {
-            return nullptr;
+            // Return descriptor pointing to invalid texture. Extern code will deal with it.
+            return Create( SingleTextureAssetDesc::Create( imageFilePath, 0, 0, TextureFormat::F_A8R8G8B8, isCacheable ) );
         }
 
         mmDescs.push_back( SingleTextureAssetDesc::Create( mmFilePath, mmProps.width, mmProps.height, EnumsUtils::Convert( mmProps.format ), isCacheable ) );
@@ -311,26 +316,37 @@ TextureAssetLoadingType TextureAssetDesc::GetLoadingType() const
 //
 std::string				TextureAssetDesc::GetKey		() const
 {
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+
+// ***********************
+//
+std::string         TextureAssetDesc::ComputeKey() const
+{
     switch( GetLoadingType() )
     {
-        case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
-            return this->GetOrigTextureDesc()->GetKey();
-        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
-            return this->GetOrigTextureDesc()->GetKey() + "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
-        case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
-        {
-            auto ret = this->GetOrigTextureDesc()->GetKey();
+    case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+        return this->GetOrigTextureDesc()->GetKey();
+    case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+        return this->GetOrigTextureDesc()->GetKey() + "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( ( int )this->GetMipMapsDesc()->GetFilter() );
+    case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+    {
+        auto ret = this->GetOrigTextureDesc()->GetKey();
 
-            for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
-                ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
+        for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
+            ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
 
-            ret += "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+        ret += "ML" + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + "MF" + toString( ( int )this->GetMipMapsDesc()->GetFilter() );
 
-            return ret;
-        }
-        default:
-            assert( !"Imposible enum value" );
-            return "";
+        return ret;
+    }
+    default:
+        assert( !"Imposible enum value" );
+        return "";
     }
 }
 

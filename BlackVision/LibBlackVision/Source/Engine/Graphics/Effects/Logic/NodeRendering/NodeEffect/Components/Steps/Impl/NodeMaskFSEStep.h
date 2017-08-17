@@ -15,7 +15,7 @@ private:
 
 private:
 
-    FullscreenEffect * m_blitAlphaMaskEffect;
+    FullscreenEffect *  m_blitAlphaMaskEffect;
 
     float               m_minThreshold;
 
@@ -43,6 +43,7 @@ public:
 private:
 
     float                           GetAlpha                () const;
+    bool                            IsPreview               () const;
 
 };
 

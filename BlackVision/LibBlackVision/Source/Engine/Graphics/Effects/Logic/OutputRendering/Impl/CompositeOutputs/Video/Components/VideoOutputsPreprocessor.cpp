@@ -2,7 +2,8 @@
 
 #include "VideoOutputsPreprocessor.h"
 
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
+#include "Engine/Audio/Resources/AudioMixer.h"
 #include "Assets/Texture/TextureUtils.h"
 
 #include "Services/BVServiceProvider.h"
@@ -23,6 +24,14 @@ VideoOutputsPreprocessor::VideoOutputsPreprocessor()
     : m_initialized( false )
     , m_lcmFPS( 0 )
 {}
+
+// *********************************
+//
+VideoOutputsPreprocessor::~VideoOutputsPreprocessor   ()
+{
+    for( auto it = m_audioMixers.begin(); it != m_audioMixers.end(); ++it )
+        delete it->second;
+}
 
 // *********************************
 //
@@ -97,8 +106,16 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     auto videoFrame = vic->ReadColorTexture( ctx );
     avFrame->m_videoData = videoFrame->GetData();
 
-    auto audio = audio_renderer( ctx );
-	auto ret = audio->GetBufferedData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ), vic->GetWrappedChannel()->AccessRenderChannelAudioEntities() );
+    if( m_audioMixers.find( vic ) == m_audioMixers.end() )
+        m_audioMixers[ vic ] = new audio::AudioMixer();
+
+    m_audioMixers[ vic ]->ResizeSources( vic->GetWrappedChannel()->GetAudioRenderChannelData().NumSources() );   
+
+    for( SizeType i = 0; i < vic->GetWrappedChannel()->GetAudioRenderChannelData().NumSources(); ++i )
+        m_audioMixers[ vic ]->PushData( i, vic->GetWrappedChannel()->GetAudioRenderChannelData().GetData( i ) );
+
+    m_audioMixers[ vic ]->SetGain( audio_renderer( ctx )->Gain() );
+    m_audioMixers[ vic ]->PopAndMixAudioData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ) );
 
     return avFrame;
 }
@@ -116,7 +133,7 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         auto vic = m_inputChannels.GetVideoInputChannelAt( i );
         assert( vic->IsActive() );
 
-        videocards::AVFrameDescriptor desc;
+        AVFrameDescriptor desc;
 
         desc.width = vic->GetWidth();
         desc.height = vic->GetHeight();
@@ -124,24 +141,19 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         desc.channels = audio->GetChannels();
         desc.sampleRate = audio->GetFrequency() / m_lcmFPS;
 
-        // FIXME: values are hardcoded.
-        desc.fieldModeEnabled = true;
-        desc.timeCodePresent = true;
-        desc.autoGenerateTimecode = true;
-
         m_avFramesBuffer[ vic ] = boost::circular_buffer< AVFramePtr >( BUFFER_SIZE );
 
-        for( SizeType i = 0; i < BUFFER_SIZE; ++i )
+        for( SizeType j = 0; j < BUFFER_SIZE; ++j )
         {
-            auto avFrame = videocards::AVFrame::Create();
+            auto avFrame = AVFrame::Create();
             avFrame->m_audioData = MemoryChunk::Create( audioFrameSize );
             avFrame->m_desc = desc;
 
-            // FIXME: values are hardcoded.
-            avFrame->m_TimeCode.h = 10;
-            avFrame->m_TimeCode.m = 22;
-            avFrame->m_TimeCode.s = 33;
-            avFrame->m_TimeCode.frame = 12;
+            // FIXME: values are hardcoded.  // FIXME: https://www.pivotaltracker.com/story/show/147188539
+            //avFrame->m_TimeCode.h = 10;
+            //avFrame->m_TimeCode.m = 22;
+            //avFrame->m_TimeCode.s = 33;
+            //avFrame->m_TimeCode.frame = 12;
 
             m_avFramesBuffer[ vic ].push_back( avFrame );
         }

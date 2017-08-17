@@ -69,7 +69,7 @@ IValuePtr   FullscreenEffectPass::GetValue             ( const std::string & nam
 {
     IValuePtr res = m_preFullscreenStep->GetState()->GetValue( name );
 
-    if ( !res )
+    if ( !res &&  m_fullscreenStep->GetState() )
     {
         res = m_fullscreenStep->GetState()->GetValue( name );
     }

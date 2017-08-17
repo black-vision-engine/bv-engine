@@ -412,8 +412,14 @@
     <Filter Include="Engine\Models\NodeLogics\Cloner">
       <UniqueIdentifier>{2389fef9-ffdf-4a95-bca5-3884dee9e704}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\NodeLogics\NodeVisibilityAnimation">
+      <UniqueIdentifier>{ea278f64-cd67-4099-9ebb-61da1719ceb3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Models\Plugins\Simple\SpecialPlugins">
       <UniqueIdentifier>{686f0cb1-fb84-468e-9b36-fbd20c656a01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
+      <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1561,9 +1567,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.cpp">
-      <Filter>Engine\Audio\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
@@ -1592,12 +1595,6 @@
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.cpp">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.cpp">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AVStream\AVAsset.cpp">
@@ -1960,9 +1957,27 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.cpp">
+      <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp">
+      <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4752,9 +4767,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamBool.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.h">
-      <Filter>Engine\Audio\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
@@ -4789,15 +4801,6 @@
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegDef.h">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.h">
-      <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.h">
       <Filter>Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AVStream\AVAsset.h">
@@ -5172,8 +5175,32 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h">
       <Filter>Engine\Models\NodeLogics\Cloner</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.h">
+      <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h">
+      <Filter>Engine\Events\InnerEvents\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\IConfig.h">
+      <Filter>Engine\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.h">
+      <Filter>Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
+      <Filter>Engine\Models\Plugins\Simple\TextPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h">
+      <Filter>Engine\Audio\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

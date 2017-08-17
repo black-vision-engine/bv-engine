@@ -2,14 +2,7 @@
 
 #include <string>
 
-// Disable warning C4201: nonstandard extension used : nameless struct/union
-#pragma warning(push)
-#pragma warning(disable : 4201)
-
-#include <glm/glm.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-#pragma warning(pop)
-
+#include "Mathematics/glm_inc.h"
 #include "BVGL.h"
 
 #include "CoreDEF.h"

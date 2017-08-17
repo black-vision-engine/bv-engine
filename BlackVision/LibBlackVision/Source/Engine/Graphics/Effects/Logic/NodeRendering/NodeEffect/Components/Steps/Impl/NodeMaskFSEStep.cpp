@@ -26,7 +26,13 @@ NodeMaskFSEStep::NodeMaskFSEStep          ( float minAlphaThreshold )
 {
     // FIXME: maybe one class is enough as we only use FullscreenEffectType type here and always set FSE state as current state
     m_blitAlphaMaskEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_BLIT_WITH_ALPHA_MASK );
-    SetState( m_blitAlphaMaskEffect->GetState() );
+
+    auto state = std::make_shared< RenderComponentState >();
+    state->AppendValue( m_blitAlphaMaskEffect->GetState()->GetValue( "alpha" ) );
+    state->AppendValue( m_blitAlphaMaskEffect->GetState()->GetValue( "maskChannelIdx" ) );
+    state->AppendValue( ValuesFactory::CreateValue< bool >( "maskPreview", false ) );
+
+    Parent::SetState( state );
 }
 
 // **************************
@@ -96,11 +102,22 @@ void                NodeMaskFSEStep::AppendRenderPasses_DIRTY_HACK   ( std::set<
 //
 float                   NodeMaskFSEStep::GetAlpha                     () const
 {
-    auto val = GetState()->GetValueAt( 1 );
+    auto val = GetState()->GetValueAt( 0 );
 
     assert( val->GetName() == "alpha" );
 
     return QueryTypedValue< ValueFloatPtr >( val )->GetValue();
+}
+
+// ***********************
+//
+bool                    NodeMaskFSEStep::IsPreview                      () const
+{
+    auto val = GetState()->GetValueAt( 2 );
+
+    assert( val->GetName() == "maskPreview" );
+
+    return QueryTypedValue< ValueBoolPtr >( val )->GetValue();
 }
 
 

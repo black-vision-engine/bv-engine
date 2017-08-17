@@ -11,7 +11,7 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/Simple/ShaderPlugins/BlendHelper.h"
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
 
 
 namespace bv { namespace model {

@@ -133,6 +133,13 @@ bool                            DefaultEnvironmentTexturePlugin::LoadResource  (
     {
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvironmentTexturePluginDesc::TextureName() );
 
+        // If texture doesn't exists, read fallback texture. 
+        if( txDesc == nullptr )
+        {
+            txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
+            txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvironmentTexturePluginDesc::TextureName() );
+        }
+
         if( txDesc != nullptr )
         {
             auto txData = m_pixelShaderChannel->GetTexturesDataImpl();

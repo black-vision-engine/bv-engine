@@ -22,6 +22,7 @@ public:
     virtual const char *        GetData         ()  const = 0;
     virtual SizeType            GetSize         ()  const = 0;
     virtual const std::string & GetName         ()  const = 0;  
+    virtual void                SetName         ( const std::string & ) = 0;
 
     virtual VoidPtr             QueryValueTyped () = 0;
 	virtual void *				QueryThis		() = 0;

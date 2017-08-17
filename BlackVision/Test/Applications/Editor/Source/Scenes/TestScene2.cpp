@@ -26,6 +26,8 @@
 
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 
+#include "UnitTest++.h"
+
 
 namespace bv {
 
@@ -54,7 +56,7 @@ void					TestScene::InitBasicColorPluginTest	()
         editor->AddChildNode( scene, col, rChild );
         success &= ( col->GetNumChildren() == 2 );
 
-        assert( success ); { success; }
+        CHECK( success ); { success; }
     };
 
     m_testSteps.push_back( add );
@@ -117,7 +119,7 @@ void					TestScene::InitOrderColorPluginTest	()
         editor->AddChildNode( scene, col, rChild );
         success &= ( col->GetNumChildren() == 2 );
         
-        assert( success );
+        CHECK( success );
     };
 
     for( auto & test : tests )
@@ -165,7 +167,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 
         success &= ( tex->GetNumChildren() == 2 );
         
-        assert( success );
+        CHECK( success );
     };
 
     m_testSteps.push_back( add0 );
@@ -203,7 +205,7 @@ void					TestScene::InitBasicTexturePluginTest	()
         success &= ( fm0 == ( int )TextureFilteringMode::TFM_POINT );
         success &= ( fm0 == fm1 );
 
-        assert( success );
+        CHECK( success );
     } );
     m_testSteps.push_back( [&]{} );
     m_testSteps.push_back( [&]
@@ -273,7 +275,7 @@ void					TestScene::InitOrderTexturePluginTest	()
         editor->AddChildNode( scene, tex, rChild );
         success &= ( tex->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     for( auto & test : tests )
@@ -324,7 +326,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 
         success &= ( anim->GetNumChildren() == 2 );
         
-        assert( success );
+        CHECK( success );
     };
 
     m_testSteps.push_back( add0 );
@@ -409,7 +411,7 @@ void					TestScene::InitOrderAnimationPluginTest	()
         editor->AddChildNode( scene, anim, rChild );
         success &= ( anim->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     for( auto & test : tests )
@@ -448,7 +450,7 @@ void					TestScene::InitBasicGradientPluginTest	()
 
         success &= ( grad->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     m_testSteps.push_back( add );
@@ -522,7 +524,7 @@ void					TestScene::InitOrderGradientPluginTest	()
         editor->AddChildNode( scene, grad, rChild );
         success &= ( grad->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     for( auto & test : tests )
@@ -573,7 +575,7 @@ void					TestScene::InitColoredTextTest			()
 
         success &= ( txt->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     std::string test0[] = { "text", "alpha_mask" };
@@ -622,7 +624,7 @@ void					TestScene::InitColoredTextTest			()
         editor->AddChildNode( scene, txt, rChild );
         success &= ( txt->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
 
@@ -712,7 +714,7 @@ void					TestScene::InitGradientTextTest			()
 
         success &= ( txt->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     std::string test0[] = { "text", "alpha_mask" };
@@ -760,7 +762,7 @@ void					TestScene::InitGradientTextTest			()
         editor->AddChildNode( scene, txt, rChild );
         success &= ( txt->GetNumChildren() == 2 );
         
-        assert( success );
+        CHECK( success );
     };
 
 
@@ -808,7 +810,7 @@ void					TestScene::InitColoredTimerTest			()
 
         success &= ( tmr->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     std::string test0[] = { "timer", "alpha_mask" };
@@ -857,7 +859,7 @@ void					TestScene::InitColoredTimerTest			()
         editor->AddChildNode( scene, tmr, rChild );
         success &= ( tmr->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
 
@@ -960,7 +962,7 @@ void					TestScene::InitGradientTimerTest			()
 
         success &= ( tmr->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
     std::string test0[] = { "linear_gradient", "timer" };
@@ -1009,7 +1011,7 @@ void					TestScene::InitGradientTimerTest			()
         editor->AddChildNode( scene, tmr, rChild );
         success &= ( tmr->GetNumChildren() == 2 );
 
-        assert( success );
+        CHECK( success );
     };
 
 
@@ -1556,7 +1558,7 @@ void					TestScene::InitOrderTest			( const OrderTestCase & testCase )
             success &= ( editor->DeletePlugin( child, plugin ).first == nullptr );
             success &= ( child->GetPlugin( plugin ) == nullptr );
 
-            assert( success );
+            CHECK( success );
         });
     }
 }
@@ -1585,7 +1587,7 @@ void					TestScene::SwapPlugins			( const std::string & rootPlugin, UInt32 rootI
 
     success &= editor->AddPlugin( root, editor->GetDetachedPlugin( child ), rootIdx );
 
-    assert( success );
+    CHECK( success );
 }
 
 // ****************************
@@ -1626,7 +1628,7 @@ void                    TestScene::Wait                     ( UInt32 sec )
 
 // ****************************
 //
-void					TestScene::TestEditor				( TimeType time )
+bool					TestScene::TestEditor				( TimeType time )
 {
     auto step = ( Int32 )std::floor( TestSceneUtils::SPEED * time );
     
@@ -1636,6 +1638,11 @@ void					TestScene::TestEditor				( TimeType time )
     }
     
     m_lastStep = step;
+
+    if( step - m_stepOffset >= ( Int32 )m_testSteps.size() )
+        return true;
+    return false;
+
 }
 
 } // bv

@@ -13,9 +13,9 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\_Builds\x64-v110-Debug\DevTools\RegressionTesterLib\</OutputPath>
-    <BaseIntermediateOutputPath>..\..\_Temp\x64-v110-Debug\DevTools\RegressionTesterLib\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>..\..\_Temp\x64-v110-Debug\DevTools\RegressionTesterLib\</IntermediateOutputPath>
+    <OutputPath>..\..\_Builds\x64-v140-Debug\DevTools\RegressionTesterLib\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\_Temp\x64-v140-Debug\DevTools\RegressionTesterLib\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>..\..\_Temp\x64-v140-Debug\DevTools\RegressionTesterLib\</IntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,9 +25,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\_Builds\x64-v110-Release\DevTools\RegressionTesterLib\</OutputPath>
-    <BaseIntermediateOutputPath>..\..\_Temp\x64-v110-Release\DevTools\RegressionTesterLib\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>..\..\_Temp\x64-v110-Release\DevTools\RegressionTesterLib\</IntermediateOutputPath>
+    <OutputPath>..\..\_Builds\x64-v140-Release\DevTools\RegressionTesterLib\</OutputPath>
+    <BaseIntermediateOutputPath>..\..\_Temp\x64-v140-Release\DevTools\RegressionTesterLib\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>..\..\_Temp\x64-v140-Release\DevTools\RegressionTesterLib\</IntermediateOutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>

@@ -4,7 +4,7 @@
 
 #include <random>
 #include <iomanip>
-#include <glm/gtx/rotate_vector.hpp>
+#include "Mathematics/glm_inc.h"
 
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Engine/Models/NodeLogics/NodeLogicHelper.h"
@@ -19,7 +19,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Tools/StringHeplers.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 namespace bv {

@@ -2,9 +2,7 @@
 
 #include "Camera.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
-
+#include "Mathematics/glm_inc.h"
 
 
 #include "Memory/MemoryLeaks.h"

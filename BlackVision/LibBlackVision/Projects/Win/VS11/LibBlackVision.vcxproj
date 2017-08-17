@@ -102,6 +102,8 @@
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalOptions>/Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;%(PreprocessorDefinitions);BV_TESTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ThirdPartyDir)/unittest-cpp/include;$(BOOST_INC);$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml;$(ThirdPartyDir)\jsoncpp\include;$(ThirdPartyDir)\FFmpeg\include;$(ThirdPartyDir)\gtest\Include;$(ThirdPartyDir)\FBX\include;$(ThirdPartyDir)\OpenAL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -123,6 +125,11 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp" />
@@ -135,6 +142,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.cpp" />
@@ -215,7 +223,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioBuffer.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.cpp" />
@@ -530,8 +537,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultLineChartPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultMeshPlugin.cpp" />
@@ -575,6 +580,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp" />
@@ -621,6 +631,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
+    <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\IConfig.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.h" />
@@ -634,6 +649,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\IReplicationModifier.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\ShiftReplicationModifier.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\PieChart\PieChart.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\Scroller.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\Scroller\ScrollerNodesStates.h" />
@@ -797,7 +813,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrOALConstants.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\OALRenderer\PdrSource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioBuffer.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\CommonEventsStrings.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHandlerHelpers.h" />
@@ -1116,9 +1131,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\Demuxer\FFmpegDemuxerThread.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegAVDecoder.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegDef.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegPacket.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\FFmpeg\FFmpegUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDecoder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\AVStreamDecoder\Interfaces\IAVDefs.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h" />

@@ -5,7 +5,7 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/AssetTracker.h"
+#include "Engine/Editors/AssetsLoading/AssetTracker.h"
 
 
 namespace bv { namespace model {

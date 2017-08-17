@@ -2,23 +2,73 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup>
+    <CustomBuildAfterTargets>BscMake</CustomBuildAfterTargets>
+  </PropertyGroup>
   <ItemDefinitionGroup>
-    <PostBuildEvent>
-      <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\zlib\bin\$(PlatformName)\*.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\FBX\lib\$(PlatformName)\*.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName)\*.dll $(OutDir) /c /y
-mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
-xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
-xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\dvp.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueVelvet.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueHancUtils.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration)\BlueGpuDirect.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\Rockey\$(PlatformName)\Rockey2.dll $(OutDir) /c /y</Command>
-      <Message>Copying required dll files.</Message>
-    </PostBuildEvent>
+    <PostBuildEvent />
+    <CustomBuildStep>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"> Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FBX\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName) $(OutDir) dvp.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueVelvet_d.dll /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueHancUtils.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueGpuDirect_d.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\Rockey\$(PlatformName) $(OutDir) Rockey2.dll  /njh /njs /ndl /xx
+EXIT 0
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FBX\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName) $(OutDir) dvp.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueVelvet.dll /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueHancUtils.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueGpuDirect.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\Rockey\$(PlatformName) $(OutDir) Rockey2.dll  /njh /njs /ndl /xx
+EXIT 0</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FBX\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName) $(OutDir) dvp.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueVelvet64_d.dll /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueHancUtils64_d.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueGpuDirect64_d.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\Rockey\$(PlatformName) $(OutDir) Rockey2.dll  /njh /njs /ndl /xx
+EXIT 0
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Robocopy $(AssetsDir) $(OutDir)/Assets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestAssetsDir) $(OutDir)/TestAssets /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(TestConfigsDir) $(OutDir)/TestConfigs /MIR /FFT /Z /XA:H /W:5 /njh /njs /ndl
+Robocopy $(ThirdPartyDir)\FreeImage\Dist\msvc-14\$(PlatformName) $(OutDir) FreeImage.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\zlib\bin\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\FBX\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\OpenAL\lib\$(PlatformName) $(OutDir) *.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName) $(OutDir) dvp.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueVelvet64.dll /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueHancUtils64.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\VideoCards\BlueFish\Bin\$(PlatformName)\$(Configuration) $(OutDir) BlueGpuDirect64.dll  /njh /njs /ndl /xx
+Robocopy $(ThirdPartyDir)\Rockey\$(PlatformName) $(OutDir) Rockey2.dll  /njh /njs /ndl /xx
+EXIT 0
+</Command>
+      <Outputs>non-exitent.file</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

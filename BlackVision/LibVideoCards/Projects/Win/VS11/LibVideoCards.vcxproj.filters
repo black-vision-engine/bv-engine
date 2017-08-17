@@ -58,7 +58,6 @@
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
-    <ClInclude Include="..\..\..\Source\AVFrame.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
@@ -106,7 +105,6 @@
       <Filter>Models\BlackMagic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
-    <ClCompile Include="..\..\..\Source\AVFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp">
       <Filter>Models\BlackMagic</Filter>
     </ClCompile>

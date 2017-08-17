@@ -25,6 +25,8 @@ public:
     struct Config
     {
         std::string     texture2DPath;
+        std::string     texture2DTransparentPath;
+        std::string     texture2DFallbackPath;
 
         std::string     fontName;
         UInt32          fontSize;
@@ -34,6 +36,13 @@ public:
 
         std::string     videoStreamPath;
         TextureFormat   videoStreamFormat;
+    };
+
+    enum class Tex2DFallback
+    {
+        None,
+        Checker,
+        Transparent
     };
 
 private:
@@ -48,7 +57,16 @@ public:
     
     template< typename AssetDescType >
     inline std::shared_ptr< const AssetDescType >   GetDefaultDesc   ();
-    
+
+    template< typename AssetDescType >
+    inline std::shared_ptr< const AssetDescType >   GetFallbackDesc  ();
+
+public:
+
+    void                InitTex2DFallback       ( Tex2DFallback fallback );
+
+
+
     static DefaultAssets &                          Instance    ();
 
 };

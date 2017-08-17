@@ -25,6 +25,8 @@ protected:
 
 public:
 
+    static std::string                  EFFECT_ENABLED_PARAM_NAME;
+
                                         ModelNodeEffect     ( NodeEffectType type );
                                         ModelNodeEffect     ( NodeEffectType type, DefaultParamValModelPtr model );
                                         ~ModelNodeEffect    ();
@@ -46,12 +48,12 @@ public:
     virtual const std::vector< IParameterPtr > &    GetParameters       () const override;
     virtual const std::vector< IValueConstPtr > &   GetValues           () const override;
 
+    virtual bool                                    IsEnabled           () const override;
 
     static ModelNodeEffectPtr						Create              ( NodeEffectType type );
     static ModelNodeEffectPtr						Create              ( NodeEffectType type, DefaultParamValModelPtr model );
     static ISerializablePtr							Create              ( const IDeserializer & doc );
     static ModelNodeEffectPtr						CreateTyped 		( const IDeserializer & deser );
-
 };
 
 } // model

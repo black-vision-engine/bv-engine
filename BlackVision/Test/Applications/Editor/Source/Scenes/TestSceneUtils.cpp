@@ -29,6 +29,12 @@ const UInt32		TestSceneUtils::GEOM_PLUGINS_NUM = 16;
 const std::string	TestSceneUtils::PluginsArr[] = { "DEFAULT_TRIANGLE", "DEFAULT_CIRCLE", "DEFAULT_ELLIPSE", "DEFAULT_ROUNDEDRECT", "DEFAULT_CUBE", "DEFAULT_SIMPLE_CUBE", "DEFAULT_SPHERE", "DEFAULT_GEOSPHERE", "DEFAULT_CYLINDER", "DEFAULT_CONE", "DEFAULT_TORUS", "DEFAULT_SPRING", "DEFAULT_COGWHEEL", "DEFAULT_PIECHART", "DEFAULT_PRISM", "DEFAULT_RECTANGLE" };
 const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "ellipse", "rounded rect", "cube", "simple cube", "sphere", "sphere", "cylinder", "cone", "torus", "spring", "cog wheel", "piechart", "prism", "rectangle" };
 
+
+
+const std::string       FakeConfig::EmptyString = "";
+const FakeConfig        FakeConfig::Config;
+
+
 // ****************************
 //
 void	                TestSceneUtils::AddColoredRectangleScene	( BVProjectEditor * editor, const std::string & name, glm::vec4 color, glm::vec3 transform )
@@ -571,6 +577,13 @@ std::vector< model::IPluginDescriptor * >  TestSceneUtils::DefaultBVPluginDescri
 	descriptors.push_back( new model::DefaultAVDecoderPluginDesc() );
 
     return descriptors;
+}
+
+// ***********************
+//
+const IConfig *         TestSceneUtils::GetConfig()
+{
+    return &FakeConfig::Config;
 }
 
 } // bv

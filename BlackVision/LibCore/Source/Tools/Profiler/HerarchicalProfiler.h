@@ -1,7 +1,5 @@
 #pragma once
 
-#include <winsock2.h>
-#include <windows.h>
 
 #include "CoreDEF.h"
 #include <climits>
@@ -112,7 +110,7 @@ Use macro HPROFILER_SET_FORCED_DISPLAY to do this.
 namespace bv
 {
 
-const int64_t INVALID_TIME = LLONG_MIN;
+const uint64_t INVALID_TIME = std::numeric_limits< uint64_t >::max();
 const std::wstring PROFILER_ENABLE_ARGUMENT_STRING = L"-EnableProfiler";		///<This string should contain main function arguments.
 
 enum class AutoProfileType : int
@@ -134,15 +132,15 @@ struct ProfilerLiveSample
 {
     const char *        name;
    
-    LARGE_INTEGER       timeStart;
-	LARGE_INTEGER		timeEnd;
+    UInt64              timeStart;
+    UInt64      		timeEnd;
     AutoProfileType     type;
 	unsigned int		depth;
 
 	ProfilerLiveSample()
 	{
-		timeStart.QuadPart = INVALID_TIME;
-		timeEnd.QuadPart = INVALID_TIME;
+		timeStart = INVALID_TIME;
+		timeEnd = INVALID_TIME;
 		name = nullptr;
 		depth = 0;
 	}
@@ -198,7 +196,8 @@ public:
     static unsigned int     NumFrames               ( unsigned int threadID );
     static unsigned int     ActiveFrame             ( unsigned int threadID );
 
-    static LARGE_INTEGER		QueryCounterFrequency   ();
+    static UInt64               QueryCounterFrequency   ();
+    static UInt64               QueryCounter            ();
 
 	static CPUThreadSamples*	GetCPUThreadSamples			( unsigned int thread );
 
@@ -240,6 +239,9 @@ inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
 
 } //bv
 
+
+#ifdef ENABLE_HIERARCHICAL_PROFILER
+
 #define HPROFILER_NEW_FRAME( thread )               ::bv::AutoFrameProfile COMBINE(frame_sample_,__LINE__) ( thread )
 
 #define HPROFILER_FUNCTION( name, thread )          ::bv::AutoProfile COMBINE(function_sample_,__LINE__) ( name, ::bv::AutoProfileType::APT_FUNCTION, thread )
@@ -251,5 +253,21 @@ inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
 #define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )	::bv::AutoFrameProfile::SetFramesToShow( n )
 #define HPROFILER_SET_DISPLAY_MODE( mode )			::bv::AutoFrameProfile::SetDisplayMode( mode )
 #define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) ::bv::AutoProfile::SetStatsDisplayWaitMs( millis )
+
+#else
+
+#define HPROFILER_NEW_FRAME( thread )
+
+#define HPROFILER_FUNCTION( name, thread )
+#define HPROFILER_SECTION( name, thread )
+
+#define HPROFILER_SET_FORCED_DISPLAY()
+#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )
+
+#define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )
+#define HPROFILER_SET_DISPLAY_MODE( mode )
+#define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis )
+
+#endif
 
 #include "HerarchicalProfiler.inl"

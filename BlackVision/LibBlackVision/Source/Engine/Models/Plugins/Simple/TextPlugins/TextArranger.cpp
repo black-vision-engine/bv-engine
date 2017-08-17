@@ -2,7 +2,6 @@
 
 #include "TextArranger.h"
 
-#include <glm/gtx/rotate_vector.hpp>
 
 #include "Assets/Font/TextHelper.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"

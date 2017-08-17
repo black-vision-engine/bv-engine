@@ -133,7 +133,8 @@ namespace SerializationHelper
 // ========================================================================= //
 // LoadAssetEvent
 // ========================================================================= //
-const std::string ASSET_DATA_STRING       = "AssetData";
+const std::string ASSET_DATA_STRING         = "AssetData";
+const std::string ASSET_ASYNC_LOAD          = "AsyncLoad";
 
 std::pair< LoadAssetEvent::Command, const char* > LoadAssetMapping[] = 
     { std::make_pair( LoadAssetEvent::Command::LoadAsset, "LoadAsset" )
@@ -531,6 +532,7 @@ std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMappi
     , std::make_pair( EngineStateEvent::Command::CloseApplication, "CloseApplication" )
     , std::make_pair( EngineStateEvent::Command::LockEventQueue, "LockEventQueue" )
 	, std::make_pair( EngineStateEvent::Command::SetGain, "SetGain" )
+    , std::make_pair( EngineStateEvent::Command::OutputCommand, "OutputCommand" )
     , std::make_pair( EngineStateEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
@@ -943,6 +945,7 @@ void                LoadAssetEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+    ser.SetAttribute( SerializationHelper::ASSET_ASYNC_LOAD, SerializationHelper::T2String( AsyncLoad ) );
 
     ser.EnterChild( SerializationHelper::ASSET_DATA_STRING );
     ser.ExitChild();
@@ -959,6 +962,7 @@ IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser 
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->AssetData         = deser.DetachBranch( SerializationHelper::ASSET_DATA_STRING );
+        newEvent->AsyncLoad         = SerializationHelper::String2T< bool >( deser.GetAttribute( SerializationHelper::ASSET_ASYNC_LOAD ), false );
         return newEvent;
     }
     return nullptr;
@@ -1893,6 +1897,7 @@ IEventPtr                EngineStateEvent::Create          ( IDeserializer& dese
         newEvent->NumFrames             = SerializationHelper::String2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_STRING ), 0 );
 		newEvent->Gain					= SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::GAIN_VAL_STRING ), 1.f );
         newEvent->RenderingCommand      = SerializationHelper::String2T<EngineStateEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), EngineStateEvent::Command::Fail );
+        newEvent->Request               = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
     }

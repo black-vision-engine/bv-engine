@@ -160,6 +160,7 @@ public:
     std::string                     SceneName;
     std::string                     PluginName;
     IDeserializer *                 AssetData;
+    bool                            AsyncLoad;
 
 public:
     explicit                        LoadAssetEvent      () { AssetData = nullptr; }
@@ -931,6 +932,7 @@ public:
         CloseApplication,
         LockEventQueue,
 		SetGain,
+        OutputCommand,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -944,7 +946,7 @@ public:
     Command                     RenderingCommand;
 	float						Gain;
 
-    //IDeserializer *             Request;
+    IDeserializer *             Request;
 
 public:
 

@@ -3,7 +3,7 @@
 #include <map>
 
 #include "VideoCardManagerUtils.h"
-#include "AVFrame.h"
+#include "Memory/AVFrame.h"
 
 #define _WINSOCKAPI_
 #include "DeckLinkAPI_h.h"

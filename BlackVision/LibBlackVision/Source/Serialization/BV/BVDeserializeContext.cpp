@@ -3,7 +3,7 @@
 #pragma once
 
 #include "BVDeserializeContext.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Timeline/TimelineManager.h"

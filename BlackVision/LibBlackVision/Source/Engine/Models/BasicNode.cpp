@@ -12,7 +12,7 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
-#include "Engine/Models/ModelNodeEditor.h"
+#include "Engine/Editors/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/SceneModel.h"

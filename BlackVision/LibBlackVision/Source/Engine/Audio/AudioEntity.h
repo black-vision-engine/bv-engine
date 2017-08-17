@@ -10,10 +10,6 @@ namespace bv { namespace audio {
 
 class AudioEntity
 {
-private:
-
-    typedef std::vector< audio::AudioBufferConstPtr > AudioBufferVec;
-
 protected:
 
     Queue< audio::AudioBufferConstPtr > m_audioData;

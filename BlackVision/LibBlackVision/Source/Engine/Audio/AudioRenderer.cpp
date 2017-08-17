@@ -7,7 +7,8 @@
 #include "Engine/Audio/OALRenderer/PdrAudioBuffersQueue.h"
 #include "Engine/Audio/OALRenderer/PdrSource.h"
 #include "Engine/Audio/AudioEntity.h"
-#include "Engine/Audio/Resources/AudioUtils.h"
+#include "Util/Audio/AudioUtils.h"
+#include "Engine/Audio/AudioRenderChannelData.h"
 
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -52,7 +53,7 @@ void	AudioRenderer::Terminate        ()
 
 // *********************************
 //
-void    AudioRenderer::Proccess         ( AudioEntity * audio )
+void    AudioRenderer::Proccess         ( AudioEntity * audio, AudioRenderChannelData & arcd )
 {
     //FIXME: no mechanism to free pdrsource & pdraudiobuffersqueue
 
@@ -69,14 +70,20 @@ void    AudioRenderer::Proccess         ( AudioEntity * audio )
             m_audioEntityUpdateIDMap[ audio ] = audio->GetUpdateID();
         }
 
-        if( audio->IsEOF() && ( queue->GetBufferedDataSize() == 0 ) && queue->BufferingDone() )
+        if( audio->IsEOF() && queue->BufferingDone() )
         {
             audio->Stop();
         }
 
         if( !audio->IsEmpty() )
         {
-            queue->PushData( audio->PopData() );
+            auto audioData = audio->PopData();
+            queue->PushData( audioData );
+            arcd.PushData( audioData );
+        }
+        else
+        {
+            arcd.PushData( AudioBufferVec() );
         }
 
         if( audio->IsPlaying() && queue->BufferData() )
@@ -198,44 +205,6 @@ void                    AudioRenderer::DeletePDR                    ( const Audi
 
 // *********************************
 //
-AudioBufferConstPtr     AudioRenderer::GetBufferedData              ( MemoryChunkPtr data, const std::set< const audio::AudioEntity * > & audioEnts )
-{
-    // check whether active audio buffer exists
-    if( IsAnySourcePlaying() )
-    {
-        // check whether any data needs uploading
-        if( IsAnyBufferReady( data->Size() ) )
-        {
-            data->Clear();
-        }
-
-        for( auto & obj : m_sources )
-        {        
-            if( audioEnts.find( obj.first ) != audioEnts.end() )
-            {
-                auto queue = m_bufferMap.at( obj.second );
-                queue->MixBufferedData( data, obj.first->IsEOF() );
-            }
-        }
-
-		auto size = data->Size();
-		auto outData = MemoryChunk::Create( size );
-
-		audio::AudioUtils::ApplyGain( outData->GetWritable(), data->Get(), size, m_gain );
-
-		data = outData;
-    }
-    else
-    {
-        data->Clear();
-    }
-
-
-    return audio::AudioBuffer::Create( data, m_frequency, m_format, false );
-}
-
-// *********************************
-//
 UInt32                  AudioRenderer::GetChannels                  () const
 {
     return AudioUtils::ChannelsCount( m_format );
@@ -275,48 +244,16 @@ void                    AudioRenderer::DeleteSinglePDR              ( MapType & 
 
 // *********************************
 //
-bool                    AudioRenderer::IsAnySourcePlaying           () const
-{
-    for( auto & obj : m_sources )
-    {
-        if( obj.first->IsPlaying() )
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-// *********************************
-//
-bool                    AudioRenderer::IsAnyBufferReady             ( SizeType requestedBufferSize ) const
-{
-    for( auto & obj : m_sources )
-    {        
-        auto queue = m_bufferMap.at( obj.second );
-        if( !obj.first->IsEOF() )
-        {
-            if( requestedBufferSize <= queue->GetBufferedDataSize() )
-            {
-                return true;
-            }
-        }
-        else
-        {
-            if( queue->GetBufferedDataSize() > 0 )
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-// *********************************
-//
 void					AudioRenderer::SetGain						( Float32 gain )
 {
 	m_gain = gain;
+}
+
+// *********************************
+//
+Float32				    AudioRenderer::Gain				            () const
+{
+    return m_gain;
 }
 
 } // audio

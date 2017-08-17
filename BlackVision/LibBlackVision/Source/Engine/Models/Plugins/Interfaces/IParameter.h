@@ -22,6 +22,7 @@ namespace bv { namespace model {
     public:
         virtual void                    Serialize       ( ISerializer& ser ) const              = 0;
         virtual const std::string &     GetName         () const								= 0;
+        virtual void                    SetName         ( const std::string & name )            = 0;
         virtual ModelParamType          GetType         () const								= 0;
 
         virtual ITimeEvaluatorPtr       GetTimeEvaluator() const    							= 0;

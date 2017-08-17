@@ -4,7 +4,7 @@
 #include "Project.h"
 #include "SceneDescriptor.h"
 
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 
 #include "Assets/FwdDecls.h"
 

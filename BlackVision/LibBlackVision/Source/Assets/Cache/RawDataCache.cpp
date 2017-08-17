@@ -11,6 +11,7 @@ namespace bv {
 //
 MemoryChunkConstPtr     RawDataCache::Get( const Hash & key ) const
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
     return Find( key );
 }
 
@@ -18,6 +19,8 @@ MemoryChunkConstPtr     RawDataCache::Get( const Hash & key ) const
 //
 bool                    RawDataCache::Add( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if( Exists( key ) )
     {
         return false;
@@ -33,6 +36,8 @@ bool                    RawDataCache::Add( const Hash & key, MemoryChunkConstPtr
 //
 bool                    RawDataCache::Remove    ( const Hash & key )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if ( Exists( key ) )
     {
         m_data.erase( key );
@@ -45,11 +50,14 @@ bool                    RawDataCache::Remove    ( const Hash & key )
 //
 void                    RawDataCache::Update    ( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     m_data[ key ] = data;
 
-    if( addToHardDriveCache && !HardDriveRawDataCache::GetInstance().Exists( key ) )
+    // FIXME: This is thread safe only as long as no one except RawDataCache calls Exists function. 
+    if( addToHardDriveCache && !m_hardDriveCache.Exists( key ) )
     {
-        HardDriveRawDataCache::GetInstance().Add( key, data, true );
+        m_hardDriveCache.Add( key, data, true );
     }
 }
 
@@ -57,7 +65,7 @@ void                    RawDataCache::Update    ( const Hash & key, MemoryChunkC
 //
 RawDataCache &          RawDataCache::GetInstance()
 {
-    static RawDataCache instance = RawDataCache();
+    static RawDataCache instance;
     return instance;
 }
 
@@ -72,7 +80,7 @@ MemoryChunkConstPtr     RawDataCache::Find( const Hash & key ) const
     }
     else
     {
-        return HardDriveRawDataCache::GetInstance().Get( key );
+        return m_hardDriveCache.Get( key );
     }
 }
 
@@ -80,7 +88,9 @@ MemoryChunkConstPtr     RawDataCache::Find( const Hash & key ) const
 //
 bool                    RawDataCache::Exists( const Hash & key )
 {
-    return ( m_data.find( key ) != m_data.end() ) || HardDriveRawDataCache::GetInstance().Exists( key );
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    return ( m_data.find( key ) != m_data.end() ) || m_hardDriveCache.Exists( key );
 }
 
 // ******************************

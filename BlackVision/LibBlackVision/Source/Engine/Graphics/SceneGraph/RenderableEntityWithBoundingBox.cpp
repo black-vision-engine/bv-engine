@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
 
-#include "Engine/Models/BVProjectTools.h"
+#include "Engine/Editors/BVProjectTools.h"
 
 #include "Engine/Models/BoundingVolume.h"
 

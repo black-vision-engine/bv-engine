@@ -14,7 +14,7 @@ class FrameDataHandler;
 // FIXME: nrl - and dynamic params which can be changed in runtime
 class OutputInstance : public Output
 {
-private:
+protected:
 
     OutputState        m_state;
 

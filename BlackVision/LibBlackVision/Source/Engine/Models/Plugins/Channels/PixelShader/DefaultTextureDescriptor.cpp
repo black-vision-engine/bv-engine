@@ -289,6 +289,9 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 //
 DefaultTextureDescriptorPtr  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & texAssetDesc, const std::string & name )
 {
+    if( !texAssetDesc )
+        return nullptr;
+
     auto texAsset = LoadTypedAsset< TextureAsset >( texAssetDesc );
 
     if ( texAsset == nullptr )

@@ -21,6 +21,7 @@ protected:
 public:
 
     virtual const std::string & GetName () const override;
+    virtual void                SetName ( const std::string & ) override;
 
 };
 

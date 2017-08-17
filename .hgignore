@@ -7,6 +7,7 @@ syntax: glob
 BlackVision/_Builds/*
 BlackVision/_Temp/*
 BlackVision/Dep/3rdParty/NuGetPackages/
+BlackVision/TestReports/
 *.nvuser
 app/cache/*
 *.orig
@@ -30,7 +31,7 @@ BlackVision/Assets/BasicShapes/*
 BlackVision/Applications/ProjectManagerPrototype/bv_media/*
 BlackVision/Test/Assets/Multipass/MultipassTestReferenceImage.png
 BlackVision/Assets/ModelNodeEditor/Desert.jpg
-BlackVision/Logs/DefaultLog.txt
+BlackVision/Logs/*
 BlackVision/Logs/*.bvtest
 *.ipch
 
@@ -51,3 +52,13 @@ BlackVision/Dep/3rdParty/ftgl_ext/msvc/
 BlackVision/Projects/Win/VS11/.vs/BlackVision/v15/Solution.VC.db-wal
 BlackVision/Projects/Win/VS11/.vs/BlackVision/v15/Solution.VC.db-shm
 *.user
+
+BlackVision/Dep/3rdParty/tclap-1.2.1/docs/
+BlackVision/Dep/3rdParty/tclap-1.2.1/config/
+BlackVision/Dep/3rdParty/tclap-1.2.1/examples/
+BlackVision/Dep/3rdParty/tclap-1.2.1/msc/
+BlackVision/Dep/3rdParty/tclap-1.2.1/tests/
+
+BlackVision/Projects/Win/VS14/packages
+BlackVision/Projects/Win/VS14/.vs/BlackVision/v15/Solution.VC.db-shm
+BlackVision/Projects/Win/VS14/.vs

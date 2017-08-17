@@ -126,8 +126,9 @@ NodeEffectPtr       CreateNodeMaskNodeEffect   ()
     auto fseStep        = new NodeMaskFSEStep      ( minAlphaThreshold );
 
     auto alphaVal       = get_value( fseStep->GetState(), "alpha" );
+    auto maskPreview    = get_value( fseStep->GetState(), "maskPreview" );
     
-    auto preFSEStep     = new NodeMaskPreFSEStep   ( alphaVal, minAlphaThreshold );
+    auto preFSEStep     = new NodeMaskPreFSEStep   ( alphaVal, maskPreview, minAlphaThreshold );
 	auto finalizeStep	= new NodeMaskFinalizeStep ();
 
     auto fsePass        = new FullscreenEffectPass ( preFSEStep, fseStep );

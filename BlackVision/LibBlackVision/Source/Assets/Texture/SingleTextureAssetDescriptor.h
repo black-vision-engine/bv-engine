@@ -25,6 +25,8 @@ private:
 	TextureFormat				m_format;
 	bool						m_isCacheable;
 
+    mutable std::string         m_key;
+
 protected:
 
 	explicit									SingleTextureAssetDesc		( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
@@ -54,6 +56,10 @@ public:
 	static const std::string &					UID							();
 
     friend SceneAccessor;
+
+private:
+
+    std::string                         ComputeKey          () const;
 };
 
 } // bv

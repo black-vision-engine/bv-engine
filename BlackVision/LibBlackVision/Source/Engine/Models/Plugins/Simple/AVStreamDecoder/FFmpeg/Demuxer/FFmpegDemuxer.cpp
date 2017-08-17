@@ -2,7 +2,7 @@
 
 #include "FFmpegDemuxer.h"
 
-#include "Engine/Models/Plugins/Simple/AVStreamDecoder/FFmpeg/FFmpegUtils.h"
+#include "Util/FFmpeg/FFmpegUtils.h"
 
 #include "UseLoggerLibBlackVision.h"
 
