@@ -270,7 +270,11 @@ public:
 
     bool                    CreateGizmo                 ( const std::string & sceneName, const std::string gizmoOwnerNodeName, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName );
     bool                    CreateGizmo                 ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName );
+    bool                    DeleteGizmo                 ( const std::string & sceneName, const std::string gizmoOwnerNodeName, const std::string & functionalityName );
+    bool                    DeleteGizmo                 ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+
     bool                    AddGizmoNode                ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr childNode );
+    bool                    DeleteGizmoNode             ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot );
 
 /* HELPERS */
 

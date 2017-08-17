@@ -125,11 +125,11 @@ void    NodeUpdater::DoUpdate               ()
     {
         m_sceneNode->SetVisible( true );
 
-        auto & modelState = model::ModelState::GetInstance();
-        if( modelState.IsSelected( m_modelNode ) )
-            m_sceneNode->Select( modelState.GetSelectedNodeColor( m_modelNode ) );
-        else
-            m_sceneNode->Unselect();
+        //auto & modelState = model::ModelState::GetInstance();
+        //if( modelState.IsSelected( m_modelNode ) )
+        //    m_sceneNode->Select( modelState.GetSelectedNodeColor( m_modelNode ) );
+        //else
+        //    m_sceneNode->Unselect();
 
         // Add, when all mechanisms are implemented
         UpdateTransform();

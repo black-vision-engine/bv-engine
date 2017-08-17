@@ -2059,6 +2059,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.cpp">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5326,6 +5329,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.h">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h">
+      <Filter>Engine\Models\Gizmos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,9 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "GizmoRegister.h"
+
+
 
 namespace bv
 {
@@ -29,6 +32,8 @@ private:
     GizmoFunMapper      m_nodesGizmos;
     GizmoFunMapper      m_sceneGizmos;
 
+    GizmoRegister       m_existingGizmos;
+
 public:
 
 
@@ -36,6 +41,7 @@ public:
 
 
     bool                CreateGizmo                 ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName );
+    bool                RemoveGizmo                 ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
 
 private:
 

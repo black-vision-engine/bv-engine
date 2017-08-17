@@ -25,7 +25,7 @@ bool                    GizmoManager::CreateGizmo           ( BVProjectEditor * 
     if( !gizmoOwner && type == model::GizmoType::Scene )
         gizmoOwner = scene->GetRootNode();
 
-    if( gizmoOwner )
+    if( gizmoOwner && !m_existingGizmos.Exists( gizmoOwner, functionalityName ) )
     {
         auto gizmoLogicName = QueryGizmoLogicName( type, ownerTypeName, functionalityName );
 
@@ -43,11 +43,31 @@ bool                    GizmoManager::CreateGizmo           ( BVProjectEditor * 
                 
                 bool result = editor->AddGizmoNode( scene, gizmoOwner, gizmoRoot );
                 if( result )
+                {
                     gizmoLogic->CreateGizmoSubtree( editor );
+                    m_existingGizmos.Register( gizmoOwner, gizmoRoot, functionalityName );
+                }
 
                 return result;
             }
         }
+    }
+
+    return false;
+}
+
+// ***********************
+//
+bool                GizmoManager::RemoveGizmo               ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    if( m_existingGizmos.Exists( gizmoOwner, functionalityName ) )
+    {
+        auto & info = m_existingGizmos.QueryGizmo( gizmoOwner, functionalityName );
+
+        bool result = editor->DeleteGizmoNode( scene, gizmoOwner, info.GizmoRoot.lock() );
+        m_existingGizmos.Unregister( gizmoOwner, functionalityName );
+
+        return result;
     }
 
     return false;

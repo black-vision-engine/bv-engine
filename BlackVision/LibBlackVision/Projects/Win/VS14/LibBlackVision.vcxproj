@@ -165,6 +165,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp" />
@@ -640,6 +641,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.h" />
