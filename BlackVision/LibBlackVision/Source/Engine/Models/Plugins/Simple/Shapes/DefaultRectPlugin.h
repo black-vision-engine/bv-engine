@@ -85,24 +85,8 @@ private:
 
 } //DefaultRect
 
-// *******************************
-//
-template<>
-inline bool SetParameter< DefaultRect::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultRect::Plugin::WeightCenter & val )
-{
-    typedef ParamEnum< DefaultRect::Plugin::WeightCenter > ParamType;
+DEFINE_ENUM_SET_PARAMETER( DefaultRect::Plugin::WeightCenter );
 
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 } // model
 } // bv

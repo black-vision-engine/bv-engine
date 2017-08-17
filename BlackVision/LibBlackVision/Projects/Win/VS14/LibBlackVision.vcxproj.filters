@@ -433,6 +433,9 @@
     <Filter Include="Engine\Models\Gizmos">
       <UniqueIdentifier>{668b5c5c-8d69-4996-b102-fcc1f41acb0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\SpecialPlugins">
+      <UniqueIdentifier>{3fd2a421-7703-4b69-9c86-caa0afb264f4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Models\Gizmos\Logics">
       <UniqueIdentifier>{f3b94df6-a3a5-4659-bb12-dd9ef4566274}</UniqueIdentifier>
     </Filter>
@@ -2014,8 +2017,14 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -5273,8 +5282,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IGizmoLogic.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h">
       <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h">
       <Filter>Engine\Models\Gizmos</Filter>

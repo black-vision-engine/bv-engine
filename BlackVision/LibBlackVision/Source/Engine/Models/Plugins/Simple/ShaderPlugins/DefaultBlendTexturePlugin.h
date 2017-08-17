@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
+
 
 
 namespace bv { namespace model {
@@ -31,41 +33,6 @@ public:
 class DefaultBlendTexturePlugin : public BasePlugin
 {
 public:
-
-    enum BlendingMode
-    {
-        BM_Normal = 0,
-        BM_Lighten,
-        BM_Darken,
-        BM_Multiply,
-        BM_Average,
-        BM_Add,
-        BM_Substract,
-        BM_Difference,
-        BM_Negation,
-        BM_Exclusion,
-        BM_Screen,
-        BM_Overlay,
-        BM_SoftLight,
-        BM_HardLight,
-        BM_ColorDodge,
-        BM_ColorBurn,
-        BM_LinearDodge,
-        BM_LinearBurn,
-        BM_LinearLight,
-        BM_VividLight,
-        BM_PinLight,
-        BM_HardMix,
-        BM_Reflect,
-        BM_Glow,
-        BM_Phoenix,
-        BM_Hue,
-        BM_Saturation,
-        BM_Color,
-        BM_Luminosity,
-
-        BM_Total
-    };
 
     struct PARAMS
     {
@@ -101,25 +68,6 @@ public:
 private:
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
-
-
-template<>
-inline bool SetParameter< DefaultBlendTexturePlugin::BlendingMode >( IParameterPtr param, TimeType t, const DefaultBlendTexturePlugin::BlendingMode & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum< DefaultBlendTexturePlugin::BlendingMode > ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 
 } // model

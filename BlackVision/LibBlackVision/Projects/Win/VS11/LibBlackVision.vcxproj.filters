@@ -415,6 +415,9 @@
     <Filter Include="Engine\Models\NodeLogics\NodeVisibilityAnimation">
       <UniqueIdentifier>{ea278f64-cd67-4099-9ebb-61da1719ceb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\SpecialPlugins">
+      <UniqueIdentifier>{686f0cb1-fb84-468e-9b36-fbd20c656a01}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Graphics\Effects\Logic\OutputRendring\Impl\FrameDataHandlers\AVFileOutput">
       <UniqueIdentifier>{08df6978-4c70-448f-8986-fc95911389fe}</UniqueIdentifier>
     </Filter>
@@ -1956,6 +1959,10 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.cpp">
       <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\BlendHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
@@ -5170,6 +5177,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeVisibilityAnimation\NodeVisibilityAnimation.h">
       <Filter>Engine\Models\NodeLogics\NodeVisibilityAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>

@@ -35,6 +35,7 @@ void main()
 	vec4 color = texture( Tex0, uvCoord );
 	color.xyz = mixWithEnvironment( color.xyz, envColor, computeReflectivity() );
 	
+	
 	FragColor = color * alpha;
 	//FragColor = col * col.a * alpha;  //This one uses premultiplied RGB values
 }

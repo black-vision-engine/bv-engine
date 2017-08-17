@@ -8,6 +8,8 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
+
 
 namespace bv { namespace model {
 
@@ -30,15 +32,18 @@ class DefaultColorPlugin : public BasePlugin
 {
 public:
     
-    static const std::string        PARAM_BLEND_ENABLE;
-    static const std::string        PARAM_COLOR;
+	struct PARAM
+	{
+		static const std::string        COLOR;
+	};
 
 private:
 
     DefaultPixelShaderChannelPtr            m_pixelShaderChannel;
     DefaultPluginParamValModelPtr           m_paramValModel;
 
-	ValueParamState< bool >					m_blendEnabled;
+	ValueParamState< bool >						m_blendEnabled;
+	ValueParamState< BlendHelper::BlendMode >	m_blendMode;
 
 public:
 

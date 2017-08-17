@@ -41,23 +41,6 @@ const std::string        DefaultAVDecoderPlugin::PARAM::GAIN		   = "gain";
 typedef ParamEnum< DefaultAVDecoderPlugin::DecoderMode > ParamEnumDM;
 
 
-// ***********************
-//
-template<>
-static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultAVDecoderPlugin::DecoderMode > ( const std::string & name, ITimeEvaluatorPtr timeline )
-{
-    return CreateParameterEnum< DefaultAVDecoderPlugin::DecoderMode >( name, timeline );
-}
-
-// ***********************
-//
-VoidPtr    ParamEnumDM::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
-}
-
-
-
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -65,8 +48,7 @@ VoidPtr    ParamEnumDM::QueryParamTyped  ()
 //
 DefaultAVDecoderPluginDesc::DefaultAVDecoderPluginDesc			()
     : BasePluginDescriptor( UID(), "video_decoder", "tx" )
-{
-}
+{}
 
 // *******************************
 //
@@ -84,15 +66,18 @@ DefaultPluginParamValModelPtr   DefaultAVDecoderPluginDesc::CreateDefaultModel( 
 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::SEEK_OFFSET, 0.f, true, true );
-    helper.AddParam< IntInterpolator, DefaultAVDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
-        ( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
+    helper.AddEnumParam( DefaultAVDecoderPlugin::PARAM::DECODER_STATE, DefaultAVDecoderPlugin::DecoderMode::STOP, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_ENABLED, false, false );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::LOOP_COUNT, 0, true, true );
     helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::MUTE, false, true, true );
 	helper.AddSimpleParam( DefaultAVDecoderPlugin::PARAM::GAIN, 1.f );
 
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Normal, true, true );
+
     helper.SetOrCreateVSModel();
     helper.AddTransformParam( DefaultAVDecoderPlugin::PARAM::TX_MAT, true );
+
     auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultAVDecoderPlugin::PARAM::TX_MAT );
     SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
@@ -128,9 +113,9 @@ bool					        DefaultAVDecoderPlugin::SetPrevPlugin               ( IPluginPt
         HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
         auto ctx = m_psc->GetRendererContext();
         ctx->cullCtx->enabled = false;
-        ctx->alphaCtx->blendEnabled = true;
-        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+
+	m_psc->GetRendererContext()->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
+	BlendHelper::SetBlendRendererContext( m_psc, m_blendMode.GetParameter() );
         return true;
     }
     else
@@ -155,6 +140,9 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 
     m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );
 
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+    m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
+
     SetPrevPlugin( prev );
 
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
@@ -177,8 +165,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
 // *************************************
 // 
 DefaultAVDecoderPlugin::~DefaultAVDecoderPlugin					()
-{
-}
+{}
 
 // *************************************
 // 
@@ -281,13 +268,15 @@ void                                DefaultAVDecoderPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, DefaultAVDecoderPlugin::PARAM::TX_MAT );
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
     {
         InitVertexAttributesChannel();
     }
+
+    BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_blendMode );
     HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
 
     UpdateDecoder();

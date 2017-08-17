@@ -180,34 +180,11 @@ BasicNodePtr BasicNode::Create( const IDeserializer& deser )
     node->m_visible = deser.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
-    deserContext->ClearRendererContextes();
     auto plugins = SerializationHelper::DeserializeArray< BasePlugin >( deser, "plugins" );
-
-    auto itRC = deserContext->RendererContextes().begin();
-
-    assert( plugins.size() == deserContext->RendererContextes().size() );  // A little bit of defensive programming
-
+    
     for( auto plugin : plugins )
     {
         node->AddPlugin( plugin );
-
-        // override renderer context
-        if( *itRC && plugin->GetPixelShaderChannel() )
-        {
-            plugin->SetRendererContext( *itRC );
-        }
-
-        ++itRC;
-    }
-    
-    if( plugins.size() > 0 )
-    {
-        auto psc = plugins.back()->GetPixelShaderChannel();
-
-        if( psc )
-        {
-            HelperPixelShaderChannel::SetRendererContextUpdate( psc );
-        }
     }
 
 // node effect
