@@ -721,6 +721,8 @@ IMPLEMENT_ENUM_SERIALIZATION( HightmapEvent::Command, HightmapEventCommandMappin
 std::pair< GizmoEvent::Command, const char* > GizmoEventCommandMapping[] =
 {
     std::make_pair( GizmoEvent::Command::CreateGizmo, "CreateGizmo" )
+    , std::make_pair( GizmoEvent::Command::RemoveGizmo, "RemoveGizmo" )      // default
+    , std::make_pair( GizmoEvent::Command::ListGizmos, "ListGizmos" )      // default
     , std::make_pair( GizmoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 

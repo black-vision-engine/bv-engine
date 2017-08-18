@@ -1414,6 +1414,9 @@ public:
     typedef enum
     {
         CreateGizmo,
+        RemoveGizmo,
+        ListGizmos,
+
         Fail            ///< Wrong command
     } Command;
 

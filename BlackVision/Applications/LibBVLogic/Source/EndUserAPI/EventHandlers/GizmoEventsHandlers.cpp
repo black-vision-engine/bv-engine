@@ -49,11 +49,52 @@ void            GizmoHandlers::GizmoHandler     ( IEventPtr evt )
     case GizmoEvent::Command::CreateGizmo:
         result = editor->CreateGizmo( sceneName, nodeName, gizmoType, elementName, functionName );
         break;
+    case GizmoEvent::Command::RemoveGizmo:
+        result = editor->DeleteGizmo( sceneName, nodeName, functionName );
+        break;
+    case GizmoEvent::Command::ListGizmos:
+        ListGizmos( gizmoEvent, sceneName, nodeName, gizmoType, elementName );
+        return;
     default:
         break;
     }
 
     SendSimpleResponse( command, gizmoEvent->EventID, gizmoEvent->SocketID, result );
+}
+
+// ***********************
+//
+void        GizmoHandlers::ListGizmos           ( GizmoEventPtr gizmoEvt, const std::string & sceneName, const std::string nodeName, model::GizmoType type, const std::string & elementName )
+{
+    assert( !"Implement in future" );
+    elementName;
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    auto node = std::static_pointer_cast< model::BasicNode >( editor->GetNode( sceneName, nodeName ) );
+
+    if( node )
+    {
+        switch( type )
+        {
+        case model::GizmoType::Scene:
+            break;
+        case model::GizmoType::Node:
+            break;
+        case model::GizmoType::Logic:
+            break;
+        case model::GizmoType::Plugin:
+            break;
+        case model::GizmoType::Effect:
+            break;
+        default:
+            break;
+        }
+    }
+    else
+    {
+        SendSimpleErrorResponse( GizmoEvent::Command::ListGizmos, gizmoEvt->EventID, gizmoEvt->SocketID, "Node not found" );
+    }
+
 }
 
 

@@ -14,11 +14,16 @@ private:
     BVAppLogic*             m_appLogic;
 
 public:
-    GizmoHandlers( BVAppLogic* logic );
-    ~GizmoHandlers();
+
+    explicit        GizmoHandlers( BVAppLogic* logic );
+                    ~GizmoHandlers();
 
     void    GizmoHandler            ( IEventPtr evt );
 
+
+private:
+
+    void     ListGizmos             ( GizmoEventPtr gizmoEvt, const std::string & sceneName, const std::string gizmoOwnerNodeName, model::GizmoType type, const std::string & ownerTypeName );
 };
 
 } //bv
