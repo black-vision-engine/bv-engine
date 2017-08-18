@@ -5,7 +5,7 @@
 #include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 #include "Engine/Graphics/Effects/Utils/RenderableEffectFactory.h"
@@ -225,38 +225,6 @@ void    NodeRenderLogic::RenderChildren    ( SceneNodeRepr * nodeRepr, RenderCon
     {
         Render( nodeRepr->GetChild( i ), ctx ); 
     }
-}
-
-// *********************************
-//
-void     NodeRenderLogic::RenderBoundingBox( SceneNode * node, RenderContext * ctx )
-{
-    // FIXME: nrl - a bit better initialization mechanics would be handy
-    static auto effect = RenderableEffectFactory::CreateBoundingBoxEffect();
-    static auto pass   = effect->GetPass( 0 );
-
-    const auto & color = node->GetBoundingBoxColor();
-    
-    // FIXME: nrl - rly "RenderableEntityWithBoundingBox"?
-    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
-    assert( obj );
-
-    auto bb = obj->GetBoundingBox();
-    if( bb )
-    {
-        auto renderer = ctx->GetRenderer();
-
-        auto param = Cast< ShaderParamVec4 * >( pass->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
-        param->SetValue( color );
-
-        renderer->Enable( pass, bb );
-        renderer->DrawRenderable( bb );
-
-        auto wc = obj->GetCenterOfMass();
-        renderer->Enable( pass, wc );
-        renderer->DrawRenderable( wc );
-    }
-
 }
 
 

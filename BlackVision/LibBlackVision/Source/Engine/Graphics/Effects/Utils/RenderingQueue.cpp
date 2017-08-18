@@ -141,13 +141,6 @@ void                RenderingQueue::QueueSingleNode     ( SceneNode * node, Rend
         QueueOpaque( node->GetRepr(), z, hasEffect );
     }
 
-    // FIXME: nrl - refactor bounding box rendering
-    // FIXME: bb color should be configured externally to the node bot let it be that way for the time being
-    if( node->IsSelected() /*&& Cast< RenderableEntity* >( node->GetTransformable() )->GetRenderableEffect() != nullptr*/  )
-    {
-        NodeRenderLogic::RenderBoundingBox( node, ctx );
-    }
-
     END_CPU_QUEUEING_MESSURE( ctx->GetRenderer(), node->GetRepr() );
 }
 

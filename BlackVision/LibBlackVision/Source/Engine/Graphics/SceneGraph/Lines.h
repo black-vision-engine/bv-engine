@@ -1,17 +1,17 @@
 #pragma once
 
-#include "RenderableEntityWithBoundingBox.h"
+#include "RenderableEntity.h"
 
 namespace bv {
 
-class Lines : public RenderableEntityWithBoundingBox
+class Lines : public RenderableEntity
 {
     float       m_width;
 
 public:
 
-    Lines        ( RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect, float width = 1.f )
-        : RenderableEntityWithBoundingBox          ( RenderableType::RT_LINES, rad, boundingBox, effect )
+    Lines        ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffectPtr effect, float width = 1.f )
+        : RenderableEntity          ( RenderableType::RT_LINES, rad, effect )
         , m_width( width )
     {
     }

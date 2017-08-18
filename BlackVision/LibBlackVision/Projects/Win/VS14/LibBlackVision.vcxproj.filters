@@ -1192,9 +1192,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
     </ClCompile>
@@ -4339,9 +4336,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h">
       <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>

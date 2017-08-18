@@ -6,7 +6,7 @@
 #include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 

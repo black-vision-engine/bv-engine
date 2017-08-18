@@ -116,7 +116,7 @@ TriangleStrip *                                 FullscreenEffectHelpers::CreateF
     auto rad = CreateTriStripArrayData( 4, numUVChannels, vbData );
 
     // FIXME: nrl - verify nullptr bounding box
-    auto ret = new TriangleStrip( rad, nullptr, effect );
+    auto ret = new TriangleStrip( rad, effect );
 
     delete[] vbData;
 

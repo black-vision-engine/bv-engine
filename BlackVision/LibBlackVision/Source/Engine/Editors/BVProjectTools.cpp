@@ -116,9 +116,9 @@ RenderableEntity *  BVProjectTools::BuildRenderableFromComponent        ( model:
     delete vaDesc; //not used anymore
 
     if( type == PrimitiveType::PT_TRIANGLE_STRIP )
-        return new TriangleStrip( radasvb, nullptr, nullptr );
+        return new TriangleStrip( radasvb, nullptr );
     else if( type == PrimitiveType::PT_LINES )
-        return new Lines( radasvb, nullptr, nullptr, 2.f );
+        return new Lines( radasvb, nullptr, 2.f );
     else
     {
         assert( false );
@@ -302,7 +302,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
                 if( radasvb )
                 {
-                    renderable = new TriangleStrip( radasvb, modelNode->GetBoundingVolume().get(), effect );
+                    renderable = new TriangleStrip( radasvb, effect );
                 }
                 break;
             }
@@ -312,7 +312,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
                 if( radasvb )
                 {
-                    renderable = new Triangles( radasvb, modelNode->GetBoundingVolume().get(), effect );
+                    renderable = new Triangles( radasvb, effect );
                 }
                 break;
             }
@@ -322,7 +322,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
 
                 if( radasvb )
                 {
-                    renderable = new Lines( radasvb, modelNode->GetBoundingVolume().get(), effect, 3.f ); // FIXME this width should be stored in VAO somehow
+                    renderable = new Lines( radasvb, effect, 3.f ); // FIXME this width should be stored in VAO somehow
                 }
                 break;
             }
@@ -334,7 +334,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
     }
     else
     {
-        renderable = new TriangleStrip( nullptr, modelNode->GetBoundingVolume().get(), nullptr );
+        renderable = new TriangleStrip( nullptr, nullptr );
     }
 
 

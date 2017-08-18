@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 
 namespace bv {
@@ -10,12 +10,12 @@ class RenderableEffect;
 
 namespace model { class BoundingVolume; }
 
-class Triangles : public RenderableEntityWithBoundingBox
+class Triangles : public RenderableEntity
 {
 
 public:
 
-            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
     virtual int     NumTriangles    ( unsigned int ccNum ) const;

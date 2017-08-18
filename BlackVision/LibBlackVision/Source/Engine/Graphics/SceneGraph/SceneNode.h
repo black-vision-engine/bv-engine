@@ -37,8 +37,6 @@ private:
     //FIXME: use some sort of caps/flag here (instead of a single flag)
     bool                m_visible;
     bool                m_nodeEffectEnabled;
-    bool                m_drawBoundingBox;
-    glm::vec4           m_boundingBoxColor;
 
     EngineGizmoContainerUPtr        m_gizmos;
 
@@ -77,7 +75,6 @@ public:
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;
     bool                    IsSelected          () const;
-    const glm::vec4 &       GetBoundingBoxColor () const;
     void                    Select              ( glm::vec4 color );
     void                    Unselect            ();
 

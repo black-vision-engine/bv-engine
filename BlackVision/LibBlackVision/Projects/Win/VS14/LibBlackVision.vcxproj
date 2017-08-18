@@ -419,7 +419,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNode.cpp" />
@@ -901,7 +900,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.h" />

@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Models/ModelState.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffect.h"
@@ -47,9 +47,6 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     
     m_renderable = static_cast< RenderableEntity* >( sceneNode->GetTransformable() );
     assert( m_renderable != nullptr );
-
-    m_boundingBox = Cast< RenderableEntityWithBoundingBox * >( m_renderable )->GetBoundingBox();
-    m_centerOfMass = Cast< RenderableEntityWithBoundingBox * >( m_renderable )->GetCenterOfMass();
 
     m_timeInvariantVertexData = false;
 
@@ -124,12 +121,6 @@ void    NodeUpdater::DoUpdate               ()
     if( m_modelNode->IsVisible() )
     {
         m_sceneNode->SetVisible( true );
-
-        //auto & modelState = model::ModelState::GetInstance();
-        //if( modelState.IsSelected( m_modelNode ) )
-        //    m_sceneNode->Select( modelState.GetSelectedNodeColor( m_modelNode ) );
-        //else
-        //    m_sceneNode->Unselect();
 
         // Add, when all mechanisms are implemented
         UpdateTransform();
@@ -346,23 +337,12 @@ void NodeUpdater::UpdateVACPtr()
 
 // ***********************
 //
-void NodeUpdater::UpdateBoundingBox( bool recreate )
+void NodeUpdater::UpdateBoundingBox()
 {
     auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
 
     auto bv = node->GetBoundingVolume().get();
     assert( bv );
-
-	if( !recreate )
-	{
-		UpdatersHelpers::UpdateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-		UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
-	}
-	else
-	{
-		UpdatersHelpers::RecreateRenderableBuffer( m_boundingBox, bv->BuildBoxRepresentation() );
-		UpdatersHelpers::RecreateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
-	}
 
     m_sceneNode->SetBoundingBox( bv->GetBoundingBox() );
 }

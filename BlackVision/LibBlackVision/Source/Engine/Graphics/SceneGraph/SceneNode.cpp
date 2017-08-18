@@ -9,8 +9,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Engine/Events/EventHandlerHelpers.h"
-#include "Engine/Events/Events.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -21,11 +19,8 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_repr( new SceneNodeRepr( transformable, this ) )
-    , m_drawBoundingBox( false )
     , m_nodeEffectEnabled( true ) // FIXME: enabled by default - is this right?
-    , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
-{
-}
+{}
 
 // ********************************
 //
@@ -203,35 +198,6 @@ void                    SceneNode::SetBoundingBox   ( const math::Box * bb )
 const math::Box *       SceneNode::GetBoundingBox   () const
 {
     return m_repr->GetBoundingBox();
-}
-
-// ***********************
-//
-bool                    SceneNode::IsSelected          () const
-{
-    return m_drawBoundingBox;
-}
-
-// ***********************
-//
-const glm::vec4 &       SceneNode::GetBoundingBoxColor () const
-{
-    return m_boundingBoxColor;
-}
-
-// ***********************
-//
-void                    SceneNode::Select              ( glm::vec4 color )
-{
-    m_drawBoundingBox = true;
-    m_boundingBoxColor = color;
-}
-
-// ***********************
-//
-void                    SceneNode::Unselect             ()
-{
-    m_drawBoundingBox = false;
 }
 
 // ***********************

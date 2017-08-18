@@ -11,7 +11,7 @@ class TriangleStrip : public Triangles
 {
 public:
 
-    TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, const model::BoundingVolume * boundingBox, RenderableEffectPtr effect );
+    TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, RenderableEffectPtr effect );
     ~TriangleStrip  ();
 
     virtual int     NumTriangles    ( unsigned int ccNum ) const override;
