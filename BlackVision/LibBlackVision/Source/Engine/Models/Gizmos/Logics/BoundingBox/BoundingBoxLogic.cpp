@@ -108,6 +108,9 @@ void                        BoundingBoxLogic::Update			( TimeType t )
         
         if( NeedsBoxUpdate( ownerNode ) )
             UpdateBox();
+
+        if( NeedsCenterUpdate( ownerNode ) )
+            UpdateCenter();
     }
 }
 
@@ -134,6 +137,9 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
 
         SetColor( centerNode, m_centerColor.GetValue() );
         SetCenterSize( centerNode, m_centerSize.GetValue() );
+
+        if( NeedsCenterUpdate( gizmoOwner ) )
+            UpdateCenter();
 
         boxNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
         boxNode->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -225,6 +231,20 @@ bool                        BoundingBoxLogic::NeedsBoxUpdate    ( model::BasicNo
 
 // ***********************
 //
+bool                        BoundingBoxLogic::NeedsCenterUpdate ( model::BasicNodePtr node )
+{
+    auto center = node->GetFinalizePlugin()->GetParamTransform()->Transform().GetCenter( 0.0f );
+
+    if( m_lastCenter != center )
+    {
+        m_lastCenter = center;
+        return true;
+    }
+    return false;
+}
+
+// ***********************
+//
 void                        BoundingBoxLogic::UpdateBox         ()
 {
     BoxInfo info = ComputeBox( m_gizmoOwner.lock(), m_includeChildren.GetValue() );
@@ -234,6 +254,15 @@ void                        BoundingBoxLogic::UpdateBox         ()
     SetColor( boxNode, m_boxColor.GetValue() );
     SetBoxSize( boxNode, info.Size );
     SetTranslation( boxNode, info.Center );
+}
+
+// ***********************
+//
+void                        BoundingBoxLogic::UpdateCenter      ()
+{
+    // m_lastCenter is already updated.
+    auto centerNode = m_centerNode.lock();
+    SetTranslation( centerNode, m_lastCenter );
 }
 
 

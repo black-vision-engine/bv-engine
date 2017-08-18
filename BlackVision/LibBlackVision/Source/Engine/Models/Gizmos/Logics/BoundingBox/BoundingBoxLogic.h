@@ -73,6 +73,8 @@ private:
     model::ValueParamState< float >         m_centerSize;
     model::ValueParamState< bool >          m_includeChildren;
 
+    glm::vec3                               m_lastCenter;
+
 public:
 
     explicit    BoundingBoxLogic        ( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator );
@@ -99,8 +101,10 @@ private:
 
     static BoxInfo          ComputeBox              ( model::BasicNodePtr node, bool includeChildren );
     bool                    NeedsBoxUpdate          ( model::BasicNodePtr node );
+    bool                    NeedsCenterUpdate       ( model::BasicNodePtr node );
 
     void                    UpdateBox               ();
+    void                    UpdateCenter            ();
 
 private:
 
