@@ -21,7 +21,7 @@ NodeLogicDesc::NodeLogicDesc( LogicCreateFun fun )
 
 // ***********************
 //
-NodeLogicDesc &           NodeLogicDesc::RegisterFunctionality      ( const std::string & function, const std::string & logicName )
+NodeLogicDesc &                 NodeLogicDesc::RegisterFunctionality      ( const std::string & function, const std::string & logicName )
 {
     m_gizmoMap.RegisterFunctionality( function, logicName );
     return *this;
@@ -29,9 +29,9 @@ NodeLogicDesc &           NodeLogicDesc::RegisterFunctionality      ( const std:
 
 // ***********************
 //
-std::vector< std::string >      NodeLogicDesc::ListGizmoFunctionalities   () const
+const GizmoFunMapper &          NodeLogicDesc::AccessGizmoMapper            () const
 {
-    return m_gizmoMap.ListFunctionalities();
+    return m_gizmoMap;
 }
 
 // ***********************

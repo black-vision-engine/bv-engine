@@ -66,6 +66,18 @@ model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std:
     return descIter->second->CreateLogic( gizmoRoot, gizmoOwner, timeEvaluator );
 }
 
+// ***********************
+//
+std::string                 NodeLogicFactory::QueryGizmoName        ( const std::string & logicName, const std::string & function )
+{
+    auto descIter = m_logics.find( logicName );
+    if( descIter == m_logics.end() )
+        return "";
+
+    auto & desc = descIter->second;
+    return desc->AccessGizmoMapper().QueryGizmoLogicName( function );
+}
+
 
 // ========================================================================= //
 // Registration

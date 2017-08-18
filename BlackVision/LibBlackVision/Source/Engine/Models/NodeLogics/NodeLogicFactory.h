@@ -27,6 +27,8 @@ public:
     virtual model::INodeLogicPtr        CreateLogic         ( const IDeserializer & deser, model::BasicNodeWeakPtr logicParent )                                                                                override;
     virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )    override;
 
+    virtual std::string                 QueryGizmoName      ( const std::string & logicName, const std::string & function ) override;
+
 public:
 
     model::NodeLogicDesc &              RegisterLogic       ( const std::string & logicType, model::LogicCreateFun creator );

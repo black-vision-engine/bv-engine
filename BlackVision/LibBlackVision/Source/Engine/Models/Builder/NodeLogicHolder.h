@@ -25,6 +25,10 @@ public:
 
     virtual model::IGizmoLogicPtr       CreateGizmoLogic    ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )
     {   gizmoName; gizmoRoot; gizmoOwner; return nullptr;    }
+
+
+    virtual std::string                 QueryGizmoName      ( const std::string & logicName, const std::string & function )
+    {   function; logicName; return "";    }
 };
 
 

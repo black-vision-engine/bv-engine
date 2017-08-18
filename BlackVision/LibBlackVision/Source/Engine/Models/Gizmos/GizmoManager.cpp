@@ -3,10 +3,14 @@
 
 
 #include "Engine/Editors/BVProjectEditor.h"
+
 #include "Engine/Models/NodeLogics/NodeLogicFactory.h"
+#include "Engine/Models/Builder/NodeLogicHolder.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
+#include "Serialization/SerializationHelper.h"
 
 
 namespace bv
@@ -100,6 +104,11 @@ void                GizmoManager::RegisterDefaultGizmos     ()
 //
 std::string         GizmoManager::QueryGizmoLogicName       ( model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
 {
+    // TODO: What is ownerTypeName? For now I decided, that it contains plugin/logic/effect type name. But maybe
+    // this code should check type name by itself and user could only provide for example plugin name (not type name, but plugin name).
+    // The scond thing: should we pass this value to gizmo root logi? It could be posible that the same gizmo logic is used 
+    // for two elements in the same node. Then logic must distinguish between these elements. But maybe it isn't worth.
+
     switch( type )
     {
     case model::GizmoType::Scene:
@@ -129,20 +138,15 @@ std::string         GizmoManager::QueryPluginGizmoLogicName ( const std::string 
 //
 std::string         GizmoManager::QueryEffectGizmoLogicName ( const std::string & ownerTypeName, const std::string & functionalityName )
 {
-    ownerTypeName;
-    functionalityName;
-    assert( !"Implement me" );
-    return std::string();
+    auto effectType = SerializationHelper::String2T< NodeEffectType >( ownerTypeName, NodeEffectType::NET_TOTAL );
+    return model::ModelNodeEffectFactory::QueryGizmoName( effectType, functionalityName );
 }
 
 // ***********************
 //
 std::string         GizmoManager::QueryLogicGizmoLogicName  ( const std::string & ownerTypeName, const std::string & functionalityName )
 {
-    ownerTypeName;
-    functionalityName;
-    assert( !"Implement me" );
-    return std::string();
+    return GetNodeLogicFactory()->QueryGizmoName( ownerTypeName, functionalityName );
 }
 
 // ***********************

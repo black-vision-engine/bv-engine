@@ -354,5 +354,15 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
     return ret;
 }
 
+std::string                 ModelNodeEffectFactory::QueryGizmoName          ( NodeEffectType nodeEffectType, const std::string & function )
+{
+    nodeEffectType;
+    function;
+
+    // TODO: Here place mapping of node effects gizmos.
+
+    return std::string();
+}
+
 } // model
 } // bv

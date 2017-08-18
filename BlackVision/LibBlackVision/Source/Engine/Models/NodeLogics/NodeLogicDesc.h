@@ -33,8 +33,8 @@ public:
     explicit                    NodeLogicDesc ( LogicCreateFun fun );
 
 
-    NodeLogicDesc &       RegisterFunctionality       ( const std::string & function, const std::string & logicName );
-    std::vector< std::string >  ListGizmoFunctionalities    () const;
+    NodeLogicDesc &             RegisterFunctionality       ( const std::string & function, const std::string & logicName );
+    const GizmoFunMapper &      AccessGizmoMapper           () const;
 
     model::INodeLogicPtr        CreateLogic                 ( const IDeserializer & deser, model::BasicNodeWeakPtr logicParent ) const;
 };

@@ -10,8 +10,8 @@ class ModelNodeEffectFactory
 {
 public:
 
-    static IModelNodeEffectPtr      CreateModelNodeEffect         ( NodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
-
+    static IModelNodeEffectPtr      CreateModelNodeEffect           ( NodeEffectType nodeEffectType, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    static std::string              QueryGizmoName                  ( NodeEffectType nodeEffectType, const std::string & function );
 };
 
 } // model
