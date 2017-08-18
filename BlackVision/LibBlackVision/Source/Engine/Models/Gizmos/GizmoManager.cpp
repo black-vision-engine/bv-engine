@@ -5,6 +5,7 @@
 #include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
 
 
@@ -120,10 +121,8 @@ std::string         GizmoManager::QueryGizmoLogicName       ( model::GizmoType t
 //
 std::string         GizmoManager::QueryPluginGizmoLogicName ( const std::string & ownerTypeName, const std::string & functionalityName )
 {
-    ownerTypeName;
-    functionalityName;
-    assert( !"Implement me" );
-    return std::string();
+    auto descriptor = model::PluginsManager::DefaultInstanceRef().GetDescriptor( ownerTypeName );
+    return descriptor->QueryGizmoLogicName( functionalityName );
 }
 
 // ***********************

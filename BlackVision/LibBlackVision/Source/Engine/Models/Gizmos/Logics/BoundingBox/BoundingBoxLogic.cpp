@@ -72,6 +72,13 @@ BoundingBoxLogic::~BoundingBoxLogic()
 
 // ***********************
 //
+model::IGizmoLogicPtr       BoundingBoxLogic::Create( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    return std::make_shared< BoundingBoxLogic >( gizmoRoot, gizmoOwner, timeEvaluator );
+}
+
+// ***********************
+//
 void        BoundingBoxLogic::Initialize        ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BoundingBoxLogic::NodeRemovedHandler ), NodeRemovedEvent::Type() );

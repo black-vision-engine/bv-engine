@@ -47,6 +47,20 @@ const std::string &     BasePluginDescriptor::GetPluginTypeAbbrv() const
     return m_abbrv;
 }
 
+// ***********************
+//
+std::string             BasePluginDescriptor::QueryGizmoLogicName( const std::string & functionalityName ) const
+{
+    return m_gizmosMapping.QueryGizmoLogicName( functionalityName );
+}
+
+// ***********************
+//
+std::vector< std::string >  BasePluginDescriptor::ListGizmoFunctions() const
+{
+    return m_gizmosMapping.ListFunctionalities();
+}
+
 // *********************************
 //
 IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluatorPtr timeEvaluator ) const

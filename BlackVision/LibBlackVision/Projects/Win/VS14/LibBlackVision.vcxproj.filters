@@ -2059,6 +2059,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5326,6 +5329,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h">
       <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

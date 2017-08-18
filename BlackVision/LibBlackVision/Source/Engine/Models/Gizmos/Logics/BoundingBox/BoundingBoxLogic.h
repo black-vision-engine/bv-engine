@@ -78,6 +78,9 @@ public:
     explicit    BoundingBoxLogic        ( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator );
     virtual    ~BoundingBoxLogic        ();
 
+
+    static model::IGizmoLogicPtr        Create              ( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator );
+
     virtual void                        Initialize			()				override;
     virtual void                        Update				( TimeType t )	override;
     virtual void                        Deinitialize		()				override;

@@ -26,84 +26,99 @@ namespace bv {
 
 // ***********************
 //
+template< typename LogicType >
+model::INodeLogicPtr        Create      ( const IDeserializer & deser, model::BasicNodeWeakPtr logicParent )
+{
+    return LogicType::Create( deser, logicParent );
+}
+
+
+
+
+// ***********************
+//
+NodeLogicFactory::NodeLogicFactory()
+{
+    RegisterDefaultLogics();
+}
+
+// ***********************
+//
 model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodeWeakPtr logicParent )
 {
     const std::string & logicType = deser.GetAttribute( "type" );
 
-    if( logicType == nodelogic::Scroller::Type() )
-    {
-        return nodelogic::Scroller::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::WidgetCounter::Type() )
-    {
-        return nodelogic::WidgetCounter::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::NodeReplicator::Type() )
-    {
-        return nodelogic::NodeReplicator::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::SmoothValueSetter::Type() )
-    {
-        return nodelogic::SmoothValueSetter::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::MeshLoader::Type() )
-    {
-        return nodelogic::MeshLoader::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::SmoothValueSetter::Type() )
-    {
-        return nodelogic::SmoothValueSetter::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::PieChart::Type() )
-    {
-        return nodelogic::PieChart::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::AnalogWatch::Type() )
-    {
-        return nodelogic::AnalogWatch::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::Arrange::Type() )
-    {
-        return nodelogic::Arrange::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::Follow::Type() )
-    {
-        return nodelogic::Follow::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::SlideShow::Type() )
-    {
-        return nodelogic::SlideShow::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::MaxSize::Type() )
-    {
-        return nodelogic::MaxSize::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::Cloner::Type() )
-    {
-        return nodelogic::Cloner::Create( deser, logicParent );
-    }
-    else if( logicType == nodelogic::NodeVisibilityAnimation::Type() )
-    {
-        return nodelogic::NodeVisibilityAnimation::Create( deser, logicParent );
-    }
+    auto descIter = m_logics.find( logicType );
+    if( descIter == m_logics.end() )
+        return nullptr;
 
-    return nullptr;
+    return descIter->second->CreateLogic( deser, logicParent );
 }
 
 // ***********************
 //
 model::IGizmoLogicPtr       NodeLogicFactory::CreateGizmoLogic      ( const std::string & gizmoName, model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    if( gizmoName == nodelogic::ShowFPS::Type() )
-    {
-        return std::make_shared< nodelogic::ShowFPS >( gizmoRoot, gizmoOwner, timeEvaluator );
-    }
-    else if( gizmoName == nodelogic::BoundingBoxLogic::Type() )
-    {
-        return std::make_shared< nodelogic::BoundingBoxLogic >( gizmoRoot, gizmoOwner, timeEvaluator );
-    }
+    auto descIter = m_gizmoLogics.find( gizmoName );
+    if( descIter == m_gizmoLogics.end() )
+        return nullptr;
 
-    return nullptr;
+    return descIter->second->CreateLogic( gizmoRoot, gizmoOwner, timeEvaluator );
+}
+
+
+// ========================================================================= //
+// Registration
+// ========================================================================= //
+
+// ***********************
+//
+model::NodeLogicDesc &      NodeLogicFactory::RegisterLogic         ( const std::string & logicType, model::LogicCreateFun creator )
+{
+    assert( m_logics[ logicType ] == nullptr );
+
+    model::NodeLogicDescPtr desc = std::make_shared< model::NodeLogicDesc >( creator );
+    m_logics[ logicType ] = desc;
+    
+    return *( desc.get() );
+}
+
+// ***********************
+//
+model::GizmoLogicDesc &     NodeLogicFactory::RegisterGizmo         ( const std::string & logicType, model::GizmoCreateFun creator )
+{
+    assert( m_gizmoLogics[ logicType ] == nullptr );
+
+    model::GizmoLogicDescPtr desc = std::make_shared< model::GizmoLogicDesc >( creator );
+    m_gizmoLogics[ logicType ] = desc;
+
+    return *( desc.get() );
+}
+
+
+
+// ***********************
+// TODO: In future there should be public registration function. This code maybe should be moved
+// somewhere outside in application logic.
+void                        NodeLogicFactory::RegisterDefaultLogics ()
+{
+    RegisterLogic( nodelogic::Scroller::Type(), &Create< nodelogic::Scroller > );
+    RegisterLogic( nodelogic::WidgetCounter::Type(), &Create< nodelogic::WidgetCounter > );
+    RegisterLogic( nodelogic::NodeReplicator::Type(), &Create< nodelogic::NodeReplicator > );
+    RegisterLogic( nodelogic::SmoothValueSetter::Type(), &Create< nodelogic::SmoothValueSetter > );
+    RegisterLogic( nodelogic::MeshLoader::Type(), &Create< nodelogic::MeshLoader > );
+    RegisterLogic( nodelogic::PieChart::Type(), &Create< nodelogic::PieChart > );
+    RegisterLogic( nodelogic::AnalogWatch::Type(), &Create< nodelogic::AnalogWatch > );
+    RegisterLogic( nodelogic::Arrange::Type(), &Create< nodelogic::Arrange > );
+    RegisterLogic( nodelogic::Follow::Type(), &Create< nodelogic::Follow > );
+    RegisterLogic( nodelogic::SlideShow::Type(), &Create < nodelogic::SlideShow > );
+    RegisterLogic( nodelogic::MaxSize::Type(), &Create < nodelogic::MaxSize > );
+    RegisterLogic( nodelogic::Cloner::Type(), &Create< nodelogic::Cloner > );
+    RegisterLogic( nodelogic::NodeVisibilityAnimation::Type(), &Create< nodelogic::NodeVisibilityAnimation > );
+
+    // Gizmos registration
+    RegisterGizmo( nodelogic::ShowFPS::Type(), &nodelogic::ShowFPS::Create );
+    RegisterGizmo( nodelogic::BoundingBoxLogic::Type(), &nodelogic::BoundingBoxLogic::Create );
 }
 
 } //bv

@@ -65,6 +65,13 @@ ShowFPS::ShowFPS             ( model::BasicNodeWeakPtr gizmoRoot, model::BasicNo
 ShowFPS::~ShowFPS()
 {}
 
+// ***********************
+//
+model::IGizmoLogicPtr       ShowFPS::Create( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    return std::make_shared< ShowFPS >( gizmoRoot, gizmoOwner, timeEvaluator );
+}
+
 
 // ***********************
 //
