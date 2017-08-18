@@ -2080,6 +2080,13 @@ bool                    BVProjectEditor::SelectNode              ( model::IModel
     bool result = CreateGizmo( scene, basicNode, model::GizmoType::Node, "", "BoundingBox" );
     model::ModelState::GetInstance().Select( node, color );
 
+    // Set color of bouinding box and center
+    auto gizmoData = m_gizmoManager.GetGizmoRootNode( basicNode, "BoundingBox" );
+    auto gizmoLogic = std::static_pointer_cast< model::IGizmoLogic >( gizmoData->GizmoRoot.lock()->GetLogic() );
+
+    model::QueryTypedParam< model::ParamVec4Ptr >( gizmoLogic->GetParameter( "BoxColor" ) )->SetVal( color, 0.0f );
+    model::QueryTypedParam< model::ParamVec4Ptr >( gizmoLogic->GetParameter( "CenterColor" ) )->SetVal( color, 0.0f );
+
     return result;
 }
 

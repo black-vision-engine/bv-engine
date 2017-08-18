@@ -43,6 +43,9 @@ public:
     bool                CreateGizmo                 ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName );
     bool                RemoveGizmo                 ( BVProjectEditor * editor, model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
 
+
+    const GizmoData *   GetGizmoRootNode            ( model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+
 private:
 
     std::string         QueryGizmoLogicName         ( model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName );

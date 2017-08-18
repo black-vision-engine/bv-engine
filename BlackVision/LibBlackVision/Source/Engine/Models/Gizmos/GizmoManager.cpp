@@ -73,6 +73,13 @@ bool                GizmoManager::RemoveGizmo               ( BVProjectEditor * 
     return false;
 }
 
+const GizmoData *   GizmoManager::GetGizmoRootNode          ( model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    if( !m_existingGizmos.Exists( gizmoOwner, functionalityName ) )
+        return nullptr;
+    return &m_existingGizmos.QueryGizmo( gizmoOwner, functionalityName );
+}
+
 
 // ========================================================================= //
 // Gizmo functionalities mapping
