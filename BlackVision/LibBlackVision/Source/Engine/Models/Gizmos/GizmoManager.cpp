@@ -97,6 +97,7 @@ void                GizmoManager::RegisterDefaultGizmos     ()
 {
     // TODO: Here place registration of default scene and node gizmos.
     m_sceneGizmos.RegisterFunctionality( "FPS", "ShowFPS" );
+    m_sceneGizmos.RegisterFunctionality( "GridLines", "GridLines" );
     m_nodesGizmos.RegisterFunctionality( "BoundingBox", "BoundingBoxLogic" );
 }
 
