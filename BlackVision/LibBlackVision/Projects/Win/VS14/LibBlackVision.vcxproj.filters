@@ -187,9 +187,6 @@
     <Filter Include="Engine\Graphics\Effects\Utils">
       <UniqueIdentifier>{457dcf57-1339-4d32-820a-48f1f4c5fb5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\NodeEffects\Effects">
-      <UniqueIdentifier>{3eb51f63-99ae-4a04-9561-8dec21ceef54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Rendering">
       <UniqueIdentifier>{a96ef61e-ff68-4bc1-a615-59e9c1661ba9}</UniqueIdentifier>
     </Filter>
@@ -450,6 +447,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl">
       <UniqueIdentifier>{b5dd1931-ca44-4f32-9517-e359105c5f1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics\GridLines">
+      <UniqueIdentifier>{bcc9f7d2-2835-48f2-aed9-bba64d250603}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2061,6 +2061,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.cpp">
       <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.cpp">
+      <Filter>Engine\Models\Gizmos\Logics\GridLines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5332,6 +5338,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h">
       <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h">
+      <Filter>Engine\Models\Gizmos\Logics\GridLines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

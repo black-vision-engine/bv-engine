@@ -7,7 +7,8 @@
 
 #include "Application/ApplicationContext.h"
 
-
+#include "Assets/DataArray/DataArrayAssetDescriptor.h"
+#include "Assets/DataArray/DataArrayTypedRows.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -23,7 +24,6 @@ UInt16  GridLinesLogic::m_sMaxGridLines = 32;
 //
 GridLinesLogic::GridLinesLogic()
     :   m_showGridLines( false )
-    ,   m_color( glm::vec4( 1.0, 0.7, 0.0, 0.8 ) )
 {
     m_horizontalGridLines.resize( m_sMaxGridLines, nullptr );
     m_verticalGridLines.resize( m_sMaxGridLines, nullptr );
@@ -184,21 +184,19 @@ void            GridLinesLogic::ShowGridLines           ( bool enable )
 
 // ***********************
 //
-ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
+DataArrayRowAssetDescConstPtr      GridLinesLogic::BuildDataArray   ( float lineSize ) const
 {
-    auto comp = model::ConnectedComponent::Create();
+    std::vector< glm::vec3 > typedRow;
+    std::vector< DataArrayRowBase * > rows;
 
-    auto compVertDesc = std::make_shared< model::AttributeChannelDescriptor >( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-
-    auto lineVerts = std::make_shared< model::Float3AttributeChannel >( compVertDesc, "gridLines", false );
-    comp->AddAttributeChannel( lineVerts );
+    float halfSize = lineSize / 2.0f;
 
     for( auto line : m_verticalGridLines )
     {
         if( line )
         {
-            lineVerts->AddAttribute( glm::vec3( line->GetPosition(), 10.0, 0.0 ) );
-            lineVerts->AddAttribute( glm::vec3( line->GetPosition(), -10.0, 0.0 ) );
+            typedRow.push_back( glm::vec3( line->GetPosition(), halfSize, 0.0 ) );
+            typedRow.push_back( glm::vec3( line->GetPosition(), -halfSize, 0.0 ) );
         }
     }
 
@@ -206,19 +204,13 @@ ConnectedComponentPtr   GridLinesLogic::BuildConnectedComponent ()
     {
         if( line )
         {
-            lineVerts->AddAttribute( glm::vec3( 10.0, line->GetPosition(), 0.0 ) );
-            lineVerts->AddAttribute( glm::vec3( -10.0, line->GetPosition(), 0.0 ) );
+            typedRow.push_back( glm::vec3( halfSize, line->GetPosition(), 0.0 ) );
+            typedRow.push_back( glm::vec3( -halfSize, line->GetPosition(), 0.0 ) );
         }
     }
 
-    return comp;
-}
-
-// ***********************
-//
-glm::vec4       GridLinesLogic::GetColor() const
-{
-    return m_color;
+    rows.push_back( new DataArrayRow< glm::vec3 >( "Lines", std::move( typedRow ) ) );
+    return DataArrayRowAssetDesc::Create( std::move( rows ) );;
 }
 
 // ***********************

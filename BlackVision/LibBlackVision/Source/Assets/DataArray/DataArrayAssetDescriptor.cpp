@@ -18,12 +18,17 @@
 namespace bv
 {
 
-const std::string DataArrayAssetDescriptor::uid = "DATA_ARRAY_ASSET_DESC";
+const std::string DataArrayAssetDesc::uid = "DATA_ARRAY_ASSET_DESC";
+const std::string DataArrayRowAssetDesc::uid = "DATA_ARRAY_ROW_ASSET_DESC";
 
+
+// ========================================================================= //
+// DataArrayAssetDesc
+// ========================================================================= //
 
 // ***********************
 //
-DataArrayAssetDescriptor::DataArrayAssetDescriptor( std::vector< std::string > && rowNames, std::vector< std::string > && rows, std::vector< ModelParamType > && types )
+DataArrayAssetDesc::DataArrayAssetDesc( std::vector< std::string > && rowNames, std::vector< std::string > && rows, std::vector< ModelParamType > && types )
 {
     m_rowNames = std::move( rowNames );
     m_rows = std::move( rows );
@@ -34,7 +39,7 @@ DataArrayAssetDescriptor::DataArrayAssetDescriptor( std::vector< std::string > &
 
 // ***********************
 //
-void                    DataArrayAssetDescriptor::Serialize       ( ISerializer& ser ) const
+void                    DataArrayAssetDesc::Serialize       ( ISerializer& ser ) const
 {
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
@@ -66,12 +71,12 @@ ser.ExitChild();
 
 // ***********************
 //
-void                    DataArrayAssetDescriptor::Deserialize     ( const IDeserializer& /*deser*/ )
+void                    DataArrayAssetDesc::Deserialize     ( const IDeserializer& /*deser*/ )
 {}
 
 // ***********************
 //
-ISerializableConstPtr   DataArrayAssetDescriptor::Create          ( const IDeserializer& deser )
+ISerializableConstPtr   DataArrayAssetDesc::Create          ( const IDeserializer& deser )
 {
     std::vector< std::string > rowNames;
     std::vector< std::string > rows;
@@ -100,42 +105,42 @@ ISerializableConstPtr   DataArrayAssetDescriptor::Create          ( const IDeser
 
 // ***********************
 //
-DataArrayAssetDescriptorConstPtr    DataArrayAssetDescriptor::Create              ( std::vector< std::string > && rowNames, std::vector< std::string > && rows, std::vector< ModelParamType > && types )
+DataArrayAssetDescConstPtr      DataArrayAssetDesc::Create              ( std::vector< std::string > && rowNames, std::vector< std::string > && rows, std::vector< ModelParamType > && types )
 {
-    return DataArrayAssetDescriptorConstPtr( new DataArrayAssetDescriptor( std::move( rowNames ), std::move( rows ), std::move( types ) ) );
+    return DataArrayAssetDescConstPtr( new DataArrayAssetDesc( std::move( rowNames ), std::move( rows ), std::move( types ) ) );
 }
 
 // ***********************
 //
-const std::string &     DataArrayAssetDescriptor::GetUID() const
+const std::string &     DataArrayAssetDesc::GetUID() const
 {
-	return DataArrayAssetDescriptor::UID();
+	return DataArrayAssetDesc::UID();
 }
 
 // ***********************
 //
-const std::string &     DataArrayAssetDescriptor::UID()
+const std::string &     DataArrayAssetDesc::UID()
 {
-	return DataArrayAssetDescriptor::uid;
+	return DataArrayAssetDesc::uid;
 }
 
 // ***********************
 //
-bool                    DataArrayAssetDescriptor::IsCacheable() const
+bool                    DataArrayAssetDesc::IsCacheable() const
 {
 	return false;
 }
 
 // ***********************
 //
-VoidConstPtr            DataArrayAssetDescriptor::QueryThis() const
+VoidConstPtr            DataArrayAssetDesc::QueryThis() const
 {
 	return shared_from_this();
 }
 
 // ***********************
 //
-std::string	            DataArrayAssetDescriptor::GetKey	() const
+std::string	            DataArrayAssetDesc::GetKey	() const
 {
     if( m_key.empty() )
         m_key = ComputeKey();
@@ -145,7 +150,7 @@ std::string	            DataArrayAssetDescriptor::GetKey	() const
 
 // ***********************
 //
-std::string				DataArrayAssetDescriptor::ComputeKey		() const
+std::string				DataArrayAssetDesc::ComputeKey		() const
 {
     std::string key = uid;
     for( auto row : m_rows )
@@ -158,14 +163,14 @@ std::string				DataArrayAssetDescriptor::ComputeKey		() const
 
 // ***********************
 //
-std::string             DataArrayAssetDescriptor::GetProposedShortKey () const
+std::string             DataArrayAssetDesc::GetProposedShortKey () const
 {
     return AssetDesc::GetProposedShortKey();
 }
 
 // ***********************
 //
-SizeType                DataArrayAssetDescriptor::EstimateMemoryUsage () const
+SizeType                DataArrayAssetDesc::EstimateMemoryUsage () const
 {
     SizeType assetSize = 0;
 
@@ -174,24 +179,135 @@ SizeType                DataArrayAssetDescriptor::EstimateMemoryUsage () const
 
 // ***********************
 //
-const std::vector< std::string > &  DataArrayAssetDescriptor::GetRowNames         () const
+const std::vector< std::string > &  DataArrayAssetDesc::GetRowNames         () const
 {
     return m_rowNames;
 }
 
 // ***********************
 //
-const std::vector< std::string > &  DataArrayAssetDescriptor::GetRows             () const
+const std::vector< std::string > &  DataArrayAssetDesc::GetRows             () const
 {
     return m_rows;
 }
 
 // ***********************
 //
-const std::vector< ModelParamType > &  DataArrayAssetDescriptor::GetRowTypes         () const
+const std::vector< ModelParamType > &  DataArrayAssetDesc::GetRowTypes         () const
 {
     return m_rowTypes;
 }
+
+// ========================================================================= //
+// DataArrayRowAssetDesc
+// ========================================================================= //
+
+
+// ***********************
+//
+DataArrayRowAssetDesc::DataArrayRowAssetDesc( std::vector< DataArrayRowBase * > && rows )
+{
+    m_rows = std::move( rows );
+}
+
+
+
+// ***********************
+//
+void                                DataArrayRowAssetDesc::Serialize      ( ISerializer & /*ser*/ ) const
+{
+    assert( !"No serialization" );
+}
+
+// ***********************
+//
+void                                DataArrayRowAssetDesc::Deserialize    ( const IDeserializer & /*deser*/ )
+{
+    assert( !"No deserialization" );
+}
+
+// ***********************
+//
+ISerializableConstPtr               DataArrayRowAssetDesc::Create         ( const IDeserializer & /*deser*/ )
+{
+    return nullptr;
+}
+
+// ***********************
+//
+DataArrayRowAssetDescConstPtr       DataArrayRowAssetDesc::Create         ( std::vector< DataArrayRowBase * > && rows )
+{
+    return DataArrayRowAssetDescConstPtr( new DataArrayRowAssetDesc( std::move( rows ) ) );
+}
+
+// ***********************
+//
+const std::string &     DataArrayRowAssetDesc::GetUID() const
+{
+    return DataArrayRowAssetDesc::UID();
+}
+
+// ***********************
+//
+const std::string &     DataArrayRowAssetDesc::UID()
+{
+    return DataArrayRowAssetDesc::uid;
+}
+
+// ***********************
+//
+bool                    DataArrayRowAssetDesc::IsCacheable() const
+{
+    return false;
+}
+
+// ***********************
+//
+VoidConstPtr            DataArrayRowAssetDesc::QueryThis() const
+{
+    return shared_from_this();
+}
+
+// ***********************
+//
+std::string	            DataArrayRowAssetDesc::GetKey	() const
+{
+    if( m_key.empty() )
+        m_key = ComputeKey();
+
+    return m_key;
+}
+
+// ***********************
+//
+std::string				DataArrayRowAssetDesc::ComputeKey		() const
+{
+    // TODO: how to compute key ??
+    std::string key = uid;
+    for( auto row : m_rows )
+    {
+        key += Hash( row->GetName() ).Get();
+    }
+
+    return key;
+}
+
+// ***********************
+//
+std::string             DataArrayRowAssetDesc::GetProposedShortKey () const
+{
+    return AssetDesc::GetProposedShortKey();
+}
+
+// ***********************
+//
+SizeType                DataArrayRowAssetDesc::EstimateMemoryUsage () const
+{
+    SizeType assetSize = 0;
+
+    return assetSize;
+}
+
 
 
 }	// bv

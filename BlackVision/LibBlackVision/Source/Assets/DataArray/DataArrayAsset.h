@@ -84,7 +84,7 @@ class DataArrayAsset;
 /// @note AssetDescriptor uid and Asset uid are different strings.
 template<> inline const std::string& GetAssetDescUID<DataArrayAsset>()
 {
-    return DataArrayAssetDescriptor::UID();
+    return DataArrayAssetDesc::UID();
 }
 
 

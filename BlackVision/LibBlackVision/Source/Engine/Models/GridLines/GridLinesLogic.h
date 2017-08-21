@@ -1,8 +1,12 @@
 #pragma once
 
 #include "GridLine.h"
+#include "Assets/FwdDecls.h"
 
 #include <vector>
+
+
+
 
 namespace bv { namespace model
 {
@@ -23,8 +27,6 @@ private:
     bool                            m_showGridLines;
     UInt64                          m_gridLinesUpdateID;
 
-    glm::vec4                       m_color;
-
 public:
     GridLinesLogic();
     ~GridLinesLogic();
@@ -40,11 +42,9 @@ public:
 
     void                    ShowGridLines           ( bool enable );
     bool                    GetGridLinesVisibility  ()                  { return m_showGridLines; }
-    
-    ConnectedComponentPtr   BuildConnectedComponent ();
     UInt64                  GetUpdateID             ()                  { return m_gridLinesUpdateID; }
-
-    glm::vec4               GetColor                () const;
+    
+    DataArrayRowAssetDescConstPtr       BuildDataArray  ( float lineSize ) const;
 
 private:
 

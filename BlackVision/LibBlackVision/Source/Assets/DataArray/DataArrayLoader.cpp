@@ -22,7 +22,7 @@ const char separator = ';';
 // ***********************
 //
 template< typename RowType >
-DataArrayRowBase *      CreateRow  ( DataArrayAssetDescriptorConstPtr desc, int idx )
+DataArrayRowBase *      CreateRow  ( DataArrayAssetDescConstPtr desc, int idx )
 {
     std::vector< RowType > typedRow;
 
@@ -49,49 +49,62 @@ DataArrayRowBase *      CreateRow  ( DataArrayAssetDescriptorConstPtr desc, int 
 
 // ******************************
 //
-AssetConstPtr DataArrayLoader::LoadAsset( const AssetDescConstPtr & desc ) const
+AssetConstPtr           DataArrayLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 {
-	auto typedDesc = QueryTypedDesc< DataArrayAssetDescriptorConstPtr >( desc );
-	assert( typedDesc );
-
-    auto & rows = typedDesc->GetRows();
-    auto & types = typedDesc->GetRowTypes();
-
-    std::vector< DataArrayRowBase * > typedRows;
-
-    for( Int32 i = 0; i < ( Int32 )rows.size(); i++ )
+    if( desc->GetUID() == DataArrayAssetDesc::UID() )
     {
-        if( types[ i ] == ModelParamType::MPT_FLOAT )
+        auto typedDesc = QueryTypedDesc< DataArrayAssetDescConstPtr >( desc );
+        assert( typedDesc );
+
+        auto & rows = typedDesc->GetRows();
+        auto & types = typedDesc->GetRowTypes();
+
+        std::vector< DataArrayRowBase * > typedRows;
+
+        for( Int32 i = 0; i < ( Int32 )rows.size(); i++ )
         {
-            typedRows.push_back( CreateRow< float >( typedDesc, i ) );
+            if( types[ i ] == ModelParamType::MPT_FLOAT )
+            {
+                typedRows.push_back( CreateRow< float >( typedDesc, i ) );
+            }
+            else if( types[ i ] == ModelParamType::MPT_VEC2 )
+            {
+                typedRows.push_back( CreateRow< glm::vec2 >( typedDesc, i ) );
+            }
+            else if( types[ i ] == ModelParamType::MPT_VEC3 )
+            {
+                typedRows.push_back( CreateRow< glm::vec3 >( typedDesc, i ) );
+            }
+            else if( types[ i ] == ModelParamType::MPT_VEC4 )
+            {
+                typedRows.push_back( CreateRow< glm::vec4 >( typedDesc, i ) );
+            }
         }
-        else if( types[ i ] == ModelParamType::MPT_VEC2 )
-        {
-            typedRows.push_back( CreateRow< glm::vec2 >( typedDesc, i ) );
-        }
-        else if( types[ i ] == ModelParamType::MPT_VEC3 )
-        {
-            typedRows.push_back( CreateRow< glm::vec3 >( typedDesc, i ) );
-        }
-        else if( types[ i ] == ModelParamType::MPT_VEC4 )
-        {
-            typedRows.push_back( CreateRow< glm::vec4 >( typedDesc, i ) );
-        }
+
+        return DataArrayAsset::Create( std::move( typedRows ) );
     }
+    else if( desc->GetUID() == DataArrayRowAssetDesc::UID() )
+    {
+        auto typedDesc = QueryTypedDesc< DataArrayRowAssetDescConstPtr >( desc );
+        assert( typedDesc );
 
-    return DataArrayAsset::Create( std::move( typedRows ) );
+        auto rows = typedDesc->GetRows();
+        return DataArrayAsset::Create( std::move( rows ) );
+    }
+    
+    return nullptr;
 }
 
 // ******************************
 //
-AssetDescConstPtr DataArrayLoader::CreateDescriptor( const IDeserializer& deserializeObject ) const
+AssetDescConstPtr       DataArrayLoader::CreateDescriptor( const IDeserializer& deserializeObject ) const
 {
-    return std::static_pointer_cast<const AssetDesc>( DataArrayAssetDescriptor::Create( deserializeObject ) );
+    return std::static_pointer_cast<const AssetDesc>( DataArrayAssetDesc::Create( deserializeObject ) );
 }
 
 // ******************************
 //
-ThumbnailConstPtr DataArrayLoader::LoadThumbnail   ( const AssetDescConstPtr & /*desc*/ ) const
+ThumbnailConstPtr       DataArrayLoader::LoadThumbnail   ( const AssetDescConstPtr & /*desc*/ ) const
 {
     assert( !"No thumbnails" );
     return nullptr;

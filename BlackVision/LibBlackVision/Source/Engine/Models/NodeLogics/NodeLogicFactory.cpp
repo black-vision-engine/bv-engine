@@ -18,6 +18,7 @@
 
 #include "Engine/Models/Gizmos/Logics/ShowFPS/ShowFPS.h"
 #include "Engine/Models/Gizmos/Logics/BoundingBox/BoundingBoxLogic.h"
+#include "Engine/Models/Gizmos/Logics/GridLines/GridLines.h"
 
 
 
@@ -131,6 +132,7 @@ void                        NodeLogicFactory::RegisterDefaultLogics ()
     // Gizmos registration
     RegisterGizmo( nodelogic::ShowFPS::Type(), &nodelogic::ShowFPS::Create );
     RegisterGizmo( nodelogic::BoundingBoxLogic::Type(), &nodelogic::BoundingBoxLogic::Create );
+    RegisterGizmo( nodelogic::GridLines::Type(), &nodelogic::GridLines::Create );
 }
 
 } //bv
