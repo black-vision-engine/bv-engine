@@ -67,9 +67,6 @@ void    NodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget *
     enable( ctx, output );
     RenderQueued( scene->GetRoot(), ctx );
 
-    // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
-    RenderGridLines( scene, ctx );
-
     disableBoundRT( ctx );
 }
 
@@ -143,16 +140,6 @@ void     NodeRenderLogic::RenderImpl      ( SceneNode * node, RenderContext * ct
         // FIXME: nrl - transition implementations
         // assert( false );
     }
-}
-
-// *********************************
-//
-void    NodeRenderLogic::RenderGridLines   ( Scene * scene, RenderContext * ctx )
-{
-    if( scene->GetGridLinesVisibility() )
-    {
-        renderer( ctx )->Draw( scene->GetGridLines() );
-    }    
 }
 
 // *********************************

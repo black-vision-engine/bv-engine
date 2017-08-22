@@ -40,7 +40,6 @@ public:
 private:
 
     static void     RenderImpl          ( SceneNode * node, RenderContext * ctx );
-    static void     RenderGridLines     ( Scene * scene, RenderContext * ctx );
 
 public:
 
