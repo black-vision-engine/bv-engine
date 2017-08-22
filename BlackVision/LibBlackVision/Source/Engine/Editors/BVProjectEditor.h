@@ -273,6 +273,8 @@ public:
     bool                    DeleteGizmo                 ( const std::string & sceneName, const std::string gizmoOwnerNodeName, const std::string & functionalityName );
     bool                    DeleteGizmo                 ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
 
+    model::BasicNodePtr     QueryGizmoNode              ( model::BasicNodePtr gizmoOwner, const std::string & functionalityName );
+
     bool                    AddGizmoNode                ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr childNode );
     bool                    DeleteGizmoNode             ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot );
 

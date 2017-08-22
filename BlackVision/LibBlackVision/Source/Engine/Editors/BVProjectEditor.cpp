@@ -1419,6 +1419,17 @@ bool            BVProjectEditor::DeleteGizmo                ( model::SceneModelP
 
 // ***********************
 //
+model::BasicNodePtr         BVProjectEditor::QueryGizmoNode ( model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    auto gizmoData = m_gizmoManager.GetGizmoRootNode( gizmoOwner, functionalityName );
+    if( gizmoData )
+        return gizmoData->GizmoRoot.lock();
+
+    return nullptr;
+}
+
+// ***********************
+//
 bool            BVProjectEditor::AddGizmoNode               ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot )
 {
     if( !scene || !gizmoOwner || !gizmoRoot )

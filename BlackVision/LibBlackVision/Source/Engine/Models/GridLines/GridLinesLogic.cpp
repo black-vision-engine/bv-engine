@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "GridLinesLogic.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/SceneModel.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -18,7 +17,11 @@
 namespace bv { namespace model
 {
 
-UInt16  GridLinesLogic::m_sMaxGridLines = 32;
+UInt16              GridLinesLogic::m_sMaxGridLines     = 32;
+const std::string   gGizmoFunctionalityName             = "GridLines";
+
+
+
 
 // ***********************
 //
@@ -177,8 +180,11 @@ bool            GridLinesLogic::AlignNodeToGridLine     ( GridLineType gridType,
 
 // ***********************
 //
-void            GridLinesLogic::ShowGridLines           ( bool enable )
+void            GridLinesLogic::ShowGridLines           ( SceneModelPtr scene, BVProjectEditor * editor, bool enable )
 {
+    auto gridNode = editor->QueryGizmoNode( scene->GetRootNode(), gGizmoFunctionalityName );
+    
+    gridNode->SetVisible( enable );
     m_showGridLines = enable;
 }
 
