@@ -18,8 +18,48 @@
 namespace bv
 {
 
-const std::string DataArrayAssetDesc::uid = "DATA_ARRAY_ASSET_DESC";
-const std::string DataArrayRowAssetDesc::uid = "DATA_ARRAY_ROW_ASSET_DESC";
+const std::string DataArrayAssetBaseDesc::uid = "DATA_ARRAY_ASSET_DESC";
+
+
+// ========================================================================= //
+// DataArrayAssetBaseDesc
+// ========================================================================= //
+
+
+// ***********************
+//
+DataArrayAssetBaseDesc::DataArrayAssetBaseDesc( DataArrayDescType type )
+    : m_type( type )
+{}
+
+// ***********************
+//
+const std::string &     DataArrayAssetBaseDesc::GetUID() const
+{
+    return DataArrayAssetDesc::UID();
+}
+
+// ***********************
+//
+const std::string &     DataArrayAssetBaseDesc::UID()
+{
+    return DataArrayAssetBaseDesc::uid;
+}
+
+// ***********************
+//
+bool                    DataArrayAssetBaseDesc::IsCacheable() const
+{
+    return false;
+}
+
+// ***********************
+//
+VoidConstPtr            DataArrayAssetBaseDesc::QueryThis() const
+{
+    return shared_from_this();
+}
+
 
 
 // ========================================================================= //
@@ -29,6 +69,7 @@ const std::string DataArrayRowAssetDesc::uid = "DATA_ARRAY_ROW_ASSET_DESC";
 // ***********************
 //
 DataArrayAssetDesc::DataArrayAssetDesc( std::vector< std::string > && rowNames, std::vector< std::string > && rows, std::vector< ModelParamType > && types )
+    : DataArrayAssetBaseDesc( DataArrayDescType::Strings )
 {
     m_rowNames = std::move( rowNames );
     m_rows = std::move( rows );
@@ -110,33 +151,6 @@ DataArrayAssetDescConstPtr      DataArrayAssetDesc::Create              ( std::v
     return DataArrayAssetDescConstPtr( new DataArrayAssetDesc( std::move( rowNames ), std::move( rows ), std::move( types ) ) );
 }
 
-// ***********************
-//
-const std::string &     DataArrayAssetDesc::GetUID() const
-{
-	return DataArrayAssetDesc::UID();
-}
-
-// ***********************
-//
-const std::string &     DataArrayAssetDesc::UID()
-{
-	return DataArrayAssetDesc::uid;
-}
-
-// ***********************
-//
-bool                    DataArrayAssetDesc::IsCacheable() const
-{
-	return false;
-}
-
-// ***********************
-//
-VoidConstPtr            DataArrayAssetDesc::QueryThis() const
-{
-	return shared_from_this();
-}
 
 // ***********************
 //
@@ -152,7 +166,7 @@ std::string	            DataArrayAssetDesc::GetKey	() const
 //
 std::string				DataArrayAssetDesc::ComputeKey		() const
 {
-    std::string key = uid;
+    std::string key = DataArrayAssetBaseDesc::UID();
     for( auto row : m_rows )
     {
         key += Hash( row ).Get();
@@ -206,6 +220,7 @@ const std::vector< ModelParamType > &  DataArrayAssetDesc::GetRowTypes         (
 // ***********************
 //
 DataArrayRowAssetDesc::DataArrayRowAssetDesc( std::vector< DataArrayRowBase * > && rows )
+    : DataArrayAssetBaseDesc( DataArrayDescType::Row )
 {
     m_rows = std::move( rows );
 }
@@ -242,34 +257,6 @@ DataArrayRowAssetDescConstPtr       DataArrayRowAssetDesc::Create         ( std:
 
 // ***********************
 //
-const std::string &     DataArrayRowAssetDesc::GetUID() const
-{
-    return DataArrayRowAssetDesc::UID();
-}
-
-// ***********************
-//
-const std::string &     DataArrayRowAssetDesc::UID()
-{
-    return DataArrayRowAssetDesc::uid;
-}
-
-// ***********************
-//
-bool                    DataArrayRowAssetDesc::IsCacheable() const
-{
-    return false;
-}
-
-// ***********************
-//
-VoidConstPtr            DataArrayRowAssetDesc::QueryThis() const
-{
-    return shared_from_this();
-}
-
-// ***********************
-//
 std::string	            DataArrayRowAssetDesc::GetKey	() const
 {
     if( m_key.empty() )
@@ -283,7 +270,7 @@ std::string	            DataArrayRowAssetDesc::GetKey	() const
 std::string				DataArrayRowAssetDesc::ComputeKey		() const
 {
     // TODO: how to compute key ??
-    std::string key = uid;
+    std::string key = DataArrayAssetBaseDesc::UID();
     for( auto row : m_rows )
     {
         key += Hash( row->GetName() ).Get();

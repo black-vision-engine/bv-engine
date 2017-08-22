@@ -186,15 +186,11 @@ bool                                DefaultLineChartPlugin::NeedsTopologyUpdate(
 // 
 bool                                DefaultLineChartPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-    auto daAssetDescr = QueryTypedDesc< DataArrayAssetDescConstPtr >( assetDescr );
-    auto darAssetDescr = QueryTypedDesc< DataArrayRowAssetDescConstPtr >( assetDescr );
+    auto daAssetDescr = QueryTypedDesc< DataArrayAssetBaseDescConstPtr >( assetDescr );
 
-    if( daAssetDescr || darAssetDescr )
+    if( daAssetDescr )
     {
-        if( daAssetDescr != nullptr )
-            m_asset = LoadTypedAsset< DataArrayAsset >( daAssetDescr );
-        else if( darAssetDescr != nullptr )
-            m_asset = LoadTypedAsset< DataArrayAsset >( darAssetDescr );
+        m_asset = LoadTypedAsset< DataArrayAsset >( daAssetDescr );
 
         SetAsset( 0, LAsset( AssetName, assetDescr, nullptr ) );
         m_assetUpdated = true;

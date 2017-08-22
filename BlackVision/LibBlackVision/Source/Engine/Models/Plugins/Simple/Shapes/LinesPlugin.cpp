@@ -80,15 +80,15 @@ public:
         if( !m_data->IsEmpty() )
         {
             auto plot = m_data->GetRow( "Lines" );
-            if( plot->GetType() == ModelParamType::MPT_VEC2 )
+            if( plot->GetType() == ModelParamType::MPT_VEC3 )
             {
-                auto typedPlot = static_cast< DataArrayRow< glm::vec2 >* >( plot );
+                auto typedPlot = static_cast< DataArrayRow< glm::vec3 >* >( plot );
                 auto & plotPoints = typedPlot->GetArray();
 
                 for( UInt32 i = 0; i < ( UInt32 )plotPoints.size() - 1; i += 2 )
                 {
-                    verts->AddAttribute( glm::vec3( plotPoints[ i ], 0.0f ) );
-                    verts->AddAttribute( glm::vec3( plotPoints[ i + 1 ], 0.0f ) );
+                    verts->AddAttribute( plotPoints[ i ] );
+                    verts->AddAttribute( plotPoints[ i + 1 ] );
                 }
 
                 return;
@@ -131,6 +131,8 @@ LinesPlugin::~LinesPlugin         ()
 std::vector<IGeometryGeneratorPtr>	LinesPlugin::GetGenerators()
 {
     std::vector<IGeometryGeneratorPtr> gens;
+    gens.push_back( std::make_shared< LinesPluginGenerator::MainGenerator >( m_asset ) );
+
     return gens;
 }
 
@@ -161,15 +163,11 @@ bool                                LinesPlugin::NeedsTopologyUpdate()
 // 
 bool                                LinesPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-    auto daAssetDescr = QueryTypedDesc< DataArrayAssetDescConstPtr >( assetDescr );
-    auto darAssetDescr = QueryTypedDesc< DataArrayRowAssetDescConstPtr >( assetDescr );
+    auto daAssetDescr = QueryTypedDesc< DataArrayAssetBaseDescConstPtr >( assetDescr );
 
-    if( daAssetDescr || darAssetDescr )
+    if( daAssetDescr )
     {
-        if( daAssetDescr != nullptr )
-            m_asset = LoadTypedAsset< DataArrayAsset >( daAssetDescr );
-        else if( darAssetDescr != nullptr )
-            m_asset = LoadTypedAsset< DataArrayAsset >( darAssetDescr );
+        m_asset = LoadTypedAsset< DataArrayAsset >( daAssetDescr );
 
         SetAsset( 0, LAsset( AssetName, assetDescr, nullptr ) );
         m_assetUpdated = true;

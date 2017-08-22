@@ -53,45 +53,50 @@ AssetConstPtr           DataArrayLoader::LoadAsset( const AssetDescConstPtr & de
 {
     if( desc->GetUID() == DataArrayAssetDesc::UID() )
     {
-        auto typedDesc = QueryTypedDesc< DataArrayAssetDescConstPtr >( desc );
-        assert( typedDesc );
+        auto baseDesc = QueryTypedDesc< DataArrayAssetBaseDescConstPtr >( desc );
+        assert( baseDesc );
 
-        auto & rows = typedDesc->GetRows();
-        auto & types = typedDesc->GetRowTypes();
-
-        std::vector< DataArrayRowBase * > typedRows;
-
-        for( Int32 i = 0; i < ( Int32 )rows.size(); i++ )
+        if( baseDesc->GetDescType() == DataArrayDescType::Strings )
         {
-            if( types[ i ] == ModelParamType::MPT_FLOAT )
+            auto typedDesc = QueryTypedDesc< DataArrayAssetDescConstPtr >( desc );
+
+            auto & rows = typedDesc->GetRows();
+            auto & types = typedDesc->GetRowTypes();
+
+            std::vector< DataArrayRowBase * > typedRows;
+
+            for( Int32 i = 0; i < ( Int32 )rows.size(); i++ )
             {
-                typedRows.push_back( CreateRow< float >( typedDesc, i ) );
+                if( types[ i ] == ModelParamType::MPT_FLOAT )
+                {
+                    typedRows.push_back( CreateRow< float >( typedDesc, i ) );
+                }
+                else if( types[ i ] == ModelParamType::MPT_VEC2 )
+                {
+                    typedRows.push_back( CreateRow< glm::vec2 >( typedDesc, i ) );
+                }
+                else if( types[ i ] == ModelParamType::MPT_VEC3 )
+                {
+                    typedRows.push_back( CreateRow< glm::vec3 >( typedDesc, i ) );
+                }
+                else if( types[ i ] == ModelParamType::MPT_VEC4 )
+                {
+                    typedRows.push_back( CreateRow< glm::vec4 >( typedDesc, i ) );
+                }
             }
-            else if( types[ i ] == ModelParamType::MPT_VEC2 )
-            {
-                typedRows.push_back( CreateRow< glm::vec2 >( typedDesc, i ) );
-            }
-            else if( types[ i ] == ModelParamType::MPT_VEC3 )
-            {
-                typedRows.push_back( CreateRow< glm::vec3 >( typedDesc, i ) );
-            }
-            else if( types[ i ] == ModelParamType::MPT_VEC4 )
-            {
-                typedRows.push_back( CreateRow< glm::vec4 >( typedDesc, i ) );
-            }
+
+            return DataArrayAsset::Create( std::move( typedRows ) );
         }
+        else if( baseDesc->GetDescType() == DataArrayDescType::Row )
+        {
+            auto typedDesc = QueryTypedDesc< DataArrayRowAssetDescConstPtr >( desc );
+            assert( typedDesc );
 
-        return DataArrayAsset::Create( std::move( typedRows ) );
+            auto rows = typedDesc->GetRows();
+            return DataArrayAsset::Create( std::move( rows ) );
+        }
     }
-    else if( desc->GetUID() == DataArrayRowAssetDesc::UID() )
-    {
-        auto typedDesc = QueryTypedDesc< DataArrayRowAssetDescConstPtr >( desc );
-        assert( typedDesc );
 
-        auto rows = typedDesc->GetRows();
-        return DataArrayAsset::Create( std::move( rows ) );
-    }
-    
     return nullptr;
 }
 
