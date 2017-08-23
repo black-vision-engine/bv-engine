@@ -111,8 +111,8 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         assert( mouseX >= 0 );
         assert( mouseY >= 0 );
 
-        Float32 screenWidth = (Float32)ApplicationContext::Instance().GetWidth();
-        Float32 screenHeight = (Float32)ApplicationContext::Instance().GetHeight();
+        Float32 screenWidth = (Float32)ApplicationContext::Instance().GetClientWidth();
+        Float32 screenHeight = (Float32)ApplicationContext::Instance().GetClientHeight();
 
         screenHeight /= 2;
         screenWidth /= 2;
