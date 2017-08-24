@@ -51,7 +51,7 @@ RenderableEffectPtr  SimpleNodeBuilder::CreateRenderableEffect  ( ShaderDataSour
 //
 RenderableEntity *   SimpleNodeBuilder::CreateRenderableTriStrip( RenderableArrayDataArraysSingleVertexBuffer * vaobuf, RenderableEffectPtr effect )
 {
-    RenderableEntity * re = new TriangleStrip( vaobuf, nullptr, effect );
+    RenderableEntity * re = new TriangleStrip( vaobuf, effect );
 
     re->SetWorldTransform( DefaultTransform() );
 

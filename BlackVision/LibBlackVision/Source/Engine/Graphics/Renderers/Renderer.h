@@ -189,6 +189,7 @@ public:
     void    SetDisabled         ( const Texture2D * texture, int textureUnit );
 
     void    Enable              ( const RenderTarget * rt );
+    void    EnableDepthOnly     ( const RenderTarget * rt );
     void    Disable             ( const RenderTarget * rt );
 
     void    ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );

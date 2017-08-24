@@ -17,16 +17,20 @@ private:
     RenderContext					m_ctx;
 
     bool                            m_initialized;
+    bool                            m_editMode;
 
 public:
 
-                                    RenderLogicState               ( unsigned int width, unsigned int height );
+                                    RenderLogicState                ( unsigned int width, unsigned int height );
 
-    RenderContext *			    GetRenderContext	            ();
+    RenderContext *			        GetRenderContext	            ();
     RenderTargetStackAllocator *    GetRenderTargetStackAllocator   ();
     RenderQueueStackAllocator *     GetRenderQueueStackAllocator    ();
 
     bool                            IsInitialized                   () const;
+    bool                            IsEditMode                      () const;
+
+    void                            SwitchEditMode                  ( bool value );
 
     void                            Initialize                      ( Renderer * renderer, audio::AudioRenderer * audio );
 

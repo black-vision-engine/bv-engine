@@ -135,7 +135,7 @@ DefaultLineChartPlugin::DefaultLineChartPlugin         ( const std::string & nam
 ,   m_asset( nullptr )
 {
     m_pluginParamValModel->Update();
-    LoadResource( DefaultAssets::Instance().GetDefaultDesc< DataArrayAssetDescriptor >() );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< DataArrayAssetDesc >() );
 
     InitGeometry( PrimitiveType::PT_LINES );
 
@@ -186,13 +186,13 @@ bool                                DefaultLineChartPlugin::NeedsTopologyUpdate(
 // 
 bool                                DefaultLineChartPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-    auto daAssetDescr = QueryTypedDesc< DataArrayAssetDescriptorConstPtr >( assetDescr );
-    
-    if ( daAssetDescr != nullptr )
+    auto daAssetDescr = QueryTypedDesc< DataArrayAssetBaseDescConstPtr >( assetDescr );
+
+    if( daAssetDescr )
     {
         m_asset = LoadTypedAsset< DataArrayAsset >( daAssetDescr );
+
         SetAsset( 0, LAsset( AssetName, assetDescr, nullptr ) );
-        
         m_assetUpdated = true;
 
         return true;

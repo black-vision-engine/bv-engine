@@ -154,8 +154,23 @@
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\AnalogWatch\AnalogWatch.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Arrange\Arrange.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\Cloner\Cloner.cpp" />
@@ -164,6 +179,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MaxSize\MaxSize.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\MeshLoader\MeshLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeReplicator\NodeReplicator.cpp" />
@@ -405,7 +421,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNode.cpp" />
@@ -592,6 +607,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultTorusPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultTrianglePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultWallPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
@@ -625,8 +641,26 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IGizmoLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPluginTests.inl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <FileType>CppCode</FileType>
@@ -872,7 +906,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\CameraLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\LightsLayout.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Scene.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodePerformance.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNodeRepr.h" />

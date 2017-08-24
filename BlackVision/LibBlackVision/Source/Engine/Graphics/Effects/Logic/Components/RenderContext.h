@@ -39,6 +39,7 @@ public:
 	const RenderTarget *            GetBoundRenderTarget    () const;
 
     void                            Enable                  ( const RenderTarget * rt );
+    void                            EnableDepthOnly         ( const RenderTarget * rt );
     void                            Disable                 ( const RenderTarget * rt );
 
     const RenderTarget *            DisableBoundRT          ();

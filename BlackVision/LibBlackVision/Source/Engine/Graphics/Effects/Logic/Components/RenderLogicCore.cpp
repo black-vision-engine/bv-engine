@@ -8,6 +8,8 @@
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/DepthRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/GizmoRenderLogic.h"
 
 #include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffectFactory.h"
 
@@ -33,7 +35,7 @@ RenderLogicCore::RenderLogicCore()
 
 // **************************
 //
-void    RenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+void    RenderLogicCore::Render             ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
 {
     // Invalidate all active output channels
     PreRender   ( result );
@@ -47,9 +49,65 @@ void    RenderLogicCore::Render    ( const SceneVec & scenes, RenderedChannelsDa
     PostRender  ( result, ctx );
 }
 
+// ***********************
+//
+void    RenderLogicCore::RenderDepth        ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+{
+    ClearGizmoTargets( result, ctx );
+
+    // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
+    for( auto & scene : scenes )
+    {
+        auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
+        assert( outIdx < ( unsigned int )RenderChannelType::RCT_TOTAL );
+
+        auto outputType = ( RenderChannelType )outIdx;
+        auto outputRT = result->GetGizmoRenderTarget( outputType );
+
+        DepthRenderLogic::RenderQueued( scene, outputRT, ctx );
+    }
+}
+
+// ***********************
+//
+void    RenderLogicCore::RenderGizmos       ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+{
+    // FIXME: nrl - is this the correct logic (to switch output channel per scene and not per scene group which belongs to a channel)
+    for( auto & scene : scenes )
+    {
+        auto outIdx = scene->GetOutputChannelIdx(); // FIXME: nrl - this mapping should be strictly typed
+        assert( outIdx < ( unsigned int )RenderChannelType::RCT_TOTAL );
+
+        auto outputType = ( RenderChannelType )outIdx;
+        auto outputRT = result->GetGizmoRenderTarget( outputType );
+
+        GizmoRenderLogic::Render( scene, outputRT, ctx );
+    }
+}
+
+// ***********************
+//
+void    RenderLogicCore::BlitGizmoTargets   ( RenderedChannelsData * channels, RenderContext * ctx )
+{
+    for( int i = 0; i < ( int )RenderChannelType::RCT_TOTAL; ++i )
+    {
+        auto outputRT = channels->GetActiveRenderTarget( ( RenderChannelType)i );
+        auto gizmoRT = channels->GetGizmoRenderTarget( ( RenderChannelType )i );
+
+        //enable( ctx, outputRT );
+        
+        RenderedData input( 1 );
+        input.SetEntry( 0, gizmoRT );
+
+        m_blitWithAlphaEffect->Render( ctx, outputRT, input );
+
+        //disableBoundRT( ctx );
+    }
+}
+
 // **************************
 //
-void    RenderLogicCore::RenderScenes      ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
+void    RenderLogicCore::RenderScenes       ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx )
 {
     // Clear render targets before rendering. Note: Clearing can't be made by RenderScene functions, because we would
     // override previously rendered scene. We have to do it here.
@@ -93,6 +151,20 @@ void    RenderLogicCore::ClearActiveChannels   ( RenderedChannelsData * result, 
         {
             auto rt = result->GetActiveRenderTarget( channelType );
 
+            NodeRenderLogic::Clear( rt, ctx );
+        }
+    }
+}
+
+// ***********************
+//
+void    RenderLogicCore::ClearGizmoTargets      ( RenderedChannelsData * result, RenderContext * ctx )
+{
+    for( auto channelType : m_allChannels )
+    {
+        if( result->IsActive( channelType ) )
+        {
+            auto rt = result->GetGizmoRenderTarget( channelType );
             NodeRenderLogic::Clear( rt, ctx );
         }
     }

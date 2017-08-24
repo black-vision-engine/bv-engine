@@ -39,7 +39,8 @@ public:
 
     const RenderChannel *   GetRenderChannel        ( RenderChannelType rct ) const;
 	const RenderTarget *	GetActiveRenderTarget	( RenderChannelType rct ) const;
-    
+    const RenderTarget *    GetGizmoRenderTarget    ( RenderChannelType rct ) const;
+
     void                    InvalidateCachedTexture ( RenderChannelType rct );
     Texture2DPtr            ReadColorTexture        ( Renderer * renderer, RenderChannelType rct );
 

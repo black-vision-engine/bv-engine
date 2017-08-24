@@ -78,8 +78,6 @@ private:
     model::IModelNodeConstPtr                   m_modelNode;
 
     RenderableEntity *                          m_renderable;
-    RenderableEntity *                          m_boundingBox;
-    RenderableEntity *                          m_centerOfMass;
 
     model::ITransformChannelConstPtr            m_transformChannel;
     model::IStatedValuePtr                      m_transformStatedValue;
@@ -140,7 +138,7 @@ private:
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
 
-    inline  void    UpdateBoundingBox   ( bool recreate );
+    inline  void    UpdateBoundingBox   ();
 
     inline	void	UpdateShaderParams  ();
     inline  void    UpdateTexturesData	();

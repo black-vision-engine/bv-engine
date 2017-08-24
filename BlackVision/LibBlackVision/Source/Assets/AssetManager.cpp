@@ -192,7 +192,7 @@ void AssetManager::RegisterBasicLoaders()
     RegisterLoader( AnimationAssetDesc::UID(),	        std::make_shared< AnimationLoader >() );
     RegisterLoader( AVAssetDesc::UID(),	                std::make_shared< AVAssetLoader >() );
     RegisterLoader( MeshAssetDesc::UID(),	            std::make_shared< MeshLoader >() );
-    RegisterLoader( DataArrayAssetDescriptor::UID(),	std::make_shared< DataArrayLoader >() );
+    RegisterLoader( DataArrayAssetDesc::UID(),	std::make_shared< DataArrayLoader >() );
     RegisterLoader( SVGAssetDescriptor::UID(),          std::make_shared< SVGLoader >() );
 
     RawDataCache::GetInstance();

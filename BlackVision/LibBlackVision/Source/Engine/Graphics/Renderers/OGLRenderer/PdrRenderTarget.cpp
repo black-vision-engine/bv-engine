@@ -88,9 +88,16 @@ PdrRenderTarget::~PdrRenderTarget    ()
 //
 void            PdrRenderTarget::Enable             ( Renderer * renderer )
 {
+    Enable( renderer, m_numTargets );
+}
+
+// ***********************
+//
+void            PdrRenderTarget::Enable             ( Renderer * renderer, SizeType numTargets )
+{
     { renderer; } // FIXME: suppress unused
     BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
-    BVGL::bvglDrawBuffers( ( GLsizei )m_numTargets, &m_drawBuffers[ 0 ] );
+    BVGL::bvglDrawBuffers( ( GLsizei )std::min( m_numTargets, numTargets), &m_drawBuffers[ 0 ] );
 
     BVGL::bvglGetIntegerv( GL_VIEWPORT, m_prevViewportCoords );
     BVGL::bvglGetDoublev( GL_DEPTH_RANGE, m_prevDepthRange );

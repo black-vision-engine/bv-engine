@@ -40,6 +40,9 @@
     <Filter Include="Application">
       <UniqueIdentifier>{a25574ee-09fc-4219-92e3-02d1a89c7796}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Logic">
+      <UniqueIdentifier>{e0139b9c-5968-45d3-ad74-be54c0f135bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
@@ -103,7 +106,6 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
@@ -170,6 +172,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Application\Logic\TimerMode.cpp">
+      <Filter>Application\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Application\Logic\RenderMode.cpp">
+      <Filter>Application\Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +252,6 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
@@ -306,6 +316,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\MainLoopProcess.h">
       <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\Logic\TimerMode.h">
+      <Filter>Application\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\Logic\RenderMode.h">
+      <Filter>Application\Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

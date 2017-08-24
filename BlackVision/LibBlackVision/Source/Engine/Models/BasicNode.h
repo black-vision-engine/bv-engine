@@ -10,6 +10,10 @@
 
 #include "Serialization/ISerializable.h"
 
+#include "Engine/Models/Gizmos/GizmoContainer.h"
+
+
+
 
 namespace bv { namespace model {
 
@@ -44,6 +48,8 @@ private:
     IModelNodeEffectPtr             m_modelNodeEffect;
 
     ModelNodeEditor *				m_modelNodeEditor;
+
+    GizmoContainerUPtr              m_gizmos;
 
 protected:
 
@@ -125,6 +131,21 @@ public:
 
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
+
+
+public:
+
+    void                                    AddGizmo                ( IModelNodePtr gizmoRoot, UInt32 idx = std::numeric_limits< UInt32 >::max() );
+    void                                    RemoveGizmo             ( UInt32 idx );
+    void                                    RemoveGizmo             ( IModelNodePtr gizmoRoot );
+
+    IModelNodePtr                           GetGizmo                ( UInt32 idx ) const;
+    UInt32                                  GetNumGizmos            () const;
+
+private:
+
+    GizmoContainer *                        AllocateGizmos          ();
+    void                                    DeallocateGizmos        ();
 
 public:
 

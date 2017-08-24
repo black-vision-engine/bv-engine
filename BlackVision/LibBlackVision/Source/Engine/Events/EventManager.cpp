@@ -289,7 +289,7 @@ IEventManager &     GetDefaultEventManager  ()
 
 // ***********************
 //
-EventType           EventManager::RegisterType()
+EventType           EventManager::RegisterType      ()
 {
     static EventType nextType = 0x0001;
     return nextType++;
@@ -297,9 +297,24 @@ EventType           EventManager::RegisterType()
 
 // ***********************
 //
+EventType           EventManager::RegisterType      ( const std::string & eventName, EventCreatorDelegate eventCreator )
+{
+    return GetDefaultEventManager().RegisterEvent( eventName, eventCreator );
+}
+
+// ***********************
+//
 const EventFactory &            EventManager::GetEventFactory()
 {
     return m_eventFactory;
+}
+
+// ***********************
+//
+EventType                       EventManager::RegisterEvent  ( const std::string & eventName, EventCreatorDelegate eventCreator )
+{
+    m_eventFactory.RegisterEvent( eventName, eventCreator );
+    return RegisterType();
 }
 
 } //bv

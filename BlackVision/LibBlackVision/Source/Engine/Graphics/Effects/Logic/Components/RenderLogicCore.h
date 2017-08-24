@@ -23,6 +23,9 @@ public:
                             RenderLogicCore    ();
 
     void                    Render              ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
+    void                    RenderDepth         ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
+    void                    RenderGizmos        ( const SceneVec & scenes, RenderedChannelsData * result, RenderContext * ctx );
+    void                    BlitGizmoTargets    ( RenderedChannelsData * channels, RenderContext * ctx );
 
 private:
 
@@ -30,6 +33,7 @@ private:
     void                    RenderScene         ( Scene * scene, const RenderTarget * outputRT, RenderContext * ctx );
 
     void                    ClearActiveChannels ( RenderedChannelsData * result, RenderContext * ctx );
+    void                    ClearGizmoTargets   ( RenderedChannelsData * result, RenderContext * ctx );
 
     void                    PreRender           ( RenderedChannelsData * result );
     void                    PostRender          ( RenderedChannelsData * result, RenderContext * ctx );

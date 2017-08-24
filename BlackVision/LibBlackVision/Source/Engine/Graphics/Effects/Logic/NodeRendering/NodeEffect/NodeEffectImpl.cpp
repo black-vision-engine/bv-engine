@@ -29,6 +29,13 @@ void        NodeEffectImpl::Render          ( SceneNodeRepr * nodeRepr, RenderCo
     m_nodeEffectRenderLogic->Render( nodeRepr, ctx );
 }
 
+// ***********************
+//
+void        NodeEffectImpl::RenderDepth     ( SceneNodeRepr * node, RenderContext * ctx )
+{
+    m_nodeEffectRenderLogic->RenderDepth( node, ctx );
+}
+
 // *********************************
 //
 IValuePtr   NodeEffectImpl::GetValue        ( const std::string & name ) const

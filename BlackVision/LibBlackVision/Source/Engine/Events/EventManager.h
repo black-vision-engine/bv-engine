@@ -58,6 +58,9 @@ public:
     
 
     static EventType                        RegisterType    ();
+    static EventType                        RegisterType    ( const std::string& eventName, EventCreatorDelegate eventCreator );
+
+    virtual EventType                       RegisterEvent   ( const std::string& eventName, EventCreatorDelegate eventCreator ) override;
     virtual const EventFactory &            GetEventFactory () override;
 };
 

@@ -49,6 +49,9 @@ public:
 
     void                                UpdateOwnBox            ( const IVertexAttributesChannelConstPtr & vac );
     void                                IncludeChildrenBox      ( const mathematics::Box & box );
+
+    ///@brief Cheks if bounding box changed lately.
+    bool                                IsUpdated               () const;
 };
 
 } // model

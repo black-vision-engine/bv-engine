@@ -32,6 +32,9 @@ public:
     virtual void    LockEvents              ( unsigned int numFrames )                                              = 0;
 
     virtual const EventFactory &            GetEventFactory()                                                       = 0; 
+
+
+    virtual EventType                       RegisterEvent   ( const std::string& eventName, EventCreatorDelegate eventCreator ) = 0;
 };
 
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services

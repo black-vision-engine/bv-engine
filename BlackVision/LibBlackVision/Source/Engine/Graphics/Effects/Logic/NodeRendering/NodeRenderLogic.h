@@ -40,7 +40,6 @@ public:
 private:
 
     static void     RenderImpl          ( SceneNode * node, RenderContext * ctx );
-    static void     RenderGridLines     ( Scene * scene, RenderContext * ctx );
 
 public:
 
@@ -60,8 +59,6 @@ public:
 	// PUBLIC API
     static void     RenderRoot          ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
     static void     RenderChildren      ( SceneNodeRepr * nodeRepr, RenderContext * ctx, unsigned int firstChildIdx = 0 );
-
-    static void     RenderBoundingBox   ( SceneNode * node, RenderContext * ctx );
 
 };
 

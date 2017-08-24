@@ -48,6 +48,11 @@
 #include "Engine/Models/Plugins/Simple/DefaultLineChartPlugin.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
 #include "Engine/Models/Plugins/Simple/SpecialPlugins/ExpertPlugin.h"
+#include "Engine/Models/Plugins/Simple/Shapes/LinesPlugin.h"
+
+// Gizmo plugins
+#include "Engine/Models/Gizmos/Plugins/BoundingBoxPlugin.h"
+#include "Engine/Models/Gizmos/Plugins/CenterPlugin.h"
 
 #include "UseLoggerBVAppModule.h"
 
@@ -104,6 +109,10 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new TriangulatePluginDesc() );
     descriptors.push_back( new DefaultText3DPluginDesc() );
     descriptors.push_back( new ExpertPluginDesc() );
+    descriptors.push_back( new LinesPluginDesc() );
+
+    descriptors.push_back( new CenterPluginDesc() );
+    descriptors.push_back( new BoundingBoxPluginDesc() );
 
     for( auto descr : descriptors )
     {

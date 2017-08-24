@@ -10,6 +10,8 @@
 #include "Engine/Audio/AudioEntity.h"
 #include "Mathematics/Box.h"
 
+#include "EngineGizmoContainer.h"
+
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 #include "SceneNodePerformance.h"
@@ -35,8 +37,8 @@ private:
     //FIXME: use some sort of caps/flag here (instead of a single flag)
     bool                m_visible;
     bool                m_nodeEffectEnabled;
-    bool                m_drawBoundingBox;
-    glm::vec4           m_boundingBoxColor;
+
+    EngineGizmoContainerUPtr        m_gizmos;
 
 public:
 
@@ -73,11 +75,25 @@ public:
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;
     bool                    IsSelected          () const;
-    const glm::vec4 &       GetBoundingBoxColor () const;
     void                    Select              ( glm::vec4 color );
     void                    Unselect            ();
 
     SceneNodePerformance *  GetPerformanceData  ();
+
+
+public:
+
+    void                    AddGizmo            ( SceneNode * gizmoRoot, UInt32 idx = std::numeric_limits< UInt32 >::max() );
+    void                    RemoveGizmo         ( UInt32 idx );
+    void                    RemoveGizmo         ( SceneNode * gizmoRoot );
+
+    SceneNode *             GetGizmo            ( UInt32 idx ) const;
+    UInt32                  GetNumGizmos        () const;
+
+private:
+
+    EngineGizmoContainer *  AllocateGizmos      ();
+    void                    DeallocateGizmos    ();
 
 private:
 

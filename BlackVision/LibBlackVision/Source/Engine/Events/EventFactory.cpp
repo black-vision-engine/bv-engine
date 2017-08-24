@@ -20,33 +20,7 @@ namespace bv
 // ***********************
 //
 EventFactory::EventFactory()
-{
-    RegisterEvent( LoadAssetEvent::Name(), LoadAssetEvent::Create );
-    RegisterEvent( ParamKeyEvent::Name(), ParamKeyEvent::Create );
-    RegisterEvent( NodeStructureEvent::Name(), NodeStructureEvent::Create );
-    RegisterEvent( ProjectEvent::Name(), ProjectEvent::Create );
-    RegisterEvent( SceneEvent::Name(), SceneEvent::Create );
-    RegisterEvent( LightEvent::Name(), LightEvent::Create );
-    RegisterEvent( CameraEvent::Name(), CameraEvent::Create );
-    RegisterEvent( InfoEvent::Name(), InfoEvent::Create );
-    RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
-    RegisterEvent( TimerEvent::Name(), TimerEvent::Create );
-    RegisterEvent( PluginStructureEvent::Name(), PluginStructureEvent::Create );
-    RegisterEvent( EngineStateEvent::Name(), EngineStateEvent::Create );
-    RegisterEvent( VideoCardEvent::Name(), VideoCardEvent::Create );
-    RegisterEvent( NodeLogicEvent::Name(), NodeLogicEvent::Create );
-    RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
-    RegisterEvent( AssetEvent::Name(), AssetEvent::Create );
-    RegisterEvent( GlobalEffectEvent::Name(), GlobalEffectEvent::Create );
-    RegisterEvent( TimelineKeyframeEvent::Name(), TimelineKeyframeEvent::Create );
-    RegisterEvent( MouseEvent::Name(), MouseEvent::Create );
-    RegisterEvent( SceneVariableEvent::Name(), SceneVariableEvent::Create );
-    RegisterEvent( ConfigEvent::Name(), ConfigEvent::Create );
-    RegisterEvent( GridLineEvent::Name(), GridLineEvent::Create );
-    RegisterEvent( ParamDescriptorEvent::Name(), ParamDescriptorEvent::Create );
-    RegisterEvent( UndoRedoEvent::Name(), UndoRedoEvent::Create );
-    RegisterEvent( GenericEvent::Name(), GenericEvent::Create );
-}
+{}
 
 // ***********************
 //

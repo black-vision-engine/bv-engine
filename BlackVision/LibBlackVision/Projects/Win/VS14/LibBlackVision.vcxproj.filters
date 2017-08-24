@@ -187,9 +187,6 @@
     <Filter Include="Engine\Graphics\Effects\Utils">
       <UniqueIdentifier>{457dcf57-1339-4d32-820a-48f1f4c5fb5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\NodeEffects\Effects">
-      <UniqueIdentifier>{3eb51f63-99ae-4a04-9561-8dec21ceef54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Rendering">
       <UniqueIdentifier>{a96ef61e-ff68-4bc1-a615-59e9c1661ba9}</UniqueIdentifier>
     </Filter>
@@ -430,8 +427,29 @@
     <Filter Include="Assets\AsyncLoading">
       <UniqueIdentifier>{fdfbb725-9a0a-4d8b-8bc4-5bcfa468718a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Models\Gizmos">
+      <UniqueIdentifier>{668b5c5c-8d69-4996-b102-fcc1f41acb0e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Models\Plugins\Simple\SpecialPlugins">
       <UniqueIdentifier>{3fd2a421-7703-4b69-9c86-caa0afb264f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics">
+      <UniqueIdentifier>{f3b94df6-a3a5-4659-bb12-dd9ef4566274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics\ShowFPS">
+      <UniqueIdentifier>{089e75b7-9031-4da3-be1c-b909d3fe34ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics\BoundingBox">
+      <UniqueIdentifier>{83e4c78f-f0e5-4297-a637-fb3d6d3bd154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Plugins">
+      <UniqueIdentifier>{5f9733d9-59fb-4c27-9173-b9a6925a95e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl">
+      <UniqueIdentifier>{b5dd1931-ca44-4f32-9517-e359105c5f1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Gizmos\Logics\GridLines">
+      <UniqueIdentifier>{bcc9f7d2-2835-48f2-aed9-bba64d250603}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1173,9 +1191,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp">
       <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.cpp">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\GeometryGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
@@ -1996,11 +2011,62 @@
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
       <Filter>Assets\AsyncLoading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.cpp">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp">
+      <Filter>Engine\Models\Gizmos\Logics\ShowFPS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.cpp">
+      <Filter>Engine\Models\Gizmos\Logics\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.cpp">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.cpp">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.cpp">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.cpp">
+      <Filter>Engine\Models\Gizmos\Logics\GridLines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4280,9 +4346,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntityWithBoundingBox.h">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Lines.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
@@ -5222,11 +5285,65 @@
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h">
       <Filter>Assets\AsyncLoading</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IGizmoLogic.h">
+      <Filter>Engine\Models\Interfaces</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.h">
+      <Filter>Engine\Models\Gizmos\Logics\ShowFPS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.h">
+      <Filter>Engine\Models\Gizmos\Logics\BoundingBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\CenterPlugin.h">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.h">
+      <Filter>Engine\Models\Gizmos\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h">
+      <Filter>Engine\Models\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h">
+      <Filter>Engine\Models\NodeLogics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h">
+      <Filter>Engine\Models\Gizmos\Logics\GridLines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include  "Mathematics/glm_inc.h"
 
 #include "Engine/Events/ParamAddress.h"
+#include "Engine/Models/Gizmos/GizmoAddress.h"
 
 
 namespace bv {
@@ -933,6 +934,7 @@ public:
         LockEventQueue,
 		SetGain,
         OutputCommand,
+        SwitchEditMode,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -1402,5 +1404,47 @@ public:
 };
 
 DEFINE_PTR_TYPE( AssetTrackerInternalEvent )
+
+
+// ************************************* GizmoEvent *************************************
+class GizmoEvent : public RemoteEvent
+{
+public:
+
+    typedef enum
+    {
+        CreateGizmo,
+        RemoveGizmo,
+        ListGizmos,
+
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+
+    Command                     CommandName;
+    GizmoAddress                Address;
+
+public:
+    explicit                        GizmoEvent     () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+DECLARE_ENUM_SERIALIZATION( GizmoEvent::Command )
+DEFINE_PTR_TYPE( GizmoEvent );
+
 
 } //bv

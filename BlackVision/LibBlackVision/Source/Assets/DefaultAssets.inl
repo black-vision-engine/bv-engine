@@ -82,16 +82,28 @@ inline std::shared_ptr< const AVAssetDesc >                 DefaultAssets::GetDe
 // ***********************
 //
 template<>
-inline std::shared_ptr< const DataArrayAssetDescriptor >    DefaultAssets::GetDefaultDesc   ()
+inline std::shared_ptr< const DataArrayAssetDesc >          DefaultAssets::GetDefaultDesc   ()
 {
-    static DataArrayAssetDescriptorConstPtr daDesc;
+    static DataArrayAssetDescConstPtr daDesc;
 	if( !daDesc )
     {
-        daDesc = DataArrayAssetDescriptor::Create( std::vector< std::string >(), std::vector< std::string >(), std::vector< ModelParamType >() );
+        daDesc = DataArrayAssetDesc::Create( std::vector< std::string >(), std::vector< std::string >(), std::vector< ModelParamType >() );
     }
     return daDesc;
 }
 
+// ***********************
+//
+template<>
+inline std::shared_ptr< const DataArrayRowAssetDesc >       DefaultAssets::GetDefaultDesc   ()
+{
+    static DataArrayRowAssetDescConstPtr daDesc;
+    if( !daDesc )
+    {
+        daDesc = DataArrayRowAssetDesc::Create( std::vector< DataArrayRowBase * >() );
+    }
+    return daDesc;
+}
 
 // ========================================================================= //
 // Fallback assets descriptors

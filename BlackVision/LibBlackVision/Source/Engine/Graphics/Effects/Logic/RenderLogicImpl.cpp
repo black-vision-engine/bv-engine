@@ -43,6 +43,14 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
     // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
     RenderQueued( scenes );
 
+    // 4. In edit mode render depth buffer from current scene and gizmos after it.
+    if( m_state.IsEditMode() )
+    {
+        RenderDepth( scenes );
+        RenderGizmos( scenes );
+        BlitGizmoTargets();
+    }
+
     // 4. Low level rendere per frame cleanup
     renderer->PostDraw();
 
@@ -66,9 +74,30 @@ RenderedChannelsData *  RenderLogicImpl::GetRenderedChannelsData   ()
 
 // **************************
 //
-void            RenderLogicImpl::RenderQueued      ( const SceneVec & scenes )
+void            RenderLogicImpl::RenderQueued           ( const SceneVec & scenes )
 {
     m_renderLogicCore.Render( scenes, m_renderedChannelsData, context( m_state ) );
+}
+
+// ***********************
+//
+void            RenderLogicImpl::RenderDepth            ( const SceneVec & scenes )
+{
+    m_renderLogicCore.RenderDepth( scenes, m_renderedChannelsData, context( m_state ) );
+}
+
+// ***********************
+//
+void            RenderLogicImpl::RenderGizmos           ( const SceneVec & scenes )
+{
+    m_renderLogicCore.RenderGizmos( scenes, m_renderedChannelsData, context( m_state ) );
+}
+
+// ***********************
+//
+void            RenderLogicImpl::BlitGizmoTargets       ()
+{
+    m_renderLogicCore.BlitGizmoTargets( m_renderedChannelsData, context( m_state ) );
 }
 
 // **************************
@@ -117,6 +146,26 @@ RenderLogicImpl *  RenderLogicImpl::Create        ( RenderLogicDesc & desc )
     impl->SetOutputLogic( outLogic );
 
     return impl;
+}
+
+// ***********************
+//
+void                RenderLogicImpl::SwitchEditMode     ( bool editMode )
+{
+    m_state.SwitchEditMode( editMode );
+
+
+    // FIXME: Deallocate gizmo render target when switching from edit mode to production mode.
+    // FIZME: The problem is const renderChannel :(
+    //if( !editMode )
+    //{
+    //    for( int i = 0; i < (int)RenderChannelType::RCT_TOTAL; ++i )
+    //    {
+    //        auto renderChannel = m_renderedChannelsData->GetRenderChannel( i );
+    //        if( renderChannel )
+    //            renderChannel->DeallocGizmoRT();
+    //    }
+    //}
 }
 
 

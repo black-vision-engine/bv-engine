@@ -18,8 +18,8 @@ private:
     
     RenderLogicState               m_state;
 
-    RenderedChannelsData *          m_renderedChannelsData;
-    OutputLogic *                   m_outputLogic;
+    RenderedChannelsData *         m_renderedChannelsData;
+    OutputLogic *                  m_outputLogic;
 
     RenderLogicCore                m_renderLogicCore;
 
@@ -32,6 +32,7 @@ public:
                                     ~RenderLogicImpl       ();
 
     virtual void                    HandleFrame             ( Renderer * renderer, audio::AudioRenderer * audio, const SceneVec & scenes ) override;
+    virtual void                    SwitchEditMode          ( bool value ) override;
 
     virtual OutputLogic *           GetOutputLogic          () override;
     virtual RenderedChannelsData *  GetRenderedChannelsData () override;
@@ -39,6 +40,9 @@ public:
 private:
 
     void                RenderQueued            ( const SceneVec & scenes );
+    void                RenderDepth             ( const SceneVec & scenes );
+    void                RenderGizmos            ( const SceneVec & scenes );
+    void                BlitGizmoTargets        ();
     void                Render                  ( SceneNode * sceneRoot );
 
 private:
@@ -51,7 +55,7 @@ private:
 public:
 
     static RenderLogicImpl *   Create          ( RenderLogicDesc & desc );
-
+    
 };
 
 } // bv

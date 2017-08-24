@@ -16,8 +16,6 @@ namespace bv {
 //
                     Scene::Scene                    ( unsigned int outputIdx )
     : m_root( nullptr )
-    , m_gridLines( nullptr )
-    , m_gridLinesVisible( false )
     , m_camera( std::unique_ptr< Camera >( new Camera() ) )
     , m_outputChannelIdx( outputIdx )
 {
@@ -31,9 +29,7 @@ namespace bv {
 // ********************************
 //
                     Scene::~Scene                   ()
-{
-    delete m_gridLines;
-}
+{}
 
 // ********************************
 //
@@ -84,25 +80,5 @@ Camera *            Scene::GetCamera                () const
     return m_camera.get();
 }
 
-// ***********************
-//
-RenderableEntity *  Scene::GetGridLines             () const
-{
-    return m_gridLines;
-}
-
-// ***********************
-//
-void                Scene::SetGridLinesRenderable   ( RenderableEntity * renderable )
-{
-    m_gridLines = renderable;
-}
-
-// ***********************
-//
-void                Scene::SetGridLinesVisible      ( bool visibility )
-{
-    m_gridLinesVisible = visibility;
-}
 
 } //bv

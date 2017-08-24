@@ -75,6 +75,10 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     {
         HandleOutputEvent( stateEvent );
     }
+    else if( command == EngineStateEvent::Command::SwitchEditMode )
+    {
+        renderMode.SwitchToEditMode( !renderMode.IsEditMode() );
+    }
     else
     {
         SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );
@@ -107,6 +111,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         assert( mouseX >= 0 );
         assert( mouseY >= 0 );
 
+        // Note: we take Full HD size not window size. Editor sends mouse positions scaled to Full HD.
         Float32 screenWidth = (Float32)ApplicationContext::Instance().GetWidth();
         Float32 screenHeight = (Float32)ApplicationContext::Instance().GetHeight();
 
@@ -136,7 +141,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
 
             if( tempCamera.IsPerspective() )
             {
-                Float32 fovY = glm::radians( tempCamera.GetFOV() );
+                Float32 fovY = tempCamera.GetFOV(); // glm::radians( tempCamera.GetFOV() );
                 Float32 d = static_cast< Float32 >( 1 / glm::tan( fovY / 2.0 ) );
 
                 rayDirection = glm::normalize( glm::vec3( 0.0, 0.0, -1.0 ) * d + screenSpaceVec );

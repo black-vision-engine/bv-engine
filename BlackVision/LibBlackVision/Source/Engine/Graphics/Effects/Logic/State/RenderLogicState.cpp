@@ -10,6 +10,7 @@ namespace bv {
 RenderLogicState::RenderLogicState   ( unsigned int width, unsigned int height )
     : m_initialized( false )
     , m_renderTargetAllocator( width, height )
+    , m_editMode( false )
 
 {
     m_ctx.SetAllocator( &m_renderTargetAllocator );
@@ -42,6 +43,20 @@ RenderQueueStackAllocator *     RenderLogicState::GetRenderQueueStackAllocator  
 bool                            RenderLogicState::IsInitialized                    () const
 {
     return m_initialized;
+}
+
+// ***********************
+//
+bool                            RenderLogicState::IsEditMode                        () const
+{
+    return m_editMode;
+}
+
+// ***********************
+//
+void                            RenderLogicState::SwitchEditMode                    ( bool value )
+{
+    m_editMode = value;
 }
 
 // **************************

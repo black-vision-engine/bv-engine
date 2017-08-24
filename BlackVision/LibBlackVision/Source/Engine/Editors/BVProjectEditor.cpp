@@ -54,6 +54,7 @@
 #include "Engine/Editors/AssetsLoading/Async/AssetAsyncLoadFinishedEvent.h"
 
 #include "Engine/Models/NodeLogics/NodeVisibilityAnimation/NodeVisibilityAnimation.h"
+#include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -110,6 +111,8 @@ BVProjectEditor::BVProjectEditor                ( BVProject * project, const ICo
 
     project->m_engineSceneRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
     m_engineSceneEditor = new SceneEditor( project->m_renderer, project->m_engineSceneRoot );
+
+    m_gizmoManager.RegisterDefaultGizmos();
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVProjectEditor::LoadAssetAsyncCallback ), AssetAsyncLoadFinishedEvent::Type() );
 }
@@ -1350,6 +1353,10 @@ bool            BVProjectEditor::SetCurrentCamera            ( model::SceneModel
     return false;
 }
 
+// ========================================================================= //
+// Undo/Redo
+// ========================================================================= //
+
 // ***********************
 //
 bool            BVProjectEditor::Undo                        ( const std::string & sceneName, UInt16 numSteps )
@@ -1370,6 +1377,97 @@ bool            BVProjectEditor::Redo                        ( const std::string
         return modelScene->GetHistory().Redo( this, numSteps );
     else
         return false;
+}
+
+// ========================================================================= //
+// Gizmo
+// ========================================================================= //
+
+// ***********************
+//
+bool            BVProjectEditor::CreateGizmo                ( const std::string & sceneName, const std::string gizmoOwnerNodeName, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
+{
+    auto scene = GetModelScene( sceneName );
+    auto node = GetNode( sceneName, gizmoOwnerNodeName );
+
+    return CreateGizmo( scene, QueryTyped( node ), type, ownerTypeName, functionalityName );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::CreateGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, model::GizmoType type, const std::string & ownerTypeName, const std::string & functionalityName )
+{
+    return m_gizmoManager.CreateGizmo( this, scene, gizmoOwner, type, ownerTypeName, functionalityName );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::DeleteGizmo                ( const std::string & sceneName, const std::string gizmoOwnerNodeName, const std::string & functionalityName )
+{
+    auto scene = GetModelScene( sceneName );
+    auto node = GetNode( sceneName, gizmoOwnerNodeName );
+
+    return DeleteGizmo( scene, QueryTyped( node ), functionalityName );
+}
+
+// ***********************
+//
+bool            BVProjectEditor::DeleteGizmo                ( model::SceneModelPtr scene, model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    return m_gizmoManager.RemoveGizmo( this, scene, gizmoOwner, functionalityName );
+}
+
+// ***********************
+//
+model::BasicNodePtr         BVProjectEditor::QueryGizmoNode ( model::BasicNodePtr gizmoOwner, const std::string & functionalityName )
+{
+    auto gizmoData = m_gizmoManager.GetGizmoRootNode( gizmoOwner, functionalityName );
+    if( gizmoData )
+        return gizmoData->GizmoRoot.lock();
+
+    return nullptr;
+}
+
+// ***********************
+//
+bool            BVProjectEditor::AddGizmoNode               ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot )
+{
+    if( !scene || !gizmoOwner || !gizmoRoot )
+    {
+        return false;
+    }
+
+    auto engineGizmoOwner = GetEngineNode( gizmoOwner );
+    auto engineGizmoRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( gizmoRoot ), m_nodesMapping );
+
+    auto sceneEditor = scene->GetModelSceneEditor();
+    sceneEditor->AddGizmoNode( QueryTyped( gizmoOwner ), QueryTyped( gizmoRoot ) );
+
+    m_engineSceneEditor->AddGizmoNode( engineGizmoOwner, engineGizmoRoot );
+
+    return true;
+}
+
+// *******************************
+//
+bool            BVProjectEditor::DeleteGizmoNode      ( model::SceneModelPtr scene, model::IModelNodePtr gizmoOwner, model::IModelNodePtr gizmoRoot )
+{
+    if( scene && gizmoOwner && gizmoRoot )
+    {
+        auto modelGizmoOwner = QueryTyped( gizmoOwner );
+        auto modelGizmoRoot = QueryTyped( gizmoRoot );
+        auto sceneEditor = scene->GetModelSceneEditor();
+
+        auto success = true;
+
+        sceneEditor->DeleteGizmoNode( modelGizmoOwner, modelGizmoRoot );
+        m_engineSceneEditor->DeleteGizmoNode( GetEngineNode( modelGizmoOwner ), GetEngineNode( modelGizmoRoot ) );
+
+        MappingsCleanup( modelGizmoRoot );
+        return success;
+    }
+
+    return false;
 }
 
 // *******************************
@@ -1986,28 +2084,39 @@ std::pair< model::BasicNodePtr, Float32 >	BVProjectEditor::FindIntersectingNode 
 //
 bool                    BVProjectEditor::SelectNode              ( model::IModelNodePtr node, glm::vec4 color )
 {
-//    auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "BoundingBox", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
+    auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
+    auto scene = GetModelScene( sceneName );
+    auto basicNode = QueryTyped( node );
     
-    //bool result = SetNodeEffect( node, newEffect );
-    //if( !result )
-    //    return false;
-    
+    bool result = CreateGizmo( scene, basicNode, model::GizmoType::Node, "", "BoundingBox" );
     model::ModelState::GetInstance().Select( node, color );
 
-    return true;
+    // Set color of bouinding box and center
+    auto gizmoData = m_gizmoManager.GetGizmoRootNode( basicNode, "BoundingBox" );
+    auto gizmoLogic = std::static_pointer_cast< model::IGizmoLogic >( gizmoData->GizmoRoot.lock()->GetLogic() );
+
+    model::QueryTypedParam< model::ParamVec4Ptr >( gizmoLogic->GetParameter( "BoxColor" ) )->SetVal( color, 0.0f );
+    model::QueryTypedParam< model::ParamVec4Ptr >( gizmoLogic->GetParameter( "CenterColor" ) )->SetVal( color, 0.0f );
+
+    return result;
 }
 
 // ***********************
 //
 void                    BVProjectEditor::UnselectNodes           ()
 {
-    //auto noEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "no effect", GetTimeEvaluator( DEFAULT_TIMELINE_NAME ) );
-    //auto selected = model::ModelState::GetInstance().GetSelectedNodes();
+    auto selected = model::ModelState::GetInstance().GetSelectedNodes();
+    const std::string functionality = "BoundingBox";
 
-    //for( auto node : selected )
-    //{
-    //    SetNodeEffect( node, noEffect );
-    //}
+    for( auto node : selected )
+    {
+        auto basicNode = QueryTyped( std::const_pointer_cast< model::IModelNode >( node ) );
+        auto sceneName = model::ModelState::GetInstance().QueryNodeSceneName( node.get() );
+        auto scene = GetModelScene( sceneName );
+
+        DeleteGizmo( scene, basicNode, functionality );
+       
+    }
 
     model::ModelState::GetInstance().UnselectAll();
 }
