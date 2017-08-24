@@ -6,7 +6,7 @@
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
-#include "RenderMode.h"
+#include "Application/Logic/RenderMode.h"
 
 #include "Tools/SimpleTimer.h"
 
