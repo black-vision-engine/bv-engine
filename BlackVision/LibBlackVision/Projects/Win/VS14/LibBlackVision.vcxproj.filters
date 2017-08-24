@@ -2011,9 +2011,6 @@
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
       <Filter>Assets\AsyncLoading</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp">
-      <Filter>Engine\Models\Gizmos</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClCompile>
@@ -2067,6 +2064,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.cpp">
+      <Filter>Engine\Models\Gizmos\Logics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5291,9 +5291,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h">
-      <Filter>Engine\Models\Gizmos</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClInclude>
@@ -5344,6 +5341,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h">
+      <Filter>Engine\Models\Gizmos\Logics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

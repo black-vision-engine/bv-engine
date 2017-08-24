@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Engine/Models/Gizmos/GizmoLogicBase.h"
+#include "Engine/Models/Gizmos/Logics/GizmoLogicBase.h"
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"

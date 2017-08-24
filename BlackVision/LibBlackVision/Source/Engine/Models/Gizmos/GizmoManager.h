@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "GizmoLogicBase.h"
+#include "Logics/GizmoLogicBase.h"
 #include "GizmoFunMapper.h"
 
 #include "Engine/Models/BasicNode.h"
