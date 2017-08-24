@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreDEF.h"
-#include "Engine/Models/Gizmos/GizmoLogicBase.h"
+#include "Engine/Models/Gizmos/Logics/GizmoLogicBase.h"
 #include "Engine/Types/Values/TypedValues.h"
 #include "Engine/Events/Interfaces/IEvent.h"
 

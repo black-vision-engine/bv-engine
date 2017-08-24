@@ -163,10 +163,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Plugins\BoundingBoxPlugin.cpp" />
@@ -644,6 +644,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h" />
@@ -654,7 +655,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\BoundingBox\BoundingBoxLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\ShowFPS\ShowFPS.h" />
