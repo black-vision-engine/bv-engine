@@ -55,7 +55,7 @@ public:
 protected:
 
     // Internal use for plugin creator.
-
+    void                                    RegisterGizmo       ( const std::string & functionalityName, const std::string & logicName );
 
 };
 

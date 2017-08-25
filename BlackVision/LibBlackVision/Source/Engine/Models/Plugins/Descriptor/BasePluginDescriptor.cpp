@@ -68,5 +68,12 @@ IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluator
     return CreateDefaultModel( timeEvaluator );
 }
 
+// ***********************
+//
+void                        BasePluginDescriptor::RegisterGizmo ( const std::string & functionalityName, const std::string & logicName )
+{
+    m_gizmosMapping.RegisterFunctionality( functionalityName, logicName );
+}
+
 } //model
 } //bv
