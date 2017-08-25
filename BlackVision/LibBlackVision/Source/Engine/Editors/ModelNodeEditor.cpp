@@ -183,6 +183,17 @@ void				ModelNodeEditor::ReplaceTimeline	( const model::ITimeEvaluatorPtr & oldT
         }
     }
 
+    // Replace default timeline in ParamVaModel
+    auto pluginsList = m_node->GetPluginList();
+    for( unsigned int i = 0; i < pluginsList->NumPlugins(); ++i )
+    {
+        auto plugin = pluginsList->GetPlugin( i );
+        auto model = std::static_pointer_cast< DefaultPluginParamValModel >( plugin->GetPluginParamValModel() );
+
+        if( model->GetTimeEvaluator() == oldTimeline )
+            model->SetTimeEvaluator( newTimeline );
+    }
+
     for( UInt32 i = 0; i < m_node->GetNumChildren(); ++i )
     {
         m_node->GetChild( i )->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );

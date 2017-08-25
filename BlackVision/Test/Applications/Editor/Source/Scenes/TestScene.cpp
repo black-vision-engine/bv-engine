@@ -1039,17 +1039,27 @@ void					TestScene::InitTimelinesTest		()
         editor->AddTimeline( scene->GetTimeline(), timeline );
         timeline->Play();
         
+        auto child = scene->GetRootNode()->GetChild( TEX_NODE );
+        auto model = std::static_pointer_cast< model::DefaultPluginParamValModel >( child->GetPlugin( "texture" )->GetPluginParamValModel() );
+        
+        CHECK( model->GetTimeEvaluator()->GetName() == TIMELINE_NAME1 );
+        CHECK( model->GetTimeEvaluator() == m_timelineManager->GetTimeline( oldTimeline ) );
+
+
         CHECK(!editor->DeleteTimeline( oldTimeline ) );
         
-        editor->ForceDeleteTimeline( oldTimeline, newTimeline );
+        CHECK( editor->ForceDeleteTimeline( oldTimeline, newTimeline ) );
 
         CHECK( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
         CHECK( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
 
-        auto child = scene->GetRootNode()->GetChild( TEX_NODE );
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 0.f, 1.f );
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 2.f, 0.f );
         CHECK( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
+        
+        // Note: ForceDeleteTimeline should change default timeline in ParamValModel too.
+        CHECK( model->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
+        CHECK( model->GetTimeEvaluator() == m_timelineManager->GetTimeline( newTimeline ) );
     });
 
     Wait( 2 );
