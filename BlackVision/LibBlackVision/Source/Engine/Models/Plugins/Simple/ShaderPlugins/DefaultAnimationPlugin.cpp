@@ -124,6 +124,9 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+    m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
+
     SetPrevPlugin( prev );
 
     m_texturesData = m_psc->GetTexturesDataImpl();
@@ -138,9 +141,6 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     auto pluginModel =  m_pluginParamValModel->GetPluginModel();
     m_paramAutoPlay = QueryTypedParam< ParamBoolPtr >( pluginModel->GetParameter( PARAM_AUTO_PLAY ) );
     m_paramFPS = QueryTypedParam< ParamFloatPtr >( pluginModel->GetParameter( PARAM_FPS ) );
-
-	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
-	m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
 
     assert( m_paramFrameNum );
 }
