@@ -131,6 +131,9 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
         model::BasicNodePtr boxNode = model::BasicNode::Create( "box", timeEvaluator );
         model::BasicNodePtr centerNode = model::BasicNode::Create( "center", timeEvaluator );
 
+        m_centerNode = centerNode;
+        m_bbNode = boxNode;
+
         centerNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
         centerNode->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         centerNode->AddPlugin( "CENTER_PLUGIN", timeEvaluator );
@@ -153,9 +156,6 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
 
         editor->AddChildNode( scene, gizmoRoot, centerNode, false );
         editor->AddChildNode( scene, gizmoRoot, boxNode, false );
-
-        m_centerNode = centerNode;
-        m_bbNode = boxNode;
     }
 }
 
