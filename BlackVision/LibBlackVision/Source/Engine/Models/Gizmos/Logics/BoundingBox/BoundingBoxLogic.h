@@ -84,8 +84,8 @@ public:
     static model::IGizmoLogicPtr        Create              ( model::BasicNodeWeakPtr gizmoRoot, model::BasicNodeWeakPtr gizmoOwner, model::ITimeEvaluatorPtr timeEvaluator );
 
     virtual void                        Initialize			()				override;
-    virtual void                        Update				( TimeType t )	override;
     virtual void                        Deinitialize		()				override;
+    virtual void                        PostOwnerUpdate     ( TimeType )    override;
 
     virtual void                        CreateGizmoSubtree  ( BVProjectEditor * editor ) override;
 

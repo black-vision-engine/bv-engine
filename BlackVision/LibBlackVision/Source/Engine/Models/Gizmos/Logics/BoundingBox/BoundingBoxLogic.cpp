@@ -93,10 +93,8 @@ void        BoundingBoxLogic::Deinitialize      ()
 
 // ***********************
 //
-void                        BoundingBoxLogic::Update			( TimeType t )
+void                        BoundingBoxLogic::PostOwnerUpdate   ( TimeType )
 {
-    GizmoLogicBase::Update( t );
-
     if( auto ownerNode = m_gizmoOwner.lock() )
     {
         if( m_centerSize.Changed() )
@@ -148,11 +146,7 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
         boxNode->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
         boxNode->AddPlugin( "BOUNDING_BOX_PLUGIN", timeEvaluator );
 
-        BoxInfo info = ComputeBox( gizmoOwner, m_includeChildren.GetValue() );
-
-        SetColor( boxNode, m_boxColor.GetValue() );
-        SetBoxSize( boxNode, info.Size );
-        SetTranslation( boxNode, -info.Center );
+        UpdateBox();
 
         editor->AddChildNode( scene, gizmoRoot, centerNode, false );
         editor->AddChildNode( scene, gizmoRoot, boxNode, false );

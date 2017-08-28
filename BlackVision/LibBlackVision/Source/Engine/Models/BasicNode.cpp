@@ -722,9 +722,12 @@ mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
                 const glm::mat4 & transform = m_children[ i ]->GetFinalizePlugin()->GetTransformChannel()->GetTransformValue()->GetValue();
             
                 mathematics::Box childBox = m_children[ i ]->GetBoundingBoxRecursive();
-                childBox.Transform( transform );
-            
-                ret.Include( childBox );
+
+                if( !childBox.IsEmpty() )
+                {
+                    childBox.Transform( transform );
+                    ret.Include( childBox );
+                }
             }
         }
     }

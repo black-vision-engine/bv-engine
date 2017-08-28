@@ -66,7 +66,7 @@ Box::Box			()
 // 
 Box::Box			( Float32 left, Float32 top, Float32 right, Float32 bottom, Float32 near, Float32 far )
     :   xmin( left ), xmax( right ), 
-        ymin( top ), ymax( bottom ), 
+        ymin( bottom ), ymax( top ), 
         zmin( near ), zmax( far ),
         m_empty( false ) { }
 

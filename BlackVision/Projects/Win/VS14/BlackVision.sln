@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
 EndProject
@@ -81,6 +81,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestTimelines", "..\..\..\Test\Model\TimelinesTest\Projects\Win\VS14\TimelinesTest.vcxproj", "{31CE6746-D02C-41C5-956B-1D82B9C6711A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSerializers", "..\..\..\Test\Tools\TestSerializers\Projects\Win\VS14\TestSerializers.vcxproj", "{C307615F-D82C-47C9-BC4D-6CEC72D3393F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMathematics", "..\..\..\Test\Tools\MathematicsTest\Projects\Win\VS14\TestMathematics.vcxproj", "{B2F1838C-ACB4-4328-8D0C-94772E5178C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -635,6 +637,20 @@ Global
 		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|Win32.Build.0 = Release|Win32
 		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|x64.ActiveCfg = Release|x64
 		{C307615F-D82C-47C9-BC4D-6CEC72D3393F}.Release|x64.Build.0 = Release|x64
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|Win32.Build.0 = Debug|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|x64.ActiveCfg = Debug|x64
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Debug|x64.Build.0 = Debug|x64
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|Win32.ActiveCfg = Release|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|Win32.Build.0 = Release|Win32
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|x64.ActiveCfg = Release|x64
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -670,5 +686,9 @@ Global
 		{03C7685D-8541-413A-9BA9-74E9A6E32788} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{31CE6746-D02C-41C5-956B-1D82B9C6711A} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{C307615F-D82C-47C9-BC4D-6CEC72D3393F} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{B2F1838C-ACB4-4328-8D0C-94772E5178C4} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23FC2EE1-0489-479F-B40E-61A4C92FB7D0}
 	EndGlobalSection
 EndGlobal
