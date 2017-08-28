@@ -127,6 +127,8 @@ bool                            DefaultParallaxMapPlugin::LoadResource  ( AssetD
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
+        bool success = true;
+
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultParallaxMapPluginDesc::TextureName() );
 
@@ -135,6 +137,8 @@ bool                            DefaultParallaxMapPlugin::LoadResource  ( AssetD
         {
             txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
             txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultParallaxMapPluginDesc::TextureName() );
+
+            success = false;
         }
 
         if( txDesc != nullptr )
@@ -148,11 +152,11 @@ bool                            DefaultParallaxMapPlugin::LoadResource  ( AssetD
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
             txData->SetTexture( 0, txDesc );
-            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
+            SetAsset( 0, LAsset( txDesc->GetName(), txAssetDescr, txDesc->GetSamplerState() ) );
 
             HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
-            return true;
+            return success;
         }
 
     }

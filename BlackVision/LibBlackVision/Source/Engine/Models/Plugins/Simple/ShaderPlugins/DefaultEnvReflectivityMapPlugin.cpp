@@ -132,6 +132,8 @@ bool                            DefaultEnvReflectivityMapPlugin::LoadResource  (
     
     if ( txAssetDescr != nullptr )
     {
+        bool success = true;
+
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvReflectivityMapPluginDesc::TextureName() );
 
         // If texture doesn't exists, read fallback texture. 
@@ -139,6 +141,8 @@ bool                            DefaultEnvReflectivityMapPlugin::LoadResource  (
         {
             txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
             txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultEnvReflectivityMapPluginDesc::TextureName() );
+
+            success = false;
         }
 
         if( txDesc != nullptr )
@@ -152,11 +156,11 @@ bool                            DefaultEnvReflectivityMapPlugin::LoadResource  (
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
             txData->SetTexture( 0, txDesc );
-            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
+            SetAsset( 0, LAsset( txDesc->GetName(), txAssetDescr, txDesc->GetSamplerState() ) );
 
             HelperPixelShaderChannel::SetTexturesDataUpdate( m_pixelShaderChannel );
 
-            return true;
+            return success;
         }
 
     }

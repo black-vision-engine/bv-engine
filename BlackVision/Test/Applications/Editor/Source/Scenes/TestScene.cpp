@@ -1128,7 +1128,7 @@ void					TestScene::InitAssetsTest		()
         SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
         auto root = scene->GetRootNode();
-        editor->AddChildNode( scene, root, tex );
+        CHECK( editor->AddChildNode( scene, root, tex ) );
     };
 
     auto add1 = [&] 
@@ -1139,7 +1139,7 @@ void					TestScene::InitAssetsTest		()
         SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 
         auto root = scene->GetRootNode();
-        editor->AddChildNode( scene, root, tex );
+        CHECK( editor->AddChildNode( scene, root, tex ) );
     };
 
     m_testSteps.push_back( add0 );
@@ -1152,7 +1152,7 @@ void					TestScene::InitAssetsTest		()
         auto child = root->GetChild( "tex0" );
 
         auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
-        editor->LoadAsset( child->GetPlugin( "texture" ), desc );
+        CHECK( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
     });
 
     m_testSteps.push_back( [&]
@@ -1164,7 +1164,7 @@ void					TestScene::InitAssetsTest		()
         auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f1.bmp", false );
         auto prevDesc = child->GetPlugin( "texture" )->GetPixelShaderChannel()->GetTexturesData()->GetTextures()[ 0 ];
         
-        editor->LoadAsset( child->GetPlugin( "texture" ), desc );
+        CHECK( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
     });
 
     m_testSteps.push_back( [&]
@@ -1185,7 +1185,7 @@ void					TestScene::InitAssetsTest		()
         auto anim = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_ANIMATION", "animation", editor->GetSceneDefaultTimeline( scene ) );
         
         UInt32 idx = 2;
-        editor->AddPlugin( child, anim, idx );
+        CHECK( editor->AddPlugin( child, anim, idx ) );
     });
 
     m_testSteps.push_back( [&]
@@ -1194,7 +1194,7 @@ void					TestScene::InitAssetsTest		()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
         auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
-        editor->LoadAsset( child->GetPlugin( "animation" ), desc );
+        CHECK( editor->LoadAsset( child->GetPlugin( "animation" ), desc ) );
 
         auto time = editor->GetModelScene( SCENE_NAME )->GetTimeline()->GetLocalTime();
         model::SetParameter( child->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
@@ -1221,13 +1221,13 @@ void					TestScene::InitAssetsTest		()
         UInt32 idx = 2;
 
         auto color = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_COLOR", "color", editor->GetSceneDefaultTimeline( scene ) );
-        editor->AddPlugin( child, color, idx );
+        CHECK( editor->AddPlugin( child, color, idx ) );
         SetParameter( child->GetPlugin( "color" )->GetParameter( "color" ), 0.0, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
         idx = 3;
 
         auto text = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_TEXT", "text", editor->GetSceneDefaultTimeline( scene ) );
-        editor->AddPlugin( child, text, idx );
+        CHECK( editor->AddPlugin( child, text, idx ) );
         SetParameter( child->GetPlugin( "text" )->GetParameter( "text" ), 0.0, std::wstring( L"tekst" ) );
     });
 
@@ -1237,7 +1237,7 @@ void					TestScene::InitAssetsTest		()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
         auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, 0, true );
-        editor->LoadAsset( child->GetPlugin( "text" ), desc );
+        CHECK( editor->LoadAsset( child->GetPlugin( "text" ), desc ) );
     });
 }
 

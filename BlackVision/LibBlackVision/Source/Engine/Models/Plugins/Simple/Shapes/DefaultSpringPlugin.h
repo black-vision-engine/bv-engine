@@ -1,8 +1,14 @@
+#pragma once
+
+
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 
-namespace bv { namespace model {
+namespace bv {
+namespace model
+{
+
 
 namespace DefaultSpring {
 
@@ -19,6 +25,10 @@ struct PN {
 	static const std::string MAPPINGTYPE;
 };
 
+
+
+// ***********************
+//
 class PluginDesc : public DefaultGeometryPluginDescBase
 {
 public:

@@ -17,6 +17,12 @@
     <ClCompile Include="..\..\..\Source\TestCases\TestTimelines.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestAssets.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\CallAllTests.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h">
@@ -27,6 +33,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Scenes\TestEditorBase.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestCases\TestCopyNode.h">
+      <Filter>TestCases</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

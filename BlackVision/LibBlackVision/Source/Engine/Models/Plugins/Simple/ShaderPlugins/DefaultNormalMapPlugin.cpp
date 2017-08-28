@@ -131,6 +131,8 @@ bool                            DefaultNormalMapPlugin::LoadResource  ( AssetDes
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
+        bool success = true;
+
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultNormalMapPluginDesc::TextureName() );
 
@@ -139,6 +141,8 @@ bool                            DefaultNormalMapPlugin::LoadResource  ( AssetDes
         {
             txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
             txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultNormalMapPluginDesc::TextureName() );
+
+            success = false;
         }
 
         if( txDesc != nullptr )
@@ -152,11 +156,11 @@ bool                            DefaultNormalMapPlugin::LoadResource  ( AssetDes
             txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
             
             txData->SetTexture( 0, txDesc );
-            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
+            SetAsset( 0, LAsset( txDesc->GetName(), txAssetDescr, txDesc->GetSamplerState() ) );
 
             HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
-            return true;
+            return success;
         }
 
     }

@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AssetsTest\TestAsyncLoading.cpp" />
+    <ClCompile Include="..\..\..\Source\AssetsTest\TestFallbackTexture.cpp" />
     <ClCompile Include="..\..\..\Source\AssetsTest\TestMixedSyncAsyncLoading.cpp" />
     <ClCompile Include="..\..\..\Source\AssetsTest\TestSyncLoading.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp" />

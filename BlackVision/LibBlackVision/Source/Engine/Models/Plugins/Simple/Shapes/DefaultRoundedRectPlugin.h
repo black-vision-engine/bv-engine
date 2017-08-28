@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 

@@ -1,7 +1,14 @@
+#pragma once
+
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
-namespace bv { namespace model {
+namespace bv {
+namespace model
+{
 
+
+// ***********************
+//
 class DefaultEllipsePluginDesc : public DefaultGeometryPluginDescBase
 {
 public:
