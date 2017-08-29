@@ -59,6 +59,8 @@ public:
         static const std::string        FIRST_TEXT_OUT_CC;
         static const std::string        FIRST_TEXT_SH_CC;
         static const std::string        FIRST_TEXT_GLOW_CC;
+
+        static const std::string        NUM_TEXT_LAYERS;
     };
 
 protected:
@@ -97,6 +99,8 @@ protected:
     ValueIntPtr                     m_firstTextOutCC;
     ValueIntPtr                     m_firstTextGlowCC;
     ValueIntPtr                     m_firstTextShCC;
+
+    ValueIntPtr                     m_numTextLayers;
 
     bool                                        LoadResource                ( AssetDescConstPtr assetDescr, const std::string & name );
     bool                                        LoadAtlas                   ( const FontAssetDescConstPtr & fontAssetDesc, const std::string & name );
