@@ -245,7 +245,17 @@ void        Box::Transform          ( const glm::mat4 & transformation )
         BBPoints[ i ] = transformation * BBPoints[ i ];
     }
 
-    for( int i = 0; i < 8; ++i )
+    // Reset min and max values
+    xmin = BBPoints[ 0 ].x;
+    ymin = BBPoints[ 0 ].y;
+    zmin = BBPoints[ 0 ].z;
+
+    xmax = BBPoints[ 0 ].x;
+    ymax = BBPoints[ 0 ].y;
+    zmax = BBPoints[ 0 ].z;
+
+
+    for( int i = 1; i < 8; ++i )
     {
         xmin = std::min( xmin, BBPoints[ i ].x );
         ymin = std::min( ymin, BBPoints[ i ].y );

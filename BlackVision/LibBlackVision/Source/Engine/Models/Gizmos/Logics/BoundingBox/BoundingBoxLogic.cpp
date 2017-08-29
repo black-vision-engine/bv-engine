@@ -93,17 +93,26 @@ void        BoundingBoxLogic::Deinitialize      ()
 
 // ***********************
 //
+void                        BoundingBoxLogic::Update            ( TimeType t )
+{
+    GizmoLogicBase::Update( t );
+
+    if( m_centerSize.Changed() )
+        SetCenterSize( m_centerNode.lock(), m_centerSize.GetValue() );
+
+    if( m_centerColor.Changed() )
+        SetColor( m_centerNode.lock(), m_centerColor.GetValue() );
+
+    if( m_boxColor.Changed() )
+        SetColor( m_bbNode.lock(), m_boxColor.GetValue() );
+}
+
+// ***********************
+//
 void                        BoundingBoxLogic::PostOwnerUpdate   ( TimeType )
 {
     if( auto ownerNode = m_gizmoOwner.lock() )
     {
-        if( m_centerSize.Changed() )
-            SetCenterSize( m_centerNode.lock(), m_centerSize.GetValue() );
-
-        if( m_centerColor.Changed() )
-            SetColor( m_centerNode.lock(), m_centerColor.GetValue() );
-
-        
         if( NeedsBoxUpdate( ownerNode ) )
             UpdateBox();
 
@@ -150,6 +159,9 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
 
         editor->AddChildNode( scene, gizmoRoot, centerNode, false );
         editor->AddChildNode( scene, gizmoRoot, boxNode, false );
+
+        // If someone wants to set parameters directly after this function, changes will be visible in next update. Otherwise not.
+        m_paramValModel->Update();
     }
 }
 

@@ -101,3 +101,29 @@ TEST( Box, CubeIncludePoint )
     EXPECT_EQ( box.Center(), glm::vec3( 0.5, 0.5, 0.5 ) );
 }
 
+// ***********************
+// Transformed empty box stays empty.
+TEST( Box, TransformEmpty )
+{
+    bv::mathematics::Box box;
+
+    EXPECT_TRUE( box.IsEmpty() );
+    box.Transform( glm::translate( glm::vec3( 1.0, 2.0, 0.0 ) ) );
+    EXPECT_TRUE( box.IsEmpty() );
+}
+
+// ***********************
+// 
+TEST( Box, Translate )
+{
+    bv::mathematics::Box box( -1.0, 1.0, 1.0, -1.0, -1.0, 1.0 );
+
+    box.Transform( glm::translate( glm::vec3( 0.0, 2.0, 0.0 ) ) );
+
+    EXPECT_EQ( box.Height(), 2.0 );
+    EXPECT_EQ( box.Width(), 2.0 );
+    EXPECT_EQ( box.Depth(), 2.0 );
+
+    EXPECT_EQ( box.Center(), glm::vec3( 0.0, 2.0, 0.0 ) );
+}
+
