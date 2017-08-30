@@ -9,11 +9,15 @@ namespace bv {
 template< class TimeValueT, class ValueT >
 class ConstEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
+private:
+
     ValueT value;
+
 public:
     ConstEvaluator( ValueT v ) : value( v ) {}
 
-    virtual EvaluatorType GetType() override { return EvaluatorType::ET_CONSTANT; }
+    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_CONSTANT; }
+    virtual CurveType               GetCurveType    () override { return CurveType::CT_POINT; }
 
     virtual void SetValue( TimeValueT /*t*/, ValueT v ) override
     {
@@ -25,13 +29,13 @@ public:
     virtual void                                        Serialize       ( ISerializer& ser ) const override
     {
     ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", "point" );
+        ser.SetAttribute( "type", SerializationHelper::T2String( CurveType::CT_POINT ) );
     ser.ExitChild();
     }
 
     virtual void                                Deserialize( const IDeserializer& deser )
     {
-        if( deser.GetAttribute( "type" ) != "point" )
+        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( CurveType::CT_POINT ) )
             assert( false );
     }
 

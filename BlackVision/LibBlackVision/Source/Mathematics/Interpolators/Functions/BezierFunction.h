@@ -1,6 +1,9 @@
 #pragma once
 
-namespace bv {
+namespace bv
+{
+
+
 
 // *******************************
 //
@@ -10,13 +13,17 @@ class BezierEvaluator : public IEvaluator< TimeValueT, ValueT >
     typedef Key< TimeValueT, ValueT > Key;
 
 public: // FIXME
+    
     Key key1, key2;
     Key v1, v2;
-    TimeValueT m_tolerance;
-public:
-    virtual EvaluatorType GetType() override { return EvaluatorType::ET_BEZIER; }
+    TimeValueT  m_tolerance;
+    CurveType   m_curveType;
 
-    BezierEvaluator( Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
+public:
+    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_BEZIER; }
+    virtual CurveType               GetCurveType    () override { return m_curveType; }
+
+    BezierEvaluator( CurveType curve, Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : m_curveType( curve ), key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
     
     void SetV2( Key v2 ) { this->v2 = v2; }
     
@@ -68,7 +75,7 @@ public:
     virtual void                                        Serialize       ( ISerializer& ser ) const override
     {
     ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", "bezier" );
+        ser.SetAttribute( "type", SerializationHelper::T2String( m_curveType ) );
         
         ser.EnterChild( "v1" );
             SerializationHelper::SerializeAttribute( ser, v1.t, "dt" );
@@ -85,7 +92,7 @@ public:
 
     virtual void                                Deserialize( const IDeserializer& deser )
     {
-        if( deser.GetAttribute( "type" ) != "bezier" )
+        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( m_curveType ) )
             assert( false );
 
         deser.EnterChild( "v1" );

@@ -1,25 +1,38 @@
 #pragma once
 
-namespace bv {
+#include "Serialization/SerializationHelper.h"
 
+
+
+namespace bv
+{
+
+
+// ***********************
+//
 template< class TimeValueT, class ValueT >
 class PolynomialEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
+private:
     typedef Key< TimeValueT, ValueT > Key;
     typedef float Coefficient;
+
+private:
 
     Coefficient a, b, c, d, e; // a*t^5+b*t^4+c*t^3+d*t^2+e*t
     bool bounce;
     Key key1, key2;
-    TimeValueT m_tolerance;
-public:
-    PolynomialEvaluator( Key k1, Key k2, Coefficient a, Coefficient b, Coefficient c, Coefficient d, Coefficient e, TimeValueT tolerance, bool bounce )
-        : a( a ), b( b ), c( c ), d( d ), e( e ), bounce( bounce )
-        , key1( k1 ), key2( k2 ), m_tolerance( tolerance )
-    {
-    }
+    TimeValueT  m_tolerance;
+    CurveType   m_curveType;
 
-    virtual EvaluatorType                               GetType() override { return EvaluatorType::ET_POLYNOMIAL; }
+public:
+    PolynomialEvaluator( CurveType curve, Key k1, Key k2, Coefficient a, Coefficient b, Coefficient c, Coefficient d, Coefficient e, TimeValueT tolerance, bool bounce )
+        : m_curveType( curve ), a( a ), b( b ), c( c ), d( d ), e( e ), bounce( bounce )
+        , key1( k1 ), key2( k2 ), m_tolerance( tolerance )
+    {}
+
+    virtual EvaluatorType                               GetType         () override { return EvaluatorType::ET_POLYNOMIAL; }
+    virtual CurveType                                   GetCurveType    () override { return m_curveType; }
 
     virtual void                                        SetValue( TimeValueT t, ValueT v ) override
     {
@@ -45,17 +58,17 @@ public:
         return ValueT( alpha * key2.val + (1-alpha) * key1.val );
     }
 
-    virtual void                                        Serialize       ( ISerializer& /*ser*/ ) const override
+    virtual void                                        Serialize       ( ISerializer & ser ) const override
     {
-    //ser.EnterChild( "interpolation" );
-    //    ser.SetAttribute( "type", "point" );
-    //ser.ExitChild();
+        ser.EnterChild( "interpolation" );
+            ser.SetAttribute( "type", SerializationHelper::T2String( m_curveType ) );
+        ser.ExitChild();
     }
 
-    virtual void                                        Deserialize( const IDeserializer& /*deser*/ )
+    virtual void                                        Deserialize     ( const IDeserializer & deser )
     {
-        //if( deser.GetAttribute( "type" ) != "point" )
-        //    assert( false );
+        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( m_curveType ) )
+            assert( false );
     }
 };
 
