@@ -212,6 +212,7 @@
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.h" />

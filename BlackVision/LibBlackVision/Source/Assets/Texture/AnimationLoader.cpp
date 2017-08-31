@@ -155,7 +155,8 @@ Hash CalcHash( const AnimationAssetDescConstPtr & typedDesc, SizeType inc = 0 )
 
      for( auto f : framesDesc )
      {
-         hashes = hashes + Hash::FromFile( ProjectManager::GetInstance()->ToAbsPath( f->GetOrigTextureDesc()->GetImagePath() ).Str() ).Get();
+         auto absPath = ProjectManager::GetInstance()->ToAbsPath( f->GetOrigTextureDesc()->GetImagePath() );
+         hashes = hashes + Hash::FromString( absPath.Str() + std::to_string( Path::GetTimestamp( absPath ) ) ).Get();
      }
 
      return Hash::FromString( hashes );
