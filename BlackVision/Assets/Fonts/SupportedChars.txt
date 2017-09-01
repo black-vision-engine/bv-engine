@@ -1,10 +1,7 @@
 ﻿1234568790
-.~,/?“‘:;[]{}\|`!@#$%^&*()-_+=<>–° 
+.~,/?“‘:;[]{}\|`!@#$%^&*()-_+=<>–°"'
 abcdefghijklmnopqrstuvxyząęćźżłśóńw
 ABCDEFGHIJKLMNOPQRSTUVXYZĄĘĆŹŻŁŚÓŃW
 ÄÖÜ
 AAOAŠŽ
-n
-AÇÉEEËÎIÔOUUÜY
-
-
+AÇÉEEËÎIÔOUUÜY©

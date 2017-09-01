@@ -83,6 +83,8 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 
     m_timelineManager = model::TimelineManager::GetInstance();
     m_timeEvaluator = m_timelineManager->GetRootTimeline();
+
+    Path::Copy( "Assets/Fonts/SupportedChars.txt", "DefaultPMDir/fonts/SupportedChars.txt" );
 }
 
 // ****************************
@@ -1151,7 +1153,7 @@ void					TestScene::InitAssetsTest		()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = root->GetChild( "tex0" );
 
-        auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
+        auto desc = TextureAssetDesc::Create( "sequences/" + ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
         CHECK( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
     });
 
@@ -1161,7 +1163,7 @@ void					TestScene::InitAssetsTest		()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = root->GetChild( "tex0" );
 
-        auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f1.bmp", false );
+        auto desc = TextureAssetDesc::Create( "sequences/" + ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f1.bmp", false );
         auto prevDesc = child->GetPlugin( "texture" )->GetPixelShaderChannel()->GetTexturesData()->GetTextures()[ 0 ];
         
         CHECK( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
@@ -1236,7 +1238,7 @@ void					TestScene::InitAssetsTest		()
         auto editor = m_project->GetProjectEditor();
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
-        auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, 0, true );
+        auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 30, 0, 0, 0, true );
         CHECK( editor->LoadAsset( child->GetPlugin( "text" ), desc ) );
     });
 }
