@@ -1,0 +1,188 @@
+	<config>
+	<property name="MediaFolder" value="DefaultPMDir" /> <!-- ścieżka do media folderu -->
+	<property name="PMFolder" value="DefaultPMDir" />
+	<property name="FullScreen" value="false" />
+	<property name="PERSPECTIVE_CAMERA" value="true" />
+	<property name="USE_READBACK_API" value="true" />
+	<property name="SuperMagic" value="false" />
+	<property name="Resolution" value="HD" />
+	<property name="solution" value="solucja_creeda.xml" />  <!-- nazwa solucji -->
+	<property name="TransferMode" value="RAM" />
+	
+	<property name="Debug">
+		<property name="LoadSceneFromEnv" value="false" />    <!-- czy ma wczytywać deserializator pawła czy mechanizm z defaulta -->
+		<property name="SceneFromEnvName" value="BASIC_SHAPES_TEST_SCENE" />
+		<property name="UseVideoInputFeeding" value="false" />    <!-- czy ma wczytywać deserializator pawła czy mechanizm z defaulta -->
+		<property name="CommandsDebugLayer">
+			<property name="UseDebugLayer" value="false" />
+			<property name="FilePath" value="../../../../Logs/" />
+		</property>
+	</property>
+	
+	<property name="Renderer">
+		<property name="MaxFPS" value="1520" />
+		<property name="RenderToSharedMemory" value="true" />
+	</property>
+		
+	<property name="Application">
+		<property name="EnableLockingQueue" value="false" />
+		<property name="VSYNC" value="false" />
+		<property name="Window">
+			<property name="Mode" value="WINDOWED" />        <!-- rodzaj wyswietlanego okienka MULTIPLE_SCREENS|WINDOWED_FULLSCREEN -->
+			<property name="Size">
+				<property name="Width" value="1920" />
+				<property name="Height" value="1080" />
+			</property>
+			<property name="Origin">
+				<property name="X" value="0" />
+				<property name="Y" value="0" />
+			</property>
+		</property>
+		<property name="Renderer">			
+			<property name="FrameBufferSize">
+				<property name="Width" value="1920" />
+				<property name="Height" value="1080" />
+			</property>
+		</property>
+	</property>
+	<property name="Renderer">
+		<property name="TimerFPS" value="200" />
+	</property>
+	<property name="Network">
+		<property name="SocketServer">
+			<property name="Port" value="11011" />
+		</property>
+	</property>
+	
+	<property name="camera">
+		<property name="fov" value="45" />
+		<property name="position">
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+			<property name="z" value="5" />
+		</property>
+		<property name="direction">
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+			<property name="z" value="5" />
+		</property>
+	</property>
+	
+	<property name="Plugins">
+		<property name="Textures">
+			<property name="OnFailedLoadBehavior" value="LoadChecker" />
+		</property>
+	</property>
+	
+	<!-- pal to 576I 5000*/-->
+	<!-- ntsc to 486I 5994*/-->
+	<property name="VideoCards">
+		<property name="BlueFish" 						value="false">
+			<property name="BlueFishAmount"				value="1" />
+			<property name="1">	
+				<property name="ChannelAmount"			value="1" />
+				<property name="Channel0"				value="A">
+					<property name="Renderer" 			value="1" />
+					<property name="Input" 				value="false">
+						<property name="Playthrough"	value="false" />
+						<property name="Type" 			value="FILL" />
+					</property>
+					<property name="Output" 		value="true">
+						<property name="Type" 		value="FILL" />
+						<property name="Resolution" value="1080" />
+						<property name="Refresh" 	value="5000" />
+						<property name="Interlaced" value="true" />	
+						<property name="Flipped" 	value="true" />	
+						<property name="Reference"		value="FREERUN">
+							<property name="H"	  		value="-1" />
+							<property name="V"	  		value="-1" />
+						</property>	
+					</property>
+				</property>		
+				<property name="Channel1"				value="B">
+					<property name="Renderer" 			value="1" />
+					<property name="Input" 				value="true">
+						<property name="Playthrough"	value="true" />
+						<property name="Type" 			value="FILL" />
+					</property>
+					<property name="Output" 		value="true">
+						<property name="Type" 		value="FILL" />
+						<property name="Resolution" value="1080" />
+						<property name="Refresh" 	value="5000" />
+						<property name="Interlaced" value="true" />	
+						<property name="Flipped" 	value="true" />	
+						<property name="Reference"		value="FREERUN">
+							<property name="H"	  		value="-1" />
+							<property name="V"	  		value="-1" />
+						</property>	
+					</property>
+				</property>		
+				<property name="Channel2"				value="C">
+					<property name="Renderer" 			value="1" />
+					<property name="Input" 				value="false">
+						<property name="Playthrough"	value="false" />
+						<property name="Type" 			value="FILL" />
+					</property>
+					<property name="Output" 		value="false">
+						<property name="Type" 		value="FILL_KEY" />
+						<property name="Resolution" value="1080" />
+						<property name="Refresh" 	value="5000" />
+						<property name="Interlaced" value="true" />	
+						<property name="Flipped" 	value="true" />	
+						<property name="Reference"		value="FREERUN">
+							<property name="H"	  		value="-1" />
+							<property name="V"	  		value="-1" />
+						</property>	
+					</property>
+				</property>			
+				<property name="Channel3"				value="D">
+					<property name="Renderer" 			value="1" />
+					<property name="Input" 				value="false">
+						<property name="Playthrough"	value="false" />
+						<property name="Type" 			value="FILL_KEY" />
+					</property>
+					<property name="Output" 		value="false">
+						<property name="Type" 		value="FILL_KEY" />
+						<property name="Resolution" value="1080" />
+						<property name="Refresh" 	value="5000" />
+						<property name="Interlaced" value="true" />	
+						<property name="Flipped" 	value="true" />	
+						<property name="Reference"		value="FREERUN">
+							<property name="H"	  		value="-1" />
+							<property name="V"	  		value="-1" />
+						</property>	
+					</property>
+				</property>											
+			</property>	
+		</property>
+		
+		<property name="BlackMagic" 			value="false">	
+				<property name="SuperMagic" 	value="false" />	
+				<property name="Reference"		value="FREERUN">
+					<property name="H"	  		value="0" />
+					<property name="V"	  		value="0" />
+				</property>		
+				<property name="OutputsAmount"	value="1" />
+				<property name="InputsAmount"	value="0" />
+				<property name="RenderersNumber" value="1" />
+				<property name="Output1"    	value="true">
+					<property name="Type"   	value="FILL" />
+					<property name="Renderer" 	value="1" />
+					<property name="Resolution" value="HD" />
+					<property name="Refresh" 	value="50" />
+					<property name="Interlaced" value="true" />						
+				</property>
+				<property name="Output2" 		value="false">
+					<property name="Type" 		value="KEY" />
+				</property>			
+		</property>
+	</property>
+	
+	<RenderChannels>
+        <RenderChannel id="0" enabled="true" />
+        <RenderChannel id="1" enabled="false" />
+        <RenderChannel id="2" enabled="false" />
+        <RenderChannel id="3" enabled="false" />
+    </RenderChannels>
+</config>
+
