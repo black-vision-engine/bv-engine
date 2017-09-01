@@ -3,18 +3,26 @@
 layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec2 vertexTexCoord;
 layout (location = 2) in vec2 ccCenter;
-layout (location = 3) in vec2 vertexAlphaTexCoord;
+layout (location = 3) in vec2 cc_num;
+layout (location = 4) in vec2 vertexAlphaTexCoord;
+
+int cc_num_total = int( cc_num.y );
+int cc_id = int( cc_num.x );
+
+uniform int         numTextLayers;
 
 uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
 
+uniform mat4 shadowTx;
+uniform mat4 outlineTx;
 uniform mat4 txAlphaMat;
 
-uniform int         numTextLayers;
-
-uniform int     cc_num;
-uniform int     cc_num_total;
+uniform int         firstTextCC;
+uniform int         firstTextOutCC;
+uniform int         firstTextGlowCC;
+uniform int         firstTextShCC;
 
 uniform float   time;
 
@@ -30,6 +38,10 @@ uniform int     transformTextEffectId;
 out vec2 uvCoord;
 out vec2 ccCenterCoord;
 out vec2 uvAlphaCoord;
+flat out int ccId;
+flat out int ccTotal;
+
+
 
 int pseudoRandonInt( int seed, int total )  // Linear congruential generator
 {   
@@ -137,13 +149,13 @@ void main()
     switch( transformTextEffectId )
     {
     case 1:
-        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearRotationCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearRotationCC( transformEffectVal1, transformEffectVal2, cc_id, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
     case 2:
-        transform = transform *translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform *translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearScaleCC( transformEffectVal1, transformEffectVal2, cc_id, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;     
     case 3:
-        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_id, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
     case 4:
         transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * animLetterTransform() * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
@@ -158,6 +170,8 @@ void main()
     gl_Position = transform * vec4( vertexPosition, 1.0 );
     uvCoord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
     ccCenterCoord = ccCenter;
+	ccId = cc_id;
+	ccTotal = cc_num_total;
 	uvAlphaCoord = ( txAlphaMat * vec4( vertexAlphaTexCoord, 0.0, 1.0 ) ).xy;
 }
 
