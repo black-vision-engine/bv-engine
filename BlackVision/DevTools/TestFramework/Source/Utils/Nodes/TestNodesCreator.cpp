@@ -423,7 +423,7 @@ model::BasicNodePtr		TestNodesCreator::VideoStreamDecoder			( model::ITimeEvalua
     std::vector< std::string > plugins;
     plugins.push_back( "DEFAULT_TRANSFORM" );
     plugins.push_back( plugin );
-    plugins.push_back( "DEFAULT_AV_DECODER" );
+    plugins.push_back( "DEFAULT_VIDEO_DECODER" );
     if( !alphaMask.empty() )
     {
         plugins.push_back( "DEFAULT_ALPHA_MASK" );
@@ -433,7 +433,7 @@ model::BasicNodePtr		TestNodesCreator::VideoStreamDecoder			( model::ITimeEvalua
 
     assert( success );
 
-    success = model::LoadAVStream( node->GetPlugin( "av_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
+    success = model::LoadAVStream( node->GetPlugin( "video_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
 
     if( !alphaMask.empty() )
     {

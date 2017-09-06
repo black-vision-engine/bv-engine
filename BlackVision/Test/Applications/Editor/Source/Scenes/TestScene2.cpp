@@ -1347,7 +1347,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
             editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
             editor->AddChildNode( scene, root, vsd );
 
-            model::SetParameter( vsd->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( vsd->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         };
 
         auto add1 = [ plugin, this ]
@@ -1361,25 +1361,25 @@ void					TestScene::InitVideoStreamDecoderTest	()
             editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
             editor->AddChildNode( scene, root, vsd );
 
-            model::SetParameter( vsd->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( vsd->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         };
 
         m_testSteps.push_back( add0 );
         Wait( 1 );
         m_testSteps.push_back( add1 );
     
-        m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, VSD_NODE, "av_decoder", 2 ); } );
-        m_testSteps.push_back( [&]{ SwapPlugins( "av_decoder", 2, VSD_NODE, "solid color", 2 ); } );
+        m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, VSD_NODE, "video_decoder", 2 ); } );
+        m_testSteps.push_back( [&]{ SwapPlugins( "video_decoder", 2, VSD_NODE, "solid color", 2 ); } );
 
         m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
         m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
     
         m_testSteps.push_back( [&]{ 
-            CopyPlugin( 2, "solid color", VSD_NODE, "av_decoder" );
+            CopyPlugin( 2, "solid color", VSD_NODE, "video_decoder" );
 
             auto editor = m_project->GetProjectEditor();
             auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
-            model::SetParameter( root->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( root->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         } );
         Wait( 1 );
         m_testSteps.push_back( [&]
@@ -1388,11 +1388,11 @@ void					TestScene::InitVideoStreamDecoderTest	()
             auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
 
             auto desc = AVAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
-            editor->LoadAsset( root->GetPlugin( "av_decoder" ), desc );
+            editor->LoadAsset( root->GetPlugin( "video_decoder" ), desc );
 
-            model::SetParameter( root->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( root->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         });
-        m_testSteps.push_back( [&]{ RestoreRoot( 2, "av_decoder" ); } );
+        m_testSteps.push_back( [&]{ RestoreRoot( 2, "video_decoder" ); } );
 
         m_testSteps.push_back( [&]{
             auto editor = m_project->GetProjectEditor();
@@ -1400,14 +1400,14 @@ void					TestScene::InitVideoStreamDecoderTest	()
             auto child = root->GetChild( VSD_NODE );
 
             auto desc = AVAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
-            editor->LoadAsset( root->GetPlugin( "av_decoder" ), desc );
+            editor->LoadAsset( root->GetPlugin( "video_decoder" ), desc );
 
-            model::SetParameter( child->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( child->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         });
 
         auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
         std::string test0[] = { "alpha_mask", pluginName };
-        std::string test1[] = { "av_decoder", pluginName };
+        std::string test1[] = { "video_decoder", pluginName };
 
         std::vector < OrderTestCase > tests;
         tests.push_back( OrderTestCase( VSD_NODE, "AmGeom", std::vector< std::string >( test0, test0 + 2 ) ) );
@@ -1426,7 +1426,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
                 editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
                 editor->AddChildNode( scene, root, vsd );
 
-                model::SetParameter( vsd->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+                model::SetParameter( vsd->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
             });
             InitOrderTest( test );
         }
@@ -1442,7 +1442,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
             editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
             editor->AddChildNode( scene, root, vsd );
 
-            model::SetParameter( vsd->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( vsd->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         });
 
         m_testSteps.push_back( [&]{
@@ -1451,9 +1451,9 @@ void					TestScene::InitVideoStreamDecoderTest	()
             auto child = root->GetChild( VSD_NODE );
 
             auto desc = AVAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
-            editor->LoadAsset( child->GetPlugin( "av_decoder" ), desc );
+            editor->LoadAsset( child->GetPlugin( "video_decoder" ), desc );
 
-            model::SetParameter( child->GetPlugin( "av_decoder" )->GetParameter( "state" ), 0.0f, 1 );
+            model::SetParameter( child->GetPlugin( "video_decoder" )->GetParameter( "state" ), 0.0f, 1 );
         });
 
         Wait( 3 );

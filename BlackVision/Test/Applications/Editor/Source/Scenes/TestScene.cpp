@@ -85,6 +85,9 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
     m_timeEvaluator = m_timelineManager->GetRootTimeline();
 
     Path::Copy( "Assets/Fonts/SupportedChars.txt", "DefaultPMDir/fonts/SupportedChars.txt" );
+
+    Path::Copy( "TestAssets/Editor/cameraman.mp4", "Assets/cameraman.mp4" );
+    Path::Copy( "TestAssets/Editor/dxv.mov", "Assets/dxv.mov" );
 }
 
 // ****************************

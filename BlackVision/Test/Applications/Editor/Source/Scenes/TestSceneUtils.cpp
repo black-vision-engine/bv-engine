@@ -18,8 +18,8 @@ const std::string	TestSceneUtils::ALPHA_MASK0_PATH = "Assets/checkboard_am0.bmp"
 const std::string	TestSceneUtils::ALPHA_MASK_PATH	= "Assets/checkboard_am.bmp";
 const std::string	TestSceneUtils::ANIM_PATH		= "seq:/anim";
 
-const std::string	TestSceneUtils::VIDEO_PATH0		= "Assets/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4";
-const std::string	TestSceneUtils::VIDEO_PATH1		= "Assets/20140117_142047_CINEC_ProRes4444.mov";
+const std::string	TestSceneUtils::VIDEO_PATH0		= "Assets/cameraman.mp4";
+const std::string	TestSceneUtils::VIDEO_PATH1		= "Assets/dxv.mov";
 
 const Float32		TestSceneUtils::SPEED			= 1.f;
 const UInt32		TestSceneUtils::ANIM_NUM		= 10;
