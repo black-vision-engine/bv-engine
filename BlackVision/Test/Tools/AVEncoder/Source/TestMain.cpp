@@ -18,6 +18,8 @@ TEST( OpenStream, OpenStream )
 
 TEST( WriteFrames, WriteFrames )
 {
+    RecordProperty( "description", "WriteFrames test writes bla bla" );
+
 	auto w = 1920;
 	auto h = 1080;
 
