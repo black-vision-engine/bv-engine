@@ -4,9 +4,13 @@
 
 namespace bv
 {
+
+
 namespace SerializationHelper
 {
 
+// ***********************
+//
 static const std::pair< CurveType, const char* > ct2s_data [] =
 { std::make_pair( CurveType::CT_BEZIER, "bezier" )
 , std::make_pair( CurveType::CT_COSINE_LIKE, "cosine" )
@@ -23,42 +27,18 @@ static const std::pair< CurveType, const char* > ct2s_data [] =
 , std::make_pair( CurveType::CT_BEZIER, "" )        // default
 };
 
+// ***********************
+//
 static const std::pair< WrapMethod, const char* > wm2s_data [] =
 { std::make_pair( WrapMethod::clamp, "clamp" )
 , std::make_pair( WrapMethod::pingPong, "pingPong" )
 , std::make_pair( WrapMethod::repeat, "repeat" )
 , std::make_pair( WrapMethod::clamp, "" ) };
 
-const std::pair< CurveType, const char* > * MappingHelper::ct2s = ct2s_data;
-const std::pair< WrapMethod, const char* > * MappingHelper::wm2s = wm2s_data;
 
-template<>
-std::string T2String< WrapMethod >( const WrapMethod& wm )
-{
-	return Enum2String( MappingHelper::wm2s, wm );
-}
-template<>
+IMPLEMENT_ENUM_SERIALIZATION( CurveType, ct2s_data );
+IMPLEMENT_ENUM_SERIALIZATION( WrapMethod, wm2s_data );
 
-WrapMethod String2T( const std::string & s, const WrapMethod& default )
-{
-	if( s == "" )
-		return default;
-	else
-		return String2Enum( MappingHelper::wm2s, s );
-}
-
-template<> std::string T2String< CurveType >( const CurveType& ct )
-{
-	return Enum2String( MappingHelper::ct2s, ct );
-}
-
-template<> CurveType String2T( const std::string & s, const CurveType& default )
-{
-	if( s == "" )
-		return default;
-	else
-		return String2Enum( MappingHelper::ct2s, s );
-}
 
 } // SerializationHelper
 

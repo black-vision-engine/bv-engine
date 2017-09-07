@@ -40,9 +40,7 @@ PresetThumbnail::PresetThumbnail    ( IDeserializer & deser )
     
     assert( deser.GetAttribute( "type" ) == "PRESET_THUMBNAIL" );
 
-    m_data = DecodeBase64( deser.GetAttribute( "data" ) );
-
-    auto dataEnc = deser.GetAttribute( "data" );
+    m_dataBase64 = deser.GetAttribute( "data" );
 
     deser.ExitChild(); // thumbnail
 }

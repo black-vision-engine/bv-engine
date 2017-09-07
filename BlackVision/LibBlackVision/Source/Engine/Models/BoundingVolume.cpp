@@ -9,6 +9,8 @@
 
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
+#include "Application/ApplicationContext.h"
+
 //#include <glm/gtc/matrix_transform.hpp>
 
 
@@ -179,6 +181,19 @@ void                    BoundingVolume::UpdateOwnBox                  ( const IV
 void                                BoundingVolume::IncludeChildrenBox      ( const mathematics::Box & box )
 {
     m_childrenBox.Include( box );
+}
+
+// ***********************
+//
+bool                                BoundingVolume::IsUpdated               () const
+{
+    auto updateID = ApplicationContext::Instance().GetUpdateCounter();
+    
+    if( updateID < m_lastTopologyID ||
+        updateID < m_lastAttribuetesID )
+        return true;
+
+    return false;
 }
 
 // ***********************

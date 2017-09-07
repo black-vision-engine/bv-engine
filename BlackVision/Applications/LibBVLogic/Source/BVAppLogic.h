@@ -2,11 +2,11 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
-#include "RenderMode.h"
+#include "Application/Logic/RenderMode.h"
 
 #include "Tools/SimpleTimer.h"
 
@@ -125,6 +125,7 @@ public:
     const model::PluginsManager *   GetPluginsManager   () const;
     RenderLogic *                   GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
+    Renderer *                      GetRenderer         () const { return m_renderer; }
 
     void                            LoadScenes          ( const PathVec & pathVec );
 
@@ -144,6 +145,7 @@ private:
     void                            InitializeKbdHandler();
     void                            InitializeRemoteCommunication();
     void                            InitializeCommandsDebugLayer();
+    void                            InitializeDefaultAssets();
 
     std::string                     GetEnvScene();
 

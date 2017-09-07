@@ -50,6 +50,11 @@ const std::string TextPluginBase::PARAM::FIRST_TEXT_OUT_CC  = "firstTextOutCC";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_SH_CC   = "firstTextShCC";
 const std::string TextPluginBase::PARAM::FIRST_TEXT_GLOW_CC = "firstTextGlowCC";
 
+const std::string TextPluginBase::PARAM::NUM_TEXT_LAYERS    = "numTextLayers";
+
+
+
+
 // *******************************
 //
 TextPluginBaseDesc::TextPluginBaseDesc                            (const std::string & uid, const std::string & defaultName, const std::string & abbrv)
@@ -79,6 +84,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.SetOrCreateVSModel();
     h.AddTransformParam( TextPluginBase::PARAM::OUTLINE_TX );
     h.AddTransformParam( TextPluginBase::PARAM::SHADOW_TX );
+    h.AddValue( TextPluginBase::PARAM::NUM_TEXT_LAYERS, 1 );
 
     h.SetOrCreatePluginModel();
 
@@ -127,6 +133,8 @@ TextPluginBase::TextPluginBase              ( const std::string & name, const st
     m_firstTextOutCC    = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_OUT_CC ) );
     m_firstTextGlowCC   = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_GLOW_CC ) );
     m_firstTextShCC     = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetPixelShaderChannelModel()->GetValue( PARAM::FIRST_TEXT_SH_CC ) );
+
+    m_numTextLayers     = QueryTypedValue< ValueIntPtr >( GetPluginParamValModel()->GetVertexShaderChannelModel()->GetValue( PARAM::NUM_TEXT_LAYERS ) );
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -206,8 +214,8 @@ bool                                TextPluginBase::SetPrevPlugin               
         ctx->depthCtx->enabled = true;
         ctx->depthCtx->writable = false;
         ctx->alphaCtx->blendEnabled = true;
-        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        //ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+        //ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
         return true;
     }
     else
@@ -259,6 +267,7 @@ bool                                TextPluginBase::LoadAtlas                   
 void                                TextPluginBase::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
+	HelperPixelShaderChannel::PropagateRendererContextUpdate( m_psc, GetPrevPlugin() );
 }
 
 // *************************************
@@ -310,6 +319,8 @@ Float32                             TextPluginBase::BuildVACForText             
     m_firstTextShCC->SetValue( 0 );
     m_firstTextGlowCC->SetValue( 0 );
 
+    int numLayers = 0;
+
     if( m_blurSize > 0 && m_shadowEnabled.GetValue() ) 
     {
         TextHelper::BuildVACForText(    m_vaChannel.get(),
@@ -328,6 +339,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         useKerning,
                                         useBox);
 
+        numLayers++;
         m_firstTextGlowCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
 
@@ -349,6 +361,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         useKerning,
                                         useBox);
 
+        numLayers++;
         m_firstTextOutCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
 
@@ -370,6 +383,7 @@ Float32                             TextPluginBase::BuildVACForText             
                                         useKerning,
                                         useBox );
 
+        numLayers++;
         m_firstTextCC->SetValue( ( Int32 ) m_vaChannel->GetComponents().size() );
     }
 
@@ -389,6 +403,8 @@ Float32                             TextPluginBase::BuildVACForText             
                                                     useKerning,
                                                     useBox );
 
+    numLayers++;
+    m_numTextLayers->SetValue( numLayers );
 
     return textLength;
 }

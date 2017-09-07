@@ -154,27 +154,20 @@ void                JsonSerializeObject::EnterArray          ( const std::string
 {
 	m_nodeStack.push( m_currentNode );
 
-    if( m_currentNode->isMember( name ) )
+    bool isArray = m_currentNode->isArray();
+    if( isArray )
+    {
+        m_currentNode = &( ( *m_currentNode ).append( Json::ValueType::arrayValue ) );
+    }
+    else if( !isArray && m_currentNode->isMember( name ) )
     {
         assert( false );
     }
     else
     {
         ( *m_currentNode )[ name ] = Json::ValueType::arrayValue;
+        m_currentNode = &( ( *m_currentNode )[ name ] );
     }
-
-    m_currentNode = &( ( *m_currentNode )[ name ] );
-
-    //unsigned int size = 0;  // Default value, when array doesn't exist yet.
-    //if( (*m_currentNode)[ name ].isArray() )
-    //    size = (*m_currentNode)[ name ].size();
-    //else if( (*m_currentNode)[ name ].isObject() )
-    //{
-    //    assert( !"It's not an array!" );
-    //}
-
-    //(*m_currentNode)[ name ][ size ] = Json::ValueType::objectValue;
-    
 }
 
 

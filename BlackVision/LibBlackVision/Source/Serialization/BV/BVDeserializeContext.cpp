@@ -3,7 +3,7 @@
 #pragma once
 
 #include "BVDeserializeContext.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
@@ -119,25 +119,5 @@ void                                BVDeserializeContext::SetNodePath           
     m_nodePath = sceneName;
 }
 
-// ***********************
-//
-void                        BVDeserializeContext::Push                      ( const model::RendererContextPtr & context )
-{
-    m_rendererContextes.push_back( context );
-}
-
-// ***********************
-//
-const model::RenderContextVec & BVDeserializeContext::RendererContextes     () const
-{
-    return m_rendererContextes;
-}
-
-// ***********************
-//
-void                        BVDeserializeContext::ClearRendererContextes    ()
-{
-    m_rendererContextes.clear();
-}
 
 } // bv

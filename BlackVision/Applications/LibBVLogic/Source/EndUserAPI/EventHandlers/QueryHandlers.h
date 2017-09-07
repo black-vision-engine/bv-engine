@@ -6,6 +6,12 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
 
+
+#include "AsyncThumbs/ThumbsThread.h"
+
+
+
+
 namespace bv
 {
 
@@ -18,6 +24,8 @@ private:
 
     BVAppLogic *        m_appLogic;
     BVProjectEditor *   m_editor;
+
+    ThumbsThread        m_thumbsThread;
 
 public:
 
@@ -40,7 +48,7 @@ private:
     //void     ListResourcesInFolders  ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     //void     ListAllResources        ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetAssetDescriptor      ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
-    void     GetAssetThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     GetAssetThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID, int socketID );
     void     GetSceneThumbnail       ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     GetPresetThumbnail      ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 

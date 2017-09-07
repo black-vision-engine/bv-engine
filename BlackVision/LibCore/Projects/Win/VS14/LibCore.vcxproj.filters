@@ -233,6 +233,9 @@
     <ClInclude Include="..\..\..\Source\Util\Audio\AudioUtils.h">
       <Filter>Util\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\ThreadsBarrier.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -346,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Util\Audio\AudioUtils.cpp">
       <Filter>Util\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\ThreadsBarrier.cpp">
+      <Filter>Threading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

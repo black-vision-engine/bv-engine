@@ -43,8 +43,10 @@ void        TestTest::PreEvents     ()
         auto scenes = GetAppLogic()->GetBVProject()->GetScenes();
 
         REQUIRE CHECK( scenes.size() == 1 );
-        CHECK( scenes.size() == 3 );
-        REQUIRE CHECK( scenes.size() == 2 );
+
+        // Uncomment to test failing in framework.
+        //CHECK( scenes.size() == 3 );
+        //REQUIRE CHECK( scenes.size() == 2 );
     }
 
     if( GetFrameNumber() >= 100 )

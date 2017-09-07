@@ -1,4 +1,5 @@
 #include "TestExecutor.h"
+#include "BVTestAppLogic.h"
 
 #include <fstream>
 
@@ -64,6 +65,14 @@ bool        TestExecutor::WantContinue      ( UnitTest::Test * curTest )
 //
 bool        TestExecutor::Execute           ()
 {
+    // Note: we can't restart timer earlier, because AppLogic isn't initialized.
+    static bool firstExecution = true;
+    if( firstExecution )
+    {
+        m_appLogic->RestartTimer();
+        firstExecution = false;
+    }
+
     if( !WantContinue( m_curTest ) )
     {
         // No tests anymore.
@@ -75,6 +84,10 @@ bool        TestExecutor::Execute           ()
 
         m_curTest = FetchNextTest();
         m_failedTests = m_runner.GetTestResults()->GetFailedTestCount();
+
+        // Clean engine bfore next test.
+        m_appLogic->UnloadScenes();
+        m_appLogic->RestartTimer();
     }
 
     m_runner.RunSingleTest( m_curTest, nullptr, 0 );

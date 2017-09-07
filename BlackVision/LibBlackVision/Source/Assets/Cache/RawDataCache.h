@@ -3,7 +3,11 @@
 #include "DataTypes/Hash.h"
 #include "Memory/MemoryChunk.h"
 
+#include "HardDriveRawDataCache.h"
+
 #include <map>
+#include <mutex>
+
 
 namespace bv
 {
@@ -12,6 +16,10 @@ namespace bv
 // Implementation of simple cache of MemoryChunk. Key must be class of bv::Hash.
 class RawDataCache
 {
+private:
+
+    HardDriveRawDataCache       m_hardDriveCache;
+
 public:
 
     MemoryChunkConstPtr     Get     ( const Hash & key ) const;
@@ -28,21 +36,30 @@ public:
     // Updates entry in cache. If doesn't exist adds it.
     void                    Update  ( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
 
-    // ******************************
-    // 
-    bool                    Exists  ( const Hash & key );
 
     // ******************************
     // Returns instance of the class singleton. 
     static RawDataCache &   GetInstance();
 
 private:
+
     RawDataCache();
     ~RawDataCache();
 
+
+    // ***********************
+    //
     MemoryChunkConstPtr     Find( const Hash & key ) const;
 
-    std::map< Hash, MemoryChunkConstPtr > m_data;
+    // ******************************
+    // 
+    bool                    Exists  ( const Hash & key );
+
+private:
+
+    std::map< Hash, MemoryChunkConstPtr >   m_data;
+    mutable std::recursive_mutex            m_lock;
+
 };
 
 } // bv

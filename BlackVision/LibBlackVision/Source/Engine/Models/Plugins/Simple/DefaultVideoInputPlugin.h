@@ -6,7 +6,7 @@
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR **********************************
-class DefaultVideoInputPluginDesc : public BasePluginDescriptor
+class DefaultVideoInputPluginDesc : public DefaultTexturePluginDesc
 {
 public:
 

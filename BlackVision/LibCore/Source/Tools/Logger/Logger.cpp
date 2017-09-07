@@ -63,23 +63,34 @@ static const char* SEVERITY_STRINGS[] =
 };
 
 
-ModuleMapping moduleString;
+
 unsigned int modulesStringAlignment = 14;
 unsigned int severityLevelAlignment = 8;
+
+
+// ***********************
+//
+ModuleMapping &     ModuleString()
+{
+    static ModuleMapping moduleString;
+    return moduleString;
+}
+
+
 
 // *********************************
 //
 void InitializeModuleMapping()
 {
-	moduleString[bv::ModuleEnum::ME_LibBlackVision]		= "LibBlackVision";
-	moduleString[bv::ModuleEnum::ME_LibCore]			= "LibCore";
-	moduleString[bv::ModuleEnum::ME_LibImage]			= "LibImage";
-	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
-	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
-	moduleString[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
-    moduleString[bv::ModuleEnum::ME_TCPServer]          = "LibTCPServer";
-    moduleString[bv::ModuleEnum::ME_LibVideoCards]      = "LibVideoCards";
-    moduleString[bv::ModuleEnum::ME_XMLScenParser]      = "LibXMLSceneParser";
+    ModuleString()[bv::ModuleEnum::ME_LibBlackVision]		= "LibBlackVision";
+    ModuleString()[bv::ModuleEnum::ME_LibCore]			= "LibCore";
+    ModuleString()[bv::ModuleEnum::ME_LibImage]			= "LibImage";
+    ModuleString()[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
+    ModuleString()[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
+    ModuleString()[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
+    ModuleString()[bv::ModuleEnum::ME_TCPServer]          = "LibTCPServer";
+    ModuleString()[bv::ModuleEnum::ME_LibVideoCards]      = "LibVideoCards";
+    ModuleString()[bv::ModuleEnum::ME_XMLScenParser]      = "LibXMLSceneParser";
 
 	modulesStringAlignment = 17;
 }
@@ -116,8 +127,8 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream & st
 //
 std::string toString( bv::ModuleEnum moduleEnum )
 {
-	auto module = moduleString.find( moduleEnum );
-	if( module != moduleString.end() )
+	auto module = ModuleString().find( moduleEnum );
+	if( module != ModuleString().end() )
 		return module->second;
 	else
 		return"Unknown Module";

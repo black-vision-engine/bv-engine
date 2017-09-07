@@ -15,7 +15,7 @@ class TimelineHandlers;
 class NodeLogicHandlers;
 class VideoCardEventsHandlers;
 class GenericEventsHandlers;
-
+class GizmoHandlers;
 
 class RemoteEventsHandlers
 {
@@ -32,6 +32,7 @@ public:
     NodeLogicHandlers *         m_nodeLogicHandlers;
     VideoCardEventsHandlers *   m_videoCardHandlers;
     GenericEventsHandlers *     m_genericHandlers;
+    GizmoHandlers *             m_gizmoHandlers;
 
 public:
 

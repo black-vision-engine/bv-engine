@@ -9,8 +9,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Engine/Events/EventHandlerHelpers.h"
-#include "Engine/Events/Events.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -21,11 +19,8 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_repr( new SceneNodeRepr( transformable, this ) )
-    , m_drawBoundingBox( false )
     , m_nodeEffectEnabled( true ) // FIXME: enabled by default - is this right?
-    , m_boundingBoxColor( glm::vec4( 1, 1, 1, 1 ) )
-{
-}
+{}
 
 // ********************************
 //
@@ -165,6 +160,16 @@ void            SceneNode::DeleteTransformable      ()
 void            SceneNode::Update                   ( const Transform & parentTransform )
 {
     m_repr->Update( parentTransform );
+
+    auto numGizmos = GetNumGizmos();
+    if( numGizmos > 0 )
+    {
+        // We treat gizmos like they were child of this node.
+        const auto & worldTransform = m_repr->GetTransformable()->WorldTransform();
+
+        for( UInt32 i = 0; i < numGizmos; ++i )
+            GetGizmo( i )->Update( worldTransform );
+    }
 }
 
 // ********************************
@@ -197,35 +202,6 @@ const math::Box *       SceneNode::GetBoundingBox   () const
 
 // ***********************
 //
-bool                    SceneNode::IsSelected          () const
-{
-    return m_drawBoundingBox;
-}
-
-// ***********************
-//
-const glm::vec4 &       SceneNode::GetBoundingBoxColor () const
-{
-    return m_boundingBoxColor;
-}
-
-// ***********************
-//
-void                    SceneNode::Select              ( glm::vec4 color )
-{
-    m_drawBoundingBox = true;
-    m_boundingBoxColor = color;
-}
-
-// ***********************
-//
-void                    SceneNode::Unselect             ()
-{
-    m_drawBoundingBox = false;
-}
-
-// ***********************
-//
 SceneNodePerformance *  SceneNode::GetPerformanceData  ()
 {
     return m_repr->GetPerformanceData();
@@ -237,5 +213,86 @@ RenderableEntity * renderable( SceneNode * node )
 {
     return renderable( node->GetRepr() );
 }
+
+
+// ========================================================================= //
+// Gizmo
+// ========================================================================= //
+
+// ***********************
+//
+void                SceneNode::AddGizmo ( SceneNode * gizmoRoot, UInt32 idx )
+{
+    if( gizmoRoot )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->AddGizmo( gizmoRoot, idx );
+    }
+}
+
+// ***********************
+//
+void                SceneNode::RemoveGizmo  ( UInt32 idx )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( idx );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+void                SceneNode::RemoveGizmo  ( SceneNode * gizmoRoot )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( gizmoRoot );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+SceneNode *        SceneNode::GetGizmo             ( UInt32 idx ) const
+{
+    if( m_gizmos )
+        return m_gizmos->GetGizmo( idx );
+    return nullptr;
+}
+
+// ***********************
+//
+UInt32              SceneNode::GetNumGizmos         () const
+{
+    if( m_gizmos )
+        return m_gizmos->GetNumGizmos();
+    return 0;
+}
+
+// ***********************
+//
+EngineGizmoContainer *      SceneNode::AllocateGizmos       ()
+{
+    if( !m_gizmos )
+        m_gizmos = std::make_unique< EngineGizmoContainer >();
+
+    return m_gizmos.get();
+}
+
+// ***********************
+// Releases gizmo container if it's empty.
+void                SceneNode::DeallocateGizmos     ()
+{
+    if( m_gizmos->GetNumGizmos() == 0 )
+        m_gizmos.release();
+}
+
+
+
 
 } //bv

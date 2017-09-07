@@ -11,6 +11,8 @@
 
 #include "win_sock.h"
 
+#include <atomic>
+
 
 namespace bv {
 
@@ -43,8 +45,9 @@ private:
     int                             m_logID;
 
     SocketConnectionState           m_state;
+    int                             m_numSocketErrors;      ///< Count errors so we can end thread if there's no hope for holding connection.
 
-    volatile bool                   m_end;
+    std::atomic< bool >             m_end;
 
 public:
 

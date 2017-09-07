@@ -14,8 +14,8 @@
 #include "Engine/Models/NodeLogics/NodeLogicHelper.h"
 
 #include "Engine/Models/ModelState.h"
-#include "Engine/Models/BVProject.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProject.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 namespace bv
 {

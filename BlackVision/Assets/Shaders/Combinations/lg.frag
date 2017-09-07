@@ -19,5 +19,9 @@ void main()
 
 	float factor = dot(v1,v2) / dot(v2, v2);
 
-	FragColor = alpha * ( color1 * factor + color2 * (1 - factor) );
+	// Premultiply alpha before blending
+	vec4 col1 = vec4( color1.rgb * color1.a, color1.a );
+	vec4 col2 = vec4( color2.rgb * color2.a, color2.a );
+	
+	FragColor = alpha * ( col1 * factor + col2 * (1 - factor) );
 }

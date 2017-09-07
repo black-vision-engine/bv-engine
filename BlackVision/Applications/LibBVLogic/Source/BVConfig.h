@@ -91,6 +91,7 @@ private:
     bool            m_enableQueueLocking;
 
     std::string     m_loadSceneFromProjectManager;
+    std::string     m_onFailedTextureLoadBehavior;
 
 private:
 
@@ -170,6 +171,7 @@ public:
     inline bool                 UseVideoInputFeeding    () const;
 
     inline bool                 EnableLockingQueue      () const;
+    inline const std::string &  OnFailedTexLoadBehavior () const;
 
     static BVConfig &           Instance  ();
 

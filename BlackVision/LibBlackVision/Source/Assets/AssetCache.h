@@ -4,6 +4,7 @@
 #include "Assets/AssetDescriptor.h"
 
 #include <map>
+#include <mutex>
 
 
 namespace bv {
@@ -13,7 +14,8 @@ class AssetCache
 {
 private:
 
-    std::map< std::string, AssetConstPtr > m_assets;
+    std::map< std::string, AssetConstPtr >      m_assets;
+    mutable std::recursive_mutex                m_lock;
 
 private:
 
@@ -36,11 +38,13 @@ public:
     // Adds entry to cache if doesn't exist or update if exists.
     void                            Update  ( const std::string & key, const AssetConstPtr& resource );
 
-    bool                            Exists  ( const std::string & key ) const;
-    bool                            Exists  ( const AssetDescConstPtr & descriptor ) const;
-
     AssetConstPtr                   Get     ( const std::string & key ) const;
     AssetConstPtr                   Get     ( const AssetDescConstPtr & descriptor ) const;
+
+    // ***********************
+    // These functions are not thread safe. You should Get asset and compare with nullptr.
+    bool                            Exists  ( const std::string & key ) const;
+    bool                            Exists  ( const AssetDescConstPtr & descriptor ) const;
 
 };
 

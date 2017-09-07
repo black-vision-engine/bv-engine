@@ -47,6 +47,7 @@ public:
     virtual             ~NodeEffect    ();
 
     virtual void        Render          ( SceneNodeRepr * node, RenderContext * ctx ) = 0;
+    virtual void        RenderDepth     ( SceneNodeRepr * node, RenderContext * ctx ) = 0;
 
     NodeEffectType      GetType         () const;
 

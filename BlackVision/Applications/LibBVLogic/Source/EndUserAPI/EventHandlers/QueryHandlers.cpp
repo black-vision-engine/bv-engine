@@ -11,10 +11,10 @@
 #include "Engine/Events/EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "ProjectManager.h"
-#include "Engine/Models/BVProjectTools.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectTools.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Graphics/SceneGraph/SceneNodePerformance.h"
-#include "Engine/Models/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
+#include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"
@@ -39,6 +39,7 @@ QueryHandlers::QueryHandlers    ( BVAppLogic * appLogic )
 //
 QueryHandlers::~QueryHandlers   ()
 {
+    m_thumbsThread.EndThread();
 }
 
 // ***********************
@@ -78,7 +79,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         else if( command == InfoEvent::Command::GetAssetDescriptor )
             GetAssetDescriptor( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetAssetThumbnail )
-            GetAssetThumbnail( responseJSON, request, eventID );
+            GetAssetThumbnail( responseJSON, request, eventID, infoEvent->SocketID );
         else if( command == InfoEvent::Command::GetSceneThumbnail )
             GetSceneThumbnail( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetPresetThumbnail )
@@ -578,7 +579,7 @@ void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser,
 
 // ***********************
 //
-void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser, IDeserializer * request, int eventID, int socketID )
 {
     assert( request != nullptr );
     if( request == nullptr )
@@ -587,50 +588,15 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
         return;
     }
 
-    auto projectName = request->GetAttribute( "projectName" );
-    auto categoryName = request->GetAttribute( "categoryName" );
-    auto path = request->GetAttribute( "path" );
+    LoadThumbRequest thumbRequest;
 
-    auto pm = ProjectManager::GetInstance();
-    auto aps = pm->ListAssetsPaths( projectName, categoryName, path, false );
-    
-    std::vector< std::pair< ThumbnailConstPtr, AssetDescConstPtr > > thumbs;
+    thumbRequest.ProjectName = request->GetAttribute( "projectName" );
+    thumbRequest.Category = request->GetAttribute( "categoryName" );
+    thumbRequest.Path = request->GetAttribute( "path" );
+    thumbRequest.EventID = eventID;
+    thumbRequest.SocketID = socketID;
 
-    for( auto & ap : aps )
-    {
-        ap = Path( ap.Str().substr( ap.Str().find_first_not_of( categoryName ) ) ); // FIXME: Ugly part of code. Add some function parsing path to category name and path.
-        auto desc = pm->GetAssetDesc( projectName, categoryName, ap );
-
-        if( desc )
-        {
-            auto thumb = AssetManager::GetInstance().LoadThumbnail( desc );
-            
-            if( thumb != nullptr )  // Fixme Inform editor that some thumbs can't be generated.
-                thumbs.push_back( std::make_pair( thumb, desc ) );
-
-
-            //File::Write( thumb->Data()->Get(), thumb->Data()->Size(), "font.tga", false );
-        }
-    }
-
-    if( !thumbs.empty() )
-    {
-        PrepareResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, true );
-
-        ser.EnterArray( "thumbnails" );
-
-        for( auto t : thumbs )
-        {
-            t.first->Serialize( ser );
-            t.second->Serialize( ser );
-        }
-
-        ser.ExitChild(); // thumbnails
-    }
-    else
-    {
-        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Cannot find asset." );
-    }
+    m_thumbsThread.QueueRequest( std::move( thumbRequest ) );
 }
 
 // ***********************

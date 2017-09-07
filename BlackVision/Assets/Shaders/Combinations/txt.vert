@@ -8,6 +8,8 @@ layout (location = 3) in vec2 cc_num;
 int cc_num_total = int( cc_num.y );
 int cc_id = int( cc_num.x );
 
+uniform int         numTextLayers;
+
 uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
@@ -102,7 +104,8 @@ mat4 translateMatrix( vec3 transVec )
 
 mat4 animLetterTransform()
 {
-    float lf  = animScaleOffset * float( cc_num_total + 1 );
+	int ccPerLayer = ( cc_num_total + 1 ) / numTextLayers;
+    float lf  = animScaleOffset * float( ccPerLayer );
     int l = int( floor( lf ) );
     
     if( l < 0 )
@@ -115,22 +118,25 @@ mat4 animLetterTransform()
         lf = -lf;
     }
     
-    if( cc_id == l )
+	int letter_id = cc_id % ccPerLayer;
+	
+    if( letter_id == l )
     {
         float so = lf - float( l );
         float realScale = so + animScale * ( 1.0 - so );
         
         return scaleMatrix( vec3( realScale, realScale, 1.0 ) );
     }
-    else if( cc_id > l ) 
+    else if( letter_id > l ) 
     {
         return scaleMatrix( vec3( animScale, animScale, 1.0 ) );        
     }
-    else if( cc_id < l )
+    else if( letter_id < l )
     {
         return scaleMatrix( vec3( 1.0, 1.0, 1.0 ) );
     }
 }
+
 
 void main()
 {

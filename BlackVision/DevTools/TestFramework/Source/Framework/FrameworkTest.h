@@ -19,6 +19,7 @@ private:
 
     BVTestAppLogic*         m_appLogic;
     SizeType                m_frameNum;
+    TimeType                m_frameTime;
     bool                    m_isLastFrame;
     bool                    m_overrideTime;
 
@@ -30,6 +31,7 @@ public:
         ,   m_isLastFrame( true )
         ,   m_overrideTime( false )
         ,   m_frameNum( 0 )
+        ,   m_frameTime( 0 )
     {}
 
     virtual void        RunImpl         () const;
@@ -48,6 +50,7 @@ public:
 
     BVTestAppLogic*     GetAppLogic         () const { return m_appLogic; }
     SizeType            GetFrameNumber      () const { return m_frameNum; }
+    TimeType            GetFrameTime        () const { return m_frameTime; }
 
     bool                IsLastFrame         () const { return m_isLastFrame; }
 

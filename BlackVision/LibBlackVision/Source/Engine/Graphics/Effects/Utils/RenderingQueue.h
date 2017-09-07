@@ -50,6 +50,7 @@ public:
     void                QueueSingleNode     ( SceneNodeRepr * nodeRepr, RenderContext * ctx );
 
     void                Render              ( RenderContext * ctx );
+    void                RenderDepth         ( RenderContext * ctx );
 
     void                ClearQueue          ();
 
@@ -61,6 +62,7 @@ public:
 
 private:
     void                RenderNode          ( RenderingQueue::RenderItem & renderItem, RenderContext * ctx );
+    void                RenderNodeDepth     ( RenderingQueue::RenderItem & renderItem, RenderContext * ctx );
 
     void                QueueTransparent    ( SceneNodeRepr * node, float z, bool useEffect = false );
     void                QueueOpaque         ( SceneNodeRepr * node, float z, bool useEffect = false );

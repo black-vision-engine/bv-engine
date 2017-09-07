@@ -10,7 +10,9 @@ SUITE( NonFrameworkTests )
 TEST( NonFrameworkTest )
 {
     CHECK( 1 == 1 );
-    CHECK( 1 == 5 );
+
+    // Uncomment to test failing in framework.
+    //CHECK( 1 == 5 );
 }
 
 

@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
-#include "Engine/Models/BVProject.h"
+#include "Engine/Editors/BVProject.h"
 
 #include "BVGL.h"
 
@@ -54,9 +54,9 @@ public:
                             TestScene				( BVProject * scene, Renderer * renderer );
                             ~TestScene				();
 
-    void					TestEditor				( TimeType time );
+    bool					TestEditor				( TimeType time );
 
-private:
+public:
 
     void					InitTestEditor				();
 
@@ -93,6 +93,8 @@ private:
 
     void					InitVideoStreamDecoderTest	();
     
+private:
+
     void					InitOrderTest				( const OrderTestCase & test );
     void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );
     void					CopyPlugin					( UInt32 rootIdx, const std::string & rootPlugin, const std::string & childName, const std::string & childPlugin );

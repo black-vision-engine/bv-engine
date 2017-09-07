@@ -52,6 +52,13 @@ const RenderTarget *		RenderedChannelsData::GetActiveRenderTarget     ( RenderCh
 	return channel->GetActiveRenderTarget();
 }
 
+// ***********************
+//
+const RenderTarget *        RenderedChannelsData::GetGizmoRenderTarget      ( RenderChannelType rct ) const
+{
+    return m_renderChannels[ ( unsigned int )rct ]->AllocGizmoRT();
+}
+
 // **************************
 //
 void                        RenderedChannelsData::InvalidateCachedTexture   ( RenderChannelType rct )

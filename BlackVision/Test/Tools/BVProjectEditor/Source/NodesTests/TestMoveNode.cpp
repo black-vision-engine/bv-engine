@@ -1,95 +1,113 @@
-#include "gtest/gtest.h"
+#include "Framework/FrameworkTest.h"
 
 #include "Utils/TwoScenesFixture.h"
+#include "Framework/BVTestAppLogic.h"
 
 
-
-TEST_F( TwoScenesTest, MoveNodeInScene )
+// ***********************
+//
+class MoveNodeInScene : public bv::FrameworkTest
 {
-    auto scene1Name = m_editor->GetModelScene( "FirstScene" )->GetName();
+private:
+public:
+    MoveNodeInScene() : bv::FrameworkTest( "MoveNodeInScene", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
 
-    auto g1Child1 = m_editor->GetNode( scene1Name, "root/Group1/Child1" );
-    auto g1Child2 = m_editor->GetNode( scene1Name, "root/Group1/Child2" );
-    auto g1Child3 = m_editor->GetNode( scene1Name, "root/Group1/Child3" );
-    auto g1Child4 = m_editor->GetNode( scene1Name, "root/Group1/Child4" );
+    virtual void        PreEvents           () override;
+} MoveNodeInSceneInstance;
 
-    auto g2Child1 = m_editor->GetNode( scene1Name, "root/Group2/Child1" );
-    auto g2Child2 = m_editor->GetNode( scene1Name, "root/Group2/Child2" );
-    auto g2Child3 = m_editor->GetNode( scene1Name, "root/Group2/Child3" );
-    auto g2Child4 = m_editor->GetNode( scene1Name, "root/Group2/Child4" );
+UnitTest::ListAdder adderTestTest ( UnitTest::Test::GetTestList(), &MoveNodeInSceneInstance );
 
-    ASSERT_NE( g1Child1, nullptr );
-    ASSERT_NE( g1Child2, nullptr );
-    ASSERT_NE( g1Child3, nullptr );
-    ASSERT_NE( g1Child4, nullptr );
 
-    ASSERT_NE( g2Child1, nullptr );
-    ASSERT_NE( g2Child2, nullptr );
-    ASSERT_NE( g2Child3, nullptr );
-    ASSERT_NE( g2Child4, nullptr );
+// ***********************
+//
+void        MoveNodeInScene::PreEvents     ()
+{
+    auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
+    CreateTwoScenes( editor );
 
-// ========================================================================= //
-// Move nodes of the same parent
-// ========================================================================= //
+    auto scene1Name = editor->GetModelScene( "FirstScene" )->GetName();
 
-    bool result = m_editor->MoveNode( scene1Name, "root/Group1", 0, scene1Name, "root/Group1/Child4" );
-    ASSERT_TRUE( result );
+    auto g1Child1 = editor->GetNode( scene1Name, "root/Group1/Child1" );
+    auto g1Child2 = editor->GetNode( scene1Name, "root/Group1/Child2" );
+    auto g1Child3 = editor->GetNode( scene1Name, "root/Group1/Child3" );
+    auto g1Child4 = editor->GetNode( scene1Name, "root/Group1/Child4" );
 
-    auto group1 = std::static_pointer_cast< bv::model::BasicNode >( m_editor->GetNode( scene1Name, "root/Group1" ) );
-    ASSERT_NE( group1, nullptr );
+    auto g2Child1 = editor->GetNode( scene1Name, "root/Group2/Child1" );
+    auto g2Child2 = editor->GetNode( scene1Name, "root/Group2/Child2" );
+    auto g2Child3 = editor->GetNode( scene1Name, "root/Group2/Child3" );
+    auto g2Child4 = editor->GetNode( scene1Name, "root/Group2/Child4" );
 
-    ASSERT_EQ( group1->GetChild( 0 ), g1Child4 );
-    ASSERT_EQ( group1->GetChild( 1 ), g1Child1 );
-    ASSERT_EQ( group1->GetChild( 2 ), g1Child2 );
-    ASSERT_EQ( group1->GetChild( 3 ), g1Child3 );
+    CHECK( g1Child1 != nullptr );
+    CHECK( g1Child2 != nullptr );
+    CHECK( g1Child3 != nullptr );
+    CHECK( g1Child4 != nullptr );
 
-    result = m_editor->MoveNode( scene1Name, "root/Group1", 1, scene1Name, "root/Group1/Child4" );
-    ASSERT_TRUE( result );
+    CHECK( g2Child1 != nullptr );
+    CHECK( g2Child2 != nullptr );
+    CHECK( g2Child3 != nullptr );
+    CHECK( g2Child4 != nullptr );
 
-    ASSERT_EQ( group1->GetChild( 0 ), g1Child1 );
-    ASSERT_EQ( group1->GetChild( 1 ), g1Child4 );
-    ASSERT_EQ( group1->GetChild( 2 ), g1Child2 );
-    ASSERT_EQ( group1->GetChild( 3 ), g1Child3 );
+    // ========================================================================= //
+    // Move nodes of the same parent
+    // ========================================================================= //
 
-    result = m_editor->MoveNode( scene1Name, "root/Group1", 2, scene1Name, "root/Group1/Child4" );
-    ASSERT_TRUE( result );
+    bool result = editor->MoveNode( scene1Name, "root/Group1", 0, scene1Name, "root/Group1/Child4" );
+    REQUIRE( result );
 
-    ASSERT_EQ( group1->GetChild( 0 ), g1Child1 );
-    ASSERT_EQ( group1->GetChild( 1 ), g1Child2 );
-    ASSERT_EQ( group1->GetChild( 2 ), g1Child4 );
-    ASSERT_EQ( group1->GetChild( 3 ), g1Child3 );
+    auto group1 = std::static_pointer_cast< bv::model::BasicNode >( editor->GetNode( scene1Name, "root/Group1" ) );
+    REQUIRE( group1 != nullptr );
 
-    result = m_editor->MoveNode( scene1Name, "root/Group1", 3, scene1Name, "root/Group1/Child4" );
-    ASSERT_TRUE( result );
+    CHECK( group1->GetChild( 0 ) == g1Child4 );
+    CHECK( group1->GetChild( 1 ) == g1Child1 );
+    CHECK( group1->GetChild( 2 ) == g1Child2 );
+    CHECK( group1->GetChild( 3 ) == g1Child3 );
 
-    ASSERT_EQ( group1->GetChild( 0 ), g1Child1 );
-    ASSERT_EQ( group1->GetChild( 1 ), g1Child2 );
-    ASSERT_EQ( group1->GetChild( 2 ), g1Child3 );
-    ASSERT_EQ( group1->GetChild( 3 ), g1Child4 );
+    result = editor->MoveNode( scene1Name, "root/Group1", 1, scene1Name, "root/Group1/Child4" );
+    REQUIRE( result );
 
-// ========================================================================= //
-// Add node after end of children vector
-// ========================================================================= //
+    CHECK( group1->GetChild( 0 ) == g1Child1 );
+    CHECK( group1->GetChild( 1 ) == g1Child4 );
+    CHECK( group1->GetChild( 2 ) == g1Child2 );
+    CHECK( group1->GetChild( 3 ) == g1Child3 );
+
+    result = editor->MoveNode( scene1Name, "root/Group1", 2, scene1Name, "root/Group1/Child4" );
+    REQUIRE( result );
+
+    CHECK( group1->GetChild( 0 ) == g1Child1 );
+    CHECK( group1->GetChild( 1 ) == g1Child2 );
+    CHECK( group1->GetChild( 2 ) == g1Child4 );
+    CHECK( group1->GetChild( 3 ) == g1Child3 );
+
+    result = editor->MoveNode( scene1Name, "root/Group1", 3, scene1Name, "root/Group1/Child4" );
+    REQUIRE( result );
+
+    CHECK( group1->GetChild( 0 ) == g1Child1 );
+    CHECK( group1->GetChild( 1 ) == g1Child2 );
+    CHECK( group1->GetChild( 2 ) == g1Child3 );
+    CHECK( group1->GetChild( 3 ) == g1Child4 );
+
+    // ========================================================================= //
+    // Add node after end of children vector
+    // ========================================================================= //
 
     // Reset to index 0
-    result = m_editor->MoveNode( scene1Name, "root/Group1", 0, scene1Name, "root/Group1/Child4" );
-    ASSERT_TRUE( result );
+    result = editor->MoveNode( scene1Name, "root/Group1", 0, scene1Name, "root/Group1/Child4" );
+    REQUIRE( result );
     // Set index after last node.
-    result = m_editor->MoveNode( scene1Name, "root/Group1", 4, scene1Name, "root/Group1/Child4" );
-    ASSERT_TRUE( result );
+    result = editor->MoveNode( scene1Name, "root/Group1", 4, scene1Name, "root/Group1/Child4" );
+    REQUIRE( result );
 
-    ASSERT_EQ( group1->GetChild( 0 ), g1Child1 );
-    ASSERT_EQ( group1->GetChild( 1 ), g1Child2 );
-    ASSERT_EQ( group1->GetChild( 2 ), g1Child3 );
-    ASSERT_EQ( group1->GetChild( 3 ), g1Child4 );
+    CHECK( group1->GetChild( 0 ) == g1Child1 );
+    CHECK( group1->GetChild( 1 ) == g1Child2 );
+    CHECK( group1->GetChild( 2 ) == g1Child3 );
+    CHECK( group1->GetChild( 3 ) == g1Child4 );
 
 
-// ========================================================================= //
-// Node can't be moved as child of itself
-// ========================================================================= //
+    // ========================================================================= //
+    // Node can't be moved as child of itself
+    // ========================================================================= //
 
-    result = m_editor->MoveNode( scene1Name, "root/Group1/Child4", 0, scene1Name, "root/Group1/Child4" );
-    ASSERT_FALSE( result );
-
+    result = editor->MoveNode( scene1Name, "root/Group1/Child4", 0, scene1Name, "root/Group1/Child4" );
+    REQUIRE( !result );
 }
 

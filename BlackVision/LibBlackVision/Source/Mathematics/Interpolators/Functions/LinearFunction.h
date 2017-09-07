@@ -2,7 +2,12 @@
 
 #include "Mathematics/Interpolators/Key.h"
 
-namespace bv {
+#include "Serialization/SerializationHelper.h"
+
+
+namespace bv
+{
+
 
 // *******************************
 //
@@ -11,12 +16,16 @@ class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
 
+private:
+
     Key key1, key2;
     TimeValueT m_tolerance;
+
 public:
     LinearEvaluator( Key k1, Key k2, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), m_tolerance( tolerance ) {}
 
-    virtual EvaluatorType GetType() override { return EvaluatorType::ET_LINEAR; }
+    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_LINEAR; }
+    virtual CurveType               GetCurveType    () override { return CurveType::CT_LINEAR; }
 
     virtual void SetValue( TimeValueT t, ValueT v ) override
     {
@@ -36,14 +45,14 @@ public:
 
     virtual void                                        Serialize       ( ISerializer& ser ) const override
     {
-    ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", "linear" );
-    ser.ExitChild();
+        ser.EnterChild( "interpolation" );
+            ser.SetAttribute( "type", SerializationHelper::T2String( CurveType::CT_LINEAR ) );
+        ser.ExitChild();
     }
 
     virtual void                                Deserialize( const IDeserializer& deser )
     {
-        if( deser.GetAttribute( "type" ) != "linear" )
+        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( CurveType::CT_LINEAR ) )
             assert( false );
     }
 };

@@ -99,6 +99,17 @@ void                            RenderContext::Enable							( const RenderTarget
     renderer( this )->Enable( rt );
 }
 
+// ***********************
+//
+void                            RenderContext::EnableDepthOnly                  ( const RenderTarget * rt )
+{
+    assert( rt != nullptr );
+
+    SetBoundRenderTarget( rt );
+
+    renderer( this )->EnableDepthOnly( rt );
+}
+
 // ***************************
 //
 void                            RenderContext::Disable							( const RenderTarget * rt )

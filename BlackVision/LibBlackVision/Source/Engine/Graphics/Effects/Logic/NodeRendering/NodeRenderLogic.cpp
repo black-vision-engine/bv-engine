@@ -5,7 +5,7 @@
 #include "Engine/Graphics/SceneGraph/Scene.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/SceneNodeRepr.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 #include "Engine/Graphics/Effects/Utils/RenderableEffectFactory.h"
@@ -66,9 +66,6 @@ void    NodeRenderLogic::RenderQueued      ( Scene * scene, const RenderTarget *
 
     enable( ctx, output );
     RenderQueued( scene->GetRoot(), ctx );
-
-    // FIXME: nrl - implement a generic solution when other editor helper object apear in engine
-    RenderGridLines( scene, ctx );
 
     disableBoundRT( ctx );
 }
@@ -147,16 +144,6 @@ void     NodeRenderLogic::RenderImpl      ( SceneNode * node, RenderContext * ct
 
 // *********************************
 //
-void    NodeRenderLogic::RenderGridLines   ( Scene * scene, RenderContext * ctx )
-{
-    if( scene->GetGridLinesVisibility() )
-    {
-        renderer( ctx )->Draw( scene->GetGridLines() );
-    }    
-}
-
-// *********************************
-//
 void    NodeRenderLogic::Render            ( SceneNodeRepr * nodeRepr, const RenderTarget * output, RenderContext * ctx )
 {
     enable( ctx, output );
@@ -225,38 +212,6 @@ void    NodeRenderLogic::RenderChildren    ( SceneNodeRepr * nodeRepr, RenderCon
     {
         Render( nodeRepr->GetChild( i ), ctx ); 
     }
-}
-
-// *********************************
-//
-void     NodeRenderLogic::RenderBoundingBox( SceneNode * node, RenderContext * ctx )
-{
-    // FIXME: nrl - a bit better initialization mechanics would be handy
-    static auto effect = RenderableEffectFactory::CreateBoundingBoxEffect();
-    static auto pass   = effect->GetPass( 0 );
-
-    const auto & color = node->GetBoundingBoxColor();
-    
-    // FIXME: nrl - rly "RenderableEntityWithBoundingBox"?
-    auto obj = Cast< RenderableEntityWithBoundingBox * >( node->GetTransformable() );
-    assert( obj );
-
-    auto bb = obj->GetBoundingBox();
-    if( bb )
-    {
-        auto renderer = ctx->GetRenderer();
-
-        auto param = Cast< ShaderParamVec4 * >( pass->GetPixelShader()->GetParameters()->AccessParam( "color" ) );
-        param->SetValue( color );
-
-        renderer->Enable( pass, bb );
-        renderer->DrawRenderable( bb );
-
-        auto wc = obj->GetCenterOfMass();
-        renderer->Enable( pass, wc );
-        renderer->DrawRenderable( wc );
-    }
-
 }
 
 

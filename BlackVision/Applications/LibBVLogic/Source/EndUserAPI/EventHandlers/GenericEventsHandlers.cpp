@@ -3,7 +3,7 @@
 #include "GenericEventsHandlers.h"
 
 #include "BVAppLogic.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
 #include "Engine/Models/Updaters/UpdatersHelpers.h"

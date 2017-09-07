@@ -620,6 +620,14 @@ void    Renderer::Enable              ( const RenderTarget * rt )
     pdrRt->Enable( this );
 }
 
+// ***********************
+//
+void Renderer::EnableDepthOnly( const RenderTarget * rt )
+{
+    PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+    pdrRt->Enable( this, 0 );
+}
+
 // *********************************
 //
 void    Renderer::Disable             ( const RenderTarget * rt )

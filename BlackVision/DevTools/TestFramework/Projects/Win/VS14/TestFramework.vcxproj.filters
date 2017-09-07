@@ -4,6 +4,18 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{2fd0f925-3788-4b47-963e-792b9dac09ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{f579ee79-2220-4e8c-aaa4-6654e60af5c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Mocks">
+      <UniqueIdentifier>{d691903b-9dad-41df-a9fe-d8639c89dbfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Mocks\FakeAssets">
+      <UniqueIdentifier>{2f60b0ee-76cc-4749-8d6b-f6ad308e04d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Nodes">
+      <UniqueIdentifier>{47b728ea-150f-4a6c-9de2-7cce04529a7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -24,6 +36,18 @@
     <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h">
+      <Filter>Utils\Mocks\FakeAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h">
+      <Filter>Utils\Mocks\FakeAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h">
+      <Filter>Utils\Mocks\FakeAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h">
+      <Filter>Utils\Nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -43,6 +67,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Framework\XmlGTestReporter.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.cpp">
+      <Filter>Utils\Mocks\FakeAssets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.cpp">
+      <Filter>Utils\Mocks\FakeAssets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.cpp">
+      <Filter>Utils\Mocks\FakeAssets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.cpp">
+      <Filter>Utils\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

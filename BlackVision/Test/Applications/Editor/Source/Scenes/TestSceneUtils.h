@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "Engine/Models/BVProjectEditor.h"
-#include "Engine/Models/ModelNodeEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
+#include "Engine/Editors/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"

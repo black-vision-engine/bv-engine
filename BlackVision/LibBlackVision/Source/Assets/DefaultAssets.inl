@@ -1,10 +1,29 @@
+#include "DefaultAssets.h"
+
+
+
+
 namespace bv
 {
+
+
+// ========================================================================= //
+// Default assets descriptors
+// ========================================================================= //
+
+
+// ***********************
+//
+template< typename AssetDescType >
+inline std::shared_ptr< const AssetDescType >               DefaultAssets::GetDefaultDesc   ()
+{
+    static_assert( false, "Implement DefaultAssets::GetDefaultDesc specialization for this type." );
+}
 
 // ***********************
 //
 template<>
-inline std::shared_ptr< const TextureAssetDesc >    DefaultAssets::GetDefaultDesc       ()
+inline std::shared_ptr< const TextureAssetDesc >            DefaultAssets::GetDefaultDesc       ()
 {
     static TextureAssetDescConstPtr texture2DDesc;
 	if( !texture2DDesc )
@@ -24,7 +43,7 @@ inline std::shared_ptr< const TextureAssetDesc >    DefaultAssets::GetDefaultDes
 // ***********************
 //
 template<>
-inline std::shared_ptr< const AnimationAssetDesc >  DefaultAssets::GetDefaultDesc       ()
+inline std::shared_ptr< const AnimationAssetDesc >          DefaultAssets::GetDefaultDesc       ()
 {
     static AnimationAssetDescConstPtr animation2DDesc;
 	if( !animation2DDesc )
@@ -37,7 +56,7 @@ inline std::shared_ptr< const AnimationAssetDesc >  DefaultAssets::GetDefaultDes
 // ***********************
 //
 template<>
-inline std::shared_ptr< const FontAssetDesc >       DefaultAssets::GetDefaultDesc       ()
+inline std::shared_ptr< const FontAssetDesc >               DefaultAssets::GetDefaultDesc       ()
 {
     static FontAssetDescConstPtr fontDesc;
 	if( !fontDesc )
@@ -50,7 +69,7 @@ inline std::shared_ptr< const FontAssetDesc >       DefaultAssets::GetDefaultDes
 // ***********************
 //
 template<>
-inline std::shared_ptr< const AVAssetDesc >    DefaultAssets::GetDefaultDesc   ()
+inline std::shared_ptr< const AVAssetDesc >                 DefaultAssets::GetDefaultDesc   ()
 {
     static AVAssetDescConstPtr avDesc;
 	if( !avDesc )
@@ -63,14 +82,55 @@ inline std::shared_ptr< const AVAssetDesc >    DefaultAssets::GetDefaultDesc   (
 // ***********************
 //
 template<>
-inline std::shared_ptr< const DataArrayAssetDescriptor >    DefaultAssets::GetDefaultDesc   ()
+inline std::shared_ptr< const DataArrayAssetDesc >          DefaultAssets::GetDefaultDesc   ()
 {
-    static DataArrayAssetDescriptorConstPtr daDesc;
+    static DataArrayAssetDescConstPtr daDesc;
 	if( !daDesc )
     {
-        daDesc = DataArrayAssetDescriptor::Create( std::vector< std::string >(), std::vector< std::string >(), std::vector< ModelParamType >() );
+        daDesc = DataArrayAssetDesc::Create( std::vector< std::string >(), std::vector< std::string >(), std::vector< ModelParamType >() );
     }
     return daDesc;
 }
 
+// ***********************
+//
+template<>
+inline std::shared_ptr< const DataArrayRowAssetDesc >       DefaultAssets::GetDefaultDesc   ()
+{
+    static DataArrayRowAssetDescConstPtr daDesc;
+    if( !daDesc )
+    {
+        daDesc = DataArrayRowAssetDesc::Create( std::vector< DataArrayRowBase * >() );
+    }
+    return daDesc;
+}
+
+// ========================================================================= //
+// Fallback assets descriptors
+// ========================================================================= //
+
+// ***********************
+//
+template< typename AssetDescType >
+inline std::shared_ptr< const AssetDescType >               DefaultAssets::GetFallbackDesc  ()
+{
+    static_assert( false, "Implement DefaultAssets::GetFallbackDesc specialization for this type." );
+}
+
+// ***********************
+//
+template<>
+inline std::shared_ptr< const TextureAssetDesc >            DefaultAssets::GetFallbackDesc  ()
+{
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( m_config.texture2DFallbackPath ).Str() );
+
+    if( !props.error.empty() )
+        return nullptr;
+
+    return TextureAssetDesc::Create( SingleTextureAssetDesc::Create( m_config.texture2DFallbackPath, props.width, props.height, EnumsUtils::Convert( props.format ), true ) );
+}
+
+
 } // bv
+
+

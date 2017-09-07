@@ -114,7 +114,13 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  
+  <ItemDefinitionGroup>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\DevTools\TestFramework\Projects\Win\VS14\TestFramework.vcxproj">
       <Project>{8a1a370e-7c9e-496b-9a55-974807cc630a}</Project>

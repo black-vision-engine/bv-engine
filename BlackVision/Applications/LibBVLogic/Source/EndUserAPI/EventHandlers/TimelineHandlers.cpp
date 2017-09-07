@@ -2,8 +2,12 @@
 
 #include "TimelineHandlers.h"
 #include "Engine/Events/EventHandlerHelpers.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "BVAppLogic.h"
+
+
+#include "Application/ApplicationContext.h"
+#include "UseLoggerLibBlackVision.h"
 
 
 namespace bv
@@ -138,6 +142,8 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
                 timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
                 timeline->Play();
                 success = true;
+
+                LOG_MESSAGE( SeverityLevel::debug ) << "Timeline Command::Play, update counter [" << ApplicationContext::Instance().GetUpdateCounter() << "]";
             }
         }
         else if( command == TimeLineEvent::Command::Stop )
@@ -168,6 +174,8 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
                 timeline->Play();
                 timeline->SetTimeAndStop( time );
                 success = true;
+
+                LOG_MESSAGE( SeverityLevel::debug ) << "Timeline Command::Goto, update counter [" << ApplicationContext::Instance().GetUpdateCounter() << "]";
             }
         }
         else if( !timeIsNaN && command == TimeLineEvent::Command::GotoAndPlay )

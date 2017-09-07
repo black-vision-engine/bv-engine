@@ -20,8 +20,6 @@ namespace model
     class RendererContext;
     DEFINE_PTR_TYPE(RendererContext);
 
-    typedef std::vector< RendererContextPtr > RenderContextVec;
-
     class OffsetTimeEvaluator;
     DEFINE_PTR_TYPE(OffsetTimeEvaluator);
 
@@ -34,7 +32,6 @@ namespace model
 class BVDeserializeContext : public DeserializeContext
 {
 private:
-    model::RenderContextVec             m_rendererContextes;
     model::OffsetTimeEvaluatorPtr       m_sceneTimeline;
     AssetDescsWithUIDsPtr               m_assets;
 
@@ -57,10 +54,6 @@ public:
 
     std::string &                       GetNodePath             ();
     void                                SetNodePath             ( const std::string& sceneName );
-
-    void                                Push                    ( const model::RendererContextPtr & context );
-    const model::RenderContextVec &     RendererContextes       () const;
-    void                                ClearRendererContextes  ();
 };
 
 

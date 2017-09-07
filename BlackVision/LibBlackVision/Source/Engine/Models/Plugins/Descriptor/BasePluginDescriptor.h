@@ -10,6 +10,10 @@
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
+
+#include "Engine/Models/Gizmos/GizmoFunMapper.h"
+
+
 namespace bv { namespace model {
 
 class BasePluginDescriptor : public IPluginDescriptor
@@ -19,6 +23,8 @@ private:
     std::string     m_uid;
     std::string     m_defaultName;
     std::string     m_abbrv;
+
+    GizmoFunMapper  m_gizmosMapping;
 
 protected:
 
@@ -31,6 +37,9 @@ public:
     virtual const std::string &             DefaultPluginName   () const override;
     virtual const std::string &             GetPluginTypeAbbrv  () const override;
 
+    virtual std::string                     QueryGizmoLogicName ( const std::string & functionalityName ) const override;
+    virtual std::vector< std::string >      ListGizmoFunctions  () const override;
+
     virtual IPluginParamValModelPtr         CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
@@ -42,6 +51,12 @@ public:
     }
 
     virtual ~BasePluginDescriptor () {}
+
+protected:
+
+    // Internal use for plugin creator.
+    void                                    RegisterGizmo       ( const std::string & functionalityName, const std::string & logicName );
+
 };
 
 } //model

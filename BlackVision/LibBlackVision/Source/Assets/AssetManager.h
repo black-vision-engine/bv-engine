@@ -7,6 +7,10 @@
 #include "Assets/AssetLoader.h"
 #include "Assets/AssetCache.h"
 
+#include "AsyncLoading/LoadBarrier.h"
+
+#include <mutex>
+
 
 namespace bv
 {
@@ -17,6 +21,9 @@ private:
 
     std::map< std::string, AssetLoaderConstPtr >	m_loaders;
     AssetCache										m_assetCache;
+    LoadBarrier                                     m_loadBarrier;
+
+    std::mutex                                      m_lock;
 
 public:
 
@@ -40,6 +47,7 @@ private:
 
     void							RegisterBasicLoaders();
 
+    AssetConstPtr                   LoadAssetImpl   ( const AssetDescConstPtr & desc );
 };
 
 // ***********************

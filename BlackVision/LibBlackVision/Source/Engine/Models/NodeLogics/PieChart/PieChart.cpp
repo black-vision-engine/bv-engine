@@ -19,7 +19,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Tools/StringHeplers.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 
 namespace bv {
@@ -356,7 +356,7 @@ void                        PieChart::AddShaderPlugin           ( model::BasicNo
     if( m_chartType == PieChartType::PST_COLOR )
     {
         node->AddPlugin( model::DefaultColorPluginDesc::UID(), PLUGIN::COLOR, m_timeEval );
-        SetParameter( node->GetPlugin( PLUGIN::COLOR )->GetParameter( model::DefaultColorPlugin::PARAM_COLOR ), 0.0f, glm::vec4( ui( re ), ui( re ), ui( re ), 1.f ) );
+        SetParameter( node->GetPlugin( PLUGIN::COLOR )->GetParameter( model::DefaultColorPlugin::PARAM::COLOR ), 0.0f, glm::vec4( ui( re ), ui( re ), ui( re ), 1.f ) );
     }
     else if( m_chartType == PieChartType::PST_MATERIAL )
     {
@@ -376,7 +376,7 @@ void                        PieChart::AddLabelNode              ( model::BasicNo
     textNode->AddPlugin( model::DefaultTextPluginDesc::UID(), PLUGIN::TEXT, m_timeEval );
 
     SetLabelTransform( node, textNode );
-    SetParameter( textNode->GetPlugin( PLUGIN::COLOR )->GetParameter( model::DefaultColorPlugin::PARAM_COLOR ), 0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    SetParameter( textNode->GetPlugin( PLUGIN::COLOR )->GetParameter( model::DefaultColorPlugin::PARAM::COLOR ), 0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
     SetLabelText( textNode, percent );
 
     node->AddChildToModelOnly( textNode );

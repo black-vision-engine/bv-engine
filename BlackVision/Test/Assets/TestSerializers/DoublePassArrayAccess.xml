@@ -1,0 +1,22 @@
+<transform kind="translation">
+	<interpolators>
+		<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+			<keys>
+				<key time="0.000000" val="0.100000"/>
+				<key time="1.000000" val="0.100000"/>
+			</keys>
+			<interpolations>
+				<interpolation type="linear" controlField="interpolator1" />
+			</interpolations>
+		</interpolator>
+		<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+			<keys>
+				<key time="0.000000" val="0.000000"/>
+				<key time="1.000000" val="0.000000"/>
+			</keys>
+			<interpolations>
+				<interpolation type="linear" controlField="interpolator2" />
+			</interpolations>
+		</interpolator>
+	</interpolators>
+</transform>

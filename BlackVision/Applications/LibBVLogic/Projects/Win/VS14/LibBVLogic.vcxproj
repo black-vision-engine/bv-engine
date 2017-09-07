@@ -203,6 +203,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Application\Logic\RenderMode.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\Logic\TimerMode.cpp" />
     <ClCompile Include="..\..\..\Source\Application\MainInitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
@@ -210,8 +212,10 @@
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp" />
@@ -227,7 +231,6 @@
     <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp" />
     <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
-    <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
     <ClCompile Include="..\..\..\Source\Statistics\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\Statistics\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\Statistics\StatsFormatters.cpp" />
@@ -257,6 +260,8 @@
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Application\Logic\RenderMode.h" />
+    <ClInclude Include="..\..\..\Source\Application\Logic\TimerMode.h" />
     <ClInclude Include="..\..\..\Source\Application\Main.h" />
     <ClInclude Include="..\..\..\Source\Application\MainInitProcess.h" />
     <ClInclude Include="..\..\..\Source\Application\MainLoopProcess.h" />
@@ -266,8 +271,10 @@
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GenericEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GizmoEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h" />
@@ -280,7 +287,6 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
     <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h" />
-    <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
     <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />

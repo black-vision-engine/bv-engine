@@ -7,6 +7,9 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/Events.h"
 
+#include "Assets/Cache/RawDataCache.h"
+#include "Assets/Cache/HardDriveRawDataCache.h"
+
 #include <memory>
 
 
@@ -41,29 +44,54 @@ AssetDescConstPtr AssetManager::CreateDesc( const IDeserializer& deserializer )
 //
 AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
 {
-    if( m_assetCache.Exists( desc ) )
-        return m_assetCache.Get( desc );
-    else
+    std::unique_lock< std::mutex > guard( m_lock );
+
+    auto asset = m_assetCache.Get( desc );
+    if( !asset )
     {
-        auto it = m_loaders.find( desc->GetUID() );
+        auto result = m_loadBarrier.RequestAsset( desc );
+        
+        guard.unlock();
 
-        if( it != m_loaders.end() )
-        {
-            auto asset = it->second->LoadAsset( desc );
-            if( asset != nullptr )
-            {
-                if( m_assetCache.Add( desc, asset ) )
-                {
-                    GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
-                }
+        WaitingAsset* assetWait = result.first;
+        bool needWait = result.second;
 
-                return asset;
-            }
-        }
-
-        return nullptr;
+        if( needWait )
+            asset = m_loadBarrier.WaitUntilLoaded( assetWait );
+        else
+            asset = LoadAssetImpl( desc );
     }
+
+    return asset;
 }
+
+// ***********************
+//
+AssetConstPtr       AssetManager::LoadAssetImpl ( const AssetDescConstPtr & desc )
+{
+    auto it = m_loaders.find( desc->GetUID() );
+
+    if( it != m_loaders.end() )
+    {
+        auto asset = it->second->LoadAsset( desc );
+        if( asset != nullptr )
+        {
+            if( m_assetCache.Add( desc, asset ) )
+            {
+                GetDefaultEventManager().TriggerEvent( std::make_shared< AssetTrackerInternalEvent >( AssetTrackerInternalEvent::Command::RegisterAsset, desc->GetKey() ) );
+            }
+
+            m_loadBarrier.LoadingCompleted( desc, asset );
+
+            return asset;
+        }
+    }
+
+    // Loading failed but we must wake all waiting threads.
+    m_loadBarrier.LoadingCompleted( desc, nullptr );
+    return nullptr;
+}
+
 
 // ***********************
 //
@@ -138,7 +166,7 @@ AssetConstPtr AssetManager::GetFromCache    ( const std::string & assetKey )
 //
 AssetManager & AssetManager::GetInstance()
 {
-    static auto instance = AssetManager();
+    static AssetManager instance;
     return instance;
 }
 
@@ -164,9 +192,12 @@ void AssetManager::RegisterBasicLoaders()
     RegisterLoader( AnimationAssetDesc::UID(),	        std::make_shared< AnimationLoader >() );
     RegisterLoader( AVAssetDesc::UID(),	                std::make_shared< AVAssetLoader >() );
     RegisterLoader( MeshAssetDesc::UID(),	            std::make_shared< MeshLoader >() );
-    RegisterLoader( DataArrayAssetDescriptor::UID(),	std::make_shared< DataArrayLoader >() );
+    RegisterLoader( DataArrayAssetDesc::UID(),	std::make_shared< DataArrayLoader >() );
     RegisterLoader( SVGAssetDescriptor::UID(),          std::make_shared< SVGLoader >() );
+
+    RawDataCache::GetInstance();
 }
+
 
 
 

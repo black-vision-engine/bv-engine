@@ -12,7 +12,7 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
-#include "Engine/Models/ModelNodeEditor.h"
+#include "Engine/Editors/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/SceneModel.h"
@@ -180,34 +180,11 @@ BasicNodePtr BasicNode::Create( const IDeserializer& deser )
     node->m_visible = deser.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
-    deserContext->ClearRendererContextes();
     auto plugins = SerializationHelper::DeserializeArray< BasePlugin >( deser, "plugins" );
-
-    auto itRC = deserContext->RendererContextes().begin();
-
-    assert( plugins.size() == deserContext->RendererContextes().size() );  // A little bit of defensive programming
-
+    
     for( auto plugin : plugins )
     {
         node->AddPlugin( plugin );
-
-        // override renderer context
-        if( *itRC && plugin->GetPixelShaderChannel() )
-        {
-            plugin->SetRendererContext( *itRC );
-        }
-
-        ++itRC;
-    }
-    
-    if( plugins.size() > 0 )
-    {
-        auto psc = plugins.back()->GetPixelShaderChannel();
-
-        if( psc )
-        {
-            HelperPixelShaderChannel::SetRendererContextUpdate( psc );
-        }
     }
 
 // node effect
@@ -683,27 +660,28 @@ void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
     {
+        if( m_gizmos )
+            m_gizmos->PreOwnerUpdate( t );
+
         if( m_nodeLogic )
-        {
             m_nodeLogic->PreNodeUpdate( t );
-        }
+
 
         if ( m_modelNodeEffect )
-        {
             m_modelNodeEffect->Update( t );
-        }
 
         m_pluginList->Update( t );
 
         if( m_boundingVolume )
-        {
             m_boundingVolume->UpdateOwnBox( m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel() );
-        }
+
 
         if( m_nodeLogic )
-        {
             m_nodeLogic->Update( t );
-        }
+
+        if( m_gizmos )
+            m_gizmos->Update( t );
+
 
         for( auto ch : m_children )
         {
@@ -713,9 +691,10 @@ void BasicNode::Update( TimeType t )
         m_boundingVolume->IncludeChildrenBox( GetBoundingBoxRecursive() );
 
         if( m_nodeLogic )
-        {
             m_nodeLogic->PostChildrenUpdate( t );
-        }
+
+        if( m_gizmos )
+            m_gizmos->PostOwnerUpdate( t );
     }
 }
 
@@ -743,9 +722,12 @@ mathematics::Box                    BasicNode::GetBoundingBoxRecursive		() const
                 const glm::mat4 & transform = m_children[ i ]->GetFinalizePlugin()->GetTransformChannel()->GetTransformValue()->GetValue();
             
                 mathematics::Box childBox = m_children[ i ]->GetBoundingBoxRecursive();
-                childBox.Transform( transform );
-            
-                ret.Include( childBox );
+
+                if( !childBox.IsEmpty() )
+                {
+                    childBox.Transform( transform );
+                    ret.Include( childBox );
+                }
             }
         }
     }
@@ -765,6 +747,79 @@ bool  BasicNode::IsVisible               () const
 void  BasicNode::SetVisible              ( bool visible )
 {
     m_visible = visible;
+}
+
+// ***********************
+//
+void                BasicNode::AddGizmo ( IModelNodePtr gizmoRoot, UInt32 idx )
+{
+    if( gizmoRoot )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->AddGizmo( gizmoRoot, idx );
+    }
+}
+
+// ***********************
+//
+void                BasicNode::RemoveGizmo  ( UInt32 idx )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( idx );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+void                BasicNode::RemoveGizmo  ( IModelNodePtr gizmoRoot )
+{
+    if( m_gizmos )
+    {
+        auto gizmoContainer = AllocateGizmos();
+        gizmoContainer->RemoveGizmo( gizmoRoot );
+
+        DeallocateGizmos();
+    }
+}
+
+// ***********************
+//
+IModelNodePtr       BasicNode::GetGizmo     ( UInt32 idx ) const
+{
+    if( m_gizmos )
+        return m_gizmos->GetGizmo( idx );
+    return nullptr;
+}
+
+// ***********************
+//
+UInt32              BasicNode::GetNumGizmos () const
+{
+    if( m_gizmos )
+        return m_gizmos->GetNumGizmos();
+    return 0;
+}
+
+// ***********************
+//
+GizmoContainer *    BasicNode::AllocateGizmos   ()
+{
+    if( !m_gizmos )
+        m_gizmos = std::make_unique< GizmoContainer >();
+
+    return m_gizmos.get();
+}
+
+// ***********************
+// Releases gizmo container if it's empty.
+void                BasicNode::DeallocateGizmos ()
+{
+    if( m_gizmos->GetNumGizmos() == 0 )
+        m_gizmos.release();
 }
 
 // ********************************

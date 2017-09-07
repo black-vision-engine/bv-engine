@@ -1,7 +1,14 @@
+#pragma once
+
 #include "Engine/Models/Plugins/Simple/DefaultGeometryPluginBase.h"
 
-namespace bv { namespace model {
+namespace bv {
+namespace model
+{
 
+
+// ***********************
+//
 class DefaultEllipsePluginDesc : public DefaultGeometryPluginDescBase
 {
 public:
@@ -38,24 +45,7 @@ public:
     DefaultEllipsePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
-
-template<>
-inline bool SetParameter< DefaultEllipsePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultEllipsePlugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultEllipsePlugin::OpenAngleMode> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}	
+DEFINE_ENUM_SET_PARAMETER( DefaultEllipsePlugin::OpenAngleMode );
 
 
 } }

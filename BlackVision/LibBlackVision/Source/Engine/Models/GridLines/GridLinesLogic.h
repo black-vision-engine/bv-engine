@@ -1,16 +1,31 @@
 #pragma once
 
 #include "GridLine.h"
+#include "Assets/FwdDecls.h"
 
 #include <vector>
 
-namespace bv { namespace model
+
+
+
+namespace bv
+{
+
+class BVProjectEditor;
+
+namespace model
 {
 
 class ConnectedComponent;
 DEFINE_PTR_TYPE( ConnectedComponent )
 
+class SceneModel;
+DEFINE_PTR_TYPE( SceneModel )
 
+
+
+// ***********************
+//
 class GridLinesLogic
 {
 private:
@@ -22,8 +37,6 @@ private:
 
     bool                            m_showGridLines;
     UInt64                          m_gridLinesUpdateID;
-
-    glm::vec4                       m_color;
 
 public:
     GridLinesLogic();
@@ -38,13 +51,11 @@ public:
 
     bool                    AlignNodeToGridLine     ( GridLineType gridType, int gridIndex, model::BasicNodePtr node, GridLineAlignement alignement );
 
-    void                    ShowGridLines           ( bool enable );
+    void                    ShowGridLines           ( SceneModelPtr scene, BVProjectEditor * editor, bool enable );
     bool                    GetGridLinesVisibility  ()                  { return m_showGridLines; }
-    
-    ConnectedComponentPtr   BuildConnectedComponent ();
     UInt64                  GetUpdateID             ()                  { return m_gridLinesUpdateID; }
-
-    glm::vec4               GetColor                () const;
+    
+    DataArrayRowAssetDescConstPtr       BuildDataArray  ( float lineSize ) const;
 
 private:
 

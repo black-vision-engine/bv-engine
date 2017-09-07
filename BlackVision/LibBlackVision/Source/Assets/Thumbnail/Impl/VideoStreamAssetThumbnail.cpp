@@ -44,10 +44,7 @@ VideoStreamAssetThumbnail::VideoStreamAssetThumbnail    ( IDeserializer & deser 
     assert( deser.GetAttribute( "type" ) == "VIDEO_STREAM_ASSET_THUMBNAIL" );
 
     m_origDataHash = Hash( deser.GetAttribute( "hash" ) );
-
-    m_data = DecodeBase64( deser.GetAttribute( "data" ) );
-
-    auto dataEnc = deser.GetAttribute( "data" );
+    m_dataBase64 = deser.GetAttribute( "data" );
 
     deser.ExitChild(); // thumbnail
 }

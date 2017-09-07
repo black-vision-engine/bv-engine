@@ -4,6 +4,9 @@
 #include "Memory/MemoryChunk.h"
 
 #include <set>
+#include <mutex>
+
+
 
 namespace bv 
 {
@@ -16,9 +19,13 @@ public:
 
 	bool							Add				( const Hash & key, const MemoryChunkConstPtr & memory, bool rewriteIfExists = false );
 
+    // Function isn't thread safe.
 	bool							Exists			( const Hash & key ) const;
 
-	static HardDriveRawDataCache &			GetInstance		();
+public:
+
+    HardDriveRawDataCache		();
+    ~HardDriveRawDataCache		();
 
 private:
 
@@ -27,12 +34,10 @@ private:
 
 	MemoryChunkConstPtr				Load			( const Hash & key ) const;
 
-
-	HardDriveRawDataCache		();
-	~HardDriveRawDataCache		();
+private:
 
 	std::set< Hash >				m_entries;
-
+    mutable std::recursive_mutex    m_lock;
 };
 
 

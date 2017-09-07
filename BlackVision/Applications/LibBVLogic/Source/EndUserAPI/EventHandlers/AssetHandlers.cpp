@@ -3,7 +3,7 @@
 #include "AssetHandlers.h"
 
 #include "BVAppLogic.h"
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Events/EventHandlerHelpers.h"
 
 
@@ -56,6 +56,7 @@ void        AssetHandlers::LoadAsset            ( bv::IEventPtr eventPtr )
         std::string & pluginName = eventLoadAsset->PluginName;
         std::string & sceneName = eventLoadAsset->SceneName;
         auto & assetData = *eventLoadAsset->AssetData;
+        bool asyncLoad = eventLoadAsset->AsyncLoad;
 
         assert( eventLoadAsset->AssetData != nullptr );
         if( eventLoadAsset->AssetData == nullptr )
@@ -65,7 +66,12 @@ void        AssetHandlers::LoadAsset            ( bv::IEventPtr eventPtr )
         }
 
         auto projectEditor = m_appLogic->GetBVProject()->GetProjectEditor();
-        bool result = projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
+
+        bool result = false;
+        if( asyncLoad )
+            result = projectEditor->LoadAssetAsync( sceneName, nodeName, pluginName, assetData, eventLoadAsset->EventID );
+        else
+            result = projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
 
         SendSimpleResponse( LoadAssetEvent::Command::LoadAsset, eventLoadAsset->EventID, eventLoadAsset->SocketID, result );
     }

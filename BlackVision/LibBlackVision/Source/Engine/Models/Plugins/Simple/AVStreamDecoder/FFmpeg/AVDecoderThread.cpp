@@ -43,8 +43,10 @@ void				AVDecoderThread::Kill	    ()
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_stopped = false;
 		m_running = false;
+        m_stopThread = false;
+        m_pauseThread = false;
+        m_cond.notify_one();
 	}
-	m_cond.notify_one();
 }
 
 // *******************************

@@ -441,7 +441,7 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     auto thumbPath = AssetAccessor::GetThumbnailPath( absTexPath );
 
-    auto h = Hash::FromFile( absTexPath.Str() );
+    auto h = Hash::FromString( absTexPath.Str() + std::to_string( Path::GetTimestamp( absTexPath ) ) );
 
     if( Path::Exists( thumbPath ) )
     {

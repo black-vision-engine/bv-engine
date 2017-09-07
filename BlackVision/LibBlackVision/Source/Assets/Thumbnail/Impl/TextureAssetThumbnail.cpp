@@ -19,8 +19,7 @@ TextureAssetThumbnail::TextureAssetThumbnail    ( const MemoryChunkConstPtr & da
     : m_data( data )
     , m_dataBase64( "" )
     , m_origDataHash( h )
-{
-}
+{}
 
 // ******************************
 //
@@ -28,15 +27,12 @@ TextureAssetThumbnail::TextureAssetThumbnail   ( const std::string & dataBase64,
     : m_data( nullptr )
     , m_dataBase64( dataBase64 )
     , m_origDataHash( h )
-{
-
-}
+{}
 
 // ******************************
 //
 TextureAssetThumbnail::~TextureAssetThumbnail   ()
-{
-}
+{}
 
 // ******************************
 //
@@ -48,10 +44,7 @@ TextureAssetThumbnail::TextureAssetThumbnail    ( IDeserializer & deser )
     assert( deser.GetAttribute( "type" ) == "TEXTURE_ASSET_THUMBNAIL" );
 
     m_origDataHash = Hash( deser.GetAttribute( "hash" ) );
-
-    m_data = DecodeBase64( deser.GetAttribute( "data" ) );
-
-    auto dataEnc = deser.GetAttribute( "data" );
+    m_dataBase64 = deser.GetAttribute( "data" );
 
     deser.ExitChild(); // thumbnail
 }

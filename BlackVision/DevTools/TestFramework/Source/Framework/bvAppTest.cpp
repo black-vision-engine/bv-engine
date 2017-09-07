@@ -115,6 +115,8 @@ std::string     GetOutputFileName       ( int argc, char * argv[], int startIdx 
 //
 void            BlackVisionAppFramework::ParseTestParameters    ( int argc, char * argv[] )
 {
+    m_testName = "Test";
+
     // FIXME: It would be better to use TCLAP library for parsing command line arguments.
     // but there's a problem - in such case we should make two fases of initialization. First would
     // add possible cmd args to TCLAP::CmdLine object and second would take parsed values and initialize

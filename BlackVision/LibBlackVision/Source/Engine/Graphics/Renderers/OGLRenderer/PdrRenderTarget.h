@@ -56,6 +56,7 @@ public:
 
 
     void            Enable              ( Renderer * renderer );
+    void            Enable              ( Renderer * renderer, SizeType numTargets );
     void            Disable             ( Renderer * renderer );
 
     void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex );

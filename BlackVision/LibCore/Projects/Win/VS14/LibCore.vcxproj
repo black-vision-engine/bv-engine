@@ -62,6 +62,7 @@
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\StoppableThread.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
+    <ClInclude Include="..\..\..\Source\Threading\ThreadsBarrier.h" />
     <ClInclude Include="..\..\..\Source\Tools\Base64.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\StoppableThread.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
+    <ClCompile Include="..\..\..\Source\Threading\ThreadsBarrier.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Base64.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp" />

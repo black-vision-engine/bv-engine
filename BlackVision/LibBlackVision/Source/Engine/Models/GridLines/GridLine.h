@@ -61,10 +61,8 @@ private:
 
 }   // model
 
-template<> model::GridLineType      SerializationHelper::String2T  ( const std::string& s, const model::GridLineType & defaultVal );
-template<> std::string              SerializationHelper::T2String  ( const model::GridLineType & t );
 
-template<> model::GridLineAlignement    SerializationHelper::String2T  ( const std::string& s, const model::GridLineAlignement & defaultVal );
-template<> std::string                  SerializationHelper::T2String  ( const model::GridLineAlignement & t );
+DECLARE_ENUM_SERIALIZATION( model::GridLineType )
+DECLARE_ENUM_SERIALIZATION( model::GridLineAlignement )
 
 }	// bv

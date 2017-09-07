@@ -2,7 +2,7 @@
 
 #include "TestVideoStreamDecoderKeyboardHandler.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 
 #include "TestingScenes/MockScenes.h"
 #include "BVAppLogic.h"
@@ -10,7 +10,7 @@
 #include "Engine/Models/Plugins/Simple/AVStreamDecoder/DefaultAVDecoderPlugin.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 

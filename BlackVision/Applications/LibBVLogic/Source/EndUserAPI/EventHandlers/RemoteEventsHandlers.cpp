@@ -13,6 +13,7 @@
 #include "NodeLogicHandlers.h"
 #include "VideoCardEventsHandlers.h"
 #include "GenericEventsHandlers.h"
+#include "GizmoEventsHandlers.h"
 
 #include "Engine/Events/EventManager.h"
 
@@ -31,9 +32,12 @@ RemoteEventsHandlers::RemoteEventsHandlers()
         m_timelineHandlers( nullptr ),
         m_nodeLogicHandlers( nullptr ),
         m_videoCardHandlers( nullptr ),
-        m_genericHandlers( nullptr )
+        m_genericHandlers( nullptr ),
+        m_gizmoHandlers( nullptr )
 {}
 
+// ***********************
+//
 RemoteEventsHandlers::~RemoteEventsHandlers()
 {
     if( m_pluginEvents )
@@ -56,6 +60,8 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
         delete m_videoCardHandlers;
     if( m_genericHandlers )
         delete m_genericHandlers;
+    if( m_gizmoHandlers )
+        delete m_gizmoHandlers;
 }
 
 // ***********************
@@ -73,6 +79,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic * appLogic )
     m_nodeLogicHandlers = new NodeLogicHandlers( appLogic );
     m_videoCardHandlers = new VideoCardEventsHandlers( appLogic );
     m_genericHandlers   = new GenericEventsHandlers( appLogic );
+    m_gizmoHandlers     = new GizmoHandlers( appLogic );
 
     
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::ParamHandler ), ParamKeyEvent::Type() );
@@ -107,6 +114,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic * appLogic )
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_videoCardHandlers, &VideoCardEventsHandlers::EventHandler ), VideoCardEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_genericHandlers, &GenericEventsHandlers::EventHandler ), GenericEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_gizmoHandlers, &GizmoHandlers::GizmoHandler ), GizmoEvent::Type() );
 }
 
 // ***********************
@@ -115,4 +123,6 @@ void RemoteEventsHandlers::UpdateHM                ()
 {
     m_heightmapEvents->UpdateHM();
 }
+
+
 } //bv

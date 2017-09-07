@@ -24,12 +24,6 @@ private:
     //FIXME: nrl - output channel logic has to be specified now
     unsigned int                    m_outputChannelIdx;
 
-    // @todo Maybe it should be moved to container class for engine grid lines.
-    // In future when other helper object will apear in BV, we should implement
-    // genering solution for handling it.
-    RenderableEntity *              m_gridLines;
-    bool                            m_gridLinesVisible;
-
 public:
 
                             Scene                   ( unsigned int channelIdx = 0 );
@@ -46,12 +40,6 @@ public:
     UniformBuffer *         GetCameraBuffer         () const;
     UniformBuffer *         GetLightsBuffer         () const;
     Camera *                GetCamera               () const;
-
-    RenderableEntity *      GetGridLines            () const;
-    void                    SetGridLinesRenderable  ( RenderableEntity * renderable );
-    void                    SetGridLinesVisible     ( bool visibility );
-    bool                    GetGridLinesVisibility  ()  { return m_gridLinesVisible; }
-
 };
 
 DEFINE_PTR_TYPE( Scene );

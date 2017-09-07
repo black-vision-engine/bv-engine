@@ -2,7 +2,7 @@
 
 #include "SceneEventsHandlers.h"
 
-#include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Editors/BVProjectEditor.h"
 #include "BVAppLogic.h"
 #include "UseLoggerBVAppModule.h"
 
@@ -991,11 +991,11 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
     }
     else if( command == GridLineEvent::Command::ShowGridLines )
     {
-        gridLinesLogic.ShowGridLines( true );
+        gridLinesLogic.ShowGridLines( scene, m_appLogic->GetBVProject()->GetProjectEditor(), true );
     }
     else if( command == GridLineEvent::Command::HideGridLines )
     {
-        gridLinesLogic.ShowGridLines( false );
+        gridLinesLogic.ShowGridLines( scene, m_appLogic->GetBVProject()->GetProjectEditor(), false );
     }
     else
         SendSimpleErrorResponse( command, gridLineEvent->EventID, gridLineEvent->SocketID, "Unknown command" );

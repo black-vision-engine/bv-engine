@@ -24,7 +24,6 @@ private:
     Scene *                 m_scene;
     model::SceneModel *     m_modelScene;
 
-    UInt64                  m_gridLinesUpdateID;
     UInt64                  m_cameraUpdateID;
 
 
@@ -41,7 +40,6 @@ public:
 private:
 
     void                    UpdateLights        ();
-    void                    UpdateGridLines     ();
     void                    UpdateCamera        ();
 
 };

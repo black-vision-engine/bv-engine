@@ -4,7 +4,7 @@
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Engine/Models/Plugins/PluginUtils.cpp"
+#include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"

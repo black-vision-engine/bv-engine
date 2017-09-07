@@ -21,11 +21,12 @@
 
 namespace bv { namespace model {
 
-const std::string        DefaultAnimationPlugin::PARAM_BLEND_ENABLE   = "blend enable";
 const std::string        DefaultAnimationPlugin::PARAM_ALPHA          = "alpha";
 const std::string        DefaultAnimationPlugin::PARAM_FRAME_NUM      = "frameNum";
 const std::string        DefaultAnimationPlugin::PARAM_AUTO_PLAY      = "autoPlay";
 const std::string        DefaultAnimationPlugin::PARAM_FPS            = "fps";
+
+const std::string        DefaultAnimationPlugin::PARAM_TX_MAT         = "txMat";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -52,14 +53,10 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
     //Create all models
     auto model  = helper.GetModel();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
-    //Create all parameters and evaluators
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
-    
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_BLEND_ENABLE, true, true, true );
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
 
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_AUTO_PLAY, false, true, true );
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FPS, 24.f, true, true );
@@ -69,17 +66,11 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FRAME_NUM, 0.f, true );    // FIXME: integer parmeters should be used here
 
 
-    vsModel->RegisterAll( trTxEvaluator );
+    helper.SetOrCreateVSModel();
+    helper.AddTransformParam( DefaultAnimationPlugin::PARAM_TX_MAT, true );
 
-    model->SetVertexShaderChannelModel( vsModel );
-
-    //Set default values of all parameters
-    //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    trTxEvaluator->Parameter()->Transform().SetCenter( glm::vec3( 0.5, 0.5, 0.0 ), 0.0f );
-
-    //FIXME: integer parmeters should be used here
-    //paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultAnimationPlugin::PARAM_TX_MAT );
+    SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
 
     return model;
 }
@@ -112,10 +103,10 @@ bool								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr pre
         HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
         auto ctx = m_psc->GetRendererContext();
         ctx->cullCtx->enabled = false;
-        ctx->alphaCtx->blendEnabled = true;
-        ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-        ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-        //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+
+	    ctx->alphaCtx->blendEnabled = m_blendEnabled.GetParameter().Evaluate();
+	    BlendHelper::SetBlendRendererContext( m_psc, m_blendMode.GetParameter() );
+
         return true;
     }
     else
@@ -132,6 +123,9 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+    m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
 
     SetPrevPlugin( prev );
 
@@ -154,8 +148,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
 // *************************************
 // 
 DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
-{
-}
+{}
 
 // *************************************
 // 
@@ -227,17 +220,11 @@ void                                DefaultAnimationPlugin::Update              
 {
     BasePlugin::Update( t );
 
-    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, "txMat" );
+    HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, DefaultAnimationPlugin::PARAM_TX_MAT );
 
     FrameUpdate();
 
-    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
-    {
-        auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
-
-        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
-    }
+	BlendHelper::UpdateBlendState( m_psc, m_blendEnabled, m_blendMode );
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )

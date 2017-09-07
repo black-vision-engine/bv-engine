@@ -43,14 +43,6 @@ inline  void    NodeUpdater::UpdateTransform     ()
         auto state = Cast< model::SimpleState< glm::mat4 >* >( m_transformStatedValue.get() );
         state->Update( mat );
     }
-
-    if( m_transformStatedValue->StateChanged() )
-    {
-        auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
-        auto bv = node->GetBoundingVolume();
-        assert( bv );
-        UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
-    }
 }
 
 // *****************************
@@ -64,7 +56,7 @@ inline  void    NodeUpdater::UpdateGeometry      ()
         m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
 
-		UpdateBoundingBox( true );
+		UpdateBoundingBox();
     }
     else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
     {
@@ -72,24 +64,7 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 
         m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();	
 
-		UpdateBoundingBox( false );
-    }
-    else
-    {
-        // RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
-        // VertexArraySingleVertexBuffer * vao = rad->VAO();
-
-		// FIXME: We want to prevent updatig the whole bb. We are apdating here only CoM. Should be moved to separated function.
-		{
-			auto node = Cast< const model::BasicNode * >( m_modelNode.get() );
-
-			auto bv = node->GetBoundingVolume().get();
-
-			UpdatersHelpers::UpdateRenderableBuffer( m_centerOfMass, bv->BuildCenterRepresentation() );
-		}
-
-        //vao->SetNeedsUpdateMemUpload( false ); // This should be unset unly after real update during render process.
-        //vao->SetNeedsUpdateRecreation( false );
+		UpdateBoundingBox();
     }
 }
 
