@@ -4,7 +4,6 @@
 
 
 
-
 static bv::avencoder::AVEncoder enc;
 
 
