@@ -2,7 +2,13 @@
 
 #include "AVEncoder.h"
 
+
+
+
 static bv::avencoder::AVEncoder enc;
+
+
+
 
 TEST( OpenStream, OpenStream ) 
 {
