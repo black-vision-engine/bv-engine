@@ -8,7 +8,8 @@ static bv::avencoder::AVEncoder enc;
 
 
 
-
+// ***********************
+//
 TEST( OpenStream, OpenStream ) 
 {
     bv::avencoder::VideoOptions vOps;
@@ -21,6 +22,8 @@ TEST( OpenStream, OpenStream )
 	ASSERT_TRUE( enc.OpenOutputStream( "output.mov", vOps, aOps ) );
 }
 
+// ***********************
+//
 TEST( WriteFrames, WriteFrames )
 {
 	auto w = 1920;
@@ -48,6 +51,9 @@ TEST( WriteFrames, WriteFrames )
     enc.CloseStream();
 }
 
+
+// ***********************
+//
 int main( int argc, char **argv )
 {
 	::testing::InitGoogleTest( &argc, argv );
