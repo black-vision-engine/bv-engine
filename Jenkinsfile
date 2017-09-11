@@ -122,19 +122,19 @@ node {
         removeDir( 'DefaultPMDir' )
     }
 
-	stage('Build Debug')
-	{
-		try {
-			notifyBuild('STARTED', 'Build')
-			make_build( configurations[0], currentPlatform )
-		} catch( e ){
-			currentBuild.result = "FAILED"
-			throw e
-		}
-		finally {
-			notifyBuild(currentBuild.result, 'Build')
-		}
-	}
+	//stage('Build Debug')
+	//{
+	//	try {
+	//		notifyBuild('STARTED', 'Build')
+	//		make_build( configurations[0], currentPlatform )
+	//	} catch( e ){
+	//		currentBuild.result = "FAILED"
+	//		throw e
+	//	}
+	//	finally {
+	//		notifyBuild(currentBuild.result, 'Build')
+	//	}
+	//}
 	
 	stage('Build Release')
 	{
