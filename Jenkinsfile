@@ -114,6 +114,11 @@ node {
     def currentConfiguration = configurations[1]
     def currentPlatform = platforms[1]
 	
+	stage('Set Properties')
+	{
+		properties [[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', daysToKeepStr: '0', numToKeepStr: '0']],
+					[$class: 'ScannerJobProperty', doNotScan: false]]
+	}
 	
     stage('Clean') {
         removeDir( buildDir )
@@ -186,9 +191,4 @@ node {
         }
     }
 	
-	stage('Discard Old Builds')
-	{
-		properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '0', artifactNumToKeepStr: '0', daysToKeepStr: '0', numToKeepStr: '0']]])
-
-	}
 }
