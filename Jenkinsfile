@@ -113,7 +113,8 @@ node {
     
     def currentConfiguration = configurations[1]
     def currentPlatform = platforms[1]
-    
+	
+	
     stage('Clean') {
         removeDir( buildDir )
         removeDir( tempDir )
@@ -183,6 +184,11 @@ node {
         finally {
             notifyBuild(currentBuild.result, 'Test')
         }
-
     }
+	
+	stage('Discard Old Builds')
+	{
+		properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '20', artifactNumToKeepStr: '30', daysToKeepStr: '20', numToKeepStr: '30']]])
+
+	}
 }
