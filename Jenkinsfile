@@ -188,7 +188,7 @@ node {
 	
 	stage('Discard Old Builds')
 	{
-		properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '20', artifactNumToKeepStr: '30', daysToKeepStr: '20', numToKeepStr: '30']]])
+		properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '0', artifactNumToKeepStr: '0', daysToKeepStr: '0', numToKeepStr: '0']]])
 
 	}
 }
