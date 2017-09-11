@@ -111,7 +111,7 @@ node {
     def configurations = ['Debug', 'Release']
     def platforms = ['Win32', 'x64']
     
-    def currentConfiguration = configurations[0]
+    def currentConfiguration = configurations[1]
     def currentPlatform = platforms[1]
     
     stage('Clean') {
@@ -121,19 +121,37 @@ node {
         removeDir( 'generatedJUnitFiles' )
         removeDir( 'DefaultPMDir' )
     }
-     stage('Build') {
-        try {
-            notifyBuild('STARTED', 'Build')
- 	        make_build( currentConfiguration, currentPlatform )
-        } catch( e ){
-            currentBuild.result = "FAILED"
-            throw e
-        }
-        finally {
-            notifyBuild(currentBuild.result, 'Build')
-        }
-     }
-  	stage('Archive') {
+
+	stage('Build Debug')
+	{
+		try {
+			notifyBuild('STARTED', 'Build')
+			make_build( configurations[0], currentPlatform )
+		} catch( e ){
+			currentBuild.result = "FAILED"
+			throw e
+		}
+		finally {
+			notifyBuild(currentBuild.result, 'Build')
+		}
+	}
+	
+	stage('Build Release')
+	{
+		try {
+			notifyBuild('STARTED', 'Build')
+			make_build( configurations[1], currentPlatform )
+		} catch( e ){
+			currentBuild.result = "FAILED"
+			throw e
+		}
+		finally {
+			notifyBuild(currentBuild.result, 'Build')
+		}
+	}
+	
+  	stage('Archive')
+	{
   	    
   	    try {
             notifyBuild('STARTED', 'Archive')
@@ -146,37 +164,18 @@ node {
             notifyBuild(currentBuild.result, 'Archive')
         }
   	}
-	//stage('Open BV') {
-	//	def bvExecutablePath = buildDir + currentPlatform + "-v140-" + currentConfiguration + '\\Applications\\BlackVision\\BlackVision.exe'
-	//	
-	//	copyFile( 'BlackVision\\Test\\Configs\\DefaultConfig.xml', get_app_dir( buildDir, currentConfiguration, currentPlatform ) + 'BlackVision\\config.xml' )
-	//	
-	//	bat bvExecutablePath
-	//}
+
 	
-    stage('Test') {
-
-
-  	    try {
-            notifyBuild('STARTED', 'Test')
- 	        //def testExecsList = list_test_execs( buildDir, currentConfiguration, currentPlatform )
+    stage('Test')
+	{
+  	    try
+		{
 		
-     		//echo testExecsList.size() + ' tests found.'
-    		
-     		//for( int i = 0; i < testExecsList.size(); ++i ) {
-     		//    try {
-     		//        bat testExecsList.get( i ) + ' -o ' + testResPath + '/TestFrameworkTest.xml -FileLog Logi/DebugLog.txt debug - DisableDefaultLog'
-     		//    }
-     		//    catch(err) {
-     		//        echo "test fail."
-     		//    }
-     		//}
-			
+            notifyBuild('STARTED', 'Test')
 			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
-    		
-    		//make_auto_tests( buildDir, currentConfiguration, currentPlatform, testResPath + '\\auto_tests' )
-    		
+
      	    generate_tests_report( "BlackVision\\" + testResPath )
+			
         } catch( e ){
             currentBuild.result = "FAILED"
             throw e
