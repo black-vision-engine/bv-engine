@@ -25,7 +25,7 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
   }
 
   // Send notifications
-  if( ${env.JOB_NAME} == "BlackVision-master" )
+  if( env.JOB_NAME == "BlackVision-master" )
   {
 	slackSend (color: colorCode, message: summary)
   }
