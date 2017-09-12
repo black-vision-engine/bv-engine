@@ -25,7 +25,11 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
   }
 
   // Send notifications
-  slackSend (color: colorCode, message: summary)
+  if( ${env.JOB_NAME} == "BlackVision-master" )
+  {
+	slackSend (color: colorCode, message: summary)
+  }
+  
   step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
 }
 
@@ -173,7 +177,7 @@ node {
   	    try
 		{
 		
-            //notifyBuild('STARTED', 'Test')
+            notifyBuild('STARTED', 'Test')
 			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
 
      	    generate_tests_report( "BlackVision\\" + testResPath )
