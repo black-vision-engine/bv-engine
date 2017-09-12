@@ -25,7 +25,7 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
   }
 
   // Send notifications
-  // slackSend (color: colorCode, message: summary)
+  slackSend (color: colorCode, message: summary)
 }
 
 def get_tests_dir( buildDir, conf, platform ) {
