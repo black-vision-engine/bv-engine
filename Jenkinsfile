@@ -66,10 +66,7 @@ def make_build( conf, platform ) {
 }
 
 def list_test_execs( buildDir, conf, platform ) {
-    //def g =  get_tests_dir( buildDir, conf, platform ) + '**/*.exe'
-	//def testExecs = findFiles(glob: g )
-	//return "list of exec paths"
-	
+
 	def testDir = get_tests_dir( buildDir, conf, platform )
 	
 	return [	testDir + "TestTestFramework\\TestTestFramework.exe"	]
