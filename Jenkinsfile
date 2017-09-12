@@ -26,6 +26,7 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
 
   // Send notifications
   slackSend (color: colorCode, message: summary)
+  step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
 }
 
 def get_tests_dir( buildDir, conf, platform ) {
