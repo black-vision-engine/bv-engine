@@ -429,6 +429,17 @@ SizeType    File::Read        ( char* out, const std::string & fileName )
     return File::Impl::Read( out, fileName );
 }
 
+// ***********************
+//
+std::string File::Read        ( const std::string & fileName )
+{
+    std::stringstream shaderSource;
+
+    File::Open( fileName ) >> shaderSource;
+
+    return shaderSource.str();
+}
+
 // *******************************
 //
 SizeType    File::Write       ( std::istream & in, const std::string & fileName )

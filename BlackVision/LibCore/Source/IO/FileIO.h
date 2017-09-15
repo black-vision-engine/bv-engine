@@ -59,6 +59,7 @@ public:
     
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char * out, const std::string & fileName );
+    static std::string  Read        ( const std::string & fileName );
 	
     static SizeType		Write       ( const char * in, SizeType size, const std::string & fileName, bool append );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
 EndProject
@@ -83,6 +83,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSerializers", "..\..\..\Test\Tools\TestSerializers\Projects\Win\VS14\TestSerializers.vcxproj", "{C307615F-D82C-47C9-BC4D-6CEC72D3393F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMathematics", "..\..\..\Test\Tools\MathematicsTest\Projects\Win\VS14\TestMathematics.vcxproj", "{B2F1838C-ACB4-4328-8D0C-94772E5178C4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestShadersCompilation", "..\..\..\Test\Engine\TestShaderCompilation\Project\Win\VS14\TestShadersCompilation.vcxproj", "{6F7C63B0-0EB8-439F-9444-7CCD86818E85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -651,6 +653,20 @@ Global
 		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|Win32.Build.0 = Release|Win32
 		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|x64.ActiveCfg = Release|x64
 		{B2F1838C-ACB4-4328-8D0C-94772E5178C4}.Release|x64.Build.0 = Release|x64
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|Win32.Build.0 = Debug|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|x64.ActiveCfg = Debug|x64
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Debug|x64.Build.0 = Debug|x64
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|Any CPU.ActiveCfg = Release|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|Win32.ActiveCfg = Release|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|Win32.Build.0 = Release|Win32
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|x64.ActiveCfg = Release|x64
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -687,6 +703,7 @@ Global
 		{31CE6746-D02C-41C5-956B-1D82B9C6711A} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{C307615F-D82C-47C9-BC4D-6CEC72D3393F} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{B2F1838C-ACB4-4328-8D0C-94772E5178C4} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{6F7C63B0-0EB8-439F-9444-7CCD86818E85} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23FC2EE1-0489-479F-B40E-61A4C92FB7D0}
