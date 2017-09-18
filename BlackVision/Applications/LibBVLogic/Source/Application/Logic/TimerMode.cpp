@@ -27,8 +27,8 @@ void            TimerMode::SetStartTime     ( unsigned long time )
 {
     unsigned long d = unsigned long( 1000.f / float( m_fps ) );
     m_startTime = time - time % d;
-    m_currentTime = TimeType( m_startTime ) * TimeType( 0.001 );
-    m_realTime = m_currentTime;
+    m_currentTime = 0.0f;
+    m_realTime = 0.0f;  //TimeType( m_startTime ) * TimeType( 0.001 );
     m_frameNumber = 0;
 }
 
