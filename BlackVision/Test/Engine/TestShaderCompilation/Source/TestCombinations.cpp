@@ -6,6 +6,9 @@
 
 
 
+UNITTEST_SUITE( ShadersCompilation )
+{
+
 // ***********************
 //
 class TestCombinations : public bv::FrameworkTest
@@ -45,3 +48,5 @@ void        TestCombinations::PreEvents           ()
     }
 }
 
+
+}

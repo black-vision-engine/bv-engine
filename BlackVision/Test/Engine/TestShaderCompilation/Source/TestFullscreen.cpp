@@ -6,6 +6,9 @@
 #include "System/Path.h"
 
 
+UNITTEST_SUITE( ShadersCompilation )
+{
+
 
 // ***********************
 // This test will compile all fullscreen effect shaders.
@@ -40,3 +43,8 @@ void        TestFullscreenShaders::PreEvents           ()
         TestCompilation( vsPath, psPath.Str() );
     }
 }
+
+
+
+}
+

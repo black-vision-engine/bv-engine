@@ -154,16 +154,12 @@
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestScene2.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCases\CallAllTests.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCases\TestAssets.cpp" />
     <ClCompile Include="..\..\..\Source\TestCases\TestModelSceneEditor.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCases\TestTimelines.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Scenes\TestEditorBase.h" />
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h" />
     <ClInclude Include="..\..\..\Source\Scenes\TestSceneUtils.h" />
-    <ClInclude Include="..\..\..\Source\TestCases\TestCopyNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\DevTools\TestFramework\Projects\Win\VS14\TestFramework.vcxproj">
