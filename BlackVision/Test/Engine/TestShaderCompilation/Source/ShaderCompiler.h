@@ -22,7 +22,7 @@ typedef std::pair< std::string, bool > CompilationResult;
 
 // ***********************
 //
-CompilationResult       CompileAndLink      ( const std::string & vertexShader, const std::string & pixelShader )
+inline CompilationResult       CompileAndLink      ( const std::string & vertexShader, const std::string & pixelShader )
 {
     VertexShader * vert = new VertexShader( vertexShader, nullptr );
     PixelShader * pix = new PixelShader( pixelShader, nullptr );
@@ -35,7 +35,7 @@ CompilationResult       CompileAndLink      ( const std::string & vertexShader, 
 
 // ***********************
 //
-void                    TestCompilation     ( const std::string & vsPath, const std::string & psPath )
+inline void                    TestCompilation     ( const std::string & vsPath, const std::string & psPath )
 {
     auto vsSource = File::Read( vsPath );
     auto psSource = File::Read( psPath );

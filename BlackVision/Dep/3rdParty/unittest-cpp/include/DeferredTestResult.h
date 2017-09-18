@@ -8,6 +8,9 @@
 #include <string>
 #include <vector>
 
+#define MAX_FAILURE_STRING 8192
+
+
 namespace UnitTest
 {
 
@@ -18,7 +21,7 @@ namespace UnitTest
       DeferredTestFailure(int lineNumber_, const char* failureStr_);
 
       int lineNumber;
-      char failureStr[1024];
+      char failureStr[ MAX_FAILURE_STRING ];
    };
 
 }

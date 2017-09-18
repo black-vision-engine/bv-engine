@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCombinations.cpp" />
     <ClCompile Include="..\..\..\Source\TestFullscreen.cpp" />
   </ItemGroup>
   <ItemGroup>
