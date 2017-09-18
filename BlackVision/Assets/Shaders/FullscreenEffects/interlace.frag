@@ -12,7 +12,7 @@ uniform int 		height;
 
 int 	Y			()
 {
-	return (int)((1.0 - uvCoord.y) * height);
+	return int((1.0 - uvCoord.y) * height);
 }
 
 vec4 InterlaceEven	()
@@ -21,11 +21,11 @@ vec4 InterlaceEven	()
 
 	if( y & 0x1 )
 	{
-		return texture( Tex1 );
+		return texture( Tex1, uvCoord );
 	}
 	else
 	{
-		return texture( Tex0 );
+		return texture( Tex0, uvCoord );
 	}
 }
 
@@ -35,11 +35,11 @@ vec4 InterlaceOdd	()
 
 	if( y & 0x1 )
 	{
-		return texture( Tex0 );
+		return texture( Tex0, uvCoord );
 	}
 	else
 	{
-		return texture( Tex1 );
+		return texture( Tex1, uvCoord );
 	}
 }
 
