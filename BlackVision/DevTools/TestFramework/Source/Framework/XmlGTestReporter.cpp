@@ -153,7 +153,7 @@ namespace UnitTest {
          << " name=\"" << result.testName << "\""
          << " status=\"run\""
          << " time=\"" << result.timeElapsed << "\""
-         << " classname=\"\"";
+         << " classname=\"" << result.suiteName << "\"";
    }
 
    void XmlGTestReporter::EndTest(std::ostream& os, DeferredTestResult const& result)
