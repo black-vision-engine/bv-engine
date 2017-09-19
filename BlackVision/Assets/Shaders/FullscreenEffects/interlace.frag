@@ -47,7 +47,7 @@ void main()
 {	
 	vec4 res;
 
-	if( startEven )
+	if( startEven != 0 )
 	{
 		res = InterlaceEven();
 	}

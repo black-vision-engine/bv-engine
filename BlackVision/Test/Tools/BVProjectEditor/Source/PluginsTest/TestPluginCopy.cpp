@@ -85,42 +85,6 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( CopyTimelines, PluginCopy.OneScene )
 }
 
 
-
-// ***********************
-// Copy plugins between scenes. Since timelines exist only in one scene, they shouldn't get prefixes.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( CopyTimelines_Unprefixed, PluginCopy.BetweenScenes )
-{
-    auto editor = GetProjectEditor();
-
-    auto scene = CreateOneSceneWithColoredRect( editor, "FirstScene" );
-    auto destScene = CreateOneSceneWithColoredRect( editor, "SecondScene" );
-
-    CreateTimelines( editor, scene, "ColorTimeline", "ParamValModelTimeline" );
-    SetTimelines( editor, scene );
-
-    // ***********************
-    // Copy plugin
-    auto destNode = QueryTyped( editor->GetNode( destScene->GetName(), "root/Group1" ) );
-
-    auto coloredRect = QueryTyped( editor->GetNode( scene->GetName(), "root/ColoredRect" ) );
-    auto plugin = editor->AddPluginCopy( destScene, destNode, 2, scene, coloredRect, "solid color" );
-
-    // ***********************
-    // Check timelines in copied plugin
-    auto destColorTimeline = editor->GetTimeEvaluator( bv::model::TimelineHelper::CombineTimelinePath( destScene->GetName(), "ColorTimeline" ) );
-    auto destParamValModelTimeline = editor->GetTimeEvaluator( bv::model::TimelineHelper::CombineTimelinePath( destScene->GetName(), "ParamValModelTimeline" ) );
-
-    // Copy operation should create new timelines with the same names.
-    CHECK( plugin->GetParameter( "color" )->GetTimeEvaluator() == destColorTimeline );
-
-    // Parameters should have default timeline if no one changed it. Copy operation shouldn't create Copy_default timeline.
-    CHECK( plugin->GetParameter( bv::model::BlendHelper::PARAM::BLEND_ENABLE )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( destScene ) );
-
-    // ParamValModel timeline should have default timeline set to proper value
-    CHECK( std::static_pointer_cast< bv::model::DefaultPluginParamValModel >( plugin->GetPluginParamValModel() )->GetTimeEvaluator() == destParamValModelTimeline );
-}
-
-
 // ***********************
 // Copy plugins between scenes. Since timelines are present in both scenes, copy operation should create
 // new timeline with Copy_ prefixes
