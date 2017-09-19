@@ -122,6 +122,7 @@ namespace UnitTest {
          << " failures=\"" << failureCount << "\""
          << " errors=\"0\""                                  // Dummy attribute
          << " time=\"" << secondsElapsed << "\""
+         << " name=\"AllTests\""
          << ">";
    }
 
