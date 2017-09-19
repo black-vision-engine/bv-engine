@@ -14,7 +14,7 @@ inline void         VerifyDefaultScene  ( bv::model::SceneModelPtr scene, bv::BV
 inline void         AddHierarchy        ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 
 
-inline void         CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor );
+inline bv::model::SceneModelPtr         CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor, const std::string & sceneName );
 
 
 // ***********************
@@ -103,15 +103,17 @@ inline void             AddHierarchy             ( bv::model::SceneModelPtr scen
 
 // ***********************
 //
-inline void             CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor )
+inline bv::model::SceneModelPtr     CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor, const std::string & sceneName )
 {
-    editor->AddScene( "FirstScene" );
+    editor->AddScene( sceneName );
 
-    auto scene = editor->GetModelScene( "FirstScene" );
+    auto scene = editor->GetModelScene( sceneName );
     auto timeline = editor->GetSceneDefaultTimeline( scene );
 
     auto node = bv::TestNodesCreator::ColoredRectangle( timeline, "ColoredRect", 10, 10, glm::vec4( 0.5f, 1.0, 1.0, 1.0 ) );
     
     editor->AddChildNode( scene, scene->GetRootNode(), node );
     editor->AddChildNode( scene->GetName(), "root", "Group1" );
+
+    return editor->GetModelScene( sceneName );
 }
