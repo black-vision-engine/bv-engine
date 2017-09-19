@@ -19,7 +19,7 @@ vec4 InterlaceEven	()
 {
 	int y = Y();
 
-	if( y & 0x1 )
+	if( ( y & 0x1 ) != 0 )
 	{
 		return texture( Tex1, uvCoord );
 	}
@@ -33,7 +33,7 @@ vec4 InterlaceOdd	()
 {
 	int y = Y();
 
-	if( y & 0x1 )
+	if( ( y & 0x1 ) != 0 )
 	{
 		return texture( Tex0, uvCoord );
 	}

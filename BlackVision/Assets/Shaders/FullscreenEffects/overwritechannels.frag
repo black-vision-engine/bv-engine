@@ -21,7 +21,7 @@ void main()
 	
 	vec4 res = vec4( color[ rIdx ], color[ gIdx ], color[ bIdx ], color[ aIdx ] );
 
-	if( overwriteAlpha )
+	if( overwriteAlpha != 0 )
 	{
 		res.a = alpha;
 	}
