@@ -20,6 +20,17 @@ namespace bv { namespace model {
 
 TimelineManager* TimelineManager::instance = nullptr; // FIXME: this may be moved to static initilizer
 
+const std::string       TimelineManager::DEFAULT_TIMELINE_NAME = "default";
+
+
+// ***********************
+//
+const std::string &     TimelineManager::GetDefaultTimelineName()
+{
+    return DEFAULT_TIMELINE_NAME;
+}
+
+
 // *********************************
 //
 TimelineManager* TimelineManager::GetInstance                     ()

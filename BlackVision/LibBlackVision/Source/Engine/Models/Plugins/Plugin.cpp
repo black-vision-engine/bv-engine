@@ -741,7 +741,24 @@ std::vector< ITimeEvaluatorPtr >    BasePlugin::GetTimelines				() const
 } //model
 
 
-namespace CloneViaSerialization {
+namespace CloneViaSerialization
+{
+
+
+// ***********************
+//
+model::ITimeEvaluatorPtr        GetCorrespondingTimeline    ( model::ITimeEvaluatorPtr srcTimeline, const std::string & prefix, const std::string & destScene )
+{
+    std::string timelinePath;
+
+    // Note: default timeline always resolves to default timeline in destination scene. We don't make copy of it.
+    if( srcTimeline->GetName() == model::TimelineManager::GetDefaultTimelineName() )
+        timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, srcTimeline->GetName() );
+    else
+        timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + srcTimeline->GetName() );
+
+    return model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+}
 
 // *******************************
 //
@@ -751,19 +768,18 @@ void				UpdateTimelines				    ( const model::IPlugin * obj, const std::string &
     {
         if( param->GetTimeEvaluator() )
         {
-            auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() );
-            auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
-            param->SetTimeEvaluator( timeline );
+            auto timeline = param->GetTimeEvaluator();
+            param->SetTimeEvaluator( GetCorrespondingTimeline( timeline, prefix, destScene ) );
         }
     }
 
     auto pluginModel = obj->GetPluginParamValModel();
     if( pluginModel && pluginModel->GetTimeEvaluator() )
     {
-        auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + pluginModel->GetTimeEvaluator()->GetName() );
-        auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+        auto timeline = pluginModel->GetTimeEvaluator();
+        auto destTimeline = GetCorrespondingTimeline( timeline, prefix, destScene );
         //FIXME: cast
-        std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
+        std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( destTimeline );
     }
 }
 

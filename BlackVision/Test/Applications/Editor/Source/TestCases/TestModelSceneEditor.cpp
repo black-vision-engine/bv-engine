@@ -32,11 +32,6 @@ void        TestModelSceneEditor::InitScene     ()
     m_scene->InitTimelinesTest();
     m_scene->InitAssetsTest();
     m_scene->InitCopyNodeTest();
-
-    //m_scene->InitColoredGeometryTest();
-    //m_scene->InitTexturedGeometryTest();
-    //m_scene->InitAnimatedGeometryTest();
-    //m_scene->InitGradientGeometryTest();
 }
 
 

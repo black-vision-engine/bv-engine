@@ -84,6 +84,9 @@ public:
     bool                    RemoveParamFromTimeline         ( IParameterPtr param, const std::string & timelineName );
     bool                    RemoveParamFromTimeline         ( IParameterPtr param, const ITimeEvaluatorPtr timeline );
 
+
+    static const std::string &     GetDefaultTimelineName    ();
+
 private:
 
     //ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
@@ -91,6 +94,8 @@ private:
     bool                    DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
     static TimelineManager* instance;
+
+    static const std::string    DEFAULT_TIMELINE_NAME;
 };
 
 } //model

@@ -2364,11 +2364,11 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
     //Set default root node & timeline & camera
     scene->GetHistory().SetHistoryLength( m_maxHistorySize );
 
-    auto defaultTimeline = GetTimeline( model::TimelineHelper::CombineTimelinePath( scene->GetName(), DEFAULT_TIMELINE_NAME ) );
+    auto defaultTimeline = GetTimeline( model::TimelineHelper::CombineTimelinePath( scene->GetName(), model::TimelineManager::GetDefaultTimelineName() ) );
     //don't add default timeline if it already exists
     if( !defaultTimeline )
     {
-        defaultTimeline = model::TimelineHelper::CreateDefaultTimeline( DEFAULT_TIMELINE_NAME, ( std::numeric_limits< TimeType >::max )(), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ); //FIXME: infinite duration
+        defaultTimeline = model::TimelineHelper::CreateDefaultTimeline( model::TimelineManager::GetDefaultTimelineName(), ( std::numeric_limits< TimeType >::max )(), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ); //FIXME: infinite duration
         scene->GetTimeline()->AddChild( defaultTimeline );
     }
 
@@ -2418,7 +2418,7 @@ model::ITimelinePtr         BVProjectEditor::GetSceneDefaultTimeline     ( model
 {
     if( scene )
     {
-        return std::static_pointer_cast< model::ITimeline >( scene->GetTimeline()->GetChild( DEFAULT_TIMELINE_NAME ) );
+        return std::static_pointer_cast< model::ITimeline >( scene->GetTimeline()->GetChild( model::TimelineManager::GetDefaultTimelineName() ) );
     }
 
     return nullptr;
@@ -2427,6 +2427,5 @@ model::ITimelinePtr         BVProjectEditor::GetSceneDefaultTimeline     ( model
 // *******************************
 //
 const std::string       BVProjectEditor::DEFAULT_ROOT_NAME = "root";
-const std::string       BVProjectEditor::DEFAULT_TIMELINE_NAME = "default";
 
 } //bv

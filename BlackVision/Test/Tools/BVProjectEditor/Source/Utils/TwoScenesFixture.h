@@ -3,6 +3,8 @@
 #include "UnitTest++.h"
 #include "Engine/Editors/BVProjectEditor.h"
 
+#include "Utils/Nodes/TestNodesCreator.h"
+
 
 
 inline void         CreateOneScene      ( bv::BVProjectEditor * editor );
@@ -11,6 +13,8 @@ inline void         CreateTwoScenes     ( bv::BVProjectEditor * editor );
 inline void         VerifyDefaultScene  ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 inline void         AddHierarchy        ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 
+
+inline void         CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor );
 
 
 // ***********************
@@ -95,4 +99,19 @@ inline void             AddHierarchy             ( bv::model::SceneModelPtr scen
     REQUIRE( group2->GetChild( "Child2" ) != nullptr );
     REQUIRE( group2->GetChild( "Child3" ) != nullptr );
     REQUIRE( group2->GetChild( "Child4" ) != nullptr );
+}
+
+// ***********************
+//
+inline void             CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor )
+{
+    editor->AddScene( "FirstScene" );
+
+    auto scene = editor->GetModelScene( "FirstScene" );
+    auto timeline = editor->GetSceneDefaultTimeline( scene );
+
+    auto node = bv::TestNodesCreator::ColoredRectangle( timeline, "ColoredRect", 10, 10, glm::vec4( 0.5f, 1.0, 1.0, 1.0 ) );
+    
+    editor->AddChildNode( scene, scene->GetRootNode(), node );
+    editor->AddChildNode( scene->GetName(), "root", "Group1" );
 }

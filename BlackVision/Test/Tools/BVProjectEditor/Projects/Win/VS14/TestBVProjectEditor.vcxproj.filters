@@ -20,6 +20,9 @@
     <ClCompile Include="..\..\..\Source\AssetsTest\TestFallbackTexture.cpp">
       <Filter>AssetsTest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginCopy.cpp">
+      <Filter>PluginsTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -30,6 +33,9 @@
     </Filter>
     <Filter Include="AssetsTest">
       <UniqueIdentifier>{11a21a3e-faa7-476c-b403-2bb00df321ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PluginsTest">
+      <UniqueIdentifier>{c1de45af-9e24-4c47-bffd-906400fc4fbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
