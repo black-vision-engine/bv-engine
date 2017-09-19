@@ -9,6 +9,7 @@ namespace bv
 {
 
 class BVTestAppLogic;
+class BVProjectEditor;
 
 
 class FrameworkTest : public UnitTest::Test
@@ -49,6 +50,7 @@ public:
     virtual TimeType    ComputeFrameTime    () { return 0.0f; }
 
     BVTestAppLogic*     GetAppLogic         () const { return m_appLogic; }
+    BVProjectEditor*    GetProjectEditor    () const;
     SizeType            GetFrameNumber      () const { return m_frameNum; }
     TimeType            GetFrameTime        () const { return m_frameTime; }
 
@@ -78,3 +80,24 @@ private:
 }	// bv
 
 
+// ========================================================================= //
+// Framework Helper macros
+// ========================================================================= //
+
+
+
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( name, suite )    \
+class name : public bv::FrameworkTest   \
+{                                       \
+public:                                 \
+    name() : bv::FrameworkTest( #name, suite, __FILE__, __LINE__ ) {}                                           \
+                                                                                                                \
+    virtual void        PreEvents           () override;                                                        \
+} name ## Instance;                                                                                             \
+                                                                                                                \
+UnitTest::ListAdder adder ## name ( UnitTest::Test::GetTestList(), &name ## Instance );                         \
+void        name::PreEvents           ()
+
+
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE( name, suite )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( name, #suite )
+#define SIMPLE_FRAMEWORK_TEST( name )                   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( name, UnitTestSuite::GetSuiteName() )
