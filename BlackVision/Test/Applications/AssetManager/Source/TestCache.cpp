@@ -12,7 +12,7 @@ using namespace bv;
 static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache/";
 
 
-TEST( AssetManager_Cache, HardDriveRawDataCacheTest )
+TEST( Assets_Cache, HardDriveRawDataCacheTest )
 {
     HardDriveRawDataCache cache;
 

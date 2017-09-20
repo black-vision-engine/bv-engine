@@ -2,8 +2,7 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
 
 
 // ***********************
@@ -12,7 +11,7 @@ class TestColorPlugin : public TestEditor
 {
 private:
 public:
-    TestColorPlugin() : TestEditor( "TestColorPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestColorPlugin() : TestEditor( "TestColorPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -34,4 +33,3 @@ void        TestColorPlugin::InitScene     ()
 }
 
 
-}

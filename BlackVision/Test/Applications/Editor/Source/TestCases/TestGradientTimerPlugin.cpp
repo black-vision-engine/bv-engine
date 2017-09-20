@@ -2,8 +2,8 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
+
 
 // ***********************
 //
@@ -11,7 +11,7 @@ class TestGradientTimerPlugin : public TestEditor
 {
 private:
 public:
-    TestGradientTimerPlugin() : TestEditor( "TestGradientTimerPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestGradientTimerPlugin() : TestEditor( "TestGradientTimerPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -32,4 +32,3 @@ void        TestGradientTimerPlugin::InitScene     ()
 }
 
 
-}

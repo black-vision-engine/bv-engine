@@ -131,7 +131,7 @@ void        IndependentAssetThread    ( int threadNum )
 
 // ================================ //
 // Only one thread should enter loading at the same time. Rest should wait.
-TEST( AssetManager_LoadBarrier, AssetsLoading )
+TEST( Assets_LoadBarrier, AssetsLoading )
 {
     std::thread threads[ numThreads ];
 
@@ -176,7 +176,7 @@ bv::LoadBarrier     gBarrier;
 // Load asset from single thread. Barrier should end in clean state without waiting assets on list.
 // Note that this checks state cleaning in situation, when there're no other threads what differs
 // from previous test case.
-TEST( AssetManager_LoadBarrier, SingleAssetLoading )
+TEST( Assets_LoadBarrier, SingleAssetLoading )
 {
     auto result = gBarrier.RequestAsset( assetFile );
 

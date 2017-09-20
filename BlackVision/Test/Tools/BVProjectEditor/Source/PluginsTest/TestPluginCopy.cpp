@@ -53,7 +53,7 @@ void            SetTimelines        ( bv::BVProjectEditor * editor, bv::model::S
 
 // ***********************
 // Copied plugin should have the same timelines set as ancestor.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( CopyTimelines, BVProjectEditor.Copy.Plugin.OneScene )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.Plugin.Copy, CopyTimelines_OneScene )
 {
     auto editor = GetProjectEditor();
     auto scene = CreateOneSceneWithColoredRect( editor, "FirstScene" );
@@ -88,7 +88,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( CopyTimelines, BVProjectEditor.Copy.Plugin.OneSc
 // ***********************
 // Copy plugins between scenes. Since timelines are present in both scenes, copy operation should create
 // new timeline with Copy_ prefixes
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( CopyTimelines_Prefixed, BVProjectEditor.Copy.Plugin.BetweenScenes )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.Plugin.Copy, CopyTimelines_BetweenScenes )
 {
     auto editor = GetProjectEditor();
 

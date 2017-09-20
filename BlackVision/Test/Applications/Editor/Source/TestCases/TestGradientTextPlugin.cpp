@@ -2,8 +2,8 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
+
 
 // ***********************
 //
@@ -11,7 +11,7 @@ class TestGradientTestPlugin : public TestEditor
 {
 private:
 public:
-    TestGradientTestPlugin() : TestEditor( "TestGradientTestPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestGradientTestPlugin() : TestEditor( "TestGradientTestPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -32,4 +32,4 @@ void        TestGradientTestPlugin::InitScene     ()
 }
 
 
-}
+

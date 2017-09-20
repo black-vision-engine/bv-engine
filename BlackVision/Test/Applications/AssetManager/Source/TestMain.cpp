@@ -30,7 +30,7 @@ TEST( AssetManager, LoadingThumbnails )
 
 // ***********************
 //
-TEST( AssetManager, Hash )
+TEST( Assets_AssetManager, Hash )
 {
     static char * c = new char[ 6 ];
     memset( c, 'a', 6 );
@@ -52,7 +52,7 @@ TEST( AssetManager, Hash )
 
 // ***********************
 //
-TEST( AssetManager, LoadingTextureAndGeneratingMipMaps )
+TEST( Assets_AssetManager, LoadingTextureAndGeneratingMipMaps )
 {
 	auto res = LoadTextureAsset( PMFilePrefix + imagePath, MipMapFilterType::BILINEAR );
 	ASSERT_TRUE( res != nullptr );
@@ -60,7 +60,7 @@ TEST( AssetManager, LoadingTextureAndGeneratingMipMaps )
 
 // ***********************
 //
-TEST( AssetManager, LoadingTexture )
+TEST( Assets_AssetManager, LoadingTexture )
 {
 	auto res = LoadTextureAsset( PMFilePrefix + imagePath );
 	ASSERT_TRUE( res != nullptr );
@@ -68,7 +68,7 @@ TEST( AssetManager, LoadingTexture )
 
 // ***********************
 //
-TEST( AssetManager, LoadingTexturePowefOf2Texture )
+TEST( Assets_AssetManager, LoadingTexturePowefOf2Texture )
 {
     // FIXME: If this test fails, maybe solution is to clean cache directory.
     // FIXME: What is exepcted solution, when texture is loaded from cache ?
@@ -78,7 +78,7 @@ TEST( AssetManager, LoadingTexturePowefOf2Texture )
 
 // ***********************
 //
-TEST( AssetManager, LoadingTextureWitmMipmaps )
+TEST( Assets_AssetManager, LoadingTextureWitmMipmaps )
 {
     auto propsOrig = image::GetImageProps( AssetsPath + std::string("checkerboard2_500X500.png") );
     ASSERT_TRUE( propsOrig.error.empty() );

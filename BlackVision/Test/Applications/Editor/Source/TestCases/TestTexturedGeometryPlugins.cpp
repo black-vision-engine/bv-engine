@@ -2,8 +2,8 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
+
 
 // ***********************
 //
@@ -11,7 +11,7 @@ class TestTextruredGeometryPlugin : public TestEditor
 {
 private:
 public:
-    TestTextruredGeometryPlugin() : TestEditor( "TestTextruredGeometryPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestTextruredGeometryPlugin() : TestEditor( "TestTextruredGeometryPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -32,4 +32,4 @@ void        TestTextruredGeometryPlugin::InitScene     ()
 }
 
 
-}
+

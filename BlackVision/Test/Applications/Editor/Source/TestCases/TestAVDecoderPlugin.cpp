@@ -2,8 +2,7 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
 
 
 // ***********************
@@ -12,7 +11,7 @@ class TestAVDecoderPlugin : public TestEditor
 {
 private:
 public:
-    TestAVDecoderPlugin() : TestEditor( "TestAVDecoderPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestAVDecoderPlugin() : TestEditor( "TestAVDecoderPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -33,5 +32,5 @@ void        TestAVDecoderPlugin::InitScene     ()
 }
 
 
-}
+
 

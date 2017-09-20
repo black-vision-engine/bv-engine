@@ -2,8 +2,8 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
+
 
 // ***********************
 //
@@ -11,7 +11,7 @@ class TestColoredTimerPlugin : public TestEditor
 {
 private:
 public:
-    TestColoredTimerPlugin() : TestEditor( "TestColoredTimerPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestColoredTimerPlugin() : TestEditor( "TestColoredTimerPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -32,4 +32,3 @@ void        TestColoredTimerPlugin::InitScene     ()
 }
 
 
-}

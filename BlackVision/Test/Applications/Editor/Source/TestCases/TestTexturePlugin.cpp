@@ -2,8 +2,7 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
 
 
 // ***********************
@@ -12,7 +11,7 @@ class TestTexturePlugin : public TestEditor
 {
 private:
 public:
-    TestTexturePlugin() : TestEditor( "TestTexturePlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestTexturePlugin() : TestEditor( "TestTexturePlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -35,5 +34,5 @@ void        TestTexturePlugin::InitScene     ()
 
 
 
-}
+
 

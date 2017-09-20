@@ -2,8 +2,7 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
 
 // ***********************
 //
@@ -11,7 +10,7 @@ class TestModelSceneEditor : public TestEditor
 {
 private:
 public:
-    TestModelSceneEditor() : TestEditor( "TestModelSceneEditor", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestModelSceneEditor() : TestEditor( "TestModelSceneEditor", "TestEditor.ModelSceneEditor", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -35,4 +34,4 @@ void        TestModelSceneEditor::InitScene     ()
 }
 
 
-}
+

@@ -6,8 +6,6 @@
 #include "System/Path.h"
 
 
-UNITTEST_SUITE( ShadersCompilation )
-{
 
 
 // ***********************
@@ -16,7 +14,7 @@ class TestFullscreenShaders : public bv::FrameworkTest
 {
 private:
 public:
-    TestFullscreenShaders() : bv::FrameworkTest( "TestFullscreenShaders", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestFullscreenShaders() : bv::FrameworkTest( "TestFullscreenShaders", "Shaders.Compilation", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 
@@ -46,5 +44,4 @@ void        TestFullscreenShaders::PreEvents           ()
 
 
 
-}
 

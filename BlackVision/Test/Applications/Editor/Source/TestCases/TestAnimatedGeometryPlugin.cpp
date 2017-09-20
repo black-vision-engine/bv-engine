@@ -2,8 +2,7 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
+
 
 // ***********************
 //
@@ -11,7 +10,7 @@ class TestAnimatedGeometryPlugins : public TestEditor
 {
 private:
 public:
-    TestAnimatedGeometryPlugins() : TestEditor( "TestAnimatedGeometryPlugins", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestAnimatedGeometryPlugins() : TestEditor( "TestAnimatedGeometryPlugins", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -31,5 +30,3 @@ void        TestAnimatedGeometryPlugins::InitScene     ()
     m_scene->InitAnimatedGeometryTest();
 }
 
-
-}

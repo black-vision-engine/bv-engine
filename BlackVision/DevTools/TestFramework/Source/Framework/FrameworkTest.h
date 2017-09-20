@@ -86,7 +86,7 @@ private:
 
 
 
-#define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( name, suite )    \
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )    \
 class name : public bv::FrameworkTest   \
 {                                       \
 public:                                 \
@@ -99,5 +99,5 @@ UnitTest::ListAdder adder ## name ( UnitTest::Test::GetTestList(), &name ## Inst
 void        name::PreEvents           ()
 
 
-#define SIMPLE_FRAMEWORK_TEST_IN_SUITE( name, suite )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( name, #suite )
-#define SIMPLE_FRAMEWORK_TEST( name )                   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( name, UnitTestSuite::GetSuiteName() )
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( #suite, name )
+#define SIMPLE_FRAMEWORK_TEST( name )                   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( UnitTestSuite::GetSuiteName(), name )

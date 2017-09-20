@@ -12,7 +12,7 @@ class CopyNodeInScene : public bv::FrameworkTest
 {
 private:
 public:
-    CopyNodeInScene() : bv::FrameworkTest( "CopyTest", "BVProjectEditor.Copy.Node.OneScene", __FILE__, __LINE__ ) {}
+    CopyNodeInScene() : bv::FrameworkTest( "CopyNodeInScene", "BVProjectEditor.Node.Copy", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 

@@ -6,8 +6,7 @@
 
 
 
-UNITTEST_SUITE( ShadersCompilation )
-{
+
 
 // ***********************
 //
@@ -15,7 +14,7 @@ class TestCombinations : public bv::FrameworkTest
 {
 private:
 public:
-    TestCombinations() : bv::FrameworkTest( "TestCombinations", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestCombinations() : bv::FrameworkTest( "TestCombinations", "Shaders.Compilation", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 
@@ -49,4 +48,3 @@ void        TestCombinations::PreEvents           ()
 }
 
 
-}

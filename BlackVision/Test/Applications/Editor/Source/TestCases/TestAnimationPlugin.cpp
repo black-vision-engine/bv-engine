@@ -2,8 +2,6 @@
 
 
 
-UNITTEST_SUITE( TestEditor )
-{
 
 
 
@@ -13,7 +11,7 @@ class TestAnimationPlugin : public TestEditor
 {
 private:
 public:
-    TestAnimationPlugin() : TestEditor( "TestAnimationPlugin", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    TestAnimationPlugin() : TestEditor( "TestAnimationPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
@@ -35,4 +33,3 @@ void        TestAnimationPlugin::InitScene     ()
 }
 
 
-}

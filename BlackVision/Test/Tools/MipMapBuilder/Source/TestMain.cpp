@@ -11,7 +11,7 @@ auto TestOutputDir = "_Output";
 
 // ******************************
 //
-TEST( RunMimmaping, RunMimmaping )
+TEST( Tools_MipMapBuilder, RunMimmaping )
 {
 	auto m1 = tools::GenerateMipmaps( imagePath, 50, bv::image::FilterType::FT_CATMULL_ROM );
 	ASSERT_TRUE( m1.size() == 11 );

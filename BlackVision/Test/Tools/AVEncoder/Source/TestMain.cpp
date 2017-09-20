@@ -10,7 +10,7 @@ static bv::avencoder::AVEncoder enc;
 
 // ***********************
 //
-TEST( AVEncoder, OpenStream ) 
+TEST( Tools_AVEncoder, OpenStream ) 
 {
     bv::avencoder::VideoOptions vOps;
     vOps.bitRate = 40000;
@@ -24,7 +24,7 @@ TEST( AVEncoder, OpenStream )
 
 // ***********************
 //
-TEST( AVEncoder, WriteFrames )
+TEST( Tools_AVEncoder, WriteFrames )
 {
 	auto w = 1920;
 	auto h = 1080;
