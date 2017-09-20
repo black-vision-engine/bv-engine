@@ -23,7 +23,7 @@ auto PMFilePrefix = std::string( "file:/" );
 
 // ***********************
 //
-TEST( AssetManager, LoadingThumbnails )
+TEST( Assets_AssetManager, LoadingThumbnails )
 {
 
 }

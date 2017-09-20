@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="TestParamValModel">
+      <UniqueIdentifier>{bada4c75-aa1e-47c1-862a-97ba1f437831}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\TestParamValModel\AddParameters.cpp">
+      <Filter>TestParamValModel</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
