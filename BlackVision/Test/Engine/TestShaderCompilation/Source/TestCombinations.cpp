@@ -24,20 +24,12 @@ UnitTest::ListAdder adderTestCombinations ( UnitTest::Test::GetTestList(), &Test
 
 
 
-// ***********************
-//
-Path            FindMatchingPS      ( const Path & vsPath )
-{
-    auto fileName = File::GetFileName( vsPath.Str(), false );
-    return vsPath.ParentPath() / Path( fileName + ".frag" );
-}
 
 
 // ***********************
 //
 void        TestCombinations::PreEvents           ()
 {
-    auto psShadersList = Path::List( "Assets/Shaders/Combinations/", true, ".*\\.frag" );
     auto vsShadersList = Path::List( "Assets/Shaders/Combinations/", true, ".*\\.vert" );
 
     for( auto & vsShaderPath : vsShadersList )

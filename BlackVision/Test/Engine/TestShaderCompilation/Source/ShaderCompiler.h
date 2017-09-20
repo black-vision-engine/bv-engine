@@ -10,6 +10,7 @@
 #include "Engine/Graphics/Shaders/VertexShader.h"
 
 #include "IO/FileIO.h"
+#include "System/Path.h"
 
 #include <string>
 
@@ -22,20 +23,46 @@ typedef std::pair< std::string, bool > CompilationResult;
 
 // ***********************
 //
-inline CompilationResult       CompileAndLink      ( const std::string & vertexShader, const std::string & pixelShader )
+inline Path                 FindMatchingPS      ( const Path & vsPath )
 {
-    VertexShader * vert = new VertexShader( vertexShader, nullptr );
-    PixelShader * pix = new PixelShader( pixelShader, nullptr );
+    auto fileName = File::GetFileName( vsPath.Str(), false );
+    return vsPath.ParentPath() / Path( fileName + ".frag" );
+}
 
-    PdrGLSLProgram program( *pix, *vert, nullptr );
-
-    return CompilationResult( program.Log(), program.IsCompiled() );
+// ***********************
+//
+inline Path                 FindMatchingGS      ( const Path & vsPath )
+{
+    auto fileName = File::GetFileName( vsPath.Str(), false );
+    return vsPath.ParentPath() / Path( fileName + ".geom" );
 }
 
 
 // ***********************
 //
-inline void                    TestCompilation     ( const std::string & vsPath, const std::string & psPath )
+inline CompilationResult    CompileAndLink      ( const std::string & vertexShader, const std::string & pixelShader, const std::string & geomShader = "" )
+{
+    VertexShader * vert = new VertexShader( vertexShader, nullptr );
+    PixelShader * pix = new PixelShader( pixelShader, nullptr );
+
+    if( geomShader.empty() )
+    {
+        PdrGLSLProgram program( *pix, *vert, nullptr );
+        return CompilationResult( program.Log(), program.IsCompiled() );
+    }
+    else
+    {
+        GeometryShader * geom = new GeometryShader( geomShader, nullptr );
+
+        PdrGLSLProgram program( *pix, *vert, geom );
+        return CompilationResult( program.Log(), program.IsCompiled() );
+    }
+}
+
+
+// ***********************
+//
+inline void                 TestCompilation     ( const std::string & vsPath, const std::string & psPath )
 {
     auto vsSource = File::Read( vsPath );
     auto psSource = File::Read( psPath );
@@ -51,4 +78,25 @@ inline void                    TestCompilation     ( const std::string & vsPath,
         CHECK_EQUAL( "", message );
     }
 }
+
+// ***********************
+//
+inline void                 TestCompilation     ( const std::string & vsPath, const std::string & psPath, const std::string & gsPath )
+{
+    auto vsSource = File::Read( vsPath );
+    auto psSource = File::Read( psPath );
+    auto gsSource = File::Read( gsPath );
+
+    auto result = CompileAndLink( vsSource, psSource, gsSource );
+
+    if( !result.second )
+    {
+        auto message = "Compiling shaders: [" + vsPath + ", " + gsPath + ", " + psPath + "] " + result.first;
+
+        // This is a little bit hackish. We know already that shader didn't compile.
+        // This chack will always fail bu thanks to this we can print error message and shader files.
+        CHECK_EQUAL( "", message );
+    }
+}
+
 
