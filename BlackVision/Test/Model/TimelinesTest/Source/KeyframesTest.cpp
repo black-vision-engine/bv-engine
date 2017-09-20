@@ -30,7 +30,7 @@ void        TestBaseKeyframe        ( bv::TimelineEventType type, KeyframeType& 
 }
 
 
-SUITE( DefaultTimelineTest )
+SUITE( Timelines )
 {
 
 

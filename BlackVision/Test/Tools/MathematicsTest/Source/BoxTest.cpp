@@ -8,7 +8,7 @@
 
 // ***********************
 // Default constructor creates empty box in point (0.0, 0.0, 0.0).
-TEST( Box, Creation )
+TEST( Mathematics_Box, Creation )
 {
     bv::mathematics::Box box;
 
@@ -23,7 +23,7 @@ TEST( Box, Creation )
 
 // ***********************
 // Constructor creates non empty cube.
-TEST( Box, NonEmptyCreation )
+TEST( Mathematics_Box, NonEmptyCreation )
 {
     bv::mathematics::Box box( -1.0, 1.0, 1.0, -1.0, -1.0, 1.0 );
 
@@ -39,7 +39,7 @@ TEST( Box, NonEmptyCreation )
 
 // ***********************
 // Including empty box leaves it in empty state.
-TEST( Box, EmptyIncludesEmpty )
+TEST( Mathematics_Box, EmptyIncludesEmpty )
 {
     bv::mathematics::Box box1;
     bv::mathematics::Box box2;
@@ -51,7 +51,7 @@ TEST( Box, EmptyIncludesEmpty )
 
 // ***********************
 // Including empty box leaves box in previous state
-TEST( Box, IncludeEmpty )
+TEST( Mathematics_Box, IncludeEmpty )
 {
     bv::mathematics::Box box1( -1.0, 1.0, 1.0, -1.0, 0.0, 0.5 );
     bv::mathematics::Box box2;
@@ -69,7 +69,7 @@ TEST( Box, IncludeEmpty )
 
 // ***********************
 // Empty box including point beacomes equal to this point.
-TEST( Box, EmptyIncludesPoint )
+TEST( Mathematics_Box, EmptyIncludesPoint )
 {
     bv::mathematics::Box box;
 
@@ -86,7 +86,7 @@ TEST( Box, EmptyIncludesPoint )
 
 // ***********************
 // When cube includes point, box is extended to this point.
-TEST( Box, CubeIncludePoint )
+TEST( Mathematics_Box, CubeIncludePoint )
 {
     bv::mathematics::Box box( -1.0, 1.0, 1.0, -1.0, -1.0, 1.0 );
 
@@ -103,7 +103,7 @@ TEST( Box, CubeIncludePoint )
 
 // ***********************
 // Transformed empty box stays empty.
-TEST( Box, TransformEmpty )
+TEST( Mathematics_Box, TransformEmpty )
 {
     bv::mathematics::Box box;
 
@@ -114,7 +114,7 @@ TEST( Box, TransformEmpty )
 
 // ***********************
 // 
-TEST( Box, Translate )
+TEST( Mathematics_Box, Translate )
 {
     bv::mathematics::Box box( -1.0, 1.0, 1.0, -1.0, -1.0, 1.0 );
 
