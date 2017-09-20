@@ -44,7 +44,7 @@ void        AssetLoaded     ( IEventPtr evt )
 
 // ***********************
 //
-TEST( AssetsThreadTest, AssetLoading )
+TEST( AssetManager_AssetsThread, AssetLoading )
 {
     GetDefaultEventManager().AddListener( &AssetLoaded, AssetAsyncLoadFinishedEvent::Type() );
     bv::AssetManager::GetInstance().RegisterLoader( FakeDescriptor::UID(), std::make_shared< FakeAssetLoader >() );
