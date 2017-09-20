@@ -15,7 +15,7 @@ class SyncLoadTest : public bv::FrameworkTest
 {
 private:
 public:
-    SyncLoadTest() : bv::FrameworkTest( "SyncLoadTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    SyncLoadTest() : bv::FrameworkTest( "SyncLoadTest", "BVProjectEditor.Assets.Loading", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 

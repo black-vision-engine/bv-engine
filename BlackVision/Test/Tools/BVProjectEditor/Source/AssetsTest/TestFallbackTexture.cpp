@@ -21,7 +21,7 @@ class FallbackTextureTest : public bv::FrameworkTest
 {
 private:
 public:
-    FallbackTextureTest() : bv::FrameworkTest( "FallbackTextureTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    FallbackTextureTest() : bv::FrameworkTest( "FallbackTextureTest", "BVProjectEditor.Assets.Loading", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 

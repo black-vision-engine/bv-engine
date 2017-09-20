@@ -24,7 +24,7 @@ private:
     int                     m_numLoaded;
 
 public:
-    AsyncLoadingTest() : bv::FrameworkTest( "AsyncLoadingTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ), m_numLoaded( 0 )
+    AsyncLoadingTest() : bv::FrameworkTest( "AsyncLoadingTest", "BVProjectEditor.Assets.Loading", __FILE__, __LINE__ ), m_numLoaded( 0 )
     {}
 
     virtual void        PreEvents           () override;

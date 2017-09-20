@@ -20,7 +20,7 @@ private:
     AssetDescConstPtr       m_assetDesc;
 
 public:
-    MixedSyncAsyncLoadingTest() : bv::FrameworkTest( "MixedSyncAsyncLoadingTest", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    MixedSyncAsyncLoadingTest() : bv::FrameworkTest( "MixedSyncAsyncLoadingTest", "BVProjectEditor.Assets.Loading", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
     virtual void        PreModelUpdate      () override;
