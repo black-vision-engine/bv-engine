@@ -13,5 +13,8 @@
     <ClCompile Include="..\..\..\Source\TestParamValModel\RemoveParametercpp.cpp">
       <Filter>TestParamValModel</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestParamValModel\TestPluginParamValModel.cpp">
+      <Filter>TestParamValModel</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
