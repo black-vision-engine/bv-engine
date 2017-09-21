@@ -297,4 +297,222 @@ TEST( Model_ParamValModel, AddEnumParameter )
     EXPECT_EQ( value->GetType(), ParamType::PT_ENUM );
 }
 
+// ***********************
+// Adds int value.
+TEST( Model_ParamValModel, AddIntValue )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
 
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", 1 );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_INT );
+}
+
+// ***********************
+// Adds float value.
+TEST( Model_ParamValModel, AddFloatValue )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", 1.0f );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_FLOAT1 );
+}
+
+// ***********************
+// Adds vec2 value.
+TEST( Model_ParamValModel, AddVec2Value )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", glm::vec2( 1.0, 1.0 ) );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_FLOAT2 );
+}
+
+// ***********************
+// Adds vec3 value.
+TEST( Model_ParamValModel, AddVec3Value )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", glm::vec3( 1.0, 1.0, 1.0 ) );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_FLOAT3 );
+}
+
+// ***********************
+// Adds vec4 value.
+TEST( Model_ParamValModel, AddVec4Value )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_FLOAT4 );
+}
+
+// ***********************
+// Adds bool value.
+TEST( Model_ParamValModel, AddBoolValue )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", false );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_BOOL );
+}
+
+// ***********************
+// Adds string value.
+TEST( Model_ParamValModel, AddStringValue )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", std::string() );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_STRING );
+}
+
+// ***********************
+// Adds wstring value.
+TEST( Model_ParamValModel, AddWStringValue )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", std::wstring() );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_WSTRING );
+}
+
+// ***********************
+// Adds mat2 value.
+TEST( Model_ParamValModel, AddMat2Value )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", glm::mat2( 1.0 ) );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_MAT2 );
+}
+
+// ***********************
+// Adds mat4 value.
+TEST( Model_ParamValModel, AddMat4Value )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddValue( "ExampleParam", glm::mat4( 1.0 ) );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param == nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state == nullptr );
+
+    EXPECT_EQ( value->GetType(), ParamType::PT_MAT4 );
+}
