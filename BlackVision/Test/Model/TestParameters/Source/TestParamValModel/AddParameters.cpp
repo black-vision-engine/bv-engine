@@ -7,6 +7,17 @@
 using namespace bv;
 
 
+
+enum EnumParameter
+{
+    IsEnum,
+    IsntEnum
+};
+
+
+
+
+
 // ***********************
 // Add only parameter and check if value and state is nullptr.
 TEST( Model_ParamValModel, AddParameterOnly )
@@ -172,4 +183,118 @@ TEST( Model_ParamValModel, AddVec4Parameter )
     EXPECT_EQ( param->GetType(), ModelParamType::MPT_VEC4 );
     EXPECT_EQ( value->GetType(), ParamType::PT_FLOAT4 );
 }
+
+// ***********************
+// Adds bool parameter value and state.
+TEST( Model_ParamValModel, AddBoolParameter )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddSimpleParam( "ExampleParam", false, true, true );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param != nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state != nullptr );
+
+    EXPECT_EQ( param->GetType(), ModelParamType::MPT_BOOL );
+    EXPECT_EQ( value->GetType(), ParamType::PT_BOOL );
+}
+
+// ***********************
+// Adds string parameter value and state.
+TEST( Model_ParamValModel, AddStringParameter )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddSimpleParam( "ExampleParam", std::string( "ExampleString" ), true, true );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param != nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state != nullptr );
+
+    EXPECT_EQ( param->GetType(), ModelParamType::MPT_STRING );
+    EXPECT_EQ( value->GetType(), ParamType::PT_STRING );
+}
+
+// ***********************
+// Adds wstring parameter value and state.
+TEST( Model_ParamValModel, AddWStringParameter )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddSimpleParam( "ExampleParam", std::wstring( L"ExampleString" ), true, true );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param != nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state != nullptr );
+
+    EXPECT_EQ( param->GetType(), ModelParamType::MPT_WSTRING );
+    EXPECT_EQ( value->GetType(), ParamType::PT_WSTRING );
+}
+
+// ***********************
+// Adds transform parameter value and state.
+TEST( Model_ParamValModel, AddTransformParameter )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddTransformParam( "ExampleParam", true );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+
+    ASSERT_TRUE( param != nullptr );
+    ASSERT_TRUE( value != nullptr );
+
+    EXPECT_EQ( param->GetType(), ModelParamType::MPT_TRANSFORM );
+    EXPECT_EQ( value->GetType(), ParamType::PT_MAT4 );
+}
+
+// ***********************
+// Adds enum parameter value and state.
+TEST( Model_ParamValModel, AddEnumParameter )
+{
+    model::ModelHelper helper( model::TimelineHelper::CreateTimeEvaluator( "Fake", TimelineType::TT_DEFAULT ) );
+
+    helper.SetOrCreatePluginModel();
+    helper.AddEnumParam( "ExampleParam", EnumParameter::IsEnum, true, true );
+
+    auto model = helper.GetModel()->GetPluginModel();
+
+    auto param = model->GetParameter( "ExampleParam" );
+    auto value = model->GetValue( "ExampleParam" );
+    auto state = model->GetState( "ExampleParam" );
+
+    ASSERT_TRUE( param != nullptr );
+    ASSERT_TRUE( value != nullptr );
+    EXPECT_TRUE( state != nullptr );
+
+    EXPECT_EQ( param->GetType(), ModelParamType::MPT_ENUM );
+    EXPECT_EQ( value->GetType(), ParamType::PT_ENUM );
+}
+
 
