@@ -516,3 +516,4 @@ TEST( Model_ParamValModel, AddMat4Value )
 
     EXPECT_EQ( value->GetType(), ParamType::PT_MAT4 );
 }
+
