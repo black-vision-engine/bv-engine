@@ -30,7 +30,7 @@ namespace nodelogic
 
 const std::string       NodeVisibilityAnimation::m_type = "NodeVisibilityAnimation";
 
-const std::string       NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM = "RegisterNodeVisilibityParam";
+const std::string       NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM = "RegisterNodeVisibilityParam";
 
 namespace
 {
