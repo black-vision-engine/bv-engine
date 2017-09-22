@@ -165,8 +165,10 @@ std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] =
     , std::make_pair( ParamKeyEvent::Command::AssignTimeline, "AssignTimeline" )
     , std::make_pair( ParamKeyEvent::Command::SampleCurve, "SampleCurve" )
     , std::make_pair( ParamKeyEvent::Command::ListKeys, "ListKeys" )
+    , std::make_pair( ParamKeyEvent::Command::ListParameters, "ListParameters" )
     , std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
+
 
 IMPLEMENT_ENUM_SERIALIZATION( ParamKeyEvent::Command, ParameterCommandMapping );
 

@@ -198,6 +198,7 @@ public:
         AssignTimeline,
         SampleCurve,
         ListKeys,
+        ListParameters,
         Fail            ///< Wrong command
     } Command;
 
