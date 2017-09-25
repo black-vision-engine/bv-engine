@@ -23,6 +23,9 @@
     <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginCopy.cpp">
       <Filter>PluginsTest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ParamDescriptor\EndUserParamLogicTest.cpp">
+      <Filter>ParamDescriptor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -36,6 +39,9 @@
     </Filter>
     <Filter Include="PluginsTest">
       <UniqueIdentifier>{c1de45af-9e24-4c47-bffd-906400fc4fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParamDescriptor">
+      <UniqueIdentifier>{a316dbcf-1e74-4c79-ab1e-efe8fdc506b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -261,10 +261,12 @@ inline bool             ParameterMapping< ParamContainerTypePtr >::RemoveDescrip
 
     if( descIter == m_paramsDescsMap.end() ) return false;
 
-    for( auto ptrIter = range.first; ptrIter != range.second; ptrIter++ )
+    for( auto ptrIter = range.first; ptrIter != range.second; )
     {
         if( ptrIter->second == descIter )
             ptrIter = m_ptr2StrAddressMap.erase( ptrIter );
+        else
+            ptrIter++;
     }
 
     m_paramsDescsMap.erase( descIter );
