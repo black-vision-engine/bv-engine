@@ -9,7 +9,7 @@
 
 
 // ***********************
-// OperationHistory should hold only specified number of task in history. Old tsks should be deleted.
+// OperationHistory should hold only specified number of task in history. Old tasks should be deleted.
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, OperationHistoryDeletesOldTasks )
 {
     bv::OperationHistory history( 5 );
@@ -67,33 +67,60 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Chang
     CHECK( opRegister[ 4 ].Type == OpType::Undo );      CHECK( opRegister[ 4 ].OperationID == "Op3" );
 }
 
+// ***********************
+// Changing history size should delete oldest tasks.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, ChangeHistorySizeLower )
+{
+    bv::OperationHistory history( 5 );
+    std::vector< OpEntry > opRegister;
 
+    history.AddOperation( CreateOperation( opRegister, "Op1" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op2" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op3" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op4" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op5" ) );
 
-//// ***********************
-//// Changing history size should delete oldest tasks.
-//SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, ChangeHistorySizeLower )
-//{
-//    bv::OperationHistory history( 5 );
-//    std::vector< OpEntry > opRegister;
-//
-//    history.AddOperation( CreateOperation( opRegister, "Op1" ) );
-//    history.AddOperation( CreateOperation( opRegister, "Op2" ) );
-//    history.AddOperation( CreateOperation( opRegister, "Op3" ) );
-//    history.AddOperation( CreateOperation( opRegister, "Op4" ) );
-//    history.AddOperation( CreateOperation( opRegister, "Op5" ) );
-//
-//    // Change history size.
-//    history.SetHistoryLength( 2 );
-//
-//    CHECK( history.Undo( GetProjectEditor(), 2 ) );
-//    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
-//
-//    // Only 2 operations should apear.
-//    REQUIRE CHECK( opRegister.size() == 2 );
-//
-//    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op5" );
-//    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op4" );
-//}
+    // Change history size.
+    history.SetHistoryLength( 2 );
+
+    CHECK( history.Undo( GetProjectEditor(), 2 ) );
+    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+
+    // Only 2 operations should apear.
+    REQUIRE CHECK( opRegister.size() == 2 );
+
+    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op5" );
+    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op4" );
+}
+
+// ***********************
+// Changing history size while there are operations on stack to redo.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, ChangeHistorySizeLowerRedoCase )
+{
+    bv::OperationHistory history( 5 );
+    std::vector< OpEntry > opRegister;
+
+    history.AddOperation( CreateOperation( opRegister, "Op1" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op2" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op3" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op4" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op5" ) );
+
+    CHECK( history.Undo( GetProjectEditor(), 2 ) );
+
+    // Change history size.
+    history.SetHistoryLength( 2 );
+    opRegister.clear();
+
+    CHECK( history.Undo( GetProjectEditor(), 2 ) );
+    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+
+    // Only 2 operations should apear.
+    REQUIRE CHECK( opRegister.size() == 2 );
+
+    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op3" );
+    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op2" );
+}
 
 
 // ***********************
@@ -142,3 +169,41 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Repea
     CHECK( opRegister[ 3 ].Type == OpType::Redo );      CHECK( opRegister[ 3 ].OperationID == "Op3" );
 
 }
+
+// ***********************
+// Adding new operations after doing undo, removes posibility to redo operations. New operatio creates new 
+// redo branch and old branch is deleted.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, DeleteRedoOldBranch )
+{
+    bv::OperationHistory history( 5 );
+    std::vector< OpEntry > opRegister;
+
+    history.AddOperation( CreateOperation( opRegister, "Op1" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op2" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op3" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op4" ) );
+    history.AddOperation( CreateOperation( opRegister, "Op5" ) );
+
+    CHECK( history.Undo( GetProjectEditor(), 2 ) );
+
+    history.AddOperation( CreateOperation( opRegister, "Op6" ) );
+
+    opRegister.clear();
+
+    // Check if there are no operations on top of stack.
+    CHECK( !history.Redo( GetProjectEditor(), 1 ) );
+
+    // Revert all operations.
+    CHECK( history.Undo( GetProjectEditor(), 4 ) );
+    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+
+    // Only 5 operations should apear.
+    REQUIRE CHECK( opRegister.size() == 4 );
+
+    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op6" );
+    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op3" );
+    CHECK( opRegister[ 2 ].Type == OpType::Undo );      CHECK( opRegister[ 2 ].OperationID == "Op2" );
+    CHECK( opRegister[ 3 ].Type == OpType::Undo );      CHECK( opRegister[ 3 ].OperationID == "Op1" );
+}
+
+
