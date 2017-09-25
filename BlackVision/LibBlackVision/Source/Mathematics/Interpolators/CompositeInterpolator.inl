@@ -674,4 +674,13 @@ inline CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolato
 	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {}
 
+// *******************************
+//
+template<>
+inline CompositeInterpolator< bv::TimeType, bool >::CompositeInterpolator( float tolerance )
+    : m_type( CurveType::CT_POINT )
+    , m_tolerance( tolerance )
+    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+{}
+
 } // bv
