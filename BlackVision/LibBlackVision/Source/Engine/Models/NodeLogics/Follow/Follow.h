@@ -107,8 +107,9 @@ public:
     ~Follow		();
 
     virtual void                        Initialize		()				override;
-    virtual void                        Update			( TimeType t )	override;
+    virtual void                        Update			( TimeType )	override {}
     virtual void                        Deinitialize	()				override;
+    virtual void                        PreNodeUpdate   ( TimeType t )	override;
 
 
     virtual const std::string &         GetType         () const override;

@@ -114,7 +114,7 @@ void        Follow::Deinitialize      ()
 
 // ***********************
 //
-void                        Follow::Update			( TimeType t )
+void                        Follow::PreNodeUpdate   ( TimeType t )
 {
     NodeLogicBase::Update( t );
 
