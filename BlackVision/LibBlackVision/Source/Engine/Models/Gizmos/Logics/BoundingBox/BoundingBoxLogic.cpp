@@ -239,7 +239,8 @@ bool                        BoundingBoxLogic::NeedsBoxUpdate    ( model::BasicNo
 //
 bool                        BoundingBoxLogic::NeedsCenterUpdate ( model::BasicNodePtr node )
 {
-    auto center = node->GetFinalizePlugin()->GetParamTransform()->Transform().GetCenter( 0.0f );
+    auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
+    auto center = transformParam->Transform().GetCenter( transformParam->GetLocalEvaluationTime() );
 
     if( m_lastCenter != center )
     {
