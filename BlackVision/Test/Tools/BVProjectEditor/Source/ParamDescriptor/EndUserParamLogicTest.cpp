@@ -220,9 +220,29 @@ void                AddParamDescriptors     ( EndUserParamsLogic & descLogic, mo
     address.PluginName = "";
     address.ParamName = "color";
     address.ParamSubName = "";
+    address.Index = 0;
+
+    EndUserParamDescriptor lightDesc;
+    lightDesc.SetName( "Light0" );
+    lightDesc.SetDescription( "This is descriptor 0" );
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( lightDesc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+    // ***********************
+    // Add Light param descriptor
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::LightParam;
+    address.PluginName = "";
+    address.ParamName = "color";
+    address.ParamSubName = "";
     address.Index = 1;
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    lightDesc.SetName( "Light1" );
+    lightDesc.SetDescription( "This is descriptor 1" );
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( lightDesc ) ) );
     REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
 
 
@@ -236,7 +256,27 @@ void                AddParamDescriptors     ( EndUserParamsLogic & descLogic, mo
     address.ParamSubName = "";
     address.Index = 1;
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    EndUserParamDescriptor cameraDesc;
+    cameraDesc.SetName( "Camera1" );
+    cameraDesc.SetDescription( "This is descriptor 1" );
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( cameraDesc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+    // ***********************
+    // Add Camera param descriptor
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::CameraParam;
+    address.PluginName = "";
+    address.ParamName = "IsPerspective";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    cameraDesc.SetName( "Camera0" );
+    cameraDesc.SetDescription( "This is descriptor 0" );
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( cameraDesc ) ) );
     REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
 
 
@@ -321,6 +361,98 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.Index = 0;
 
     CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
-
 }
 
+// ***********************
+// Deleting camera should delete camera param descriptor. If we delete camera under index 0, camera from index 1 gets index 0.
+// In this example we have to cameras, each have the same parameter pinned. After removing first camera, we access
+// parameter using the same address and we should get descriptors of the second camera parameter.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_RemovingCameraDeletesDescriptor )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    // Remove camera
+    editor->RemoveCamera( scene, 0 );
+
+    // ***********************
+    // Check descirptores
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::CameraParam;
+    address.PluginName = "";
+    address.ParamName = "IsPerspective";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    auto desc = paramsLogic.GetDescriptor( address );
+    REQUIRE CHECK( desc != nullptr );                   // Camera from index 1 replaces camera under index 0.
+    
+    CHECK( desc->GetName() == "Camera1" );
+
+    // ***********************
+    // There's no camera under index 1 now.
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::CameraParam;
+    address.PluginName = "";
+    address.ParamName = "IsPerspective";
+    address.ParamSubName = "";
+    address.Index = 1;
+
+    desc = paramsLogic.GetDescriptor( address );
+    REQUIRE CHECK( desc == nullptr );
+}
+
+// ***********************
+// Deleting light should delete camera param descriptor. If we delete camera under index 0, camera from index 1 gets index 0.
+// In this example we have to lights, each have the same parameter pinned. After removing first light, we access
+// parameter using the same address and we should get descriptors of the second light parameter.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_RemovingLightDeletesDescriptor )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    // Remove camera
+    editor->RemoveLight( scene, 0 );
+
+    // ***********************
+    // Check descirptores
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::LightParam;
+    address.PluginName = "";
+    address.ParamName = "color";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    auto desc = paramsLogic.GetDescriptor( address );
+    REQUIRE CHECK( desc != nullptr );                   // Camera from index 1 replaces camera under index 0.
+
+    CHECK( desc->GetName() == "Light1" );
+
+    // ***********************
+    // There's no camera under index 1 now.
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::LightParam;
+    address.PluginName = "";
+    address.ParamName = "color";
+    address.ParamSubName = "";
+    address.Index = 1;
+
+    desc = paramsLogic.GetDescriptor( address );
+    REQUIRE CHECK( desc == nullptr );
+}
