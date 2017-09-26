@@ -167,8 +167,160 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     CHECK( paramsLogic.GetDescriptor( addressRes ) == nullptr );
 }
 
+// ***********************
+//
+void                AddParamDescriptors     ( EndUserParamsLogic & descLogic, model::SceneModelPtr scene )
+{
+    EndUserParamDescriptor desc;
+    desc.SetName( "Desc" );
+    desc.SetDescription( "This is descriptor" );
 
 
+    // ***********************
+    //
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+    // ***********************
+    //
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "rectangle";
+    address.ParamName = "width";
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+    // ***********************
+    //
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "texture";
+    address.ParamName = "wrapModeX";
+    address.ParamSubName = "Tex0";
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
 
 
+    // ***********************
+    // Add Light param descriptor
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::LightParam;
+    address.PluginName = "";
+    address.ParamName = "color";
+    address.ParamSubName = "";
+    address.Index = 1;
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+
+    // ***********************
+    // Add Camera param descriptor
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::CameraParam;
+    address.PluginName = "";
+    address.ParamName = "IsPerspective";
+    address.ParamSubName = "";
+    address.Index = 1;
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+
+    // ***********************
+    // Add Logic param descriptor
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::NodeLogicParam;
+    address.PluginName = "";
+    address.ParamName = "OffsetX";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+
+
+    // ***********************
+    // Add Effect param descriptor
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::GlobalEffectParam;
+    address.PluginName = "";
+    address.ParamName = "alpha";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+}
+
+
+// ***********************
+// Tests adding and removing parameter descriptor.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_RemovingNodeDeletesDescriptor )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    CHECK( editor->DeleteChildNode( "Scene", "root/ColoredRect", false ) );
+
+    // ***********************
+    // Check if descriptors were deleted.
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.ParamTargetType = ParameterAddress::GlobalEffectParam;
+    address.PluginName = "";
+    address.ParamName = "alpha";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "rectangle";
+    address.ParamName = "width";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    // Remove second node
+    CHECK( editor->DeleteChildNode( "Scene", "root/TexturedRect", false ) );
+
+    // ***********************
+    // Check if descriptors were deleted.
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::NodeLogicParam;
+    address.PluginName = "";
+    address.ParamName = "OffsetX";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+}
 

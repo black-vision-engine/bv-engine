@@ -208,7 +208,7 @@ inline typename ParameterMapping< ParamContainerTypePtr >::PtrParamAddress      
 
     ptrAddress.Node = std::static_pointer_cast< model::BasicNode >( owner->GetModelSceneEditor()->GetNode( param.NodeName ) );       // Nullptr in case of Light or Camera.
     ptrAddress.Parameter = GetParameter( owner, param );
-    ptrAddress.Container = GetParamContainer< ParamContainerTypePtr >( owner, ptrAddress.Node, param );
+    ptrAddress.Container = ptrAddress.Node ? GetParamContainer< ParamContainerTypePtr >( owner, ptrAddress.Node, param ) : nullptr;
 
     return ptrAddress;
 }
