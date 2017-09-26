@@ -361,6 +361,15 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.Index = 0;
 
     CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "texture";
+    address.ParamName = "wrapModeX";
+    address.ParamSubName = "Tex0";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
 }
 
 // ***********************
@@ -456,3 +465,116 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     desc = paramsLogic.GetDescriptor( address );
     REQUIRE CHECK( desc == nullptr );
 }
+
+// ***********************
+// Move node whose parameters are registered and check if we can access descriptor with new address.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_MovingNodeChangesDescsAddress )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    // Move node
+    REQUIRE CHECK( editor->MoveNode( scene->GetName(), "root/TexturedRect", 0, scene->GetName(), "root/ColoredRect" ) );
+
+    // ***********************
+    // Check old addresses. Descriptor shouldn't be accessed.
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.ParamTargetType = ParameterAddress::GlobalEffectParam;
+    address.NodeName = "root/ColoredRect";
+    address.PluginName = "";
+    address.ParamName = "alpha";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "rectangle";
+    address.ParamName = "width";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    // Check new adresses for existance of descriptos.
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+
+    address.ParamTargetType = ParameterAddress::GlobalEffectParam;
+    address.NodeName = "root/TexturedRect/ColoredRect";
+    address.PluginName = "";
+    address.ParamName = "alpha";
+    address.ParamSubName = "";
+
+    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+
+    address.NodeName = "root/TexturedRect/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "rectangle";
+    address.ParamName = "width";
+
+    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+
+    // ***********************
+    // Move TexturedNode (it holds logic and resource param descriptors)
+    REQUIRE CHECK( editor->MoveNode( scene->GetName(), "root/Group1", 0, scene->GetName(), "root/TexturedRect" ) );
+
+    // ***********************
+    // Check old addresses. Descriptor shouldn't be accessed.
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::NodeLogicParam;
+    address.PluginName = "";
+    address.ParamName = "OffsetX";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "texture";
+    address.ParamName = "wrapModeX";
+    address.ParamSubName = "Tex0";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    // Check new adresses for existance of descriptos.
+    address.NodeName = "root/Group1/TexturedRect";
+    address.ParamTargetType = ParameterAddress::NodeLogicParam;
+    address.PluginName = "";
+    address.ParamName = "OffsetX";
+    address.ParamSubName = "";
+    address.Index = 0;
+
+    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/Group1/TexturedRect";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "texture";
+    address.ParamName = "wrapModeX";
+    address.ParamSubName = "Tex0";
+
+    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+}
+
