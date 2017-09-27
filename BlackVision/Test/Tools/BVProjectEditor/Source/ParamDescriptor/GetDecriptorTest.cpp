@@ -13,7 +13,7 @@ using namespace bv;
 
 // ***********************
 // Gets descriptor for param using almost good address.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDescBadSceneAddress )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDesc_BadSceneAddress )
 {
     auto editor = GetProjectEditor();
 
@@ -99,7 +99,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
 
 // ***********************
 // Gets descriptor for param using almost good address.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDescCameraIndexOutOfRange )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDesc_CameraIndexOutOfRange )
 {
     auto editor = GetProjectEditor();
 
@@ -136,7 +136,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
 
 // ***********************
 // Gets descriptor for param using almost good address.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDescLightIndexOutOfRange )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDesc_LightIndexOutOfRange )
 {
     auto editor = GetProjectEditor();
 
@@ -171,4 +171,116 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
 }
 
+// ***********************
+// Gets descriptor for param using almost good address.
+// Wrong node path shouldn't crash engine (this happend in some old versions of BV).
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDesc_InvalidNodeName )
+{
+    auto editor = GetProjectEditor();
 
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    //
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/Colo";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    //
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/Textur";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "texture";
+    address.ParamName = "wrapModeX";
+    address.ParamSubName = "Tex0";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    //
+    address.SceneName = scene->GetName();
+    address.NodeName = "";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+}
+
+// ***********************
+// Gets descriptor for param using almost good address.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDesc_InvalidPluginName )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    //
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid ";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    //
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "te";
+    address.ParamName = "wrapModeX";
+    address.ParamSubName = "Tex0";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+}
+
+
+// ***********************
+// Gets descriptor for param using almost good address.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_GetDesc_InvalidParamName )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    //
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "col";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    // ***********************
+    //
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/TexturedRect";
+    address.ParamTargetType = ParameterAddress::ResourceParam;
+    address.PluginName = "texture";
+    address.ParamName = "wra";
+    address.ParamSubName = "Tex0";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+}
