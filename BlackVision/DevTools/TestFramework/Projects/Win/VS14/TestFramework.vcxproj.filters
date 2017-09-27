@@ -48,6 +48,9 @@
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h">
       <Filter>Utils\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\NameMangler.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">

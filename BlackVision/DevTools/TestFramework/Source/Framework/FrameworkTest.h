@@ -3,6 +3,7 @@
 #include "CoreDEF.h"
 
 #include "UnitTest++.h"
+#include "NameMangler.h"
 
 
 namespace bv
@@ -90,7 +91,7 @@ private:
 class name : public bv::FrameworkTest   \
 {                                       \
 public:                                 \
-    name() : bv::FrameworkTest( #name, suite, __FILE__, __LINE__ ) {}                                           \
+    name() : bv::FrameworkTest( ::bv::MangleName< name >( #name ).c_str(), suite, __FILE__, __LINE__ ) {}       \
                                                                                                                 \
     virtual void        PreEvents           () override;                                                        \
 } name ## Instance;                                                                                             \

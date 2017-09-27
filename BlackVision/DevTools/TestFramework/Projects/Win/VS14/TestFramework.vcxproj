@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h" />
+    <ClInclude Include="..\..\..\Source\Framework\NameMangler.h" />
     <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h" />
     <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h" />
