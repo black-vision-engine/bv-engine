@@ -1070,41 +1070,43 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
 //
 bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName, bool enableUndo )
 {
-if( !srcScene || !destScene )
-{
-    return false;
-}
-
-bool success = true;
-if( srcScene == destScene )
-{
-    if( DetachPlugin( srcNode, pluginName ) )
+    if( !srcScene || !destScene )
     {
-        auto plugin = srcNode->GetModelNodeEditor()->GetDetachedPlugin();
-        auto pluginIdx = srcNode->GetModelNodeEditor()->GetDetachedPluginIdx();
-        srcScene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( srcNode, plugin, pluginIdx ) ) );
-        auto result = AttachPlugin( destNode, destIdx );
+        return false;
+    }
 
-        if( result )
+    bool success = true;
+    if( srcScene == destScene )
+    {
+        if( DetachPlugin( srcNode, pluginName ) )
         {
-            destScene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation>( new AddPluginOperation( destNode, plugin, destIdx ) ) );
+            auto plugin = srcNode->GetModelNodeEditor()->GetDetachedPlugin();
+            auto pluginIdx = srcNode->GetModelNodeEditor()->GetDetachedPluginIdx();
+            srcScene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( srcNode, plugin, pluginIdx ) ) );
+            auto result = AttachPlugin( destNode, destIdx );
+
+            if( result )
+            {
+                destScene->GetHistory().AddOperation( std::unique_ptr< AddPluginOperation>( new AddPluginOperation( destNode, plugin, destIdx ) ) );
+            }
+
+            NotifyPluginMoved( std::static_pointer_cast< model::BasePlugin >( plugin ), srcNode, destNode );
+
+            return result;
         }
 
-        NotifyPluginMoved( std::static_pointer_cast< model::BasePlugin >( plugin ), srcNode, destNode );
-
-        return result;
+        return false;
     }
-}
-else
-{
-    if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName, enableUndo ) )
+    else
     {
-        auto result = DeletePlugin( srcNode, pluginName );
-        return ( result.first != nullptr );
+        if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName, enableUndo ) )
+        {
+            auto result = DeletePlugin( srcNode, pluginName );
+            return ( result.first != nullptr );
+        }
     }
-}
 
-return success;
+    return success;
 }
 
 // *******************************

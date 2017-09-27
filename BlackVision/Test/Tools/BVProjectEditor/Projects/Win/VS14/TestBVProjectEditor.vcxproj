@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp" />
     <ClCompile Include="..\..\..\Source\ParamDescriptor\EndUserParamLogicTest.cpp" />
     <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginCopy.cpp" />
+    <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginMove.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>

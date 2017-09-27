@@ -26,6 +26,9 @@
     <ClCompile Include="..\..\..\Source\ParamDescriptor\EndUserParamLogicTest.cpp">
       <Filter>ParamDescriptor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginMove.cpp">
+      <Filter>PluginsTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">

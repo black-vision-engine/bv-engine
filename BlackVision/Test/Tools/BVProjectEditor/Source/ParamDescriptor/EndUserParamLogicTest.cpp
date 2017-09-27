@@ -578,3 +578,37 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
 }
 
+// ***********************
+// Move plugin whose parameters are registered and check if we can access descriptor with new address.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_MovingPluginChangesDescsAddress )
+{
+    auto editor = GetProjectEditor();
+
+    auto scene = CreateSceneForParamDesc( editor, "Scene" );
+    EndUserParamsLogic paramsLogic( scene.get() );
+
+    AddParamDescriptors( paramsLogic, scene );
+
+    // ***********************
+    // Move plugin
+    REQUIRE CHECK( editor->MovePlugin( scene->GetName(), "root/Group1", 1, scene->GetName(), "root/ColoredRect", "solid color" ) );
+
+    // ***********************
+    // Check old addresses. Descriptor shouldn't be accessed.
+    ParameterAddress address;
+    address.SceneName = scene->GetName();
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "solid color";
+    address.ParamName = "color";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+    address.NodeName = "root/ColoredRect";
+    address.ParamTargetType = ParameterAddress::PluginParam;
+    address.PluginName = "rectangle";
+    address.ParamName = "width";
+
+    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+
+}
