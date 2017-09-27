@@ -1082,8 +1082,11 @@ bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::
         {
             auto plugin = srcNode->GetModelNodeEditor()->GetDetachedPlugin();
             auto pluginIdx = srcNode->GetModelNodeEditor()->GetDetachedPluginIdx();
+            srcNode->GetModelNodeEditor()->ResetDetachedPlugin();
+
             srcScene->GetHistory().AddOperation( std::unique_ptr< DeletePluginOperation >( new DeletePluginOperation( srcNode, plugin, pluginIdx ) ) );
-            auto result = AttachPlugin( destNode, destIdx );
+            
+            auto result = AddPlugin( destNode, plugin, destIdx );
 
             if( result )
             {
