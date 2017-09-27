@@ -63,14 +63,14 @@ void        AsyncLoadingTest::PreEvents           ()
         auto secondNode = editor->GetNode( "FirstScene", "root/Group2" );
 
         UInt32 idx = 1;
-        REQUIRE( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
-        REQUIRE( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+        REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+        REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
 
         m_assetDesc = TextureAssetDesc::Create( imagePath_32x32, true );
 
         // Loading assets synchronously. BV should hang and load assets immediately.
-        REQUIRE( editor->LoadAssetAsync( "FirstScene", "root/Group1", "texture", m_assetDesc ) );
-        REQUIRE( editor->LoadAssetAsync( "FirstScene", "root/Group2", "texture", m_assetDesc ) );
+        REQUIRE CHECK( editor->LoadAssetAsync( "FirstScene", "root/Group1", "texture", m_assetDesc ) );
+        REQUIRE CHECK( editor->LoadAssetAsync( "FirstScene", "root/Group2", "texture", m_assetDesc ) );
 
         GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &AsyncLoadingTest::AssetLoaded ), AssetAsyncLoadFinishedEvent::Type() );
     }
@@ -98,8 +98,8 @@ void        AsyncLoadingTest::PreModelUpdate        ()
 
         auto lassets1 = texPlugin1->GetLAssets();
         auto lassets2 = texPlugin2->GetLAssets();
-        REQUIRE( lassets1.size() == 1 );
-        REQUIRE( lassets2.size() == 1 );
+        REQUIRE CHECK( lassets1.size() == 1 );
+        REQUIRE CHECK( lassets2.size() == 1 );
 
         CHECK( lassets1[ 0 ].assetDesc == m_assetDesc );
         CHECK( lassets2[ 0 ].assetDesc == m_assetDesc );

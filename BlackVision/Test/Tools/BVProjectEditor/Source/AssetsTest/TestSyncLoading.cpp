@@ -45,14 +45,14 @@ void        SyncLoadTest::PreEvents           ()
     auto secondNode = editor->GetNode( "FirstScene", "root/Group2" );
 
     UInt32 idx = 1;
-    REQUIRE( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
-    REQUIRE( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+    REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+    REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
 
     auto assetDesc = TextureAssetDesc::Create( imagePath_32x32, true );
 
     // Loading assets synchronously. BV should hang and load assets immediately.
-    REQUIRE( editor->LoadAsset( "FirstScene", "root/Group1", "texture", assetDesc ) );
-    REQUIRE( editor->LoadAsset( "FirstScene", "root/Group2", "texture", assetDesc ) );
+    REQUIRE CHECK( editor->LoadAsset( "FirstScene", "root/Group1", "texture", assetDesc ) );
+    REQUIRE CHECK( editor->LoadAsset( "FirstScene", "root/Group2", "texture", assetDesc ) );
 
     // Check if assets were loaded corectly.
 
@@ -61,8 +61,8 @@ void        SyncLoadTest::PreEvents           ()
 
     auto lassets1 = texPlugin1->GetLAssets();
     auto lassets2 = texPlugin2->GetLAssets();
-    REQUIRE( lassets1.size() == 1 );
-    REQUIRE( lassets2.size() == 1 );
+    REQUIRE CHECK( lassets1.size() == 1 );
+    REQUIRE CHECK( lassets2.size() == 1 );
 
     CHECK( lassets1[ 0 ].assetDesc == assetDesc );
     CHECK( lassets2[ 0 ].assetDesc == assetDesc );
