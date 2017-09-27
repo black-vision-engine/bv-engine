@@ -29,6 +29,9 @@
     <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginMove.cpp">
       <Filter>PluginsTest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ParamDescriptor\GetDecriptorTest.cpp">
+      <Filter>ParamDescriptor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -49,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Utils\TwoScenesFixture.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\ParamDescUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
