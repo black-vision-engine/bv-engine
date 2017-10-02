@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\..\Source\Application\Logic\TimerMode.cpp" />
     <ClCompile Include="..\..\..\Source\Application\MainInitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\Application\MainLoopProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\Version\Version.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
@@ -265,6 +266,8 @@
     <ClInclude Include="..\..\..\Source\Application\Main.h" />
     <ClInclude Include="..\..\..\Source\Application\MainInitProcess.h" />
     <ClInclude Include="..\..\..\Source\Application\MainLoopProcess.h" />
+    <ClInclude Include="..\..\..\Source\Application\Version\BuildVersion.h" />
+    <ClInclude Include="..\..\..\Source\Application\Version\Version.h" />
     <ClInclude Include="..\..\..\Source\bvApp.h" />
     <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
