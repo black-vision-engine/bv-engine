@@ -5,6 +5,9 @@
       <Filter>InitDescriptors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp">
+      <Filter>RenderLogic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="InitDescriptors">
@@ -12,6 +15,9 @@
     </Filter>
     <Filter Include="Helpers">
       <UniqueIdentifier>{ebe1cd48-f28c-49f4-944e-453708fc6849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderLogic">
+      <UniqueIdentifier>{519422b8-2c6e-48a7-977e-2301b7f4857a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

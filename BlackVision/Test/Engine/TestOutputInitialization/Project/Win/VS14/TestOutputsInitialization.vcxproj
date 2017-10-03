@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\InitDescriptos\RenderChannels.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h" />

@@ -12,7 +12,7 @@ using namespace bv;
 
 // ***********************
 // Tests render channels initialization from config with proper content.
-TEST( Engine_RenderChannels, RenderLogicInit )
+TEST( Engine_RenderChannels, DescriptorInit )
 {
     BVConfig config( "TestConfigs/OutputsTests/TwoRenderChannels.xml" );
 
@@ -28,7 +28,7 @@ TEST( Engine_RenderChannels, RenderLogicInit )
 
 // ***********************
 // Tests initialization with missing entries in config file. Render channels are defaulted to false.
-TEST( Engine_RenderChannels, RenderLogicInitMissingEntries )
+TEST( Engine_RenderChannels, DescriptorInit_MissingEntries )
 {
     BVConfig config( "TestConfigs/OutputsTests/MissingRenderChannelEntries.xml" );
 
@@ -44,7 +44,7 @@ TEST( Engine_RenderChannels, RenderLogicInitMissingEntries )
 
 // ***********************
 // Tests initialization without Description in config. First channel should be enabled by default.
-TEST( Engine_RenderChannels, RenderLogicInitWithoutConfig )
+TEST( Engine_RenderChannels, DescriptorInit_WithoutConfig )
 {
     BVConfig config( "TestConfigs/OutputsTests/NoRenderChannelsDesc.xml" );
 
