@@ -101,11 +101,25 @@ void    BVConfig::InitDefaultConfiguration()
 //FIXME: read default values from a configuration file
 BVConfig::BVConfig                      ()
 {
+    InitializeFromFile( CONFIG_PATH );
+}
+
+// ***********************
+// This version is used mostly in tests.
+BVConfig::BVConfig                      ( const std::string & configPath )
+{
+    InitializeFromFile( configPath );
+}
+
+// ***********************
+//
+void                    BVConfig::InitializeFromFile        ( const std::string & filePath )
+{
     InitDefaultConfiguration();
 
-    if( Path::Exists( CONFIG_PATH ) )
+    if( Path::Exists( filePath ) )
     {
-        m_deserializer.LoadFile( CONFIG_PATH );
+        m_deserializer.LoadFile( filePath );
 
         if( m_deserializer.EnterChild( "config" ) )
         {
@@ -194,11 +208,11 @@ BVConfig::BVConfig                      ()
         m_defaultFOV = SerializationHelper::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
 
         m_defaultCameraPosition = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
-                                             SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
-                                             SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
+            SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
+            SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
         m_defaultCameraDirection = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/x" ], 0.f ),
-                                              SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
-                                              SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
+            SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
+            SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
         m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
 
         m_defaultStatsMovingAverageWindowSize = 500; //500
@@ -210,9 +224,9 @@ BVConfig::BVConfig                      ()
         m_numRedbackBuffersPerRenderTarget = 4; //up to 200+, when 32 bit build is enabled
 
         m_defaultClearColor = glm::vec4( SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
-                                         SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
-                                         SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
-                                         SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
+            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
+            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
+            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
         m_defaultClearDepth = 1.0f;
 
         m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";

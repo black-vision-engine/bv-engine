@@ -11,6 +11,12 @@ class RenderTargetStackAllocator;
 class RenderTarget;
 class Renderer;
 
+namespace audio
+{
+    class AudioEntity;
+}
+
+
 
 
 enum class RenderChannelType : unsigned int

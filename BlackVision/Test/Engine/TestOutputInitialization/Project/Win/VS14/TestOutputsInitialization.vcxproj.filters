@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\InitDescriptos\RenderChannels.cpp">
+      <Filter>InitDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="InitDescriptors">
+      <UniqueIdentifier>{33cb9667-b966-4064-a8c5-b4a3db34997c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{ebe1cd48-f28c-49f4-944e-453708fc6849}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
