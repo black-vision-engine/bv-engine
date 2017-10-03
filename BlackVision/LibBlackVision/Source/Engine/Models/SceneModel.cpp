@@ -17,6 +17,7 @@
 
 #include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
+#include "Version/Version.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -65,6 +66,9 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
 
         ser.SetAttribute( "name", m_name );
         ser.SetAttribute( "RenderChannelIdx", SerializationHelper::T2String( m_renderChannelIdx ) );
+
+        auto version = Version::GetCurrentVersion();
+        version.Serialize( ser );
 
         if( context->detailedInfo )
         {

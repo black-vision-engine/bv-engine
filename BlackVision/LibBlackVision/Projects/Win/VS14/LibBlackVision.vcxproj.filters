@@ -451,6 +451,9 @@
     <Filter Include="Engine\Models\Gizmos\Logics\GridLines">
       <UniqueIdentifier>{bcc9f7d2-2835-48f2-aed9-bba64d250603}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Version">
+      <UniqueIdentifier>{8dc7b79b-4cab-4b75-b22e-2b40f1e929da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2067,6 +2070,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.cpp">
       <Filter>Engine\Models\Gizmos\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Version\Version.cpp">
+      <Filter>Version</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5344,6 +5350,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h">
       <Filter>Engine\Models\Gizmos\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Version\BuildVersion.h">
+      <Filter>Version</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Version\Version.h">
+      <Filter>Version</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

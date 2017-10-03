@@ -46,9 +46,6 @@
     <Filter Include="EndUserAPI\EventHandlers\AsyncThumbs">
       <UniqueIdentifier>{e50c354a-ec9f-464a-a7c9-0efcae507524}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Application\Version">
-      <UniqueIdentifier>{63b7a330-8c4a-4b46-8bed-47f201b92cca}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
@@ -190,9 +187,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.cpp">
       <Filter>EndUserAPI\EventHandlers\AsyncThumbs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Application\Version\Version.cpp">
-      <Filter>Application\Version</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,12 +334,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.h">
       <Filter>EndUserAPI\EventHandlers\AsyncThumbs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Application\Version\BuildVersion.h">
-      <Filter>Application\Version</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Application\Version\Version.h">
-      <Filter>Application\Version</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
