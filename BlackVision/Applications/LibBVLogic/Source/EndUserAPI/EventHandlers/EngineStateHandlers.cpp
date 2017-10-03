@@ -75,6 +75,7 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     else if( command == EngineStateEvent::Command::OutputCommand )
     {
         HandleOutputEvent( stateEvent );
+        return;
     }
     else if( command == EngineStateEvent::Command::SwitchEditMode )
     {
@@ -369,8 +370,23 @@ void    EngineStateHandlers::AssingChannels             ( JsonSerializeObject & 
 //
 void    EngineStateHandlers::ListChannelsMapping        ( JsonSerializeObject & response, EngineStateEventPtr evt )
 {
-    response;
-    evt;
+    auto scenesVec = m_appLogic->GetBVProject()->GetModelScenes();
+
+    PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, true );
+
+    response.EnterArray( "ChannelsMapping" );
+
+    for( auto & scene : scenesVec )
+    {
+        response.EnterChild( "Mapping" );
+
+        response.SetAttribute( "SceneName", scene->GetName() );
+        response.SetAttribute( "ChannelIdx", SerializationHelper::T2String( scene->GetRenderChannelIdx() ) );
+
+        response.ExitChild();
+    }
+
+    response.ExitChild();
 }
 
 } //bv
