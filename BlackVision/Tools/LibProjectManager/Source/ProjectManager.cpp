@@ -190,7 +190,7 @@ void						ProjectManager::MoveScene			( const Path & inProjectName, const Path &
 
 // ********************************
 //
-model::SceneModelPtr        ProjectManager::LoadScene           ( const Path & projectName, const Path & path ) const
+Expected< model::SceneModelPtr >       ProjectManager::LoadScene           ( const Path & projectName, const Path & path ) const
 {
     return m_impl->LoadScene( projectName, path );
 }

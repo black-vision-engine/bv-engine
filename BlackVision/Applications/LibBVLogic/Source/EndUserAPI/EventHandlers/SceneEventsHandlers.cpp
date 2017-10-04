@@ -505,7 +505,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto scene = pm->LoadScene( "", sceneName );
 
-        if( scene )
+        if( scene.isValid )
         {
             m_appLogic->GetBVProject()->GetProjectEditor()->AddScene( scene );
             SendSimpleResponse( command, projectEvent->EventID, senderID, true );
