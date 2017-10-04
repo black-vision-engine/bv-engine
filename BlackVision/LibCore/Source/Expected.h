@@ -5,22 +5,22 @@
 
 // ************************
 //
-template< typename T, typename E = bv::ExceptionPtr >
+template< typename HamType, typename ErrorType = bv::ExceptionPtr >
 struct Expected
 {
     union {
-        T ham;
-        E spam;
+        HamType ham;
+        ErrorType spam;
     };
 
     bool isValid;
 
-    Expected( T h ) : ham( h ), isValid( true ) {}
+    Expected( HamType h ) : ham( h ), isValid( true ) {}
     Expected() : isValid( false ), spam( nullptr ) {}
-    Expected(const Expected<T, E>& that) : isValid( that.isValid ) { if( isValid ) ham = that.ham; else spam = that.spam; }
-    ~Expected() { if (isValid) ham.~T(); else spam.~E(); }
-    bool operator==( const T& that ) { return isValid && ham==that; }
-    bool operator!=( const T& that ) { return !(*this==that); }
-    operator T&() { if( !isValid ) assert( false ); return ham; }
+    Expected(const Expected<HamType, ErrorType>& that) : isValid( that.isValid ) { if( isValid ) ham = that.ham; else spam = that.spam; }
+    ~Expected() { if (isValid) ham.~HamType(); else spam.~ErrorType(); }
+    bool operator==( const HamType& that ) { return isValid && ham==that; }
+    bool operator!=( const HamType& that ) { return !(*this==that); }
+    operator HamType&() { if( !isValid ) assert( false ); return ham; }
 };
 
