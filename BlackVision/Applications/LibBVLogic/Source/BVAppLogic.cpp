@@ -221,7 +221,7 @@ void BVAppLogic::LoadScene          ( void )
         auto pm = ProjectManager::GetInstance();
         auto sceneModel = pm->LoadScene("", pmSceneName);
 
-        if(sceneModel)
+        if( sceneModel.isValid )
         {
             projectEditor->AddScene( sceneModel );
         }

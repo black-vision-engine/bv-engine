@@ -236,6 +236,7 @@
     <ClInclude Include="..\..\..\Source\Threading\ThreadsBarrier.h">
       <Filter>Threading</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exception.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />

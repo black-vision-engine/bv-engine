@@ -1,19 +1,26 @@
 #pragma once
 
+#include "Exception.h"
 #include <assert.h>
 
 // ************************
 //
-template< typename T >
+template< typename HamType, typename ErrorType = bv::ExceptionPtr >
 struct Expected
 {
-    T ham;
+    union {
+        HamType ham;
+        ErrorType spam;
+    };
+
     bool isValid;
 
-    Expected( T h ) : ham( h ), isValid( true ) {}
-    Expected() : isValid( false ) {}
-    bool operator==( const T& that ) { return isValid && ham==that; }
-    bool operator!=( const T& that ) { return !(*this==that); }
-    operator T&() { if( !isValid ) assert( false ); return ham; }
+    Expected( HamType h ) : ham( h ), isValid( true ) {}
+    Expected() : isValid( false ), spam( nullptr ) {}
+    Expected(const Expected<HamType, ErrorType>& that) : isValid( that.isValid ) { if( isValid ) ham = that.ham; else spam = that.spam; }
+    ~Expected() { if (isValid) ham.~HamType(); else spam.~ErrorType(); }
+    bool operator==( const HamType& that ) { return isValid && ham==that; }
+    bool operator!=( const HamType& that ) { return !(*this==that); }
+    operator HamType&() { if( !isValid ) assert( false ); return ham; }
 };
 
