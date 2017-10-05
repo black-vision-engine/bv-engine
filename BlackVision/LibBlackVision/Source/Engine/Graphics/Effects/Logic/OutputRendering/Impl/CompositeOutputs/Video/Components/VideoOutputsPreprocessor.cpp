@@ -38,15 +38,7 @@ VideoOutputsPreprocessor::~VideoOutputsPreprocessor   ()
 const AVOutputsData &   VideoOutputsPreprocessor::Preprocess            ( RenderContext * ctx, RenderedChannelsData * input )
 {
     if( !m_initialized )
-    {
-        m_inputChannels.PostInitialize( input );
-    
-        m_lcmFPS = BVServiceProvider::GetInstance().GetVideoCardManager()->GetRequiredFPS();
-
-        InitializeAVBuffers( ctx );
-
-        m_initialized = true;
-    }
+        PostInitialize( ctx, input );
 
     for( unsigned int i = 0; i < m_inputChannels.GetNumVideoInputChannels(); ++i )
     {
@@ -118,6 +110,19 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     m_audioMixers[ vic ]->PopAndMixAudioData( std::const_pointer_cast< MemoryChunk >( avFrame->m_audioData ) );
 
     return avFrame;
+}
+
+// ***********************
+//
+void                  VideoOutputsPreprocessor::PostInitialize        ( RenderContext * ctx, RenderedChannelsData * input )
+{
+    m_inputChannels.PostInitialize( input );
+
+    m_lcmFPS = BVServiceProvider::GetInstance().GetVideoCardManager()->GetRequiredFPS();
+
+    InitializeAVBuffers( ctx );
+
+    m_initialized = true;
 }
 
 // *********************************

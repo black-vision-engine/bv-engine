@@ -24,5 +24,8 @@
     <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\OutputCompositeVideoAccessor.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

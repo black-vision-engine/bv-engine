@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Helpers\OutputCompositeVideoAccessor.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
