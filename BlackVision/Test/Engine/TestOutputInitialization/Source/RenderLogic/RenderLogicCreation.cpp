@@ -10,6 +10,9 @@
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/OutputCompositeVideo.h"
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/FrameDataHandlers/AVFileOutput/AVFileOutput.h"
 
+#include "VideoCardManager.h"
+#include "Services/BVServiceProvider.h"
+
 #include "BVConfig.h"
 
 
@@ -107,9 +110,20 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo )
     auto & outPreprocessor = TEST_ACCESSOR( OutputCompositeVideo )::GetVideoOutputPreprocessor( output );
     auto & inputChannels = TEST_ACCESSOR( VideoOutputsPreprocessor )::GetInputChannels( outPreprocessor );
 
+    videocards::VideoCardManager * videoCardManager = new videocards::VideoCardManager();
+
+    videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+    videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
+    videoCardManager->Start();
+
+    TEST_ACCESSOR( BVServiceProvider )::RegisterVideoCardManager( videoCardManager );
+
     RenderContext ctx;
+    ctx.SetAudio( new audio::AudioRenderer() );
+
     TEST_ACCESSOR( VideoOutputsPreprocessor )::Initialize( outPreprocessor, &ctx, renderLogic->GetRenderedChannelsData() );
 
+    delete ctx.GetAudio();
 
 
     for( unsigned int i = 0; i < inputChannels.GetNumVideoInputChannels(); ++i )
@@ -119,7 +133,7 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo )
         EXPECT_EQ( vic->GetHeight(), 1080 );
         EXPECT_EQ( vic->GetWidth(), 1920 );
     }
-
+    
 }
 
 

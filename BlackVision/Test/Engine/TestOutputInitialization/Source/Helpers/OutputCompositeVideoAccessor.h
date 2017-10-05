@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/Effects/Logic/OutputRendering/Impl/CompositeOutputs/Video/OutputCompositeVideo.h"
 
-
+#include "Services/BVServiceProvider.h"
 
 
 namespace bv
@@ -28,6 +28,14 @@ public:
 
     static VideoInputChannelsData &         GetInputChannels            ( VideoOutputsPreprocessor & outPreproc ) { return outPreproc.m_inputChannels; }
     static void                             Initialize                  ( VideoOutputsPreprocessor & outPreproc, RenderContext * ctx, RenderedChannelsData * input );
+};
+
+// ***********************
+//
+class TEST_ACCESSOR( BVServiceProvider )
+{
+public:
+    static void         RegisterVideoCardManager        ( videocards::VideoCardManager * manager )  { BVServiceProvider::GetInstance().RegisterVideoCardManager( manager ); }
 };
 
 // ========================================================================= //
