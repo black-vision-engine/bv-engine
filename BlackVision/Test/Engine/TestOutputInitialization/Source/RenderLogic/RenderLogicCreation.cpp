@@ -3,6 +3,7 @@
 
 #include "Helpers/RenderLogicInitializerAccessor.h"
 #include "Helpers/OutputCompositeVideoAccessor.h"
+#include "Helpers/OutputExtractor.h"
 
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderedChannelsDataDesc.h"
 #include "Engine/Graphics/Effects/Logic/RenderLogicImpl.h"
@@ -96,7 +97,7 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputsTypesCreation )
 }
 
 // ***********************
-//
+// Video output configuration with right config.
 TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo )
 {
     BVConfig config( "TestConfigs/OutputsTests/TwoRenderChannels.xml" );
@@ -104,26 +105,8 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo )
     auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
     ASSERT_NE( renderLogic, nullptr );
 
-    auto output = static_cast< OutputCompositeVideo * >( renderLogic->GetOutputLogic()->GetOutput( CustomOutputType::COT_VIDEO ) );
-    ASSERT_NE( output, nullptr );
-
-    auto & outPreprocessor = TEST_ACCESSOR( OutputCompositeVideo )::GetVideoOutputPreprocessor( output );
-    auto & inputChannels = TEST_ACCESSOR( VideoOutputsPreprocessor )::GetInputChannels( outPreprocessor );
-
-    videocards::VideoCardManager * videoCardManager = new videocards::VideoCardManager();
-
-    videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-    videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
-    videoCardManager->Start();
-
-    TEST_ACCESSOR( BVServiceProvider )::RegisterVideoCardManager( videoCardManager );
-
-    RenderContext ctx;
-    ctx.SetAudio( new audio::AudioRenderer() );
-
-    TEST_ACCESSOR( VideoOutputsPreprocessor )::Initialize( outPreprocessor, &ctx, renderLogic->GetRenderedChannelsData() );
-
-    delete ctx.GetAudio();
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
 
 
     for( unsigned int i = 0; i < inputChannels.GetNumVideoInputChannels(); ++i )
@@ -132,8 +115,27 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo )
         EXPECT_TRUE( vic->IsActive() );
         EXPECT_EQ( vic->GetHeight(), 1080 );
         EXPECT_EQ( vic->GetWidth(), 1920 );
+
+        // Render channells numbers have the same index as video outputs in this case. But it isn't any rule.
+        EXPECT_EQ( vic->GetWrappedChannel(), renderLogic->GetRenderedChannelsData()->GetRenderChannel( (RenderChannelType)i ) );
     }
-    
 }
 
+// ***********************
+// Config doesn't specifies RenderChannels. All input channels chould return active RenderChannels.
+TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo_NoChannels )
+{
+    BVConfig config( "TestConfigs/OutputsTests/NoRenderChannelsDesc.xml" );
 
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
+
+    for( unsigned int i = 0; i < inputChannels.GetNumVideoInputChannels(); ++i )
+    {
+        auto vic = inputChannels.GetVideoInputChannelAt( i );
+        EXPECT_TRUE( vic->IsActive() );
+    }
+}

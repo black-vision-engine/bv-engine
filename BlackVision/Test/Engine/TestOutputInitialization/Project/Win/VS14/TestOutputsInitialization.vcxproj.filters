@@ -8,6 +8,9 @@
     <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp">
       <Filter>RenderLogic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\InitDescriptos\Outputs.cpp">
+      <Filter>InitDescriptors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="InitDescriptors">
@@ -25,6 +28,9 @@
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Helpers\OutputCompositeVideoAccessor.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\OutputExtractor.h">
       <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>

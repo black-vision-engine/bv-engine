@@ -123,12 +123,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\InitDescriptos\Outputs.cpp" />
     <ClCompile Include="..\..\..\Source\InitDescriptos\RenderChannels.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Helpers\OutputCompositeVideoAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\OutputExtractor.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

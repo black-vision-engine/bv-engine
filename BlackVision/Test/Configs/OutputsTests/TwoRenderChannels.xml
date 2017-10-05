@@ -89,22 +89,18 @@
                     <output type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="FREERUN" referenceH="0" referenceV="0" /></channel>
             </channels>
         </videocard>
-		
-		<RenderChannels>
-			<RenderChannel id="0" >
-				<VideoOutput id="0" width="1920" height="1080" />
-			
-			</RenderChannel>
-			<RenderChannel id="1" >
-			
-				<VideoOutput id="1" width="1920" height="1080" />
-			</RenderChannel>
-		</RenderChannels>
     </videocards>
 
 	<RenderChannels>
-        <RenderChannel id="0" enabled="true" />
-        <RenderChannel id="1" enabled="true" />
+	
+        <RenderChannel id="0" enabled="true" >
+			<VideoOutput id="0" width="1920" height="1080" />
+		</RenderChannel>
+		
+        <RenderChannel id="1" enabled="true" >
+			<VideoOutput id="1" width="1920" height="1080" />
+		</RenderChannel>
+		
         <RenderChannel id="2" enabled="false" />
         <RenderChannel id="3" enabled="false" />
     </RenderChannels>
