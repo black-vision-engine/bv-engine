@@ -85,8 +85,9 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     
     if( cfg.ReadbackFlag() )
     {
-        desc.AppendDesc( shmDesc );
+        // Note and FIXME: initialization order matters. Check OutputLogic::GetOutput :(
         desc.AppendDesc( vidDesc );
+        desc.AppendDesc( shmDesc );
         desc.AppendDesc( avFileDesc );
     }
 }
