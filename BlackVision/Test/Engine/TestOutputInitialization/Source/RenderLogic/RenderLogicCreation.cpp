@@ -175,4 +175,3 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputInDisabledChannel )
 
     ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
 }
-
