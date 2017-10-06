@@ -45,9 +45,9 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
         {
             Expected< UInt32 > expectedId = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
             auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
-            bool entryProcessed = processedChannels.find( expectedId.ham ) != processedChannels.end();
+            bool duplicated = processedChannels.find( expectedId.ham ) != processedChannels.end();
 
-            if( expectedId.isValid && !entryProcessed )
+            if( expectedId.isValid && !duplicated )
             {
                 auto id = expectedId.ham;
                 processedChannels.insert( id );
@@ -64,7 +64,7 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
                     }
                 }
             }
-            else if( expectedId.isValid && entryProcessed )
+            else if( expectedId.isValid && duplicated )
             {
                 LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.ham << "] entry already existed in config and will be ignored.";
             }
@@ -192,6 +192,9 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     auto & props = desc.AccessOutputProperties();
     
     auto & deser = cfg.GetNode( 2, "config", "RenderChannels" );
+    
+    // We need to ingore duplicated entries.
+    std::set< std::string > processedChannels;
 
     if( deser.EnterChild( "RenderChannel" ) )
     {
@@ -199,9 +202,12 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
         {
             auto rdID = deser.GetAttribute( "id" );
             bool rcEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+            bool duplicated = processedChannels.find( rdID ) != processedChannels.end();
 
-            if( deser.EnterChild( "VideoOutput" ) )
+            if( !duplicated && deser.EnterChild( "VideoOutput" ) )
             {
+                processedChannels.insert( rdID );
+
                 // Ignore disabled render channels and don't create video outputs.
                 if( rcEnabled )
                 {
