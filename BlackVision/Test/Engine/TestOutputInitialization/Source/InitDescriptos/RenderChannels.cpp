@@ -58,4 +58,19 @@ TEST( Engine_RenderChannels, DescriptorInit_WithoutConfig )
     EXPECT_FALSE( desc.IsEnabled( RenderChannelType::RCT_OUTPUT_4 ) );
 }
 
+// ***********************
+// Duplicate RenderChannels entries in config file. Second entry is always ignored.
+TEST( Engine_RenderChannels, DescriptorInit_DuplicateRenderChannels )
+{
+    BVConfig config( "TestConfigs/OutputsTests/DuplicateRenderChannels.xml" );
+
+    RenderedChannelsDataDesc desc;
+
+    TEST_ACCESSOR( RenderLogicInitializer )::Initialize( desc, config );
+
+    EXPECT_TRUE( desc.IsEnabled( RenderChannelType::RCT_OUTPUT_1 ) );
+    EXPECT_TRUE( desc.IsEnabled( RenderChannelType::RCT_OUTPUT_2 ) );
+    EXPECT_TRUE( desc.IsEnabled( RenderChannelType::RCT_OUTPUT_3 ) );
+    EXPECT_TRUE( desc.IsEnabled( RenderChannelType::RCT_OUTPUT_4 ) );
+}
 
