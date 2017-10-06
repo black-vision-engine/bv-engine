@@ -39,18 +39,18 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
     if( deser.EnterChild( "RenderChannel" ) )
     {
         std::hash_map< std::string, std::string > prop;
-        std::set< UInt32 > channelEntries;
+        std::set< UInt32 > processedChannels;
 
         do
         {
             Expected< UInt32 > expectedId = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
             auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
-            bool entryProcessed = channelEntries.find( expectedId.ham ) != channelEntries.end();
+            bool entryProcessed = processedChannels.find( expectedId.ham ) != processedChannels.end();
 
             if( expectedId.isValid && !entryProcessed )
             {
                 auto id = expectedId.ham;
-                channelEntries.insert( id );
+                processedChannels.insert( id );
 
                 if( ( RenderChannelType )id < RenderChannelType::RCT_TOTAL )
                 {
@@ -74,6 +74,18 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
 
         deser.ExitChild(); // RenderChannel
     }
+
+    // At least one chanel must be enabled.
+    bool existEnabled = false;
+    for( int i = 0; i < ( int )RenderChannelType::RCT_TOTAL; ++i )
+    {
+        if( desc.IsEnabled( ( RenderChannelType )i ) )
+            existEnabled = true;
+    }
+
+    // If there're no enabled channels, we choose first by default.
+    if( !existEnabled )
+        desc.SetEnabled( RenderChannelType::RCT_OUTPUT_1 );
 }
 
 // *********************************
