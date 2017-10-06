@@ -16,6 +16,7 @@ class FrameDataHandler;
 
 class OutputCompositeVideo : public Output
 {
+    FRIEND_TEST_ACCESSOR( OutputCompositeVideo )
 private:
 
     unsigned int                m_mainWidth;

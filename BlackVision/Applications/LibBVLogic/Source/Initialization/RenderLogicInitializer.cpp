@@ -5,6 +5,8 @@
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderLogicDesc.h"
 
+#include "UseLoggerBVAppModule.h"
+
 
 namespace bv { 
 
@@ -85,8 +87,9 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     
     if( cfg.ReadbackFlag() )
     {
-        desc.AppendDesc( shmDesc );
+        // Note and FIXME: initialization order matters. Check OutputLogic::GetOutput :(
         desc.AppendDesc( vidDesc );
+        desc.AppendDesc( shmDesc );
         desc.AppendDesc( avFileDesc );
     }
 }
@@ -165,29 +168,39 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
     auto & props = desc.AccessOutputProperties();
     
-    auto & deser = cfg.GetNode( 3, "config", "videocards", "RenderChannels" );
+    auto & deser = cfg.GetNode( 2, "config", "RenderChannels" );
 
     if( deser.EnterChild( "RenderChannel" ) )
     {
         do
         {
             auto rdID = deser.GetAttribute( "id" );
+            bool rcEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+
             if( deser.EnterChild( "VideoOutput" ) )
             {
-                std::hash_map< std::string, std::string > prop;
-
-                do
+                // Ignore disabled render channels and don't create video outputs.
+                if( rcEnabled )
                 {
-                    prop[ "outputID" ] = deser.GetAttribute( "id" );
-                    prop[ "width" ] = deser.GetAttribute( "width" );
-                    prop[ "height" ] = deser.GetAttribute( "height" );
-                    prop[ "renderChannelID" ] = rdID;
+                    std::hash_map< std::string, std::string > prop;
 
-                    props.push_back( prop );
+                    do
+                    {
+                        prop[ "outputID" ] = deser.GetAttribute( "id" );
+                        prop[ "width" ] = deser.GetAttribute( "width" );
+                        prop[ "height" ] = deser.GetAttribute( "height" );
+                        prop[ "renderChannelID" ] = rdID;
+
+                        props.push_back( prop );
+                    } while( deser.NextChild() );
+
+                    deser.ExitChild(); // Output
                 }
-                while( deser.NextChild() );
-
-                deser.ExitChild(); // Output
+                else
+                {
+                    // Inform user that VideoOutput wasn't created.
+                    LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << rdID << "] is disabled. VideoOutputs are ignored.";
+                }
             }
         }
         while( deser.NextChild() );

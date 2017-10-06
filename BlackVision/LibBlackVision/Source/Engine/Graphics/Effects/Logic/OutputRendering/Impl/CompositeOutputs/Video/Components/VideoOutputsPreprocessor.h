@@ -19,6 +19,7 @@ class AudioMixer;
 
 class VideoOutputsPreprocessor
 {
+    FRIEND_TEST_ACCESSOR( VideoOutputsPreprocessor )
 private:
     typedef std::map< const VideoInputChannel *, boost::circular_buffer< AVFramePtr > > AVFrameBuffersMap;
     typedef std::map< const VideoInputChannel *, AVFramePtr >                           AVFramesMap;
@@ -51,6 +52,7 @@ private:
 
     AVFramePtr              PrepareAVFrame          ( RenderContext * ctx, const VideoInputChannel * channel );
 
+    void                    PostInitialize          ( RenderContext * ctx, RenderedChannelsData * input );
     void                    InitializeAVBuffers     ( RenderContext * ctx );
 
 };
