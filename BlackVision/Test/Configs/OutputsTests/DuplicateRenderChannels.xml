@@ -102,6 +102,7 @@
 			<VideoOutput id="1" width="1920" height="1080" />
 		</RenderChannel>
 		
+		<RenderChannel id="1" enabled="true" />
         <RenderChannel id="2" enabled="true" />
 		<RenderChannel id="2" enabled="false" />
         <RenderChannel id="3" enabled="true" />

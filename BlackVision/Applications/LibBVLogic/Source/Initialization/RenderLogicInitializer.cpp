@@ -39,24 +39,35 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
     if( deser.EnterChild( "RenderChannel" ) )
     {
         std::hash_map< std::string, std::string > prop;
+        std::set< UInt32 > channelEntries;
 
         do
         {
-            auto id = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ), 0 );
+            Expected< UInt32 > expectedId = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
             auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+            bool entryProcessed = channelEntries.find( expectedId.ham ) != channelEntries.end();
 
-            if( ( RenderChannelType ) id < RenderChannelType::RCT_TOTAL )
+            if( expectedId.isValid && !entryProcessed )
             {
-                if( enabled )
+                auto id = expectedId.ham;
+                channelEntries.insert( id );
+
+                if( ( RenderChannelType )id < RenderChannelType::RCT_TOTAL )
                 {
-                    desc.SetEnabled ( ( RenderChannelType ) id );
-                }
-                else
-                {
-                    desc.SetDisabled( ( RenderChannelType ) id );
+                    if( enabled )
+                    {
+                        desc.SetEnabled ( ( RenderChannelType )id );
+                    }
+                    else
+                    {
+                        desc.SetDisabled( ( RenderChannelType )id );
+                    }
                 }
             }
-
+            else if( expectedId.isValid && entryProcessed )
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.ham << "] entry already existed in config.";
+            }
 
         }
         while( deser.NextChild() );
