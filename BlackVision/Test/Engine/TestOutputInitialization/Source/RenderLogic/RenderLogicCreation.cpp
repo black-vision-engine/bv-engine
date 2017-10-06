@@ -139,3 +139,40 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputVideo_NoChannels )
         EXPECT_TRUE( vic->IsActive() );
     }
 }
+
+// ***********************
+// One RenderChannel is mapped to multiple VideoChannels
+TEST( Engine_RenderChannels, RenderLogicInit_MultiVideoOutputsFromChannel )
+{
+    BVConfig config( "TestConfigs/OutputsTests/MultiOutputsFromChannel.xml" );
+
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
+
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
+
+    auto renderChannel = renderLogic->GetRenderedChannelsData()->GetRenderChannel( ( RenderChannelType )0 );
+
+    EXPECT_EQ( inputChannels.GetInputChannel( 0 )->GetWrappedChannel(), renderChannel );
+    EXPECT_EQ( inputChannels.GetInputChannel( 1 )->GetWrappedChannel(), renderChannel );
+}
+
+// ***********************
+// RenderChannel number 1 is disabled but it has VideoOutput defined in itself.
+// This VideoOutput should be ignored.
+TEST( Engine_RenderChannels, RenderLogicInit_OutputInDisabledChannel )
+{
+    BVConfig config( "TestConfigs/OutputsTests/OutputInDisabledChannel.xml" );
+
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
+
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
+}
+

@@ -27,11 +27,13 @@ private:
     RenderLogicImpl *       m_renderLogic;
 
     VideoInputChannelsData *    m_inputChannels;
+    OutputCompositeVideo *      m_videoOutput;
 
 public:
     explicit            OutputExtractor     ( RenderLogicImpl * renderLogic );
 
     VideoInputChannelsData &        GetInputChannels()      { return *m_inputChannels;  }
+    OutputCompositeVideo *          GetVideoOutput  ()      { return m_videoOutput; }
 };
 
 
@@ -43,10 +45,10 @@ public:
 //
 OutputExtractor::OutputExtractor    ( RenderLogicImpl * renderLogic )
 {
-    auto output = static_cast< OutputCompositeVideo * >( renderLogic->GetOutputLogic()->GetOutput( CustomOutputType::COT_VIDEO ) );
-    if( output )
+    auto m_videoOutput = static_cast< OutputCompositeVideo * >( renderLogic->GetOutputLogic()->GetOutput( CustomOutputType::COT_VIDEO ) );
+    if( m_videoOutput )
     {
-        auto & outPreprocessor = TEST_ACCESSOR( OutputCompositeVideo )::GetVideoOutputPreprocessor( output );
+        auto & outPreprocessor = TEST_ACCESSOR( OutputCompositeVideo )::GetVideoOutputPreprocessor( m_videoOutput );
         m_inputChannels = &TEST_ACCESSOR( VideoOutputsPreprocessor )::GetInputChannels( outPreprocessor );
         
         m_inputChannels->PostInitialize( renderLogic->GetRenderedChannelsData() );
