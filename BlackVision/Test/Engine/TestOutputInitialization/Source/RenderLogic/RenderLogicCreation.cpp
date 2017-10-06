@@ -175,3 +175,21 @@ TEST( Engine_RenderChannels, RenderLogicInit_OutputInDisabledChannel )
 
     ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
 }
+
+// ***********************
+// At least one channel must be enabled. Engine Enables first channel by default.
+TEST( Engine_RenderChannels, RenderLogicInit_AllChannelsDisabled )
+{
+    BVConfig config( "TestConfigs/OutputsTests/AllChannelsDisabled.xml" );
+
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    auto renderChannels = renderLogic->GetRenderedChannelsData();
+
+    EXPECT_TRUE( renderChannels->IsActive( RenderChannelType::RCT_OUTPUT_1 ) );
+    EXPECT_FALSE( renderChannels->IsActive( RenderChannelType::RCT_OUTPUT_2 ) );
+    EXPECT_FALSE( renderChannels->IsActive( RenderChannelType::RCT_OUTPUT_3 ) );
+    EXPECT_FALSE( renderChannels->IsActive( RenderChannelType::RCT_OUTPUT_4 ) );
+}
+
