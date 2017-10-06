@@ -66,7 +66,7 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
             }
             else if( expectedId.isValid && entryProcessed )
             {
-                LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.ham << "] entry already existed in config.";
+                LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.ham << "] entry already existed in config and will be ignored.";
             }
 
         }
