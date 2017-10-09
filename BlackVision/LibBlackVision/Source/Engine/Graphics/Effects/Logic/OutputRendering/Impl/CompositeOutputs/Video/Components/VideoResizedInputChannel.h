@@ -33,6 +33,8 @@ public:
     virtual Texture2DPtr        ReadColorTexture            ( RenderContext * ctx ) const override;
     virtual void                InvalidateCachedTexture     () const override;
 
+    virtual UInt32              GetWidth                    () const override;
+    virtual UInt32              GetHeight                   () const override;
 };
 
 } //bv

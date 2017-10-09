@@ -207,8 +207,8 @@ TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
 
     ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 2 );
 
-    auto vic1 = inputChannels.GetVideoInputChannelAt( 0 );
-    auto vic2 = inputChannels.GetVideoInputChannelAt( 1 );
+    auto vic1 = inputChannels.GetInputChannel( 0 );
+    auto vic2 = inputChannels.GetInputChannel( 1 );
 
     EXPECT_EQ( vic1->GetHeight(), 200 );
     EXPECT_EQ( vic1->GetWidth(), 1000 );
