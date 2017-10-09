@@ -193,3 +193,11 @@ TEST( Engine_RenderChannels, RenderLogicInit_AllChannelsDisabled )
     EXPECT_FALSE( renderChannels->IsActive( RenderChannelType::RCT_OUTPUT_4 ) );
 }
 
+// ***********************
+// This test checks proper handling of bad width height VideoOutput parameter
+TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
+{
+
+}
+
+
