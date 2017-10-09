@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Version.h"
 
+#include "BuildVersion.h"
+
 #include "Serialization/SerializationHelper.h"
 
 
