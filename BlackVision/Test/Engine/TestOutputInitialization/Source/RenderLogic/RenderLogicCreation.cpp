@@ -197,7 +197,24 @@ TEST( Engine_RenderChannels, RenderLogicInit_AllChannelsDisabled )
 // This test checks proper handling of bad width height VideoOutput parameter
 TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
 {
+    BVConfig config( "TestConfigs/OutputsTests/BadOutputsWidthHeight.xml" );
 
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
+
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 2 );
+
+    auto vic1 = inputChannels.GetVideoInputChannelAt( 0 );
+    auto vic2 = inputChannels.GetVideoInputChannelAt( 1 );
+
+    EXPECT_EQ( vic1->GetHeight(), 200 );
+    EXPECT_EQ( vic1->GetWidth(), 1000 );
+
+    EXPECT_EQ( vic2->GetHeight(), 0 );
+    EXPECT_EQ( vic2->GetWidth(), 0 );
 }
 
 
