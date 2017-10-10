@@ -16,6 +16,12 @@
     <Filter Include="Utils\Nodes">
       <UniqueIdentifier>{47b728ea-150f-4a6c-9de2-7cce04529a7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Comparators">
+      <UniqueIdentifier>{f3fe5d7d-abdc-4bbc-88cd-5cb75309d473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Serialization">
+      <UniqueIdentifier>{b67e9e93-a3db-4528-86fc-44822e3f81f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -50,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Framework\NameMangler.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h">
+      <Filter>Utils\Comparators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h">
+      <Filter>Utils\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

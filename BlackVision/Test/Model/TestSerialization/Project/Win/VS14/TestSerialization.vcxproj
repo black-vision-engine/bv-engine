@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

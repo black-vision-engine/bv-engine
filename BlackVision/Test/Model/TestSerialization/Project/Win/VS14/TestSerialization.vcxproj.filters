@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp">
+      <Filter>TestKeys</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="TestKeys">
+      <UniqueIdentifier>{5b9ccd61-e84f-41bb-bcef-6fa1403916ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
