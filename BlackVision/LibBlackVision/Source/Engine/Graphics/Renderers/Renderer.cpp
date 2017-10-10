@@ -566,9 +566,6 @@ PdrDownloadPBO *        Renderer::CreateMemoryTransfer      ( DataBuffer::Semant
         memTransfersMap.insert( std::make_pair( memTransferDesc, download ) );
         return download;
     }
-
-
-    return nullptr;
 }
 
 // *********************************
