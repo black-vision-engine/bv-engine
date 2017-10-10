@@ -16,7 +16,7 @@ class ParamComparator
 public:
 
     template< typename ParamType >
-    static bool             CompareKeys     ( const CompositeInterpolator< ParamType, TimeType > & expected, const CompositeInterpolator< ParamType, TimeType > & actual );
+    static bool             CompareKeys     ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual );
 
 };
 
@@ -27,7 +27,7 @@ public:
 
 
 template< typename ParamType >
-inline bool             ParamComparator::CompareKeys        ( const CompositeInterpolator< ParamType, TimeType > & expected, const CompositeInterpolator< ParamType, TimeType > & actual )
+inline bool             ParamComparator::CompareKeys        ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual )
 {
     auto & expectedKeys = expected.GetKeys();
     auto & actualKeys = actual.GetKeys();
