@@ -86,9 +86,6 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
 
     m_currentStateInstance = m_defaultStateInstance;
 
-    m_PdrPBOMemTransferRT = nullptr;
-    m_PdrPBOMemTransferSyncRT = nullptr;
-
     m_lightsUBO = nullptr;
     m_cameraUBO = nullptr;
 }
@@ -152,8 +149,12 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 //
 void	Renderer::Terminate             ()
 {
-    delete m_PdrPBOMemTransferRT;
-    delete m_PdrPBOMemTransferSyncRT;
+    for( auto & memTransfer : m_PdrPBOMemTransferRT )
+        delete memTransfer.second;
+
+    for( auto & memTransfer : m_PdrPBOMemTransferSyncRT )
+        delete memTransfer.second;
+
     delete m_lightsUBO;
     delete m_cameraUBO;
 
@@ -543,6 +544,33 @@ void    Renderer::SetSamplerTexUnit ( int samplerLoc, int textureUnit )
     m_enabledSamplerTexUnitsMap[ samplerLoc ] = textureUnit;
 }
 
+// ***********************
+//
+PdrDownloadPBO *        Renderer::CreateMemoryTransfer      ( DataBuffer::Semantic semantic, SizeType dataSize, bool sync )
+{
+    MemTransferDesc memTransferDesc;
+    memTransferDesc.DataSize = dataSize;
+    memTransferDesc.Semantic = semantic;
+
+    MemoryDowloadMap & memTransfersMap = sync ? m_PdrPBOMemTransferSyncRT : m_PdrPBOMemTransferRT;
+
+    auto iter = memTransfersMap.find( memTransferDesc );
+    if( iter != memTransfersMap.end() )
+    {
+        return iter->second;
+    }
+    else
+    {
+        // FIXME: At this moment we doesn't support async transfers.
+        auto download = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, dataSize, true );
+        memTransfersMap.insert( std::make_pair( memTransferDesc, download ) );
+        return download;
+    }
+
+
+    return nullptr;
+}
+
 // *********************************
 //
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
@@ -642,14 +670,9 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 {
     PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
 
-    if( !m_PdrPBOMemTransferRT )
-    {
-        m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
-    }
+    auto memTransfer = CreateMemoryTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
 
-    //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
-
-    pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
+    pdrRt->ReadColorTexture( i, this, memTransfer, outputTex );
 }
 
 // *********************************
@@ -683,14 +706,9 @@ void    Renderer::ReadColorTexturSync ( unsigned int i, const RenderTarget * rt,
 {
     PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
 
-    if( !m_PdrPBOMemTransferSyncRT )
-    {
-        m_PdrPBOMemTransferSyncRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
-    }
+    auto memTransfer = CreateMemoryTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize(), true );
 
-    //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
-
-    pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferSyncRT, outputTex );
+    pdrRt->ReadColorTexture( i, this, memTransfer, outputTex );
 }
 
 // *********************************
@@ -1117,6 +1135,26 @@ void    Renderer::FreeNodeEffectPDR_DIRTY_HACK ( const NodeEffect * nodeEffect )
         // FIXME: this does not work as expected - no resources are freed from the device - which means that this is a device resource leak !!!
         m_PdrShaderMap.erase( p );
     }
+}
+
+// ========================================================================= //
+// Helpers
+// ========================================================================= //
+
+
+// ***********************
+//
+bool        operator<           ( const Renderer::MemTransferDesc & first, const Renderer::MemTransferDesc & second )
+{
+    if( first.DataSize < second.DataSize )
+        return true;
+    else if( first.DataSize == second.DataSize )
+    {
+        if( first.Semantic < second.Semantic )
+            return true;
+    }
+
+    return false;
 }
 
 } //bv
