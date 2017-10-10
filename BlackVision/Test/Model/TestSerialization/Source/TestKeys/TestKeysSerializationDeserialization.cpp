@@ -138,5 +138,44 @@ TEST( Serialization_ParamValModel, Keys_SerializeDeserializeVec2 )
     EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
 }
 
+// ***********************
+//
+TEST( Serialization_ParamValModel, Keys_SerializeDeserializeVec3 )
+{
+    CompositeInterpolator< TimeType, glm::vec3 > expectedInterpolator;
+
+    expectedInterpolator.AddKey( 0.0f, glm::vec3( 2.0, 3.0, 1.0 ) );
+    expectedInterpolator.AddKey( 1.0f, glm::vec3( 22.0, 37.0, -15 ) );
+    expectedInterpolator.AddKey( 3.0f, glm::vec3( 0.0, 0.00001, 0.1 ) );
+    expectedInterpolator.AddKey( 4.0f, glm::vec3( 0.0, -34.0, 13.00002 ) );
+    expectedInterpolator.AddKey( 7.0f, glm::vec3( 22.34315325, 3.1231, 15.000006 ) );
+
+    Serialize( expectedInterpolator, "SerDeserVec3.xml" );
+
+    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, glm::vec3 > >( "SerDeserVec3.xml", "interpolator" );
+
+    EXPECT_TRUE( ParamComparator::CompareKeys( expectedInterpolator, *( actualInterpolator.get() ) ) );
+    EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
+}
+
+// ***********************
+//
+TEST( Serialization_ParamValModel, Keys_SerializeDeserializeVec4 )
+{
+    CompositeInterpolator< TimeType, glm::vec4 > expectedInterpolator;
+
+    expectedInterpolator.AddKey( 0.0f, glm::vec4( 2.0, 3.0, 1.0, 0.0 ) );
+    expectedInterpolator.AddKey( 1.0f, glm::vec4( 22.0, 37.0, -15, -11 ) );
+    expectedInterpolator.AddKey( 3.0f, glm::vec4( 0.0, 0.00001, 0.1, -0.000012 ) );
+    expectedInterpolator.AddKey( 4.0f, glm::vec4( 0.0, -34.0, 13.00002, 1.01111 ) );
+    expectedInterpolator.AddKey( 7.0f, glm::vec4( 22.34315325, 3.1231, 15.000006, 0.9999999999 ) );
+
+    Serialize( expectedInterpolator, "SerDeserVec4.xml" );
+
+    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, glm::vec4 > >( "SerDeserVec4.xml", "interpolator" );
+
+    EXPECT_TRUE( ParamComparator::CompareKeys( expectedInterpolator, *( actualInterpolator.get() ) ) );
+    EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
+}
 
 
