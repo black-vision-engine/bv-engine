@@ -5,6 +5,9 @@
 #include "Utils/Comparators/ParamComparator.h"
 #include "Utils/Serialization/Serialize.h"
 
+#include "Mathematics/glm_inc.h"
+
+
 using namespace bv;
 
 
@@ -66,11 +69,74 @@ TEST( Serialization_ParamValModel, Keys_SerializeDeserializeBool )
     expectedInterpolator.AddKey( 4.0f, true );
     expectedInterpolator.AddKey( 7.0f, false );
 
-    Serialize( expectedInterpolator, "SerDeserInt.xml" );
+    Serialize( expectedInterpolator, "SerDeserBool.xml" );
 
-    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, bool > >( "SerDeserInt.xml", "interpolator" );
+    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, bool > >( "SerDeserBool.xml", "interpolator" );
 
     EXPECT_TRUE( ParamComparator::CompareKeys( expectedInterpolator, *( actualInterpolator.get() ) ) );
     EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
 }
+
+// ***********************
+//
+TEST( Serialization_ParamValModel, Keys_SerializeDeserializeString )
+{
+    CompositeInterpolator< TimeType, std::string > expectedInterpolator;
+
+    expectedInterpolator.AddKey( 0.0f, "Blaaa" );
+    expectedInterpolator.AddKey( 1.0f, "Dobre coo" );
+    expectedInterpolator.AddKey( 3.0f, "Œmieszne wartoœæi" );
+    expectedInterpolator.AddKey( 4.0f, "z¿ó³k³a kiœæ" );
+    expectedInterpolator.AddKey( 7.0f, "ŸdŸb³o" );
+
+    Serialize( expectedInterpolator, "SerDeserString.xml" );
+
+    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, std::string > >( "SerDeserString.xml", "interpolator" );
+
+    EXPECT_TRUE( ParamComparator::CompareKeys( expectedInterpolator, *( actualInterpolator.get() ) ) );
+    EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
+}
+
+
+// ***********************
+//
+TEST( Serialization_ParamValModel, Keys_SerializeDeserializeWString )
+{
+    CompositeInterpolator< TimeType, std::wstring > expectedInterpolator;
+
+    expectedInterpolator.AddKey( 0.0f, L"Blaaa" );
+    expectedInterpolator.AddKey( 1.0f, L"Dobre coo" );
+    expectedInterpolator.AddKey( 3.0f, L"Œmieszne wartoœæi" );
+    expectedInterpolator.AddKey( 4.0f, L"z¿ó³k³a kiœæ" );
+    expectedInterpolator.AddKey( 7.0f, L"ŸdŸb³o" );
+
+    Serialize( expectedInterpolator, "SerDeserWString.xml" );
+
+    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, std::wstring > >( "SerDeserWString.xml", "interpolator" );
+
+    EXPECT_TRUE( ParamComparator::CompareKeys( expectedInterpolator, *( actualInterpolator.get() ) ) );
+    EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
+}
+
+// ***********************
+//
+TEST( Serialization_ParamValModel, Keys_SerializeDeserializeVec2 )
+{
+    CompositeInterpolator< TimeType, glm::vec2 > expectedInterpolator;
+
+    expectedInterpolator.AddKey( 0.0f, glm::vec2( 2.0, 3.0 ) );
+    expectedInterpolator.AddKey( 1.0f, glm::vec2( 22.0, 37.0 ) );
+    expectedInterpolator.AddKey( 3.0f, glm::vec2( 0.0, 0.00001 ) );
+    expectedInterpolator.AddKey( 4.0f, glm::vec2( 0.0, -34.0 ) );
+    expectedInterpolator.AddKey( 7.0f, glm::vec2( 22.34315325, 3.1231 ) );
+
+    Serialize( expectedInterpolator, "SerDeserVec2.xml" );
+
+    auto actualInterpolator = Deserialize< CompositeInterpolator< TimeType, glm::vec2 > >( "SerDeserVec2.xml", "interpolator" );
+
+    EXPECT_TRUE( ParamComparator::CompareKeys( expectedInterpolator, *( actualInterpolator.get() ) ) );
+    EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
+}
+
+
 
