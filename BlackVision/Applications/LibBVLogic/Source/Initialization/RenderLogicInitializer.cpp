@@ -5,6 +5,8 @@
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderLogicDesc.h"
 
+#include "UseLoggerBVAppModule.h"
+
 
 namespace bv { 
 
@@ -37,30 +39,53 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
     if( deser.EnterChild( "RenderChannel" ) )
     {
         std::hash_map< std::string, std::string > prop;
+        std::set< UInt32 > processedChannels;
 
         do
         {
-            auto id = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ), 0 );
+            Expected< UInt32 > expectedId = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
             auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+            bool duplicated = processedChannels.find( expectedId.ham ) != processedChannels.end();
 
-            if( ( RenderChannelType ) id < RenderChannelType::RCT_TOTAL )
+            if( expectedId.isValid && !duplicated )
             {
-                if( enabled )
+                auto id = expectedId.ham;
+                processedChannels.insert( id );
+
+                if( ( RenderChannelType )id < RenderChannelType::RCT_TOTAL )
                 {
-                    desc.SetEnabled ( ( RenderChannelType ) id );
-                }
-                else
-                {
-                    desc.SetDisabled( ( RenderChannelType ) id );
+                    if( enabled )
+                    {
+                        desc.SetEnabled ( ( RenderChannelType )id );
+                    }
+                    else
+                    {
+                        desc.SetDisabled( ( RenderChannelType )id );
+                    }
                 }
             }
-
+            else if( expectedId.isValid && duplicated )
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.ham << "] entry already existed in config and will be ignored.";
+            }
 
         }
         while( deser.NextChild() );
 
         deser.ExitChild(); // RenderChannel
     }
+
+    // At least one chanel must be enabled.
+    bool existEnabled = false;
+    for( int i = 0; i < ( int )RenderChannelType::RCT_TOTAL; ++i )
+    {
+        if( desc.IsEnabled( ( RenderChannelType )i ) )
+            existEnabled = true;
+    }
+
+    // If there're no enabled channels, we choose first by default.
+    if( !existEnabled )
+        desc.SetEnabled( RenderChannelType::RCT_OUTPUT_1 );
 }
 
 // *********************************
@@ -85,8 +110,9 @@ void            RenderLogicInitializer::Initialize      ( OutputLogicDesc & desc
     
     if( cfg.ReadbackFlag() )
     {
-        desc.AppendDesc( shmDesc );
+        // Note and FIXME: initialization order matters. Check OutputLogic::GetOutput :(
         desc.AppendDesc( vidDesc );
+        desc.AppendDesc( shmDesc );
         desc.AppendDesc( avFileDesc );
     }
 }
@@ -165,29 +191,45 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     // FIXME: nrl - based on the code from VideoCardManager::ReadConfig
     auto & props = desc.AccessOutputProperties();
     
-    auto & deser = cfg.GetNode( 3, "config", "videocards", "RenderChannels" );
+    auto & deser = cfg.GetNode( 2, "config", "RenderChannels" );
+    
+    // We need to ingore duplicated entries.
+    std::set< std::string > processedChannels;
 
     if( deser.EnterChild( "RenderChannel" ) )
     {
         do
         {
             auto rdID = deser.GetAttribute( "id" );
-            if( deser.EnterChild( "VideoOutput" ) )
+            bool rcEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+            bool duplicated = processedChannels.find( rdID ) != processedChannels.end();
+
+            if( !duplicated && deser.EnterChild( "VideoOutput" ) )
             {
-                std::hash_map< std::string, std::string > prop;
+                processedChannels.insert( rdID );
 
-                do
+                // Ignore disabled render channels and don't create video outputs.
+                if( rcEnabled )
                 {
-                    prop[ "outputID" ] = deser.GetAttribute( "id" );
-                    prop[ "width" ] = deser.GetAttribute( "width" );
-                    prop[ "height" ] = deser.GetAttribute( "height" );
-                    prop[ "renderChannelID" ] = rdID;
+                    std::hash_map< std::string, std::string > prop;
 
-                    props.push_back( prop );
+                    do
+                    {
+                        prop[ "outputID" ] = deser.GetAttribute( "id" );
+                        prop[ "width" ] = deser.GetAttribute( "width" );
+                        prop[ "height" ] = deser.GetAttribute( "height" );
+                        prop[ "renderChannelID" ] = rdID;
+
+                        props.push_back( prop );
+                    } while( deser.NextChild() );
+
+                    deser.ExitChild(); // Output
                 }
-                while( deser.NextChild() );
-
-                deser.ExitChild(); // Output
+                else
+                {
+                    // Inform user that VideoOutput wasn't created.
+                    LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << rdID << "] is disabled. VideoOutputs are ignored.";
+                }
             }
         }
         while( deser.NextChild() );

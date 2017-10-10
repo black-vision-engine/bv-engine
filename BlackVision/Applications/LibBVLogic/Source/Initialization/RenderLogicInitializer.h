@@ -12,6 +12,7 @@ class OutputDesc;
 
 class RenderLogicInitializer
 {
+    FRIEND_TEST_ACCESSOR( RenderLogicInitializer )
 public:
 
     static RenderLogic *   CreateInstance  ( const BVConfig & cfg );

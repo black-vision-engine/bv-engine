@@ -26,6 +26,9 @@
 #define COMBINE1(X,Y) X##Y  // helper macro
 #define COMBINE(X,Y) COMBINE1(X,Y)
 
+#define TEST_ACCESSOR( className ) _TEST_ACCESSOR_ ## className
+#define FRIEND_TEST_ACCESSOR( className ) friend class TEST_ACCESSOR( className );
+
 typedef std::shared_ptr< void > VoidPtr;
 typedef std::shared_ptr< const void > VoidConstPtr;
 

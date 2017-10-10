@@ -60,5 +60,19 @@ void            VideoResizedInputChannel::InvalidateCachedTexture   () const
     m_cachedReadbackUpToDate = false;
 }
 
+// ***********************
+//
+UInt32          VideoResizedInputChannel::GetWidth                  () const
+{
+    return m_width;
+}
+
+// ***********************
+//
+UInt32          VideoResizedInputChannel::GetHeight                 () const
+{
+    return m_height;
+}
+
 
 } // bv
