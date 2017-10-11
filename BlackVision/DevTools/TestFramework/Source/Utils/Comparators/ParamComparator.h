@@ -32,7 +32,7 @@ public:
 // ***********************
 //
 template< typename ParamType >
-inline bool             ParamComparator::CompareKeys        ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual )
+inline bool             ParamComparator::CompareKeys            ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual )
 {
     auto & expectedKeys = expected.GetKeys();
     auto & actualKeys = actual.GetKeys();
@@ -55,7 +55,7 @@ inline bool             ParamComparator::CompareKeys        ( const CompositeInt
 
 // ***********************
 //
-bool                    ParamComparator::CompareTransformKeys   ( const CompositeTransform & expected, const CompositeTransform & actual )
+inline bool             ParamComparator::CompareTransformKeys   ( const CompositeTransform & expected, const CompositeTransform & actual )
 {
     bool equal = true;
 

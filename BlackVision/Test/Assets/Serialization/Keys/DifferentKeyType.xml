@@ -1,0 +1,28 @@
+<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="0.000000" val="3"/>
+		<key time="1.000000" val="3.10101010"/>
+		<key time="2.000000" val="-13"/>
+		<key time="3.000000" val="string in xml"/>
+		<key time="4.000000" val="true"/>
+		<key time="5.000000" val="false"/>
+		<key time="6.000000" val="2.0, 3.0"/>
+		<key time="7.000000" val="2.0, 3.0, 13.0"/>
+		<key time="8.000000" val="2.0, 3.0, 13.0, -1.0"/>
+		<key time="9.000000" val="2,3"/>
+		<key time="10.000000" val="wstring z żółtą gęślą"/>
+	</keys>
+	<interpolations>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+		<interpolation type="linear"/>
+	</interpolations>
+</interpolator>
+

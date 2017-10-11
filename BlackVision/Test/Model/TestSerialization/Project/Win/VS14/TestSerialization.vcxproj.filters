@@ -5,6 +5,12 @@
     <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp">
       <Filter>TestKeys</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeys.cpp">
+      <Filter>TestKeys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeyTime.cpp">
+      <Filter>TestKeys</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestKeys">
