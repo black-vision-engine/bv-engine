@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "Mathematics/Interpolators/CompositeInterpolator.h"
+#include "Mathematics/Transform/MatTransform.h"
 
 #include "Utils/Comparators/ParamComparator.h"
 #include "Utils/Serialization/Serialize.h"
@@ -178,4 +179,57 @@ TEST( Serialization_ParamValModel, Keys_SerializeDeserializeVec4 )
     EXPECT_EQ( actualInterpolator->GetKeys().size(), 5 );
 }
 
+// ***********************
+//
+TEST( Serialization_ParamValModel, Keys_SerializeDeserializeTransform )
+{
+    CompositeTransform expected;
+    expected.SetTranslation( glm::vec3( 2.0, 3.0, 1.0 ), 0.0f );
+    expected.SetTranslation( glm::vec3( 22.0, 37.0, -15 ), 2.0f );
+    expected.SetTranslation( glm::vec3( 0.0, 0.00001, 0.1 ), 3.0f );
+    expected.SetTranslation( glm::vec3( 0.0, -34.0, 13.00002 ), 4.0f );
+    expected.SetTranslation( glm::vec3( 22.34315325, 3.1231, 15.000006 ), 7.0f );
+
+    expected.SetRotation( glm::vec3( 2.0, 3.0, 1.0 ), 0.0f );
+    expected.SetRotation( glm::vec3( 22.0, 37.0, -15 ), 1.0f );
+    expected.SetRotation( glm::vec3( 0.0, 0.00001, 0.1 ), 5.0f );
+    expected.SetRotation( glm::vec3( 0.0, -34.0, 13.00002 ), 6.0f );
+    expected.SetRotation( glm::vec3( 22.34315325, 3.1231, 15.000006 ), 7.0f );
+
+    expected.SetScale( glm::vec3( 2.0, 3.0, 1.0 ), 0.0f );
+    expected.SetScale( glm::vec3( 22.0, 37.0, -15 ), 1.5f );
+    expected.SetScale( glm::vec3( 0.0, 0.00001, 0.1 ), 2.0f );
+    expected.SetScale( glm::vec3( 0.0, -34.0, 13.00002 ), 5.0f );
+    expected.SetScale( glm::vec3( 22.34315325, 3.1231, 15.000006 ), 8.0f );
+
+    expected.SetCenter( glm::vec3( 2.0, 3.0, 1.0 ), 0.0f );
+    expected.SetCenter( glm::vec3( 22.0, 37.0, -15 ), 1.0f );
+    expected.SetCenter( glm::vec3( 0.0, 0.00001, 0.1 ), 3.0f );
+    expected.SetCenter( glm::vec3( 0.0, -34.0, 13.00002 ), 4.0f );
+    expected.SetCenter( glm::vec3( 22.34315325, 3.1231, 15.000006 ), 7.0f );
+
+    Serialize( expected, "SerDeserTransform.xml" );
+
+    auto actual = Deserialize< CompositeTransform >( "SerDeserTransform.xml", "composite_transform" );
+    auto & actualRef = *( actual.get() );
+
+    EXPECT_TRUE( ParamComparator::CompareTransformKeys( expected, *( actual.get() ) ) );
+
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::TranslationX( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::TranslationY( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::TranslationZ( actualRef ).GetNumKeys(), 5 );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::Pitch( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::Yaw( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::Roll( actualRef ).GetNumKeys(), 5 );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::ScaleX( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::ScaleY( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::ScaleZ( actualRef ).GetNumKeys(), 5 );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::CenterX( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::CenterY( actualRef ).GetNumKeys(), 5 );
+    EXPECT_EQ( TEST_ACCESSOR( CompositeTransform )::CenterZ( actualRef ).GetNumKeys(), 5 );
+}
 
