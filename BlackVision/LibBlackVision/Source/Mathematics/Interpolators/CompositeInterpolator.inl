@@ -262,7 +262,7 @@ inline std::shared_ptr< IEvaluator< TimeType, std::wstring > > CreateDummyInterp
     }
     else
     {
-        assert( false );
+        //assert( false );
         return nullptr;
     }
 }
@@ -278,7 +278,7 @@ inline std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpo
     }
     else
     {
-        assert( false );
+        //assert( false );
         return nullptr;
     }
 }

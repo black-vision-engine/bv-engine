@@ -179,8 +179,8 @@ TEST( Serialization_ParamValModel, Keys_String_DifferentKeyTypeInXML )
     EXPECT_EQ( keys[ 4 ].val, "true" );
     EXPECT_EQ( keys[ 5 ].val, "false" );
     EXPECT_EQ( keys[ 6 ].val, "2.0, 3.0" );
-    EXPECT_EQ( keys[ 8 ].val, "2.0, 3.0, 13.0" );
-    EXPECT_EQ( keys[ 7 ].val, "2.0, 3.0, 13.0, -1.0" );
+    EXPECT_EQ( keys[ 7 ].val, "2.0, 3.0, 13.0" );
+    EXPECT_EQ( keys[ 8 ].val, "2.0, 3.0, 13.0, -1.0" );
     EXPECT_EQ( keys[ 9 ].val, "2,3" );
     EXPECT_EQ( keys[ 10 ].val, "wstring z ¿ó³t¹ gêœl¹" );
 }
@@ -202,8 +202,8 @@ TEST( Serialization_ParamValModel, Keys_WString_DifferentKeyTypeInXML )
     EXPECT_EQ( keys[ 4 ].val, L"true" );
     EXPECT_EQ( keys[ 5 ].val, L"false" );
     EXPECT_EQ( keys[ 6 ].val, L"2.0, 3.0" );
-    EXPECT_EQ( keys[ 8 ].val, L"2.0, 3.0, 13.0" );
-    EXPECT_EQ( keys[ 7 ].val, L"2.0, 3.0, 13.0, -1.0" );
+    EXPECT_EQ( keys[ 7 ].val, L"2.0, 3.0, 13.0" );
+    EXPECT_EQ( keys[ 8 ].val, L"2.0, 3.0, 13.0, -1.0" );
     EXPECT_EQ( keys[ 9 ].val, L"2,3" );
     EXPECT_EQ( keys[ 10 ].val, L"wstring z ¿ó³t¹ gêœl¹" );
 }

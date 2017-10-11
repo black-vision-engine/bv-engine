@@ -1,4 +1,4 @@
-<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+<interpolator curve_type="point" preMethod="clamp" postMethod="clamp">
 	<keys>
 		<key time="0.000000" val="3"/>
 		<key time="1.000000" val="3.10101010"/>
@@ -13,16 +13,16 @@
 		<key time="10.000000" val="wstring z żółtą gęślą"/>
 	</keys>
 	<interpolations>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
-		<interpolation type="linear"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
+		<interpolation type="point"/>
 	</interpolations>
 </interpolator>
 
