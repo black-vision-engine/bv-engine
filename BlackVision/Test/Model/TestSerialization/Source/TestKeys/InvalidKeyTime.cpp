@@ -31,6 +31,15 @@ TEST( Serialization_ParamValModel, Keys_Float_InvalidTime )
 
 }
 
+// ***********************
+// Load xml with invalid time keys values.
+TEST( Serialization_ParamValModel, Keys_Float_AllInvalidKeys )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Keys/AllInvalidKeys.xml", "interpolator" );
+    auto & keys = actual->GetKeys();
+
+    ASSERT_EQ( keys.size(), 0 );
+}
 
 
 
