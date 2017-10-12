@@ -36,10 +36,14 @@ TEST( Serialization_ParamValModel, Interpolators_LinearCurveForwString )
 }
 
 // ***********************
-//
+// Create interpolator with linear interpolation for string type.
+// This is invalid combination but I don't know what is expected result.
 TEST( Serialization_ParamValModel, Interpolators_LinearCurveForStringXML )
 {
     auto actual = Deserialize< CompositeInterpolator< TimeType, std::string > >( "TestAssets/Serialization/Interpolators/InvalidCurveForString.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+
 
 }
 
