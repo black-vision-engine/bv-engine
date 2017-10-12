@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ExpectedTest">
+      <UniqueIdentifier>{060ea86c-31c9-4f53-970b-a25e437e3649}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\ExpectedTest\ExpectedTest.cpp">
+      <Filter>ExpectedTest</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

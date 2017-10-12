@@ -354,6 +354,7 @@
     <ClCompile Include="..\..\..\Source\Threading\ThreadsBarrier.cpp">
       <Filter>Threading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exception.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">

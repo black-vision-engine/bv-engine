@@ -41,10 +41,10 @@ ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializ
     auto time = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
     auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
 
-    if( !time.isValid || !val.isValid )
+    if( !time.IsValid() || !val.IsValid() )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Cannot deserialize key, time: [" << deser.GetAttribute( "time" ) << "], value: [" << deser.GetAttribute( "val" ) << "]. Replacing with defaults.";
-        return std::make_shared< Key< TimeValueT, ValueT > >( time.isValid ? time : TimeValueT(), val.isValid ? val : ValueT() );
+        return std::make_shared< Key< TimeValueT, ValueT > >( time.IsValid() ? time : TimeValueT(), val.IsValid() ? val : ValueT() );
     }
     else
     {

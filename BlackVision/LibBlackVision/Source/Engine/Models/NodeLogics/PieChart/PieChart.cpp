@@ -422,7 +422,7 @@ void                        PieChart::SetLabelText              ( model::BasicNo
         std::ostringstream out;
         out << std::setprecision( 3 ) << percent;
         auto wtext = StringToWString( out.str() );
-        SetParameter( textPlugin->GetParameter( model::DefaultTextPlugin::PARAM::TEXT ), 0.f, wtext.ham );
+        SetParameter( textPlugin->GetParameter( model::DefaultTextPlugin::PARAM::TEXT ), 0.f, wtext.GetVal() );
     }
 }
 

@@ -109,9 +109,9 @@ EndUserParamDescriptor      EndUserParamDescriptor::Create          ( const IDes
             do
             {
                 Expected< float > key = SerializationHelper::String2T< float >( deser.GetAttribute( "timeValue" ) );
-                if( key.isValid )
+                if( key.IsValid() )
                 {
-                    descriptor.AddKeyTimeValue( key.ham );
+                    descriptor.AddKeyTimeValue( key );
                 }
 
             } while( deser.NextChild() );

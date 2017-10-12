@@ -36,7 +36,7 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
  
     for(;;)
     {
-        auto fileName = WStringToString( fd.cFileName ).ham;
+        auto fileName = WStringToString( fd.cFileName ).GetVal();
 
         if( fileName != "." && fileName != ".." )
         {

@@ -167,7 +167,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             auto end = SerializationHelper::String2T< TimeType >( params[ 1 ] );
             auto steps = SerializationHelper::String2T< UInt32 >( params[ 2 ] );
 
-            if( start.isValid && end.isValid & steps.isValid )
+            if( start.IsValid() && end.IsValid() & steps.IsValid() )
             {
                 JsonSerializeObject responseJSON;
 
@@ -214,7 +214,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     {
         Expected< std::vector< ParameterPtr > > paramsList = ListParameters( setParamEvent->ParamAddress );
 
-        if( paramsList.isValid )
+        if( paramsList.IsValid() )
         {
             JsonSerializeObject responseJSON;
             PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
@@ -223,7 +223,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
             responseJSON.EnterArray( "Parameters" );
 
-            for( auto & listedParam : paramsList.ham )
+            for( auto & listedParam : paramsList.GetVal() )
                 listedParam->Serialize( responseJSON );
 
             responseJSON.ExitChild();   // Parameters
@@ -276,7 +276,7 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
         case ModelParamType::MPT_WSTRING:
         {
             auto wstring = StringToWString( stringValue );
-            return SetParameter( param, ( TimeType )keyTime, wstring.ham );
+            return SetParameter( param, ( TimeType )keyTime, wstring.GetVal() );
         }
         case ModelParamType::MPT_STRING:
             return SetParameter( param, ( TimeType )keyTime, stringValue );
