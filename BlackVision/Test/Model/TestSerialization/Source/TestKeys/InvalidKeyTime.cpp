@@ -17,6 +17,7 @@ using namespace bv;
 
 // ***********************
 // Load xml with invalid time value. Such key should be omitted.
+// This test checks keys with both value and time invalid numbers too.
 // This test works on float but it should cover all other parameters types too.
 TEST( Serialization_ParamValModel, Keys_Float_InvalidTime )
 {
