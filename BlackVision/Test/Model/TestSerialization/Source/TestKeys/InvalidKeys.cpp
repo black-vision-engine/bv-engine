@@ -6,6 +6,7 @@
 
 #include "Utils/Comparators/ParamComparator.h"
 #include "Utils/Serialization/Serialize.h"
+#include "Serialization/SerializationHelper.h"
 
 #include "Mathematics/glm_inc.h"
 
@@ -182,7 +183,7 @@ TEST( Serialization_ParamValModel, Keys_String_DifferentKeyTypeInXML )
     EXPECT_EQ( keys[ 7 ].val, "2.0, 3.0, 13.0" );
     EXPECT_EQ( keys[ 8 ].val, "2.0, 3.0, 13.0, -1.0" );
     EXPECT_EQ( keys[ 9 ].val, "2,3" );
-    EXPECT_EQ( keys[ 10 ].val, "wstring z ¿ó³t¹ gêœl¹" );
+    EXPECT_EQ( keys[ 10 ].val, "wstring z \xC5\xBC\xC3\xB3\xC5\x82t\xC4\x85 g\xC4\x99\xC5\x9Bl\xC4\x85" );
 }
 
 // ***********************
