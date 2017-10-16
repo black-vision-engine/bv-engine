@@ -27,6 +27,9 @@ public:
 
 private:
     void    HandleOutputEvent       ( EngineStateEventPtr evt );
+
+    void    AssingChannels          ( JsonSerializeObject & response, EngineStateEventPtr evt );
+    void    ListChannelsMapping     ( JsonSerializeObject & response, EngineStateEventPtr evt );
 };
 
 } //bv

@@ -46,6 +46,7 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     auto command                        = stateEvent->RenderingCommand;
 	auto gain							= stateEvent->Gain;
 
+    
     // Converts to path inside project manager.
     std::string path = ProjectManager::GetInstance()->ToAbsPath( filePath ).Str();
 
@@ -74,6 +75,7 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     else if( command == EngineStateEvent::Command::OutputCommand )
     {
         HandleOutputEvent( stateEvent );
+        return;
     }
     else if( command == EngineStateEvent::Command::SwitchEditMode )
     {
@@ -307,6 +309,8 @@ void    EngineStateHandlers::UndoRedoEvent            ( IEventPtr evt )
 //
 void    EngineStateHandlers::HandleOutputEvent       ( EngineStateEventPtr evt )
 {
+    JsonSerializeObject response;
+
     std::string action = evt->Request->GetAttribute( "Action" );
 
     if( action == "StartAVFileRendering" )
@@ -316,13 +320,73 @@ void    EngineStateHandlers::HandleOutputEvent       ( EngineStateEventPtr evt )
         {
             auto & renderMode = m_appLogic->GetRenderMode();
             renderMode.StartToAVFileRendering( fileName );
+
+            PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, false );
         }
+
+        PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, true );
     }
     else if( action == "StopAVFileRendering" )
     {
         auto & renderMode = m_appLogic->GetRenderMode();
         renderMode.StopToAVFileRendering();
+
+        PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, true );
     }
+    else if( action == "AssignChannel" )
+    {
+        AssingChannels( response, evt );
+    }
+    else if( action == "ListChannelsMapping" )
+    {
+        ListChannelsMapping( response, evt );
+    }
+
+    SendResponse( response, evt->SocketID, evt->EventID );
+}
+
+// ***********************
+//
+void    EngineStateHandlers::AssingChannels             ( JsonSerializeObject & response, EngineStateEventPtr evt )
+{
+    auto sceneName = evt->Request->GetAttribute( "SceneName" );
+    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetModelScene( sceneName );
+
+    Expected< int > channel = SerializationHelper::String2T< int >( evt->Request->GetAttribute( "ChannelIdx" ) );
+
+    if( channel.isValid &&
+        scene &&
+        channel >= 0 &&
+        channel <= 4 )
+    {
+        scene->SetRenderChannelIdx( channel );
+        PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, true );
+    }
+
+    PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, false );
+}
+
+// ***********************
+//
+void    EngineStateHandlers::ListChannelsMapping        ( JsonSerializeObject & response, EngineStateEventPtr evt )
+{
+    auto scenesVec = m_appLogic->GetBVProject()->GetModelScenes();
+
+    PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, true );
+
+    response.EnterArray( "ChannelsMapping" );
+
+    for( auto & scene : scenesVec )
+    {
+        response.EnterChild( "Mapping" );
+
+        response.SetAttribute( "SceneName", scene->GetName() );
+        response.SetAttribute( "ChannelIdx", SerializationHelper::T2String( scene->GetRenderChannelIdx() ) );
+
+        response.ExitChild();
+    }
+
+    response.ExitChild();
 }
 
 } //bv
