@@ -87,10 +87,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestUndoRedo", "..\..\..\Test\Model\TestUndoRedo\Project\Win\VS14\TestUndoRedo.vcxproj", "{03C7685D-8541-413A-9BA9-74E9A6E32788}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestLibCore", "..\..\..\Test\Tools\TestLibCore\Project\Win\VS14\TestLibCore.vcxproj", "{C606D2D6-A1A6-496E-AA7A-170F35C80011}"
-	ProjectSection(ProjectDependencies) = postProject
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestOutputsInitialization", "..\..\..\Test\Engine\TestOutputInitialization\Project\Win\VS14\TestOutputsInitialization.vcxproj", "{C7402DE3-2985-48DC-BF1C-3B46D88949E2}"
 EndProject
+    ProjectSection(ProjectDependencies) = postProject
 		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8} = {ECABCE66-F47E-4889-8A4C-20DCB97C86B8}
 	EndProjectSection
 EndProject
