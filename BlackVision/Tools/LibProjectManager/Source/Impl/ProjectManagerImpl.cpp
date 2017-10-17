@@ -344,7 +344,7 @@ void						ProjectManagerImpl::MoveScene			( const Path & inProjectName, const Pa
 
 // ********************************
 //
-model::SceneModelPtr        ProjectManagerImpl::LoadScene           ( const Path & projectName, const Path & path ) const
+LoadSceneResult             ProjectManagerImpl::LoadScene           ( const Path & projectName, const Path & path ) const
 {
     return m_sceneAccessor->GetScene( projectName / path );
 }

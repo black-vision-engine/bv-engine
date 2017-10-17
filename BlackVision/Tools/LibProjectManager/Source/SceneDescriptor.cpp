@@ -48,7 +48,7 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 
 // ********************************
 //
-Expected< model::SceneModelPtr >    SceneDescriptor::LoadScene		( const Path & inputFilePath )
+LoadSceneResult    SceneDescriptor::LoadScene		( const Path & inputFilePath )
 {
     auto f = File::Open( inputFilePath.Str() );
 
@@ -66,7 +66,6 @@ Expected< model::SceneModelPtr >    SceneDescriptor::LoadScene		( const Path & i
     else
     {
         return "Scene file not found.";
-//        return Expected< model::SceneModelPtr >::fromError( std::make_shared< Exception >( "Scene file not found." ) );
     }
 }
 
@@ -102,19 +101,20 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 
 // ********************************
 //
-model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
+LoadSceneResult	    SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
 {
     try
     {
-        XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
+        auto context = new BVDeserializeContext( nullptr, nullptr );
+        XMLDeserializer deser( in, numBytes,  context );
 
         auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
-        return scene;
+        return LoadSceneResult( scene, context->GetWarnings() );
     }
     catch( const std::exception & e )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Loading scene failed. Exception: [" << e.what() << "].";
-        return nullptr;
+        return e.what();
     }
 }
 

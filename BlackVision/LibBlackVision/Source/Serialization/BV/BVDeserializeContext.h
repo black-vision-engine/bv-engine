@@ -27,6 +27,10 @@ namespace model
     DEFINE_PTR_TYPE( ITimeEvaluator );
 }; // model
 
+class Exception;
+DEFINE_PTR_TYPE( Exception );
+typedef std::vector< ExceptionPtr > Exceptions;
+
 // ************************
 //
 class BVDeserializeContext : public DeserializeContext
@@ -38,8 +42,10 @@ private:
     std::string                         m_sceneName;
     std::string                         m_nodePath;
 
+    Exceptions                          m_warnings;
+
 public:
-    BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
+                                        BVDeserializeContext    ( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
     virtual                             ~BVDeserializeContext   ();
 
     model::OffsetTimeEvaluatorPtr       GetSceneTimeline        ();
@@ -54,39 +60,9 @@ public:
 
     std::string &                       GetNodePath             ();
     void                                SetNodePath             ( const std::string& sceneName );
+
+    Exceptions                          GetWarnings             ();
+    void                                AddWarning              ( ExceptionPtr warning );
 };
-
-
-
-//template< class Type >
-//struct SaveCall
-//{
-//    static_assert( false );
-//};
-//
-//
-//template< class Type >
-//struct SaveCall< Type * >
-//{
-//private:
-//    Type *      m_ptr;
-//
-//public:
-//    explicit    SaveCall< Type * >( Type * ptr )
-//        : m_ptr( ptr )
-//    {}
-//
-//    Type *      operator -> ()
-//    {
-//        assert( m_ptr );
-//
-//        if( m_ptr
-//
-//        return m_ptr;
-//    }
-//};
-//
-//
-//
 
 } // bv

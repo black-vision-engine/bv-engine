@@ -112,6 +112,14 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 {
     auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
 
+    // Check scene version
+    Version version = Version::Create( deser );
+
+    if( !version.IsValid() )
+        bvDeserCo->AddWarning( std::make_shared<  RuntimeException >( "This file does not contain scene version. It may be corrupted and loaded incorrectly." ) );
+    else if( version != Version::GetCurrentVersion() )
+        bvDeserCo->AddWarning( std::make_shared< RuntimeException >( "Version of the scene file does not match engine version. This scene may be loaded incorrectly" ) );
+
     // Add scene name to context
     auto sceneName = deser.GetAttribute( "name" );
     bvDeserCo->SetSceneName( sceneName );
