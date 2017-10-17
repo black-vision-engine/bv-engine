@@ -1,0 +1,113 @@
+<config>
+	<!-- <property name="PMFolder" value="E:/GoogleDrive/bv_data/bv_media/" /> -->
+	<!-- <property name="PMFolder" value="../bv_media/" /> -->
+	<property name="PMFolder" value="C:/Users/Witek/Dysk Google/bv_data/bv_media/" />
+	<property name="FullScreen" value="false" />
+	<property name="PERSPECTIVE_CAMERA" value="true" />
+	<property name="USE_READBACK_API" value="true" />
+	<property name="SuperMagic" value="false" />
+	<property name="Resolution" value="HD" />
+	<property name="TransferMode" value="RAM" />
+	<property name="Debug">
+		<property name="LoadSceneFromEnv" value="false" />
+		<property name="LoadSolution" value="false" />
+		<property name="SceneFromEnvName" value="TWO_TEXTURED_RECTANGLES" />
+		<property name="UseVideoInputFeeding" value="false" />  
+		<!-- <property name="LoadSceneFromProjectManager" value="woof.scn" /> -->
+	</property>
+	
+	<property name="Renderer">
+		<property name="MaxFPS" value="5000" />
+		<property name="DisplayVideoCardOutput" value="true" />
+		<property name="TimerFPS" value="50" />
+		<property name="RenderToSharedMemory" value="true" />
+		<property name="ClearColor" >
+			<property name="r" value="0" />
+			<property name="g" value="0" />
+			<property name="b" value="0" />
+			<property name="a" value="0" />
+		</property>
+	</property>
+		
+	<property name="Application">
+		<property name="VSYNC" value="false" />
+		<property name="Window">
+			<property name="Mode" value="WINDOWED" />        <!-- rodzaj wyswietlanego okienka MULTIPLE_SCREENS|WINDOWED_FULLSCREEN -->
+			<property name="Size">
+				<property name="Width" value="640" />
+				<property name="Height" value="360" />
+			</property>
+			<property name="Origin">
+				<property name="X" value="0" />
+				<property name="Y" value="0" />
+			</property>
+		</property>
+		<property name="Renderer">			
+			<property name="FrameBufferSize">
+				<property name="Width" value="1920" />
+				<property name="Height" value="1080" />
+			</property>
+		</property>
+	</property>
+	
+	<property name="Network">
+		<property name="SocketServer">
+			<property name="Port" value="11011" />
+		</property>
+	</property>
+	
+	<property name="camera">
+		<property name="fov" value="60" />
+		<property name="position">
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+			<property name="z" value="5" />
+		</property>
+		<property name="direction">
+			<property name="x" value="0" />
+			<property name="y" value="0" />
+			<property name="z" value="-1" />
+		</property>
+	</property>
+	
+    <videocards>
+        <videocard name="BlueFish">
+            <deviceID value="1" />
+            <channels>
+                <channel name="A" renderer="1" >
+                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+				</channel>
+				<channel name="C" renderer="2" >
+                    <output linkedVideoOutput="1" type="FILL" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+				</channel>
+            </channels>
+        </videocard>
+		<videocard name="BlackMagic2">
+            <deviceID value="1" />
+            <channels>
+                <channel name="A" renderer="1" >
+                    <output type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="FREERUN" referenceH="0" referenceV="0" />
+				</channel>
+            </channels>
+        </videocard>
+    </videocards>
+
+	<RenderChannels>
+	
+        <RenderChannel id="0" enabled="true" >
+			<VideoOutput id="0" width="1920" height="1080" />
+		</RenderChannel>
+		
+        <RenderChannel id="0" enabled="false" >
+			<VideoOutput id="1" width="1920" height="1080" />
+		</RenderChannel>
+		
+		<RenderChannel id="1" enabled="true" />
+        <RenderChannel id="2" enabled="true" />
+		<RenderChannel id="2" enabled="false" />
+        <RenderChannel id="3" enabled="true" />
+		<RenderChannel id="3" enabled="false" />
+    </RenderChannels>
+	
+</config>
+
