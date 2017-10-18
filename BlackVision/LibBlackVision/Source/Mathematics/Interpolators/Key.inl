@@ -47,11 +47,11 @@ ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializ
         LOG_MESSAGE( SeverityLevel::error ) << "Cannot deserialize key, time: [" << deser.GetAttribute( "time" ) << "], value: [" << deser.GetAttribute( "val" ) << "]. Replacing with defaults.";
         return nullptr;
     }
-    else if( !val.isValid )
+    else if( !val.IsValid() )
     {
         // Invalid value. We can add key with default value. This way we don't break interpolations array.
         LOG_MESSAGE( SeverityLevel::warning ) << "Cannot deserialize key, time: [" << deser.GetAttribute( "time" ) << "], value: [" << deser.GetAttribute( "val" ) << "]. Replacing with defaults.";
-        return std::make_shared< Key< TimeValueT, ValueT > >( time.isValid ? time : TimeValueT(), ValueT() );
+        return std::make_shared< Key< TimeValueT, ValueT > >( time.IsValid() ? time : TimeValueT(), ValueT() );
     }
     else
     {
