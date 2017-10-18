@@ -45,30 +45,33 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
         {
             Expected< UInt32 > expectedId = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
             auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
-            bool duplicated = processedChannels.find( expectedId.ham ) != processedChannels.end();
 
-            if( expectedId.isValid && !duplicated )
+            if( expectedId.IsValid() )
             {
-                auto id = expectedId.ham;
-                processedChannels.insert( id );
+                bool duplicated = processedChannels.find( expectedId.GetVal() ) != processedChannels.end();
 
-                if( ( RenderChannelType )id < RenderChannelType::RCT_TOTAL )
+                if( !duplicated )
                 {
-                    if( enabled )
+                    auto id = expectedId.GetVal();
+                    processedChannels.insert( id );
+
+                    if( ( RenderChannelType )id < RenderChannelType::RCT_TOTAL )
                     {
-                        desc.SetEnabled ( ( RenderChannelType )id );
-                    }
-                    else
-                    {
-                        desc.SetDisabled( ( RenderChannelType )id );
+                        if( enabled )
+                        {
+                            desc.SetEnabled ( ( RenderChannelType )id );
+                        }
+                        else
+                        {
+                            desc.SetDisabled( ( RenderChannelType )id );
+                        }
                     }
                 }
+                else
+                {
+                    LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.GetVal() << "] entry already existed in config and will be ignored.";
+                }
             }
-            else if( expectedId.isValid && duplicated )
-            {
-                LOG_MESSAGE( SeverityLevel::warning ) << "RenderChannel [" << expectedId.ham << "] entry already existed in config and will be ignored.";
-            }
-
         }
         while( deser.NextChild() );
 

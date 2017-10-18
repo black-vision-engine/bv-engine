@@ -41,7 +41,7 @@ ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializ
     auto time = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
     auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
 
-    if( !time.isValid )
+    if( !time.IsValid() )
     {
         // Invalid time. Don't add key, it has no value for us.
         LOG_MESSAGE( SeverityLevel::error ) << "Cannot deserialize key, time: [" << deser.GetAttribute( "time" ) << "], value: [" << deser.GetAttribute( "val" ) << "]. Replacing with defaults.";

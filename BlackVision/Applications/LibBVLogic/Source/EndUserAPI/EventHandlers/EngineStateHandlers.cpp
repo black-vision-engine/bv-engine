@@ -354,7 +354,7 @@ void    EngineStateHandlers::AssingChannels             ( JsonSerializeObject & 
 
     Expected< int > channel = SerializationHelper::String2T< int >( evt->Request->GetAttribute( "ChannelIdx" ) );
 
-    if( channel.isValid &&
+    if( channel.IsValid() &&
         scene &&
         channel >= 0 &&
         channel <= 4 )

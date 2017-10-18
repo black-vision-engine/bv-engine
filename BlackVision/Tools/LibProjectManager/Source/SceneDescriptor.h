@@ -16,8 +16,8 @@ public:
 
 	Path				GetPath			() const;
 
-    static void			            SaveScene		( const model::SceneModelPtr & scene, const Path & outputFilePath );
-    static model::SceneModelPtr	    LoadScene		( const Path & inputFilePath );
+    static void			                        SaveScene		( const model::SceneModelPtr & scene, const Path & outputFilePath );
+    static Expected< model::SceneModelPtr >     LoadScene		( const Path & inputFilePath );
 
     static void			            SaveScene		( const model::SceneModelPtr & scene, std::ostream & out );
     static model::SceneModelPtr	    LoadScene		( std::istream & in, SizeType numBytes );

@@ -52,21 +52,6 @@ OutputExtractor::OutputExtractor    ( RenderLogicImpl * renderLogic )
         m_inputChannels = &TEST_ACCESSOR( VideoOutputsPreprocessor )::GetInputChannels( outPreprocessor );
         
         m_inputChannels->PostInitialize( renderLogic->GetRenderedChannelsData() );
-
-        //videocards::VideoCardManager * videoCardManager = new videocards::VideoCardManager();
-
-        //videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-        //videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
-        //videoCardManager->Start();
-
-        //TEST_ACCESSOR( BVServiceProvider )::RegisterVideoCardManager( videoCardManager );
-
-        //RenderContext ctx;
-        //ctx.SetAudio( new audio::AudioRenderer() );
-
-        //TEST_ACCESSOR( VideoOutputsPreprocessor )::Initialize( outPreprocessor, &ctx, renderLogic->GetRenderedChannelsData() );
-
-        //delete ctx.GetAudio();
     }
 }
 

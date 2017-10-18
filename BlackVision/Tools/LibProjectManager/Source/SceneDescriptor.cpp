@@ -48,7 +48,7 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 
 // ********************************
 //
-model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePath )
+Expected< model::SceneModelPtr >    SceneDescriptor::LoadScene		( const Path & inputFilePath )
 {
     auto f = File::Open( inputFilePath.Str() );
 
@@ -65,7 +65,8 @@ model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePat
     }
     else
     {
-        return nullptr;
+        return "Scene file not found.";
+//        return Expected< model::SceneModelPtr >::fromError( std::make_shared< Exception >( "Scene file not found." ) );
     }
 }
 

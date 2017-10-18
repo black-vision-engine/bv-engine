@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C7402DE3-2985-48DC-BF1C-3B46D88949E2}</ProjectGuid>
+    <ProjectGuid>{C606D2D6-A1A6-496E-AA7A-170F35C80011}</ProjectGuid>
     <RootNamespace>DefaultTest_change_this_name</RootNamespace>
-    <ProjectName>TestOutputsInitialization</ProjectName>
+    <ProjectName>TestLibCore</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -65,7 +65,6 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -79,7 +78,6 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -93,7 +91,6 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -107,31 +104,20 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\App_EntryPoint.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_VideoCards.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Applications\LibBVLogic\Projects\Win\VS14\LibBVLogic.vcxproj">
-      <Project>{e92b5bdf-8bd5-4d22-b2cd-90d681deda85}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
-      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\LibVideoCards\Projects\Win\VS14\LibVideoCards.vcxproj">
-      <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
+    <!-- <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj"> -->
+    <!-- <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project> -->
+    <!-- </ProjectReference> -->
+    <ProjectReference Include="..\..\..\..\..\..\LibCore\Projects\Win\VS14\LibCore.vcxproj">
+      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\InitDescriptors\Outputs.cpp" />
-    <ClCompile Include="..\..\..\Source\InitDescriptors\RenderChannels.cpp" />
+    <ClCompile Include="..\..\..\Source\ExpectedTest\ExpectedTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
-    <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Source\Helpers\OutputCompositeVideoAccessor.h" />
-    <ClInclude Include="..\..\..\Source\Helpers\OutputExtractor.h" />
-    <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

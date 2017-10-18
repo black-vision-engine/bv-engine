@@ -55,9 +55,9 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
 
                 auto idxEx = SerializationHelper::String2T< SizeType >( req->GetAttribute( "assetIdx" ) );
 
-                if( idxEx.isValid )
+                if( idxEx.IsValid() )
                 {
-                    idx = idxEx.ham;
+                    idx = idxEx;
                 }
             }
 
