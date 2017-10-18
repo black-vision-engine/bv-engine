@@ -1,0 +1,10 @@
+<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="3.000000" val="string in xml"/>
+		<key time="10.000000" val="wstring z żółtą gęślą"/>
+	</keys>
+	<interpolations>
+		<interpolation type="linear"/>
+	</interpolations>
+</interpolator>
+
