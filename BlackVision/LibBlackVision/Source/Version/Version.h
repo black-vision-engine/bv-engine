@@ -2,8 +2,6 @@
 
 #include "CoreDEF.h"
 
-#include "BuildVersion.h"
-
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
