@@ -41,7 +41,18 @@ TEST( Serialization_ParamValModel, Keys_Float_AllInvalidKeys )
     ASSERT_EQ( keys.size(), 0 );
 }
 
+// ***********************
+// If there are two keys in the same time, the second key overrides first.
+TEST( Serialization_ParamValModel, Keys_TwoKeysInTheSameTime )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Keys/KeysInTheSameTime.xml", "interpolator" );
+    auto & keys = actual->GetKeys();
 
+    ASSERT_EQ( keys.size(), 3 );
+
+    EXPECT_EQ( keys[ 2 ].t, 2.0f );
+    EXPECT_EQ( keys[ 2 ].val, -13.0f );
+}
 
 
 
