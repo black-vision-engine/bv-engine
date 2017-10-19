@@ -164,7 +164,10 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
     for( auto p : pathVec )
     {
         auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
-        m_bvProject->GetProjectEditor()->AddScene( scene );
+        if( scene.IsValid() )
+            m_bvProject->GetProjectEditor()->AddScene( scene );
+        else
+            LOG_MESSAGE_FILE_LINE( SeverityLevel::warning ) << "Unable to load scene: " << p << " - " << scene.GetErrorReason();
     }
 }
 
@@ -227,7 +230,7 @@ void BVAppLogic::LoadScene          ( void )
         }
         else 
         {
-            // TODO: Add an error log message here.
+            LOG_MESSAGE_FILE_LINE( SeverityLevel::error ) << "Unable to load scene: " << pmSceneName << ", reason: " << sceneModel.GetErrorReason();
         }
     }
     else if( DefaultConfig.LoadSceneFromEnv() )

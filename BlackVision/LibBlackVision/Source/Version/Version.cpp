@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Version.h"
 
+#include "BuildVersion.h"
+
 #include "Serialization/SerializationHelper.h"
 
 
@@ -27,21 +29,27 @@ namespace
 
 // ***********************
 //
-Version         Version::Create      ( IDeserializer & deser )
+Version         Version::Create      ( const IDeserializer & deser )
 {
     Version version;
 
-    deser.EnterChild( "version" );
+    if( deser.EnterChild( "version" ) )
+    {
+        version.MajorVersion        = SerializationHelper::String2T< Int32 >( deser.GetAttribute( MAJOR_VERSION ) );
+        version.MinorVersion        = SerializationHelper::String2T< Int32 >( deser.GetAttribute( MINOR_VERSION ) );
+        version.SerializerVersion   = SerializationHelper::String2T< Int32 >( deser.GetAttribute( SERIALIZER_VERSION ) );
+        version.BuildVersion        = SerializationHelper::String2T< Int64 >( deser.GetAttribute( BUILD_VERSION ) );
+        version.Platform            = deser.GetAttribute( PLATFORM );
 
-    version.MajorVersion        = SerializationHelper::String2T< Int32 >( deser.GetAttribute( MAJOR_VERSION ) );
-    version.MinorVersion        = SerializationHelper::String2T< Int32 >( deser.GetAttribute( MINOR_VERSION ) );
-    version.SerializerVersion   = SerializationHelper::String2T< Int32 >( deser.GetAttribute( SERIALIZER_VERSION ) );
-    version.BuildVersion        = SerializationHelper::String2T< Int64 >( deser.GetAttribute( BUILD_VERSION ) );
-    version.Platform            = deser.GetAttribute( PLATFORM );
+        deser.ExitChild();
 
-    deser.ExitChild();
-
-    return Version();
+        return version;
+    }
+    else
+    {
+        version.MajorVersion        = -1;
+        return version;
+    }
 }
 
 // ***********************
@@ -58,6 +66,28 @@ void            Version::Serialize   ( ISerializer & ser )
 
     ser.ExitChild();    // Version
 }
+
+// ***********************
+//
+bool                Version::IsValid     ()
+{
+    if( MajorVersion >= 0 )
+        return true;
+    else
+        return false;
+}
+
+// ***********************
+//
+bool                Version::operator!=  ( const Version & that )
+{
+    return MajorVersion != that.MajorVersion ||
+        MinorVersion != that.MinorVersion ||
+        SerializerVersion != that.SerializerVersion ||
+        BuildVersion != that.BuildVersion ||
+        Platform != that.Platform;
+}
+
 
 // ***********************
 //

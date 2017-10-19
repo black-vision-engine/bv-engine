@@ -102,6 +102,11 @@ def removeDir( path ) {
     }
 }
 
+def generateBuildNumber()
+{
+	bat 'BlackVision/GenBuildVersion.bat ' + "${env.BUILD_NUMBER}"
+}
+
 node {
     checkout scm
     
@@ -123,6 +128,7 @@ node {
         removeDir( testResPath )
         removeDir( 'generatedJUnitFiles' )
         removeDir( 'DefaultPMDir' )
+        generateBuildNumber()
     }
 
 	//stage('Build Debug')

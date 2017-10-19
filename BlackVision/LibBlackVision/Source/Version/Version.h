@@ -2,8 +2,6 @@
 
 #include "CoreDEF.h"
 
-#include "BuildVersion.h"
-
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
@@ -27,8 +25,12 @@ struct Version
 
     // ***********************
     // Version serialization
-    Version             Create( IDeserializer & deser );
-    void                Serialize( ISerializer & ser );
+    static Version      Create      ( const IDeserializer & deser );
+    void                Serialize   ( ISerializer & ser );
+
+    bool                IsValid     ();
+
+    bool                operator!=  ( const Version & that );
 };
 
 

@@ -15,6 +15,7 @@
 #include "Memory/MemoryLeaks.h"
 
 
+#include "UseLoggerLibBlackVision.h"
 
 namespace bv
 {
@@ -117,6 +118,21 @@ std::string &                       BVDeserializeContext::GetNodePath           
 void                                BVDeserializeContext::SetNodePath             ( const std::string& sceneName )
 {
     m_nodePath = sceneName;
+}
+
+// ***********************
+//
+Exceptions                          BVDeserializeContext::GetWarnings             ()
+{
+    return m_warnings;
+}
+
+// ***********************
+//
+void                                BVDeserializeContext::AddWarning              ( ExceptionPtr warning )
+{
+    m_warnings.push_back( warning );
+    LOG_MESSAGE( SeverityLevel::warning ) << warning->GetReason();
 }
 
 

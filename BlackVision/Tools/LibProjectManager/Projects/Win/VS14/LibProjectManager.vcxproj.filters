@@ -75,5 +75,6 @@
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SVGAssetAccessor.h">
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\LoadSceneResult.h" />
   </ItemGroup>
 </Project>

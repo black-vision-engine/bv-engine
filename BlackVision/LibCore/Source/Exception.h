@@ -20,6 +20,8 @@ public:
 
 DEFINE_PTR_TYPE( Exception );
 
+typedef std::vector< ExceptionPtr > Exceptions;
+
 class RuntimeException : public Exception
 {
     std::string                 reason;
