@@ -178,3 +178,22 @@ TEST( Model_ParamValModel, CompositeInterpolator_MoveKeyToExistingOne )
     EXPECT_EQ( interpolator.GetKeys()[ 3 ].val, 2222.0f );
 }
 
+// ***********************
+// Negative key times are valid values.
+TEST( Model_ParamValModel, CompositeInterpolator_AddNegativeTimeKeys )
+{
+    CompositeInterpolator< TimeType, float > interpolator;
+
+    interpolator.AddKey( -1.0f, 2.0f );
+    interpolator.AddKey( 2.0f, 22.0f );
+
+    ASSERT_EQ( interpolator.GetNumKeys(), 2 );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 0 ].t, -1.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 0 ].val, 2.0f );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 1 ].t, 2.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 1 ].val, 22.0f );
+}
+
+

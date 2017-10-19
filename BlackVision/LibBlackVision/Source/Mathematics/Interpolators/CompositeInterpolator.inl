@@ -638,7 +638,6 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( Ti
 	auto size = keys.size();
 	if( size == 0 )
 	{
-		assert( false ); // FIXME: error handling FTW
 		return ValueT();
 	}
 
