@@ -44,6 +44,7 @@ DEFINE_PTR_TYPE(CompositeTransform)
 // ******************* CompositeTransform **************** 
 class CompositeTransform : public ISerializable
 {
+    FRIEND_TEST_ACCESSOR( CompositeTransform )
 private:
 
     FloatInterpolator   m_translationX;

@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
+# Visual Studio 15
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
@@ -87,6 +87,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestUndoRedo", "..\..\..\Test\Model\TestUndoRedo\Project\Win\VS14\TestUndoRedo.vcxproj", "{03C7685D-8541-413A-9BA9-74E9A6E32788}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestLibCore", "..\..\..\Test\Tools\TestLibCore\Project\Win\VS14\TestLibCore.vcxproj", "{C606D2D6-A1A6-496E-AA7A-170F35C80011}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSerialization", "..\..\..\Test\Model\TestSerialization\Project\Win\VS14\TestSerialization.vcxproj", "{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestOutputsInitialization", "..\..\..\Test\Engine\TestOutputInitialization\Project\Win\VS14\TestOutputsInitialization.vcxproj", "{C7402DE3-2985-48DC-BF1C-3B46D88949E2}"
 EndProject
@@ -671,6 +673,20 @@ Global
 		{03C7685D-8541-413A-9BA9-74E9A6E32788}.Release|Win32.Build.0 = Release|Win32
 		{03C7685D-8541-413A-9BA9-74E9A6E32788}.Release|x64.ActiveCfg = Release|x64
 		{03C7685D-8541-413A-9BA9-74E9A6E32788}.Release|x64.Build.0 = Release|x64
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|Win32.Build.0 = Debug|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|x64.ActiveCfg = Debug|x64
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Debug|x64.Build.0 = Debug|x64
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|Win32.ActiveCfg = Release|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|Win32.Build.0 = Release|Win32
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|x64.ActiveCfg = Release|x64
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}.Release|x64.Build.0 = Release|x64
 		{C7402DE3-2985-48DC-BF1C-3B46D88949E2}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{C7402DE3-2985-48DC-BF1C-3B46D88949E2}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{C7402DE3-2985-48DC-BF1C-3B46D88949E2}.Debug|Mixed Platforms.Build.0 = Debug|Win32
@@ -736,6 +752,7 @@ Global
 		{6F7C63B0-0EB8-439F-9444-7CCD86818E85} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{B054F6A0-06EC-44E7-AE4E-DA8663237E92} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{03C7685D-8541-413A-9BA9-74E9A6E32788} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{C7402DE3-2985-48DC-BF1C-3B46D88949E2} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{C606D2D6-A1A6-496E-AA7A-170F35C80011} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection

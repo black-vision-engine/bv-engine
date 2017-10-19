@@ -18,12 +18,14 @@ namespace bv {
 
 // *******************************
 //
-Expected< std::wstring > StringToWString( const std::string & data )
+Expected< std::wstring >        StringToWString     ( const std::string & data )
 {
-    try{
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    try
+    {
+        std::wstring_convert< std::codecvt_utf8_utf16< wchar_t > > converter;
         return converter.from_bytes( data );
-    }catch(...)
+    }
+    catch( ... )
     {
         return Expected< std::wstring >();
     };
@@ -32,11 +34,17 @@ Expected< std::wstring > StringToWString( const std::string & data )
 
 // *******************************
 //
-Expected< std::string > WStringToString( const std::wstring & data )
+Expected< std::string >         WStringToString     ( const std::wstring & data )
 {
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-
-    return converter.to_bytes( data );
+    try
+    {
+        std::wstring_convert< std::codecvt_utf8_utf16< wchar_t > > converter;
+        return converter.to_bytes( data );
+    }
+    catch( ... )
+    {
+        return Expected< std::string >();
+    }
 }
 
 // *******************************

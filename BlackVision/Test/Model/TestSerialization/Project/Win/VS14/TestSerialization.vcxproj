@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B054F6A0-06EC-44E7-AE4E-DA8663237E92}</ProjectGuid>
+    <ProjectGuid>{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}</ProjectGuid>
     <RootNamespace>DefaultTest_change_this_name</RootNamespace>
-    <ProjectName>TestParameters</ProjectName>
+    <ProjectName>TestSerialization</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -114,11 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestEvaluation.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestKeysManipulation.cpp" />
-    <ClCompile Include="..\..\..\Source\TestParamValModel\AddParameters.cpp" />
-    <ClCompile Include="..\..\..\Source\TestParamValModel\RemoveParametercpp.cpp" />
-    <ClCompile Include="..\..\..\Source\TestParamValModel\TestPluginParamValModel.cpp" />
+    <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidCurveForType.cpp" />
+    <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeys.cpp" />
+    <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeyTime.cpp" />
+    <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
