@@ -115,6 +115,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidCurveForType.cpp" />
+    <ClCompile Include="..\..\..\Source\TestInterpolators\TestInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeys.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeyTime.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp" />

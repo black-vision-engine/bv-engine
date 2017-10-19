@@ -7,7 +7,7 @@
 #include "Utils/Comparators/ParamComparator.h"
 #include "Utils/Serialization/Serialize.h"
 
-#include "UseLoggerLibBlackVision.h"
+#include "Framework/UseLoggerTests.h"
 
 
 #include "Mathematics/Interpolators/CompositeInterpolator.h"

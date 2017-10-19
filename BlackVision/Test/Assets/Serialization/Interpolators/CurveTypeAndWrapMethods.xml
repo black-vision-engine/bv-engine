@@ -1,0 +1,9 @@
+<interpolator curve_type="elastic_out_bounce" preMethod="pingPong" postMethod="repeat">
+	<keys>
+		<key time="0.000000" val="3"/>
+		<key time="1.5" val="4"/>
+	</keys>
+	<interpolations>
+		<interpolation type="point"/>
+	</interpolations>
+</interpolator>
