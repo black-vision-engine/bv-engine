@@ -40,6 +40,8 @@ TEST( Model_ParamValModel, CompositeInterpolator_NegativeKeys )
     float result = 1000;
 
     EXPECT_NO_THROW( { result = interpolator.Evaluate( 0.0f ); } );
-
     EXPECT_NEAR( result, 3.0f, 0.00001f );
+
+    EXPECT_NO_THROW( { result = interpolator.Evaluate( -0.5f ); } );
+    EXPECT_NEAR( result, 2.5f, 0.00001f );
 }
