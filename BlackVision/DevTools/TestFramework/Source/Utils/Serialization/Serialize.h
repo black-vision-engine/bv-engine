@@ -39,6 +39,13 @@ std::shared_ptr< Type >     Deserialize     ( const std::string & path, const st
     return object;
 }
 
-
+// ***********************
+//
+inline
+std::shared_ptr< CompositeInterpolator< TimeType, std::string > >
+                            DeserializeFloatCompositeInterpolator       ( const std::string & path )
+{
+    return Deserialize< CompositeInterpolator< TimeType, std::string > >( path, "interpolator" );
+}
 
 }	// bv

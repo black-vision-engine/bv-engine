@@ -48,10 +48,13 @@ TEST( Serialization_ParamValModel, Keys_TwoKeysInTheSameTime )
     auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Keys/KeysInTheSameTime.xml", "interpolator" );
     auto & keys = actual->GetKeys();
 
-    ASSERT_EQ( keys.size(), 3 );
+    ASSERT_EQ( keys.size(), 4 );
 
     EXPECT_EQ( keys[ 2 ].t, 2.0f );
     EXPECT_EQ( keys[ 2 ].val, -13.0f );
+
+    EXPECT_EQ( keys[ 3 ].t, 4.0f );
+    EXPECT_EQ( keys[ 3 ].val, 5.0f );
 }
 
 
