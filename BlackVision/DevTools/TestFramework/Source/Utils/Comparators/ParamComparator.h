@@ -20,6 +20,9 @@ public:
     template< typename ParamType >
     static bool             CompareKeys             ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual );
 
+    template< typename ParamType >
+    static bool             CompareEvaluators       ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual );
+
     static bool             CompareTransformKeys    ( const CompositeTransform & expected, const CompositeTransform & actual );
 };
 
@@ -51,6 +54,14 @@ inline bool             ParamComparator::CompareKeys            ( const Composit
         return false;
 
     return true;
+}
+
+// ***********************
+//
+template< typename ParamType >
+inline bool             ParamComparator::CompareEvaluators      ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual )
+{
+    return false;
 }
 
 // ***********************

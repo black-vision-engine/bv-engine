@@ -12,6 +12,8 @@
 #include "Mathematics/Interpolators/CompositeInterpolator.h"
 #include "Mathematics/Interpolators/CompositeInterpolator.inl"
 
+#include "Utils/Accessors/CompositeInterpolatorAccessor.h"
+
 
 using namespace bv;
 
@@ -19,7 +21,7 @@ using namespace bv;
 
 // ***********************
 // Test serialization of CurveType and pre, post WrapMEthod.
-TEST( Serialization_ParamValModel, Interpolators_CompositeInteprolatorParams )
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorParams )
 {
     auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/CurveTypeAndWrapMethods.xml", "interpolator" );
     ASSERT_NE( actual, nullptr );

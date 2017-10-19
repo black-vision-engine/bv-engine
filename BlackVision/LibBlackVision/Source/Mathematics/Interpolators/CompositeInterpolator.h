@@ -3,9 +3,16 @@
 #include "BasicInterpolator.h"
 #include "InterpolatorBasicTypes.h"
 
+
+
+
 namespace bv
 {
 
+
+
+// ***********************
+//
 template< class TimeValueT, class ValueT >
 class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
 {
@@ -19,9 +26,12 @@ public:
 };
 
 
+// ***********************
+//
 template< class TimeValueT, class ValueT >
 class CompositeInterpolator : public ISerializable
 {
+    FRIEND_TEST_ACCESSOR( CompositeInterpolator )
 private:
     typedef Key< TimeValueT, ValueT >                   Key;
     typedef IEvaluator< TimeValueT, ValueT >            IEvaluator;

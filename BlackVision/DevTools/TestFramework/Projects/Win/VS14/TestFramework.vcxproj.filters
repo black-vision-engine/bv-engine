@@ -72,6 +72,9 @@
     <ClInclude Include="..\..\..\Source\Framework\UseLoggerTests.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeInterpolatorAccessor.h">
+      <Filter>Utils\Accessors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
