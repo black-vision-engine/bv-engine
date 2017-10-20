@@ -16,10 +16,10 @@ private:
 public:
 
     template< typename ParamType >
-    static std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &        GetEvaluators   ( std::shared_ptr< CompositeInterpolator< TimeType, ParamType > > interpolator );
+    static const std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &      GetEvaluators   ( std::shared_ptr< CompositeInterpolator< TimeType, ParamType > > interpolator );
 
     template< typename ParamType >
-    static std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &       GetEvaluators   ( CompositeInterpolator< TimeType, ParamType > * interpolator );
+    static const std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &      GetEvaluators   ( const CompositeInterpolator< TimeType, ParamType > * interpolator );
 
 };
 
@@ -31,7 +31,7 @@ public:
 // ***********************
 //
 template< typename ParamType >
-std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &       TEST_ACCESSOR( CompositeInterpolator )::GetEvaluator    ( std::shared_ptr< CompositeInterpolator< TimeType, ParamType > > interpolator )
+const std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &     TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators   ( std::shared_ptr< CompositeInterpolator< TimeType, ParamType > > interpolator )
 {
     return GetEvaluator( interpolator.get() );
 }
@@ -39,9 +39,9 @@ std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &       TEST
 // ***********************
 //
 template< typename ParamType >
-std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &       TEST_ACCESSOR( CompositeInterpolator )::GetEvaluator    ( CompositeInterpolator< TimeType, ParamType > * interpolator )
+const std::vector< std::shared_ptr< IEvaluator< TimeType, ParamType > > > &     TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators   ( const CompositeInterpolator< TimeType, ParamType > * interpolator )
 {
-    return &( interpolator->interpolators );
+    return interpolator->interpolators;
 }
 
 

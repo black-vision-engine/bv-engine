@@ -15,6 +15,7 @@ template< class TimeValueT, class ValueT >
 class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
+    FRIEND_TEST_ACCESSOR( LinearEvaluator )
 
 private:
 
@@ -24,8 +25,8 @@ private:
 public:
     LinearEvaluator( Key k1, Key k2, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), m_tolerance( tolerance ) {}
 
-    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_LINEAR; }
-    virtual CurveType               GetCurveType    () override { return CurveType::CT_LINEAR; }
+    virtual EvaluatorType           GetType         () const override { return EvaluatorType::ET_LINEAR; }
+    virtual CurveType               GetCurveType    () const override { return CurveType::CT_LINEAR; }
 
     virtual void SetValue( TimeValueT t, ValueT v ) override
     {

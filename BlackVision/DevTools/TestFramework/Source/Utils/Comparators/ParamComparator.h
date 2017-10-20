@@ -5,6 +5,8 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Utils/Accessors/CompositeTransformAccessor.h"
+#include "Utils/Accessors/CompositeInterpolatorAccessor.h"
+#include "Utils/Accessors/EvaluatorsAccessors.h"
 
 
 namespace bv
@@ -22,6 +24,9 @@ public:
 
     template< typename ParamType >
     static bool             CompareEvaluators       ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual );
+
+    template< typename ParamType >
+    static bool             CompareEvaluators       ( const IEvaluator< TimeType, ParamType > & expected, const IEvaluator< TimeType, ParamType > & actual );
 
     static bool             CompareTransformKeys    ( const CompositeTransform & expected, const CompositeTransform & actual );
 };
@@ -61,7 +66,51 @@ inline bool             ParamComparator::CompareKeys            ( const Composit
 template< typename ParamType >
 inline bool             ParamComparator::CompareEvaluators      ( const CompositeInterpolator< TimeType, ParamType > & expected, const CompositeInterpolator< TimeType, ParamType > & actual )
 {
-    return false;
+    auto & expectedEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( &expected );
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( &actual );
+
+    if( actualEvals.size() == expectedEvals.size() )
+    {
+        for( SizeType i = 0; i < actualEvals.size(); ++i )
+        {
+            if( !ParamComparator::CompareEvaluators( *expectedEvals[ i ].get(), *actualEvals[ i ].get() ) )
+                return false;
+        }
+    }
+    else
+        return false;
+
+    return true;
+}
+
+// ***********************
+//
+template< typename ParamType >
+inline bool             ParamComparator::CompareEvaluators      ( const IEvaluator< TimeType, ParamType > & expected, const IEvaluator< TimeType, ParamType > & actual )
+{
+    if( expected.GetType() != actual.GetType() )
+        return false;
+
+    bool equal = false;
+    switch( actual.GetType() )
+    {
+        case EvaluatorType::ET_BEZIER:
+            equal = TEST_ACCESSOR( BezierEvaluator )::Compare( static_cast< const BezierEvaluator< TimeType, ParamType > & >( expected ), static_cast< const BezierEvaluator< TimeType, ParamType > & >( actual ) );
+            break;
+        case EvaluatorType::ET_CONSTANT:
+            equal = TEST_ACCESSOR( ConstEvaluator )::Compare( static_cast< const ConstEvaluator< TimeType, ParamType > & >( expected ), static_cast< const ConstEvaluator< TimeType, ParamType > & >( actual ) );
+            break;
+        case EvaluatorType::ET_LINEAR:
+            equal = TEST_ACCESSOR( LinearEvaluator )::Compare( static_cast< const LinearEvaluator< TimeType, ParamType > & >( expected ), static_cast< const LinearEvaluator< TimeType, ParamType > & >( actual ) );
+            break;
+        case EvaluatorType::ET_POLYNOMIAL:
+            equal = TEST_ACCESSOR( PolynomialEvaluator )::Compare( static_cast< const PolynomialEvaluator< TimeType, ParamType > & >( expected ), static_cast< const PolynomialEvaluator< TimeType, ParamType > & >( actual ) );
+            break;
+    }
+
+    if( !equal )
+        return false;
+    return true;
 }
 
 // ***********************

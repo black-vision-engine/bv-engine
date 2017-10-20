@@ -11,7 +11,7 @@ template< class TimeValueT, class ValueT >
 class BezierEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
-
+    FRIEND_TEST_ACCESSOR( BezierEvaluator )
 public: // FIXME
     
     Key key1, key2;
@@ -20,8 +20,8 @@ public: // FIXME
     CurveType   m_curveType;
 
 public:
-    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_BEZIER; }
-    virtual CurveType               GetCurveType    () override { return m_curveType; }
+    virtual EvaluatorType           GetType         () const override { return EvaluatorType::ET_BEZIER; }
+    virtual CurveType               GetCurveType    () const override { return m_curveType; }
 
     BezierEvaluator( CurveType curve, Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : m_curveType( curve ), key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
     

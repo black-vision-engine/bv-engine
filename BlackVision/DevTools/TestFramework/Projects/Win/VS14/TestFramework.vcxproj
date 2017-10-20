@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeInterpolatorAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\EvaluatorsAccessors.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />

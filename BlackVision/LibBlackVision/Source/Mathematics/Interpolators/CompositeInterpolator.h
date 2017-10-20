@@ -21,8 +21,8 @@ public:
     
     virtual ValueT                              Evaluate( TimeValueT t ) const              = 0;
     virtual void                                SetValue( TimeValueT t, ValueT v )          = 0;
-    virtual EvaluatorType                       GetType()                                   = 0;
-    virtual CurveType                           GetCurveType()                              = 0;
+    virtual EvaluatorType                       GetType() const                             = 0;
+    virtual CurveType                           GetCurveType() const                        = 0;
 };
 
 

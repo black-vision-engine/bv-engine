@@ -165,13 +165,14 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i, CurveType cType )
+inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i )
 {
     typedef Key< TimeValueT, ValueT > Key;
 
     const float scale = 0.2f;
 
     auto iType = interpolators[ i ]->GetType();
+    auto cType = interpolators[ i ]->GetCurveType();
 
     if( iType == EvaluatorType::ET_CONSTANT || iType == EvaluatorType::ET_LINEAR || iType == EvaluatorType::ET_POLYNOMIAL )
         return;
@@ -205,13 +206,13 @@ inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeVal
 // *******************************
 //
 template<>
-inline void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t, CurveType )
+inline void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t )
 {}
 
 // *******************************
 //
 template<>
-inline void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t, CurveType )
+inline void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t )
 {}
 
 // *******************************
@@ -356,7 +357,7 @@ inline void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( Ti
 // update interpolators
     for( auto j = ( UInt32 )( i-2 ); j <= ( UInt32 )( i+1 ); j++ )
         if( j >= 0 && j < ( UInt32 )interpolators.size() )
-            UpdateInterpolator( interpolators, j, m_type );
+            UpdateInterpolator( interpolators, j );
 }
 
 // ***********************
@@ -398,7 +399,7 @@ inline bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeV
 // update interpolators
     for( SizeType j = int( i-2 ); j <= int( i+1 ); j++ )
         if( j >= 0 && j < interpolators.size() )
-            UpdateInterpolator( interpolators, j, m_type );
+            UpdateInterpolator( interpolators, j );
 
     return true;
 }
@@ -494,7 +495,7 @@ inline void                                                CompositeInterpolator
     }
 
     for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
-        UpdateInterpolator( interpolators, i, type );
+        UpdateInterpolator( interpolators, i );
 
     SetAddedKeyCurveType( type );
 }

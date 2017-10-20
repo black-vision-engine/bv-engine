@@ -9,6 +9,7 @@ namespace bv {
 template< class TimeValueT, class ValueT >
 class ConstEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
+    FRIEND_TEST_ACCESSOR( ConstEvaluator )
 private:
 
     ValueT value;
@@ -16,8 +17,8 @@ private:
 public:
     ConstEvaluator( ValueT v ) : value( v ) {}
 
-    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_CONSTANT; }
-    virtual CurveType               GetCurveType    () override { return CurveType::CT_POINT; }
+    virtual EvaluatorType           GetType         () const override { return EvaluatorType::ET_CONSTANT; }
+    virtual CurveType               GetCurveType    () const override { return CurveType::CT_POINT; }
 
     virtual void SetValue( TimeValueT /*t*/, ValueT v ) override
     {

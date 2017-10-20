@@ -13,6 +13,7 @@ namespace bv
 template< class TimeValueT, class ValueT >
 class PolynomialEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
+    FRIEND_TEST_ACCESSOR( PolynomialEvaluator )
 private:
     typedef Key< TimeValueT, ValueT > Key;
     typedef float Coefficient;
@@ -31,8 +32,8 @@ public:
         , key1( k1 ), key2( k2 ), m_tolerance( tolerance )
     {}
 
-    virtual EvaluatorType                               GetType         () override { return EvaluatorType::ET_POLYNOMIAL; }
-    virtual CurveType                                   GetCurveType    () override { return m_curveType; }
+    virtual EvaluatorType                               GetType         () const override { return EvaluatorType::ET_POLYNOMIAL; }
+    virtual CurveType                                   GetCurveType    () const override { return m_curveType; }
 
     virtual void                                        SetValue( TimeValueT t, ValueT v ) override
     {

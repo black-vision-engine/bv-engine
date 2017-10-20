@@ -32,4 +32,30 @@ TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorParams )
 }
 
 
+// ***********************
+//
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorSerDeserFloat )
+{
+    CompositeInterpolator< TimeType, float > expected;
 
+    expected.AddKey( 0.0f, 3.0f );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_BEZIER );
+    expected.AddKey( 1.0f, 3.0f );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_COSINE_LIKE );
+    expected.AddKey( 3.0f, 13.0f );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_CUBIC_IN );
+    expected.AddKey( 4.0f, 2.0f );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_CUBIC_OUT );
+    expected.AddKey( 7.0f, 5.0f );
+
+    Serialize( expected, "InterpolatorSerDeserFloat.xml" );
+
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "InterpolatorSerDeserFloat.xml", "interpolator" );
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( expected, *( actual.get() ) ) );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
+}
