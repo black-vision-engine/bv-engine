@@ -115,6 +115,34 @@ inline bool             ParamComparator::CompareEvaluators      ( const IEvaluat
 
 // ***********************
 //
+template<>
+inline bool             ParamComparator::CompareEvaluators< std::string >      ( const IEvaluator< TimeType, std::string > & expected, const IEvaluator< TimeType, std::string > & actual )
+{
+    if( expected.GetType() != actual.GetType() )
+        return false;
+
+    if( actual.GetType() != EvaluatorType::ET_CONSTANT )
+        return false;
+
+    return TEST_ACCESSOR( ConstEvaluator )::Compare( static_cast< const ConstEvaluator< TimeType, std::string > & >( expected ), static_cast< const ConstEvaluator< TimeType, std::string > & >( actual ) );
+}
+
+// ***********************
+//
+template<>
+inline bool             ParamComparator::CompareEvaluators< std::wstring >      ( const IEvaluator< TimeType, std::wstring > & expected, const IEvaluator< TimeType, std::wstring > & actual )
+{
+    if( expected.GetType() != actual.GetType() )
+        return false;
+
+    if( actual.GetType() != EvaluatorType::ET_CONSTANT )
+        return false;
+
+    return TEST_ACCESSOR( ConstEvaluator )::Compare( static_cast< const ConstEvaluator< TimeType, std::wstring > & >( expected ), static_cast< const ConstEvaluator< TimeType, std::wstring > & >( actual ) );
+}
+
+// ***********************
+//
 inline bool             ParamComparator::CompareTransformKeys   ( const CompositeTransform & expected, const CompositeTransform & actual )
 {
     bool equal = true;

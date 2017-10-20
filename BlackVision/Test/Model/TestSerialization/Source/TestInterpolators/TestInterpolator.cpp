@@ -90,4 +90,73 @@ TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolator_SerDeserI
     EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
 }
 
+// ***********************
+// Test compares CompositeInterpolator evaluators serialization and deserialization.
+// This is hight level tests that checks only if result of the serialization is the same as original.
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolator_SerDeserBool )
+{
+    CompositeInterpolator< TimeType, bool > expected;
+
+    expected.SetAddedKeyCurveType( CurveType::CT_POINT );
+    expected.AddKey( 0.0f, true );
+    expected.AddKey( 1.0f, false );
+    expected.AddKey( 3.0f, false );
+    expected.AddKey( 4.0f, true );
+    expected.AddKey( 7.0f, false );
+
+    Serialize( expected, "InterpolatorSerDeserBool.xml" );
+
+    auto actual = Deserialize< CompositeInterpolator< TimeType, bool > >( "InterpolatorSerDeserBool.xml", "interpolator" );
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( expected, *( actual.get() ) ) );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
+}
+
+
+// ***********************
+// Test compares CompositeInterpolator evaluators serialization and deserialization.
+// This is hight level tests that checks only if result of the serialization is the same as original.
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolator_SerDeserString )
+{
+    CompositeInterpolator< TimeType, std::string > expected;
+
+    expected.SetAddedKeyCurveType( CurveType::CT_POINT );
+    expected.AddKey( 0.0f, "Blaaa" );
+    expected.AddKey( 1.0f, "Dobre coo" );
+    expected.AddKey( 3.0f, "Œmieszne wartoœæi" );
+    expected.AddKey( 4.0f, "z¿ó³k³a kiœæ" );
+    expected.AddKey( 7.0f, "ŸdŸb³o" );
+
+    Serialize( expected, "InterpolatorSerDeserString.xml" );
+
+    auto actual = Deserialize< CompositeInterpolator< TimeType, std::string > >( "InterpolatorSerDeserString.xml", "interpolator" );
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( expected, *( actual.get() ) ) );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
+}
+
+// ***********************
+// Test compares CompositeInterpolator evaluators serialization and deserialization.
+// This is hight level tests that checks only if result of the serialization is the same as original.
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolator_SerDeserWString )
+{
+    CompositeInterpolator< TimeType, std::wstring > expected;
+
+    expected.SetAddedKeyCurveType( CurveType::CT_POINT );
+    expected.AddKey( 0.0f, L"Blaaa" );
+    expected.AddKey( 1.0f, L"Dobre coo" );
+    expected.AddKey( 3.0f, L"Œmieszne wartoœæi" );
+    expected.AddKey( 4.0f, L"z¿ó³k³a kiœæ" );
+    expected.AddKey( 7.0f, L"ŸdŸb³o" );
+
+    Serialize( expected, "InterpolatorSerDeserWString.xml" );
+
+    auto actual = Deserialize< CompositeInterpolator< TimeType, std::wstring > >( "InterpolatorSerDeserWString.xml", "interpolator" );
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( expected, *( actual.get() ) ) );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
+}
+
+
+
 
