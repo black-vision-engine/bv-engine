@@ -1,0 +1,6 @@
+<scene>
+	<version Major="0" Minor="47" SerializerVersion="1" Build="-1" Platform="Windows 64bit"/>
+	<timelines>
+		<timeline name="default" type="default"/>
+	</timelines>
+</scene>

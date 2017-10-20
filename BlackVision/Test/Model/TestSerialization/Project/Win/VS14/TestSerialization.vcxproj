@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeys.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeyTime.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp" />
+    <ClCompile Include="..\..\..\Source\TestScenes\VersionTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

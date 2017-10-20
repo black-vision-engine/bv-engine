@@ -11,6 +11,8 @@
 
 #include "Serialization/SerializationHelper.h"
 
+#include "Exceptions/FileNotFoundException.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 #include <fstream>
@@ -65,7 +67,7 @@ LoadSceneResult    SceneDescriptor::LoadScene		( const Path & inputFilePath )
     }
     else
     {
-        return "Scene file not found.";
+        return LoadSceneResult::fromError( std::make_shared< FileNotFoundException >() );
     }
 }
 
