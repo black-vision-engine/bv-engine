@@ -17,6 +17,9 @@
     <ClCompile Include="..\..\..\Source\TestInterpolators\TestInterpolator.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidInterpolations.cpp">
+      <Filter>TestInterpolators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestKeys">
