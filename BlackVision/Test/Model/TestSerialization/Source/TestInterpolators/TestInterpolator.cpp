@@ -33,8 +33,9 @@ TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorParams )
 
 
 // ***********************
-//
-TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorSerDeserFloat )
+// Test compares CompositeInterpolator evaluators serialization and deserialization.
+// This is hight level tests that checks only if result of the serialization is the same as original.
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolator_SerDeserFloat )
 {
     CompositeInterpolator< TimeType, float > expected;
 
@@ -59,3 +60,34 @@ TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorSerDeserFl
 
     EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
 }
+
+// ***********************
+// Test compares CompositeInterpolator evaluators serialization and deserialization.
+// This is hight level tests that checks only if result of the serialization is the same as original.
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolator_SerDeserInt )
+{
+    CompositeInterpolator< TimeType, int > expected;
+
+    expected.AddKey( 0.0f, 1 );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_LINEAR );
+    expected.AddKey( 1.0f, 3 );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_CUBIC_INTOUT );
+    expected.AddKey( 3.0f, 7 );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_ELASTIC_IN );
+    expected.AddKey( 4.0f, 2 );
+
+    expected.SetAddedKeyCurveType( CurveType::CT_ELASTIC_IN_BOUNCE );
+    expected.AddKey( 7.0f, 10 );
+
+    Serialize( expected, "InterpolatorSerDeserInt.xml" );
+
+    auto actual = Deserialize< CompositeInterpolator< TimeType, int > >( "InterpolatorSerDeserInt.xml", "interpolator" );
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( expected, *( actual.get() ) ) );
+
+    EXPECT_EQ( TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() ).size(), 4 );
+}
+
+
