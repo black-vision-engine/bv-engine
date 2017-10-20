@@ -21,6 +21,14 @@ ExceptionType   Exception::RegisterType()
 
 #include "Expected.h"
 
+ExceptionType RuntimeException::type = Exception::RegisterType();
+
+ExceptionType        RuntimeException::Type()
+{
+    return type;
+}
+
+
 RuntimeException::RuntimeException( const std::string & reason )
     : reason( reason )
 {
@@ -30,6 +38,10 @@ std::string            RuntimeException::GetReason() {
     return reason;
 }
 
+ExceptionType               RuntimeException::GetType()
+{
+    return Type();
+}
 
 
 }

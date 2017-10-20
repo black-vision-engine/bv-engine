@@ -23,6 +23,7 @@ public:
                                         {}
 
     model::SceneModelPtr                GetScene() const { return m_scene; }
+    Exceptions                          GetWarnings() const { return m_warnings; }
 };
 
 class LoadSceneResult : public Expected< SceneWithWarnings >
@@ -36,6 +37,9 @@ public:
                                         {}
                                         LoadSceneResult( const std::string & reason )
                                             : Expected( reason )
+                                        {}
+                                        LoadSceneResult( const Expected< SceneWithWarnings > & base )
+                                            : Expected< SceneWithWarnings >( base )
                                         {}
 
     operator const model::SceneModelPtr ()

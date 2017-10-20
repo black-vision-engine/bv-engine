@@ -33,6 +33,7 @@ public:
 
     bool                    IsValid             ();
     std::string             GetErrorReason      ();
+    ErrorType               GetError            ();
 
     bool                    operator==          ( const HamType & that );
     bool                    operator!=          ( const HamType & that );
@@ -144,6 +145,14 @@ template< typename HamType, typename ErrorType >
 std::string             ExpectedBase< HamType, ErrorType >::GetErrorReason  () 
 { 
     return spam->GetReason(); 
+}
+
+template< typename HamType, typename ErrorType >
+ErrorType               ExpectedBase< HamType, ErrorType >::GetError ()
+{
+    if( isValid )
+        assert( false ); // FIXME: error handling(?)
+    return spam;
 }
 
 template< typename HamType, typename ErrorType >
