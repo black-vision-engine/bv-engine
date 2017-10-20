@@ -40,10 +40,13 @@ TEST( Serialization_ParamValModel, Interpolators_LinearCurveForwString )
 // This is invalid combination but I don't know what is expected result.
 TEST( Serialization_ParamValModel, Interpolators_LinearCurveForStringXML )
 {
-    auto actual = Deserialize< CompositeInterpolator< TimeType, std::string > >( "TestAssets/Serialization/Interpolators/InvalidCurveForString.xml", "interpolator" );
+    std::shared_ptr< CompositeInterpolator< TimeType, std::string > > actual;
+    
+    EXPECT_NO_THROW( {
+    actual = DeserializeFloatCompositeInterpolator( "TestAssets/Serialization/Interpolators/InvalidCurveForString.xml" );
+    } );
+
     ASSERT_NE( actual, nullptr );
-
-
 
 }
 

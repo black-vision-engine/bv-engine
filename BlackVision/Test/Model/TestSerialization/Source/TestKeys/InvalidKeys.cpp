@@ -209,3 +209,27 @@ TEST( Serialization_ParamValModel, Keys_WString_DifferentKeyTypeInXML )
     EXPECT_EQ( keys[ 10 ].val, L"wstring z ¿ó³t¹ gêœl¹" );
 }
 
+// ***********************
+// Xml contains <keys> marker but there are no keys inside.
+TEST( Serialization_ParamValModel, Keys_NoKeys )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, std::wstring > >( "TestAssets/Serialization/Keys/NoKeys.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    auto & keys = actual->GetKeys();
+
+    ASSERT_EQ( keys.size(), 0 );
+}
+
+// ***********************
+// Xml doesn't contain <keys> marker.
+TEST( Serialization_ParamValModel, Keys_NoXmlKeysMarker )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, std::wstring > >( "TestAssets/Serialization/Keys/NoXmlKeysMarker.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    auto & keys = actual->GetKeys();
+
+    ASSERT_EQ( keys.size(), 0 );
+}
+

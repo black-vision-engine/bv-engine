@@ -48,11 +48,36 @@ TEST( Serialization_ParamValModel, Keys_TwoKeysInTheSameTime )
     auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Keys/KeysInTheSameTime.xml", "interpolator" );
     auto & keys = actual->GetKeys();
 
-    ASSERT_EQ( keys.size(), 3 );
+    ASSERT_EQ( keys.size(), 4 );
 
     EXPECT_EQ( keys[ 2 ].t, 2.0f );
     EXPECT_EQ( keys[ 2 ].val, -13.0f );
+
+    EXPECT_EQ( keys[ 3 ].t, 4.0f );
+    EXPECT_EQ( keys[ 3 ].val, 5.0f );
 }
 
+// ***********************
+// Keys should be sorted by time. If they are not deserialization should give them right order.
+// Order of interpolators in this case will be tested in interpolators tests.
+TEST( Serialization_ParamValModel, Keys_InvalidKeysOrder )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Keys/BadKeysOrder.xml", "interpolator" );
+    auto & keys = actual->GetKeys();
+
+    ASSERT_EQ( keys.size(), 4 );
+
+    EXPECT_EQ( keys[ 0 ].t, 0.0f );
+    EXPECT_EQ( keys[ 0 ].val, 3.0f );
+
+    EXPECT_EQ( keys[ 1 ].t, 1.5f );
+    EXPECT_EQ( keys[ 1 ].val, 4.0f );
+
+    EXPECT_EQ( keys[ 2 ].t, 2.0f );
+    EXPECT_EQ( keys[ 2 ].val, 5.0f );
+
+    EXPECT_EQ( keys[ 3 ].t, 4.0f );
+    EXPECT_EQ( keys[ 3 ].val, -13.0f );
+}
 
 

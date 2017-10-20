@@ -120,7 +120,8 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
                             deser.ExitChild();
                         else // we've got malformed XML
                         {
-                            assert( false ); // FIXME: error handling
+                            // DOUBLE FIXME: error handling
+                            // assert( false ); // FIXME: error handling
                             return nullptr;
                         }
                     }
@@ -153,8 +154,10 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
     interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR ) );
     interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp ) );
     interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp ) );
-
-    assert( interpolator->GetNumKeys() > 0 );
+    
+    // FIXME: This code is written instead of assert here. Make proper error handling.
+    //if( interpolator->GetNumKeys() == 0 )
+    //    return nullptr;
 
     return interpolator;
 }
@@ -635,7 +638,6 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( Ti
 	auto size = keys.size();
 	if( size == 0 )
 	{
-		assert( false ); // FIXME: error handling FTW
 		return ValueT();
 	}
 
