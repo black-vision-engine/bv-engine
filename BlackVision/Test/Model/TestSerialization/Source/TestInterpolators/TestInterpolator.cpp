@@ -20,7 +20,7 @@ using namespace bv;
 
 
 // ***********************
-// Test serialization of CurveType and pre, post WrapMEthod.
+// Test serialization of CurveType and pre, post WrapMethod.
 TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorParams )
 {
     auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/CurveTypeAndWrapMethods.xml", "interpolator" );
@@ -29,6 +29,19 @@ TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorParams )
     EXPECT_EQ( actual->GetWrapPreMethod(), WrapMethod::pingPong );
     EXPECT_EQ( actual->GetWrapPostMethod(), WrapMethod::repeat );
     EXPECT_EQ( actual->GetCurveType(), CurveType::CT_ELASTIC_OUT_BOUNCE );
+}
+
+// ***********************
+// Test serialization of CurveType and pre, post WrapMethod for invalid values.
+// This should result in default values set.
+TEST( Serialization_ParamValModel, Interpolators_CompositeInterpolatorInvalidParams )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/InvalidCompositeInterpolatorParams.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    EXPECT_EQ( actual->GetWrapPreMethod(), WrapMethod::clamp );
+    EXPECT_EQ( actual->GetWrapPostMethod(), WrapMethod::clamp );
+    EXPECT_EQ( actual->GetCurveType(), CurveType::CT_LINEAR );
 }
 
 
