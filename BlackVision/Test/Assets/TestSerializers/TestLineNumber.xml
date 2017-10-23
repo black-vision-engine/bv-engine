@@ -1,0 +1,439 @@
+<scene name="witek/ExtrudeRect.scn" RenderChannelIdx="0" CurrentCamera="0">
+	<timelines>
+		<timeline name="default" type="default" local_time="0.000000" play="false" duration="340282346638528870000000000000000000000.000000" loop="clamp">
+			<events/>
+			<children/>
+		</timeline>
+	</timelines>
+	<lights>
+		<light type="point">
+			<params>
+				<param name="color" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="1.000000, 1.000000, 1.000000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="position" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="-0.810000, 1.160000, 0.900000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="attenuation" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="1.000000, 0.000000, 0.020000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+			</params>
+		</light>
+	</lights>
+	<cameras>
+		<camera>
+			<params>
+				<param name="IsPerspective" type="bool" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="true"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="FOV" type="float" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="45.000000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="NearClippingPlane" type="float" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="0.100000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="FarClippingPlane" type="float" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="100.000000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="ViewportSize" type="float" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="2.000000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="Position" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="-1.238764, 0.630000, 2.384693"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="Direction" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="0.254663, 0.000000, -0.967030"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+				<param name="UpVector" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+					<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+						<keys>
+							<key time="0.000000" val="0.000000, 1.000000, 0.000000"/>
+						</keys>
+						<interpolations/>
+					</interpolator>
+				</param>
+			</params>
+		</camera>
+	</cameras>
+	<sceneVariables>
+		<variablesDict/>
+	</sceneVariables>
+	<gridlines>
+		<horizontal/>
+		<vertical/>
+	</gridlines>
+	<endUserParams>
+		<CameraParamsDescriptors/>
+		<EffectParamsDescriptors/>
+		<LogicParamsDescriptors/>
+		<PluginParamsDescriptors/>
+		<LightParamsDescriptors/>
+	</endUserParams>
+	<node name="root" visible="true">
+		<plugins>
+			<plugin uid="DEFAULT_TRANSFORM" name="transform" timeline="witek/ExtrudeRect.scn%default">
+				<params>
+					<param name="simple_transform" type="transform" timeline="witek/ExtrudeRect.scn%default">
+						<composite_transform>
+							<transform kind="center">
+								<interpolators>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+								</interpolators>
+							</transform>
+							<transform kind="translation">
+								<interpolators>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+								</interpolators>
+							</transform>
+							<transform kind="rotation" iseuler="true">
+								<interpolators>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="0.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+								</interpolators>
+							</transform>
+							<transform kind="scale">
+								<interpolators>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="1.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="1.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+									<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+										<keys>
+											<key time="0.000000" val="1.000000"/>
+										</keys>
+										<interpolations/>
+									</interpolator>
+								</interpolators>
+							</transform>
+						</composite_transform>
+					</param>
+				</params>
+			</plugin>
+			<plugin uid="DEFAULT_RECTANGLE" name="rectangle" timeline="witek/ExtrudeRect.scn%default">
+				<renderer_context>
+					<alpha_context blendEnabled="false" srcRGBBlendMode="SBM_SRC_ALPHA" dstRGBBlendMode="DBM_ONE_MINUS_SRC_ALPHA" srcAlphaBlendMode="SBM_ONE" dstAlphaBlendMode="DBM_ONE" blendColor="0.000000, 0.000000, 0.000000, 0.000000"/>
+					<cull_context enabled="false" isCCWOrdered="false"/>
+					<depth_context enabled="true" writable="true"/>
+					<fill_context fillMode="M_POLYGONS"/>
+				</renderer_context>
+				<params>
+					<param name="width" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="1.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="height" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="1.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="weight center x" type="enum" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="2"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="weight center y" type="enum" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="2"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+				</params>
+			</plugin>
+			<plugin uid="DEFAULT_MATERIAL" name="material" timeline="witek/ExtrudeRect.scn%default">
+				<renderer_context>
+					<alpha_context blendEnabled="true" srcRGBBlendMode="SBM_SRC_ALPHA" dstRGBBlendMode="DBM_ONE_MINUS_SRC_ALPHA" srcAlphaBlendMode="SBM_ONE" dstAlphaBlendMode="DBM_ONE" blendColor="0.000000, 0.000000, 0.000000, 0.000000"/>
+					<cull_context enabled="false" isCCWOrdered="false"/>
+					<depth_context enabled="true" writable="true"/>
+					<fill_context fillMode="M_POLYGONS"/>
+				</renderer_context>
+				<params>
+					<param name="blend enable" type="bool" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="true"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="mtlDiffuse" type="vec4" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.500000, 0.500000, 0.500000, 1.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="mtlAmbient" type="vec4" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.200000, 0.200000, 0.200000, 1.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="mtlSpecular" type="vec4" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="1.000000, 1.000000, 1.000000, 1.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="mtlEmission" type="vec4" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.100000, 0.100000, 0.100000, 1.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="mtlShininess" type="int" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="128"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+				</params>
+			</plugin>
+			<plugin uid="DEFAULT_EXTRUDE_PLUGIN" name="extrude" timeline="witek/ExtrudeRect.scn%default">
+				<renderer_context>
+					<alpha_context blendEnabled="true" srcRGBBlendMode="SBM_SRC_ALPHA" dstRGBBlendMode="DBM_ONE_MINUS_SRC_ALPHA" srcAlphaBlendMode="SBM_ONE" dstAlphaBlendMode="DBM_ONE" blendColor="0.000000, 0.000000, 0.000000, 0.000000"/>
+					<cull_context enabled="false" isCCWOrdered="false"/>
+					<depth_context enabled="true" writable="true"/>
+					<fill_context fillMode="M_POLYGONS"/>
+				</renderer_context>
+				<params>
+					<param name="extrude vector" type="vec3" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.000000, 0.000000, -0.900000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="smooth threshold angle" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="160.000000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="curve scale" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.200000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="tesselation" type="int" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="1"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="cosinus curve period" type="int" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="1"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="bevel height" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.100000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="bevel tesselation" type="int" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="20"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="bevel depth front" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.300000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="bevel depth back" type="float" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0.300000"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="symetrical bevel" type="bool" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="false"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="extrude curve" type="enum" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="0"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="bevel curve front" type="enum" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="2"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+					<param name="bevel curve back" type="enum" timeline="witek/ExtrudeRect.scn%default">
+						<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+							<keys>
+								<key time="0.000000" val="2"/>
+							</keys>
+							<interpolations/>
+						</interpolator>
+					</param>
+				</params>
+			</plugin>
+		</plugins>
+		<nodes/>
+	</node>
+	<assets/>
+</scene>
+

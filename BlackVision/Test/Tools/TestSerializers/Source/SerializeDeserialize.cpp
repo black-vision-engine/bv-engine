@@ -42,12 +42,12 @@ TEST( Serialization_Serializers_XML, SerializeDeserialize )
         XMLSerializer ser( nullptr );
 
         SimpleSerializeTest( ser );
-        ser.Save( "SerializeDeserializeJSON.json" );
+        ser.Save( "SerializeDeserializeJSON.xml" );
     }
 
     {
         XMLDeserializer deser;
-        deser.LoadFile( "SerializeDeserializeJSON.json" );
+        deser.LoadFile( "SerializeDeserializeJSON.xml" );
         SimpleDeserializeTest( deser );
     }
 }
