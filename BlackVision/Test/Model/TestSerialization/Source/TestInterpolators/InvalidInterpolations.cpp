@@ -35,6 +35,25 @@ TEST( Serialization_ParamValModel, Interpolators_MoreKeysThenInterpolators )
 }
 
 // ***********************
+// Keys are not ordered by time. This means, that someon manually modified scene xml.
+// There's no way to determine evaluators order. Best option is to leave order as it is.
+TEST( Serialization_ParamValModel, Interpolators_BadKeysOrder )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/BadKeysOrder.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    ASSERT_EQ( actual->GetNumKeys(), 4 );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 3 );
+
+    // In this xml all evaluators have different curve type. This helpes to determine their order.
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_BEZIER );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 2 ]->GetCurveType(), CurveType::CT_LINEAR );
+}
+
+// ***********************
 // More interpolators then needed for number of keys in xml.
 // Ignore all redundant interpolators.
 TEST( Serialization_ParamValModel, Interpolators_ToManyInterpolators )
@@ -68,4 +87,3 @@ TEST( Serialization_ParamValModel, Interpolators_NoInterpolationsMarkerInXML )
     auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
     ASSERT_EQ( actualEvals.size(), 2 );
 }
-
