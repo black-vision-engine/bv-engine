@@ -12,10 +12,13 @@
 #include "CompositeInterpolatorSerializationHelper.h"
 
 #include "Serialization/BV/BVSerializeContext.h"
+#include "Exceptions/SerializationException.h"
 
 #include "Mathematics/Core/MathFuncs.h"
+
 #include <vector>
 #include <array>
+#include <algorithm>
 //#include <initializer_list>
 
 #include "Mathematics/glm_inc.h"
@@ -95,9 +98,63 @@ inline CompositeInterpolator< TimeValueT, ValueT >::Create              ( float 
 template< class TimeValueT, class ValueT >
 inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
 {
-    auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
+    //auto ctx = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 
+    auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
     auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
+
+    //std::stable_sort( keys.negin(), keys.end() );
+
+    //if( keys.size() > 0 )
+    //{
+    //    interpolator->AddKey( keys[ 0 ]->t, keys[ 0 ]->val );
+
+    //    if( keys.size() > 1 )
+    //    {
+    //        if( deser.EnterChild( "interpolations" ) )
+    //        {
+    //            bool existsEvaluator = true;
+
+    //            if( deser.EnterChild( "interpolation" ) )
+    //            {
+    //                for( SizeType i = 1; i < keys.size(); ++i )
+    //                {
+    //                    CurveType curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ), CurveType::CT_LINEAR );
+
+    //                    interpolator->SetAddedKeyCurveType( curveType );
+    //                    interpolator->AddKey( keys[ i ]->t, keys[ i ]->val );
+    //                    
+    //                    auto & addedKeys = interpolator->GetKeys();
+    //                    auto posIter = std::find( addedKeys.begin(), addedKeys.end(), keys[ i ] );
+    //                    auto evalIdx = std::distance( addedKeys.begin(), posIter );
+
+    //                    interpolator->interpolators[ evalIdx ]->Deserialize( deser );
+
+    //                    deser.NextChild();
+    //                }
+
+    //                deser.ExitChild();  // interpolation
+    //            }
+
+    //            deser.ExitChild();  // interpolations
+    //        }
+    //        else
+    //        {
+    //            ctx->AddWarning< SerializationException >( "No interpolation marker found in xml. Evaluators for keys will have default types." );
+
+
+    //        }
+    //    }
+    //}
+
+    //interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR ) );
+    //interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp ) );
+    //interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp ) );
+
+    //return interpolator;
+
+    // ***********************
+    // Old code
 
     if( keys.size() == 1 || deser.EnterChild( "interpolations" ) == false )
     {
@@ -160,6 +217,42 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
     //    return nullptr;
 
     return interpolator;
+}
+
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, ValueT >::DeserializeCurves      ( const IDeserializer & deser )
+{
+    auto ctx = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+
+    std::vector< CurveType > curves;
+
+    SizeType numEvaluators = 0;
+
+    if( deser.EnterChild( "interpolations" ) )
+    {
+        if( deser.EnterChild( "interpolation" ) )
+        {
+            do
+            {
+                auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
+
+                if( curveType.IsValid() )
+                    curves.push_back( curveType.GetVal() );
+                else
+                    ctx->AddWarning< SerializationException >( "Cannot deserialize interpolation under index [" + SerializationHelper::T2String( numEvaluators ) + "]. Interpolation ignored." );
+
+                numEvaluators++;
+            }
+            while( deser.NextChild() );
+
+            deser.ExitChild();  // interpolation
+        }
+        deser.ExitChild();  // interpolations
+    }
+
+    return curves;
 }
 
 // *******************************

@@ -86,6 +86,8 @@ public:
 private:
 	inline ValueT                                       PreEvaluate         ( TimeValueT t ) const;
 	inline ValueT                                       PostEvaluate        ( TimeValueT t ) const;
+
+    inline std::vector< CurveType >                     DeserializeCurves   ( const IDeserializer & deser );
 };
 
 

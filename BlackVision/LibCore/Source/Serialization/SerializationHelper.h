@@ -123,13 +123,15 @@ template<> std::string      T2String( const std::wstring & wstr );
 // Examples: check file Events.h ParamKeyEvent.
 
 #define DECLARE_ENUM_SERIALIZATION( enumType )  \
-template<> enumType         SerializationHelper::String2T      ( const std::string & s, const enumType & defaultVal );  \
-template<> std::string      SerializationHelper::T2String      ( const enumType & t );
+template<> enumType                 SerializationHelper::String2T      ( const std::string & s, const enumType & defaultVal );  \
+template<> Expected< enumType >     SerializationHelper::String2T      ( const std::string & s );                               \
+template<> std::string              SerializationHelper::T2String      ( const enumType & t );
 
 
 #define IMPLEMENT_ENUM_SERIALIZATION( enumType, enumMapping )  \
-template<> enumType         String2T        ( const std::string & s, const enumType & defaultVal ) { return String2Enum( enumMapping, s, defaultVal ); }   \
-template<> std::string      T2String        ( const enumType & t ) { return Enum2String( enumMapping, t ); }
+template<> enumType                 String2T        ( const std::string & s, const enumType & defaultVal )  { return String2Enum( enumMapping, s, defaultVal ); }    \
+template<> Expected< enumType >     String2T        ( const std::string & s )                               { return String2Enum( enumMapping, s ); }                \
+template<> std::string              T2String        ( const enumType & t )                                  { return Enum2String( enumMapping, t ); }
 
 
 #include "SerializationHelper.inl"

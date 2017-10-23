@@ -63,6 +63,21 @@ public:
 
     Exceptions                          GetWarnings             ();
     void                                AddWarning              ( ExceptionPtr warning );
+
+    template< typename Type >
+    void                                AddWarning              ( const std::string & message );
 };
+
+// ========================================================================= //
+// Implmentation
+// ========================================================================= //
+
+// ***********************
+//
+template< typename WarningType >
+inline void             BVDeserializeContext::AddWarning        ( const std::string & message )
+{
+    AddWarning( std::make_shared< WarningType >( message ) );
+}
 
 } // bv

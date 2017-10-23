@@ -2083,6 +2083,9 @@
     <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp">
       <Filter>Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exceptions\SerializationException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5370,6 +5373,9 @@
       <Filter>Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exceptions\SerializationException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
