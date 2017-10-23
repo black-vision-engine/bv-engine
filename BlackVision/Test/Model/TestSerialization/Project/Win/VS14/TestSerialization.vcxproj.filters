@@ -17,6 +17,9 @@
     <ClCompile Include="..\..\..\Source\TestInterpolators\TestInterpolator.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestScenes\VersionTest.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidInterpolations.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
@@ -27,6 +30,9 @@
     </Filter>
     <Filter Include="TestInterpolators">
       <UniqueIdentifier>{bb81b635-eee1-4a1f-8b3b-ad4ecbaab2ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestScenes">
+      <UniqueIdentifier>{3f6d9b73-8dd3-47b0-a08b-018913b1ec4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

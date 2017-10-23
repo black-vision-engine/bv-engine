@@ -18,7 +18,7 @@
 #include "Engine/Editors/EditorVariables/ParametersDescriptors/EndUserParamsLogic.h"
 
 #include "Version/Version.h"
-
+#include "Exceptions/InvalidSceneVersion.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -116,9 +116,9 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     Version version = Version::Create( deser );
 
     if( !version.IsValid() )
-        bvDeserCo->AddWarning( std::make_shared<  RuntimeException >( "This file does not contain scene version. It may be corrupted and loaded incorrectly." ) );
+        bvDeserCo->AddWarning( std::make_shared< InvalidSceneVersion >( "This file does not contain scene version. It may be corrupted and loaded incorrectly." ) );
     else if( version != Version::GetCurrentVersion() )
-        bvDeserCo->AddWarning( std::make_shared< RuntimeException >( "Version of the scene file does not match engine version. This scene may be loaded incorrectly" ) );
+        bvDeserCo->AddWarning( std::make_shared< InvalidSceneVersion >( "Version of the scene file does not match engine version. This scene may be loaded incorrectly" ) );
 
     // Add scene name to context
     auto sceneName = deser.GetAttribute( "name" );

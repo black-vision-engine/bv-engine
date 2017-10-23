@@ -9,11 +9,11 @@ typedef     Int32       ExceptionType;
 
 class Exception : public std::exception
 {
-    ExceptionType               type;
 public:
                                 Exception();
 
     virtual std::string         GetReason() = 0;
+    virtual ExceptionType       GetType() = 0;
 
     static ExceptionType        RegisterType();
 };
@@ -24,12 +24,17 @@ typedef std::vector< ExceptionPtr > Exceptions;
 
 class RuntimeException : public Exception
 {
-    std::string                 reason;
+    static ExceptionType        type;
+public:
+    static ExceptionType        Type();
 
+private:
+    std::string                 reason;
 public:
                                 RuntimeException    ( const std::string& reason );
 
     std::string                 GetReason() override;
+    ExceptionType               GetType() override;
 };
 
 }
