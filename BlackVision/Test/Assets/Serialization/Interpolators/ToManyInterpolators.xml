@@ -1,0 +1,19 @@
+<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="0.000000" val="3.000000"/>
+		<key time="1.000000" val="3.000000"/>
+		<key time="3.000000" val="13.000000"/>
+	</keys>
+	<interpolations>
+		<interpolation type="bezier">
+			<v1 dt="0.200000" dval="0.000000"/>
+			<v2 dt="-0.600000" dval="-2.000000"/>
+		</interpolation>
+		<interpolation type="cosine">
+			<v1 dt="0.400000" dval="0.000000"/>
+			<v2 dt="-0.400000" dval="0.000000"/>
+		</interpolation>
+        <interpolation type="point" />
+        <interpolation type="point" />
+	</interpolations>
+</interpolator>
