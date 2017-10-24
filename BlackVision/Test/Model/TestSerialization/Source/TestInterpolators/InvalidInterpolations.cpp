@@ -87,3 +87,18 @@ TEST( Serialization_ParamValModel, Interpolators_NoInterpolationsMarkerInXML )
     auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
     ASSERT_EQ( actualEvals.size(), 2 );
 }
+
+// ***********************
+// Interpolator without type should be simply ignored.
+TEST( Serialization_ParamValModel, Interpolators_InterpolatorWithoutType )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/InterpolatorWithoutType.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 2 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_BEZIER );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_LINEAR );
+}
+
