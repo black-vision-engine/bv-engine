@@ -14,6 +14,7 @@ class AssetDescsWithUIDs;
 DEFINE_PTR_TYPE( AssetDescsWithUIDs );
 
 class BVProjectEditor;
+class BVDeserializeContext;
 
 namespace model
 {
@@ -27,9 +28,15 @@ namespace model
     DEFINE_PTR_TYPE( ITimeEvaluator );
 }; // model
 
+
 class Exception;
 DEFINE_PTR_TYPE( Exception );
 typedef std::vector< ExceptionPtr > Exceptions;
+
+
+BVDeserializeContext *      Context             ( const IDeserializer & deser );
+void                        WarnWithoutContext  ( const std::string & message );
+
 
 // ************************
 //
@@ -65,7 +72,7 @@ public:
     void                                AddWarning              ( ExceptionPtr warning );
 
     template< typename Type >
-    void                                AddWarning              ( const std::string & message );
+    void                                AddWarning              ( const std::string & message, FilePosition filePos );
 };
 
 // ========================================================================= //
@@ -75,9 +82,27 @@ public:
 // ***********************
 //
 template< typename WarningType >
-inline void             BVDeserializeContext::AddWarning        ( const std::string & message )
+inline void             BVDeserializeContext::AddWarning        ( const std::string & message, FilePosition filePos )
 {
-    AddWarning( std::make_shared< WarningType >( message ) );
+    AddWarning( std::make_shared< WarningType >( message, filePos, m_sceneName ) );
+}
+
+// ***********************
+//
+template< typename WarningType >
+inline void                     Warn        ( const IDeserializer & deser, const std::string & message )
+{
+    auto ctx = Context( deser );
+    if( ctx )
+    {
+        auto filePos = deser.CurrentLineNumber();
+
+        ctx->AddWarning< WarningType >( message, filePos );
+    }
+    else
+    {
+        WarnWithoutContext( message );
+    }
 }
 
 } // bv

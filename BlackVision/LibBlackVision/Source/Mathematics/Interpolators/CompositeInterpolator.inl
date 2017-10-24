@@ -224,11 +224,7 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
 template< class TimeValueT, class ValueT >
 inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, ValueT >::DeserializeCurves      ( const IDeserializer & deser )
 {
-    auto ctx = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
-
     std::vector< CurveType > curves;
-
-    SizeType numEvaluators = 0;
 
     if( deser.EnterChild( "interpolations" ) )
     {
@@ -241,9 +237,7 @@ inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, Value
                 if( curveType.IsValid() )
                     curves.push_back( curveType.GetVal() );
                 else
-                    ctx->AddWarning< SerializationException >( "Cannot deserialize interpolation under index [" + SerializationHelper::T2String( numEvaluators ) + "]. Interpolation ignored." );
-
-                numEvaluators++;
+                    Warn< SerializationException >( deser, "Cannot deserialize interpolation. Interpolation ignored." );
             }
             while( deser.NextChild() );
 

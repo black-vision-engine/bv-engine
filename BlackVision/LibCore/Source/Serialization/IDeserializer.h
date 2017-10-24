@@ -16,6 +16,13 @@ struct FilePosition
 {
     SizeType    Line;
     SizeType    CharPosition;
+
+    // ***********************
+    //
+    FilePosition()
+        : Line( 0 )
+        , CharPosition( 0 )
+    {}
 };
 
 
