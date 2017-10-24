@@ -27,17 +27,44 @@ TEST( Serialization_Serializers_XML, QueryLineNumberOfNode )
 
     ASSERT_TRUE( deser.EnterChild( "lights" ) );
 
-    EXPECT_EQ( deser.CurrentLineNumber().Line, 8 );
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 9 );
     EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 3 );
 
     ASSERT_TRUE( deser.EnterChild( "light" ) );
 
-    EXPECT_EQ( deser.CurrentLineNumber().Line, 9 );
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 10 );
     EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 4 );
 
     ASSERT_TRUE( deser.EnterChild( "params" ) );
 
-    EXPECT_EQ( deser.CurrentLineNumber().Line, 10 );
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 11 );
     EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 5 );
 
+    deser.ExitChild();
+    deser.ExitChild();
+    deser.ExitChild();
+
+    ASSERT_TRUE( deser.EnterChild( "gridlines" ) );
+
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 112 );
+    EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 3 );
+
+    deser.ExitChild();
+
+    ASSERT_TRUE( deser.EnterChild( "node" ) );
+
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 123 );
+    EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 3 );
+
+    ASSERT_TRUE( deser.EnterChild( "plugins" ) );
+    ASSERT_TRUE( deser.EnterChild( "plugin" ) );
+
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 125 );
+    EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 5 );
+
+    ASSERT_TRUE( deser.NextChild() );
+    ASSERT_TRUE( deser.NextChild() );
+
+    EXPECT_EQ( deser.CurrentLineNumber().Line, 263 );
+    EXPECT_EQ( deser.CurrentLineNumber().CharPosition, 5 );
 }
