@@ -3,10 +3,16 @@
 #include <exception>
 #include "CoreDEF.h"
 
-namespace bv {
+
+
+namespace bv
+{
 
 typedef     Int32       ExceptionType;
 
+
+// ***********************
+//
 class Exception : public std::exception
 {
 public:
@@ -20,16 +26,22 @@ public:
 
 DEFINE_PTR_TYPE( Exception );
 
+
+
 typedef std::vector< ExceptionPtr > Exceptions;
 
+// ***********************
+//
 class RuntimeException : public Exception
 {
     static ExceptionType        type;
 public:
     static ExceptionType        Type();
 
-private:
+protected:
+
     std::string                 reason;
+
 public:
                                 RuntimeException    ( const std::string& reason );
 
