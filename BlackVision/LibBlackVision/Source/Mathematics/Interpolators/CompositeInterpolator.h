@@ -34,6 +34,7 @@ class CompositeInterpolator : public ISerializable
     FRIEND_TEST_ACCESSOR( CompositeInterpolator )
 private:
     typedef Key< TimeValueT, ValueT >                   Key;
+    typedef std::shared_ptr< Key >                      KeyPtr;
     typedef IEvaluator< TimeValueT, ValueT >            IEvaluator;
 
     std::vector< Key >                                  keys;
@@ -63,7 +64,7 @@ public:
     static std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > 
                                                         Create              ( const IDeserializer & );
 
-    inline void                                         AddKey              ( TimeValueT t, const ValueT & v );
+    inline bool                                         AddKey              ( TimeValueT t, const ValueT & v );
     inline bool                                         RemoveKey           ( TimeValueT t );
     inline bool                                         MoveKey             ( TimeValueT t, TimeValueT newTime );
     inline ValueT                                       Evaluate            ( TimeValueT t ) const;
@@ -87,7 +88,8 @@ private:
 	inline ValueT                                       PreEvaluate         ( TimeValueT t ) const;
 	inline ValueT                                       PostEvaluate        ( TimeValueT t ) const;
 
-    inline std::vector< CurveType >                     DeserializeCurves   ( const IDeserializer & deser );
+    static inline std::vector< CurveType >              DeserializeCurves           ( const IDeserializer & deser );
+    static inline void                                  DeserializeInterpolators    ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator );
 };
 
 

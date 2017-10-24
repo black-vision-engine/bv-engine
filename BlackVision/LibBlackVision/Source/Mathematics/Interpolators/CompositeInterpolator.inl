@@ -12,6 +12,7 @@
 #include "CompositeInterpolatorSerializationHelper.h"
 
 #include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 #include "Exceptions/SerializationException.h"
 
 #include "Mathematics/Core/MathFuncs.h"
@@ -98,123 +99,45 @@ inline CompositeInterpolator< TimeValueT, ValueT >::Create              ( float 
 template< class TimeValueT, class ValueT >
 inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
 {
-    //auto ctx = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
-
     auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
+
+    // Read CompositeInterpolator parameters.
+    CurveType defaultCurveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR );
+    WrapMethod preWrapMethod = SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp );
+    WrapMethod postWrapMethod = SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp );
+
     auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
+    auto curves = DeserializeCurves( deser );       // Reads curve types to add keys with proper interpolator.
 
-    //std::stable_sort( keys.negin(), keys.end() );
+    std::stable_sort( keys.begin(), keys.end(), []( const KeyPtr & key1, const KeyPtr key2 ){ if( key1->t < key2->t ) return true; return false; } );
 
-    //if( keys.size() > 0 )
-    //{
-    //    interpolator->AddKey( keys[ 0 ]->t, keys[ 0 ]->val );
-
-    //    if( keys.size() > 1 )
-    //    {
-    //        if( deser.EnterChild( "interpolations" ) )
-    //        {
-    //            bool existsEvaluator = true;
-
-    //            if( deser.EnterChild( "interpolation" ) )
-    //            {
-    //                for( SizeType i = 1; i < keys.size(); ++i )
-    //                {
-    //                    CurveType curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ), CurveType::CT_LINEAR );
-
-    //                    interpolator->SetAddedKeyCurveType( curveType );
-    //                    interpolator->AddKey( keys[ i ]->t, keys[ i ]->val );
-    //                    
-    //                    auto & addedKeys = interpolator->GetKeys();
-    //                    auto posIter = std::find( addedKeys.begin(), addedKeys.end(), keys[ i ] );
-    //                    auto evalIdx = std::distance( addedKeys.begin(), posIter );
-
-    //                    interpolator->interpolators[ evalIdx ]->Deserialize( deser );
-
-    //                    deser.NextChild();
-    //                }
-
-    //                deser.ExitChild();  // interpolation
-    //            }
-
-    //            deser.ExitChild();  // interpolations
-    //        }
-    //        else
-    //        {
-    //            ctx->AddWarning< SerializationException >( "No interpolation marker found in xml. Evaluators for keys will have default types." );
-
-
-    //        }
-    //    }
-    //}
-
-    //interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR ) );
-    //interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp ) );
-    //interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp ) );
-
-    //return interpolator;
-
-    // ***********************
-    // Old code
-
-    if( keys.size() == 1 || deser.EnterChild( "interpolations" ) == false )
+    if( keys.size() > 0 )
     {
-        for( auto key : keys ) // no interpolation types
-            interpolator->AddKey( key->t, key->val );
-    }
-    else
-    {
-        if( deser.EnterChild( "interpolation" ) )
+        interpolator->AddKey( keys[ 0 ]->t, keys[ 0 ]->val );
+
+        if( keys.size() > 1 )
         {
-            for( auto key : keys )
+            for( SizeType i = 1; i < keys.size(); ++i )
             {
-                interpolator->AddKey( key->t, key->val );
-                if( key != keys.back() )
-                {
-                    interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ), CurveType::CT_LINEAR ) );
-                    if( deser.NextChild() == false )
-                    {
-                        if( key == keys.end()[ -2 ] ) // everything is OK, this is the end, we need to go out
-                            deser.ExitChild();
-                        else // we've got malformed XML
-                        {
-                            // DOUBLE FIXME: error handling
-                            // assert( false ); // FIXME: error handling
-                            return nullptr;
-                        }
-                    }
-                }
+                SizeType curveIdx = i - 1;
+                CurveType curveType = curves.size() > curveIdx  ? curves[ curveIdx ] : defaultCurveType;
+
+                interpolator->SetAddedKeyCurveType( curveType );
+                bool addedNew = interpolator->AddKey( keys[ i ]->t, keys[ i ]->val );
+
+                if( !addedNew )
+                    Warn< SerializationException >( deser, "Duplicate key. Time [" + SerializationHelper::T2String( keys[ i ]->t ) + "], value [" + SerializationHelper::T2String( keys[ i ]->val ) + "]" );
             }
-
-            deser.EnterChild( "interpolation" );
-            size_t i = 0;
-            do
-            {
-				if( interpolator->interpolators.size() > i )
-				{
-					interpolator->interpolators[ i++ ]->Deserialize( deser );
-				}
-				else
-				{
-					LOG_MESSAGE( SeverityLevel::error ) << "Wrong number of interpolators for keys.";
-				}
-            } while( deser.NextChild() );
-            deser.ExitChild(); // exit "interpolation"
         }
-        else
-        {
-            for( auto key : keys ) // no interpolation types
-                interpolator->AddKey( key->t, key->val );
-        }
-        deser.ExitChild(); // exit "interpolations"
     }
 
-    interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR ) );
-    interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp ) );
-    interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp ) );
-    
-    // FIXME: This code is written instead of assert here. Make proper error handling.
-    //if( interpolator->GetNumKeys() == 0 )
-    //    return nullptr;
+    // Deserialize interpolators parameters.
+    DeserializeInterpolators( deser, interpolator );
+
+    // Set CompositeInterpolator parameters.
+    interpolator->SetAddedKeyCurveType( defaultCurveType );
+    interpolator->SetWrapPreMethod( preWrapMethod );
+    interpolator->SetWrapPostMethod( postWrapMethod );
 
     return interpolator;
 }
@@ -222,7 +145,7 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, ValueT >::DeserializeCurves      ( const IDeserializer & deser )
+inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, ValueT >::DeserializeCurves          ( const IDeserializer & deser )
 {
     std::vector< CurveType > curves;
 
@@ -237,7 +160,7 @@ inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, Value
                 if( curveType.IsValid() )
                     curves.push_back( curveType.GetVal() );
                 else
-                    Warn< SerializationException >( deser, "Cannot deserialize interpolation. Interpolation ignored." );
+                    Warn< SerializationException >( deser, "Cannot deserialize curveType. Interpolation ignored." );
             }
             while( deser.NextChild() );
 
@@ -247,6 +170,43 @@ inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, Value
     }
 
     return curves;
+}
+
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+inline void                             CompositeInterpolator< TimeValueT, ValueT >::DeserializeInterpolators   ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator )
+{
+    if( interpolator->interpolators.size() > 0 )
+    {
+        SizeType interpolatorIdx = 0;
+
+        if( deser.EnterChild( "interpolations" ) )
+        {
+            if( deser.EnterChild( "interpolation" ) )
+            {
+                do
+                {
+                    auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
+
+                    if( curveType.IsValid() )
+                    {
+                        interpolator->interpolators[ interpolatorIdx ]->Deserialize( deser );
+                        interpolatorIdx++;
+                    }
+
+                } while( interpolator->interpolators.size() > interpolatorIdx && deser.NextChild() );
+
+                deser.ExitChild();  // interpolation
+            }
+            else
+                Warn< SerializationException >( deser, "Empty [interpolations] array." );
+
+            deser.ExitChild();  // interpolations
+        }
+        else
+            Warn< SerializationException >( deser, "No [interpolation] marker." );
+    }
 }
 
 // *******************************
@@ -376,12 +336,12 @@ inline std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpo
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-inline void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
+inline bool         CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
     if( keys.empty() )
     {
         keys.push_back( Key( t, v ) );
-        return;
+        return true;
     }
 
 // find the proper key
@@ -445,6 +405,9 @@ inline void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( Ti
     for( auto j = ( UInt32 )( i-2 ); j <= ( UInt32 )( i+1 ); j++ )
         if( j >= 0 && j < ( UInt32 )interpolators.size() )
             UpdateInterpolator( interpolators, j );
+
+    // Returns true if key was added. Returns false if key was overriden.
+    return !isSame;
 }
 
 // ***********************

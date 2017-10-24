@@ -81,7 +81,7 @@ TEST( Serialization_ParamValModel, Interpolators_LackOfInterpolatorsInXML )
 // There're no interpolations marker. We should create default interpolators.
 TEST( Serialization_ParamValModel, Interpolators_NoInterpolationsMarkerInXML )
 {
-    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/NoInteprolationsMarker.xml", "interpolator" );
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/NoInterpolationsMarker.xml", "interpolator" );
     ASSERT_NE( actual, nullptr );
 
     auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
