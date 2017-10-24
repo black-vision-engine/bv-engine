@@ -25,7 +25,7 @@ public:
 
     //PieChartNode( const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, const model::PluginsManager * pluginsManager = nullptr );
     PieChartNode( /*const std::string & name, */model::ITimeEvaluatorPtr timeEvaluator, const std::vector< float > percents, const std::vector< float > offsets )
-		: BasicNode( "PieChartNode", timeEvaluator ) 
+		: BasicNode( "PieChartNode" ) 
 	{ 
 		std::vector< PieChartSubnodeDesc > descs;
 
@@ -37,7 +37,7 @@ public:
 	}
 
 	PieChartNode( model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
-		: BasicNode( "PieChartNode", timeEvaluator ) 
+		: BasicNode( "PieChartNode" ) 
 	{ 
 		Init( timeEvaluator, descs );
 	}

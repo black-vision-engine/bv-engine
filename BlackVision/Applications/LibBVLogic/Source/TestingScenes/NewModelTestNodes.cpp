@@ -160,7 +160,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::s
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( name, timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( name );
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
@@ -186,7 +186,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
-    auto root = model::BasicNode::Create( name, timeEvaluator );
+    auto root = model::BasicNode::Create( name );
     auto success = root->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
@@ -456,7 +456,7 @@ model::BasicNodePtr NewEmptyNodeWithTransform( model::ITimeEvaluatorPtr timeEval
 
     uids.push_back( "DEFAULT_TRANSFORM" );
 
-    auto node = model::BasicNode::Create( "", timeEvaluator );
+    auto node = model::BasicNode::Create( "" );
     assert( node );
     
     auto success = node->AddPlugins( uids, timeEvaluator );
@@ -794,7 +794,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::ITimeEvalua
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( nodeName, timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( nodeName );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -843,7 +843,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::ITi
     }
 
     
-    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root" );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
@@ -884,7 +884,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -937,7 +937,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::ITimeEvalu
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1006,7 +1006,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITi
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "prismNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "prismNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1067,7 +1067,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITim
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "prismNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "prismNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1132,7 +1132,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::IT
     uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "prismNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "prismNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1196,7 +1196,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "pieNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "pieNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1265,7 +1265,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::I
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "pieNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "pieNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1336,7 +1336,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvalua
     //uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1394,7 +1394,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
     //uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
-    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode" );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1489,7 +1489,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root" );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1616,7 +1616,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::ITimeEva
     GSimplePluginsUIDS.push_back( "DEFAULT_TEXTURE" );
 
 
-    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root" );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1711,7 +1711,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root" );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1770,7 +1770,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins8, GSimplePlugins8 + 2 );
 #endif
 
-    auto node = model::BasicNode::Create( "video_node", timeEvaluator );
+    auto node = model::BasicNode::Create( "video_node" );
     //auto node2 = model::BasicNode::Create( "video_node2", timeEvaluator );
     //node->AddChildToModelOnly( node2 );
 
@@ -1873,7 +1873,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = model::BasicNode::Create( "Text", timeEvaluator );
+    auto node = model::BasicNode::Create( "Text" );
 
     
 
@@ -2053,7 +2053,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root" );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -2126,7 +2126,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvalu
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root" );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -2190,7 +2190,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::ITimeEvalua
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins6, GSimplePlugins6 + 3 );
 
-    auto node = model::BasicNode::Create( ".", timeEvaluator );
+    auto node = model::BasicNode::Create( "." );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
@@ -2403,7 +2403,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
     #endif
 #endif
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root" );
 
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );  { success;  }
@@ -2655,7 +2655,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
     #endif
 #endif
 
-    auto root = model::BasicNode::Create( uid, timeEvaluator );
+    auto root = model::BasicNode::Create( uid );
 
     auto success = root->AddPlugins( uids, someTimelineWithEvents );
     assert( success );
@@ -2710,7 +2710,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
     uids.push_back( "DEFAULT_TEXT" );
 
 
-    auto node = model::BasicNode::Create( nodeName, timeEvaluator );
+    auto node = model::BasicNode::Create( nodeName );
     auto success = node->AddPlugins( uids, localTimeline );
     assert( success );
 

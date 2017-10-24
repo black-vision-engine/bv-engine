@@ -135,8 +135,8 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
         auto scene = editor->GetModelScene( model::ModelState::GetInstance().QueryNodeScene( gizmoOwner.get() )->GetName() );
         auto timeEvaluator = m_centerColor.GetParameter().GetTimeEvaluator();
 
-        model::BasicNodePtr boxNode = model::BasicNode::Create( "box", timeEvaluator );
-        model::BasicNodePtr centerNode = model::BasicNode::Create( "center", timeEvaluator );
+        model::BasicNodePtr boxNode = model::BasicNode::Create( "box" );
+        model::BasicNodePtr centerNode = model::BasicNode::Create( "center" );
 
         m_centerNode = centerNode;
         m_bbNode = boxNode;

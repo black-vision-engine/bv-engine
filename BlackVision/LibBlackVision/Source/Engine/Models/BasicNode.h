@@ -53,13 +53,13 @@ private:
 
 protected:
 
-    explicit BasicNode( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager = nullptr );
+    explicit BasicNode( const std::string & name, const PluginsManager * pluginsManager = nullptr );
 
 public:
 
     virtual ~BasicNode();
 
-    static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager = nullptr );
+    static BasicNodePtr                     Create                  ( const std::string & name, const PluginsManager * pluginsManager = nullptr );
     static BasicNodePtr                     Create                  ( const IDeserializer& doc );
     virtual void                            Serialize               ( ISerializer& doc ) const;
 
