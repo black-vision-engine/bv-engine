@@ -22,7 +22,7 @@ std::string         SerializationException::PrintLineNumber     () const
 {
     // Note: Lines are numbered beginning from 1. If we got 0 here,
     // position information is useless and we can ommit it.
-    if( m_filePosition.Line == 0 )
+    if( m_filePosition.Line != 0 )
         return "Line: [" + SerializationHelper::T2String( m_filePosition.Line ) + "] Column: [" + SerializationHelper::T2String( m_filePosition.CharPosition ) + "]. ";
     return std::string();
 }

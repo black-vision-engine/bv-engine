@@ -191,8 +191,17 @@ inline void                             CompositeInterpolator< TimeValueT, Value
 
                     if( curveType.IsValid() )
                     {
-                        interpolator->interpolators[ interpolatorIdx ]->Deserialize( deser );
-                        interpolatorIdx++;
+                        auto & eval = interpolator->interpolators[ interpolatorIdx ];
+
+                        // Check if curve type of created evaluator matches deserialized value.
+                        // If not, we probably omited some interpolations in previous step while adding keys,
+                        // for example in situation, that two keys were placed in the same time. The solution is
+                        // to find next matching interpolation in file.
+                        if( curveType == eval->GetCurveType() )
+                        {
+                            eval->Deserialize( deser );
+                            interpolatorIdx++;
+                        }
                     }
 
                 } while( interpolator->interpolators.size() > interpolatorIdx && deser.NextChild() );

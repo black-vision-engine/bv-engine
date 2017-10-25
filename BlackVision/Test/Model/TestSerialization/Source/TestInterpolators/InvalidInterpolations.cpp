@@ -102,3 +102,19 @@ TEST( Serialization_ParamValModel, Interpolators_InterpolatorWithoutType )
     EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_LINEAR );
 }
 
+// ***********************
+// Keys are set in the same time. Interpolator for the second key should be ignored.
+// Note: This is no ideal solution since we don't know what someone, who modified xml, actually meant.
+// But there's no way to determine, what interpolators should be used.
+TEST( Serialization_ParamValModel, Interpolators_DoubledKey )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/DoubledKeys.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 2 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_QUARTIC_INOUT );
+}
+
