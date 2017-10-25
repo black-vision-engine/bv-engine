@@ -118,3 +118,19 @@ TEST( Serialization_ParamValModel, Interpolators_DoubledKey )
     EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_QUARTIC_INOUT );
 }
 
+// ***********************
+// One key has not parsing time value. Key will be ignored. Interpolations will be used
+// in order of occurance in file.
+// Note: It could be better solution to ignore interpolator the same way as in DoubledKey test.
+// I'm not sure if it's worth the work needed for this.
+TEST( Serialization_ParamValModel, Interpolators_NotParsingKey )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/NotParsingKeyTime.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 2 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_LINEAR );
+}
