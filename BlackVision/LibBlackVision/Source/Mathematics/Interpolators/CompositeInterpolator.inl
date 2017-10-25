@@ -128,6 +128,17 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
                 if( !addedNew )
                     Warn< SerializationException >( deser, "Duplicate key. Time [" + SerializationHelper::T2String( keys[ i ]->t ) + "], value [" + SerializationHelper::T2String( keys[ i ]->val ) + "]" );
             }
+
+            if( keys.size() - 1 > curves.size() )
+            {
+                SizeType numLacks = ( keys.size() - 1 ) - curves.size();
+                Warn< SerializationException >( deser, "Not enough interpolations. Replacing [" + SerializationHelper::T2String( numLacks ) + "] with default evaluators." );
+            }
+            else if( keys.size() - 1 < curves.size() - 1 )
+            {
+                SizeType toMany = curves.size() - keys.size() + 1;
+                Warn< SerializationException >( deser, "To many interpolations. [" + SerializationHelper::T2String( toMany ) + "] ignored." );
+            }
         }
     }
 
