@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Serialization/SerializationHelper.h"
-
+#include "IEvaluator.h"
 
 
 namespace bv

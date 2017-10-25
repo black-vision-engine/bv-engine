@@ -4,10 +4,7 @@
 
 #include "InterpolatorBasicTypes.h"
 
-#include "Functions/ConstFunction.h"
-#include "Functions/LinearFunction.h"
-#include "Functions/BezierFunction.h"
-#include "Functions/PolynomialFunction.h"
+#include "Mathematics/Interpolators/Functions/Evaluators.h"
 
 #include "CompositeInterpolatorSerializationHelper.h"
 
@@ -34,11 +31,10 @@ namespace bv {
 //
 template< class TimeValueT, class ValueT >
 inline CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolerance )
-    : m_type( CurveType::CT_LINEAR )
+    : m_type( DefaultCurveType< ValueT >() )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{
-}
+{}
 
 // *******************************
 //
@@ -129,16 +125,7 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
                     Warn< SerializationException >( deser, "Duplicate key. Time [" + SerializationHelper::T2String( keys[ i ]->t ) + "], value [" + SerializationHelper::T2String( keys[ i ]->val ) + "]" );
             }
 
-            if( keys.size() - 1 > curves.size() )
-            {
-                SizeType numLacks = ( keys.size() - 1 ) - curves.size();
-                Warn< SerializationException >( deser, "Not enough interpolations. Replacing [" + SerializationHelper::T2String( numLacks ) + "] with default evaluators." );
-            }
-            else if( keys.size() - 1 < curves.size() - 1 )
-            {
-                SizeType toMany = curves.size() - keys.size() + 1;
-                Warn< SerializationException >( deser, "To many interpolations. [" + SerializationHelper::T2String( toMany ) + "] ignored." );
-            }
+            ValidateMatching( deser, curves, keys );
         }
     }
 
@@ -227,6 +214,30 @@ inline void                             CompositeInterpolator< TimeValueT, Value
         else
             Warn< SerializationException >( deser, "No [interpolation] marker." );
     }
+}
+
+// ***********************
+// This function checks only number of keys and curves.
+// In future we could make better check, for example do something with invalid keys.
+template< class TimeValueT, class ValueT >
+inline bool                             CompositeInterpolator< TimeValueT, ValueT >::ValidateMatching       ( const IDeserializer & deser, const std::vector< CurveType > & curves, const std::vector< std::shared_ptr< Key > > & keys )
+{
+    if( keys.size() - 1 > curves.size() )
+    {
+        SizeType numLacks = ( keys.size() - 1 ) - curves.size();
+        Warn< SerializationException >( deser, "Not enough interpolations. Replacing [" + SerializationHelper::T2String( numLacks ) + "] with default evaluators." );
+
+        return false;
+    }
+    else if( keys.size() - 1 < curves.size() - 1 )
+    {
+        SizeType toMany = curves.size() - keys.size() + 1;
+        Warn< SerializationException >( deser, "To many interpolations. [" + SerializationHelper::T2String( toMany ) + "] ignored." );
+
+        return false;
+    }
+
+    return true;
 }
 
 // *******************************
@@ -548,11 +559,10 @@ inline std::vector< Key< TimeValueT, ValueT > > &                               
 template< class TimeValueT, class ValueT >
 inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
+    SetAddedKeyCurveType( type );
+
     if( keys.size() == 0 )
-    {
-        assert( false && "Interpolators with no keys are evil" );
         return;
-    }
 
     interpolators.clear();
     auto prevKey = keys.begin();
@@ -566,8 +576,6 @@ inline void                                                CompositeInterpolator
 
     for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
         UpdateInterpolator( interpolators, i );
-
-    SetAddedKeyCurveType( type );
 }
 
 // *******************************
@@ -729,31 +737,5 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( Ti
 
 }
 
-// *******************************
-//
-template<>
-inline CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance )
-	: m_type( CurveType::CT_POINT )
-	, m_tolerance( tolerance )
-	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{}
-
-// *******************************
-//
-template<>
-inline CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance )
-	: m_type( CurveType::CT_POINT )
-	, m_tolerance( tolerance )
-	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{}
-
-// *******************************
-//
-template<>
-inline CompositeInterpolator< bv::TimeType, bool >::CompositeInterpolator( float tolerance )
-    : m_type( CurveType::CT_POINT )
-    , m_tolerance( tolerance )
-    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{}
 
 } // bv

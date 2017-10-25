@@ -3,27 +3,11 @@
 #include "BasicInterpolator.h"
 #include "InterpolatorBasicTypes.h"
 
-
+#include "Mathematics/Interpolators/Functions/IEvaluator.h"
 
 
 namespace bv
 {
-
-
-
-// ***********************
-//
-template< class TimeValueT, class ValueT >
-class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
-{
-public:
-    virtual void                                Deserialize( const IDeserializer& deser )   = 0;
-    
-    virtual ValueT                              Evaluate( TimeValueT t ) const              = 0;
-    virtual void                                SetValue( TimeValueT t, ValueT v )          = 0;
-    virtual EvaluatorType                       GetType() const                             = 0;
-    virtual CurveType                           GetCurveType() const                        = 0;
-};
 
 
 // ***********************
@@ -90,18 +74,9 @@ private:
 
     static inline std::vector< CurveType >              DeserializeCurves           ( const IDeserializer & deser );
     static inline void                                  DeserializeInterpolators    ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator );
+
+    static inline bool                                  ValidateMatching    ( const IDeserializer & deser, const std::vector< CurveType > & curves, const std::vector< std::shared_ptr< Key > > & keys );
 };
-
-
-// *******************************
-//
-template<>
-CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance );
-
-// *******************************
-//
-template<>
-CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance );
 
 
 

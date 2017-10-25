@@ -37,7 +37,7 @@ TEST( Serialization_ParamValModel, Interpolators_LinearCurveForwString )
 
 // ***********************
 // Create interpolator with linear interpolation for string type.
-// This is invalid combination but I don't know what is expected result.
+// This is invalid combination. Interpolator should use default value for this type.
 TEST( Serialization_ParamValModel, Interpolators_LinearCurveForStringXML )
 {
     std::shared_ptr< CompositeInterpolator< TimeType, std::string > > actual;
@@ -48,5 +48,10 @@ TEST( Serialization_ParamValModel, Interpolators_LinearCurveForStringXML )
 
     ASSERT_NE( actual, nullptr );
 
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 1 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetType(), EvaluatorType::ET_CONSTANT );
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT);
 }
 

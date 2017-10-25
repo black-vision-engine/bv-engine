@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mathematics/Interpolators/Key.h"
+#include "IEvaluator.h"
 
 #include "Serialization/SerializationHelper.h"
 

@@ -5378,6 +5378,12 @@
     <ClInclude Include="..\..\..\Source\Exceptions\SerializationException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\IEvaluator.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\Evaluators.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

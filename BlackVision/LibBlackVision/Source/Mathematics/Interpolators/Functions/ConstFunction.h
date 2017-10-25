@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Mathematics/Interpolators/CompositeInterpolator.h"
+#include "IEvaluator.h"
 
-namespace bv {
+
+namespace bv
+{
 
 // *******************************
 //

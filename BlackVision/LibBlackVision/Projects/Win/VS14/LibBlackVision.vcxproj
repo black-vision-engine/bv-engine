@@ -828,6 +828,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\Evaluators.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\IEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Version\BuildVersion.h" />
     <ClInclude Include="..\..\..\Source\Version\Version.h" />
   </ItemGroup>
