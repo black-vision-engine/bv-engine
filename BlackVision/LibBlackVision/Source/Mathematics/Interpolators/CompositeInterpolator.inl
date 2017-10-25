@@ -559,23 +559,26 @@ inline std::vector< Key< TimeValueT, ValueT > > &                               
 template< class TimeValueT, class ValueT >
 inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
-    SetAddedKeyCurveType( type );
-
-    if( keys.size() == 0 )
-        return;
-
-    interpolators.clear();
-    auto prevKey = keys.begin();
-    auto nextKey = prevKey + 1;
-    while( nextKey != keys.end() )
+    if( IsValidCurveType< ValueT >( type ) )
     {
-        interpolators.push_back( CreateDummyInterpolator( type, *prevKey, *nextKey, m_tolerance ) );
-        prevKey++;
-        nextKey++;
-    }
+        SetAddedKeyCurveType( type );
 
-    for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
-        UpdateInterpolator( interpolators, i );
+        if( keys.size() == 0 )
+            return;
+
+        interpolators.clear();
+        auto prevKey = keys.begin();
+        auto nextKey = prevKey + 1;
+        while( nextKey != keys.end() )
+        {
+            interpolators.push_back( CreateDummyInterpolator( type, *prevKey, *nextKey, m_tolerance ) );
+            prevKey++;
+            nextKey++;
+        }
+
+        for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
+            UpdateInterpolator( interpolators, i );
+    }
 }
 
 // *******************************
@@ -583,7 +586,8 @@ inline void                                                CompositeInterpolator
 template< class TimeValueT, class ValueT >
 inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetAddedKeyCurveType( CurveType type )
 {
-    m_type = type;
+    if( IsValidCurveType< ValueT >( type ) )
+        m_type = type;
 }
 
 // *******************************

@@ -138,7 +138,7 @@ inline EvaluatorType            GetEvaluatorType        ( CurveType curve )
 template< typename ValueT >
 inline bool                 IsValidCurveType            ( CurveType curve )
 {
-    EvaluatorType evalType = GetEvaluatorType( curvet );
+    EvaluatorType evalType = GetEvaluatorType< ValueT >( curve );
     return IsValidEvaluatorType< ValueT >( evalType );
 }
 
