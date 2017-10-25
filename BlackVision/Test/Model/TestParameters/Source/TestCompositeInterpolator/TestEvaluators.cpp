@@ -106,3 +106,46 @@ TEST( Model_ParamValModel, CompositeInterpolator_ChangeAllCurves )
     EXPECT_EQ( evals[ 1 ]->GetCurveType(), CurveType::CT_LINEAR );
     EXPECT_EQ( evals[ 2 ]->GetCurveType(), CurveType::CT_LINEAR );
 }
+
+// ***********************
+// Some evalutors don't supported some types. SetAddedKeyCurveType should stay with previous value in this case.
+TEST( Model_ParamValModel, CompositeInterpolator_ChangeToInvalidCurve )
+{
+    CompositeInterpolator< TimeType, std::string > interpolator;
+    interpolator.AddKey( 1.0f, "" );
+
+    auto & evals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( &interpolator );
+
+    // Check if curve is set to default value.
+    EXPECT_EQ( interpolator.GetCurveType(), CurveType::CT_POINT );
+
+    // Set invalid curve type.
+    interpolator.SetAddedKeyCurveType( CurveType::CT_BEZIER );
+    interpolator.AddKey( 2.0f, "" );
+
+    // Add key should add value but with previous curve type.
+    EXPECT_EQ( interpolator.GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( evals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+}
+
+// ***********************
+// Some evalutors don't supported some types. SetGlobalCurveType shouldn't change any value.
+TEST( Model_ParamValModel, CompositeInterpolator_ChangeGlobalToInvalidCurve )
+{
+    CompositeInterpolator< TimeType, std::string > interpolator;
+    interpolator.AddKey( 1.0f, "" );
+    interpolator.AddKey( 2.0f, "" );
+    interpolator.AddKey( 3.0f, "" );
+
+    auto & evals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( &interpolator );
+
+    // Check if curve is set to default value.
+    EXPECT_EQ( interpolator.GetCurveType(), CurveType::CT_POINT );
+
+    // Set invalid curve type.
+    interpolator.SetGlobalCurveType( CurveType::CT_BEZIER );
+
+    // Nothing should change.
+    EXPECT_EQ( evals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( evals[ 1 ]->GetCurveType(), CurveType::CT_POINT );
+}
