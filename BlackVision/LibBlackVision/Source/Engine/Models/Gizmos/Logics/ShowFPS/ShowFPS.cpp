@@ -125,8 +125,8 @@ void                        ShowFPS::CreateGizmoSubtree ( BVProjectEditor * edit
         auto scene = editor->GetModelScene( model::ModelState::GetInstance().QueryNodeScene( gizmoOwner.get() )->GetName() );
         auto timeEvaluator = m_refreshFrequency.GetParameter().GetTimeEvaluator();
 
-        model::BasicNodePtr fpsLabel = model::BasicNode::Create( "fpsLabel", timeEvaluator );
-        model::BasicNodePtr fpsValue = model::BasicNode::Create( "fpsValue", timeEvaluator );
+        model::BasicNodePtr fpsLabel = model::BasicNode::Create( "fpsLabel" );
+        model::BasicNodePtr fpsValue = model::BasicNode::Create( "fpsValue" );
 
         fpsLabel->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
         fpsLabel->AddPlugin( "DEFAULT_COLOR", timeEvaluator );

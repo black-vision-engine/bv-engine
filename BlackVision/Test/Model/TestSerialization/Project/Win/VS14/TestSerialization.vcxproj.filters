@@ -23,6 +23,9 @@
     <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidInterpolations.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp">
+      <Filter>TestNodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestKeys">
@@ -33,6 +36,9 @@
     </Filter>
     <Filter Include="TestScenes">
       <UniqueIdentifier>{3f6d9b73-8dd3-47b0-a08b-018913b1ec4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestNodes">
+      <UniqueIdentifier>{a0e3ce15-1f0a-4d31-98d6-f8c6d4eeb88c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -61,7 +61,7 @@ bv::model::SceneModelPtr CreateTestScene0()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );
 
-	auto root = model::BasicNode::Create( "textured_rect", timeline );
+	auto root = model::BasicNode::Create( "textured_rect" );
 
     StringVector plugins;
     plugins.push_back( "DEFAULT_TRANSFORM" );
