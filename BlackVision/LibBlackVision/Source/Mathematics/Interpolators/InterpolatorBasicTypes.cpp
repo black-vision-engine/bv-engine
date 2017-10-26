@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "CompositeInterpolatorSerializationHelper.h"
+#include "InterpolatorBasicTypes.h"
 
 namespace bv
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "BasicInterpolator.h"
 #include "InterpolatorBasicTypes.h"
+#include "Key.h"
 
 #include "Mathematics/Interpolators/Functions/IEvaluator.h"
 

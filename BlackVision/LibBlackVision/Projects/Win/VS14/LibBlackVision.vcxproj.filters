@@ -471,9 +471,6 @@
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp">
       <Filter>Application\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
@@ -1588,9 +1585,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
     </ClCompile>
@@ -2086,6 +2080,9 @@
     <ClCompile Include="..\..\..\Source\Exceptions\SerializationException.cpp">
       <Filter>Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2096,9 +2093,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h">
-      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h">
       <Filter>Mathematics\Interpolators</Filter>
@@ -4852,9 +4846,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeMovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h">
-      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeRemovedEvent.h">
       <Filter>Engine\Events\InnerEvents\Nodes</Filter>

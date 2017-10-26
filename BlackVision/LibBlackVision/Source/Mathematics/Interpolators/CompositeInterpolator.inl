@@ -6,8 +6,6 @@
 
 #include "Mathematics/Interpolators/Functions/Evaluators.h"
 
-#include "CompositeInterpolatorSerializationHelper.h"
-
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Exceptions/SerializationException.h"
