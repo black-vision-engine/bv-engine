@@ -73,7 +73,7 @@ private:
 	inline ValueT                                       PostEvaluate        ( TimeValueT t ) const;
 
     static inline std::vector< CurveType >              DeserializeCurves           ( const IDeserializer & deser );
-    static inline void                                  DeserializeInterpolators    ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator );
+    static inline void                                  DeserializeInterpolators    ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator, const std::vector< CurveType > & curves );
 
     static inline bool                                  ValidateMatching    ( const IDeserializer & deser, const std::vector< CurveType > & curves, const std::vector< std::shared_ptr< Key > > & keys );
 };

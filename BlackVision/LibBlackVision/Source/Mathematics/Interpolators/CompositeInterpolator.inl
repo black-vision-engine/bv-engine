@@ -122,7 +122,12 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
                 bool addedNew = interpolator->AddKey( keys[ i ]->t, keys[ i ]->val );
 
                 if( !addedNew )
+                {
+                    // Mark omited curve.
+                    if( curves.size() > curveIdx ) curves[ curveIdx ] = CurveType::CT_TOTAL;
+
                     Warn< SerializationException >( deser, "Duplicate key. Time [" + SerializationHelper::T2String( keys[ i ]->t ) + "], value [" + SerializationHelper::T2String( keys[ i ]->val ) + "]" );
+                }
             }
 
             ValidateMatching( deser, curves, keys );
@@ -130,7 +135,7 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
     }
 
     // Deserialize interpolators parameters.
-    DeserializeInterpolators( deser, interpolator );
+    DeserializeInterpolators( deser, interpolator, curves );
 
     // Set CompositeInterpolator parameters.
     interpolator->SetAddedKeyCurveType( defaultCurveType );
@@ -178,7 +183,7 @@ inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, Value
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-inline void                             CompositeInterpolator< TimeValueT, ValueT >::DeserializeInterpolators   ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator )
+inline void                             CompositeInterpolator< TimeValueT, ValueT >::DeserializeInterpolators   ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator, const std::vector< CurveType > & curves )
 {
     if( interpolator->interpolators.size() > 0 )
     {
@@ -190,20 +195,37 @@ inline void                             CompositeInterpolator< TimeValueT, Value
             {
                 do
                 {
-                    auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
-
-                    if( curveType.IsValid() )
+                    // Check if curve type is valid.
+                    // If not, we probably omited some interpolations in previous step while adding keys,
+                    // for example in situation, that two keys were placed in the same time. The solution is
+                    // to find next matching interpolation in file. We marked omitted values with CurveType::CT_TOTAL.
+                    if( curves[ interpolatorIdx ] != CurveType::CT_TOTAL )
                     {
-                        auto & eval = interpolator->interpolators[ interpolatorIdx ];
+                        auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
 
-                        // Check if curve type of created evaluator matches deserialized value.
-                        // If not, we probably omited some interpolations in previous step while adding keys,
-                        // for example in situation, that two keys were placed in the same time. The solution is
-                        // to find next matching interpolation in file.
-                        if( curveType == eval->GetCurveType() )
+                        if( curveType.IsValid() )
                         {
-                            eval->Deserialize( deser );
-                            interpolatorIdx++;
+                            auto & eval = interpolator->interpolators[ interpolatorIdx ];
+
+                            // Check if curve type of created evaluator matches deserialized value.
+                            // Reason why could they not match is posiblity, that curve from file was invalid for
+                            // this type of interpolator (for this ValueT).
+                            if( curveType == eval->GetCurveType() )
+                            {
+                                eval->Deserialize( deser );
+                                interpolatorIdx++;
+                            }
+                            else if( !IsValidCurveType< ValueT >( curveType ) )
+                            {
+                                // If deserialized curveType was invalid we already created evaluator with default type.
+                                // In this case we don't need deserialization, beacause interpolator has good default values.
+                                interpolatorIdx++;
+                            }
+                            else
+                            {
+                                Warn< SerializationException >( deser, "Curve type doesn't match created interpolator. Probably something is not correct in deserialization code." );
+                                assert( false );
+                            }
                         }
                     }
 

@@ -65,7 +65,7 @@ TEST( Serialization_ParamValModel, Interpolators_InvalidCurveHandling )
     std::shared_ptr< CompositeInterpolator< TimeType, std::string > > actual;
 
     EXPECT_NO_THROW( {
-        actual = DeserializeFloatCompositeInterpolator( "TestAssets/Serialization/Interpolators/InvalidCurveForString.xml" );
+        actual = DeserializeFloatCompositeInterpolator( "TestAssets/Serialization/Interpolators/InvalidCurveHandling.xml" );
     } );
 
     ASSERT_NE( actual, nullptr );
