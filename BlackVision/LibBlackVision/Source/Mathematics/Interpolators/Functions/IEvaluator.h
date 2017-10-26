@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Mathematics/Interpolators/InterpolatorBasicTypes.h"
+#include "Exceptions/Serialization/SerializationLogicError.h"
+
 
 
 namespace bv
@@ -60,10 +62,10 @@ inline bool             IEvaluator< TimeValueT, ValueT >::ValidateCurveType     
 {
     if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( curve ) )
     {
-        Warn< SerializationException >( deser, "Created interpolator of other type ["
+        Warn< SerializationLogicError >( deser, "Created interpolator of other type ["
             + SerializationHelper::T2String( curve )
             + "] then serialized in file ["
-            + deser.GetAttribute( "type" ) + "]. This should never happen. Implementation is incorrect." );
+            + deser.GetAttribute( "type" ) + "]." );
 
         assert( false );
         return false;

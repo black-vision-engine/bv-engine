@@ -31,6 +31,7 @@ public:
     {}
 
 
+    virtual std::string         GetReason       () const override;
     virtual ExceptionType       GetType         () const override { return Type(); }
     virtual bool                IsDerivedFrom   ( ExceptionType fromType ) const override   { return IsDerivedImpl< SerializationLogicError, SerializationException >( fromType ); }
 
@@ -38,6 +39,9 @@ public:
 
     static ExceptionType        Type() { return type; }
 
+protected:
+
+    std::string                 PrintIncorrectImplMessage   () const;
 };
 
 

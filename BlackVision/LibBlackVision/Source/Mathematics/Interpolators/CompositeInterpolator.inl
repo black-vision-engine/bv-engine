@@ -9,6 +9,7 @@
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Exceptions/Serialization/SerializationException.h"
+#include "Exceptions/Serialization/SerializationLogicError.h"
 
 #include "Mathematics/Core/MathFuncs.h"
 
@@ -221,7 +222,7 @@ inline void                             CompositeInterpolator< TimeValueT, Value
                             }
                             else
                             {
-                                Warn< SerializationException >( deser, "Curve type doesn't match created interpolator. Probably something is not correct in deserialization code." );
+                                Warn< SerializationLogicError >( deser, "Curve type doesn't match created interpolator." );
                                 assert( false );
                             }
                         }
