@@ -457,6 +457,9 @@
     <Filter Include="Exceptions">
       <UniqueIdentifier>{6332c879-802c-4b15-821c-0db7b3e73d4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Exceptions\Serialization">
+      <UniqueIdentifier>{5b7dffad-d710-4ba8-b6d2-4bd799a6f2d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2077,11 +2080,14 @@
     <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp">
       <Filter>Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Exceptions\SerializationException.cpp">
-      <Filter>Exceptions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationException.cpp">
+      <Filter>Exceptions\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.cpp">
+      <Filter>Exceptions\Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5366,14 +5372,17 @@
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Exceptions\SerializationException.h">
-      <Filter>Exceptions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\IEvaluator.h">
       <Filter>Mathematics\Interpolators\Functions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\Evaluators.h">
       <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationException.h">
+      <Filter>Exceptions\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.h">
+      <Filter>Exceptions\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

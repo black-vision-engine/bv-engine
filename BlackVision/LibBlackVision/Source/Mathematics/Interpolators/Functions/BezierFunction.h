@@ -3,7 +3,7 @@
 #include "IEvaluator.h"
 
 #include "Serialization/BV/BVDeserializeContext.h"
-#include "Exceptions/SerializationException.h"
+#include "Exceptions/Serialization/SerializationException.h"
 
 namespace bv
 {

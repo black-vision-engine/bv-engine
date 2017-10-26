@@ -37,8 +37,9 @@ public:
     {}
 
 
-    virtual std::string         GetReason   ();
-    virtual ExceptionType       GetType     () { return Type(); }
+    virtual std::string         GetReason       () const override;
+    virtual ExceptionType       GetType         () const override { return Type(); }
+    virtual bool                IsDerivedFrom   ( ExceptionType fromType ) const override   { return IsDerivedImpl< SerializationException, RuntimeException >( fromType ); }
 
 public:
 

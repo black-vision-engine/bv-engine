@@ -8,7 +8,7 @@
 
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Serialization/BV/BVDeserializeContext.h"
-#include "Exceptions/SerializationException.h"
+#include "Exceptions/Serialization/SerializationException.h"
 
 #include "Mathematics/Core/MathFuncs.h"
 

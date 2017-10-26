@@ -11,7 +11,7 @@ ExceptionType        SerializationException::type = Exception::RegisterType();
 
 // ***********************
 //
-std::string         SerializationException::GetReason   ()
+std::string         SerializationException::GetReason           () const
 {
     return PrintSceneName() + PrintLineNumber() + RuntimeException::GetReason();
 }

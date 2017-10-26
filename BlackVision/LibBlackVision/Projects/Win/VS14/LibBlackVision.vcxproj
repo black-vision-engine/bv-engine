@@ -614,7 +614,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\FileNotFoundException.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp" />
-    <ClCompile Include="..\..\..\Source\Exceptions\SerializationException.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationException.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
@@ -807,7 +808,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h" />
-    <ClInclude Include="..\..\..\Source\Exceptions\SerializationException.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationException.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <FileType>CppCode</FileType>
     </ClInclude>

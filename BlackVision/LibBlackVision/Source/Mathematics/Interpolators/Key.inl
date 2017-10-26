@@ -5,7 +5,7 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
-#include "Exceptions/SerializationException.h"
+#include "Exceptions/Serialization/SerializationException.h"
 
 #include "Tools/Utils.h"
 
