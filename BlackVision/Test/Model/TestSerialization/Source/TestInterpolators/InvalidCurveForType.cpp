@@ -78,4 +78,23 @@ TEST( Serialization_ParamValModel, Interpolators_InvalidCurveHandling )
     EXPECT_EQ( actualEvals[ 2 ]->GetCurveType(), CurveType::CT_POINT );
 }
 
+// ***********************
+// This test contains both errors - invalid curve type and doubled corresponding keys.
+TEST( Serialization_ParamValModel, Interpolators_InvalidCurveAndDoubledKey )
+{
+    std::shared_ptr< CompositeInterpolator< TimeType, std::string > > actual;
+
+    EXPECT_NO_THROW( {
+        actual = DeserializeFloatCompositeInterpolator( "TestAssets/Serialization/Interpolators/InvalidCurveAndDoubledKey.xml" );
+    } );
+
+    ASSERT_NE( actual, nullptr );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 2 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_POINT );
+}
+
 
