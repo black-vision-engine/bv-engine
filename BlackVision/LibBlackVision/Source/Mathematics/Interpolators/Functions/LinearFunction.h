@@ -45,17 +45,16 @@ public:
         return ValueT( alpha * key2.val + (1-alpha) * key1.val );
     }
 
-    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    virtual void                    Serialize       ( ISerializer& ser ) const override
     {
         ser.EnterChild( "interpolation" );
             ser.SetAttribute( "type", SerializationHelper::T2String( CurveType::CT_LINEAR ) );
         ser.ExitChild();
     }
 
-    virtual void                                Deserialize( const IDeserializer& deser )
+    virtual void                    Deserialize     ( const IDeserializer & deser )
     {
-        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( CurveType::CT_LINEAR ) )
-            assert( false );
+        ValidateCurveType( deser, CurveType::CT_LINEAR );
     }
 };
 

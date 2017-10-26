@@ -156,7 +156,12 @@ inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, Value
                 auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
 
                 if( curveType.IsValid() )
+                {
                     curves.push_back( curveType.GetVal() );
+
+                    if( !IsValidCurveType< ValueT >( curveType.GetVal() ) )
+                        Warn< SerializationException >( deser, "Interpolation has invalid curveType for this parameter type. Default curve set [" + SerializationHelper::T2String( DefaultCurveType< ValueT >() ) + "]." );
+                }
                 else
                     Warn< SerializationException >( deser, "Cannot deserialize curveType. Interpolation ignored." );
             }

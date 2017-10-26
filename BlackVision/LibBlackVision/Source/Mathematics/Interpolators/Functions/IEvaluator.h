@@ -12,12 +12,16 @@ template< class TimeValueT, class ValueT >
 class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
 {
 public:
-    virtual void                                Deserialize( const IDeserializer& deser ) = 0;
+    virtual void                                Deserialize     ( const IDeserializer& deser )  = 0;
 
-    virtual ValueT                              Evaluate( TimeValueT t ) const = 0;
-    virtual void                                SetValue( TimeValueT t, ValueT v ) = 0;
-    virtual EvaluatorType                       GetType() const = 0;
-    virtual CurveType                           GetCurveType() const = 0;
+    virtual ValueT                              Evaluate        ( TimeValueT t ) const          = 0;
+    virtual void                                SetValue        ( TimeValueT t, ValueT v )      = 0;
+    virtual EvaluatorType                       GetType         () const                        = 0;
+    virtual CurveType                           GetCurveType    () const                        = 0;
+
+public:
+
+    bool                    ValidateCurveType   ( const IDeserializer & deser, CurveType curve );
 };
 
 // ========================================================================= //
@@ -43,6 +47,31 @@ SPECIALIZE_TYPE_DEFAULT_CURVE( std::string, CurveType::CT_POINT )
 SPECIALIZE_TYPE_DEFAULT_CURVE( std::wstring, CurveType::CT_POINT )
 SPECIALIZE_TYPE_DEFAULT_CURVE( int, CurveType::CT_POINT )
 SPECIALIZE_TYPE_DEFAULT_CURVE( bool, CurveType::CT_POINT )
+
+
+// ========================================================================= //
+// Validation helper functions
+// ========================================================================= //
+
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+inline bool             IEvaluator< TimeValueT, ValueT >::ValidateCurveType     ( const IDeserializer & deser, CurveType curve )
+{
+    if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( curve ) )
+    {
+        Warn< SerializationException >( deser, "Created interpolator of other type ["
+            + SerializationHelper::T2String( curve )
+            + "] then serialized in file ["
+            + deser.GetAttribute( "type" ) + "]. This should never happen. Implementation is incorrect." );
+
+        assert( false );
+        return false;
+    }
+
+    return true;
+}
+
 
 }	// bv
 

@@ -2,7 +2,8 @@
 
 #include "IEvaluator.h"
 
-
+#include "Serialization/BV/BVDeserializeContext.h"
+#include "Exceptions/SerializationException.h"
 
 namespace bv
 {
@@ -96,18 +97,18 @@ public:
 
     virtual void                                Deserialize( const IDeserializer& deser )
     {
-        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( m_curveType ) )
-            assert( false );
+        if( ValidateCurveType( deser, m_curveType ) )
+        {
+            deser.EnterChild( "v1" );
+                v1.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+                v1.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
+            deser.ExitChild();
 
-        deser.EnterChild( "v1" );
-            v1.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v1.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
-        deser.ExitChild();
-
-        deser.EnterChild( "v2" );
-            v2.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v2.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
-        deser.ExitChild();
+            deser.EnterChild( "v2" );
+                v2.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+                v2.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
+            deser.ExitChild();
+        }
     }
 };
 

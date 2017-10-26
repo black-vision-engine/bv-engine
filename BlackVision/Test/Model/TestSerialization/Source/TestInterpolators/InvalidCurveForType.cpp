@@ -48,10 +48,34 @@ TEST( Serialization_ParamValModel, Interpolators_LinearCurveForStringXML )
 
     ASSERT_NE( actual, nullptr );
 
+    EXPECT_EQ( actual->GetCurveType(), CurveType::CT_POINT );
+
     auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
     ASSERT_EQ( actualEvals.size(), 1 );
 
     EXPECT_EQ( actualEvals[ 0 ]->GetType(), EvaluatorType::ET_CONSTANT );
     EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT);
 }
+
+// ***********************
+// One interpolation has linear interpolator which is invalid for string type.
+// Deserialization should create default interpolator instead of linear.
+TEST( Serialization_ParamValModel, Interpolators_InvalidCurveHandling )
+{
+    std::shared_ptr< CompositeInterpolator< TimeType, std::string > > actual;
+
+    EXPECT_NO_THROW( {
+        actual = DeserializeFloatCompositeInterpolator( "TestAssets/Serialization/Interpolators/InvalidCurveForString.xml" );
+    } );
+
+    ASSERT_NE( actual, nullptr );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 3 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 2 ]->GetCurveType(), CurveType::CT_POINT );
+}
+
 

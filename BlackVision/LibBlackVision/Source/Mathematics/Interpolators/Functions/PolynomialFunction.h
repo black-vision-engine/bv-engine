@@ -68,8 +68,7 @@ public:
 
     virtual void                                        Deserialize     ( const IDeserializer & deser )
     {
-        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( m_curveType ) )
-            assert( false );
+        ValidateCurveType( deser, m_curveType );
     }
 };
 
