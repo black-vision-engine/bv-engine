@@ -39,4 +39,30 @@ TEST( Serialization_ParamValModel, Evaluators_Bezier_SerializeDeserialize )
     EXPECT_TRUE( ParamComparator::CompareEvaluators( *( expected.get() ), *( actual.get() ) ) );
 }
 
+// ***********************
+// If any value lacks in xml, bezier should be created with default values.
+TEST( Serialization_ParamValModel, Evaluators_Bezier_NoV1Param )
+{
+    Key< TimeType, float > k1( 0.0, 1.0f );
+    Key< TimeType, float > k2( 3.0, 5.0f );
+
+    auto actual = DeserializeBezier( "TestAssets/Serialization/Interpolators/BezierLackOfDelta1.xml", CurveType::CT_BEZIER, k1, k2 );
+    auto expected = CreateDummyInterpolator< TimeType, float >( CurveType::CT_BEZIER, k1, k2, tolerance );
+
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( *( expected.get() ), *( actual.get() ) ) );
+}
+
+// ***********************
+// If any value lacks in xml, bezier should be created with default values.
+TEST( Serialization_ParamValModel, Evaluators_Bezier_NoV2Param )
+{
+    Key< TimeType, float > k1( 0.0, 1.0f );
+    Key< TimeType, float > k2( 3.0, 5.0f );
+
+    auto actual = DeserializeBezier( "TestAssets/Serialization/Interpolators/BezierLackOfDelta2.xml", CurveType::CT_BEZIER, k1, k2 );
+    auto expected = CreateDummyInterpolator< TimeType, float >( CurveType::CT_BEZIER, k1, k2, tolerance );
+
+    EXPECT_TRUE( ParamComparator::CompareEvaluators( *( expected.get() ), *( actual.get() ) ) );
+}
+
 

@@ -16,7 +16,13 @@ class TEST_ACCESSOR( BezierEvaluator )
 public:
 
     template< typename ParamType >
-    static bool         Compare         ( const BezierEvaluator< TimeType, ParamType > & expected, const BezierEvaluator< TimeType, ParamType > & actual );
+    static bool                                 Compare         ( const BezierEvaluator< TimeType, ParamType > & expected, const BezierEvaluator< TimeType, ParamType > & actual );
+
+    template< typename ParamType >
+    static const Key< TimeType, ParamType >     GetDelta1       ( const BezierEvaluator< TimeType, ParamType > & bezier );
+
+    template< typename ParamType >
+    static const Key< TimeType, ParamType >     GetDelta2       ( const BezierEvaluator< TimeType, ParamType > & bezier );
 };
 
 // ***********************
@@ -148,6 +154,22 @@ bool        TEST_ACCESSOR( BezierEvaluator )::Compare       ( const BezierEvalua
         return false;
 
     return true;
+}
+
+// ***********************
+//
+template< typename ParamType >
+const Key< TimeType, ParamType >            GetDelta1           ( const BezierEvaluator< TimeType, ParamType > & bezier )
+{
+    return bezier.v1;
+}
+
+// ***********************
+//
+template< typename ParamType >
+const Key< TimeType, ParamType >            GetDelta2           ( const BezierEvaluator< TimeType, ParamType > & bezier )
+{
+    return bezier.v2;
 }
 
 // ***********************

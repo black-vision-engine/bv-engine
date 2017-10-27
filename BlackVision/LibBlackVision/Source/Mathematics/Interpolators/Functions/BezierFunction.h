@@ -99,15 +99,30 @@ public:
     {
         if( ValidateCurveType( deser, m_curveType ) )
         {
-            deser.EnterChild( "v1" );
+            bool somethingFailed = false;
+
+            if( deser.EnterChild( "v1" ) )
+            {
                 v1.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
                 v1.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
-            deser.ExitChild();
 
-            deser.EnterChild( "v2" );
+                deser.ExitChild();
+            }
+            else
+                somethingFailed = true;
+
+
+            if( deser.EnterChild( "v2" ) )
+            {
                 v2.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
                 v2.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
-            deser.ExitChild();
+
+                deser.ExitChild();
+            }
+            else
+                somethingFailed = true;
+
+
         }
     }
 };
