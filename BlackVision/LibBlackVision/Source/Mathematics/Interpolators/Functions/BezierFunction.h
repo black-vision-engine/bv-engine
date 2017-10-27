@@ -121,11 +121,14 @@ public:
                 t1 = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
                 val1 = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
 
+                if( !t1.IsValid() )     { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dt1." ); }
+                if( !val1.IsValid() )   { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dval1." ); }
+
                 deser.ExitChild();
             }
             else
             {
-                Warn< SerializationException >( deser, "No v1 marker found. Bezier will use default values" );
+                Warn< SerializationException >( deser, "No v1 marker found. Bezier will use default values." );
                 somethingFailed = true;
             }
 
@@ -135,31 +138,25 @@ public:
                 t2 = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
                 val2 = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
 
+                if( !t2.IsValid() )     { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dt2." ); }
+                if( !val2.IsValid() )   { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dval2." ); }
+
                 deser.ExitChild();
             }
             else
             {
-                Warn< SerializationException >( deser, "No v2 marker found. Bezier will use default values" );
+                Warn< SerializationException >( deser, "No v2 marker found. Bezier will use default values." );
                 somethingFailed = true;
             }
 
 
             if( !somethingFailed )
             {
-                if( !t1.IsValid() ) somethingFailed = true;
-                if( !val1.IsValid() ) somethingFailed = true;
+                v1.t = t1.GetVal();
+                v2.t = t2.GetVal();
 
-                if( !t2.IsValid() ) somethingFailed = true;
-                if( !val2.IsValid() ) somethingFailed = true;
-
-                if( !somethingFailed )
-                {
-                    v1.t = t1.GetVal();
-                    v2.t = t2.GetVal();
-
-                    v1.val = val1.GetVal();
-                    v2.val = val2.GetVal();
-                }
+                v1.val = val1.GetVal();
+                v2.val = val2.GetVal();
             }
         }
     }
