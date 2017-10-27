@@ -86,33 +86,43 @@ std::vector< std::shared_ptr< T > >                         DeserializePropertie
     return ret;
 }
 
+// ***********************
+//
 template< typename T >
-void SerializeObjectImpl( const T& o, ISerializer& ser );
+void                        SerializeObjectImpl     ( const T & o, ISerializer & ser );
 
+// ***********************
+//
 template< typename T >
-std::shared_ptr< T > Create( const IDeserializer& deser )
+std::shared_ptr< T >        Create          ( const IDeserializer & deser )
 {
     auto obj = T::Create( deser );
     return std::static_pointer_cast< T >( obj );
 }
 
+// ***********************
+//
 template< typename T >
-std::string T2String( const T & t );
+std::string                 T2String        ( const T & t );
 
+// ***********************
+//
 template< typename T >
-Expected<T> String2T( const std::string & s );
+Expected< T >               String2T        ( const std::string & s );
 
+// ***********************
+//
 template< typename T >
-T String2T( const std::string & s, const T & defaultVal );
+T                           String2T        ( const std::string & s, const T & defaultVal );
 
 
 
 // ***********************
 // Declarations of specializations.
 //template<> bool             String2T    ( const std::string & s, const bool & defaultVal );
-template<> std::string      T2String( const bool & t );
+template<> std::string      T2String        ( const bool & t );
 
-template<> std::string      T2String( const std::wstring & wstr );
+template<> std::string      T2String        ( const std::wstring & wstr );
 
 } // SerializationHelper
 } // bv

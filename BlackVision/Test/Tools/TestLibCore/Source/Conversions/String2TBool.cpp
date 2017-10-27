@@ -38,6 +38,50 @@ TEST( LibCore_String2T, Bool_InvaliInput )
 }
 
 // ***********************
+// Test for invalid input for bool.
+TEST( LibCore_String2T, Bool_TrueMixedWithText )
+{
+    Expected< bool > trueExp = SerializationHelper::String2T< bool >( "trueblabla" );
+    bool trueDef = SerializationHelper::String2T< bool >( "trueblabla", false );
+
+    EXPECT_FALSE( trueExp.IsValid() );
+    EXPECT_EQ( trueDef, false );
+}
+
+// ***********************
+// Test for invalid input for bool.
+TEST( LibCore_String2T, Bool_FalseMixedWithText )
+{
+    Expected< bool > trueExp = SerializationHelper::String2T< bool >( "falseblabla" );
+    bool trueDef = SerializationHelper::String2T< bool >( "falseblabla", true );
+
+    EXPECT_FALSE( trueExp.IsValid() );
+    EXPECT_EQ( trueDef, true );
+}
+
+// ***********************
+// Test for invalid input for bool.
+TEST( LibCore_String2T, Bool_TrueAfterText )
+{
+    Expected< bool > trueExp = SerializationHelper::String2T< bool >( "bla true" );
+    bool trueDef = SerializationHelper::String2T< bool >( "bla true", false );
+
+    EXPECT_FALSE( trueExp.IsValid() );
+    EXPECT_EQ( trueDef, false );
+}
+
+// ***********************
+// Test for invalid input for bool.
+TEST( LibCore_String2T, Bool_FalseAfterText )
+{
+    Expected< bool > trueExp = SerializationHelper::String2T< bool >( "bla false" );
+    bool trueDef = SerializationHelper::String2T< bool >( "bla fals", true );
+
+    EXPECT_FALSE( trueExp.IsValid() );
+    EXPECT_EQ( trueDef, true );
+}
+
+// ***********************
 //
 TEST( LibCore_String2T, Bool_True2String )
 {

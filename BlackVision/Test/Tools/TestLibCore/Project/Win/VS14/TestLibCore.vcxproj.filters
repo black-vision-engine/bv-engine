@@ -25,6 +25,9 @@
     <ClCompile Include="..\..\..\Source\Conversions\String2TBool.cpp">
       <Filter>Conversions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Conversions\String2Float.cpp">
+      <Filter>Conversions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.h">
