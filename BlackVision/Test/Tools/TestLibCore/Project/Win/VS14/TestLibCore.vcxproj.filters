@@ -7,6 +7,9 @@
     <Filter Include="ExceptionsTest">
       <UniqueIdentifier>{81f7b200-5cd6-4308-ac81-f5c514dfd59f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Conversions">
+      <UniqueIdentifier>{fcceb571-61ec-4bd6-bb74-455cbb0f245f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
@@ -18,6 +21,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.cpp">
       <Filter>ExceptionsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Conversions\String2TBool.cpp">
+      <Filter>Conversions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
