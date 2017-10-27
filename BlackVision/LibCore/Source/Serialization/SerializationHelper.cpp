@@ -66,10 +66,10 @@ inline std::vector<std::string> _split(const std::string &s, char delim)
 
 // *************************************
 //
-template<> Expected< Float32 >      String2T( const std::string & s ) 
+template<> Expected< Float32 >      String2T        ( const std::string & s ) 
 { 
     char * end = nullptr;
-    auto ret = strtod( s.c_str(), &end );
+    auto ret = strtof( s.c_str(), &end );
 
     if( !*end && end != s.c_str() )
     {
@@ -87,7 +87,7 @@ template<> Expected< Float32 >      String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< Float64 >      String2T( const std::string & s ) 
+template<> Expected< Float64 >      String2T        ( const std::string & s ) 
 { 
     char * end = nullptr;
     auto ret = strtod( s.c_str(), &end );
@@ -102,7 +102,7 @@ template<> Expected< Float64 >      String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< bool >         String2T( const std::string & s ) 
+template<> Expected< bool >         String2T        ( const std::string & s ) 
 { 
     if( s == "true" ) 
         return true; 
@@ -113,7 +113,7 @@ template<> Expected< bool >         String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< UInt32 >       String2T( const std::string & s ) 
+template<> Expected< UInt32 >       String2T        ( const std::string & s ) 
 { 
     char * end = nullptr;
     auto ret = strtoul( s.c_str(), &end, 10 );
@@ -134,7 +134,7 @@ template<> Expected< UInt32 >       String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< Int32 >        String2T( const std::string & s ) 
+template<> Expected< Int32 >        String2T        ( const std::string & s ) 
 { 
     char * end = nullptr;
     auto ret = strtol( s.c_str(), &end, 10 );
@@ -155,7 +155,7 @@ template<> Expected< Int32 >        String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< UInt64 >       String2T( const std::string & s ) 
+template<> Expected< UInt64 >       String2T        ( const std::string & s ) 
 { 
     char * end = nullptr;
     auto ret = strtoul( s.c_str(), &end, 10 );
@@ -170,7 +170,7 @@ template<> Expected< UInt64 >       String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< Int64 >        String2T( const std::string & s ) 
+template<> Expected< Int64 >        String2T        ( const std::string & s ) 
 { 
     char * end = nullptr;
     auto ret = strtol( s.c_str(), &end, 10 );
@@ -186,7 +186,7 @@ template<> Expected< Int64 >        String2T( const std::string & s )
 // *************************************
 //
 template< typename T > 
-Expected< std::vector< T > > Strings2T( std::vector< std::string > strings )
+Expected< std::vector< T > >        Strings2T       ( std::vector< std::string > strings )
 {
     std::vector< T > ret;
 
@@ -202,7 +202,7 @@ Expected< std::vector< T > > Strings2T( std::vector< std::string > strings )
     return ret;
 }
 
-template<> Expected< glm::vec2 >    String2T( const std::string & s ) 
+template<> Expected< glm::vec2 >    String2T        ( const std::string & s ) 
 { 
     auto strings = SerializationHelper::_split( s, ',' );
 
@@ -222,7 +222,7 @@ template<> Expected< glm::vec2 >    String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< glm::vec3 >    String2T( const std::string & s )
+template<> Expected< glm::vec3 >    String2T        ( const std::string & s )
 { 
     auto strings = SerializationHelper::_split( s, ',' );
 
@@ -241,7 +241,7 @@ template<> Expected< glm::vec3 >    String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< glm::vec4 >    String2T( const std::string & s )
+template<> Expected< glm::vec4 >    String2T        ( const std::string & s )
 { 
     auto strings = SerializationHelper::_split( s, ',' );
 
@@ -260,14 +260,14 @@ template<> Expected< glm::vec4 >    String2T( const std::string & s )
 
 // *************************************
 //
-template<> Expected< std::string >  String2T( const std::string & s ) 
+template<> Expected< std::string >  String2T        ( const std::string & s ) 
 { 
     return s; 
 }
 
 // *************************************
 //
-template<> Expected< std::wstring > String2T( const std::string & s ) 
+template<> Expected< std::wstring > String2T        ( const std::string & s ) 
 { 
     return StringToWString( s ); 
 }
