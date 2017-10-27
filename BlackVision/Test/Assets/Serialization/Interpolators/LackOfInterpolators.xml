@@ -1,0 +1,9 @@
+<interpolator curve_type="linear" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="0.000000" val="3.000000"/>
+		<key time="1.000000" val="3.000000"/>
+		<key time="3.000000" val="13.000000"/>
+	</keys>
+	<interpolations>
+	</interpolations>
+</interpolator>

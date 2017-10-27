@@ -43,7 +43,33 @@ TEST( Model_ParamValModel, CompositeInterpolator_AddKeys )
     EXPECT_EQ( interpolator.GetKeys()[ 3 ].val, 2222.0f );
 }
 
+// ***********************
+// Add key between existing keys.
+TEST( Model_ParamValModel, CompositeInterpolator_AddKeyInTheMiddle )
+{
+    CompositeInterpolator< TimeType, float > interpolator;
 
+    interpolator.AddKey( 1.0f, 2.0f );
+    interpolator.AddKey( 2.0f, 22.0f );
+    interpolator.AddKey( 5.0f, 222.0f );
+
+    // New key added before last key.
+    interpolator.AddKey( 3.0f, 2222.0f );
+
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 0 ].t, 1.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 0 ].val, 2.0f );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 1 ].t, 2.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 1 ].val, 22.0f );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 2 ].t, 3.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 2 ].val, 2222.0f );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 3 ].t, 5.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 3 ].val, 222.0f );
+}
 
 // ***********************
 // Adding key under the same time overrides previous value in this key.

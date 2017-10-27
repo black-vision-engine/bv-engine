@@ -1,8 +1,16 @@
 #pragma once
 
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
+
+
+
 namespace bv
 {
 
+
+// ***********************
+//
 enum class WrapMethod : int
 {
     clamp = 0,
@@ -10,6 +18,10 @@ enum class WrapMethod : int
     pingPong = 2,
 };
 
+DECLARE_ENUM_SERIALIZATION( WrapMethod );
+
+// ***********************
+//
 enum CurveType 
 { 
     CT_POINT = 0, 
@@ -33,6 +45,10 @@ enum CurveType
     CT_TOTAL
 };
 
+DECLARE_ENUM_SERIALIZATION( CurveType );
+
+// ***********************
+//
 enum class EvaluatorType : int
 { 
     ET_CONSTANT, 

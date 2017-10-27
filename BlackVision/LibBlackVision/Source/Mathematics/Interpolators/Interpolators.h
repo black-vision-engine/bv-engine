@@ -2,7 +2,6 @@
 
 #include "Mathematics/glm_inc.h"
 
-#include "Mathematics/Interpolators/BasicInterpolator.h"
 #include "Mathematics/Interpolators/CompositeInterpolator.h"
 #include "CoreDEF.h"
 

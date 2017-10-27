@@ -1,0 +1,9 @@
+<interpolator curve_type="bla" preMethod="bla" postMethod="bla">
+	<keys>
+		<key time="0.000000" val="3"/>
+		<key time="1.5" val="4"/>
+	</keys>
+	<interpolations>
+		<interpolation type="point"/>
+	</interpolations>
+</interpolator>

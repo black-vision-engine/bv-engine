@@ -142,5 +142,31 @@ BVDeserializeContext *       BVDeserializeContext::CreateContextFromEmptiness  (
     return new BVDeserializeContext( timeline, nullptr, &model::PluginsManager::DefaultInstanceRef(), model::TimelineManager::GetInstance() );
 }
 
+// ========================================================================= //
+// Warning helper functions
+// ========================================================================= //
+
+
+// ***********************
+//
+BVDeserializeContext *              Context             ( const IDeserializer & deser )
+{
+    auto contextTyped = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+    if( contextTyped == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Deserialization context doesn't exist. This can cause undefined behavior of deserialization.";
+        assert( !"Probably you should create deserializer with context. You can remove this assert, if you are sure returning nullptr is right behavior." );
+        return nullptr;
+    }
+
+    return contextTyped;
+}
+
+// ***********************
+//
+void                                WarnWithoutContext  ( const std::string & message )
+{
+    LOG_MESSAGE( SeverityLevel::warning ) << message << " (Warning could not be returned, because of non existing deserialization context).";
+}
 
 } // bv

@@ -62,11 +62,13 @@ public:
                             Expected            ( HamType h ) 
                                 : ExpectedBase( h ) 
     {}
-                            Expected        ( const std::string & reason )
+                            Expected            ( const std::string & reason )
                                 : ExpectedBase( ErrorType( new RuntimeException( reason ) ) ) 
     {}
-                            Expected ( const ExpectedBase & that ) // conversion to let ExpectedBase::fromError work
+                            Expected            ( const ExpectedBase & that ) // conversion to let ExpectedBase::fromError work
                                 : ExpectedBase( that ) {}
+
+    Expected< HamType, ErrorType > &        operator=   ( const Expected< HamType, ErrorType > & other );
 };
 
 // ========================================================================= //
@@ -205,6 +207,33 @@ ExpectedBase< HamType, ErrorType >     ExpectedBase< HamType, ErrorType >::fromE
     return ExpectedBase< HamType, ErrorType >(); 
 }
 
+}
+
+// ========================================================================= //
+// Ecpected
+// ========================================================================= //
+
+
+// ***********************
+//
+template< typename HamType, typename ErrorType >
+inline Expected< HamType, ErrorType > &         Expected< HamType, ErrorType >::operator=       ( const Expected< HamType, ErrorType > & other )
+{
+    // Release current content.
+    if( isValid )
+        ham.~HamType();
+    else
+        spam.~ErrorType();
+
+    isValid = other.isValid;
+
+    // Assing new content.
+    if( isValid )
+        new( &ham ) HamType( other.ham );
+    else
+        new( &spam ) ErrorType( other.spam );
+
+    return *this;
 }
 
 }	// bv
