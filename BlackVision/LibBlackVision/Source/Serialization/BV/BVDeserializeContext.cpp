@@ -104,14 +104,14 @@ void                                BVDeserializeContext::SetAssets             
 //
 std::string &                       BVDeserializeContext::GetSceneName            ()
 {
-    return m_sceneName;
+    return m_fileName;
 }
 
 // ***********************
 //
 void                                BVDeserializeContext::SetSceneName            ( const std::string& sceneName )
 {
-    m_sceneName = sceneName;
+    m_fileName = sceneName;
 }
 
 // ***********************
