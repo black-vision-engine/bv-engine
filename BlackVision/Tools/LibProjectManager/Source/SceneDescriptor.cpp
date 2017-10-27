@@ -2,6 +2,7 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
 #include "Serialization/XML/XMLDeserializer.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
@@ -94,7 +95,8 @@ namespace
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-    BVXMLSerializer ser;
+    auto context = BVSerializeContext::CreateContextFromEmptiness();
+    BVXMLSerializer ser( context );
 
     scene->Serialize( ser );
 
@@ -107,7 +109,7 @@ LoadSceneResult	    SceneDescriptor::LoadScene		( std::istream & in, SizeType nu
 {
     try
     {
-        auto context = new BVDeserializeContext( nullptr, nullptr );
+        auto context = BVDeserializeContext::CreateContextFromEmptiness();
         XMLDeserializer deser( in, numBytes,  context );
 
         auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
@@ -145,7 +147,7 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
+    XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr, &model::PluginsManager::DefaultInstanceRef(), model::TimelineManager::GetInstance() ) );
 
     // assets
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );

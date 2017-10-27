@@ -914,7 +914,7 @@ void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
     }
     else if( command == SceneVariableEvent::Command::GetVariable )
     {
-        JsonSerializeObject ser;
+        SimpleJsonSerializeObject ser;
         Expected< std::string > varContent = variablesCollection.GetVariable( variableName );
 
         if( !varContent.IsValid() )
@@ -1060,7 +1060,7 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
 
         auto thumb = CreateThumbnail( thumbnailType, compresed );
 
-        JsonSerializeObject ser;
+        SimpleJsonSerializeObject ser;
         thumb->Serialize( ser );        
         
         ser.Save( AssetAccessor::GetThumbnailPath( thumbName ).Str() );

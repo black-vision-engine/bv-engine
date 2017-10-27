@@ -24,7 +24,7 @@ void            TestArrayNesting        ( ISerializer & ser );
 //
 TEST( Serialization_Serializers_JSON, ArrayNesting )
 {
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     TestArrayNesting( ser );
     ser.Save( "ArrayNesting.json" );
 }

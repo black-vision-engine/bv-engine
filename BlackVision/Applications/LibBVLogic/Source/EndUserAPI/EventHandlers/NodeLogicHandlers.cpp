@@ -65,7 +65,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     }
 
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
 
     auto context = static_cast< BVDeserializeContext* >( action.GetDeserializeContext() );
     context->SetSceneName( sceneName );

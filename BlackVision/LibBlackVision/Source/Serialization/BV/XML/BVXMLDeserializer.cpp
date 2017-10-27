@@ -14,15 +14,15 @@ namespace bv {
 
 // ***********************
 //
-BVXMLDeserializer::BVXMLDeserializer( std::istream & in, SizeType numBytes, model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets )
-    : XMLDeserializer( in, numBytes, new BVDeserializeContext( timeline, assets ) )
+BVXMLDeserializer::BVXMLDeserializer( std::istream & in, SizeType numBytes, DeserializeContext * context )
+    : XMLDeserializer( in, numBytes, context )
 {
 }
 
 // ***********************
 //
-BVXMLDeserializer::BVXMLDeserializer( std::string filename, model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets )
-    : XMLDeserializer( filename, new BVDeserializeContext( timeline, assets ) )
+BVXMLDeserializer::BVXMLDeserializer( std::string filename, DeserializeContext * context )
+    : XMLDeserializer( filename, context )
 {
 }
 

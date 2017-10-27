@@ -37,7 +37,7 @@ void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
     
     std::string timeline;
     if( serContext->sceneNameInTimeline )
-        timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+        timeline = serContext->GetTimelineManager()->GetTimelinePath( m_timeEvaluator );
     else
         timeline = m_timeEvaluator->GetName();
     ser.SetAttribute( "timeline", timeline );

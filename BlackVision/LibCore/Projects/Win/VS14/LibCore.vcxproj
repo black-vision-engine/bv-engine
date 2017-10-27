@@ -101,6 +101,7 @@
     <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp" />

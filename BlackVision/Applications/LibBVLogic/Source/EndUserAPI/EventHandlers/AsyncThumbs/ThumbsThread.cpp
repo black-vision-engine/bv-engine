@@ -93,7 +93,7 @@ void            ThumbsThread::GenerateThumbnails    ( const LoadThumbRequest & r
         }
     }
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
 
 
     if( !thumbs.empty() )

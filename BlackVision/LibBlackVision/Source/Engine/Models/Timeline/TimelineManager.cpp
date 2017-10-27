@@ -173,6 +173,9 @@ ITimelinePtr            TimelineManager::GetTimeline                     ( const
 //
 std::string             TimelineManager::GetTimelinePath                 ( ITimeEvaluatorPtr timeline )
 {
+    assert( m_rootTimeline );
+    if( m_rootTimeline == timeline )
+        return m_rootTimeline->GetName();
     return TimelineHelper::GetTimelinePath( timeline, m_rootTimeline );
 }
 

@@ -92,7 +92,7 @@ ThumbnailConstPtr       SceneAccessor::GetSceneThumbnail   ( const Path & path )
     if( !Path::Exists( thumbPath ) )
         return nullptr;
 
-    JsonDeserializeObject deser;
+    JsonDeserializeObject deser( new DeserializeContext() );
     deser.LoadFile( thumbPath.Str() );
 
     auto thumb = SceneThumbnail::Create( deser );

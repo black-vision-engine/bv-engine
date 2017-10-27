@@ -13,9 +13,9 @@ class BVSerializeContext;
 class BVXMLSerializer : public XMLSerializer
 {
 public:
-    BVXMLSerializer();
+    BVXMLSerializer( BVSerializeContext * context );
 
-    BVXMLSerializer( AssetDescsWithUIDsPtr assets );
+    //BVXMLSerializer( AssetDescsWithUIDsPtr assets );
 
     BVSerializeContext *        GetBVSerializeContext();
 };

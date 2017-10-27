@@ -79,7 +79,7 @@ ThumbnailConstPtr Font2DLoader::LoadThumbnail     ( const AssetDescConstPtr & de
 
     if( Path::Exists( thumbFilePath ) )
     {
-        JsonDeserializeObject deser;
+        SimpleJsonDeserializeObject deser;
         deser.LoadFile( thumbFilePath.Str() );
 
         auto thumb = FontAssetThumbnail::Create( deser );
@@ -101,7 +101,7 @@ ThumbnailConstPtr Font2DLoader::LoadThumbnail     ( const AssetDescConstPtr & de
 
     auto thumb = FontAssetThumbnail::Create( tga, h );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
 
     thumb->Serialize( ser );
 

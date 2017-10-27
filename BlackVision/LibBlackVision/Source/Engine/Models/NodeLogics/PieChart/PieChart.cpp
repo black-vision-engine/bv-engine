@@ -162,7 +162,7 @@ void                PieChart::Serialize       ( ISerializer & ser ) const
         ser.SetAttribute( "pieChartType", SerializationHelper::T2String( m_chartType ) );
         ser.SetAttribute( "textEnabled", SerializationHelper::T2String( m_textEnabled ) );
 
-        auto timeline = model::TimelineManager::GetInstance()->GetTimelinePath( m_timeEval );
+        auto timeline = context->GetTimelineManager()->GetTimelinePath( m_timeEval );
         ser.SetAttribute( "timelinePath", timeline );
     }
 
@@ -183,7 +183,7 @@ PieChartPtr             PieChart::Create          ( const IDeserializer & deser,
             model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
             if( !sceneTimeline )
             {
-                sceneTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
+                sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
             }
             auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
         

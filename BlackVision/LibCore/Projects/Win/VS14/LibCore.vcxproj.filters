@@ -355,6 +355,7 @@
       <Filter>Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Exception.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">

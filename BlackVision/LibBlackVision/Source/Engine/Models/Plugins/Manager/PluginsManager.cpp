@@ -94,6 +94,16 @@ IPluginPtr                                          PluginsManager::CreatePlugin
     {
         return desc->CreatePlugin( name, prev, timeEvaluator );
     }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Plugin descriptor: " << uid << " could not be found by PluginsManager.";
+
+        std::string avaibleDescsMsg = "Available descriptors: \n";
+        for( auto descr : m_descrVec )
+            avaibleDescsMsg += descr->GetPluginTypeUID() + "\n";
+
+        LOG_MESSAGE( SeverityLevel::debug ) << avaibleDescsMsg;
+    }
 
     return nullptr;
 }

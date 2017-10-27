@@ -126,7 +126,7 @@ model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserialize
     bv::model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
     if( sceneTimeline == nullptr )
     {
-        sceneTimeline = bv::model::TimelineManager::GetInstance()->GetRootTimeline();
+        sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
     }
 
     timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( "default", sceneTimeline );

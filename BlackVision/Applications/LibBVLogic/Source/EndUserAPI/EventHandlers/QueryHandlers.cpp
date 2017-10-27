@@ -54,7 +54,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         auto request = infoEvent->Request;
         auto eventID = infoEvent->EventID;
 
-        JsonSerializeObject responseJSON;
+        SimpleJsonSerializeObject responseJSON;
 
         if( command == InfoEvent::Command::TreeStructure )
             TreeStructureInfo( responseJSON, request, eventID );

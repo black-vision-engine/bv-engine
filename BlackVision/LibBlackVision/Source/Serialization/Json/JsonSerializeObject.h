@@ -29,7 +29,7 @@ private:
     std::unique_ptr< SerializeContext >     m_context;
 
 public:
-	JsonSerializeObject();
+	JsonSerializeObject( SerializeContext * context );
     JsonSerializeObject( Json::Value && initValue );
 	~JsonSerializeObject();
 
@@ -59,5 +59,15 @@ public:
 
 };
 
+
+// ***********************
+// This class is a "stupid" Serializer, with a primitive context and not sufficient to handle BV objects serialization
+class SimpleJsonSerializeObject : public JsonSerializeObject
+{
+public:
+    SimpleJsonSerializeObject()
+        : JsonSerializeObject( new SerializeContext() )
+    {}
+};
 
 } //bv
