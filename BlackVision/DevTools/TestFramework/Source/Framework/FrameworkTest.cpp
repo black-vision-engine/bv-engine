@@ -1,7 +1,34 @@
 #include "FrameworkTest.h"
 #include "BVTestAppLogic.h"
 
+#include <excpt.h>
 
+int filter( unsigned int code, struct _EXCEPTION_POINTERS * ) {
+
+    CHECK( false );
+//    EndTestAfterThisFrame( true );
+
+    puts( "in filter." );
+
+    if( code == EXCEPTION_ACCESS_VIOLATION )
+    {
+
+        puts( "caught AV as expected." );
+
+        return EXCEPTION_EXECUTE_HANDLER;
+
+    }
+
+    else
+    {
+
+        puts( "didn't catch AV, unexpected." );
+
+        return EXCEPTION_CONTINUE_SEARCH;
+
+    };
+
+}
 
 namespace bv
 {
@@ -23,22 +50,38 @@ void            FrameworkTest::RunImpl      () const
 //
 void            FrameworkTest::RunImplNotConst  ()
 {
-    m_frameTime = ComputeFrameTimeImpl();
+    __try
+    {
+        m_frameTime = ComputeFrameTimeImpl();
 
-    // Events
-    PreEvents();
-    m_appLogic->EventsPhase();
+        // Events
+        PreEvents();
+        m_appLogic->EventsPhase();
 
-    // Model
-    PreModelUpdate();
-    m_appLogic->ModelUpdatePhase( m_frameTime );
+        // Model
+        PreModelUpdate();
+        m_appLogic->ModelUpdatePhase( m_frameTime );
 
-    // Engine
-    PreRender();
-    m_appLogic->RenderPhase( m_frameTime, m_appLogic->m_renderer, m_appLogic->m_audioRenderer );
-    PostRender();
+        // Engine
+        PreRender();
+        m_appLogic->RenderPhase( m_frameTime, m_appLogic->m_renderer, m_appLogic->m_audioRenderer );
+        PostRender();
 
-    GTimer.StartTimer();
+        GTimer.StartTimer();
+    }
+    __except( filter( GetExceptionCode(), GetExceptionInformation() ) )
+    {
+    }
+    //catch( const std::exception & ex )
+    //{
+    //    CHECK( !ex.what() );
+    //    EndTestAfterThisFrame( true );
+    //}
+    //catch( ... )
+    //{
+    //    CHECK( !"Unexpected exception" );
+    //    EndTestAfterThisFrame( true );
+    //}
 }
 
 // ***********************
