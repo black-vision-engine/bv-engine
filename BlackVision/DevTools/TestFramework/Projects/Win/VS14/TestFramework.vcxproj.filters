@@ -78,6 +78,9 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\EvaluatorsAccessors.h">
       <Filter>Utils\Accessors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h">
+      <Filter>Utils\Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">

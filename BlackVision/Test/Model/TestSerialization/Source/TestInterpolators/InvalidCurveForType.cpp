@@ -5,7 +5,7 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Utils/Comparators/ParamComparator.h"
-#include "Utils/Serialization/Serialize.h"
+#include "Utils/Serialization/SerializeInteprolator.h"
 
 #include "Framework/UseLoggerTests.h"
 

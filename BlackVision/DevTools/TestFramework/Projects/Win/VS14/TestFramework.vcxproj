@@ -36,6 +36,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />

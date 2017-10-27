@@ -28,6 +28,9 @@ public:
     template< typename ParamType >
     static bool             CompareEvaluators       ( const IEvaluator< TimeType, ParamType > & expected, const IEvaluator< TimeType, ParamType > & actual );
 
+    template< typename ParamType >
+    static bool             CompareEvaluators       ( std::shared_ptr< IEvaluator< TimeType, ParamType > > expected, std::shared_ptr< IEvaluator< TimeType, ParamType > > actual );
+
     static bool             CompareTransformKeys    ( const CompositeTransform & expected, const CompositeTransform & actual );
 };
 
