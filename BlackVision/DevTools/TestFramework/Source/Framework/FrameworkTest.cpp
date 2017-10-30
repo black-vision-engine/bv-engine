@@ -8,7 +8,6 @@ namespace bv
 {
 
 extern HighResolutionTimer  GTimer;
-extern TestEnvironment *    gEnvironment;
 
 
 // ***********************
@@ -126,7 +125,7 @@ void            FrameworkTest::TestBody     ()
 {
     while( !IsLastFrame() )
     {
-        bool end = gEnvironment->MainLoopStep();
+        bool end = TestEnvironment::GetEnvironment()->MainLoopStep();
         { end; }    // Maybe we can use this in future.
     }
 }
@@ -135,7 +134,7 @@ void            FrameworkTest::TestBody     ()
 //
 void            FrameworkTest::SetUp        ()
 {
-    SetAppLogic( gEnvironment->GetAppLogic() );
+    SetAppLogic( TestEnvironment::GetEnvironment()->GetAppLogic() );
 
     m_appLogic->InjectTest( this );
 }

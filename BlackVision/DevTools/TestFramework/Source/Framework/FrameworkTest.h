@@ -101,18 +101,58 @@ private:
 
 
 
+
+
+// ***********************
+// Creates and registers test class instance.
+#define REGISTER_TEST_INFO( test_case_name, test_name, parent_class, parent_id )\
+::testing::TestInfo* const GTEST_TEST_CLASS_NAME_( test_case_name, test_name )\
+::test_info_ = \
+::testing::internal::MakeAndRegisterTestInfo( \
+    MangleName( #test_case_name ).c_str(), MangleName( #test_name ).c_str(), NULL, NULL, \
+    ::testing::internal::CodeLocation( __FILE__, __LINE__ ), \
+    ( parent_id ), \
+    parent_class::SetUpTestCase, \
+    parent_class::TearDownTestCase, \
+    new ::testing::internal::TestFactoryImpl<\
+    GTEST_TEST_CLASS_NAME_( test_case_name, test_name )> );
+
+
+// ***********************
+// Creates and registers test class instance based on bv framework.
+#define REGISTER_FRAMEWORK_GTEST_INFO( test_case_name, test_name )\
+    REGISTER_TEST_INFO( test_case_name, test_name, ::bv::FrameworkTest, ::testing::internal::GetTestTypeId() )
+
+
+// ***********************
+// Declares TestInfo structure and other gtest things inside of test class.
+#define DECALRE_TEST_INFO( test_case_name, test_name )\
+public:\
+    GTEST_TEST_CLASS_NAME_( test_case_name, test_name )() {}\
+private:\
+    static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_; \
+    GTEST_DISALLOW_COPY_AND_ASSIGN_( GTEST_TEST_CLASS_NAME_( test_case_name, test_name ) );
+
+
+// ========================================================================= //
+// Test creation macros
+// ========================================================================= //
+
+
+// ***********************
+//
 #define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )    \
-class name : public bv::FrameworkTest   \
+class GTEST_TEST_CLASS_NAME_( suite, name ) : public bv::FrameworkTest   \
 {                                       \
+    DECALRE_TEST_INFO( suite, name )  \
 public:                                 \
-    name() : bv::FrameworkTest( ::bv::MangleName< name >( #name ).c_str(), suite, __FILE__, __LINE__ ) {}       \
-                                                                                                                \
-    virtual void        PreEvents           () override;                                                        \
-} name ## Instance;                                                                                             \
-                                                                                                                \
-UnitTest::ListAdder adder ## name ( UnitTest::Test::GetTestList(), &name ## Instance );                         \
-void        name::PreEvents           ()
+                                                                \
+    virtual void        PreEvents           () override;        \
+};                                                              \
+                                                                \
+REGISTER_FRAMEWORK_GTEST_INFO( suite, name )                    \
+void        GTEST_TEST_CLASS_NAME_( suite, name )::PreEvents           ()
 
 
-#define SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( #suite, name )
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )
 #define SIMPLE_FRAMEWORK_TEST( name )                   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( UnitTestSuite::GetSuiteName(), name )

@@ -19,6 +19,10 @@ class TestEnvironment : public ::testing::Environment
 {
 private:
 
+    static TestEnvironment *    gEnvironment;
+
+private:
+
     BlackVisionAppFramework *       m_app;
 
     int         ArgC;
@@ -41,6 +45,11 @@ public:
     void                InjectTest      ( FrameworkTest * test );
 
     BVTestAppLogic *    GetAppLogic     ();
+
+public:
+
+    static void                 SetEnvironment  ( TestEnvironment * environment );
+    static TestEnvironment *    GetEnvironment  ();
 };
 
 

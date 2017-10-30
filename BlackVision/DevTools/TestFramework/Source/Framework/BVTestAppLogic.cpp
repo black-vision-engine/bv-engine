@@ -17,6 +17,7 @@ namespace bv
 //
 BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : BVAppLogic( renderer, audioRenderer )
+    , m_test( nullptr )
 {}
 
 // *********************************
@@ -36,7 +37,8 @@ void            BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer 
         firstExecution = false;
     }
 
-    m_test->Run();
+    if( m_test )
+        m_test->Run();
 }
 
 // ***********************

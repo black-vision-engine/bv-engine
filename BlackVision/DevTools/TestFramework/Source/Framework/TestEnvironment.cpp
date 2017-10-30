@@ -10,6 +10,11 @@
 namespace bv
 {
 
+
+TestEnvironment *    TestEnvironment::gEnvironment = nullptr;;
+
+
+
 // ***********************
 //
 TestEnvironment::TestEnvironment        ( int argc, char * argv[] )
@@ -57,6 +62,20 @@ void            TestEnvironment::InjectTest     ( FrameworkTest * test )
 BVTestAppLogic *    TestEnvironment::GetAppLogic()
 {
     return static_cast< BVTestAppLogic * >( m_app->GetAppLogic() );
+}
+
+// ***********************
+//
+void                TestEnvironment::SetEnvironment     ( TestEnvironment * environment )
+{
+    gEnvironment = environment;
+}
+
+// ***********************
+//
+TestEnvironment *   TestEnvironment::GetEnvironment     ()
+{
+    return gEnvironment;
 }
 
 

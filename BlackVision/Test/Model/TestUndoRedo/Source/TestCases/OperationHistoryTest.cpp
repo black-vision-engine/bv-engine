@@ -10,7 +10,7 @@
 
 // ***********************
 // OperationHistory should hold only specified number of task in history. Old tasks should be deleted.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, OperationHistoryDeletesOldTasks )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_UndoRedo_OperationHistory, OperationHistoryDeletesOldTasks )
 {
     bv::OperationHistory history( 5 );
     std::vector< OpEntry > opRegister;
@@ -23,22 +23,22 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Opera
     history.AddOperation( CreateOperation( opRegister, "Op5" ) );
     history.AddOperation( CreateOperation( opRegister, "Op6" ) );
 
-    CHECK( history.Undo( GetProjectEditor(), 5 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 5 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
     // Only 5 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 5 );
+    ASSERT_EQ( opRegister.size(), 5 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op6" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op5" );
-    CHECK( opRegister[ 2 ].Type == OpType::Undo );      CHECK( opRegister[ 2 ].OperationID == "Op4" );
-    CHECK( opRegister[ 3 ].Type == OpType::Undo );      CHECK( opRegister[ 3 ].OperationID == "Op3" );
-    CHECK( opRegister[ 4 ].Type == OpType::Undo );      CHECK( opRegister[ 4 ].OperationID == "Op2" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op6" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op5" );
+    EXPECT_EQ( opRegister[ 2 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 2 ].OperationID, "Op4" );
+    EXPECT_EQ( opRegister[ 3 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 3 ].OperationID, "Op3" );
+    EXPECT_EQ( opRegister[ 4 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 4 ].OperationID, "Op2" );
 }
 
 // ***********************
 // Changing history size to greater value shouldn't affect history.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, ChangeHistorySizeGreater )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_UndoRedo_OperationHistory, ChangeHistorySizeGreater )
 {
     bv::OperationHistory history( 2 );
     std::vector< OpEntry > opRegister;
@@ -54,22 +54,22 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Chang
     history.AddOperation( CreateOperation( opRegister, "Op6" ) );
     history.AddOperation( CreateOperation( opRegister, "Op7" ) );
 
-    CHECK( history.Undo( GetProjectEditor(), 5 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 5 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
     // Only 5 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 5 );
+    ASSERT_EQ( opRegister.size(), 5 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op7" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op6" );
-    CHECK( opRegister[ 2 ].Type == OpType::Undo );      CHECK( opRegister[ 2 ].OperationID == "Op5" );
-    CHECK( opRegister[ 3 ].Type == OpType::Undo );      CHECK( opRegister[ 3 ].OperationID == "Op4" );
-    CHECK( opRegister[ 4 ].Type == OpType::Undo );      CHECK( opRegister[ 4 ].OperationID == "Op3" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op7" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op6" );
+    EXPECT_EQ( opRegister[ 2 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 2 ].OperationID, "Op5" );
+    EXPECT_EQ( opRegister[ 3 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 3 ].OperationID, "Op4" );
+    EXPECT_EQ( opRegister[ 4 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 4 ].OperationID, "Op3" );
 }
 
 // ***********************
 // Changing history size should delete oldest tasks.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, ChangeHistorySizeLower )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_UndoRedo_OperationHistory, ChangeHistorySizeLower )
 {
     bv::OperationHistory history( 5 );
     std::vector< OpEntry > opRegister;
@@ -83,19 +83,19 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Chang
     // Change history size.
     history.SetHistoryLength( 2 );
 
-    CHECK( history.Undo( GetProjectEditor(), 2 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 2 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
     // Only 2 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 2 );
+    ASSERT_EQ( opRegister.size(), 2 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op5" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op4" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op5" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op4" );
 }
 
 // ***********************
 // Changing history size while there are operations on stack to redo.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, ChangeHistorySizeLowerRedoCase )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_UndoRedo_OperationHistory, ChangeHistorySizeLowerRedoCase )
 {
     bv::OperationHistory history( 5 );
     std::vector< OpEntry > opRegister;
@@ -106,26 +106,26 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Chang
     history.AddOperation( CreateOperation( opRegister, "Op4" ) );
     history.AddOperation( CreateOperation( opRegister, "Op5" ) );
 
-    CHECK( history.Undo( GetProjectEditor(), 2 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 2 ) );
 
     // Change history size.
     history.SetHistoryLength( 2 );
     opRegister.clear();
 
-    CHECK( history.Undo( GetProjectEditor(), 2 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 2 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
     // Only 2 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 2 );
+    ASSERT_EQ( opRegister.size(), 2 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op3" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op2" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op3" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op2" );
 }
 
 
 // ***********************
 // OperationHistory should hold only specified number of task in history. Old tsks should be deleted.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, RepeatedUndoRedo )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_UndoRedo_OperationHistory, RepeatedUndoRedo )
 {
     bv::OperationHistory history( 2 );
     std::vector< OpEntry > opRegister;
@@ -135,45 +135,45 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Repea
     history.AddOperation( CreateOperation( opRegister, "Op3" ) );
 
     // First repeat
-    CHECK( history.Undo( GetProjectEditor(), 2 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 2 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
-    CHECK( history.Redo( GetProjectEditor(), 1 ) );
-    CHECK( history.Redo( GetProjectEditor(), 1 ) );
-    CHECK( !history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_FALSE( history.Redo( GetProjectEditor(), 1 ) );
 
     // Only 4 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 4 );
+    ASSERT_EQ( opRegister.size(), 4 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op3" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op2" );
-    CHECK( opRegister[ 2 ].Type == OpType::Redo );      CHECK( opRegister[ 2 ].OperationID == "Op2" );
-    CHECK( opRegister[ 3 ].Type == OpType::Redo );      CHECK( opRegister[ 3 ].OperationID == "Op3" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op3" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op2" );
+    EXPECT_EQ( opRegister[ 2 ].Type, OpType::Redo );      EXPECT_EQ( opRegister[ 2 ].OperationID, "Op2" );
+    EXPECT_EQ( opRegister[ 3 ].Type, OpType::Redo );      EXPECT_EQ( opRegister[ 3 ].OperationID, "Op3" );
 
     // Second repeat
     opRegister.clear();
 
-    CHECK( history.Undo( GetProjectEditor(), 2 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 2 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
-    CHECK( history.Redo( GetProjectEditor(), 1 ) );
-    CHECK( history.Redo( GetProjectEditor(), 1 ) );
-    CHECK( !history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_FALSE( history.Redo( GetProjectEditor(), 1 ) );
 
     // Only 4 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 4 );
+    ASSERT_EQ( opRegister.size(), 4 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op3" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op2" );
-    CHECK( opRegister[ 2 ].Type == OpType::Redo );      CHECK( opRegister[ 2 ].OperationID == "Op2" );
-    CHECK( opRegister[ 3 ].Type == OpType::Redo );      CHECK( opRegister[ 3 ].OperationID == "Op3" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op3" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op2" );
+    EXPECT_EQ( opRegister[ 2 ].Type, OpType::Redo );      EXPECT_EQ( opRegister[ 2 ].OperationID, "Op2" );
+    EXPECT_EQ( opRegister[ 3 ].Type, OpType::Redo );      EXPECT_EQ( opRegister[ 3 ].OperationID, "Op3" );
 
 }
 
 // ***********************
 // Adding new operations after doing undo, removes posibility to redo operations. New operatio creates new 
 // redo branch and old branch is deleted.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, DeleteRedoOldBranch )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_UndoRedo_OperationHistory, DeleteRedoOldBranch )
 {
     bv::OperationHistory history( 5 );
     std::vector< OpEntry > opRegister;
@@ -184,26 +184,26 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.UndoRedo.OperationHistory, Delet
     history.AddOperation( CreateOperation( opRegister, "Op4" ) );
     history.AddOperation( CreateOperation( opRegister, "Op5" ) );
 
-    CHECK( history.Undo( GetProjectEditor(), 2 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 2 ) );
 
     history.AddOperation( CreateOperation( opRegister, "Op6" ) );
 
     opRegister.clear();
 
     // Check if there are no operations on top of stack.
-    CHECK( !history.Redo( GetProjectEditor(), 1 ) );
+    EXPECT_FALSE( history.Redo( GetProjectEditor(), 1 ) );
 
     // Revert all operations.
-    CHECK( history.Undo( GetProjectEditor(), 4 ) );
-    CHECK( !history.Undo( GetProjectEditor(), 1 ) );
+    EXPECT_TRUE( history.Undo( GetProjectEditor(), 4 ) );
+    EXPECT_FALSE( history.Undo( GetProjectEditor(), 1 ) );
 
     // Only 5 operations should apear.
-    REQUIRE CHECK( opRegister.size() == 4 );
+    ASSERT_EQ( opRegister.size(), 4 );
 
-    CHECK( opRegister[ 0 ].Type == OpType::Undo );      CHECK( opRegister[ 0 ].OperationID == "Op6" );
-    CHECK( opRegister[ 1 ].Type == OpType::Undo );      CHECK( opRegister[ 1 ].OperationID == "Op3" );
-    CHECK( opRegister[ 2 ].Type == OpType::Undo );      CHECK( opRegister[ 2 ].OperationID == "Op2" );
-    CHECK( opRegister[ 3 ].Type == OpType::Undo );      CHECK( opRegister[ 3 ].OperationID == "Op1" );
+    EXPECT_EQ( opRegister[ 0 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 0 ].OperationID, "Op6" );
+    EXPECT_EQ( opRegister[ 1 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 1 ].OperationID, "Op3" );
+    EXPECT_EQ( opRegister[ 2 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 2 ].OperationID, "Op2" );
+    EXPECT_EQ( opRegister[ 3 ].Type, OpType::Undo );      EXPECT_EQ( opRegister[ 3 ].OperationID, "Op1" );
 }
 
 
