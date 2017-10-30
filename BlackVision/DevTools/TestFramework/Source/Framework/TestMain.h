@@ -20,7 +20,7 @@ int main( int argc, char **argv )
 {
     gEnvironment = new bv::TestEnvironment( argc, argv );
     
-    ::testing::AddGlobalTestEnvironment( environment );
+    ::testing::AddGlobalTestEnvironment( gEnvironment );
 
     ::testing::InitGoogleTest( &argc, argv );
     return RUN_ALL_TESTS();

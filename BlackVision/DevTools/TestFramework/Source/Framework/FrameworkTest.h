@@ -31,14 +31,13 @@ private:
 
 public:
 
-    //explicit    FrameworkTest       ( char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0 )
-    //    : UnitTest::Test( testName, suiteName, filename, lineNumber )
-    //    , m_appLogic( nullptr )       // This will be set in future.
-    //    , m_isLastFrame( true )
-    //    , m_overrideTime( false )
-    //    , m_frameNum( 0 )
-    //    , m_frameTime( 0 )
-    //{}
+    explicit    FrameworkTest       ()
+        : m_appLogic( nullptr )       // This will be set in future.
+        , m_isLastFrame( true )
+        , m_overrideTime( false )
+        , m_frameNum( 0 )
+        , m_frameTime( 0 )
+    {}
 
     // Run test from BVTesterAppLogic
 
