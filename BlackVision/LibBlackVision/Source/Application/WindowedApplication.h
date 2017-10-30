@@ -102,7 +102,7 @@ protected:
 
 	HWND			handle;
 
-protected:
+public:
 
     bool            Initialize      ( int argc, char ** argv );
     bool            MainLoopStep    ();

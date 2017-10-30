@@ -1,42 +1,51 @@
 #include "FrameworkTest.h"
 #include "BVTestAppLogic.h"
 
+#include "TestEnvironment.h"
 
 
 namespace bv
 {
 
-extern HighResolutionTimer GTimer;
-
+extern HighResolutionTimer  GTimer;
+extern TestEnvironment *    gEnvironment;
 
 
 // ***********************
 //
-void            FrameworkTest::RunImpl      () const
+void            FrameworkTest::Run              ()
 {
     const_cast< FrameworkTest * >( this )->PreRunImpl();
-    const_cast< FrameworkTest * >( this )->RunImplNotConst();
+    const_cast< FrameworkTest * >( this )->RunImpl();
     const_cast< FrameworkTest * >( this )->PostRunImpl();
 }
 
 // ***********************
 //
-void            FrameworkTest::RunImplNotConst  ()
+void            FrameworkTest::RunImpl          ()
 {
     m_frameTime = ComputeFrameTimeImpl();
 
     // Events
     PreEvents();
+    if( HandleFailure() ) return;
+    
     m_appLogic->EventsPhase();
 
     // Model
     PreModelUpdate();
+    if( HandleFailure() ) return;
+
     m_appLogic->ModelUpdatePhase( m_frameTime );
 
     // Engine
     PreRender();
+    if( HandleFailure() ) return;
+
     m_appLogic->RenderPhase( m_frameTime, m_appLogic->m_renderer, m_appLogic->m_audioRenderer );
+
     PostRender();
+    if( HandleFailure() ) return;
 
     GTimer.StartTimer();
 }
@@ -53,6 +62,19 @@ BVProjectEditor *   FrameworkTest::GetProjectEditor     () const
 void            FrameworkTest::SetAppLogic      ( BVTestAppLogic * logic )
 {
     m_appLogic = logic;
+}
+
+// ***********************
+//
+bool            FrameworkTest::HandleFailure()
+{
+    if( HasFatalFailure() )
+    {
+        EndTestAfterThisFrame( true );
+        return true;
+    }
+    
+    return false;
 }
 
 
@@ -98,6 +120,37 @@ void            FrameworkTest::PostRunImpl()
     m_frameNum++;
 }
 
+// ***********************
+//
+void            FrameworkTest::TestBody     ()
+{
+    while( !IsLastFrame() )
+    {
+        bool end = gEnvironment->MainLoopStep();
+        { end; }    // Maybe we can use this in future.
+    }
+}
+
+// ***********************
+//
+void            FrameworkTest::SetUp        ()
+{
+    SetAppLogic( gEnvironment->GetAppLogic() );
+
+    m_appLogic->InjectTest( this );
+}
+
+// ***********************
+//
+void            FrameworkTest::TearDown     ()
+{
+    // Clean engine before next test.
+    m_appLogic->UnloadScenes();
+    m_appLogic->RestartTimer();
+
+    // To be sure.
+    m_appLogic->InjectTest( nullptr );
+}
 
 }	// bv
 

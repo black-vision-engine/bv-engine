@@ -2,8 +2,8 @@
 
 #include "CoreDEF.h"
 
-#include "UnitTest++.h"
 #include "NameMangler.h"
+#include "TestEnvironment.h"
 
 
 namespace bv
@@ -13,7 +13,11 @@ class BVTestAppLogic;
 class BVProjectEditor;
 
 
-class FrameworkTest : public UnitTest::Test
+
+
+// ***********************
+//
+class FrameworkTest : public ::testing::Test
 {
     friend class BVTestAppLogic;
     friend class TestExecutor;
@@ -27,17 +31,28 @@ private:
 
 public:
 
-    explicit    FrameworkTest       ( char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0 )
-        :   UnitTest::Test( testName, suiteName, filename, lineNumber )
-        ,   m_appLogic( nullptr )       // This will be set in future.
-        ,   m_isLastFrame( true )
-        ,   m_overrideTime( false )
-        ,   m_frameNum( 0 )
-        ,   m_frameTime( 0 )
-    {}
+    //explicit    FrameworkTest       ( char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0 )
+    //    : UnitTest::Test( testName, suiteName, filename, lineNumber )
+    //    , m_appLogic( nullptr )       // This will be set in future.
+    //    , m_isLastFrame( true )
+    //    , m_overrideTime( false )
+    //    , m_frameNum( 0 )
+    //    , m_frameTime( 0 )
+    //{}
 
-    virtual void        RunImpl         () const;
-    virtual void        RunImplNotConst ();
+    // Run test from BVTesterAppLogic
+
+    virtual void        RunImpl         ();
+    virtual void        Run             ();
+
+protected:
+
+    // gtest overrides
+
+    virtual void        TestBody    () override;
+
+    virtual void        SetUp       () override;
+    virtual void        TearDown    () override;
 
 public:
 
@@ -59,9 +74,8 @@ public:
 
 private:
 
-    // Call only from BVTestAppLogic
-
     void        SetAppLogic             ( BVTestAppLogic* logic );
+    bool        HandleFailure           ();
 
 protected:
 
@@ -77,6 +91,7 @@ private:
     void        PreRunImpl              ();
     void        PostRunImpl             ();
 };
+
 
 }	// bv
 

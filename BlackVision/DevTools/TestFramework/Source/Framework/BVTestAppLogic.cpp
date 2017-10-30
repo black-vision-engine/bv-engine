@@ -4,9 +4,7 @@
 
 #include "Application/ApplicationContext.h"
 
-#include "UnitTest++.h"
-#include "TestReporterStdout.h"
-#include "XmlTestReporter.h"
+#include "FrameworkTest.h"
 
 
 #include <limits>
@@ -17,35 +15,28 @@ namespace bv
 
 // *********************************
 //
-BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const std::string & testname )
-    : BVAppLogic( renderer, audioRenderer )
-    , m_testExecutor( nullptr )
-{
-    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), testname );
-}
-
-// *********************************
-//
 BVTestAppLogic::BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : BVAppLogic( renderer, audioRenderer )
-    , m_testExecutor( nullptr )
-{
-    m_testExecutor = new TestExecutor( this, UnitTest::Test::GetTestList().GetHead(), "Test", true );
-}
+{}
 
 // *********************************
 //
 BVTestAppLogic::~BVTestAppLogic     ()
-{
-    delete m_testExecutor;
-}
+{}
 
 // *********************************
 //
 void            BVTestAppLogic::OnUpdate    ( Renderer * , audio::AudioRenderer * )
 {
-    if( !m_testExecutor->Execute() )
-        EndExecution();
+    // Note: we can't restart timer earlier, because AppLogic isn't initialized.
+    static bool firstExecution = true;
+    if( firstExecution )
+    {
+        RestartTimer();
+        firstExecution = false;
+    }
+
+    m_test->Run();
 }
 
 // ***********************
@@ -77,6 +68,13 @@ void            BVTestAppLogic::RestartTimer()
 {
     StartTime();
     m_renderMode.SetOffscreenRenderMode( 50.0f, std::numeric_limits< UInt64 >::max() );
+}
+
+// ***********************
+//
+void            BVTestAppLogic::InjectTest  ( FrameworkTest * test )
+{
+    m_test = test;
 }
 
 

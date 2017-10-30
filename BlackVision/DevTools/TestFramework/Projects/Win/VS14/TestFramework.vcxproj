@@ -22,10 +22,9 @@
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
-    <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h" />
     <ClInclude Include="..\..\..\Source\Framework\NameMangler.h" />
-    <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h" />
-    <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h" />
+    <ClInclude Include="..\..\..\Source\Framework\TestEnvironment.h" />
+    <ClInclude Include="..\..\..\Source\Framework\TestMain.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h" />
@@ -38,9 +37,7 @@
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />
-    <ClCompile Include="..\..\..\Source\Framework\MultiframeTestRunner.cpp" />
-    <ClCompile Include="..\..\..\Source\Framework\TestExecutor.cpp" />
-    <ClCompile Include="..\..\..\Source\Framework\XmlGTestReporter.cpp" />
+    <ClCompile Include="..\..\..\Source\Framework\TestEnvironment.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.cpp" />
