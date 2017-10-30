@@ -105,8 +105,8 @@ private:
 
 // ***********************
 // Creates and registers test class instance.
-#define REGISTER_TEST_INFO( test_case_name, test_name, parent_class, parent_id )\
-::testing::TestInfo* const GTEST_TEST_CLASS_NAME_( test_case_name, test_name )\
+#define REGISTER_TEST_INFO( testClassName, test_case_name, test_name, parent_class, parent_id )\
+::testing::TestInfo* const testClassName\
 ::test_info_ = \
 ::testing::internal::MakeAndRegisterTestInfo( \
     MangleName( #test_case_name ).c_str(), MangleName( #test_name ).c_str(), NULL, NULL, \
@@ -115,23 +115,23 @@ private:
     parent_class::SetUpTestCase, \
     parent_class::TearDownTestCase, \
     new ::testing::internal::TestFactoryImpl<\
-    GTEST_TEST_CLASS_NAME_( test_case_name, test_name )> );
+    testClassName> );
 
 
 // ***********************
 // Creates and registers test class instance based on bv framework.
-#define REGISTER_FRAMEWORK_GTEST_INFO( test_case_name, test_name )\
-    REGISTER_TEST_INFO( test_case_name, test_name, ::bv::FrameworkTest, ::testing::internal::GetTestTypeId() )
+#define REGISTER_FRAMEWORK_GTEST_INFO( testClassName, test_case_name, test_name )\
+    REGISTER_TEST_INFO( testClassName, test_case_name, test_name, ::bv::FrameworkTest, ::testing::internal::GetTestTypeId() )
 
 
 // ***********************
 // Declares TestInfo structure and other gtest things inside of test class.
-#define DECALRE_TEST_INFO( test_case_name, test_name )\
+#define DECALRE_GTEST_INFO( testClassName )\
 public:\
-    GTEST_TEST_CLASS_NAME_( test_case_name, test_name )() {}\
+    testClassName() {}\
 private:\
     static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_; \
-    GTEST_DISALLOW_COPY_AND_ASSIGN_( GTEST_TEST_CLASS_NAME_( test_case_name, test_name ) );
+    GTEST_DISALLOW_COPY_AND_ASSIGN_( testClassName );
 
 
 // ========================================================================= //
@@ -144,15 +144,14 @@ private:\
 #define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )    \
 class GTEST_TEST_CLASS_NAME_( suite, name ) : public bv::FrameworkTest   \
 {                                       \
-    DECALRE_TEST_INFO( suite, name )  \
+    DECALRE_GTEST_INFO( GTEST_TEST_CLASS_NAME_( suite, name ) )  \
 public:                                 \
                                                                 \
     virtual void        PreEvents           () override;        \
 };                                                              \
                                                                 \
-REGISTER_FRAMEWORK_GTEST_INFO( suite, name )                    \
+REGISTER_FRAMEWORK_GTEST_INFO( GTEST_TEST_CLASS_NAME_( suite, name ), suite, name )     \
 void        GTEST_TEST_CLASS_NAME_( suite, name )::PreEvents           ()
 
 
 #define SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )
-#define SIMPLE_FRAMEWORK_TEST( name )                   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( UnitTestSuite::GetSuiteName(), name )

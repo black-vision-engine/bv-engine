@@ -6,20 +6,6 @@
 
 
 
-// ***********************
-// Test BVProjectEditor API for copying nodes.
-class CopyNodeInScene : public bv::FrameworkTest
-{
-private:
-public:
-    CopyNodeInScene() : bv::FrameworkTest( "CopyNodeInScene", "BVProjectEditor.Node.Copy", __FILE__, __LINE__ ) {}
-
-    virtual void        PreEvents           () override;
-
-} CopyNodeInSceneInstance;
-
-UnitTest::ListAdder adderCopyNodeInScene ( UnitTest::Test::GetTestList(), &CopyNodeInSceneInstance );
-
 
 void        CopyNodeCompare                     ( bv::model::BasicNodePtr srcNode, bv::model::BasicNodePtr dstNode );
 void        CopyPluginCompare                   ( bv::model::IPluginPtr srcPlugin, bv::model::IPluginPtr dstPlugin );
@@ -30,7 +16,7 @@ void        CopyEffectCompare                   ( bv::model::IModelNodeEffectPtr
 
 // ***********************
 //
-void        CopyNodeInScene::PreEvents           ()
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node_Copy, CopyNodeInScene )
 {
     auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
     CreateOneScene( editor );
@@ -43,10 +29,10 @@ void        CopyNodeInScene::PreEvents           ()
     auto sourceNode = std::static_pointer_cast< bv::model::BasicNode >( editor->GetNode( scene1Name, "root/#0" ) );
     auto destNode   = std::static_pointer_cast< bv::model::BasicNode >( editor->GetNode( scene1Name, "root/#2" ) );
 
-    REQUIRE( sourceNode != nullptr );
-    REQUIRE( destNode != nullptr );
+    ASSERT_TRUE( sourceNode != nullptr );
+    ASSERT_TRUE( destNode != nullptr );
 
-    CHECK( destNode->GetNumChildren() == 4 );
+    EXPECT_TRUE( destNode->GetNumChildren() == 4 );
 
     CopyNodeCompare( sourceNode, destNode );
 }
@@ -55,8 +41,8 @@ void        CopyNodeInScene::PreEvents           ()
 //
 void        CopyNodeCompare                     ( bv::model::BasicNodePtr srcNode, bv::model::BasicNodePtr dstNode )
 {
-    CHECK( srcNode->GetName() == dstNode->GetName() );
-    CHECK( srcNode != dstNode );
+    EXPECT_TRUE( srcNode->GetName() == dstNode->GetName() );
+    EXPECT_TRUE( srcNode != dstNode );
 
     auto srcLogic = srcNode->GetLogic();
     auto dstLogic = dstNode->GetLogic();
@@ -70,7 +56,7 @@ void        CopyNodeCompare                     ( bv::model::BasicNodePtr srcNod
     CopyEffectCompare( srcEffect, dstEffect );
 
 
-    REQUIRE( srcNode->GetNumPlugins() == dstNode->GetNumPlugins() );
+    ASSERT_TRUE( srcNode->GetNumPlugins() == dstNode->GetNumPlugins() );
 
     for( unsigned int i = 0; i < srcNode->GetNumPlugins(); ++i )
     {
@@ -81,7 +67,7 @@ void        CopyNodeCompare                     ( bv::model::BasicNodePtr srcNod
     }
 
 
-    REQUIRE( srcNode->GetNumChildren() == dstNode->GetNumChildren() );
+    ASSERT_TRUE( srcNode->GetNumChildren() == dstNode->GetNumChildren() );
 
     for( unsigned int i = 0; i < srcNode->GetNumChildren(); ++i )
     {
@@ -93,11 +79,11 @@ void        CopyNodeCompare                     ( bv::model::BasicNodePtr srcNod
 //
 void        CopyPluginCompare                   ( bv::model::IPluginPtr srcPlugin, bv::model::IPluginPtr dstPlugin )
 {
-    REQUIRE( srcPlugin->GetTypeUid() == dstPlugin->GetTypeUid() );
-    CHECK( srcPlugin->GetName() == dstPlugin->GetName() );
+    ASSERT_TRUE( srcPlugin->GetTypeUid() == dstPlugin->GetTypeUid() );
+    EXPECT_TRUE( srcPlugin->GetName() == dstPlugin->GetName() );
 
     // Compare assets
-    REQUIRE( srcPlugin->GetLAssets().size() == dstPlugin->GetLAssets().size() );
+    ASSERT_TRUE( srcPlugin->GetLAssets().size() == dstPlugin->GetLAssets().size() );
 
     // FIXME: Add comparision code here
 }
@@ -106,11 +92,11 @@ void        CopyPluginCompare                   ( bv::model::IPluginPtr srcPlugi
 //
 void        CopyLogicCompare                    ( bv::model::INodeLogicPtr srcLogic, bv::model::INodeLogicPtr dstLogic )
 {
-    REQUIRE( srcLogic == dstLogic );
+    ASSERT_TRUE( srcLogic == dstLogic );
 
     if( srcLogic != nullptr && dstLogic != nullptr )
     {
-        CHECK( srcLogic->GetType() == dstLogic->GetType() );
+        EXPECT_TRUE( srcLogic->GetType() == dstLogic->GetType() );
         // FIXME: Add comparision code here
     }
 }
@@ -119,12 +105,12 @@ void        CopyLogicCompare                    ( bv::model::INodeLogicPtr srcLo
 //
 void        CopyEffectCompare                   ( bv::model::IModelNodeEffectPtr srcEffect, bv::model::IModelNodeEffectPtr dstEffect )
 {
-    REQUIRE( srcEffect == dstEffect );
+    ASSERT_TRUE( srcEffect == dstEffect );
 
     if( srcEffect != nullptr && dstEffect != nullptr )
     {
-        CHECK( srcEffect->GetType() == dstEffect->GetType() );
-        CHECK( srcEffect->IsEnabled() == dstEffect->IsEnabled() );
+        EXPECT_TRUE( srcEffect->GetType() == dstEffect->GetType() );
+        EXPECT_TRUE( srcEffect->IsEnabled() == dstEffect->IsEnabled() );
 
         // FIXME: Add comparision code here
     }

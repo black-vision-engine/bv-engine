@@ -7,28 +7,9 @@
 
 
 
-
 // ***********************
-//
-class TestEffects : public bv::FrameworkTest
-{
-private:
-public:
-    TestEffects() : bv::FrameworkTest( "TestEffects", "Shaders.Compilation", __FILE__, __LINE__ ) {}
-
-    virtual void        PreEvents           () override;
-
-} TestEffectsInstance;
-
-UnitTest::ListAdder adderTestEffects ( UnitTest::Test::GetTestList(), &TestEffectsInstance );
-
-
-
-
-
-// ***********************
-//
-void        TestEffects::PreEvents           ()
+// Compiles and links all shaders in Effects folder.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Shaders_Compilation, TestEffects )
 {
     auto vsShadersList = Path::List( "Assets/Shaders/Effects/", true, ".*\\.vert" );
 

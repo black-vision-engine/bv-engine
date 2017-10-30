@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UnitTest++.h"
+#include "gtest/gtest.h"
 #include "Engine/Editors/BVProjectEditor.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
@@ -28,7 +28,7 @@ inline void             CreateOneScene          ( bv::BVProjectEditor * editor )
 
     auto scene1 = editor->GetModelScene( "FirstScene" );
 
-    REQUIRE( scene1 != nullptr );
+    ASSERT_TRUE( scene1 != nullptr );
 
     VerifyDefaultScene( scene1, editor );
     AddHierarchy( scene1, editor );
@@ -44,8 +44,8 @@ inline void             CreateTwoScenes         ( bv::BVProjectEditor * editor )
     auto scene1 = editor->GetModelScene( "FirstScene" );
     auto scene2 = editor->GetModelScene( "SecondScene" );
 
-    REQUIRE( scene1 != nullptr );
-    REQUIRE( scene2 != nullptr );
+    ASSERT_TRUE( scene1 != nullptr );
+    ASSERT_TRUE( scene2 != nullptr );
 
     VerifyDefaultScene( scene1, editor );
     VerifyDefaultScene( scene2, editor );
@@ -59,10 +59,10 @@ inline void             CreateTwoScenes         ( bv::BVProjectEditor * editor )
 inline void             VerifyDefaultScene       ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * /*editor*/ )
 {
     auto root = scene->GetRootNode();
-    REQUIRE( root != nullptr );
+    ASSERT_TRUE( root != nullptr );
 
     auto transformPlugin = root->GetPlugin( "transform" );
-    REQUIRE( transformPlugin != nullptr );
+    ASSERT_TRUE( transformPlugin != nullptr );
 
 }
 
@@ -70,38 +70,38 @@ inline void             VerifyDefaultScene       ( bv::model::SceneModelPtr scen
 //
 inline void             AddHierarchy             ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor )
 {
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root", "Group1" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root", "Group2" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root", "Group1" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root", "Group2" ) );
 
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child1" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child2" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child3" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child4" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child1" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child2" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child3" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child4" ) );
 
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child1" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child2" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child3" ) );
-    REQUIRE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child4" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child1" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child2" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child3" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child4" ) );
 
     auto root = scene->GetRootNode();
-    REQUIRE( root, nullptr );
+    ASSERT_EQ( root, nullptr );
 
-    REQUIRE( root->GetChild( "Group1" ) != nullptr );
-    REQUIRE( root->GetChild( "Group2" ) != nullptr );
+    ASSERT_TRUE( root->GetChild( "Group1" ) != nullptr );
+    ASSERT_TRUE( root->GetChild( "Group2" ) != nullptr );
 
     auto group1 = root->GetChild( "Group1" );
 
-    REQUIRE( group1->GetChild( "Child1" ) != nullptr );
-    REQUIRE( group1->GetChild( "Child2" ) != nullptr );
-    REQUIRE( group1->GetChild( "Child3" ) != nullptr );
-    REQUIRE( group1->GetChild( "Child4" ) != nullptr );
+    ASSERT_TRUE( group1->GetChild( "Child1" ) != nullptr );
+    ASSERT_TRUE( group1->GetChild( "Child2" ) != nullptr );
+    ASSERT_TRUE( group1->GetChild( "Child3" ) != nullptr );
+    ASSERT_TRUE( group1->GetChild( "Child4" ) != nullptr );
 
     auto group2 = root->GetChild( "Group2" );
 
-    REQUIRE( group2->GetChild( "Child1" ) != nullptr );
-    REQUIRE( group2->GetChild( "Child2" ) != nullptr );
-    REQUIRE( group2->GetChild( "Child3" ) != nullptr );
-    REQUIRE( group2->GetChild( "Child4" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child1" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child2" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child3" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child4" ) != nullptr );
 }
 
 // ***********************

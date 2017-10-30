@@ -7,28 +7,9 @@
 
 
 
-
 // ***********************
-//
-class TestCombinations : public bv::FrameworkTest
-{
-private:
-public:
-    TestCombinations() : bv::FrameworkTest( "TestCombinations", "Shaders.Compilation", __FILE__, __LINE__ ) {}
-
-    virtual void        PreEvents           () override;
-
-} TestCombinationsInstance;
-
-UnitTest::ListAdder adderTestCombinations ( UnitTest::Test::GetTestList(), &TestCombinationsInstance );
-
-
-
-
-
-// ***********************
-//
-void        TestCombinations::PreEvents           ()
+// Tries to compile and link all shaders in combination folder.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Shaders_Compilation, TestCombinations )
 {
     auto vsShadersList = Path::List( "Assets/Shaders/Combinations/", true, ".*\\.vert" );
 

@@ -75,7 +75,7 @@ inline void                 TestCompilation     ( const std::string & vsPath, co
 
         // This is a little bit hackish. We know already that shader didn't compile.
         // This chack will always fail bu thanks to this we can print error message and shader files.
-        CHECK_EQUAL( "", message );
+        ADD_FAILURE() << message;
     }
 }
 
@@ -95,7 +95,7 @@ inline void                 TestCompilation     ( const std::string & vsPath, co
 
         // This is a little bit hackish. We know already that shader didn't compile.
         // This chack will always fail bu thanks to this we can print error message and shader files.
-        CHECK_EQUAL( "", message );
+        ADD_FAILURE() << message;
     }
 }
 

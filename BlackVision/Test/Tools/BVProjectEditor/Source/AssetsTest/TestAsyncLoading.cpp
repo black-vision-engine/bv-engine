@@ -12,30 +12,24 @@
 using namespace bv;
 
 
-
-
 // ***********************
 //
 class AsyncLoadingTest : public bv::FrameworkTest
 {
-private:
-
-    AssetDescConstPtr       m_assetDesc;
-    int                     m_numLoaded;
-
+    DECALRE_GTEST_INFO( AsyncLoadingTest )
 public:
-    AsyncLoadingTest() : bv::FrameworkTest( "AsyncLoadingTest", "BVProjectEditor.Assets.Loading", __FILE__, __LINE__ ), m_numLoaded( 0 )
-    {}
 
     virtual void        PreEvents           () override;
     virtual void        PreModelUpdate      () override;
 
     void                AssetLoaded         ( IEventPtr );
 
+private:
 
-} AsyncLoadingTestInstance;
-
-UnitTest::ListAdder adderAsyncLoadingTest ( UnitTest::Test::GetTestList(), &AsyncLoadingTestInstance );
+    AssetDescConstPtr       m_assetDesc;
+    int                     m_numLoaded;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( AsyncLoadingTest, BVProjectEditor_Assets_Loading, AsyncLoadingTest )
 
 
 
@@ -63,14 +57,14 @@ void        AsyncLoadingTest::PreEvents           ()
         auto secondNode = editor->GetNode( "FirstScene", "root/Group2" );
 
         UInt32 idx = 1;
-        REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
-        REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+        ASSERT_TRUE( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+        ASSERT_TRUE( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
 
         m_assetDesc = TextureAssetDesc::Create( imagePath_32x32, true );
 
         // Loading assets synchronously. BV should hang and load assets immediately.
-        REQUIRE CHECK( editor->LoadAssetAsync( "FirstScene", "root/Group1", "texture", m_assetDesc ) );
-        REQUIRE CHECK( editor->LoadAssetAsync( "FirstScene", "root/Group2", "texture", m_assetDesc ) );
+        ASSERT_TRUE( editor->LoadAssetAsync( "FirstScene", "root/Group1", "texture", m_assetDesc ) );
+        ASSERT_TRUE( editor->LoadAssetAsync( "FirstScene", "root/Group2", "texture", m_assetDesc ) );
 
         GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &AsyncLoadingTest::AssetLoaded ), AssetAsyncLoadFinishedEvent::Type() );
     }
@@ -98,11 +92,11 @@ void        AsyncLoadingTest::PreModelUpdate        ()
 
         auto lassets1 = texPlugin1->GetLAssets();
         auto lassets2 = texPlugin2->GetLAssets();
-        REQUIRE CHECK( lassets1.size() == 1 );
-        REQUIRE CHECK( lassets2.size() == 1 );
+        ASSERT_TRUE( lassets1.size() == 1 );
+        ASSERT_TRUE( lassets2.size() == 1 );
 
-        CHECK( lassets1[ 0 ].assetDesc == m_assetDesc );
-        CHECK( lassets2[ 0 ].assetDesc == m_assetDesc );
+        EXPECT_EQ( lassets1[ 0 ].assetDesc, m_assetDesc );
+        EXPECT_EQ( lassets2[ 0 ].assetDesc, m_assetDesc );
     }
 }
 

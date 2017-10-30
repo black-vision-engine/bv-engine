@@ -123,11 +123,12 @@ void            FrameworkTest::PostRunImpl()
 //
 void            FrameworkTest::TestBody     ()
 {
-    while( !IsLastFrame() )
+    do
     {
         bool end = TestEnvironment::GetEnvironment()->MainLoopStep();
         { end; }    // Maybe we can use this in future.
-    }
+
+    } while( !IsLastFrame() );
 }
 
 // ***********************
