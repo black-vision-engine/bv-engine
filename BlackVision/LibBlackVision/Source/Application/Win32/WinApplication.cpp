@@ -293,9 +293,26 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 //
 int WindowedApplication::MainFun	( int argc, char ** argv )
 {
-//#ifdef _DEBUG
-//	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-//#endif
+    if( Initialize( argc, argv ) )
+    {
+        bool quit = false;
+        while( !quit )
+        {
+            quit = MainLoopStep();
+        }
+    }
+
+    TerminateStep();
+    return 0;
+}
+
+// ***********************
+//
+bool            WindowedApplication::Initialize     ( int argc, char ** argv )
+{
+    //#ifdef _DEBUG
+    //	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+    //#endif
 
     { argc; argv; } // FIXME: suppress unused warning
     WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
@@ -303,19 +320,19 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     //FIXME: implement
     //Camera::SetDefaultDepthType(Camera::PM_DEPTH_MINUS_ONE_TO_ONE);
 
-    if ( !app->OnPrecreate() )
+    if( !app->OnPrecreate() )
     {
-        return -1;
+        return false;
     }
 
     handle = NULL;
     handle = CreateApplicationWindow( app );
-    if (!handle )
+    if( !handle )
     {
-        return -1;
+        return false;
     }
 
-    app->SetWindowId( (INT)(INT_PTR)( handle ) );
+    app->SetWindowId( ( INT )( INT_PTR )( handle ) );
 
     /*RendererInput ri;
     ri.m_WindowHandle			= handle;
@@ -323,16 +340,16 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     ri.m_RendererDC				= 0;
     ri.m_DisableVerticalSync	= true;*/
 
-	RendererInput ri = app->GetRendererInput();
-	ri.m_WindowHandle = handle;
-    
+    RendererInput ri = app->GetRendererInput();
+    ri.m_WindowHandle = handle;
+
     assert( !m_Renderer );
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
 
     assert( !m_audioRenderer );
     m_audioRenderer = new audio::AudioRenderer();
 
-    if ( app->OnInitialize() )
+    if( app->OnInitialize() )
     {
         GLUtils::DumpGLInfo();
         GLUtils::DumpGLInfoCaps();
@@ -346,32 +363,55 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
         app->OnPreMainLoop();
 
-        bool quit = false;
-        while ( !quit )
-        {
-            MSG msg;
-            if ( PeekMessage( &msg, 0, 0, 0, PM_REMOVE ) )
-            {
-                if ( msg.message == WM_QUIT )
-                {
-                    quit = true;
-                    continue;
-                }
+        return true;
+    }
 
-                HACCEL accel = 0;
-                if ( !TranslateAccelerator( handle, accel, &msg ) )
-                {
-                    TranslateMessage( &msg );
-                    DispatchMessage	( &msg );
-                }
-            }
-            else
+    return false;
+}
+
+// ***********************
+//
+bool            WindowedApplication::MainLoopStep   ()
+{
+    WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
+
+    bool quit = false;
+
+    // Eat all events from windows message loop and call OnIdle one time.
+    while( !quit )
+    {
+        MSG msg;
+        if( PeekMessage( &msg, 0, 0, 0, PM_REMOVE ) )
+        {
+            if( msg.message == WM_QUIT )
             {
-                // Returns false if application wants to quit itself.
-                quit = !app->OnIdle();
+                quit = true;
+                return quit;
+            }
+
+            HACCEL accel = 0;
+            if( !TranslateAccelerator( handle, accel, &msg ) )
+            {
+                TranslateMessage( &msg );
+                DispatchMessage	( &msg );
             }
         }
+        else
+        {
+            // Returns false if application wants to quit itself.
+            quit = !app->OnIdle();
+            return quit;
+        }
     }
+
+    return quit;
+}
+
+// ***********************
+//
+void            WindowedApplication::TerminateStep  ()
+{
+    WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
 
     app->OnTerminate();
 
@@ -379,8 +419,7 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     delete m_audioRenderer;
 
     DestroyApplicationWindow( app, handle );
-
-    return 0;
 }
+
 
 } //bv

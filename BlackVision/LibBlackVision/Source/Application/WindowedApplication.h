@@ -101,6 +101,12 @@ public:
 protected:
 
 	HWND			handle;
+
+protected:
+
+    bool            Initialize      ( int argc, char ** argv );
+    bool            MainLoopStep    ();
+    void            TerminateStep   ();
     
 protected:
     
