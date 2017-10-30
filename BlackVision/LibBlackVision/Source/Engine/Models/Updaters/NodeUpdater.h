@@ -87,7 +87,7 @@ private:
     model::IAudioChannelPtr                     m_audioChannel;
     
     bool                                        m_timeInvariantVertexData;
-    bool                                        m_hasEffect;
+    bool                                        m_isDrawable;
 
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     model::RendererContextConstPtr              m_rendererContext;

@@ -25,7 +25,7 @@ void            TestDeserialization     ( const IDeserializer & deser );
 
 // ***********************
 //
-TEST( DoublePassArrayAccessJSON, TestSerializers )
+TEST( Serialization_Serializers_JSON, DoublePassArrayAccess )
 {
     JsonDeserializeObject deser;
     deser.LoadFile( "TestAssets/TestSerializers/DoublePassArrayAccess.json" );
@@ -35,7 +35,7 @@ TEST( DoublePassArrayAccessJSON, TestSerializers )
 
 // ***********************
 //
-TEST( DoublePassArrayAccessXML, TestSerializers )
+TEST( Serialization_Serializers_XML, DoublePassArrayAccess )
 {
     XMLDeserializer deser( "TestAssets/TestSerializers/DoublePassArrayAccess.xml", nullptr );
     TestDeserialization( deser );

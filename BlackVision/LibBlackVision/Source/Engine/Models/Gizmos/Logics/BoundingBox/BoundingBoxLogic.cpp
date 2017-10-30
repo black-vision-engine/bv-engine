@@ -135,8 +135,8 @@ void                        BoundingBoxLogic::CreateGizmoSubtree ( BVProjectEdit
         auto scene = editor->GetModelScene( model::ModelState::GetInstance().QueryNodeScene( gizmoOwner.get() )->GetName() );
         auto timeEvaluator = m_centerColor.GetParameter().GetTimeEvaluator();
 
-        model::BasicNodePtr boxNode = model::BasicNode::Create( "box", timeEvaluator );
-        model::BasicNodePtr centerNode = model::BasicNode::Create( "center", timeEvaluator );
+        model::BasicNodePtr boxNode = model::BasicNode::Create( "box" );
+        model::BasicNodePtr centerNode = model::BasicNode::Create( "center" );
 
         m_centerNode = centerNode;
         m_bbNode = boxNode;
@@ -239,7 +239,8 @@ bool                        BoundingBoxLogic::NeedsBoxUpdate    ( model::BasicNo
 //
 bool                        BoundingBoxLogic::NeedsCenterUpdate ( model::BasicNodePtr node )
 {
-    auto center = node->GetFinalizePlugin()->GetParamTransform()->Transform().GetCenter( 0.0f );
+    auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
+    auto center = transformParam->Transform().GetCenter( transformParam->GetLocalEvaluationTime() );
 
     if( m_lastCenter != center )
     {

@@ -18,7 +18,7 @@ void        SimpleDeserializeTest   ( IDeserializer & deser );
 
 // ***********************
 //
-TEST( SerializeDeserializeJSON, TestSerializers )
+TEST( Serialization_Serializers_JSON, SerializeDeserialize )
 {
     {
         JsonSerializeObject ser;
@@ -36,7 +36,7 @@ TEST( SerializeDeserializeJSON, TestSerializers )
 
 // ***********************
 //
-TEST( SerializeDeserializeXML, TestSerializers )
+TEST( Serialization_Serializers_XML, SerializeDeserialize )
 {
     {
         XMLSerializer ser( nullptr );

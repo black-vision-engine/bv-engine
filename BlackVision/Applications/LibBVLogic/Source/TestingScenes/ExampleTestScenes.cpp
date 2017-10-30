@@ -30,7 +30,7 @@ float simple_rnd( float a, float b )
 //
 model::BasicNodePtr CreateSingleTestNode( const std::string & nodeName, model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int numPlugins, ... )
 {
-    auto node = model::BasicNode::Create( nodeName, timeEvaluator, pluginsManager );
+    auto node = model::BasicNode::Create( nodeName, pluginsManager );
 
     va_list args;
     va_start( args, numPlugins );
@@ -57,7 +57,7 @@ model::BasicNodePtr CreateSingleTestNode( const std::string & nodeName, model::P
 //
 model::BasicNodePtr CreateSingleTestNodeUidsOnly( const std::string & nodeName, const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int numPlugins, ... )
 {
-    auto node = model::BasicNode::Create( nodeName, timeEvaluator, pluginsManager );
+    auto node = model::BasicNode::Create( nodeName, pluginsManager );
 
     va_list args;
     va_start( args, numPlugins );

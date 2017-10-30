@@ -236,6 +236,7 @@
     <ClInclude Include="..\..\..\Source\Threading\ThreadsBarrier.h">
       <Filter>Threading</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exception.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\..\..\Source\Threading\ThreadsBarrier.cpp">
       <Filter>Threading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exception.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">

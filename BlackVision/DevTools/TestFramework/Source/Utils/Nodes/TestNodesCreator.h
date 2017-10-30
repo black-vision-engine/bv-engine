@@ -73,6 +73,12 @@ public:
 
 };
 
+// *******************************
+//
+inline model::BasicNodePtr         QueryTyped      ( model::IModelNodePtr node )
+{
+    return std::static_pointer_cast< model::BasicNode >( node );
+}
 
 
 }	// bv

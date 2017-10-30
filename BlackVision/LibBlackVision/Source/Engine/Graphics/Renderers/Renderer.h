@@ -1,6 +1,7 @@
 #pragma once
 
 #include <hash_map>
+#include <map>
 
 #include "Mathematics/glm_inc.h"
 
@@ -57,9 +58,21 @@ class TransformableEntity;
 
 enum class FaceKind : int;
 
+
+
+
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 class Renderer
 {
+public:
+
+    struct MemTransferDesc
+    {
+        SizeType                DataSize;
+        DataBuffer::Semantic    Semantic;
+    };
+
+
 private:
 
     static const UInt32         LIGHTS_UBO_BINDING_IDX;
@@ -92,6 +105,7 @@ private:
     typedef std::hash_map< const RenderTarget *, PdrRenderTarget * >                            PdrRenderTargetMap;
     typedef std::hash_map< int, const Texture2D * >                                             EnabledTexture2DMap;
     typedef std::hash_map< int, int >                                                           EnabledSamplerTexUnitsMap;
+    typedef std::map< MemTransferDesc, PdrDownloadPBO * >                                       MemoryDowloadMap;
 
     typedef std::hash_map<const Texture *, UInt32 >												TextureUpdateIDMapType;
 
@@ -108,8 +122,8 @@ private:
     EnabledSamplerTexUnitsMap           m_enabledSamplerTexUnitsMap;
     TextureUpdateIDMapType              m_TextureUpdateIDMap;
 
-    PdrDownloadPBO *					m_PdrPBOMemTransferRT;
-    PdrDownloadPBO *					m_PdrPBOMemTransferSyncRT;
+    MemoryDowloadMap					m_PdrPBOMemTransferRT;
+    MemoryDowloadMap					m_PdrPBOMemTransferSyncRT;
 
     bool								m_EnableGLFinish;
     bool								m_EnableGLFlush;
@@ -176,6 +190,8 @@ public: //FIXME: private
 
     int     GetSamplerTexUnit   ( int samplerLoc );
     void    SetSamplerTexUnit   ( int samplerLoc, int textureUnit );
+
+    PdrDownloadPBO *            CreateMemoryTransfer        ( DataBuffer::Semantic semantic, SizeType dataSize, bool sync );
 
 public:
 
@@ -263,6 +279,8 @@ private:
 //    void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
+
+bool    operator<   ( const Renderer::MemTransferDesc & first, const Renderer::MemTransferDesc & second );
 
 
 #define BEGIN_MESSURE_GPU_PERFORMANCE( renderer, sceneNode )        renderer->Performance().BeginGPUQuery( sceneNode );

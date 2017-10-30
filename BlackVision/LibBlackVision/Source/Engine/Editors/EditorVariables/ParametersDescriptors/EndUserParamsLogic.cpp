@@ -122,6 +122,9 @@ bool            EndUserParamsLogic::RemoveDescriptor    ( const ParameterAddress
 //
 EndUserParamDescriptor *      EndUserParamsLogic::GetDescriptor   ( const ParameterAddress & param )
 {
+    if( param.SceneName != m_ownerScene->GetName() )
+        return nullptr;
+
     switch( param.ParamTargetType )
     {
         case ParameterAddress::TargetType::PluginParam:

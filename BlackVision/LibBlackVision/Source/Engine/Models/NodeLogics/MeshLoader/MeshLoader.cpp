@@ -192,7 +192,7 @@ void                        MeshLoader::Load                  ( model::SceneMode
 //
 model::BasicNodePtr         MeshLoader::Load                  ( MeshAssetConstPtr asset, model::ITimeEvaluatorPtr timeEval )
 {
-    auto node = model::BasicNode::Create( asset->GetKey(), timeEval );
+    auto node = model::BasicNode::Create( asset->GetKey() );
     node->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", timeEval );
     
     auto transform = asset->GetTransform();

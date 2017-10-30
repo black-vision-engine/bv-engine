@@ -63,7 +63,7 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
     m_timelineManager->RegisterRootTimeline( m_globalTimeline );
     model::TimelineManager::SetInstance( m_timelineManager.get() );
 
-    m_rootNode = model::BasicNode::Create( MAIN_ROOT_NAME, m_timelineManager->GetRootTimeline() );
+    m_rootNode = model::BasicNode::Create( MAIN_ROOT_NAME );
 
     m_projectEditor = new BVProjectEditor( this, config );
 

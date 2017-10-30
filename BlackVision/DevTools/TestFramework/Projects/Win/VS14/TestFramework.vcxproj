@@ -23,12 +23,16 @@
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h" />
+    <ClInclude Include="..\..\..\Source\Framework\NameMangler.h" />
     <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h" />
     <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />

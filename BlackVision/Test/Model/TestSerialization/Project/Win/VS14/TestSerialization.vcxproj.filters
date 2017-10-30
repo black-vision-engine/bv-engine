@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp">
+      <Filter>TestKeys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeys.cpp">
+      <Filter>TestKeys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeyTime.cpp">
+      <Filter>TestKeys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidCurveForType.cpp">
+      <Filter>TestInterpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestScenes\VersionTest.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp">
+      <Filter>TestNodes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="TestKeys">
+      <UniqueIdentifier>{5b9ccd61-e84f-41bb-bcef-6fa1403916ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestInterpolators">
+      <UniqueIdentifier>{bb81b635-eee1-4a1f-8b3b-ad4ecbaab2ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestScenes">
+      <UniqueIdentifier>{3f6d9b73-8dd3-47b0-a08b-018913b1ec4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestNodes">
+      <UniqueIdentifier>{a0e3ce15-1f0a-4d31-98d6-f8c6d4eeb88c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

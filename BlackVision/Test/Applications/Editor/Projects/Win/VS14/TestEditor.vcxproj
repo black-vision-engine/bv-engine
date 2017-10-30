@@ -154,16 +154,25 @@
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestScene2.cpp" />
     <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCases\CallAllTests.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCases\TestAssets.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestAnimatedGeometryPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestAnimationPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestAVDecoderPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestColoredGeometryPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestColoredTextPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestColorPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientGeometryPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientTextPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\TestCases\TestModelSceneEditor.cpp" />
-    <ClCompile Include="..\..\..\Source\TestCases\TestTimelines.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestTexturedGeometryPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestTexturePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCases\TestColoredTimerPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Scenes\TestEditorBase.h" />
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h" />
     <ClInclude Include="..\..\..\Source\Scenes\TestSceneUtils.h" />
-    <ClInclude Include="..\..\..\Source\TestCases\TestCopyNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\DevTools\TestFramework\Projects\Win\VS14\TestFramework.vcxproj">

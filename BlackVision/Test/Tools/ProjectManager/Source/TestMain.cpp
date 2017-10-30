@@ -61,7 +61,7 @@ bv::model::SceneModelPtr CreateTestScene0()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );
 
-	auto root = model::BasicNode::Create( "textured_rect", timeline );
+	auto root = model::BasicNode::Create( "textured_rect" );
 
     StringVector plugins;
     plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -89,7 +89,7 @@ bv::model::SceneModelPtr CreateTestScene0()
     return scene;
 }
 
-TEST( CleanAll, ProjectManager )
+TEST( Tools_ProjectManager, CleanAll )
 {
 	if( Path::Exists( "bv_media" ) )
 	{
@@ -103,7 +103,7 @@ TEST( CleanAll, ProjectManager )
 
 }
 
-TEST( CreatingPM, ProjectManager )
+TEST( Tools_ProjectManager, CreatingPM )
 {
     auto static TM = std::make_shared < model::TimelineManager >();
 
@@ -115,12 +115,12 @@ TEST( CreatingPM, ProjectManager )
     g_pm0 = ProjectManager::GetInstance();
 }
 
-TEST( ProjectsListing, ProjectManager )
+TEST( Tools_ProjectManager, ProjectsListing )
 {
 	ASSERT_TRUE( g_pm0->ListProjectsNames().empty() );
 }
 
-TEST( AddingProjects, ProjectManager )
+TEST( Tools_ProjectManager, AddingProjects )
 {
 	g_pm0->AddNewProject( "proj00" );
 	g_pm0->AddNewProject( "proj01" );
@@ -179,7 +179,7 @@ TEST( AddingProjects, ProjectManager )
 //    ASSERT_TRUE( cns.size() == 3 );
 //}
 
-TEST( AddingAssets, ProjectManager )
+TEST( Tools_ProjectManager, AddingAssets )
 {
 	g_pm0->AddAsset( "proj00", "textures", "flagi/pol.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/checker.png", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 	g_pm0->AddAsset( "proj01", "textures", "flagi/ger.jpg", SingleTextureAssetDesc::Create( "TestAssets/ProjectManager/checker.png", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
@@ -198,7 +198,7 @@ TEST( AddingAssets, ProjectManager )
 	ASSERT_TRUE( assets.size() == 3 );
 }
 
-TEST( AddingScene, ProjectManager )
+TEST( Tools_ProjectManager, AddingScene )
 {
     g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
 }
@@ -220,12 +220,12 @@ TEST( AddingScene, ProjectManager )
 //    g_pm0->RemoveUnusedAssets();
 //}
 
-TEST( SavingPresets, ProjectManager )
+TEST( Tools_ProjectManager, SavingPresets )
 {
     g_pm0->SavePreset( CreateTestScene0()->GetRootNode(), "proj00", "pres/proj1.bvpreset" );
 }
 
-TEST( ListingPresets, ProjectManager )
+TEST( Tools_ProjectManager, ListingPresets )
 {
     ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres", true ).size() == 1 );
     ASSERT_TRUE( g_pm0->ListPresets( "proj00" ).size() == 1 );
@@ -235,7 +235,7 @@ TEST( ListingPresets, ProjectManager )
     ASSERT_TRUE( g_pm0->ListPresets( "proj01", "pres", true ).size() == 0 );
 }
 
-TEST( LoadingPresets, ProjectManager )
+TEST( Tools_ProjectManager, LoadingPresets )
 {
     auto scene = CreateTestScene0();
     auto timeline = bv::model::TimelineManager::GetInstance()->GetTimeEvaluator( scene->GetName() );
@@ -245,19 +245,19 @@ TEST( LoadingPresets, ProjectManager )
     ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", offsetTimeline ) != nullptr ); // FIXME: 
 }
 
-TEST( CreatingSecondPM, ProjectManager )
+TEST( Tools_ProjectManager, CreatingSecondPM )
 {
     ChangeProjectManagerInstanceTo( "bv_media1" );
     g_pm1 = ProjectManager::GetInstance();
     ASSERT_TRUE( g_pm1 != g_pm0 );
 }
 
-TEST( ProjectsListing2, ProjectManager )
+TEST( Tools_ProjectManager, ProjectsListing2 )
 {
     ASSERT_TRUE( g_pm1->ListProjectsNames().empty() );
 }
 
-TEST( AddingPorjects2, ProjectManager )
+TEST( Tools_ProjectManager, AddingProjects2 )
 {
 	g_pm1->AddNewProject( "proj10" );
 	g_pm1->AddNewProject( "proj11" );

@@ -30,7 +30,11 @@ namespace nodelogic
 
 const std::string       NodeVisibilityAnimation::m_type = "NodeVisibilityAnimation";
 
-const std::string       NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM = "RegisterNodeVisilibityParam";
+const std::string       NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM = "RegisterNodeVisibilityParam";
+const std::string       NodeVisibilityAnimation::ACTION::LIST_NODE_VISIBILITY_PARAMS = "ListNodeVisibilityParams";
+const std::string       NodeVisibilityAnimation::ACTION::UNREGISTER_NODE_VISIBILITY_PARAM = "UnregisterNodeVisibilityParam";
+
+
 
 namespace
 {
@@ -183,8 +187,34 @@ bool                        NodeVisibilityAnimation::HandleEvent     ( IDeserial
             }
         }
     }
+    else if( action == NodeVisibilityAnimation::ACTION::LIST_NODE_VISIBILITY_PARAMS )
+    {
+        ListNodesVisibility( response );
+        return true;
+    }
+    else if( action == NodeVisibilityAnimation::ACTION::UNREGISTER_NODE_VISIBILITY_PARAM )
+    {
+        auto context = static_cast< BVDeserializeContext * >( eventDeser.GetDeserializeContext() );
+        auto sceneName = context->GetSceneName();
+        auto rootPath = context->GetNodePath();
+        auto nodePath = eventDeser.GetAttribute( "NodePath" );
+
+        if( !rootPath.empty() && !nodePath.empty() && !sceneName.empty() )
+        {
+            if( auto parent = m_parentNode.lock() )
+            {
+                auto node = parent->GetNode( nodePath );
+                RemoveNodeParam( node );
+                
+                return true;
+            }
+        }
+    }
     else
-        response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only ' " + NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM + " ' command." );
+        response.SetAttribute( ERROR_INFO_STRING, "Unknown command. This logic supports only ' "
+            + NodeVisibilityAnimation::ACTION::REGISTER_NODE_VISIBILITY_PARAM + ", "
+            + NodeVisibilityAnimation::ACTION::LIST_NODE_VISIBILITY_PARAMS + ", "
+            + NodeVisibilityAnimation::ACTION::UNREGISTER_NODE_VISIBILITY_PARAM + " ' commands." );
 
     return false;
 }
@@ -287,13 +317,17 @@ void                        NodeVisibilityAnimation::RemoveNodeParam         ( c
 {
     std::string paramName = "";
 
-    for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); ++it )
+    for( auto it = m_paramNodes.begin(); it != m_paramNodes.end(); )
     {
         auto node = ( *it ).second.lock();
         if( node == removedNode )
         {
             paramName = ( *it ).first.GetParameter().GetName();
             it = m_paramNodes.erase( it );
+        }
+        else
+        {
+            it++;
         }
     }
 
@@ -335,6 +369,9 @@ bool                        NodeVisibilityAnimation::RegisterNodeVisibilityParam
 
             h.AddSimpleParam< bool >( paramName, node->IsVisible(), true, true );
 
+            auto param = m_paramValModel->GetParameter( paramName );
+            model::QueryTypedParam< model::ParamBoolPtr >( param )->SetGlobalCurveType( CurveType::CT_POINT );
+
             m_paramNodes.push_back( std::make_pair( model::GetValueParamState< bool >( m_paramValModel.get(), paramName ), node ) );
 
             return true;
@@ -342,6 +379,28 @@ bool                        NodeVisibilityAnimation::RegisterNodeVisibilityParam
     }
     
     return false;
+}
+
+// ***********************
+//
+void                        NodeVisibilityAnimation::ListNodesVisibility( ISerializer & response )
+{
+    response.EnterArray( "Nodes" );
+
+    for( auto & nodeParamMapping : m_paramNodes )
+    {
+        if( auto node = nodeParamMapping.second.lock() )
+        {
+            response.EnterChild( "NodeMapping" );
+
+            response.SetAttribute( "NodeName", model::ModelState::GetInstance().BuildIndexPath( node.get() ) );
+            response.SetAttribute( "ParamName", nodeParamMapping.first.GetParameter().GetName() );
+
+            response.ExitChild();   // NodeMapping
+        }
+    }
+
+    response.ExitChild();   // Nodes
 }
 
 }   // nodelogic

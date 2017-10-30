@@ -14,13 +14,43 @@
     <ClCompile Include="..\..\..\Source\TestCases\TestModelSceneEditor.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\TestCases\TestTimelines.cpp">
+    <ClCompile Include="..\..\..\Source\TestCases\TestColorPlugin.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\TestCases\TestAssets.cpp">
+    <ClCompile Include="..\..\..\Source\TestCases\TestAVDecoderPlugin.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\TestCases\CallAllTests.cpp">
+    <ClCompile Include="..\..\..\Source\TestCases\TestTexturePlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestAnimationPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestColoredTextPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientTextPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestColoredTimerPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientTimerPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestColoredGeometryPlugins.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestTexturedGeometryPlugins.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestAnimatedGeometryPlugin.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCases\TestGradientGeometryPlugins.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,9 +63,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Scenes\TestEditorBase.h">
       <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\TestCases\TestCopyNode.h">
-      <Filter>TestCases</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

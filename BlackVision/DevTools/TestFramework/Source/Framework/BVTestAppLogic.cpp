@@ -75,6 +75,7 @@ void            BVTestAppLogic::PostFrameLogic()
 //
 void            BVTestAppLogic::RestartTimer()
 {
+    StartTime();
     m_renderMode.SetOffscreenRenderMode( 50.0f, std::numeric_limits< UInt64 >::max() );
 }
 

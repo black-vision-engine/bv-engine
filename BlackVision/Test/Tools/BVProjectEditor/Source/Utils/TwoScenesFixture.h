@@ -2,6 +2,11 @@
 
 #include "UnitTest++.h"
 #include "Engine/Editors/BVProjectEditor.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
+
+#include "Utils/Nodes/TestNodesCreator.h"
+
+#include "Engine/Models/NodeLogics/Follow/Follow.h"
 
 
 
@@ -11,6 +16,8 @@ inline void         CreateTwoScenes     ( bv::BVProjectEditor * editor );
 inline void         VerifyDefaultScene  ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 inline void         AddHierarchy        ( bv::model::SceneModelPtr scene, bv::BVProjectEditor * editor );
 
+
+inline bv::model::SceneModelPtr         CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor, const std::string & sceneName );
 
 
 // ***********************
@@ -95,4 +102,50 @@ inline void             AddHierarchy             ( bv::model::SceneModelPtr scen
     REQUIRE( group2->GetChild( "Child2" ) != nullptr );
     REQUIRE( group2->GetChild( "Child3" ) != nullptr );
     REQUIRE( group2->GetChild( "Child4" ) != nullptr );
+}
+
+// ***********************
+//
+inline bv::model::SceneModelPtr     CreateOneSceneWithColoredRect       ( bv::BVProjectEditor * editor, const std::string & sceneName )
+{
+    editor->AddScene( sceneName );
+
+    auto scene = editor->GetModelScene( sceneName );
+    auto timeline = editor->GetSceneDefaultTimeline( scene );
+
+    auto node = bv::TestNodesCreator::ColoredRectangle( timeline, "ColoredRect", 10, 10, glm::vec4( 0.5f, 1.0, 1.0, 1.0 ) );
+    
+    editor->AddChildNode( scene, scene->GetRootNode(), node );
+    editor->AddChildNode( scene->GetName(), "root", "Group1" );
+
+    return editor->GetModelScene( sceneName );
+}
+
+// ***********************
+//
+inline bv::model::SceneModelPtr     CreateSceneForParamDesc             ( bv::BVProjectEditor * editor, const std::string & sceneName )
+{
+    editor->AddScene( sceneName );
+
+    auto scene = editor->GetModelScene( sceneName );
+    auto timeline = editor->GetSceneDefaultTimeline( scene );
+
+    editor->AddLight( scene, bv::LightType::LT_POINT, timeline );
+    editor->AddLight( scene, bv::LightType::LT_DIRECTIONAL, timeline );
+
+    editor->AddCamera( scene );
+
+    auto node1 = bv::TestNodesCreator::ColoredRectangle( timeline, "ColoredRect", 10, 10, glm::vec4( 0.5f, 1.0, 1.0, 1.0 ) );
+    auto node2 = bv::TestNodesCreator::TexturedRectangle( timeline, "TexturedRect", 100, 100, "TestAssets/Common/checkerboard2_32X32.png" );
+
+    editor->AddChildNode( scene, scene->GetRootNode(), node1 );
+    editor->AddChildNode( scene, scene->GetRootNode(), node2 );
+    editor->AddChildNode( scene->GetName(), "root", "Group1" );
+
+    auto logic = std::make_shared< bv::nodelogic::Follow >( node2, timeline );
+    editor->SetLogic( node2, logic );
+
+    editor->SetNodeEffect( scene->GetName(), "root/ColoredRect", sceneName, "alpha mask" );
+
+    return editor->GetModelScene( sceneName );
 }

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
+#include "Engine/Events/ParamAddress.h"
+#include "Expected.h"
 
 
 namespace bv
@@ -36,6 +38,9 @@ private:
     bool                    RemoveTransformKey      ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime );
     bool                    MoveTransformKey        ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, TimeType newTime );
 
+
+
+    Expected< std::vector< ParameterPtr > >     ListParameters  ( const ParameterAddress & address );
 };
 
 } //bv

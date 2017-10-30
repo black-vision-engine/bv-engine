@@ -114,6 +114,11 @@ protected:
     IParamValModelPtr                           GeometryShaderChannelModel  () const;
 
     bool                                        ParameterChanged            ( const std::string & name );
+
+private:
+
+    void                                        AssignTimelines             ( const BasePlugin * sourcePlugin );
+    void                                        AssignTimelines             ( DefaultParamValModelPtr srcModel, DefaultParamValModelPtr dstModel );
 };
 
 

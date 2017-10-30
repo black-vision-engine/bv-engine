@@ -3,12 +3,14 @@
 #include "CoreDEF.h"
 
 #include "UnitTest++.h"
+#include "NameMangler.h"
 
 
 namespace bv
 {
 
 class BVTestAppLogic;
+class BVProjectEditor;
 
 
 class FrameworkTest : public UnitTest::Test
@@ -49,6 +51,7 @@ public:
     virtual TimeType    ComputeFrameTime    () { return 0.0f; }
 
     BVTestAppLogic*     GetAppLogic         () const { return m_appLogic; }
+    BVProjectEditor*    GetProjectEditor    () const;
     SizeType            GetFrameNumber      () const { return m_frameNum; }
     TimeType            GetFrameTime        () const { return m_frameTime; }
 
@@ -78,3 +81,24 @@ private:
 }	// bv
 
 
+// ========================================================================= //
+// Framework Helper macros
+// ========================================================================= //
+
+
+
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )    \
+class name : public bv::FrameworkTest   \
+{                                       \
+public:                                 \
+    name() : bv::FrameworkTest( ::bv::MangleName< name >( #name ).c_str(), suite, __FILE__, __LINE__ ) {}       \
+                                                                                                                \
+    virtual void        PreEvents           () override;                                                        \
+} name ## Instance;                                                                                             \
+                                                                                                                \
+UnitTest::ListAdder adder ## name ( UnitTest::Test::GetTestList(), &name ## Instance );                         \
+void        name::PreEvents           ()
+
+
+#define SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( #suite, name )
+#define SIMPLE_FRAMEWORK_TEST( name )                   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( UnitTestSuite::GetSuiteName(), name )

@@ -43,6 +43,13 @@ void            FrameworkTest::RunImplNotConst  ()
 
 // ***********************
 //
+BVProjectEditor *   FrameworkTest::GetProjectEditor     () const
+{
+    return m_appLogic->GetBVProject()->GetProjectEditor();
+}
+
+// ***********************
+//
 void            FrameworkTest::SetAppLogic      ( BVTestAppLogic * logic )
 {
     m_appLogic = logic;

@@ -1,0 +1,7 @@
+<interpolator curve_type="point" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="blabla" val="4"/>
+		<key time="blabla" val="bla"/>
+	</keys>
+</interpolator>
+

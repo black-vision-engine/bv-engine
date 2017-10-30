@@ -505,14 +505,14 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto scene = pm->LoadScene( "", sceneName );
 
-        if( scene )
+        if( scene.IsValid() )
         {
             m_appLogic->GetBVProject()->GetProjectEditor()->AddScene( scene );
             SendSimpleResponse( command, projectEvent->EventID, senderID, true );
         }
         else
         {
-            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, scene.GetErrorReason().c_str() );
         }
     }
     else if( command == ProjectEvent::Command::RemoveScene )
@@ -917,13 +917,13 @@ void        SceneEventsHandlers::SceneVariable       ( bv::IEventPtr evt )
         JsonSerializeObject ser;
         Expected< std::string > varContent = variablesCollection.GetVariable( variableName );
 
-        if( !varContent.isValid )
+        if( !varContent.IsValid() )
         {
             SendSimpleErrorResponse( command, sceneVarEvent->EventID, sceneVarEvent->SocketID, "Variable not found" );
             return;
         }
 
-        ser.SetAttribute( "VariableContent", varContent.ham );
+        ser.SetAttribute( "VariableContent", varContent );
         
         PrepareResponseTemplate( ser, command, sceneVarEvent->EventID, true );
         SendResponse( ser, sceneVarEvent->SocketID, sceneVarEvent->EventID );

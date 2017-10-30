@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderLogic\RenderLogicCreation.cpp">
+      <Filter>RenderLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\InitDescriptors\Outputs.cpp">
+      <Filter>InitDescriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\InitDescriptors\RenderChannels.cpp">
+      <Filter>InitDescriptors</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="InitDescriptors">
+      <UniqueIdentifier>{33cb9667-b966-4064-a8c5-b4a3db34997c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{ebe1cd48-f28c-49f4-944e-453708fc6849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderLogic">
+      <UniqueIdentifier>{519422b8-2c6e-48a7-977e-2301b7f4857a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Helpers\RenderLogicInitializerAccessor.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\OutputCompositeVideoAccessor.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\OutputExtractor.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

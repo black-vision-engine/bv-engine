@@ -451,6 +451,12 @@
     <Filter Include="Engine\Models\Gizmos\Logics\GridLines">
       <UniqueIdentifier>{bcc9f7d2-2835-48f2-aed9-bba64d250603}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Version">
+      <UniqueIdentifier>{8dc7b79b-4cab-4b75-b22e-2b40f1e929da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exceptions">
+      <UniqueIdentifier>{6332c879-802c-4b15-821c-0db7b3e73d4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2067,6 +2073,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.cpp">
       <Filter>Engine\Models\Gizmos\Logics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Version\Version.cpp">
+      <Filter>Version</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exceptions\FileNotFoundException.cpp">
+      <Filter>Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp">
+      <Filter>Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5344,6 +5359,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h">
       <Filter>Engine\Models\Gizmos\Logics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Version\BuildVersion.h">
+      <Filter>Version</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Version\Version.h">
+      <Filter>Version</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h">
+      <Filter>Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

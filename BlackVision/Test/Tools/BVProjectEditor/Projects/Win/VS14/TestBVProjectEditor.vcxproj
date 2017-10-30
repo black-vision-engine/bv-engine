@@ -147,9 +147,14 @@
     <ClCompile Include="..\..\..\Source\AssetsTest\TestSyncLoading.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestCopyNode.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp" />
+    <ClCompile Include="..\..\..\Source\ParamDescriptor\EndUserParamLogicTest.cpp" />
+    <ClCompile Include="..\..\..\Source\ParamDescriptor\GetDecriptorTest.cpp" />
+    <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginCopy.cpp" />
+    <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginMove.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Utils\ParamDescUtils.h" />
     <ClInclude Include="..\..\..\Source\Utils\TwoScenesFixture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

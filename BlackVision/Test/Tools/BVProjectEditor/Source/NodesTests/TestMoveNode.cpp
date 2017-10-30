@@ -10,7 +10,7 @@ class MoveNodeInScene : public bv::FrameworkTest
 {
 private:
 public:
-    MoveNodeInScene() : bv::FrameworkTest( "MoveNodeInScene", UnitTestSuite::GetSuiteName(), __FILE__, __LINE__ ) {}
+    MoveNodeInScene() : bv::FrameworkTest( "MoveNodeInScene", "BVProjectEditor.Node.Move", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 } MoveNodeInSceneInstance;

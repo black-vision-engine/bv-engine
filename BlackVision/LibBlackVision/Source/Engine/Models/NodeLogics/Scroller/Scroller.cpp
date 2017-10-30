@@ -1412,7 +1412,7 @@ void            Scroller::AddTexts            ( IDeserializer & eventSer, ISeria
                         auto textParam = textPlugin->GetParameter( "text" );
                         assert( textParam != nullptr );
 
-                        model::SetParameter( textParam, (TimeType)0.0f, StringToWString( setText ).ham );
+                        model::SetParameter( textParam, (TimeType)0.0f, StringToWString( setText ).GetVal() );
                     }
                 }
 

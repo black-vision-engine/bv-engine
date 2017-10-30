@@ -60,12 +60,12 @@ public:
     void					RemoveUnusedAssets	( const Path & projectName );
     void					RemoveUnusedAssets	();
 
-    void					AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath );
-    void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-    void					RemoveScene			( const Path & projectName, const Path & path );
-    void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-    model::SceneModelPtr    LoadScene           ( const Path & projectName, const Path & path ) const;
-    ThumbnailConstPtr       GetSceneThumbnail   ( const Path & projectName, const Path & path ) const;
+    void					            AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath );
+    void					            CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+    void					            RemoveScene			( const Path & projectName, const Path & path );
+    void					            MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+    LoadSceneResult                     LoadScene           ( const Path & projectName, const Path & path ) const;
+    ThumbnailConstPtr                   GetSceneThumbnail   ( const Path & projectName, const Path & path ) const;
 
     // categories
     void					RegisterCategory	( const AssetCategoryConstPtr & category);

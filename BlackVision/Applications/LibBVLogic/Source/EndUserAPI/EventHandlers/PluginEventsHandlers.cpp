@@ -62,42 +62,45 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     // FIXME: should be set externally
     bool enableUndo = false;
 
-    //<------- preserve compatibility code - delete me later & uncomment code below -------
-    if( paramSubName.empty() )
+    if( command != ParamKeyEvent::Command::ListParameters )
     {
-        if( pluginName == "transform" )     // Hack for transformations. Maybe it's eternal hack.
+        //<------- preserve compatibility code - delete me later & uncomment code below -------
+        if( paramSubName.empty() )
         {
-            param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, "simple_transform" );
-            paramSubName = paramName;
-        }
-        else if( pluginName == "texture" && ( paramName == "translation" || paramName == "scale" || paramName == "rotation" ) )     // Hack for transformations. Maybe it's eternal hack.
-        {
-            param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, "txMat" );
-            paramSubName = paramName;
-        }
-		else if (targetType == ParameterAddress::TargetType::ResourceParam)
-			param = GetResourceParameter(m_projectEditor, sceneName, nodeName, pluginName, "Tex0", paramName);
-		else if (targetType == ParameterAddress::TargetType::NodeLogicParam)
-			param = GetNodeLogicParameter(m_projectEditor, sceneName, nodeName, paramName);
-		
-    }
+            if( pluginName == "transform" )     // Hack for transformations. Maybe it's eternal hack.
+            {
+                param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, "simple_transform" );
+                paramSubName = paramName;
+            }
+            else if( pluginName == "texture" && ( paramName == "translation" || paramName == "scale" || paramName == "rotation" ) )     // Hack for transformations. Maybe it's eternal hack.
+            {
+                param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, "txMat" );
+                paramSubName = paramName;
+            }
+            else if( targetType == ParameterAddress::TargetType::ResourceParam )
+                param = GetResourceParameter( m_projectEditor, sceneName, nodeName, pluginName, "Tex0", paramName );
+            else if( targetType == ParameterAddress::TargetType::NodeLogicParam )
+                param = GetNodeLogicParameter( m_projectEditor, sceneName, nodeName, paramName );
 
-    if( !param )
-    {
-        param = GetParameter( m_projectEditor, setParamEvent->ParamAddress );
+        }
+
         if( !param )
-            param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
-    }
-    // ------- preserve compatibility code ------->
+        {
+            param = GetParameter( m_projectEditor, setParamEvent->ParamAddress );
+            if( !param )
+                param = GetPluginParameter( m_projectEditor, sceneName, nodeName, pluginName, paramName ); // Temporary for backward compatibility
+        }
+        // ------- preserve compatibility code ------->
 
-    /* uncomment me on 'preserve compatibility code' deletion
-    param = GetParameter( setParamEvent->ParamAddress );
-    */
+        /* uncomment me on 'preserve compatibility code' deletion
+        param = GetParameter( setParamEvent->ParamAddress );
+        */
 
-    if( param == nullptr )
-    {
-        SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Parameter not found" );
-        return;
+        if( param == nullptr )
+        {
+            SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Parameter not found" );
+            return;
+        }
     }
 
     bool result = false;
@@ -164,7 +167,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             auto end = SerializationHelper::String2T< TimeType >( params[ 1 ] );
             auto steps = SerializationHelper::String2T< UInt32 >( params[ 2 ] );
 
-            if( start.isValid && end.isValid & steps.isValid )
+            if( start.IsValid() && end.IsValid() & steps.IsValid() )
             {
                 JsonSerializeObject responseJSON;
 
@@ -191,12 +194,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         JsonSerializeObject responseJSON;
         PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
 
-        responseJSON.SetAttribute( SerializationHelper::SCENE_NAME_STRING, setParamEvent->ParamAddress.SceneName );
-        responseJSON.SetAttribute( SerializationHelper::NODE_NAME_STRING, setParamEvent->ParamAddress.NodeName );
-        responseJSON.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, setParamEvent->ParamAddress.PluginName );
-        responseJSON.SetAttribute( SerializationHelper::PARAM_NAME_STRING, setParamEvent->ParamAddress.ParamName );
-        responseJSON.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, setParamEvent->ParamAddress.ParamSubName );
-        responseJSON.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, SerializationHelper::T2String( setParamEvent->ParamAddress.ParamTargetType ) );
+        setParamEvent->ParamAddress.Serialize( responseJSON );
 
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {
@@ -211,6 +209,28 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         SendResponse( responseJSON, setParamEvent->SocketID, setParamEvent->EventID );
         
         return;
+    }
+    else if( command == ParamKeyEvent::Command::ListParameters )
+    {
+        Expected< std::vector< ParameterPtr > > paramsList = ListParameters( setParamEvent->ParamAddress );
+
+        if( paramsList.IsValid() )
+        {
+            JsonSerializeObject responseJSON;
+            PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
+
+            setParamEvent->ParamAddress.Serialize( responseJSON );
+
+            responseJSON.EnterArray( "Parameters" );
+
+            for( auto & listedParam : paramsList.GetVal() )
+                listedParam->Serialize( responseJSON );
+
+            responseJSON.ExitChild();   // Parameters
+
+            SendResponse( responseJSON, setParamEvent->SocketID, setParamEvent->EventID );
+            return;
+        }
     }
 
     if( result )
@@ -256,7 +276,7 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
         case ModelParamType::MPT_WSTRING:
         {
             auto wstring = StringToWString( stringValue );
-            return SetParameter( param, ( TimeType )keyTime, wstring.ham );
+            return SetParameter( param, ( TimeType )keyTime, wstring.GetVal() );
         }
         case ModelParamType::MPT_STRING:
             return SetParameter( param, ( TimeType )keyTime, stringValue );
@@ -418,6 +438,65 @@ bool        PluginEventsHandlers::MoveTransformKey        ( ParameterPtr & param
         default:
             return false;
     }
+}
+
+// ***********************
+//
+Expected< std::vector< ParameterPtr > >         PluginEventsHandlers::ListParameters        ( const ParameterAddress & address )
+{
+    auto scene = m_projectEditor->GetModelScene( address.SceneName );
+    
+    if( scene )
+    {
+        if( address.ParamTargetType == ParameterAddress::TargetType::CameraParam )
+        {
+            auto camera = scene->GetCamerasLogic().GetCamera( address.Index );
+            if( camera )
+                return camera->GetParameters();
+        }
+        else if( address.ParamTargetType == ParameterAddress::TargetType::LightParam )
+        {
+            auto light = scene->GetLight( address.Index );
+            if( light )
+                return light->GetParameters();
+        }
+        else
+        {
+            auto node = scene->GetModelSceneEditor()->GetNode( address.NodeName );
+            if( node )
+            {
+                if( address.ParamTargetType == ParameterAddress::TargetType::GlobalEffectParam )
+                {
+                    auto effect = node->GetNodeEffect();
+                    if( effect )
+                        return effect->GetParameters();
+                }
+                else if( address.ParamTargetType == ParameterAddress::TargetType::NodeLogicParam )
+                {
+                    auto logic = node->GetLogic();
+                    if( logic )
+                        return logic->GetParameters();
+                }
+                else
+                {
+                    auto plugin = node->GetPlugin( address.PluginName );
+                    if( plugin )
+                    {
+                        if( address.ParamTargetType == ParameterAddress::TargetType::PluginParam )
+                            return plugin->GetParameters();
+                        else if( address.ParamTargetType == ParameterAddress::TargetType::ResourceParam )
+                        {
+                            auto model = plugin->GetResourceStateModel( address.ParamSubName );
+                            if( model )
+                                return model->GetParameters();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return Expected< std::vector< ParameterPtr > >();
 }
 
 // ***********************

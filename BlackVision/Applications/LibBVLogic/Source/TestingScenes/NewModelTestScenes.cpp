@@ -62,7 +62,7 @@ model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * plugins
 
     model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator ) );
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root" );
 
     //FIXME: add list to the node
     return root;
@@ -72,7 +72,7 @@ model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * plugins
 //
 model::BasicNodePtr  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = model::BasicNode::Create( "Root", timeEvaluator, pluginsManager );
+    auto root = model::BasicNode::Create( "Root", pluginsManager );
 
     bool success = true;
 
@@ -98,7 +98,7 @@ model::BasicNodePtr  DefaultTestWithValidation   ( const model::PluginsManager *
 
     IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator ) );
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root" );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -118,7 +118,7 @@ model::BasicNodePtr  DefaultTestNoValidation     ( const model::PluginsManager *
     auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator );
     auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator );
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root" );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -851,7 +851,7 @@ model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const m
 model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
@@ -890,7 +890,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
     //return rect;
 
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 //SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
 
@@ -963,7 +963,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
 {
     {pluginsManager;}
 
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
@@ -986,7 +986,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
 {
     {pluginsManager;}
 
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timeEvaluator, 0 );
@@ -1021,7 +1021,7 @@ void BoolParamTest()
 
 model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, CurveType type )
 {
-    model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
+    model::BasicNodePtr node = model::BasicNode::Create( "rect" );
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     node->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
     node->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -1053,7 +1053,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
 
 model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     const int total = bv::CurveType::CT_TOTAL;
@@ -1067,7 +1067,7 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CIRCLE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -1097,7 +1097,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::
 
 model::BasicNodePtr    /*TestScenesFactory::*/CreedEllipseTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_ELLIPSE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -1122,7 +1122,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedEllipseTestScene     ( model:
 
 model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRIANGLE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -1147,7 +1147,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_ROUNDEDRECT", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -1167,7 +1167,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( mo
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
@@ -1197,7 +1197,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::IT
 model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 //model::BasicNodePtr    /*TestScenesFactory::*/CreedCubeTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
@@ -1232,7 +1232,7 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 //
 model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
 
     //auto child1 = model::BasicNode::Create( "child1", timeEvaluator );
     //root->AddChildToModelOnly( child1 );
@@ -1317,13 +1317,13 @@ model::BasicNodePtr    TestScenesFactory::MeshTestScene     ( model::ITimeEvalua
 model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.0f, 0.0f, -5.0f ) );
 
     // Sphere node
-    auto envSphereNode = model::BasicNode::Create( "sphereEnv", timeEvaluator );
+    auto envSphereNode = model::BasicNode::Create( "sphereEnv" );
     root->AddChildToModelOnly( envSphereNode );
 
     envSphereNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1347,7 +1347,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( envSphereNode->GetPlugin( "environmental tex" ), "textures/witek/Env/EnvVillage.jpg" );
 
     // Cube node
-    auto cubeNode = model::BasicNode::Create( "cubeEnvRefl", timeEvaluator );
+    auto cubeNode = model::BasicNode::Create( "cubeEnvRefl" );
     root->AddChildToModelOnly( cubeNode );
 
     cubeNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1374,7 +1374,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
 
     // Sphere texture environemnt node
-    auto sphereTexEnv = model::BasicNode::Create( "SphereTexEnv", timeEvaluator );
+    auto sphereTexEnv = model::BasicNode::Create( "SphereTexEnv" );
     root->AddChildToModelOnly( sphereTexEnv );
 
     sphereTexEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1391,7 +1391,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( sphereTexEnv->GetPlugin( "texture" ), "textures/ice.jpg" );
 
     // Cube texture environemnt reflectivity map node
-    auto cubeTexEnvRefl = model::BasicNode::Create( "CubeTexEnvRefl", timeEvaluator );
+    auto cubeTexEnvRefl = model::BasicNode::Create( "CubeTexEnvRefl" );
     root->AddChildToModelOnly( cubeTexEnvRefl );
 
     cubeTexEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1412,7 +1412,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
 
     // Cube material texture environemnt node
-    auto cubeMatTexEnv = model::BasicNode::Create( "CubeMatTexEnv", timeEvaluator );
+    auto cubeMatTexEnv = model::BasicNode::Create( "CubeMatTexEnv" );
     root->AddChildToModelOnly( cubeMatTexEnv );
 
     cubeMatTexEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1439,7 +1439,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     
 
     // Cube material, texture, environment, reflectivity map node
-    auto cubeMatTexEnvRefl = model::BasicNode::Create( "CubeMatTexEnvRefl", timeEvaluator );
+    auto cubeMatTexEnvRefl = model::BasicNode::Create( "CubeMatTexEnvRefl" );
     root->AddChildToModelOnly( cubeMatTexEnvRefl );
 
     cubeMatTexEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1469,7 +1469,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadTexture( reflectivityMap, "textures/witek/Env/Reflectivity.jpg" );
 
     // Mesh material, normal map, environement node
-    auto meshMatBumpEnv = model::BasicNode::Create( "CubeMatBumpEnv", timeEvaluator );
+    auto meshMatBumpEnv = model::BasicNode::Create( "CubeMatBumpEnv" );
     root->AddChildToModelOnly( meshMatBumpEnv );
 
     meshMatBumpEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1499,7 +1499,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadMesh( meshMatBumpEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     // Mesh material, normal map, environment, reflectivity map node
-    auto meshMatBumpEnvRefl = model::BasicNode::Create( "MeshMatBumpEnvRefl", timeEvaluator );
+    auto meshMatBumpEnvRefl = model::BasicNode::Create( "MeshMatBumpEnvRefl" );
     root->AddChildToModelOnly( meshMatBumpEnvRefl );
 
     meshMatBumpEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1532,7 +1532,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadMesh( meshMatBumpEnvRefl->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     // Mesh material, texture, normal map, environment node
-    auto meshMatTexBumpEnv = model::BasicNode::Create( "MeshMatTexBumpEnv", timeEvaluator );
+    auto meshMatTexBumpEnv = model::BasicNode::Create( "MeshMatTexBumpEnv" );
     root->AddChildToModelOnly( meshMatTexBumpEnv );
 
     meshMatTexBumpEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1564,7 +1564,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadMesh( meshMatTexBumpEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     // Mesh material, texture, normal map, environment, reflectivity map node
-    auto meshMatTexBumpEnvRefl = model::BasicNode::Create( "MeshMatTexBumpEnvRefl", timeEvaluator );
+    auto meshMatTexBumpEnvRefl = model::BasicNode::Create( "MeshMatTexBumpEnvRefl" );
     root->AddChildToModelOnly( meshMatTexBumpEnvRefl );
 
     meshMatTexBumpEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1600,7 +1600,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
 
 
     // Mesh material, normal map, paralax, environement node
-    auto meshMatBumpParalaxEnv = model::BasicNode::Create( "MeshMatBumpParalaxEnv", timeEvaluator );
+    auto meshMatBumpParalaxEnv = model::BasicNode::Create( "MeshMatBumpParalaxEnv" );
     root->AddChildToModelOnly( meshMatBumpParalaxEnv );
 
     meshMatBumpParalaxEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1633,7 +1633,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadMesh( meshMatBumpParalaxEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     // Mesh, material, normal map, paralax, environement, reflectivity node
-    auto meshMatBumpParalaxEnvRefl = model::BasicNode::Create( "MeshMatBumpParalaxEnvRefl", timeEvaluator );
+    auto meshMatBumpParalaxEnvRefl = model::BasicNode::Create( "MeshMatBumpParalaxEnvRefl" );
     root->AddChildToModelOnly( meshMatBumpParalaxEnvRefl );
 
     meshMatBumpParalaxEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1669,7 +1669,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadMesh( meshMatBumpParalaxEnvRefl->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     // Mesh, material, texture, normal map, paralax, environement node
-    auto meshMatTexBumpParalaxEnv = model::BasicNode::Create( "MeshMatTexBumpParalaxEnv", timeEvaluator );
+    auto meshMatTexBumpParalaxEnv = model::BasicNode::Create( "MeshMatTexBumpParalaxEnv" );
     root->AddChildToModelOnly( meshMatTexBumpParalaxEnv );
 
     meshMatTexBumpParalaxEnv->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1703,7 +1703,7 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
     model::LoadMesh( meshMatTexBumpParalaxEnv->GetPlugin( "mesh" ), "meshes/daria/cube.obj" );
 
     // Mesh, material, texture, normal map, paralax, enviroement, reflectivity map node
-    auto meshMatTexBumpParalaxEnvRefl = model::BasicNode::Create( "MeshMatTexBumpParalaxEnvRefl", timeEvaluator );
+    auto meshMatTexBumpParalaxEnvRefl = model::BasicNode::Create( "MeshMatTexBumpParalaxEnvRefl" );
     root->AddChildToModelOnly( meshMatTexBumpParalaxEnvRefl );
 
     meshMatTexBumpParalaxEnvRefl->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1748,11 +1748,11 @@ model::BasicNodePtr     TestScenesFactory::EnvMappingTestScene             ( mod
 model::BasicNodePtr     TestScenesFactory::BlendTextureTestScene           ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     // Rectangle node
-    auto rectNode = model::BasicNode::Create( "RectNode", timeEvaluator );
+    auto rectNode = model::BasicNode::Create( "RectNode" );
     root->AddChildToModelOnly( rectNode );
 
     rectNode->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1778,7 +1778,7 @@ model::BasicNodePtr     TestScenesFactory::BlendTextureTestScene           ( mod
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_TORUS", timeEvaluator );
@@ -1811,7 +1811,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene  
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_SPRING", timeEvaluator );
@@ -1976,7 +1976,7 @@ model::BasicNodePtr TestScenesFactory::FontTestScene( const model::PluginsManage
 model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
@@ -2016,7 +2016,7 @@ model::BasicNodePtr     TestScenesFactory::FadeRectTestScene               ( mod
 model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_WALL", timeEvaluator );
@@ -2042,7 +2042,7 @@ model::BasicNodePtr     TestScenesFactory::ExtrudeTestScene                ( mod
 model::BasicNodePtr     TestScenesFactory::LineChartTestScene                ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_LINE_CHART", timeEvaluator );
@@ -2057,7 +2057,7 @@ model::BasicNodePtr     TestScenesFactory::LineChartTestScene                ( m
 model::BasicNodePtr     TestScenesFactory::SVGTestScene                    ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     // Root node
-    auto root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    auto root = model::BasicNode::Create( "rootNode" );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_MESH", timeEvaluator );
@@ -2112,7 +2112,7 @@ model::BasicNodePtr     TestScenesFactory::Text3DTestScene                 ( mod
     uids.push_back( "DEFAULT_MATERIAL" );
 
 
-    auto node = model::BasicNode::Create( "Text3D", timeEvaluator );
+    auto node = model::BasicNode::Create( "Text3D" );
     auto success = node->AddPlugins( uids, timeEvaluator );
     assert( success );
 

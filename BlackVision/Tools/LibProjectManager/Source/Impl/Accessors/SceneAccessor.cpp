@@ -56,7 +56,7 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 
 // ********************************
 //
-model::SceneModelPtr	SceneAccessor::GetScene( const Path & path ) const
+LoadSceneResult 	SceneAccessor::GetScene( const Path & path ) const
 {
     return SceneDescriptor::LoadScene( m_rootDir / path );
 }
@@ -119,16 +119,16 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         in.ignore();
         Path oldOwnerProjectName = buf.str();
 
-        rapidxml::xml_document<> doc;
-
         buf.str("");
         in.get( buf, '\n' );
         auto size = stoul( buf.str() );
         in.ignore();
 
+        auto loadResult = SceneDescriptor::LoadScene( in, size );
+
+        if( loadResult.IsValid() )
         {
-            auto scene = SceneDescriptor::LoadScene( in, size );
-        
+            auto scene = loadResult.GetVal().GetScene();
             auto sceneAssertDescs = ListSceneAssetsDescs( scene->GetRootNode() );
         
             std::set< AssetDescConstPtr > assetsDescsSet;
@@ -144,6 +144,9 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
 
             SceneDescriptor::SaveScene( scene, outFilePath );
         }
+        else
+            LOG_MESSAGE( SeverityLevel::error ) << "Cannot import scene: " << importToPath.Str(); 
+
         buf.str( "" );
         in.ignore();
         in.get( buf, '\n' );

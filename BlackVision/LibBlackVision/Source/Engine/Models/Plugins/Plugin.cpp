@@ -448,6 +448,45 @@ bool                                        BasePlugin::ParameterChanged        
     return state->StateChanged();
 }
 
+// ***********************
+//
+void                                        BasePlugin::AssignTimelines             ( const BasePlugin * sourcePlugin )
+{
+    auto srcModel = std::static_pointer_cast< DefaultPluginParamValModel >( sourcePlugin->GetPluginParamValModel() );
+    auto dstModel = std::static_pointer_cast< DefaultPluginParamValModel >( m_pluginParamValModel );
+    
+    dstModel->SetTimeEvaluator( srcModel->GetTimeEvaluator() );
+
+    AssignTimelines( std::static_pointer_cast< DefaultParamValModel >( srcModel->GetPluginModel() ), std::static_pointer_cast< DefaultParamValModel >( dstModel->GetPluginModel() ) );
+    AssignTimelines( std::static_pointer_cast< DefaultParamValModel >( srcModel->GetTransformChannelModel() ), std::static_pointer_cast< DefaultParamValModel >( dstModel->GetTransformChannelModel() ) );
+    AssignTimelines( std::static_pointer_cast< DefaultParamValModel >( srcModel->GetVertexAttributesChannelModel() ), std::static_pointer_cast< DefaultParamValModel >( dstModel->GetVertexAttributesChannelModel() ) );
+    AssignTimelines( std::static_pointer_cast< DefaultParamValModel >( srcModel->GetPixelShaderChannelModel() ), std::static_pointer_cast< DefaultParamValModel >( dstModel->GetPixelShaderChannelModel() ) );
+    AssignTimelines( std::static_pointer_cast< DefaultParamValModel >( srcModel->GetVertexShaderChannelModel() ), std::static_pointer_cast< DefaultParamValModel >( dstModel->GetVertexShaderChannelModel() ) );
+    AssignTimelines( std::static_pointer_cast< DefaultParamValModel >( srcModel->GetGeometryShaderChannelModel() ), std::static_pointer_cast< DefaultParamValModel >( dstModel->GetGeometryShaderChannelModel() ) );
+}
+
+// ***********************
+//
+void                                        BasePlugin::AssignTimelines             ( DefaultParamValModelPtr srcModel, DefaultParamValModelPtr dstModel )
+{
+    if( srcModel && dstModel )
+    {
+        auto & srcParams = srcModel->GetParameters();
+        auto & dstParams = dstModel->GetParameters();
+
+        assert( srcParams.size() == dstParams.size() );
+
+        for( int i = 0; i < srcParams.size(); ++i )
+        {
+            auto srcParam = srcParams[ i ];
+            auto dstParam = dstParams[ i ];
+
+            assert( srcParam->GetName() == dstParam->GetName() );
+
+            dstParam->SetTimeEvaluator( srcParam->GetTimeEvaluator() );
+        }
+    }
+}
 
 // *******************************
 //
@@ -708,7 +747,11 @@ IPluginPtr							BasePlugin::Clone					() const
     //AssetDescsWithUIDs assets;
     //GetAssetsWithUIDs( assets, this );
 
-    return bv::CloneViaSerialization::ClonePtr( this, "plugin", nullptr, nullptr ); // FIXME(?)
+    auto clonedPlugin = bv::CloneViaSerialization::ClonePtr( this, "plugin", nullptr, nullptr ); // FIXME(?)
+    
+    // We must assign timelines back, because cloning sets always default timeline.
+    clonedPlugin->AssignTimelines( this );
+    return clonedPlugin;
 }
 
 // *******************************
@@ -741,7 +784,24 @@ std::vector< ITimeEvaluatorPtr >    BasePlugin::GetTimelines				() const
 } //model
 
 
-namespace CloneViaSerialization {
+namespace CloneViaSerialization
+{
+
+
+// ***********************
+//
+model::ITimeEvaluatorPtr        GetCorrespondingTimeline    ( model::ITimeEvaluatorPtr srcTimeline, const std::string & prefix, const std::string & destScene )
+{
+    std::string timelinePath;
+
+    // Note: default timeline always resolves to default timeline in destination scene. We don't make copy of it.
+    if( srcTimeline->GetName() == model::TimelineManager::GetDefaultTimelineName() )
+        timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, srcTimeline->GetName() );
+    else
+        timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + srcTimeline->GetName() );
+
+    return model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+}
 
 // *******************************
 //
@@ -751,19 +811,18 @@ void				UpdateTimelines				    ( const model::IPlugin * obj, const std::string &
     {
         if( param->GetTimeEvaluator() )
         {
-            auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() );
-            auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
-            param->SetTimeEvaluator( timeline );
+            auto timeline = param->GetTimeEvaluator();
+            param->SetTimeEvaluator( GetCorrespondingTimeline( timeline, prefix, destScene ) );
         }
     }
 
     auto pluginModel = obj->GetPluginParamValModel();
     if( pluginModel && pluginModel->GetTimeEvaluator() )
     {
-        auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + pluginModel->GetTimeEvaluator()->GetName() );
-        auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+        auto timeline = pluginModel->GetTimeEvaluator();
+        auto destTimeline = GetCorrespondingTimeline( timeline, prefix, destScene );
         //FIXME: cast
-        std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
+        std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( destTimeline );
     }
 }
 

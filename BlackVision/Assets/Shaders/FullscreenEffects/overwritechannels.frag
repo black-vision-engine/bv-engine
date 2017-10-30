@@ -12,16 +12,16 @@ uniform float 		alpha;
 
 void main()
 {
-	vec4 col = texture( Tex0, uvCoord );
+	vec4 color = texture( Tex0, uvCoord );
 	
 	int rIdx = ( channelMask >> 0 ) & 0x3;
 	int gIdx = ( channelMask >> 2 ) & 0x3;
 	int bIdx = ( channelMask >> 4 ) & 0x3;
 	int aIdx = ( channelMask >> 6 ) & 0x3;
 	
-	vec4 res( col[ rIdx ], col[ gIdx ], col[ bIdx ], col[ aIdx ] );
+	vec4 res = vec4( color[ rIdx ], color[ gIdx ], color[ bIdx ], color[ aIdx ] );
 
-	if( overwriteAlpha )
+	if( overwriteAlpha != 0 )
 	{
 		res.a = alpha;
 	}

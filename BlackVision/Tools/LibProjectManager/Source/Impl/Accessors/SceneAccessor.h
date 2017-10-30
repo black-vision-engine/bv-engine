@@ -41,7 +41,7 @@ private:
 public:
 
     SceneDescriptor		GetSceneDesc			( const Path & path ) const;
-    model::SceneModelPtr GetScene			    ( const Path & path ) const;
+    LoadSceneResult     GetScene			    ( const Path & path ) const;
 
     void				AddSceneFromFile		( const Path & srcPath, const Path & path ) const;
     void				AddScene				( const model::SceneModelPtr & scene, const Path & path ) const;

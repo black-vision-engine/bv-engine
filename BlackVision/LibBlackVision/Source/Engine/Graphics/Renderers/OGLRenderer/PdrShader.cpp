@@ -65,6 +65,7 @@ PdrShader *  PdrShader::Create( PixelShader * ps, VertexShader * vs, GeometrySha
     if ( !program->IsCompiled() )
     {
         delete program;
+        assert( !"Compilation errors!" );   // Fixme: Handle this error properly.
         return nullptr;
     }
 

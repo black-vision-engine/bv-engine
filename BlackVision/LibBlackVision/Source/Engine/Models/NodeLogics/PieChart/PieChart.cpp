@@ -319,7 +319,7 @@ model::BasicNodePtr         PieChart::CreateSlice           ( PieSliceDescPtr sl
     {
         if( sliceDesc->percent > 0 )
         {
-            auto node = model::BasicNode::Create( SliceNodeName( parentNode->GetName(), idx ), m_timeEval );
+            auto node = model::BasicNode::Create( SliceNodeName( parentNode->GetName(), idx ) );
 
             node->AddPlugin( model::DefaultTransformPluginDesc::UID(), PLUGIN::TRANSFORM, m_timeEval );
             node->AddPlugin( model::DefaultCylinder::DefaultCylinderPluginDesc::UID(), PLUGIN::CYLINDER, m_timeEval );
@@ -369,7 +369,7 @@ void                        PieChart::AddShaderPlugin           ( model::BasicNo
 //
 void                        PieChart::AddLabelNode              ( model::BasicNodePtr node, Float32 percent )
 {
-    auto textNode = model::BasicNode::Create( LabelNodeName( node->GetName() ), m_timeEval );
+    auto textNode = model::BasicNode::Create( LabelNodeName( node->GetName() ) );
     
     textNode->AddPlugin( model::DefaultTransformPluginDesc::UID(), PLUGIN::TRANSFORM, m_timeEval );
     textNode->AddPlugin( model::DefaultColorPluginDesc::UID(), PLUGIN::COLOR, m_timeEval );
@@ -422,7 +422,7 @@ void                        PieChart::SetLabelText              ( model::BasicNo
         std::ostringstream out;
         out << std::setprecision( 3 ) << percent;
         auto wtext = StringToWString( out.str() );
-        SetParameter( textPlugin->GetParameter( model::DefaultTextPlugin::PARAM::TEXT ), 0.f, wtext.ham );
+        SetParameter( textPlugin->GetParameter( model::DefaultTextPlugin::PARAM::TEXT ), 0.f, wtext.GetVal() );
     }
 }
 

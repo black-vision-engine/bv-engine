@@ -39,6 +39,7 @@ private:
     struct ACTION
     {
         static const std::string        REGISTER_NODE_VISIBILITY_PARAM;
+        static const std::string        LIST_NODE_VISIBILITY_PARAMS;
         static const std::string        UNREGISTER_NODE_VISIBILITY_PARAM;
     };
 
@@ -78,6 +79,10 @@ private:
 
     bool            RegisterNodeVisibilityParam( const std::string & nodePath );
 
+
+public:
+
+    void            ListNodesVisibility                 ( ISerializer & response );
 };
 
 

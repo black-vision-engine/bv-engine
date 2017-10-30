@@ -355,7 +355,6 @@ private:
     bool                        IsTimelineEditable      ( const model::ITimeEvaluator * timeEval ) const;
     
     static const std::string    DEFAULT_ROOT_NAME;
-    static const std::string    DEFAULT_TIMELINE_NAME;
 
 };
 

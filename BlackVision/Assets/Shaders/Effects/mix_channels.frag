@@ -7,7 +7,7 @@ in vec2 uvCoord;
 layout (binding = 0) uniform sampler2D 	Tex0;
 
 uniform int			channelMixMask;
-univorm vec4 		channelMaskMask;
+uniform vec4 		channelMaskMask;
 
 // *********************************
 //

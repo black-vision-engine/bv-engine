@@ -9,5 +9,6 @@
     <ClCompile Include="..\..\..\Source\BoxTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
   </ItemGroup>
 </Project>

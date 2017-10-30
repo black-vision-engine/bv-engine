@@ -74,9 +74,6 @@ public:
 
     void                    SetBoundingBox      ( const math::Box * bb );
     const math::Box *       GetBoundingBox      () const;
-    bool                    IsSelected          () const;
-    void                    Select              ( glm::vec4 color );
-    void                    Unselect            ();
 
     SceneNodePerformance *  GetPerformanceData  ();
 

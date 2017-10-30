@@ -591,7 +591,7 @@ bool                    SmoothValueSetter::SetSmoothParam      ( std::shared_ptr
 {
     Expected< ValType > newValue = SerializationHelper::String2T< ValType >( paramValue );
 
-    if( !newValue.isValid )
+    if( !newValue.IsValid() )
     {
         response.SetAttribute( "ErrorInfo", "Error parsing [" + srcParamName + "]. Value [" + paramValue + "] is invalid " + SerializationHelper::T2String( param->GetType() )  );
         return false;
@@ -620,7 +620,7 @@ bool                    SmoothValueSetter::SetSmoothParam      ( std::shared_ptr
     }
 
     // Add new value key. Smoothing lasts m_smoothTime.
-    param->SetVal( newValue.ham, currentTime + deltaTime );
+    param->SetVal( newValue, currentTime + deltaTime );
     
     return true;
 }

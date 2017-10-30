@@ -47,7 +47,7 @@ float sRGB_2_lin    ( float val )
 
     if ( val <= 0.04045 )
     {
-        return = val / 12.92;
+        return val / 12.92;
     }
     else
     {
@@ -55,12 +55,12 @@ float sRGB_2_lin    ( float val )
     }
 }
 
-vex3 lin_2_sRGB( vec3 col )
+vec3 lin_2_sRGB( vec3 col )
 {
     return vec3( lin_2_sRGB( col.r ), lin_2_sRGB( col.g ), lin_2_sRGB( col.b ) );
 }
 
-vex3 sRGB_2_lin( vec3 col )
+vec3 sRGB_2_lin( vec3 col )
 {
     return vec3( sRGB_2_lin( col.r ), sRGB_2_lin( col.g ), sRGB_2_lin( col.b ) );
 }

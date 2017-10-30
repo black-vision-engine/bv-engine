@@ -68,7 +68,7 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 
 // ********************************
 //
-BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager )
+BasicNode::BasicNode( const std::string & name, const PluginsManager * pluginsManager )
     : m_name( name )
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
@@ -97,16 +97,16 @@ BasicNode::~BasicNode()
 
 // ********************************
 //
-BasicNodePtr                    BasicNode::Create                   ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
+BasicNodePtr                    BasicNode::Create                   ( const std::string & name, const PluginsManager * pluginsManager )
 {
     struct make_shared_enabler_BasicNode : public BasicNode
     {
-        make_shared_enabler_BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
-            : BasicNode( name, timeEvaluator, pluginsManager )
+        make_shared_enabler_BasicNode( const std::string & name, const PluginsManager * pluginsManager )
+            : BasicNode( name, pluginsManager )
         {
         }
     };
-    return std::make_shared< make_shared_enabler_BasicNode >( name, timeEvaluator, pluginsManager );
+    return std::make_shared< make_shared_enabler_BasicNode >( name, pluginsManager );
 }
 
 // ********************************

@@ -193,7 +193,7 @@ Expected< std::vector< T > > Strings2T( std::vector< std::string > strings )
     for( auto s : strings )
     {
         auto t = String2T< T >( s );
-        if( t.isValid )
+        if( t.IsValid() )
             ret.push_back( t );
         else
             return Expected< std::vector< T > >();
@@ -209,8 +209,10 @@ template<> Expected< glm::vec2 >    String2T( const std::string & s )
     if( strings.size() == 2 )
     {
         auto vals = Strings2T< Float32 >( strings );
-        if( vals.isValid )
-            return glm::vec2( vals.ham[ 0 ], vals.ham[ 1 ] );
+        if( vals.IsValid() )
+        {
+            return glm::vec2( vals.GetVal()[ 0 ], vals.GetVal()[ 1 ] );
+        }
         else
             return Expected< glm::vec2 >();
     }
@@ -227,8 +229,8 @@ template<> Expected< glm::vec3 >    String2T( const std::string & s )
     if( strings.size() == 3 )
     {
         auto vals = Strings2T< Float32 >( strings );
-        if( vals.isValid )
-            return glm::vec3( vals.ham[ 0 ], vals.ham[ 1 ], vals.ham[ 2 ] );
+        if( vals.IsValid() )
+            return glm::vec3( vals.GetVal()[ 0 ], vals.GetVal()[ 1 ], vals.GetVal()[ 2 ] );
         else
             return Expected< glm::vec3 >();
     }
@@ -246,8 +248,8 @@ template<> Expected< glm::vec4 >    String2T( const std::string & s )
     if( strings.size() == 4 )
     {
         auto vals = Strings2T< Float32 >( strings );
-        if( vals.isValid )
-            return glm::vec4( vals.ham[ 0 ], vals.ham[ 1 ], vals.ham[ 2 ], vals.ham[ 3 ] );
+        if( vals.IsValid() )
+            return glm::vec4( vals.GetVal()[ 0 ], vals.GetVal()[ 1 ], vals.GetVal()[ 2 ], vals.GetVal()[ 3 ] );
         else
             return Expected< glm::vec4 >();
     }
@@ -276,8 +278,8 @@ template< typename T >
 T       String2T        ( const std::string & s, const T & defaultVal ) 
 { 
     auto ret = String2T< T >( s );
-    if( ret.isValid )
-        return ret.ham;
+    if( ret.IsValid() )
+        return ret;
     else
         return defaultVal;
 }
@@ -307,7 +309,7 @@ std::string T2String( const bool& b )
 template<>
 std::string T2String( const std::wstring& wstr )
 {
-    return WStringToString( wstr );
+    return WStringToString( wstr ).GetVal();
 }
 
 

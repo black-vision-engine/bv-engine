@@ -3,6 +3,7 @@
 
 #include "DeferredTestResult.h"
 #include <cstring>
+#include <algorithm>
 
 namespace UnitTest
 {
@@ -16,7 +17,11 @@ namespace UnitTest
    DeferredTestFailure::DeferredTestFailure(int lineNumber_, const char* failureStr_)
       : lineNumber(lineNumber_)
    {
-      UNIITEST_NS_QUAL_STD(strcpy)(failureStr, failureStr_);
+       auto length = strlen( failureStr_ ) + 1;
+       auto lenToCopy = std::min( (int)length, MAX_FAILURE_STRING - 1 );
+
+       memcpy( failureStr, failureStr_, lenToCopy );
+       failureStr[ MAX_FAILURE_STRING - 1 ] = '\0';
    }
 
    DeferredTestResult::DeferredTestResult()

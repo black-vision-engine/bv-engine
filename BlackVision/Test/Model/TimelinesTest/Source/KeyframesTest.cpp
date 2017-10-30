@@ -1,4 +1,5 @@
-#include "UnitTest++.h"
+#include "Framework/FrameworkTest.h"
+
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
@@ -30,13 +31,11 @@ void        TestBaseKeyframe        ( bv::TimelineEventType type, KeyframeType& 
 }
 
 
-SUITE( DefaultTimelineTest )
-{
 
 
-    // ***********************
-    //
-TEST( AddStopKeyframe )
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, AddStopKeyframe )
 {
     auto keyframe = TimelineEventStop::Create( "StopKeyframe", 1.0f );
     TestBaseKeyframe( bv::TimelineEventType::TET_STOP, keyframe, "StopKeyframe" );
@@ -45,7 +44,7 @@ TEST( AddStopKeyframe )
 
 // ***********************
 //
-TEST( AddGotoKeyframe )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, AddGotoKeyframe )
 {
     auto keyframe = TimelineEventLoop::Create( "GotoKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 300, 1.2f, nullptr );
     TestBaseKeyframe( bv::TimelineEventType::TET_LOOP, keyframe, "GotoKeyframe" );
@@ -53,14 +52,14 @@ TEST( AddGotoKeyframe )
     CHECK( keyframe->GetActionType() == bv::LoopEventAction::LEA_GOTO );
     CHECK( keyframe->GetTotalLoopCount() == 300 );
     CHECK( keyframe->GetTargetTime() == 1.2f );
-    
+
     keyframe->SetTargetTime( 1.4f );
     CHECK( keyframe->GetTargetTime() == 1.4f );
 }
 
 // ***********************
 //
-TEST( AddMultipleKeyframe )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, AddMultipleKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
 
@@ -101,7 +100,7 @@ TEST( AddMultipleKeyframe )
 
 // ***********************
 // Keyframe stops timeline. Timeline is stoped until someone calls play.
-TEST( StopOnKeyframe )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, StopOnKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 1.0f, timeline.get() );
@@ -121,7 +120,7 @@ TEST( StopOnKeyframe )
 
     // Here StopKeyframe should stop timeline
     CHECK( timeline->GetLocalTime() == 1.0f );
-    
+
     timeline->Play();
     timeline->SetGlobalTime( bv::TimeType( 1.65f ) );
 
@@ -130,7 +129,7 @@ TEST( StopOnKeyframe )
 
 // ***********************
 // Timeline should jump one time on keframe. In next loop it should pass keyframe time value.
-TEST( GotoOnKeyframe )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, GotoOnKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     auto gotoKeyframe = TimelineEventLoop::Create( "GotoKeyframe", 1.0f, bv::LoopEventAction::LEA_GOTO, 1, 0.2f, timeline.get() );
@@ -162,7 +161,7 @@ TEST( GotoOnKeyframe )
 
 // ***********************
 //
-TEST( RestartKeyframe )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, RestartKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     auto restartKeyframe = TimelineEventLoop::Create( "RestartKeyframe", 1.0f, bv::LoopEventAction::LEA_RESTART, 1, 0.2f, timeline.get() );
@@ -189,7 +188,7 @@ TEST( RestartKeyframe )
 
 // ***********************
 //
-TEST( ReverseKeyframe )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, ReverseKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     auto restartKeyframe = TimelineEventLoop::Create( "ReversesKeyframe", 1.0f, bv::LoopEventAction::LEA_REVERSE, 1, 0.2f, timeline.get() );
@@ -228,7 +227,7 @@ TEST( ReverseKeyframe )
 // CurrentEvent chooses the same stop event which stops timeline.
 // Note that if time offset between frames is less then GEvtTimeSeparation, stop event will be deactivated in third frame
 // and bug wouldn't occur.
-TEST( StopOnKeyframeAndPlay )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, StopOnKeyframeAndPlay )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.2f, timeline.get() );
@@ -262,7 +261,7 @@ TEST( StopOnKeyframeAndPlay )
 // If there are two keyframes to near from each other, the second can be lost.
 // Note: this is example problem. This bug has never occured in real situation but we need to think what
 // to do in this case.
-TEST( TwoNearKeyframes )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model.Timelines, TwoNearKeyframes )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
     REQUIRE( timeline );
@@ -284,7 +283,4 @@ TEST( TwoNearKeyframes )
     CHECK( abs( timeline->GetLocalTime() - 0.4f ) < 0.00001 );
 }
 
-
-
-}
 

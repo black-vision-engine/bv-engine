@@ -1,5 +1,8 @@
 #pragma once
 
+#include "CoreDEF.h"
+
+
 namespace bv {
 
 namespace videocards {
@@ -41,7 +44,9 @@ public:
 
     static BVServiceProvider &          GetInstance();
 
-friend class BVAppLogic;
+private:
+    friend class BVAppLogic;
+    FRIEND_TEST_ACCESSOR( BVServiceProvider )
 };
 
 } // bv

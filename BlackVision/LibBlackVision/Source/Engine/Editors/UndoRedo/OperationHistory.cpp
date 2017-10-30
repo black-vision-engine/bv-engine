@@ -61,11 +61,27 @@ void        OperationHistory::SetHistoryLength    ( UInt16 size )
 {
     m_maxSize = size;
     
-    if( m_nextOp > size )
+    if( m_historyStack.size() > size )
     {
-        // Delete operations from bottom of stack.
-        SizeType diff = size - m_nextOp;
-        m_historyStack.erase( m_historyStack.begin(), m_historyStack.begin() + diff );
+        SizeType diff = m_historyStack.size() - size;
+
+        // Undo operation has priority over redo.
+        // Remove operations from top (operations to redo).
+        if( m_historyStack.size() > m_nextOp )
+        {
+            SizeType numOpToRedo = m_historyStack.size() - m_nextOp;
+            SizeType numOpToRemove = diff > numOpToRedo ? numOpToRedo : diff;
+
+            m_historyStack.erase( m_historyStack.end() - numOpToRemove, m_historyStack.end() );
+            diff -= numOpToRemove;
+        }
+
+        // Now remove opearations from the beginning of the stack.
+        if( diff > 0 )
+        {
+            m_historyStack.erase( m_historyStack.begin(), m_historyStack.begin() + diff );
+            m_nextOp -= (UInt16)diff;
+        }
     }
 
     m_historyStack.reserve( size );

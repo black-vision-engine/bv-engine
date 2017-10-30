@@ -10,19 +10,27 @@
 #include "win_sock.h"
 
 
-namespace bv {
+namespace bv
+{
 
 auto imagePath = "TestAssets/AssetManager/checkerboard2.png";
 auto imagePath_512x512 = "TestAssets/AssetManager/checkerboard2_512X512.png";
 auto AssetsPath = std::string( "TestAssets/AssetManager/" );
 auto PMFilePrefix = std::string( "file:/" );
 
-TEST(LoadingThumbnailsTest, LoadingThumbnails)
+
+
+
+// ***********************
+//
+TEST( Assets_AssetManager, LoadingThumbnails )
 {
 
 }
 
-TEST(HashTest, Hash)
+// ***********************
+//
+TEST( Assets_AssetManager, Hash )
 {
     static char * c = new char[ 6 ];
     memset( c, 'a', 6 );
@@ -42,19 +50,25 @@ TEST(HashTest, Hash)
     ASSERT_TRUE( !( h0 == h1 ) );
 }
 
-TEST(LoadingTextureAndGeneratingMipMaps, AssetManager)
+// ***********************
+//
+TEST( Assets_AssetManager, LoadingTextureAndGeneratingMipMaps )
 {
 	auto res = LoadTextureAsset( PMFilePrefix + imagePath, MipMapFilterType::BILINEAR );
 	ASSERT_TRUE( res != nullptr );
 }
 
-TEST(LoadingTexture, AssetManager)
+// ***********************
+//
+TEST( Assets_AssetManager, LoadingTexture )
 {
 	auto res = LoadTextureAsset( PMFilePrefix + imagePath );
 	ASSERT_TRUE( res != nullptr );
-}  
+}
 
-TEST(LoadingTexturePowefOf2Texture, AssetManager)
+// ***********************
+//
+TEST( Assets_AssetManager, LoadingTexturePowefOf2Texture )
 {
     // FIXME: If this test fails, maybe solution is to clean cache directory.
     // FIXME: What is exepcted solution, when texture is loaded from cache ?
@@ -62,7 +76,9 @@ TEST(LoadingTexturePowefOf2Texture, AssetManager)
     ASSERT_TRUE( typedRes->GetOriginal()->GetData() == typedRes->GetMipMaps()->GetLevel( 0 )->GetData() );
 }  
 
-TEST(LoadingTextureWitmMipmaps, AssetManager)
+// ***********************
+//
+TEST( Assets_AssetManager, LoadingTextureWitmMipmaps )
 {
     auto propsOrig = image::GetImageProps( AssetsPath + std::string("checkerboard2_500X500.png") );
     ASSERT_TRUE( propsOrig.error.empty() );
@@ -156,6 +172,9 @@ TEST(LoadingTextureWitmMipmaps, AssetManager)
 
 } // bv
 
+
+// ***********************
+//
 int main( int argc, char **argv )
 {
     ::testing::InitGoogleTest( &argc, argv );

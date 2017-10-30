@@ -46,6 +46,7 @@
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AVAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
+    <ClInclude Include="..\..\..\Source\LoadSceneResult.h" />
     <ClInclude Include="..\..\..\Source\Project.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager.h" />
     <ClInclude Include="..\..\..\Source\SceneDescriptor.h" />

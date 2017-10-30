@@ -15,6 +15,9 @@ RenderedChannelsDataDesc::RenderedChannelsDataDesc()
     {
         *it = false;
     }
+
+    // Enable first channel by default.
+    m_channelsEnabledState[ 0 ] = true;
 }
 
 // **************************

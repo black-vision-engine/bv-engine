@@ -95,7 +95,7 @@ void            GizmoContainer::PostOwnerUpdate  ( TimeType t )
     for( auto & gizmoRoot : m_gizmoRoots )
     {
         auto gizmoLogic = GetGizmoLogic( gizmoRoot );
-        gizmoLogic->PostChildrenUpdate( t );
+        gizmoLogic->PostOwnerUpdate( t );
     }
 }
 

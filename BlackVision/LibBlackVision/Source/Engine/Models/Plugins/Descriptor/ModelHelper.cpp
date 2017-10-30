@@ -52,7 +52,15 @@ void ModelHelper::SetOrCreateVSModel       ()
 //
 void ModelHelper::SetOrCreateGSModel       ()
 {
-    assert( false );
+    DefaultParamValModelPtr gsModel = std::static_pointer_cast< DefaultParamValModel >( m_model->GetGeometryShaderChannelModel() );
+
+    if( !gsModel )
+    {
+        gsModel = std::make_shared< DefaultParamValModel >();
+        m_model->SetGeometryShaderChannelModel( gsModel );
+    }
+
+    m_lastParamValModel = gsModel;
 }
 
 // *********************************

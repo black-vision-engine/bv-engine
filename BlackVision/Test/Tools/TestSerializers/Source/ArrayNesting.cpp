@@ -22,7 +22,7 @@ void            TestArrayNesting        ( ISerializer & ser );
 
 // ***********************
 //
-TEST( ArrayNestingJSON, TestSerializers )
+TEST( Serialization_Serializers_JSON, ArrayNesting )
 {
     JsonSerializeObject ser;
     TestArrayNesting( ser );
@@ -31,7 +31,7 @@ TEST( ArrayNestingJSON, TestSerializers )
 
 // ***********************
 //
-TEST( ArrayNestingXML, TestSerializers )
+TEST( Serialization_Serializers_XML, ArrayNesting )
 {
     XMLSerializer ser( nullptr );
     TestArrayNesting( ser );

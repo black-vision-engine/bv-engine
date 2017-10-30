@@ -103,7 +103,7 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
         }
     }
 
-    m_hasEffect = effect != nullptr;
+    m_isDrawable = effect != nullptr;
 }
 
 // *****************************
@@ -125,7 +125,7 @@ void    NodeUpdater::DoUpdate               ()
         // Add, when all mechanisms are implemented
         UpdateTransform();
 
-        if( m_hasEffect )
+        if( m_isDrawable )
         {
             UpdateVACPtr();
 

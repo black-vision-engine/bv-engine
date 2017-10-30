@@ -3,6 +3,8 @@
 #include "EndUserParamDescriptor.h"
 #include "Engine/Events/ParamAddress.h"
 
+#include "Engine/Models/Plugins/Plugin.h"
+
 #include "ParameterMapping.h"
 
 #include <map>

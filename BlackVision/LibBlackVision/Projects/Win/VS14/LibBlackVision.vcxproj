@@ -612,6 +612,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\FileNotFoundException.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp" />
+    <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h" />
@@ -801,6 +804,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\SamplerEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\Texture2DEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -821,6 +826,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="..\..\..\Source\Version\BuildVersion.h" />
+    <ClInclude Include="..\..\..\Source\Version\Version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h" />
