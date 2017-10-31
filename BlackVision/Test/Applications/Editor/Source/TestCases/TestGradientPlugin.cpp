@@ -7,15 +7,15 @@
 //
 class TestGradientPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestGradientPlugin )
 public:
-    TestGradientPlugin() : TestEditor( "TestGradientPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestGradientPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestGradientPlugin, TestEditor_Plugins, TestGradientPlugin )
 
-UnitTest::ListAdder adderTestGradientPlugin ( UnitTest::Test::GetTestList(), &TestGradientPluginInstance );
+
 
 
 

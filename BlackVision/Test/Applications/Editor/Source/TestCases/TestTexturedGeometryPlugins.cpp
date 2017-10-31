@@ -9,15 +9,14 @@
 //
 class TestTextruredGeometryPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestTextruredGeometryPlugin )
 public:
-    TestTextruredGeometryPlugin() : TestEditor( "TestTextruredGeometryPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestTextruredGeometryPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestTextruredGeometryPlugin, TestEditor_Plugins, TestTextruredGeometryPlugin )
 
-UnitTest::ListAdder adderTestTextruredGeometryPlugin ( UnitTest::Test::GetTestList(), &TestTextruredGeometryPluginInstance );
 
 
 

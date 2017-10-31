@@ -2,22 +2,18 @@
 
 
 
-
-
 // ***********************
 //
 class TestAnimatedGeometryPlugins : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestAnimatedGeometryPlugins )
+
 public:
-    TestAnimatedGeometryPlugins() : TestEditor( "TestAnimatedGeometryPlugins", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestAnimatedGeometryPluginsInstance;
-
-UnitTest::ListAdder adderTestAnimatedGeometryPlugins ( UnitTest::Test::GetTestList(), &TestAnimatedGeometryPluginsInstance );
-
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestAnimatedGeometryPlugins, TestEditor_Plugins, TestAnimatedGeometryPlugins )
 
 
 // ***********************
