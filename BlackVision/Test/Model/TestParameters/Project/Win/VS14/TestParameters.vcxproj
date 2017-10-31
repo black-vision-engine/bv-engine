@@ -115,6 +115,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestEvaluation.cpp" />
+    <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestEvaluators.cpp" />
     <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestKeysManipulation.cpp" />
     <ClCompile Include="..\..\..\Source\TestParamValModel\AddParameters.cpp" />
     <ClCompile Include="..\..\..\Source\TestParamValModel\RemoveParametercpp.cpp" />

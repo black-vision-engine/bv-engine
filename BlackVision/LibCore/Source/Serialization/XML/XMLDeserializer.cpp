@@ -242,6 +242,44 @@ void                                                    XMLDeserializer::Reset  
     m_nodes.push( m_doc );
 }
 
+// ***********************
+//
+FilePosition                                            XMLDeserializer::CurrentLineNumber      () const
+{
+    auto & curNode = m_nodes.top();
+    const char * firstCharPtr = curNode->name();
+
+    return ComputeXmlPosition( firstCharPtr );
+}
+
+// ***********************
+//
+FilePosition                                            XMLDeserializer::ComputeXmlPosition     ( const char * nodeBegin ) const
+{
+    FilePosition pos;
+    pos.Line = 1;
+    pos.CharPosition = 0;
+
+    const char * xmlPos = m_buf;
+    const char * lastLineBegin = xmlPos;
+
+    while( xmlPos < nodeBegin )
+    {
+        if( *xmlPos == '\n' )
+        {
+            pos.Line++;
+            lastLineBegin = xmlPos + 1;
+        }
+
+        xmlPos++;
+    }
+
+    // Note: numerate position from 1.
+    pos.CharPosition = nodeBegin - lastLineBegin + 1;
+
+    return pos;
+}
+
 // *******************************
 //
 std::wstring                                            XMLDeserializer::GetAttribute           ( const std::wstring & /*name*/ ) const

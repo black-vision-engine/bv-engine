@@ -14,8 +14,10 @@ public:
     static ExceptionType        Type() { return type; }
 
 public:
-    virtual std::string         GetReason() { return "File not found."; }
-    virtual ExceptionType       GetType() { return Type(); }
+
+    virtual std::string         GetReason       () const override { return "File not found."; }
+    virtual ExceptionType       GetType         () const override { return Type(); }
+    virtual bool                IsDerivedFrom   ( ExceptionType fromType ) const override   { return IsDerivedImpl< FileNotFoundException, Exception >( fromType ); }
 };
 
 

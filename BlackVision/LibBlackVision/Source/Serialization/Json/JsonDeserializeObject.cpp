@@ -287,6 +287,18 @@ ISerializer *       JsonDeserializeObject::CreateSerializer    () const
 
 // ***********************
 //
+FilePosition        JsonDeserializeObject::CurrentLineNumber    () const
+{
+    FilePosition pos;
+    pos.Line = 0;
+    pos.CharPosition = 0;
+
+    assert( !"Not supported" );
+    return pos;
+}
+
+// ***********************
+//
 bool		        JsonDeserializeObject::HasAttribute        ( const std::wstring & ) const
 { assert( !"This serializer doesn't supports wstrings" ); return false; }
 
