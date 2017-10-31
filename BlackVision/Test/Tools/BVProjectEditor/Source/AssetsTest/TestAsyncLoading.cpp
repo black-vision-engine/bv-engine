@@ -17,6 +17,13 @@ using namespace bv;
 class AsyncLoadingTest : public bv::FrameworkTest
 {
     DECALRE_GTEST_INFO( AsyncLoadingTest )
+
+public:
+
+    explicit AsyncLoadingTest()
+        : m_numLoaded( 0 )
+    {}
+
 public:
 
     virtual void        PreEvents           () override;

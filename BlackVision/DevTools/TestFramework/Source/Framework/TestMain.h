@@ -18,7 +18,7 @@
 //
 int main( int argc, char **argv )
 {
-    auto env = new bv::TestEnvironment( argc, argv );
+    auto env = new bv::TestEnvironment( &argc, argv );
     bv::TestEnvironment::SetEnvironment( env );
     
     ::testing::AddGlobalTestEnvironment( env );

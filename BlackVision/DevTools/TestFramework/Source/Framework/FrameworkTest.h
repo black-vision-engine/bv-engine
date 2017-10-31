@@ -127,6 +127,13 @@ private:
 // ***********************
 // Declares TestInfo structure and other gtest things inside of test class.
 #define DECALRE_GTEST_INFO( testClassName )\
+private:\
+    static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_; \
+    GTEST_DISALLOW_COPY_AND_ASSIGN_( testClassName );
+
+// ***********************
+// Declares TestInfo structure and other gtest things inside of test class.
+#define DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( testClassName )\
 public:\
     testClassName() {}\
 private:\
@@ -144,7 +151,7 @@ private:\
 #define SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )    \
 class GTEST_TEST_CLASS_NAME_( suite, name ) : public bv::FrameworkTest   \
 {                                       \
-    DECALRE_GTEST_INFO( GTEST_TEST_CLASS_NAME_( suite, name ) )  \
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( GTEST_TEST_CLASS_NAME_( suite, name ) )  \
 public:                                 \
                                                                 \
     virtual void        PreEvents           () override;        \

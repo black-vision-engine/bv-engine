@@ -84,7 +84,7 @@ inline void             AddHierarchy             ( bv::model::SceneModelPtr scen
     ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child4" ) );
 
     auto root = scene->GetRootNode();
-    ASSERT_EQ( root, nullptr );
+    ASSERT_NE( root, nullptr );
 
     ASSERT_TRUE( root->GetChild( "Group1" ) != nullptr );
     ASSERT_TRUE( root->GetChild( "Group2" ) != nullptr );

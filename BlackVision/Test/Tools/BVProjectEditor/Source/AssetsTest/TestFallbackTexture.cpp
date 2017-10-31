@@ -17,7 +17,7 @@ using namespace bv;
 //
 class FallbackTextureTest : public bv::FrameworkTest
 {
-    DECALRE_GTEST_INFO( FallbackTextureTest )
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( FallbackTextureTest )
 public:
 
     virtual void        PreEvents           () override;
@@ -25,7 +25,7 @@ public:
 private:
 
     AssetDescConstPtr       m_assetDesc;
-    int                     m_numLoaded;
+
 };
 REGISTER_FRAMEWORK_GTEST_INFO( FallbackTextureTest, BVProjectEditor_Assets_Loading, FallbackTextureTest )
 

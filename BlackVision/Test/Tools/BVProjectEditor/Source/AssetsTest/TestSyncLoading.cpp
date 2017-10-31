@@ -13,7 +13,7 @@ using namespace bv;
 // Loads assets synchronously from main thread. BV should hang on loading.
 class SyncLoadTest : public bv::FrameworkTest
 {
-    DECALRE_GTEST_INFO( SyncLoadTest )
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( SyncLoadTest )
 public:
 
     virtual void        PreEvents           () override;
@@ -21,7 +21,7 @@ public:
 private:
 
     AssetDescConstPtr       m_assetDesc;
-    int                     m_numLoaded;
+
 };
 REGISTER_FRAMEWORK_GTEST_INFO( SyncLoadTest, BVProjectEditor_Assets_Loading, SyncLoadTest )
 

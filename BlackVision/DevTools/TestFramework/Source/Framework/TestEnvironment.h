@@ -25,12 +25,12 @@ private:
 
     BlackVisionAppFramework *       m_app;
 
-    int         ArgC;
+    int *       ArgC;   ///< Google Test removes recognized flags. We need reference to number of arguments.
     char **     ArgV;
 
 public:
 
-    explicit    TestEnvironment     ( int argc, char * argv[] );
+    explicit    TestEnvironment     ( int * argc, char * argv[] );
     virtual     ~TestEnvironment    () {}
 
     // Override this to define how to set up the environment.

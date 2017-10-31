@@ -16,7 +16,7 @@ using namespace bv;
 // Sync load should hang and wait for async load.
 class MixedSyncAsyncLoadingTest : public bv::FrameworkTest
 {
-    DECALRE_GTEST_INFO( MixedSyncAsyncLoadingTest )
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( MixedSyncAsyncLoadingTest )
 public:
 
     virtual void        PreEvents           () override;
@@ -25,7 +25,7 @@ public:
 private:
 
     AssetDescConstPtr       m_assetDesc;
-    int                     m_numLoaded;
+
 };
 REGISTER_FRAMEWORK_GTEST_INFO( MixedSyncAsyncLoadingTest, BVProjectEditor_Assets_Loading, MixedSyncAsyncLoadingTest )
 

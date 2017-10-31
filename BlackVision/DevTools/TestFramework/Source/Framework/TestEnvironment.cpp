@@ -17,7 +17,7 @@ TestEnvironment *    TestEnvironment::gEnvironment = nullptr;;
 
 // ***********************
 //
-TestEnvironment::TestEnvironment        ( int argc, char * argv[] )
+TestEnvironment::TestEnvironment        ( int * argc, char * argv[] )
     :   ArgC( argc )
     ,   ArgV( argv )
     ,   m_app( nullptr )
@@ -27,12 +27,12 @@ TestEnvironment::TestEnvironment        ( int argc, char * argv[] )
 //
 void            TestEnvironment::SetUp      ()
 {
-    bv::InitSubsystem::CallInitializers( ArgC, ArgV );
+    bv::InitSubsystem::CallInitializers( *ArgC, ArgV );
     assert( bv::ApplicationBase::ApplicationInstance != nullptr );
 
     m_app = static_cast< BlackVisionAppFramework * >( bv::ApplicationBase::ApplicationInstance );
 
-    m_app->Initialize( ArgC, ArgV );
+    m_app->Initialize( *ArgC, ArgV );
 }
 
 // ***********************
