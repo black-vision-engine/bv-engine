@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Serialization/DeserializeContext.h"
-
-//#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
+#include "Serialization/IDeserializer.h"
 
 #include "CoreDEF.h"
 
@@ -14,6 +13,7 @@ class AssetDescsWithUIDs;
 DEFINE_PTR_TYPE( AssetDescsWithUIDs );
 
 class BVProjectEditor;
+class BVDeserializeContext;
 
 namespace model
 {
@@ -31,9 +31,15 @@ namespace model
     class TimelineManager;
 }; // model
 
+
 class Exception;
 DEFINE_PTR_TYPE( Exception );
 typedef std::vector< ExceptionPtr > Exceptions;
+
+
+BVDeserializeContext *      Context             ( const IDeserializer & deser );
+void                        WarnWithoutContext  ( const std::string & message );
+
 
 // ************************
 //
@@ -43,7 +49,6 @@ private:
     model::OffsetTimeEvaluatorPtr       m_sceneTimeline;
     AssetDescsWithUIDsPtr               m_assets;
 
-    std::string                         m_sceneName;
     std::string                         m_nodePath;
 
     model::PluginsManager *             m_pluginsManager;
@@ -72,6 +77,8 @@ public:
 
     static BVDeserializeContext *       CreateContextFromEmptiness  (); // in future this should have some parameters instead of static singletons
     static BVDeserializeContext *       CreateContextFromEmptiness  ( const model::OffsetTimeEvaluatorPtr & timeline ); // in future this should have some parameters instead of static singletons
+
 };
+
 
 } // bv

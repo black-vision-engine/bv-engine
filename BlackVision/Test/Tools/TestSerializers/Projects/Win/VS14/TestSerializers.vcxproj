@@ -137,6 +137,7 @@
     <ClCompile Include="..\..\..\Source\DoublePassArrayAccess.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\SerializeDeserialize.cpp" />
+    <ClCompile Include="..\..\..\Source\TestQueringLineNumber.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

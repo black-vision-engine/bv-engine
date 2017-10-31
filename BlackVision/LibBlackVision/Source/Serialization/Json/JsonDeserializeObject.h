@@ -57,6 +57,7 @@ public:
     virtual bool                AttachBranch        ( const std::string & name, ISerializer * ser ) override;
     virtual ISerializer *       CreateSerializer    () const override;
 
+    virtual FilePosition        CurrentLineNumber   () const override;
 
 private:
     void                        OnRootInit          ();

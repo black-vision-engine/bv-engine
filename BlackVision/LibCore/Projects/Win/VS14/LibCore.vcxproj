@@ -47,6 +47,7 @@
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
     <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\FilePosition.h" />
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />

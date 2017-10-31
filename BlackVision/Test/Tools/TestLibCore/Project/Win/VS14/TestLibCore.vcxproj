@@ -116,8 +116,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.cpp" />
+    <ClCompile Include="..\..\..\Source\ExceptionsTest\TestExceptions.cpp" />
     <ClCompile Include="..\..\..\Source\ExpectedTest\ExpectedTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

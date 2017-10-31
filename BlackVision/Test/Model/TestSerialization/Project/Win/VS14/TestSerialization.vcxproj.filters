@@ -14,11 +14,17 @@
     <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidCurveForType.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestInterpolators\TestInterpolator.cpp">
+      <Filter>TestInterpolators</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestScenes\VersionTest.cpp">
       <Filter>TestScenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp">
-      <Filter>TestNodes</Filter>
+    <ClCompile Include="..\..\..\Source\TestInterpolators\InvalidInterpolations.cpp">
+      <Filter>TestInterpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestInterpolators\TestBezierSerialization.cpp">
+      <Filter>TestInterpolators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

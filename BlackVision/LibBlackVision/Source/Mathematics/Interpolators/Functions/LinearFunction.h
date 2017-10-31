@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mathematics/Interpolators/Key.h"
+#include "IEvaluator.h"
 
 #include "Serialization/SerializationHelper.h"
 
@@ -15,6 +16,7 @@ template< class TimeValueT, class ValueT >
 class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
+    FRIEND_TEST_ACCESSOR( LinearEvaluator )
 
 private:
 
@@ -24,8 +26,8 @@ private:
 public:
     LinearEvaluator( Key k1, Key k2, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), m_tolerance( tolerance ) {}
 
-    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_LINEAR; }
-    virtual CurveType               GetCurveType    () override { return CurveType::CT_LINEAR; }
+    virtual EvaluatorType           GetType         () const override { return EvaluatorType::ET_LINEAR; }
+    virtual CurveType               GetCurveType    () const override { return CurveType::CT_LINEAR; }
 
     virtual void SetValue( TimeValueT t, ValueT v ) override
     {
@@ -43,17 +45,16 @@ public:
         return ValueT( alpha * key2.val + (1-alpha) * key1.val );
     }
 
-    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    virtual void                    Serialize       ( ISerializer& ser ) const override
     {
         ser.EnterChild( "interpolation" );
             ser.SetAttribute( "type", SerializationHelper::T2String( CurveType::CT_LINEAR ) );
         ser.ExitChild();
     }
 
-    virtual void                                Deserialize( const IDeserializer& deser )
+    virtual void                    Deserialize     ( const IDeserializer & deser )
     {
-        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( CurveType::CT_LINEAR ) )
-            assert( false );
+        ValidateCurveType( deser, CurveType::CT_LINEAR );
     }
 };
 

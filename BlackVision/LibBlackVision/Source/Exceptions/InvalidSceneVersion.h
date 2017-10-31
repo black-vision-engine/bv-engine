@@ -14,7 +14,10 @@ public:
 
 public:
                                 InvalidSceneVersion( const std::string & detailedReason );
-    virtual ExceptionType       GetType() { return Type(); }
+
+
+    virtual ExceptionType       GetType         () const override { return Type(); }
+    virtual bool                IsDerivedFrom   ( ExceptionType fromType ) const override   { return IsDerivedImpl< InvalidSceneVersion, Exception >( fromType ); }
 };
 
 }	// bv

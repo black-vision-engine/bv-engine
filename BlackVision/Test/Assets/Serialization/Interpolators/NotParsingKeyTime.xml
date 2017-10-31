@@ -1,0 +1,14 @@
+<interpolator curve_type="point" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="0.000000" val="3"/>
+		<key time="2.000000" val="5"/>
+		<key time="bla" val="-1"/>
+        <key time="4.000000" val="7"/>
+	</keys>
+	<interpolations>
+		<interpolation type="point"/>
+		<interpolation type="linear"/>
+        <interpolation type="quadric_inout"/>
+	</interpolations>
+</interpolator>
+

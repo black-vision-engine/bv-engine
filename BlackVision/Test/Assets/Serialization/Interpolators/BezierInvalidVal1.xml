@@ -1,0 +1,4 @@
+<interpolation type="bezier">
+    <v1 dt="0.200000" dval="bla"/>
+    <v2 dt="-0.600000" dval="-2.000000"/>
+</interpolation>

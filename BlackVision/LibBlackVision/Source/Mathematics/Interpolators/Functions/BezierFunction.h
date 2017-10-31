@@ -1,5 +1,10 @@
 #pragma once
 
+#include "IEvaluator.h"
+
+#include "Serialization/BV/BVDeserializeContext.h"
+#include "Exceptions/Serialization/SerializationException.h"
+
 namespace bv
 {
 
@@ -11,7 +16,7 @@ template< class TimeValueT, class ValueT >
 class BezierEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
-
+    FRIEND_TEST_ACCESSOR( BezierEvaluator )
 public: // FIXME
     
     Key key1, key2;
@@ -20,14 +25,18 @@ public: // FIXME
     CurveType   m_curveType;
 
 public:
-    virtual EvaluatorType           GetType         () override { return EvaluatorType::ET_BEZIER; }
-    virtual CurveType               GetCurveType    () override { return m_curveType; }
+    virtual EvaluatorType           GetType         () const override { return EvaluatorType::ET_BEZIER; }
+    virtual CurveType               GetCurveType    () const override { return m_curveType; }
 
     BezierEvaluator( CurveType curve, Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : m_curveType( curve ), key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
     
+    // ***********************
+    //
     void SetV2( Key v2 ) { this->v2 = v2; }
     
-    virtual void SetValue( TimeValueT t, ValueT v ) override
+    // ***********************
+    //
+    virtual void                        SetValue        ( TimeValueT t, ValueT v ) override
     {
         if( key1.t == t )
             key1.val = v;
@@ -37,7 +46,9 @@ public:
             assert( false );
     }
 
-    ValueT Evaluate( TimeValueT t ) const override 
+    // ***********************
+    //
+    ValueT                              Evaluate        ( TimeValueT t ) const override 
     {
         assert( key1.t <= t && t <= key2.t );
 
@@ -72,38 +83,82 @@ public:
         }
     }
 
-    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    // ***********************
+    //
+    virtual void                        Serialize       ( ISerializer & ser ) const override
     {
-    ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", SerializationHelper::T2String( m_curveType ) );
+        ser.EnterChild( "interpolation" );
+            ser.SetAttribute( "type", SerializationHelper::T2String( m_curveType ) );
         
-        ser.EnterChild( "v1" );
-            SerializationHelper::SerializeAttribute( ser, v1.t, "dt" );
-            SerializationHelper::SerializeAttribute( ser, v1.val, "dval" );
+            ser.EnterChild( "v1" );
+                SerializationHelper::SerializeAttribute( ser, v1.t, "dt" );
+                SerializationHelper::SerializeAttribute( ser, v1.val, "dval" );
+            ser.ExitChild();
+        
+            ser.EnterChild( "v2" );
+                SerializationHelper::SerializeAttribute( ser, v2.t, "dt" );
+                SerializationHelper::SerializeAttribute( ser, v2.val, "dval" );
+            ser.ExitChild();
+        
         ser.ExitChild();
-        
-        ser.EnterChild( "v2" );
-            SerializationHelper::SerializeAttribute( ser, v2.t, "dt" );
-            SerializationHelper::SerializeAttribute( ser, v2.val, "dval" );
-        ser.ExitChild();
-        
-    ser.ExitChild();
     }
 
-    virtual void                                Deserialize( const IDeserializer& deser )
+    // ***********************
+    // Note: if there's only one error in xml, we use default values.
+    virtual void                        Deserialize     ( const IDeserializer & deser )
     {
-        if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( m_curveType ) )
-            assert( false );
+        if( ValidateCurveType( deser, m_curveType ) )
+        {
+            bool somethingFailed = false;
 
-        deser.EnterChild( "v1" );
-            v1.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v1.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
-        deser.ExitChild();
+            Expected< TimeValueT > t1;
+            Expected< TimeValueT > t2;
+            Expected< ValueT > val1;
+            Expected< ValueT > val2;
 
-        deser.EnterChild( "v2" );
-            v2.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v2.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
-        deser.ExitChild();
+            if( deser.EnterChild( "v1" ) )
+            {
+                t1 = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+                val1 = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
+
+                if( !t1.IsValid() )     { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dt1." ); }
+                if( !val1.IsValid() )   { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dval1." ); }
+
+                deser.ExitChild();
+            }
+            else
+            {
+                Warn< SerializationException >( deser, "No v1 marker found. Bezier will use default values." );
+                somethingFailed = true;
+            }
+
+
+            if( deser.EnterChild( "v2" ) )
+            {
+                t2 = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+                val2 = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
+
+                if( !t2.IsValid() )     { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dt2." ); }
+                if( !val2.IsValid() )   { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dval2." ); }
+
+                deser.ExitChild();
+            }
+            else
+            {
+                Warn< SerializationException >( deser, "No v2 marker found. Bezier will use default values." );
+                somethingFailed = true;
+            }
+
+
+            if( !somethingFailed )
+            {
+                v1.t = t1.GetVal();
+                v2.t = t2.GetVal();
+
+                v1.val = val1.GetVal();
+                v2.val = val2.GetVal();
+            }
+        }
     }
 };
 

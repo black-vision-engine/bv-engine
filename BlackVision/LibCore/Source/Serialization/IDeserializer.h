@@ -1,12 +1,20 @@
 #pragma once
 
+#include "CoreDEF.h"
 #include "DeserializeContext.h"
+
+#include "FilePosition.h"
 
 #include <string>
 
 
-namespace bv {
+namespace bv
+{
 
+
+
+// ***********************
+//
 class IDeserializer
 {
 friend class ISerializer;
@@ -41,6 +49,8 @@ public:
     virtual bool                AttachBranch        ( const std::string & name, ISerializer * ser ) = 0;
 
     virtual ISerializer *       CreateSerializer    () const = 0;
+
+    virtual FilePosition        CurrentLineNumber   () const = 0;
 };
 
 } //bv

@@ -4,11 +4,25 @@
     <Filter Include="ExpectedTest">
       <UniqueIdentifier>{060ea86c-31c9-4f53-970b-a25e437e3649}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExceptionsTest">
+      <UniqueIdentifier>{81f7b200-5cd6-4308-ac81-f5c514dfd59f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\ExpectedTest\ExpectedTest.cpp">
       <Filter>ExpectedTest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ExceptionsTest\TestExceptions.cpp">
+      <Filter>ExceptionsTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.cpp">
+      <Filter>ExceptionsTest</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.h">
+      <Filter>ExceptionsTest</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
