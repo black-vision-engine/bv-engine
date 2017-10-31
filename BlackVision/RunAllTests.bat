@@ -13,7 +13,6 @@ cd %scriptDirectory%
 
 set testOutputDir=%scriptDirectory%%testOutputDir%
 
-if "%4"=="" set consoleReport=-ReportToConsole
 if NOT "%4"=="" set gtestParams=--gtest_output=xml:%testOutputDir%
 
 REM Clean output directory only if test output directory is valid.
@@ -37,7 +36,7 @@ for /r %%g in (*.exe) do (
 	echo Working directory: !fileDir!
 	
 	echo Executing test: !fileName!
-	call !fileWithExt! -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog %consoleReport%
+	call !fileWithExt! -o %testOutputDir%!fileName!.xml -FileLog %testOutputDir%Logs/!fileName!Log.txt debug -DisableDefaultLog %gtestParams%
 	echo Execution ended
 	
 	cd %scriptDirectory%%FRAMEWORKTEST_EXECUTABLES_DIRECTORY%
