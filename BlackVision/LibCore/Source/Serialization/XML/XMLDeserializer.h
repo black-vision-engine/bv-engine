@@ -18,6 +18,9 @@ namespace rapidxml // Forward declarations of rapidxml classes. FIXME: Should be
 namespace bv
 {
 
+
+// ***********************
+//
 class XMLDeserializer  : public IDeserializer
 {
 public:
@@ -72,6 +75,13 @@ public:
     void                                            Reset                   () const;
 
     virtual ISerializer *                           CreateSerializer        () const override { assert( false ); return nullptr; }
+
+    virtual FilePosition                            CurrentLineNumber       () const override;
+
+
+private:
+
+    FilePosition                                    ComputeXmlPosition      ( const char * nodeBegin ) const;
 };
 
 } // bv

@@ -4,18 +4,18 @@
 
 #include "InterpolatorBasicTypes.h"
 
-#include "Functions/ConstFunction.h"
-#include "Functions/LinearFunction.h"
-#include "Functions/BezierFunction.h"
-#include "Functions/PolynomialFunction.h"
-
-#include "CompositeInterpolatorSerializationHelper.h"
+#include "Mathematics/Interpolators/Functions/Evaluators.h"
 
 #include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
+#include "Exceptions/Serialization/SerializationException.h"
+#include "Exceptions/Serialization/SerializationLogicError.h"
 
 #include "Mathematics/Core/MathFuncs.h"
+
 #include <vector>
 #include <array>
+#include <algorithm>
 //#include <initializer_list>
 
 #include "Mathematics/glm_inc.h"
@@ -30,11 +30,10 @@ namespace bv {
 //
 template< class TimeValueT, class ValueT >
 inline CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolerance )
-    : m_type( CurveType::CT_LINEAR )
+    : m_type( DefaultCurveType< ValueT >() )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{
-}
+{}
 
 // *******************************
 //
@@ -97,81 +96,187 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
 {
     auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
 
-    auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
+    // Read CompositeInterpolator parameters.
+    CurveType defaultCurveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR );
+    WrapMethod preWrapMethod = SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp );
+    WrapMethod postWrapMethod = SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp );
 
-    if( keys.size() == 1 || deser.EnterChild( "interpolations" ) == false )
+    auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
+    auto curves = DeserializeCurves( deser );       // Reads curve types to add keys with proper interpolator.
+
+    std::stable_sort( keys.begin(), keys.end(), []( const KeyPtr & key1, const KeyPtr key2 ){ if( key1->t < key2->t ) return true; return false; } );
+
+    if( keys.size() > 0 )
     {
-        for( auto key : keys ) // no interpolation types
-            interpolator->AddKey( key->t, key->val );
-    }
-    else
-    {
-        if( deser.EnterChild( "interpolation" ) )
+        interpolator->AddKey( keys[ 0 ]->t, keys[ 0 ]->val );
+
+        if( keys.size() > 1 )
         {
-            for( auto key : keys )
+            for( SizeType i = 1; i < keys.size(); ++i )
             {
-                interpolator->AddKey( key->t, key->val );
-                if( key != keys.back() )
+                SizeType curveIdx = i - 1;
+                CurveType curveType = curves.size() > curveIdx  ? curves[ curveIdx ] : defaultCurveType;
+
+                interpolator->SetAddedKeyCurveType( curveType );
+                bool addedNew = interpolator->AddKey( keys[ i ]->t, keys[ i ]->val );
+
+                if( !addedNew )
                 {
-                    interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ), CurveType::CT_LINEAR ) );
-                    if( deser.NextChild() == false )
-                    {
-                        if( key == keys.end()[ -2 ] ) // everything is OK, this is the end, we need to go out
-                            deser.ExitChild();
-                        else // we've got malformed XML
-                        {
-                            // DOUBLE FIXME: error handling
-                            // assert( false ); // FIXME: error handling
-                            return nullptr;
-                        }
-                    }
+                    // Mark omited curve.
+                    if( curves.size() > curveIdx ) curves[ curveIdx ] = CurveType::CT_TOTAL;
+
+                    Warn< SerializationException >( deser, "Duplicate key. Time [" + SerializationHelper::T2String( keys[ i ]->t ) + "], value [" + SerializationHelper::T2String( keys[ i ]->val ) + "]" );
                 }
             }
 
-            deser.EnterChild( "interpolation" );
-            size_t i = 0;
-            do
-            {
-				if( interpolator->interpolators.size() > i )
-				{
-					interpolator->interpolators[ i++ ]->Deserialize( deser );
-				}
-				else
-				{
-					LOG_MESSAGE( SeverityLevel::error ) << "Wrong number of interpolators for keys.";
-				}
-            } while( deser.NextChild() );
-            deser.ExitChild(); // exit "interpolation"
+            ValidateMatching( deser, curves, keys );
         }
-        else
-        {
-            for( auto key : keys ) // no interpolation types
-                interpolator->AddKey( key->t, key->val );
-        }
-        deser.ExitChild(); // exit "interpolations"
     }
 
-    interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR ) );
-    interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp ) );
-    interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp ) );
-    
-    // FIXME: This code is written instead of assert here. Make proper error handling.
-    //if( interpolator->GetNumKeys() == 0 )
-    //    return nullptr;
+    // Deserialize interpolators parameters.
+    DeserializeInterpolators( deser, interpolator, curves );
+
+    // Set CompositeInterpolator parameters.
+    interpolator->SetAddedKeyCurveType( defaultCurveType );
+    interpolator->SetWrapPreMethod( preWrapMethod );
+    interpolator->SetWrapPostMethod( postWrapMethod );
 
     return interpolator;
+}
+
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, ValueT >::DeserializeCurves          ( const IDeserializer & deser )
+{
+    std::vector< CurveType > curves;
+
+    if( deser.EnterChild( "interpolations" ) )
+    {
+        if( deser.EnterChild( "interpolation" ) )
+        {
+            do
+            {
+                auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
+
+                if( curveType.IsValid() )
+                {
+                    curves.push_back( curveType.GetVal() );
+
+                    if( !IsValidCurveType< ValueT >( curveType.GetVal() ) )
+                        Warn< SerializationException >( deser, "Interpolation has invalid curveType for this parameter type. Default curve set [" + SerializationHelper::T2String( DefaultCurveType< ValueT >() ) + "]." );
+                }
+                else
+                    Warn< SerializationException >( deser, "Cannot deserialize curveType. Interpolation ignored." );
+            }
+            while( deser.NextChild() );
+
+            deser.ExitChild();  // interpolation
+        }
+        deser.ExitChild();  // interpolations
+    }
+
+    return curves;
+}
+
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+inline void                             CompositeInterpolator< TimeValueT, ValueT >::DeserializeInterpolators   ( const IDeserializer & deser, std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > & interpolator, const std::vector< CurveType > & curves )
+{
+    if( interpolator->interpolators.size() > 0 )
+    {
+        SizeType interpolatorIdx = 0;
+
+        if( deser.EnterChild( "interpolations" ) )
+        {
+            if( deser.EnterChild( "interpolation" ) )
+            {
+                do
+                {
+                    // Check if curve type is valid.
+                    // If not, we probably omited some interpolations in previous step while adding keys,
+                    // for example in situation, that two keys were placed in the same time. The solution is
+                    // to find next matching interpolation in file. We marked omitted values with CurveType::CT_TOTAL.
+                    if( curves[ interpolatorIdx ] != CurveType::CT_TOTAL )
+                    {
+                        auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
+
+                        if( curveType.IsValid() )
+                        {
+                            auto & eval = interpolator->interpolators[ interpolatorIdx ];
+
+                            // Check if curve type of created evaluator matches deserialized value.
+                            // Reason why could they not match is posiblity, that curve from file was invalid for
+                            // this type of interpolator (for this ValueT).
+                            if( curveType == eval->GetCurveType() )
+                            {
+                                eval->Deserialize( deser );
+                                interpolatorIdx++;
+                            }
+                            else if( !IsValidCurveType< ValueT >( curveType ) )
+                            {
+                                // If deserialized curveType was invalid we already created evaluator with default type.
+                                // In this case we don't need deserialization, beacause interpolator has good default values.
+                                interpolatorIdx++;
+                            }
+                            else
+                            {
+                                Warn< SerializationLogicError >( deser, "Curve type doesn't match created interpolator." );
+                                assert( false );
+                            }
+                        }
+                    }
+
+                } while( interpolator->interpolators.size() > interpolatorIdx && deser.NextChild() );
+
+                deser.ExitChild();  // interpolation
+            }
+            else
+                Warn< SerializationException >( deser, "Empty [interpolations] array." );
+
+            deser.ExitChild();  // interpolations
+        }
+        else
+            Warn< SerializationException >( deser, "No [interpolation] marker." );
+    }
+}
+
+// ***********************
+// This function checks only number of keys and curves.
+// In future we could make better check, for example do something with invalid keys.
+template< class TimeValueT, class ValueT >
+inline bool                             CompositeInterpolator< TimeValueT, ValueT >::ValidateMatching       ( const IDeserializer & deser, const std::vector< CurveType > & curves, const std::vector< std::shared_ptr< Key > > & keys )
+{
+    if( keys.size() - 1 > curves.size() )
+    {
+        SizeType numLacks = ( keys.size() - 1 ) - curves.size();
+        Warn< SerializationException >( deser, "Not enough interpolations. Replacing [" + SerializationHelper::T2String( numLacks ) + "] with default evaluators." );
+
+        return false;
+    }
+    else if( keys.size() - 1 < curves.size() - 1 )
+    {
+        SizeType toMany = curves.size() - keys.size() + 1;
+        Warn< SerializationException >( deser, "To many interpolations. [" + SerializationHelper::T2String( toMany ) + "] ignored." );
+
+        return false;
+    }
+
+    return true;
 }
 
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i, CurveType cType )
+inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeValueT, ValueT > > > & interpolators, size_t i )
 {
     typedef Key< TimeValueT, ValueT > Key;
 
     const float scale = 0.2f;
 
     auto iType = interpolators[ i ]->GetType();
+    auto cType = interpolators[ i ]->GetCurveType();
 
     if( iType == EvaluatorType::ET_CONSTANT || iType == EvaluatorType::ET_LINEAR || iType == EvaluatorType::ET_POLYNOMIAL )
         return;
@@ -205,13 +310,13 @@ inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeVal
 // *******************************
 //
 template<>
-inline void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t, CurveType )
+inline void UpdateInterpolator< TimeType, std::string >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::string > > > & , size_t )
 {}
 
 // *******************************
 //
 template<>
-inline void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t, CurveType )
+inline void UpdateInterpolator< TimeType, std::wstring >( std::vector< std::shared_ptr< IEvaluator< TimeType, std::wstring > > > &, size_t )
 {}
 
 // *******************************
@@ -288,12 +393,12 @@ inline std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpo
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-inline void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
+inline bool         CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
     if( keys.empty() )
     {
         keys.push_back( Key( t, v ) );
-        return;
+        return true;
     }
 
 // find the proper key
@@ -356,7 +461,10 @@ inline void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( Ti
 // update interpolators
     for( auto j = ( UInt32 )( i-2 ); j <= ( UInt32 )( i+1 ); j++ )
         if( j >= 0 && j < ( UInt32 )interpolators.size() )
-            UpdateInterpolator( interpolators, j, m_type );
+            UpdateInterpolator( interpolators, j );
+
+    // Returns true if key was added. Returns false if key was overriden.
+    return !isSame;
 }
 
 // ***********************
@@ -398,7 +506,7 @@ inline bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeV
 // update interpolators
     for( SizeType j = int( i-2 ); j <= int( i+1 ); j++ )
         if( j >= 0 && j < interpolators.size() )
-            UpdateInterpolator( interpolators, j, m_type );
+            UpdateInterpolator( interpolators, j );
 
     return true;
 }
@@ -477,26 +585,26 @@ inline std::vector< Key< TimeValueT, ValueT > > &                               
 template< class TimeValueT, class ValueT >
 inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
-    if( keys.size() == 0 )
+    if( IsValidCurveType< ValueT >( type ) )
     {
-        assert( false && "Interpolators with no keys are evil" );
-        return;
+        SetAddedKeyCurveType( type );
+
+        if( keys.size() == 0 )
+            return;
+
+        interpolators.clear();
+        auto prevKey = keys.begin();
+        auto nextKey = prevKey + 1;
+        while( nextKey != keys.end() )
+        {
+            interpolators.push_back( CreateDummyInterpolator( type, *prevKey, *nextKey, m_tolerance ) );
+            prevKey++;
+            nextKey++;
+        }
+
+        for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
+            UpdateInterpolator( interpolators, i );
     }
-
-    interpolators.clear();
-    auto prevKey = keys.begin();
-    auto nextKey = prevKey + 1;
-    while( nextKey != keys.end() )
-    {
-        interpolators.push_back( CreateDummyInterpolator( type, *prevKey, *nextKey, m_tolerance ) );
-        prevKey++;
-        nextKey++;
-    }
-
-    for( UInt32 i = 0; i < ( UInt32 )interpolators.size(); i++ )
-        UpdateInterpolator( interpolators, i, type );
-
-    SetAddedKeyCurveType( type );
 }
 
 // *******************************
@@ -504,7 +612,8 @@ inline void                                                CompositeInterpolator
 template< class TimeValueT, class ValueT >
 inline void                                                CompositeInterpolator< TimeValueT, ValueT >::SetAddedKeyCurveType( CurveType type )
 {
-    m_type = type;
+    if( IsValidCurveType< ValueT >( type ) )
+        m_type = type;
 }
 
 // *******************************
@@ -658,31 +767,5 @@ inline ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( Ti
 
 }
 
-// *******************************
-//
-template<>
-inline CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance )
-	: m_type( CurveType::CT_POINT )
-	, m_tolerance( tolerance )
-	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{}
-
-// *******************************
-//
-template<>
-inline CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance )
-	: m_type( CurveType::CT_POINT )
-	, m_tolerance( tolerance )
-	, m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{}
-
-// *******************************
-//
-template<>
-inline CompositeInterpolator< bv::TimeType, bool >::CompositeInterpolator( float tolerance )
-    : m_type( CurveType::CT_POINT )
-    , m_tolerance( tolerance )
-    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
-{}
 
 } // bv

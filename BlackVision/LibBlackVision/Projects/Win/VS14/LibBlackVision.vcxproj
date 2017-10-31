@@ -614,6 +614,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\FileNotFoundException.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationException.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
@@ -700,7 +703,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\EnumsUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.h" />
@@ -806,13 +808,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationException.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.inl">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\SQTTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
@@ -826,6 +829,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\Evaluators.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\IEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Version\BuildVersion.h" />
     <ClInclude Include="..\..\..\Source\Version\Version.h" />
   </ItemGroup>
@@ -1272,7 +1277,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\ConstFunction.h" />
@@ -1281,7 +1285,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolatorSerializationHelper.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\SQTTransform.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />

@@ -1,0 +1,14 @@
+<interpolator curve_type="point" preMethod="clamp" postMethod="clamp">
+	<keys>
+		<key time="3.000000" val="string in xml"/>
+        <key time="6.000000" val="tu tez jakis string"/>
+		<key time="6.000000" val="string z niepoprawnym evaluatorem"/>
+        <key time="11.000000" val="znowu dobry string"/>
+	</keys>
+	<interpolations>
+        <interpolation type="point"/>
+		<interpolation type="linear"/>
+        <interpolation type="point"/>
+	</interpolations>
+</interpolator>
+

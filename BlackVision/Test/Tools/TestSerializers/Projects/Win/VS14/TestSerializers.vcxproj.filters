@@ -16,5 +16,8 @@
     <ClCompile Include="..\..\..\Source\ArrayNesting.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestQueringLineNumber.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
