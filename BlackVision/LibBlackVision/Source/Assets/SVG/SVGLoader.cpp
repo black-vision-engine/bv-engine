@@ -471,7 +471,7 @@ AssetConstPtr		SVGLoader::LoadAsset       ( const AssetDescConstPtr & desc )  co
     {
         auto mesh = std::make_shared< SVGAsset >( path );
 
-        BVXMLDeserializer deser( path, nullptr, nullptr );
+        BVXMLDeserializer deser( path, new DeserializeContext() );
 
         auto success = deser.EnterChild( "svg" );
 

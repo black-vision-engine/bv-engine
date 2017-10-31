@@ -9,6 +9,8 @@ namespace bv {
 class AssetDescsWithUIDs;
 DEFINE_PTR_TYPE( AssetDescsWithUIDs );    
 
+class BVDeserializeContext;
+
 namespace model
 {
     class OffsetTimeEvaluator;
@@ -18,8 +20,8 @@ namespace model
 class BVXMLDeserializer : public XMLDeserializer
 {
 public:
-    BVXMLDeserializer( std::istream & in, SizeType numBytes, model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
-    BVXMLDeserializer( std::string filename, model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
+    BVXMLDeserializer( std::istream & in, SizeType numBytes, DeserializeContext * context ); // model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets, model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
+    BVXMLDeserializer( std::string filename, DeserializeContext * context ); //, model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets, model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
 };
 
 }

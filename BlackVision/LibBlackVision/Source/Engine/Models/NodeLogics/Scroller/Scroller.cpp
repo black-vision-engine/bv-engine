@@ -603,7 +603,7 @@ void        Scroller::NotifyVisibilityChanged       ( model::BasicNode * n, bool
 {
     assert( m_scrollerNodePath != "" );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "NodeName", n->GetName() );
     ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
@@ -622,7 +622,7 @@ void        Scroller::NotifyNoMoreNodes ()
 {
     assert( m_scrollerNodePath != "" );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "cmd", "AllItemsOffScreen" );
     ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );
@@ -636,7 +636,7 @@ void        Scroller::NotifyLowBuffer         ()
 {
     assert( m_scrollerNodePath != "" );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
     ser.SetAttribute( "cmd", "LowBuffer" );
     ser.SetAttribute( "TriggerEvent", "ScrollerTrigger" );

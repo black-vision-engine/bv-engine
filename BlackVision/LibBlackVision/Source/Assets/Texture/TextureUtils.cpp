@@ -445,7 +445,7 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     if( Path::Exists( thumbPath ) )
     {
-        JsonDeserializeObject deser;
+        SimpleJsonDeserializeObject deser;
         deser.LoadFile( thumbPath.Str() );
 
         auto thumb = TextureAssetThumbnail::Create( deser );
@@ -465,7 +465,7 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     auto thumb = TextureAssetThumbnail::Create( compresed, h );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
 
     thumb->Serialize( ser );
 

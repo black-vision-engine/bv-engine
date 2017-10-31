@@ -110,7 +110,7 @@ inline void             ErrorResponseTemplate< std::string >     ( ISerializer &
 template< typename CommandType >
 inline void             SendSimpleResponse          ( CommandType commandType, int eventID, int socketID, bool success )
 {
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     PrepareResponseTemplate( ser, commandType, eventID, success );
 
     SendResponse( ser, socketID, eventID );
@@ -121,7 +121,7 @@ inline void             SendSimpleResponse          ( CommandType commandType, i
 template< typename CommandType >
 inline void             SendSimpleErrorResponse     ( CommandType commandType, int eventID, int socketID, const char * errorString )
 {
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     ErrorResponseTemplate( ser, commandType, eventID, errorString );
 
     SendResponse( ser, socketID, eventID );

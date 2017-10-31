@@ -25,6 +25,10 @@ namespace model
 
     class ITimeEvaluator;
     DEFINE_PTR_TYPE( ITimeEvaluator );
+
+    class PluginsManager;
+
+    class TimelineManager;
 }; // model
 
 class Exception;
@@ -42,15 +46,18 @@ private:
     std::string                         m_sceneName;
     std::string                         m_nodePath;
 
-    Exceptions                          m_warnings;
+    model::PluginsManager *             m_pluginsManager;
+    model::TimelineManager *            m_timelineManager;
 
 public:
-                                        BVDeserializeContext    ( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
+
+    BVDeserializeContext    ( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets, model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
     virtual                             ~BVDeserializeContext   ();
 
     model::OffsetTimeEvaluatorPtr       GetSceneTimeline        ();
     void                                SetSceneTimeline        ( const model::OffsetTimeEvaluatorPtr & timeline );
     model::ITimeEvaluatorPtr            GetTimeline             ( const std::string & name, const std::string & paramName );
+    model::TimelineManager *            GetTimelineManager      ();
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );
@@ -61,8 +68,10 @@ public:
     std::string &                       GetNodePath             ();
     void                                SetNodePath             ( const std::string& sceneName );
 
-    Exceptions                          GetWarnings             ();
-    void                                AddWarning              ( ExceptionPtr warning );
+public:
+
+    static BVDeserializeContext *       CreateContextFromEmptiness  (); // in future this should have some parameters instead of static singletons
+    static BVDeserializeContext *       CreateContextFromEmptiness  ( const model::OffsetTimeEvaluatorPtr & timeline ); // in future this should have some parameters instead of static singletons
 };
 
 } // bv

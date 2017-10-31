@@ -6,6 +6,7 @@
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/BV/XML/BVXMLDeserializer.h"
 #include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
@@ -40,7 +41,8 @@ PresetAccessor::PresetAccessor	( const Path & path )
 //
 void                        PresetAccessor::SavePreset ( const model::BasicNodePtr node, const Path & path ) const
 {    
-    BVXMLSerializer ser;
+    auto context = BVSerializeContext::CreateContextFromEmptiness();
+    BVXMLSerializer ser( context );
 
     auto bvSerCo = ser.GetBVSerializeContext();
     bvSerCo->sceneNameInTimeline = false;
@@ -79,7 +81,8 @@ model::BasicNodePtr         PresetAccessor::LoadPreset( const Path & path, const
 {
     if( Path::Exists( m_path / path ) )
     {
-        BVXMLDeserializer deser( ( m_path / path ).Str(), timeline, nullptr );
+        auto context = BVDeserializeContext::CreateContextFromEmptiness( timeline );
+        BVXMLDeserializer deser( ( m_path / path ).Str(), context );
 
         deser.EnterChild( "preset" );
 
@@ -138,7 +141,8 @@ ThumbnailConstPtr           PresetAccessor::GetPresetThumbnail  ( const Path & p
     if( !Path::Exists( thumbPath ) )
         return nullptr;
 
-    JsonDeserializeObject deser;
+    auto context = BVDeserializeContext::CreateContextFromEmptiness();
+    JsonDeserializeObject deser( context );
     deser.LoadFile( thumbPath.Str() );
 
     auto thumb = PresetThumbnail::Create( deser );

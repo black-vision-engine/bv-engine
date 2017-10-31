@@ -21,14 +21,14 @@ void        SimpleDeserializeTest   ( IDeserializer & deser );
 TEST( Serialization_Serializers_JSON, SerializeDeserialize )
 {
     {
-        JsonSerializeObject ser;
+        SimpleJsonSerializeObject ser;
 
         SimpleSerializeTest( ser );
         ser.Save( "SerializeDeserializeJSON.json" );
     }
 
     {
-        JsonDeserializeObject deser;
+        SimpleJsonDeserializeObject deser;
         deser.LoadFile( "SerializeDeserializeJSON.json" );
         SimpleDeserializeTest( deser );
     }

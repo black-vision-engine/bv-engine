@@ -1207,7 +1207,7 @@ void            BVProjectEditor::LoadAssetAsyncCallback     ( IEventPtr evt )
 //
 void            BVProjectEditor::LoadedAssetResponse        ( AssetAsyncLoadFinishedEventPtr loadedEvent, bool result )
 {
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     PrepareResponseTemplate( ser, LoadAssetEvent::Command::LoadAsset, loadedEvent->Request.RequestID, result );
 
     auto & request = loadedEvent->Request;

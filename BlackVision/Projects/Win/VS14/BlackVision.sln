@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Visual Studio 14
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
@@ -89,10 +89,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestLibCore", "..\..\..\Test\Tools\TestLibCore\Project\Win\VS14\TestLibCore.vcxproj", "{C606D2D6-A1A6-496E-AA7A-170F35C80011}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSerialization", "..\..\..\Test\Model\TestSerialization\Project\Win\VS14\TestSerialization.vcxproj", "{F224D6A9-AED3-4FF3-AE2A-C1864C6B7832}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibGTest", "..\..\..\Dep\3rdParty\gtest\Projects\Win\VS14\LibGTest.vcxproj", "{4FA0F828-8690-4FDC-963E-9BC7A8C55E13}"
+EndProject
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestOutputsInitialization", "..\..\..\Test\Engine\TestOutputInitialization\Project\Win\VS14\TestOutputsInitialization.vcxproj", "{C7402DE3-2985-48DC-BF1C-3B46D88949E2}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibGTest", "..\..\..\Dep\3rdParty\gtest\Projects\Win\VS14\LibGTest.vcxproj", "{4FA0F828-8690-4FDC-963E-9BC7A8C55E13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -35,7 +35,7 @@ void    GenericEventsHandlers::EventHandler             ( bv::IEventPtr evt )
         std::string & command = genericEvent->CommandName;
         auto request = genericEvent->Request;
 
-        JsonSerializeObject responseJSON;
+        SimpleJsonSerializeObject responseJSON;
 
         if( command == "SetWeightCenter" )
         {

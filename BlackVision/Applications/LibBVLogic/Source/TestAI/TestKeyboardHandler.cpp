@@ -308,7 +308,7 @@ namespace
 
 void SerializeAllEvents( const std::string& fileName )
 {
-    JsonSerializeObject*  ser = new JsonSerializeObject();
+    SimpleJsonSerializeObject * ser = new SimpleJsonSerializeObject();
 
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
     EngineStateEventPtr     engineStateEvent    = std::make_shared<EngineStateEvent>();

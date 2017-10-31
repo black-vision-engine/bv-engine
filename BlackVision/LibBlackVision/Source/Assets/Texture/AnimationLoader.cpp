@@ -180,7 +180,7 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
 
     if( Path::Exists( thumbFileName ) )
     {
-        JsonDeserializeObject deser;
+        SimpleJsonDeserializeObject deser;
         deser.LoadFile( thumbFileName.Str() );
 
         auto thumb = AnimationAssetThumbnail::Create( deser );
@@ -206,7 +206,7 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
 
     auto thumb = AnimationAssetThumbnail::Create( mcVec, h );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     thumb->Serialize( ser );
     ser.Save( thumbFileName.Str() );
 

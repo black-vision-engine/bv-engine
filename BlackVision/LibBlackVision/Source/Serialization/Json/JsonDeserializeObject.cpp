@@ -25,17 +25,17 @@ namespace bv
 // ******************************************************************************************
 //
 
-JsonDeserializeObject::JsonDeserializeObject()
-    : m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+JsonDeserializeObject::JsonDeserializeObject( DeserializeContext * context )
+    : m_context( context )
     , m_currentNode( nullptr )
 {}
 
 // ***********************
 //
-JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && serializer )
+JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && serializer, DeserializeContext * context )
     :   m_root( Json::nullValue )
     ,   m_currentNode( nullptr )
-    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+    ,   m_context( context )
 {
     auto & steal = serializer.StealJson();
     m_root.swap( steal );
@@ -48,7 +48,7 @@ JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && seriali
 JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
     :   m_root( initValue )
     ,   m_currentNode( nullptr )
-    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr, &model::PluginsManager::DefaultInstanceRef(), model::TimelineManager::GetInstance() ) ) )
 {
     OnRootInit();
 }

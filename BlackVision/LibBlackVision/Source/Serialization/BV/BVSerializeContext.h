@@ -7,16 +7,19 @@
 
 namespace bv {
 
+namespace model { class TimelineManager; }
 
 class BVSerializeContext : public SerializeContext
 {
 private:
 
     AssetDescsWithUIDsPtr               m_assets;
+    model::TimelineManager *            m_timelineManager;
 
 public:
-    BVSerializeContext()
+    BVSerializeContext( model::TimelineManager * timelineManager )
         : m_assets( std::make_shared< AssetDescsWithUIDs >() )
+        , m_timelineManager( timelineManager )
     {
         recursive = true;
         detailedInfo = true;
@@ -25,14 +28,20 @@ public:
         sceneNameInTimeline = true;
     }
 
-    bool            recursive;
-    bool            detailedInfo;
-    bool            pluginsInfo;
-    bool            extendedAssetData;
-    bool            sceneNameInTimeline;
+    bool                                recursive;
+    bool                                detailedInfo;
+    bool                                pluginsInfo;
+    bool                                extendedAssetData;
+    bool                                sceneNameInTimeline;
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );
+
+    model::TimelineManager *            GetTimelineManager      ();
+
+public:
+
+    static BVSerializeContext *         CreateContextFromEmptiness  (); // in future this should have some parameters instead of static singletons
 };
 
 }

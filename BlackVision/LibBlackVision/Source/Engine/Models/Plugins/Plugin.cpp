@@ -586,7 +586,9 @@ ser.EnterChild( "plugin" );
     {
         std::string timeline;
         if( serContext->sceneNameInTimeline )
-            timeline = TimelineManager::GetInstance()->GetTimelinePath( GetTimeline( this ) );
+        {
+            timeline = serContext->GetTimelineManager()->GetTimelinePath( GetTimeline( this ) );
+        }
         else
             timeline = GetTimeline( this )->GetName();
 

@@ -77,7 +77,7 @@ void                MeshLoader::Serialize       ( ISerializer & ser ) const
 
         ser.SetAttribute( "assetPath", m_assetDesc->GetPath() );
 
-        auto timeline = model::TimelineManager::GetInstance()->GetTimelinePath( m_timeEval );
+        auto timeline = context->GetTimelineManager()->GetTimelinePath( m_timeEval );
         ser.SetAttribute( "timelinePath", timeline );
     }
 
@@ -99,7 +99,7 @@ MeshLoaderPtr           MeshLoader::Create          ( const IDeserializer & dese
             model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
             if( !sceneTimeline )
             {
-                sceneTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
+                sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
             }
             auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
         

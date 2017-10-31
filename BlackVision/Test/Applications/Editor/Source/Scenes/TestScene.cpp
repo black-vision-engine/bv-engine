@@ -1395,7 +1395,8 @@ void					TestScene::InitCopyNodeTest	()
         }
 
 
-        BVXMLSerializer ser;
+        auto context = BVSerializeContext::CreateContextFromEmptiness();
+        BVXMLSerializer ser( context );
         srcScene->Serialize( ser );
         destScene->Serialize( ser );
         ser.Save( "test.xml" );
@@ -1428,7 +1429,8 @@ void					TestScene::InitCopyNodeTest	()
         EXPECT_TRUE( srcTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "Copy_Copy1_timeline_1" ) );
         EXPECT_TRUE( destTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, "Copy_Copy_Copy1_timeline_1" ) );
 
-        BVXMLSerializer ser;
+        auto context = BVSerializeContext::CreateContextFromEmptiness();
+        BVXMLSerializer ser( context );
         scene->Serialize( ser );
         ser.Save( "test.xml" );
     });
