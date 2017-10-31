@@ -19,7 +19,7 @@ namespace bv
 // ***********************
 //
 JsonSerializeObject::JsonSerializeObject( SerializeContext * context )
-    :   m_context( std::make_unique< SerializeContext >( *context ) ),
+    :   m_context( context ),
         m_root( Json::objectValue )
 {
     m_currentNode = &m_root;
