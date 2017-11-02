@@ -280,6 +280,7 @@ T       String2T        ( const std::string & s, const T & defaultVal )
 
 template bool           String2T        ( const std::string & s, const bool & defaultVal );
 template Float32        String2T        ( const std::string & s, const Float32 & defaultVal );
+template Float64        String2T        ( const std::string & s, const Float64 & defaultVal );
 template UInt32         String2T        ( const std::string & s, const UInt32 & defaultVal );
 template Int32          String2T        ( const std::string & s, const Int32 & defaultVal );
 //template UInt16         String2T        ( const std::string & s, const UInt16 & defaultVal );

@@ -166,3 +166,22 @@ TEST( LibCore_String2T, Float_TextSpaceFloat )
     EXPECT_EQ( floatDef, 0.0f );
 }
 
+
+// ========================================================================= //
+// Test only for float different then in String2Double
+// ========================================================================= //
+
+
+// ***********************
+// Convertes string containing floating point number greater then float range.
+// To big number is converted to infinity.
+TEST( LibCore_String2T, Float_NumberGreaterThenFloatRange )
+{
+    Expected< float > floatExp = SerializationHelper::String2T< float >( "3.02e100" );
+    float floatDef = SerializationHelper::String2T< float >( "3.02e100", 0.0f );
+
+    EXPECT_TRUE( floatExp.IsValid() );
+    EXPECT_TRUE( std::isinf( floatExp.GetVal() ) );
+    EXPECT_TRUE( std::isinf( floatDef ) );
+}
+
