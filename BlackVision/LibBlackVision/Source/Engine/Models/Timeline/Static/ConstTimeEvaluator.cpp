@@ -33,6 +33,7 @@ void                ConstTimeEvaluator::Serialize           ( ISerializer & sob 
     sob.EnterChild( "timeline" );
     sob.SetAttribute( "name", GetName() );
     sob.SetAttribute( "type", "const" );
+    sob.SetAttribute( "value", SerializationHelper::T2String< TimeType >( m_timeVal ) );
     sob.ExitChild();
 }
 
@@ -47,8 +48,10 @@ ConstTimeEvaluatorPtr    ConstTimeEvaluator::Create         ( const std::string 
 //
 ConstTimeEvaluatorPtr     ConstTimeEvaluator::Create         ( const IDeserializer & dob )
 {
-    assert( false );
-    dob; return nullptr;
+    auto name = dob.GetAttribute( "name" );
+    auto value = SerializationHelper::String2T< TimeType >( dob.GetAttribute( "value" ) );
+
+    return Create( name, value );
 }
 
 // *******************************
@@ -74,7 +77,7 @@ TimeType            ConstTimeEvaluator::GetLocalTime        () const
 
 // ***********************
 //
-const std::string&        ConstTimeEvaluator::GetType             ()
+const std::string&        ConstTimeEvaluator::GetType             () const
 {
     return Type();
 }

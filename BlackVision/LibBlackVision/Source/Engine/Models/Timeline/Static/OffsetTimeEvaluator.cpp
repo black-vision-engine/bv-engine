@@ -38,6 +38,7 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& ser 
     ser.SetAttribute( "name", GetName() );
     ser.SetAttribute( "type", "offset" );
     SerializationHelper::SerializeAttribute( ser, m_timeOffset, "offset" );
+    SerializationHelper::SerializeAttribute( ser, m_timeScale, "scale" );
 
     ser.EnterArray( "children" );
     for( auto child : m_children )
@@ -96,7 +97,7 @@ TimeType            OffsetTimeEvaluator::GetLocalTime       () const
 
 // ***********************
 //
-const std::string&        OffsetTimeEvaluator::GetType             ()
+const std::string&        OffsetTimeEvaluator::GetType             () const
 {
     return Type();
 }

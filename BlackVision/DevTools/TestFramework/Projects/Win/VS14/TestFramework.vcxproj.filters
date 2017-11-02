@@ -80,6 +80,12 @@
     <ClInclude Include="..\..\..\Source\Framework\TestMain.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\TimelineComparator.h">
+      <Filter>Utils\Comparators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\PrimitiveComparator.h">
+      <Filter>Utils\Comparators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">

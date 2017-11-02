@@ -611,7 +611,7 @@ void                                DefaultTimeline::PostUpdateEventStep    ()
 
 // ***********************
 //
-const std::string&        DefaultTimeline::GetType             ()
+const std::string&        DefaultTimeline::GetType             () const
 {
     return Type();
 }
