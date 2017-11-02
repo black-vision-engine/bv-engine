@@ -291,6 +291,8 @@ Expected< std::vector< T > >        Strings2T       ( std::vector< std::string >
     return ret;
 }
 
+// ***********************
+//
 template<> Expected< glm::vec2 >    String2T        ( const std::string & s ) 
 { 
     auto strings = SerializationHelper::_split( s, ',' );
