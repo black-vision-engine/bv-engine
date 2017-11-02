@@ -120,3 +120,49 @@ TEST( LibCore_String2T, Float_ConvertStrInifinity )
     EXPECT_TRUE( std::isinf( floatExp.GetVal() ) );
     EXPECT_TRUE( std::isinf( floatDef) );
 }
+
+// ***********************
+// Converts string containing float preceded by illigal text.
+TEST( LibCore_String2T, Float_TextBeforeFloat )
+{
+    Expected< float > floatExp = SerializationHelper::String2T< float >( "blabla3.14" );
+    float floatDef = SerializationHelper::String2T< float >( "blabla3.14", 0.0f );
+
+    EXPECT_FALSE( floatExp.IsValid() );
+    EXPECT_EQ( floatDef, 0.0f );
+}
+
+// ***********************
+// Converts string containing float followed by illigal text.
+TEST( LibCore_String2T, Float_TextAfterFloat )
+{
+    Expected< float > floatExp = SerializationHelper::String2T< float >( "3.14blabla" );
+    float floatDef = SerializationHelper::String2T< float >( "3.14blabla", 0.0f );
+
+    EXPECT_FALSE( floatExp.IsValid() );
+    EXPECT_EQ( floatDef, 0.0f );
+}
+
+// ***********************
+// Converts string containing infinity text followed by float.
+TEST( LibCore_String2T, Float_InfinityBeforeFloat )
+{
+    Expected< float > floatExp = SerializationHelper::String2T< float >( "Inf3.14" );
+    float floatDef = SerializationHelper::String2T< float >( "Inf3.14", 0.0f );
+
+    EXPECT_FALSE( floatExp.IsValid() );
+    EXPECT_EQ( floatDef, 0.0f );
+}
+
+// ***********************
+// Converts string containing float preceded by illigal text with space.
+// Whole string passed to function must be float. Function never ignores anything.
+TEST( LibCore_String2T, Float_TextSpaceFloat )
+{
+    Expected< float > floatExp = SerializationHelper::String2T< float >( "blabla 3.14" );
+    float floatDef = SerializationHelper::String2T< float >( "blabla 3.14", 0.0f );
+
+    EXPECT_FALSE( floatExp.IsValid() );
+    EXPECT_EQ( floatDef, 0.0f );
+}
+
