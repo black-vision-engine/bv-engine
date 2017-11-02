@@ -36,11 +36,16 @@ namespace std
 
 
 namespace bv {
+namespace SerializationHelper
+{
 
-namespace SerializationHelper {
 
-namespace {
+namespace
+{
 
+
+// ***********************
+//
 inline std::vector<std::string> &_split(const std::string &s, char delim, std::vector<std::string> &elems) 
 {
     std::stringstream ss(s);
@@ -51,6 +56,9 @@ inline std::vector<std::string> &_split(const std::string &s, char delim, std::v
     return elems;
 }
 
+
+// ***********************
+//
 inline std::vector<std::string> _split(const std::string &s, char delim) 
 {
     std::vector<std::string> elems;
@@ -60,9 +68,17 @@ inline std::vector<std::string> _split(const std::string &s, char delim)
 
 } // anonymous
 
+
+
 // *************************************
 // String2T-s
 // *************************************
+
+
+// ========================================================================= //
+// Floating points String2T
+// ========================================================================= //
+
 
 // *************************************
 //
@@ -94,6 +110,12 @@ template<> Expected< Float64 >      String2T        ( const std::string & s )
     return Expected< Float64 >();
 }
 
+// ========================================================================= //
+// Bool String2T
+// ========================================================================= //
+
+
+
 // *************************************
 //
 template<> Expected< bool >         String2T        ( const std::string & s ) 
@@ -105,77 +127,110 @@ template<> Expected< bool >         String2T        ( const std::string & s )
     return Expected< bool >(); 
 }
 
-// *************************************
+
+// ========================================================================= //
+// Integer String2T
+// ========================================================================= //
+
+// ***********************
 //
-template<> Expected< UInt32 >       String2T        ( const std::string & s ) 
-{ 
+template< typename IntType, typename std::enable_if< std::is_signed< IntType >::value, bool >::type = true >
+Int64                               CharToInt64     ( const char * str, char ** end )
+{
+    return strtol( str, end, 10 );
+}
+
+// ***********************
+//
+template< typename IntType, typename std::enable_if< std::is_unsigned< IntType >::value, bool >::type = true >
+UInt64                              CharToInt64     ( const char * str, char ** end )
+{
+    return strtoul( str, end, 10 );
+}
+
+
+// ***********************
+//
+template< typename IntType>
+Expected< IntType >                 String2IntType  ( const std::string & s )
+{
     char * end = nullptr;
-    auto ret = strtoul( s.c_str(), &end, 10 );
+    auto ret = CharToInt64< IntType >( s.c_str(), &end );
 
     if( !*end && end != s.c_str() )
     {
-        if ( ret < std::numeric_limits< UInt32 >::lowest() )
-            return std::numeric_limits< UInt32 >::lowest();
+        if( ret < std::numeric_limits< IntType >::lowest() )
+            return Expected< IntType >();
 
-        if ( ret > std::numeric_limits< UInt32 >::max() ) 
-            return std::numeric_limits< UInt32 >::max();
+        if( ret > std::numeric_limits< IntType >::max() )
+            return Expected< IntType >();
 
-        return ( UInt32 )ret;
+        return static_cast< IntType >( ret );
     }
-    
-    return Expected< UInt32 >();
+
+    return Expected< IntType >();
 }
 
 // *************************************
 //
-template<> Expected< Int32 >        String2T        ( const std::string & s ) 
-{ 
-    char * end = nullptr;
-    auto ret = strtol( s.c_str(), &end, 10 );
-
-    if( !*end && end != s.c_str() )
-    {
-        if ( ret < std::numeric_limits< Int32 >::lowest() )
-            return std::numeric_limits< Int32 >::lowest();
-
-        if ( ret > std::numeric_limits< Int32 >::max() ) 
-            return std::numeric_limits< Int32 >::max();
-
-        return ( Int32 )ret;
-    }
-
-    return Expected< Int32 >();
+template<> Expected< UInt64 >       String2T        ( const std::string & s )
+{
+    return String2IntType< UInt64 >( s );
 }
 
 // *************************************
 //
-template<> Expected< UInt64 >       String2T        ( const std::string & s ) 
-{ 
-    char * end = nullptr;
-    auto ret = strtoul( s.c_str(), &end, 10 );
-
-    if( !*end && end != s.c_str() )
-    {
-        return ret;
-    }
-    
-    return Expected< UInt64 >();
+template<> Expected< Int64 >        String2T        ( const std::string & s )
+{
+    return String2IntType< Int64 >( s );
 }
 
 // *************************************
 //
-template<> Expected< Int64 >        String2T        ( const std::string & s ) 
-{ 
-    char * end = nullptr;
-    auto ret = strtol( s.c_str(), &end, 10 );
-
-    if( !*end && end != s.c_str() )
-    {
-        return ret;
-    }
-
-    return Expected< Int64 >();
+template<> Expected< UInt32 >       String2T        ( const std::string & s )
+{
+    return String2IntType< UInt32 >( s );
 }
+
+// *************************************
+//
+template<> Expected< Int32 >        String2T        ( const std::string & s )
+{
+    return String2IntType< Int32 >( s );
+}
+
+// *************************************
+//
+template<> Expected< UInt16 >       String2T        ( const std::string & s )
+{
+    return String2IntType< UInt16 >( s );
+}
+
+// *************************************
+//
+template<> Expected< Int16 >        String2T        ( const std::string & s )
+{
+    return String2IntType< Int16 >( s );
+}
+
+// *************************************
+//
+template<> Expected< UInt8 >       String2T        ( const std::string & s )
+{
+    return String2IntType< UInt8 >( s );
+}
+
+// *************************************
+//
+template<> Expected< Int8 >        String2T        ( const std::string & s )
+{
+    return String2IntType< Int8 >( s );
+}
+
+// ========================================================================= //
+// Complex types
+// ========================================================================= //
+
 
 // *************************************
 //
@@ -281,9 +336,14 @@ T       String2T        ( const std::string & s, const T & defaultVal )
 template bool           String2T        ( const std::string & s, const bool & defaultVal );
 template Float32        String2T        ( const std::string & s, const Float32 & defaultVal );
 template Float64        String2T        ( const std::string & s, const Float64 & defaultVal );
+template UInt64         String2T        ( const std::string & s, const UInt64 & defaultVal );
+template Int64          String2T        ( const std::string & s, const Int64 & defaultVal );
 template UInt32         String2T        ( const std::string & s, const UInt32 & defaultVal );
 template Int32          String2T        ( const std::string & s, const Int32 & defaultVal );
-//template UInt16         String2T        ( const std::string & s, const UInt16 & defaultVal );
+template UInt16         String2T        ( const std::string & s, const UInt16 & defaultVal );
+template Int16          String2T        ( const std::string & s, const Int16 & defaultVal );
+template UInt8          String2T        ( const std::string & s, const UInt8 & defaultVal );
+template Int8           String2T        ( const std::string & s, const Int8 & defaultVal );
 template glm::vec2      String2T        ( const std::string & s, const glm::vec2 & defaultVal );
 template glm::vec3      String2T        ( const std::string & s, const glm::vec3 & defaultVal );
 template glm::vec4      String2T        ( const std::string & s, const glm::vec4 & defaultVal );

@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Conversions\String2Double.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2Float.cpp" />
+    <ClCompile Include="..\..\..\Source\Conversions\String2Integer.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2TBool.cpp" />
     <ClCompile Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.cpp" />
     <ClCompile Include="..\..\..\Source\ExceptionsTest\TestExceptions.cpp" />
