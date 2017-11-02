@@ -110,7 +110,6 @@ TYPED_TEST( LibCore_String2T_Integer, ConvertOverflowing )
     EXPECT_EQ( intDef, 5 );
 }
 
-
 // ***********************
 // Try to convert underflowing number. Conversion should fail. No implicit truncation should be made.
 TYPED_TEST( LibCore_String2T_Integer, ConvertUnderflowing )
@@ -122,3 +121,35 @@ TYPED_TEST( LibCore_String2T_Integer, ConvertUnderflowing )
     EXPECT_EQ( intDef, 5 );
 }
 
+// ***********************
+// Try to convert string with text before number.
+TYPED_TEST( LibCore_String2T_Integer, TextBeforeNumber )
+{
+    Expected< TypeParam > intExp = SerializationHelper::String2T< TypeParam >( "bla13" );
+    TypeParam intDef = SerializationHelper::String2T< TypeParam >( "bla13", 5 );
+
+    EXPECT_FALSE( intExp.IsValid() );
+    EXPECT_EQ( intDef, 5 );
+}
+
+// ***********************
+// Try to convert string with text after number.
+TYPED_TEST( LibCore_String2T_Integer, TextAfterNumber )
+{
+    Expected< TypeParam > intExp = SerializationHelper::String2T< TypeParam >( "13bla" );
+    TypeParam intDef = SerializationHelper::String2T< TypeParam >( "13bla", 5 );
+
+    EXPECT_FALSE( intExp.IsValid() );
+    EXPECT_EQ( intDef, 5 );
+}
+
+// ***********************
+// Try to convert string with text in the middle of number.
+TYPED_TEST( LibCore_String2T_Integer, TextInTheMiddleOfNumber )
+{
+    Expected< TypeParam > intExp = SerializationHelper::String2T< TypeParam >( "13bla234" );
+    TypeParam intDef = SerializationHelper::String2T< TypeParam >( "13bla234", 5 );
+
+    EXPECT_FALSE( intExp.IsValid() );
+    EXPECT_EQ( intDef, 5 );
+}
