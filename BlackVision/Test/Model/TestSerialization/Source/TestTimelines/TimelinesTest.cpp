@@ -4,21 +4,10 @@
 
 #include "Utils/Comparators/TimelineComparator.h"
 
-#include "Utils/Serialization/Serialize.h"
+#include "Utils/Serialization/SerializeTimeline.h"
 
 using namespace bv;
 using namespace model;
-
-ITimeEvaluatorPtr DeserializeTimeline( const std::string & path )
-{
-    BVXMLDeserializer deser( path, BVDeserializeContext::CreateContextFromEmptiness() );
-
-    deser.EnterChild( "timeline" );
-    auto object = model::TimeEvaluatorBase< model::ITimeEvaluator >::Create( deser );
-    deser.ExitChild();
-
-    return object;
-}
 
 TEST( Serialization_Timelines, SerDeser_TimelineHelperConst )
 {

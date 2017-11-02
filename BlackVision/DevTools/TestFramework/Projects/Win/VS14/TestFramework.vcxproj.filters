@@ -86,6 +86,12 @@
     <ClInclude Include="..\..\..\Source\Utils\Comparators\PrimitiveComparator.h">
       <Filter>Utils\Comparators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\TimelinesAccessors.h">
+      <Filter>Utils\Accessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeTimeline.h">
+      <Filter>Utils\Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">

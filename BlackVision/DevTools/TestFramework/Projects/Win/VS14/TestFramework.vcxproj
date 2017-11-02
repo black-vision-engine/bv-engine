@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeInterpolatorAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\EvaluatorsAccessors.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\TimelinesAccessors.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\NodeComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\PrimitiveComparator.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeTimeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />

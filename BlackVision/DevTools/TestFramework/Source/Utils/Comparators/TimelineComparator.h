@@ -2,12 +2,13 @@
 
 #include "Engine/Models/Timeline/Static/ConstTimeEvaluator.h"
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
-#include "Engine/Models/Timeline/GlobalTimeline.h"
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
-#include "PrimitiveComparator.h"
+#include "Utils/Accessors/TimelinesAccessors.h"
 
-namespace bv { namespace model {
+namespace bv { 
+
+namespace model {
 
 class TimelineComparator
 {
@@ -20,43 +21,10 @@ public:
 // Implementation
 // ========================================================================= //
 
-class TEST_ACCESSOR( ConstTimeEvaluator )
-{
-public:
-    static bool         Compare( const ConstTimeEvaluator & expected, const ConstTimeEvaluator & actual )
-    {
-        if( expected.m_name != actual.m_name )
-            return false;
-
-        if( expected.m_timeVal != actual.m_timeVal )
-            return false;
-
-        return true;
-    };
-};
-
 bool                    CompareConstTimelines( const ConstTimeEvaluator & expected, const ConstTimeEvaluator & actual )
 {
     return TEST_ACCESSOR( ConstTimeEvaluator )::Compare( expected, actual );
 }
-
-class TEST_ACCESSOR( OffsetTimeEvaluator )
-{
-public:
-    static bool         Compare( const OffsetTimeEvaluator & expected, const OffsetTimeEvaluator & actual )
-    {
-        if( expected.m_name != actual.m_name )
-            return false;
-
-        if( ! CompareFloats( expected.m_timeOffset, actual.m_timeOffset ) )
-            return false;
-
-        if( ! CompareFloats( expected.m_timeScale, actual.m_timeScale ) )
-            return false;
-
-        return true;
-    }
-};
 
 bool                    CompareOffsetTimelines( const OffsetTimeEvaluator & expected, const OffsetTimeEvaluator & actual )
 {
@@ -92,7 +60,7 @@ bool         TimelineComparator::CompareTimelines( const ITimeEvaluator & expect
     else if( expected.GetType() == DefaultTimeline::Type() )
         return CompareDefaultTimelines( static_cast< const DefaultTimeline &>( expected ), static_cast< const DefaultTimeline &>( actual ) );
 
-    assert( false );
+    assert( false && "Timeline of unpredicted type encountered." );
     return false;
 }
 
