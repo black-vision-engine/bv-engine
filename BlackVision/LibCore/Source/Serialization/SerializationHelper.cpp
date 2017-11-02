@@ -73,12 +73,6 @@ template<> Expected< Float32 >      String2T        ( const std::string & s )
 
     if( !*end && end != s.c_str() )
     {
-        if ( ret < std::numeric_limits< Float32 >::lowest() )
-            return std::numeric_limits< Float32 >::lowest();
-
-        if ( ret > std::numeric_limits< Float32 >::max() ) 
-            return std::numeric_limits< Float32 >::max();
-
         return ( Float32 )ret;
     }
 
