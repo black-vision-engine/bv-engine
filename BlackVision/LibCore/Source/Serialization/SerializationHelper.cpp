@@ -154,7 +154,8 @@ template< typename IntType, typename std::enable_if< std::is_signed< IntType >::
 bool                                 IsOverflow      ( Int64 value, const char * )
 {
     auto max = std::numeric_limits< Int64 >::max();
-    return max == value;
+    auto min = std::numeric_limits< Int64 >::min();
+    return ( max == value ) || ( min == value );
 }
 
 // ***********************
