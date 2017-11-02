@@ -1238,12 +1238,6 @@ class NativeArray {
 
 
 
-// ***********************
-// WARNING: Change to gtest (nieznanysprawiciel)
-inline std::string     MangleName      ( const char* name );
-
-
-
 // Helper macro for defining tests.
 #define GTEST_TEST_(test_case_name, test_name, parent_class, parent_id)\
 class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
@@ -1259,7 +1253,7 @@ class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
 ::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
   ::test_info_ =\
     ::testing::internal::MakeAndRegisterTestInfo(\
-        MangleName( #test_case_name ).c_str(), MangleName( #test_name ).c_str(), NULL, NULL, \
+        #test_case_name, #test_name, NULL, NULL, \
         ::testing::internal::CodeLocation(__FILE__, __LINE__), \
         (parent_id), \
         parent_class::SetUpTestCase, \
@@ -1270,19 +1264,6 @@ void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
 
 
 
-// ***********************
-// WARNING: Change to gtest (nieznanysprawiciel)
-
-#include <algorithm>
-
-// ***********************
-//
-inline std::string     MangleName      ( const char* name )
-{
-    std::string mangledName( name );
-    std::replace( mangledName.begin(), mangledName.end(), '_', '.' );
-    return mangledName;
-}
 
 #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_INTERNAL_H_
 

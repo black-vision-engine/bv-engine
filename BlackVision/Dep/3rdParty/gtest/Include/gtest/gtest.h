@@ -54,6 +54,7 @@
 #include <limits>
 #include <ostream>
 #include <vector>
+#include <algorithm>
 
 #include "gtest/internal/gtest-internal.h"
 #include "gtest/internal/gtest-string.h"
@@ -81,6 +82,18 @@
 // heuristically.
 
 namespace testing {
+
+
+
+// ***********************
+//
+inline std::string     MangleName      ( const std::string & name )
+{
+    std::string mangledName( name );
+    std::replace( mangledName.begin(), mangledName.end(), '_', '.' );
+    return mangledName;
+}
+
 
 // Declares the flags.
 
