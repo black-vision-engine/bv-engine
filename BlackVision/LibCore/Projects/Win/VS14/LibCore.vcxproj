@@ -47,6 +47,7 @@
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />
     <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\FilePosition.h" />
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="..\..\..\Source\Memory\AVFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp" />

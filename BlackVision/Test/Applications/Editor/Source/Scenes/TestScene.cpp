@@ -28,7 +28,7 @@
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 
 
-#include "UnitTest++.h"
+#include "gtest/gtest.h"
 
 
 namespace bv {
@@ -152,7 +152,7 @@ void                    TestScene::InitTestModelSceneEditor ()
             SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root, child );
         }
-        CHECK( root->GetNumChildren() == 3 );
+        EXPECT_TRUE( root->GetNumChildren() == 3 );
 
         for( unsigned int i = 0; i < root->GetNumChildren(); ++i )
         {
@@ -161,7 +161,7 @@ void                    TestScene::InitTestModelSceneEditor ()
             SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root->GetChild( "child0" ), child );
         }
-        CHECK( root->GetChild( "child0" )->GetNumChildren() == 3 );
+        EXPECT_TRUE( root->GetChild( "child0" )->GetNumChildren() == 3 );
     });
 
     m_testSteps.push_back([&] 
@@ -180,7 +180,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( node3->GetName() == "child2" );
         success &= ( node4 == nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -197,16 +197,16 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto node8 = editor->GetNode( SCENE_NAME, "/#0/#0/#1" );
         auto node9 = editor->GetNode( SCENE_NAME, "/#1/child0/#2" );
 
-        CHECK( node0->GetName() == "child01" );
-        CHECK( node1 == nullptr );
-        CHECK( node2->GetName() == "child0" );
-        CHECK( node3->GetName() == "child2" );
-        CHECK( node4 == nullptr );
-        CHECK( node5->GetName() == "child01" );
-        CHECK( node6->GetName() == "child02" );
-        CHECK( node6 == node7 );
-        CHECK( node0 == node8 );
-        CHECK( node9 == nullptr );
+        EXPECT_TRUE( node0->GetName() == "child01" );
+        EXPECT_TRUE( node1 == nullptr );
+        EXPECT_TRUE( node2->GetName() == "child0" );
+        EXPECT_TRUE( node3->GetName() == "child2" );
+        EXPECT_TRUE( node4 == nullptr );
+        EXPECT_TRUE( node5->GetName() == "child01" );
+        EXPECT_TRUE( node6->GetName() == "child02" );
+        EXPECT_TRUE( node6 == node7 );
+        EXPECT_TRUE( node0 == node8 );
+        EXPECT_TRUE( node9 == nullptr );
     });
 
     m_testSteps.push_back([&] 
@@ -223,7 +223,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         editor->SetNodeEffect( child, newEffect );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -236,11 +236,11 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto child = root->GetChild( 0 );
 
         auto nodeEffect = editor->GetNodeEffect( child );
-        REQUIRE CHECK( nodeEffect != nullptr );
+        ASSERT_TRUE( nodeEffect != nullptr );
 
         success = model::SetParameter( nodeEffect->GetParameter( "alpha" ), 0.f, 0.5f );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -259,7 +259,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( root->GetNumPlugins() == 1 );
         success &= ( root->GetPlugin( "transform" ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -269,7 +269,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success = editor->DetachScene( EMPTY_SCENE );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     
@@ -280,7 +280,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
          success = editor->AttachScene( EMPTY_SCENE, 0 );
 
-         CHECK( success );
+         EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -297,7 +297,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( editor->GetModelScene( EMPTY_SCENE ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -315,7 +315,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto root = model::BasicNode::Create( "root", nullptr );
         success &= editor->AddChildNode( scene, nullptr, root );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -335,7 +335,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( "Copy_" + SCENE_NAME ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -357,7 +357,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         editor->RenameScene( "Copy_Copy_" + SCENE_NAME, "Copy1_" + SCENE_NAME );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -377,7 +377,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -397,7 +397,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
     
     m_testSteps.push_back([&] 
@@ -409,7 +409,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( root->GetName() == "root" );
         success &= ( root == std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) ) );
         
-        CHECK( success );
+        EXPECT_TRUE( success );
         
         auto child = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "newChild", 0.2f, 0.2f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
         auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
@@ -468,7 +468,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( root->GetChild( 0 )->GetName() == "newChild" );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -487,7 +487,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !child0->GetChild( "child00" ) );
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child0/child00" ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
     
     m_testSteps.push_back([&] 
@@ -505,7 +505,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !child0->GetChild( "child02" ) );
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child0/child02" ) );
     
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
     
     m_testSteps.push_back([&] 
@@ -523,7 +523,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !child0->GetChild( "child01" ) );
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child0/child01" ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -536,7 +536,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( editor->DetachChildNode( SCENE_NAME, "/root/child0" ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -551,7 +551,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( root->GetChild( "child0" ) != nullptr );
         success &= ( !editor->AttachChildNode( scene, root ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -571,7 +571,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !editor->AttachChildNode( scene, root ) );
         success &= ( !editor->DeleteChildNode( SCENE_NAME, "/root/child0" ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -589,7 +589,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !editor->AttachChildNode( scene, root ) );
         success &= ( !editor->DeleteChildNode( SCENE_NAME, "/root/child1" ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -608,7 +608,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( !editor->DetachChildNode( SCENE_NAME, "/root/child1" ) );
         success &= ( !editor->DeleteChildNode( SCENE_NAME, "/root/child1" ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     /*m_testSteps.push_back([&] 
@@ -689,7 +689,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto root = scene->GetRootNode();
         success &= ( root == newRoot );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -707,7 +707,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         editor->AddChildNode( scene, root, newChild );
         success &= ( root->GetChild( "newChild" ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -746,7 +746,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -760,7 +760,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         success &= ( !editor->GetModelScene( SCENE_NAME1 ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -773,7 +773,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) != nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -786,7 +786,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) == nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) == nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -799,7 +799,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         success &= ( editor->GetModelScene( SCENE_NAME ) != nullptr );
         success &= ( editor->GetModelScene( SCENE_NAME1 ) == nullptr );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
 }
@@ -815,31 +815,31 @@ void					TestScene::InitTimelinesTest		()
 
         editor->AddTimeline( SCENE_NAME, TIMELINE_NAME, TimelineType::TT_DEFAULT );
 
-        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
-        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
 
         auto root = scene->GetRootNode();
-        CHECK( root->GetName() == "root" );
-        CHECK( root->GetPlugin( "transform" ) != nullptr );
+        EXPECT_TRUE( root->GetName() == "root" );
+        EXPECT_TRUE( root->GetPlugin( "transform" ) != nullptr );
 
         auto defaultTimeline = editor->GetSceneDefaultTimeline( scene );
         auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
         for( auto param : root->GetPlugin( "transform" )->GetParameters() )
         {
-            CHECK( param->GetTimeEvaluator() == defaultTimeline );
+            EXPECT_TRUE( param->GetTimeEvaluator() == defaultTimeline );
         }
 
-        CHECK( root->GetPlugin( "transform" )->GetPluginParamValModel()->GetTimeEvaluator() == defaultTimeline );
+        EXPECT_TRUE( root->GetPlugin( "transform" )->GetPluginParamValModel()->GetTimeEvaluator() == defaultTimeline );
         
-        CHECK( !editor->DeleteTimeline( defaultTimelinePath ) );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( !editor->DeleteTimeline( defaultTimelinePath ) );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        CHECK( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        CHECK( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
-        CHECK( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
+        EXPECT_TRUE( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
     });
 
     m_testSteps.push_back([&] 
@@ -848,19 +848,19 @@ void					TestScene::InitTimelinesTest		()
 
         editor->RenameTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ), TIMELINE_NAME1 );
 
-        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
-        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) == nullptr );
-        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) == nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) ) != nullptr );
     });
 
     m_testSteps.push_back([&] 
     {
         auto editor = m_project->GetProjectEditor();
 
-        CHECK( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" ) ) != nullptr );
         bool success = editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME1 ) );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back([&] 
@@ -894,15 +894,15 @@ void					TestScene::InitTimelinesTest		()
 
         auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
 
-        CHECK( !editor->DeleteTimeline( defaultTimelinePath ) );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( !editor->DeleteTimeline( defaultTimelinePath ) );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        CHECK( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
-        CHECK( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
-        CHECK( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
+        EXPECT_TRUE( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
         
         timeline->Stop();
     });
@@ -916,7 +916,7 @@ void					TestScene::InitTimelinesTest		()
         auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 10000.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
         editor->AddTimeline( scene->GetTimeline(), timeline );
 
-        CHECK( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
+        EXPECT_TRUE( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
 
         for( auto param : child->GetParameters() )
         {
@@ -952,17 +952,17 @@ void					TestScene::InitTimelinesTest		()
         auto timelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
         
-        CHECK( !editor->DeleteTimeline( timelinePath ) );
-        CHECK( editor->GetTimeline( timelinePath ) != nullptr );
+        EXPECT_TRUE( !editor->DeleteTimeline( timelinePath ) );
+        EXPECT_TRUE( editor->GetTimeline( timelinePath ) != nullptr );
 
-        CHECK( editor->ForceDeleteTimeline( timelinePath ) );
-        CHECK( editor->GetTimeline( timelinePath ) == nullptr );
-        CHECK( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        EXPECT_TRUE( editor->ForceDeleteTimeline( timelinePath ) );
+        EXPECT_TRUE( editor->GetTimeline( timelinePath ) == nullptr );
+        EXPECT_TRUE( editor->GetTimeline( defaultTimelinePath ) != nullptr );
 
         auto child = scene->GetRootNode()->GetChild( ANIM_NODE );
         for( auto param : child->GetParameters() )
         {
-            CHECK( param->GetTimeEvaluator() == timeline );
+            EXPECT_TRUE( param->GetTimeEvaluator() == timeline );
         }
 
         timeline->SetTimeAndPlay( 0.0f );
@@ -974,7 +974,7 @@ void					TestScene::InitTimelinesTest		()
         auto scene = editor->GetModelScene( SCENE_NAME );
         auto root = scene->GetRootNode();
 
-        CHECK( editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) ) );
     });
 
     m_testSteps.push_back([&] 
@@ -996,7 +996,7 @@ void					TestScene::InitTimelinesTest		()
     {
         auto editor = m_project->GetProjectEditor();
 
-        CHECK( !editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) );
+        EXPECT_TRUE( !editor->DeleteTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) );
     });
 
     m_testSteps.push_back([&] 
@@ -1012,12 +1012,12 @@ void					TestScene::InitTimelinesTest		()
         editor->AddTimeline( scene->GetTimeline(), timeline );
         timeline->Play();
         
-        CHECK( !editor->DeleteTimeline( oldTimeline ) );
+        EXPECT_TRUE( !editor->DeleteTimeline( oldTimeline ) );
         
         editor->ForceDeleteTimeline( oldTimeline, newTimeline );
 
-        CHECK( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
-        CHECK( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
     });
 
     m_testSteps.push_back([&] 
@@ -1047,24 +1047,24 @@ void					TestScene::InitTimelinesTest		()
         auto child = scene->GetRootNode()->GetChild( TEX_NODE );
         auto model = std::static_pointer_cast< model::DefaultPluginParamValModel >( child->GetPlugin( "texture" )->GetPluginParamValModel() );
         
-        CHECK( model->GetTimeEvaluator()->GetName() == TIMELINE_NAME1 );
-        CHECK( model->GetTimeEvaluator() == m_timelineManager->GetTimeline( oldTimeline ) );
+        EXPECT_TRUE( model->GetTimeEvaluator()->GetName() == TIMELINE_NAME1 );
+        EXPECT_TRUE( model->GetTimeEvaluator() == m_timelineManager->GetTimeline( oldTimeline ) );
 
 
-        CHECK(!editor->DeleteTimeline( oldTimeline ) );
+        EXPECT_TRUE(!editor->DeleteTimeline( oldTimeline ) );
         
-        CHECK( editor->ForceDeleteTimeline( oldTimeline, newTimeline ) );
+        EXPECT_TRUE( editor->ForceDeleteTimeline( oldTimeline, newTimeline ) );
 
-        CHECK( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
-        CHECK( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
 
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 0.f, 1.f );
         SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 2.f, 0.f );
-        CHECK( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
+        EXPECT_TRUE( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
         
         // Note: ForceDeleteTimeline should change default timeline in ParamValModel too.
-        CHECK( model->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
-        CHECK( model->GetTimeEvaluator() == m_timelineManager->GetTimeline( newTimeline ) );
+        EXPECT_TRUE( model->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
+        EXPECT_TRUE( model->GetTimeEvaluator() == m_timelineManager->GetTimeline( newTimeline ) );
     });
 
     Wait( 2 );
@@ -1077,8 +1077,8 @@ void					TestScene::InitTimelinesTest		()
         auto timeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         editor->SetTimelineDuration( timeline, 3.f );
         
-        CHECK( m_timelineManager->GetTimeline( timeline ) != nullptr );
-        CHECK( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
     });
 
     Wait( 3 );
@@ -1091,9 +1091,9 @@ void					TestScene::InitTimelinesTest		()
         auto timeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         editor->SetTimelineWrapPostBehavior( timeline, TimelineWrapMethod::TWM_CLAMP );
         
-        CHECK( m_timelineManager->GetTimeline( timeline ) != nullptr );
-        CHECK( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
-        CHECK( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
     });
 
     m_testSteps.push_back([&] 
@@ -1104,9 +1104,9 @@ void					TestScene::InitTimelinesTest		()
         auto timeline = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
         editor->SetTimelineDuration( timeline, 0.5f );
         
-        CHECK( m_timelineManager->GetTimeline( timeline ) != nullptr );
-        CHECK( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
-        CHECK( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline ) != nullptr );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
+        EXPECT_TRUE( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
     });
 
     m_testSteps.push_back([&] 
@@ -1133,7 +1133,7 @@ void					TestScene::InitAssetsTest		()
         SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
         auto root = scene->GetRootNode();
-        CHECK( editor->AddChildNode( scene, root, tex ) );
+        EXPECT_TRUE( editor->AddChildNode( scene, root, tex ) );
     };
 
     auto add1 = [&] 
@@ -1144,7 +1144,7 @@ void					TestScene::InitAssetsTest		()
         SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 
         auto root = scene->GetRootNode();
-        CHECK( editor->AddChildNode( scene, root, tex ) );
+        EXPECT_TRUE( editor->AddChildNode( scene, root, tex ) );
     };
 
     m_testSteps.push_back( add0 );
@@ -1157,7 +1157,7 @@ void					TestScene::InitAssetsTest		()
         auto child = root->GetChild( "tex0" );
 
         auto desc = TextureAssetDesc::Create( "sequences/" + ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
-        CHECK( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
+        EXPECT_TRUE( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
     });
 
     m_testSteps.push_back( [&]
@@ -1169,7 +1169,7 @@ void					TestScene::InitAssetsTest		()
         auto desc = TextureAssetDesc::Create( "sequences/" + ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f1.bmp", false );
         auto prevDesc = child->GetPlugin( "texture" )->GetPixelShaderChannel()->GetTexturesData()->GetTextures()[ 0 ];
         
-        CHECK( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
+        EXPECT_TRUE( editor->LoadAsset( child->GetPlugin( "texture" ), desc ) );
     });
 
     m_testSteps.push_back( [&]
@@ -1190,7 +1190,7 @@ void					TestScene::InitAssetsTest		()
         auto anim = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_ANIMATION", "animation", editor->GetSceneDefaultTimeline( scene ) );
         
         UInt32 idx = 2;
-        CHECK( editor->AddPlugin( child, anim, idx ) );
+        EXPECT_TRUE( editor->AddPlugin( child, anim, idx ) );
     });
 
     m_testSteps.push_back( [&]
@@ -1199,7 +1199,7 @@ void					TestScene::InitAssetsTest		()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
         auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
-        CHECK( editor->LoadAsset( child->GetPlugin( "animation" ), desc ) );
+        EXPECT_TRUE( editor->LoadAsset( child->GetPlugin( "animation" ), desc ) );
 
         auto time = editor->GetModelScene( SCENE_NAME )->GetTimeline()->GetLocalTime();
         model::SetParameter( child->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
@@ -1226,13 +1226,13 @@ void					TestScene::InitAssetsTest		()
         UInt32 idx = 2;
 
         auto color = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_COLOR", "color", editor->GetSceneDefaultTimeline( scene ) );
-        CHECK( editor->AddPlugin( child, color, idx ) );
+        EXPECT_TRUE( editor->AddPlugin( child, color, idx ) );
         SetParameter( child->GetPlugin( "color" )->GetParameter( "color" ), 0.0, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
         idx = 3;
 
         auto text = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_TEXT", "text", editor->GetSceneDefaultTimeline( scene ) );
-        CHECK( editor->AddPlugin( child, text, idx ) );
+        EXPECT_TRUE( editor->AddPlugin( child, text, idx ) );
         SetParameter( child->GetPlugin( "text" )->GetParameter( "text" ), 0.0, std::wstring( L"tekst" ) );
     });
 
@@ -1242,7 +1242,7 @@ void					TestScene::InitAssetsTest		()
         auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
         auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
         auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 30, 0, 0, 0, true );
-        CHECK( editor->LoadAsset( child->GetPlugin( "text" ), desc ) );
+        EXPECT_TRUE( editor->LoadAsset( child->GetPlugin( "text" ), desc ) );
     });
 }
 
@@ -1289,7 +1289,7 @@ void					TestScene::InitCopyNodeTest	()
         auto destScene = editor->GetModelScene( SCENE_NAME1 );
         bool success = true;
 
-        CHECK( editor->AddNodeCopy( SCENE_NAME1, "", SCENE_NAME, srcScene->GetRootNode()->GetName() ) != nullptr );
+        EXPECT_TRUE( editor->AddNodeCopy( SCENE_NAME1, "", SCENE_NAME, srcScene->GetRootNode()->GetName() ) != nullptr );
 
         auto destTimeline = editor->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, PrefixHelper::PrefixCopy( 0 ) + TIMELINE_NAME ) );
         auto destTimeline1 = editor->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, PrefixHelper::PrefixCopy( 0 ) + TIMELINE_NAME1 ) );
@@ -1298,109 +1298,110 @@ void					TestScene::InitCopyNodeTest	()
         auto destRoot = destScene->GetRootNode();
         SetParameterTranslation( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
-        CHECK( srcRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( srcScene ) );
-        CHECK( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator()->GetName() == "Copy_default" );
+        EXPECT_TRUE( srcRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( srcScene ) );
+        EXPECT_TRUE( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator()->GetName() == "Copy_default" );
 
         auto destTimelines = destScene->GetTimeline()->GetChildren();
 
         std::string timelines0 [ 4 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1" };
         std::vector< std::string > vtimelines0( timelines0, timelines0 + 4 );
-        CHECK( destTimelines.size() == 4 );
+        EXPECT_TRUE( destTimelines.size() == 4 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            CHECK( std::find( vtimelines0.begin(), vtimelines0.end(), destTimelines[ i ]->GetName() ) != vtimelines0.end() );
+            EXPECT_TRUE( std::find( vtimelines0.begin(), vtimelines0.end(), destTimelines[ i ]->GetName() ) != vtimelines0.end() );
         }
 
         auto srcChild0Node = srcRoot->GetChild( "child0" );
         auto destChild0Node = destRoot->GetChild( "child0" );
 
-        CHECK( srcChild0Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == srcTimeline );
-        CHECK( destChild0Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == destTimeline );
+        EXPECT_TRUE( srcChild0Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == srcTimeline );
+        EXPECT_TRUE( destChild0Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == destTimeline );
 
         auto srcChild00Node = srcChild0Node->GetChild( "child00" );
         auto destChild00Node = destChild0Node->GetChild( "child00" );
 
-        CHECK( srcChild00Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == srcTimeline1 );
-        CHECK( destChild00Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == destTimeline1 );
+        EXPECT_TRUE( srcChild00Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == srcTimeline1 );
+        EXPECT_TRUE( destChild00Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == destTimeline1 );
 
         auto srcChild01Node = srcChild0Node->GetChild( "child01" );
         auto destChild01Node = destChild0Node->GetChild( "child01" );
 
-        CHECK( srcChild01Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == srcTimeline1 );
-        CHECK( destChild01Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == destTimeline1 );
+        EXPECT_TRUE( srcChild01Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == srcTimeline1 );
+        EXPECT_TRUE( destChild01Node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == destTimeline1 );
 
 
-        CHECK( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
+        EXPECT_TRUE( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
 
         destTimelines = destScene->GetTimeline()->GetChildren();
 
         std::string timelines1[ 6 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1" };
         std::vector< std::string > vtimelines1( timelines1, timelines1 + 6 );
-        CHECK( destTimelines.size() == 6 );
+        EXPECT_TRUE( destTimelines.size() == 6 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            CHECK( std::find( vtimelines1.begin(), vtimelines1.end(), destTimelines[ i ]->GetName() ) != vtimelines1.end() );
+            EXPECT_TRUE( std::find( vtimelines1.begin(), vtimelines1.end(), destTimelines[ i ]->GetName() ) != vtimelines1.end() );
         }
 
         
-        CHECK( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
+        EXPECT_TRUE( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
 
         destTimelines = destScene->GetTimeline()->GetChildren();
 
         std::string timelines2[ 8 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1", "Copy2_timeline_0", "Copy2_timeline_1" };
         std::vector< std::string > vtimelines2( timelines2, timelines2 + 8 );
-        CHECK( destTimelines.size() == 8 );
+        EXPECT_TRUE( destTimelines.size() == 8 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            CHECK( std::find( vtimelines2.begin(), vtimelines2.end(), destTimelines[ i ]->GetName() ) != vtimelines2.end() );
+            EXPECT_TRUE( std::find( vtimelines2.begin(), vtimelines2.end(), destTimelines[ i ]->GetName() ) != vtimelines2.end() );
         }
 
 
-        CHECK( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00/child0/child00/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
+        EXPECT_TRUE( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00/child0/child00/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
 
         destTimelines = destScene->GetTimeline()->GetChildren();
 
         std::string timelines3[ 10 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1", "Copy2_timeline_0", "Copy2_timeline_1", "Copy3_timeline_0", "Copy3_timeline_1" };
         std::vector< std::string > vtimelines3( timelines3, timelines3 + 10 );
-        CHECK( destTimelines.size() == 10 );
+        EXPECT_TRUE( destTimelines.size() == 10 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            CHECK( std::find( vtimelines3.begin(), vtimelines3.end(), destTimelines[ i ]->GetName() ) != vtimelines3.end() );
+            EXPECT_TRUE( std::find( vtimelines3.begin(), vtimelines3.end(), destTimelines[ i ]->GetName() ) != vtimelines3.end() );
         }
 
 
-        CHECK( editor->AddNodeCopy( SCENE_NAME, "/root/child0/child00", SCENE_NAME1, "/root/child0/child00/child0" ) != nullptr );
+        EXPECT_TRUE( editor->AddNodeCopy( SCENE_NAME, "/root/child0/child00", SCENE_NAME1, "/root/child0/child00/child0" ) != nullptr );
         
         auto srcTimelines = srcScene->GetTimeline()->GetChildren();
         
         std::string timelines4[ 9 ] = { "default", "timeline_0", "timeline_1", "Copy_Copy1_timeline_0", "Copy_Copy1_timeline_1", "Copy_Copy2_timeline_0", "Copy_Copy2_timeline_1", "Copy_Copy3_timeline_0", "Copy_Copy3_timeline_1" };
         std::vector< std::string > vtimelines4( timelines4, timelines4 + 9 );
-        CHECK( srcTimelines.size() == 9 );
+        EXPECT_TRUE( srcTimelines.size() == 9 );
         for( auto i = 0; i < srcTimelines.size(); ++i )
         {
-            CHECK( std::find( vtimelines4.begin(), vtimelines4.end(), srcTimelines[ i ]->GetName() ) != vtimelines4.end() );
+            EXPECT_TRUE( std::find( vtimelines4.begin(), vtimelines4.end(), srcTimelines[ i ]->GetName() ) != vtimelines4.end() );
         }
 
 
-        CHECK( editor->AddNodeCopy( SCENE_NAME, "/root/child0/child00", SCENE_NAME1, "/root/child0/child00/child0" ) != nullptr );
+        EXPECT_TRUE( editor->AddNodeCopy( SCENE_NAME, "/root/child0/child00", SCENE_NAME1, "/root/child0/child00/child0" ) != nullptr );
 
         srcTimelines = srcScene->GetTimeline()->GetChildren();
         
         std::string timelines5[ 15 ] = { "default", "timeline_0", "timeline_1", "Copy_Copy1_timeline_0", "Copy_Copy1_timeline_1", "Copy_Copy2_timeline_0", "Copy_Copy2_timeline_1", "Copy_Copy3_timeline_0", "Copy_Copy3_timeline_1", "Copy1_Copy1_timeline_0", "Copy1_Copy1_timeline_1", "Copy1_Copy2_timeline_0", "Copy1_Copy2_timeline_1", "Copy1_Copy3_timeline_0", "Copy1_Copy3_timeline_1" };
         std::vector< std::string > vtimelines5( timelines5, timelines5 + 15 );
-        CHECK( srcTimelines.size() == 15 );
+        EXPECT_TRUE( srcTimelines.size() == 15 );
         for( auto i = 0; i < srcTimelines.size(); ++i )
         {
-            CHECK( std::find( vtimelines5.begin(), vtimelines5.end(), srcTimelines[ i ]->GetName() ) != vtimelines5.end() );
+            EXPECT_TRUE( std::find( vtimelines5.begin(), vtimelines5.end(), srcTimelines[ i ]->GetName() ) != vtimelines5.end() );
         }
 
 
-        BVXMLSerializer ser;
+        auto context = BVSerializeContext::CreateContextFromEmptiness();
+        BVXMLSerializer ser( context );
         srcScene->Serialize( ser );
         destScene->Serialize( ser );
         ser.Save( "test.xml" );
 
-        CHECK( success );
+        EXPECT_TRUE( success );
     });
 
     m_testSteps.push_back( [&] 
@@ -1425,10 +1426,11 @@ void					TestScene::InitCopyNodeTest	()
         auto srcTimelinePath = model::TimelineManager::GetInstance()->GetTimelinePath( editor->GetNode( SCENE_NAME, "/root/child0/child00/child0/child00" )->GetPlugin( "solid color" )->GetParameter( "color" )->GetTimeEvaluator() );
         auto destTimelinePath = model::TimelineManager::GetInstance()->GetTimelinePath( editor->GetNode( SCENE_NAME1, "/root/child0" )->GetPlugin( "solid color" )->GetParameter( "color" )->GetTimeEvaluator() );
 
-        CHECK( srcTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "Copy_Copy1_timeline_1" ) );
-        CHECK( destTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, "Copy_Copy_Copy1_timeline_1" ) );
+        EXPECT_TRUE( srcTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "Copy_Copy1_timeline_1" ) );
+        EXPECT_TRUE( destTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, "Copy_Copy_Copy1_timeline_1" ) );
 
-        BVXMLSerializer ser;
+        auto context = BVSerializeContext::CreateContextFromEmptiness();
+        BVXMLSerializer ser( context );
         scene->Serialize( ser );
         ser.Save( "test.xml" );
     });

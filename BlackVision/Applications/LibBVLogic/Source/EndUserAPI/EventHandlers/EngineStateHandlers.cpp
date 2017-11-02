@@ -193,7 +193,7 @@ void    EngineStateHandlers::MouseInteraction         ( IEventPtr evt )
         std::string nodePath = model::ModelState::GetInstance().BuildIndexPath( node.get() );
         //std::string nodeScene = ModelState::GetInstance().QueryNodeScene( node.get() );
 
-        JsonSerializeObject ser;
+        SimpleJsonSerializeObject ser;
         PrepareResponseTemplate( ser, command, mouseEvent->EventID, result );
         ser.SetAttribute( "Scene", nodeScene );
         ser.SetAttribute( "ClickedNode", nodePath );
@@ -229,7 +229,7 @@ void    EngineStateHandlers::ConfigManagment          ( IEventPtr evt )
     auto& value         = configEvent->Value;
 
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     PrepareResponseTemplate( ser, command, configEvent->SocketID, true );
 
     if( command == ConfigEvent::Command::ReadValue )
@@ -309,7 +309,7 @@ void    EngineStateHandlers::UndoRedoEvent            ( IEventPtr evt )
 //
 void    EngineStateHandlers::HandleOutputEvent       ( EngineStateEventPtr evt )
 {
-    JsonSerializeObject response;
+    SimpleJsonSerializeObject response;
 
     std::string action = evt->Request->GetAttribute( "Action" );
 

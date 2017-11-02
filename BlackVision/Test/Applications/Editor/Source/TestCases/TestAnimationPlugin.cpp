@@ -2,23 +2,17 @@
 
 
 
-
-
-
 // ***********************
 //
 class TestAnimationPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestAnimationPlugin )
 public:
-    TestAnimationPlugin() : TestEditor( "TestAnimationPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestAnimationPluginInstance;
-
-UnitTest::ListAdder adderTestAnimationPlugin ( UnitTest::Test::GetTestList(), &TestAnimationPluginInstance );
-
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestAnimationPlugin, TestEditor_Plugins, TestAnimationPlugin )
 
 
 // ***********************

@@ -20,16 +20,16 @@ namespace CloneViaSerialization {
 template< typename T >
 std::shared_ptr< T >                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    JsonSerializeObject ser;
+    auto serCtx = BVSerializeContext::CreateContextFromEmptiness();
+    JsonSerializeObject ser( serCtx );
 
-    auto serCtx = static_cast< BVSerializeContext* >( ser.GetSerializeContext() );
     serCtx->SetAssets( assets );
 
     obj->Serialize( ser );
 
-    JsonDeserializeObject deser( std::move( ser ) );
+    auto deserCtx = BVDeserializeContext::CreateContextFromEmptiness();
+    JsonDeserializeObject deser( std::move( ser ), deserCtx );
     
-    auto deserCtx = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
     deserCtx->SetAssets( assets );
     deserCtx->SetSceneTimeline( sceneTimeline );
 
@@ -39,16 +39,16 @@ std::shared_ptr< T >                              Clone( const T* obj, std::stri
 template< typename T >
 std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    JsonSerializeObject ser;
+    auto serCtx = BVSerializeContext::CreateContextFromEmptiness();
+    JsonSerializeObject ser( serCtx );
 
-    auto serCtx = static_cast< BVSerializeContext* >( ser.GetSerializeContext() );
     serCtx->SetAssets( assets );
 
     obj->Serialize( ser );
 
-    JsonDeserializeObject deser( std::move( ser ) );
+    auto deserCtx = BVDeserializeContext::CreateContextFromEmptiness();
+    JsonDeserializeObject deser( std::move( ser ), deserCtx );
 
-    auto deserCtx = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
     deserCtx->SetAssets( assets );
     deserCtx->SetSceneTimeline( sceneTimeline );
     

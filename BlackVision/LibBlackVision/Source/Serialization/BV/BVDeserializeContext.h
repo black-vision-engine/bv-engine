@@ -25,6 +25,10 @@ namespace model
 
     class ITimeEvaluator;
     DEFINE_PTR_TYPE( ITimeEvaluator );
+
+    class PluginsManager;
+
+    class TimelineManager;
 }; // model
 
 
@@ -45,18 +49,20 @@ private:
     model::OffsetTimeEvaluatorPtr       m_sceneTimeline;
     AssetDescsWithUIDsPtr               m_assets;
 
-    std::string                         m_sceneName;
     std::string                         m_nodePath;
 
-    Exceptions                          m_warnings;
+    model::PluginsManager *             m_pluginsManager;
+    model::TimelineManager *            m_timelineManager;
 
 public:
-                                        BVDeserializeContext    ( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
+
+    BVDeserializeContext    ( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets, model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
     virtual                             ~BVDeserializeContext   ();
 
     model::OffsetTimeEvaluatorPtr       GetSceneTimeline        ();
     void                                SetSceneTimeline        ( const model::OffsetTimeEvaluatorPtr & timeline );
     model::ITimeEvaluatorPtr            GetTimeline             ( const std::string & name, const std::string & paramName );
+    model::TimelineManager *            GetTimelineManager      ();
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );
@@ -67,41 +73,12 @@ public:
     std::string &                       GetNodePath             ();
     void                                SetNodePath             ( const std::string& sceneName );
 
-    Exceptions                          GetWarnings             ();
-    void                                AddWarning              ( ExceptionPtr warning );
+public:
 
-    template< typename Type >
-    void                                AddWarning              ( const std::string & message, FilePosition filePos );
+    static BVDeserializeContext *       CreateContextFromEmptiness  (); // in future this should have some parameters instead of static singletons
+    static BVDeserializeContext *       CreateContextFromEmptiness  ( const model::OffsetTimeEvaluatorPtr & timeline ); // in future this should have some parameters instead of static singletons
+
 };
 
-// ========================================================================= //
-// Implmentation
-// ========================================================================= //
-
-// ***********************
-//
-template< typename WarningType >
-inline void             BVDeserializeContext::AddWarning        ( const std::string & message, FilePosition filePos )
-{
-    AddWarning( std::make_shared< WarningType >( message, filePos, m_sceneName ) );
-}
-
-// ***********************
-//
-template< typename WarningType >
-inline void                     Warn        ( const IDeserializer & deser, const std::string & message )
-{
-    auto ctx = Context( deser );
-    if( ctx )
-    {
-        auto filePos = deser.CurrentLineNumber();
-
-        ctx->AddWarning< WarningType >( message, filePos );
-    }
-    else
-    {
-        WarnWithoutContext( message );
-    }
-}
 
 } // bv

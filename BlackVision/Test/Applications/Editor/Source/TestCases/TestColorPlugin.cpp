@@ -3,21 +3,18 @@
 
 
 
-
-
 // ***********************
 //
 class TestColorPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestColorPlugin )
 public:
-    TestColorPlugin() : TestEditor( "TestColorPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestColorPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestColorPlugin, TestEditor_Plugins, TestColorPlugin )
 
-UnitTest::ListAdder adderTestColorPlugin ( UnitTest::Test::GetTestList(), &TestColorPluginInstance );
 
 
 

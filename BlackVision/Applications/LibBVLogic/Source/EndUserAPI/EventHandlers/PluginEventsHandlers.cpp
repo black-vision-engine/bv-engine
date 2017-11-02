@@ -169,7 +169,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
             if( start.IsValid() && end.IsValid() & steps.IsValid() )
             {
-                JsonSerializeObject responseJSON;
+                SimpleJsonSerializeObject responseJSON;
 
                 responseJSON.EnterArray( "samples" );
 
@@ -191,7 +191,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     }
     else if( command == ParamKeyEvent::Command::ListKeys )
     {
-        JsonSerializeObject responseJSON;
+        SimpleJsonSerializeObject responseJSON;
         PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
 
         setParamEvent->ParamAddress.Serialize( responseJSON );
@@ -216,7 +216,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
         if( paramsList.IsValid() )
         {
-            JsonSerializeObject responseJSON;
+            SimpleJsonSerializeObject responseJSON;
             PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
 
             setParamEvent->ParamAddress.Serialize( responseJSON );

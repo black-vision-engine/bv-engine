@@ -3,21 +3,20 @@
 
 
 
-
-
 // ***********************
 //
 class TestGradientTestPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestGradientTestPlugin )
 public:
-    TestGradientTestPlugin() : TestEditor( "TestGradientTestPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestGradientTestPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestGradientTestPlugin, TestEditor_Plugins, TestGradientTestPlugin )
 
-UnitTest::ListAdder adderTestGradientTestPlugin ( UnitTest::Test::GetTestList(), &TestGradientTestPluginInstance );
+
+
 
 
 

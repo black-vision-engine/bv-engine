@@ -3,27 +3,13 @@
 #include "CoreDEF.h"
 #include "DeserializeContext.h"
 
+#include "FilePosition.h"
+
 #include <string>
 
 
 namespace bv
 {
-
-
-// ***********************
-//
-struct FilePosition
-{
-    SizeType    Line;
-    SizeType    CharPosition;
-
-    // ***********************
-    //
-    FilePosition()
-        : Line( 0 )
-        , CharPosition( 0 )
-    {}
-};
 
 
 

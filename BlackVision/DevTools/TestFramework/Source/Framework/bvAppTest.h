@@ -43,6 +43,10 @@ public:
 private:
     virtual BVAppLogic *    CreateAppLogic      ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const;
 
+
+public:
+
+    BVAppLogic *            GetAppLogic         () { return m_app; }
 };
 
 

@@ -31,7 +31,7 @@ ThumbnailConstPtr            AVAssetUtils::LoadThumbnail                   ( con
 
     if( Path::Exists( thumbPath ) )
     {
-        JsonDeserializeObject deser;
+        SimpleJsonDeserializeObject deser;
         deser.LoadFile( thumbPath.Str() );
 
         auto thumb = VideoStreamAssetThumbnail::Create( deser );
@@ -55,7 +55,7 @@ ThumbnailConstPtr            AVAssetUtils::LoadThumbnail                   ( con
 
     auto thumb = VideoStreamAssetThumbnail::Create( compresed, h );
 
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
 
     thumb->Serialize( ser );
 

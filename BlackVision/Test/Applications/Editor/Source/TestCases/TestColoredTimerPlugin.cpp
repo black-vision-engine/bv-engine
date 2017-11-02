@@ -9,15 +9,14 @@
 //
 class TestColoredTimerPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestColoredTimerPlugin )
 public:
-    TestColoredTimerPlugin() : TestEditor( "TestColoredTimerPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestColoredTimerPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestColoredTimerPlugin, TestEditor_Plugins, TestColoredTimerPlugin )
 
-UnitTest::ListAdder adderTestColoredTimerPlugin ( UnitTest::Test::GetTestList(), &TestColoredTimerPluginInstance );
 
 
 

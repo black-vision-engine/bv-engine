@@ -4,23 +4,10 @@
 #include "Framework/BVTestAppLogic.h"
 
 
-// ***********************
-//
-class MoveNodeInScene : public bv::FrameworkTest
-{
-private:
-public:
-    MoveNodeInScene() : bv::FrameworkTest( "MoveNodeInScene", "BVProjectEditor.Node.Move", __FILE__, __LINE__ ) {}
-
-    virtual void        PreEvents           () override;
-} MoveNodeInSceneInstance;
-
-UnitTest::ListAdder adderTestTest ( UnitTest::Test::GetTestList(), &MoveNodeInSceneInstance );
-
 
 // ***********************
 //
-void        MoveNodeInScene::PreEvents     ()
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node_Move, MoveNodeInScene )
 {
     auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
     CreateTwoScenes( editor );
@@ -37,54 +24,54 @@ void        MoveNodeInScene::PreEvents     ()
     auto g2Child3 = editor->GetNode( scene1Name, "root/Group2/Child3" );
     auto g2Child4 = editor->GetNode( scene1Name, "root/Group2/Child4" );
 
-    CHECK( g1Child1 != nullptr );
-    CHECK( g1Child2 != nullptr );
-    CHECK( g1Child3 != nullptr );
-    CHECK( g1Child4 != nullptr );
+    EXPECT_TRUE( g1Child1 != nullptr );
+    EXPECT_TRUE( g1Child2 != nullptr );
+    EXPECT_TRUE( g1Child3 != nullptr );
+    EXPECT_TRUE( g1Child4 != nullptr );
 
-    CHECK( g2Child1 != nullptr );
-    CHECK( g2Child2 != nullptr );
-    CHECK( g2Child3 != nullptr );
-    CHECK( g2Child4 != nullptr );
+    EXPECT_TRUE( g2Child1 != nullptr );
+    EXPECT_TRUE( g2Child2 != nullptr );
+    EXPECT_TRUE( g2Child3 != nullptr );
+    EXPECT_TRUE( g2Child4 != nullptr );
 
     // ========================================================================= //
     // Move nodes of the same parent
     // ========================================================================= //
 
     bool result = editor->MoveNode( scene1Name, "root/Group1", 0, scene1Name, "root/Group1/Child4" );
-    REQUIRE( result );
+    ASSERT_TRUE( result );
 
     auto group1 = std::static_pointer_cast< bv::model::BasicNode >( editor->GetNode( scene1Name, "root/Group1" ) );
-    REQUIRE( group1 != nullptr );
+    ASSERT_TRUE( group1 != nullptr );
 
-    CHECK( group1->GetChild( 0 ) == g1Child4 );
-    CHECK( group1->GetChild( 1 ) == g1Child1 );
-    CHECK( group1->GetChild( 2 ) == g1Child2 );
-    CHECK( group1->GetChild( 3 ) == g1Child3 );
+    EXPECT_TRUE( group1->GetChild( 0 ) == g1Child4 );
+    EXPECT_TRUE( group1->GetChild( 1 ) == g1Child1 );
+    EXPECT_TRUE( group1->GetChild( 2 ) == g1Child2 );
+    EXPECT_TRUE( group1->GetChild( 3 ) == g1Child3 );
 
     result = editor->MoveNode( scene1Name, "root/Group1", 1, scene1Name, "root/Group1/Child4" );
-    REQUIRE( result );
+    ASSERT_TRUE( result );
 
-    CHECK( group1->GetChild( 0 ) == g1Child1 );
-    CHECK( group1->GetChild( 1 ) == g1Child4 );
-    CHECK( group1->GetChild( 2 ) == g1Child2 );
-    CHECK( group1->GetChild( 3 ) == g1Child3 );
+    EXPECT_TRUE( group1->GetChild( 0 ) == g1Child1 );
+    EXPECT_TRUE( group1->GetChild( 1 ) == g1Child4 );
+    EXPECT_TRUE( group1->GetChild( 2 ) == g1Child2 );
+    EXPECT_TRUE( group1->GetChild( 3 ) == g1Child3 );
 
     result = editor->MoveNode( scene1Name, "root/Group1", 2, scene1Name, "root/Group1/Child4" );
-    REQUIRE( result );
+    ASSERT_TRUE( result );
 
-    CHECK( group1->GetChild( 0 ) == g1Child1 );
-    CHECK( group1->GetChild( 1 ) == g1Child2 );
-    CHECK( group1->GetChild( 2 ) == g1Child4 );
-    CHECK( group1->GetChild( 3 ) == g1Child3 );
+    EXPECT_TRUE( group1->GetChild( 0 ) == g1Child1 );
+    EXPECT_TRUE( group1->GetChild( 1 ) == g1Child2 );
+    EXPECT_TRUE( group1->GetChild( 2 ) == g1Child4 );
+    EXPECT_TRUE( group1->GetChild( 3 ) == g1Child3 );
 
     result = editor->MoveNode( scene1Name, "root/Group1", 3, scene1Name, "root/Group1/Child4" );
-    REQUIRE( result );
+    ASSERT_TRUE( result );
 
-    CHECK( group1->GetChild( 0 ) == g1Child1 );
-    CHECK( group1->GetChild( 1 ) == g1Child2 );
-    CHECK( group1->GetChild( 2 ) == g1Child3 );
-    CHECK( group1->GetChild( 3 ) == g1Child4 );
+    EXPECT_TRUE( group1->GetChild( 0 ) == g1Child1 );
+    EXPECT_TRUE( group1->GetChild( 1 ) == g1Child2 );
+    EXPECT_TRUE( group1->GetChild( 2 ) == g1Child3 );
+    EXPECT_TRUE( group1->GetChild( 3 ) == g1Child4 );
 
     // ========================================================================= //
     // Add node after end of children vector
@@ -92,15 +79,15 @@ void        MoveNodeInScene::PreEvents     ()
 
     // Reset to index 0
     result = editor->MoveNode( scene1Name, "root/Group1", 0, scene1Name, "root/Group1/Child4" );
-    REQUIRE( result );
+    ASSERT_TRUE( result );
     // Set index after last node.
     result = editor->MoveNode( scene1Name, "root/Group1", 4, scene1Name, "root/Group1/Child4" );
-    REQUIRE( result );
+    ASSERT_TRUE( result );
 
-    CHECK( group1->GetChild( 0 ) == g1Child1 );
-    CHECK( group1->GetChild( 1 ) == g1Child2 );
-    CHECK( group1->GetChild( 2 ) == g1Child3 );
-    CHECK( group1->GetChild( 3 ) == g1Child4 );
+    EXPECT_TRUE( group1->GetChild( 0 ) == g1Child1 );
+    EXPECT_TRUE( group1->GetChild( 1 ) == g1Child2 );
+    EXPECT_TRUE( group1->GetChild( 2 ) == g1Child3 );
+    EXPECT_TRUE( group1->GetChild( 3 ) == g1Child4 );
 
 
     // ========================================================================= //
@@ -108,6 +95,6 @@ void        MoveNodeInScene::PreEvents     ()
     // ========================================================================= //
 
     result = editor->MoveNode( scene1Name, "root/Group1/Child4", 0, scene1Name, "root/Group1/Child4" );
-    REQUIRE( !result );
+    ASSERT_TRUE( !result );
 }
 

@@ -94,7 +94,7 @@ std::vector< IEventPtr >        EventFactory::ParseEventsList( IDeserializer & d
 //
 std::vector< IEventPtr >        EventFactory::ParseEventsListJSON ( const std::string & eventString, int socketID ) const
 {
-    JsonDeserializeObject deser;
+    SimpleJsonDeserializeObject deser;
 
     if( !deser.Load( eventString ) )
     {

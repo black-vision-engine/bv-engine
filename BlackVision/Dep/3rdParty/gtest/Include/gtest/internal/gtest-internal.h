@@ -175,7 +175,7 @@ namespace edit_distance {
 // Returns the optimal edits to go from 'left' to 'right'.
 // All edits cost the same, with replace having lower priority than
 // add/remove.
-// Simple implementation of the Wagner–Fischer algorithm.
+// Simple implementation of the Wagner-Fischer algorithm.
 // See http://en.wikipedia.org/wiki/Wagner-Fischer_algorithm
 enum EditType { kMatch, kAdd, kRemove, kReplace };
 GTEST_API_ std::vector<EditType> CalculateOptimalEdits(
@@ -502,9 +502,10 @@ typedef void (*SetUpTestCaseFunc)();
 typedef void (*TearDownTestCaseFunc)();
 
 struct CodeLocation {
-  CodeLocation(const string& a_file, int a_line) : file(a_file), line(a_line) {}
+  CodeLocation(const std::string& a_file, int a_line)
+      : file(a_file), line(a_line) {}
 
-  string file;
+  std::string file;
   int line;
 };
 
@@ -939,6 +940,31 @@ typedef char IsNotContainer;
 template <class C>
 IsNotContainer IsContainerTest(long /* dummy */) { return '\0'; }
 
+template <typename C, bool = 
+  sizeof(IsContainerTest<C>(0)) == sizeof(IsContainer)
+>
+struct IsRecursiveContainerImpl;
+
+template <typename C>
+struct IsRecursiveContainerImpl<C, false> : public false_type {};
+
+template <typename C>
+struct IsRecursiveContainerImpl<C, true> {
+  typedef
+    typename IteratorTraits<typename C::iterator>::value_type
+  value_type;
+  typedef is_same<value_type, C> type;
+};
+
+// IsRecursiveContainer<Type> is a unary compile-time predicate that
+// evaluates whether C is a recursive container type. A recursive container 
+// type is a container type whose value_type is equal to the container type
+// itself. An example for a recursive container type is 
+// boost::filesystem::path, whose iterator has a value_type that is equal to 
+// boost::filesystem::path.
+template<typename C>
+struct IsRecursiveContainer : public IsRecursiveContainerImpl<C>::type {};
+
 // EnableIf<condition>::type is void when 'Cond' is true, and
 // undefined when 'Cond' is false.  To use SFINAE to make a function
 // overload only apply when a particular expression is true, add
@@ -1211,9 +1237,11 @@ class NativeArray {
   test_case_name##_##test_name##_Test
 
 
+
 // ***********************
 // WARNING: Change to gtest (nieznanysprawiciel)
 inline std::string     MangleName      ( const char* name );
+
 
 
 // Helper macro for defining tests.
@@ -1231,7 +1259,7 @@ class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
 ::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
   ::test_info_ =\
     ::testing::internal::MakeAndRegisterTestInfo(\
-        MangleName( #test_case_name ).c_str(), #test_name, NULL, NULL, \
+        #test_case_name, #test_name, NULL, NULL, \
         ::testing::internal::CodeLocation(__FILE__, __LINE__), \
         (parent_id), \
         parent_class::SetUpTestCase, \

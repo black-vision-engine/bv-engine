@@ -35,7 +35,8 @@ void    TestEditorsKeyboardHandler::HandleKey   ( unsigned char c, BVAppLogic * 
 {
 	if( c == 's' )
     {
-        BVXMLSerializer ser;
+        auto context = BVSerializeContext::CreateContextFromEmptiness();
+        BVXMLSerializer ser( context );
         //auto sob = new JsonSerializeObject();
         logic->GetBVProject()->GetModelScenes()[ 0 ]->Serialize( ser );
         ser.Save( "test.xml" );

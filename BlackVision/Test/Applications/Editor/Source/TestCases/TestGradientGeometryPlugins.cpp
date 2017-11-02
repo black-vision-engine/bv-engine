@@ -3,20 +3,18 @@
 
 
 
-
 // ***********************
 //
 class TestGradientGeometryPlugins : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestGradientGeometryPlugins )
 public:
-    TestGradientGeometryPlugins() : TestEditor( "TestGradientGeometryPlugins", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestGradientGeometryPluginsInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestGradientGeometryPlugins, TestEditor_Plugins, TestGradientGeometryPlugins )
 
-UnitTest::ListAdder adderTestGradientGeometryPlugins ( UnitTest::Test::GetTestList(), &TestGradientGeometryPluginsInstance );
 
 
 

@@ -4,20 +4,19 @@
 
 
 
-
 // ***********************
 //
 class TestGradientTimerPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestGradientTimerPlugin )
 public:
-    TestGradientTimerPlugin() : TestEditor( "TestGradientTimerPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestGradientTimerPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestGradientTimerPlugin, TestEditor_Plugins, TestGradientTimerPlugin )
 
-UnitTest::ListAdder adderTestGradientTimerPlugin ( UnitTest::Test::GetTestList(), &TestGradientTimerPluginInstance );
+
 
 
 

@@ -2,21 +2,17 @@
 
 
 
-
-
 // ***********************
 //
 class TestColoredGeometryPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestColoredGeometryPlugin )
 public:
-    TestColoredGeometryPlugin() : TestEditor( "TestColoredGeometryPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestColoredGeometryPluginInstance;
-
-UnitTest::ListAdder adderTestColoredGeometryPlugin ( UnitTest::Test::GetTestList(), &TestColoredGeometryPluginInstance );
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestColoredGeometryPlugin, TestEditor_Plugins, TestColoredGeometryPlugin )
 
 
 

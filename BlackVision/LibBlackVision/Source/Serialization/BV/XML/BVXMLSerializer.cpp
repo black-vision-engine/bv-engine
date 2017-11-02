@@ -15,20 +15,20 @@ namespace bv {
 
 // *******************************
 //
-BVXMLSerializer::BVXMLSerializer()
-    : XMLSerializer( new BVSerializeContext() )
+BVXMLSerializer::BVXMLSerializer( BVSerializeContext * context )
+    : XMLSerializer( context )
 {
 }
 
-// *******************************
-//
-BVXMLSerializer::BVXMLSerializer( AssetDescsWithUIDsPtr assets )
-    : XMLSerializer( nullptr )
-{
-    auto con = new BVSerializeContext();
-    con->SetAssets( assets );
-    SetSerializeContext( con );
-}
+//// *******************************
+////
+//BVXMLSerializer::BVXMLSerializer( AssetDescsWithUIDsPtr assets )
+//    : XMLSerializer( nullptr )
+//{
+//    auto con = new BVSerializeContext();
+//    con->SetAssets( assets );
+//    SetSerializeContext( con );
+//}
 
 // ***********************
 //

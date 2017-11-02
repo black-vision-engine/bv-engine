@@ -458,7 +458,7 @@ ThumbnailConstPtr   MeshUtils::LoadThumbnail             ( const MeshAssetDescCo
 
     if( Path::Exists( thumbPath ) )
     {
-        JsonDeserializeObject deser;
+        SimpleJsonDeserializeObject deser;
         deser.LoadFile( thumbPath.Str() );
 
         return MeshAssetThumbnail::Create( deser );

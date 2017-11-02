@@ -8,6 +8,8 @@
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
+
 #include "UseLoggerLibBlackVision.h"
 
 
@@ -22,7 +24,9 @@ namespace bv
 
 // ***********************
 //
-BVDeserializeContext::BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets )
+BVDeserializeContext::BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets, model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
+    : m_timelineManager( timelineManager )
+    , m_pluginsManager( pluginsManager )
 {
     SetAssets( assets );
     SetSceneTimeline( timeline );
@@ -56,7 +60,7 @@ model::ITimeEvaluatorPtr            BVDeserializeContext::GetTimeline           
     model::ITimeEvaluatorPtr defaultTimeline;
     if( m_sceneTimeline == nullptr ) // this should happen only during cloning, I think
     {
-        auto rootTimeline = model::TimelineManager::GetInstance()->GetRootTimeline();
+        auto rootTimeline = m_timelineManager->GetRootTimeline();
         defaultTimeline = model::TimelineHelper::GetTimeEvaluator( "default", rootTimeline ); // FIXME: this is not really the good way to do it
         assert( defaultTimeline );
     }
@@ -74,6 +78,10 @@ model::ITimeEvaluatorPtr            BVDeserializeContext::GetTimeline           
     }
 
     return te;
+}
+
+model::TimelineManager * BVDeserializeContext::GetTimelineManager() {
+    return m_timelineManager;
 }
 
 
@@ -96,14 +104,14 @@ void                                BVDeserializeContext::SetAssets             
 //
 std::string &                       BVDeserializeContext::GetSceneName            ()
 {
-    return m_sceneName;
+    return m_fileName;
 }
 
 // ***********************
 //
 void                                BVDeserializeContext::SetSceneName            ( const std::string& sceneName )
 {
-    m_sceneName = sceneName;
+    m_fileName = sceneName;
 }
 
 // ***********************
@@ -122,17 +130,16 @@ void                                BVDeserializeContext::SetNodePath           
 
 // ***********************
 //
-Exceptions                          BVDeserializeContext::GetWarnings             ()
+BVDeserializeContext *       BVDeserializeContext::CreateContextFromEmptiness  ()
 {
-    return m_warnings;
+    return CreateContextFromEmptiness( nullptr );
 }
 
 // ***********************
 //
-void                                BVDeserializeContext::AddWarning              ( ExceptionPtr warning )
+BVDeserializeContext *       BVDeserializeContext::CreateContextFromEmptiness  ( const model::OffsetTimeEvaluatorPtr & timeline )
 {
-    m_warnings.push_back( warning );
-    LOG_MESSAGE( SeverityLevel::warning ) << warning->GetReason();
+    return new BVDeserializeContext( timeline, nullptr, &model::PluginsManager::DefaultInstanceRef(), model::TimelineManager::GetInstance() );
 }
 
 // ========================================================================= //

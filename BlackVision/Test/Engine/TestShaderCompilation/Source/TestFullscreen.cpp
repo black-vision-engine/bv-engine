@@ -7,29 +7,12 @@
 
 
 
-
-// ***********************
-// This test will compile all fullscreen effect shaders.
-class TestFullscreenShaders : public bv::FrameworkTest
-{
-private:
-public:
-    TestFullscreenShaders() : bv::FrameworkTest( "TestFullscreenShaders", "Shaders.Compilation", __FILE__, __LINE__ ) {}
-
-    virtual void        PreEvents           () override;
-
-} TestFullscreenShadersInstance;
-
-UnitTest::ListAdder adderTestFullscreenShaders ( UnitTest::Test::GetTestList(), &TestFullscreenShadersInstance );
-
-
-
 using namespace bv;
 
 
 // ***********************
-//
-void        TestFullscreenShaders::PreEvents           ()
+// This test will compile all fullscreen effect shaders.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Shaders_Compilation, TestFullscreenShaders )
 {
     std::string vsPath = "Assets/Shaders/FullscreenEffects/fse_default.vert";
 

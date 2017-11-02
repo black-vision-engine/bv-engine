@@ -4,21 +4,17 @@
 
 
 
-
 // ***********************
 //
 class TestAVDecoderPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestAVDecoderPlugin )
 public:
-    TestAVDecoderPlugin() : TestEditor( "TestAVDecoderPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestAVDecoderPluginInstance;
-
-UnitTest::ListAdder adderTestAVDecoderPlugin ( UnitTest::Test::GetTestList(), &TestAVDecoderPluginInstance );
-
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestAVDecoderPlugin, TestEditor_Plugins, TestAVDecoderPlugin )
 
 
 // ***********************

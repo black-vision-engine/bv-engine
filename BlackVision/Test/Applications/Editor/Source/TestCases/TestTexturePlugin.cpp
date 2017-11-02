@@ -3,21 +3,17 @@
 
 
 
-
-
 // ***********************
 //
 class TestTexturePlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestTexturePlugin )
 public:
-    TestTexturePlugin() : TestEditor( "TestTexturePlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestTexturePluginInstance;
-
-UnitTest::ListAdder adderTestTexturePlugin ( UnitTest::Test::GetTestList(), &TestTexturePluginInstance );
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestTexturePlugin, TestEditor_Plugins, TestTexturePlugin )
 
 
 

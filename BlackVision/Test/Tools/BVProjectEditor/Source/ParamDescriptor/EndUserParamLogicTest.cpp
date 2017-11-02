@@ -12,7 +12,7 @@ using namespace bv;
 
 // ***********************
 // Tests adding and removing parameter descriptor.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_AddRemoveParamDesc )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_ParameterDescriptor, EndUserParamsLogic_AddRemoveParamDesc )
 {
     auto scene = CreateSceneForParamDesc( GetProjectEditor(), "Scene" );
     EndUserParamsLogic paramsLogic( scene.get() );
@@ -31,13 +31,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     addressPlug.PluginName = "solid color";
     addressPlug.ParamName = "color";
 
-    CHECK( paramsLogic.AddDescriptor( ParameterAddress( addressPlug ), EndUserParamDescriptor( desc ) ) );
+    EXPECT_TRUE( paramsLogic.AddDescriptor( ParameterAddress( addressPlug ), EndUserParamDescriptor( desc ) ) );
 
     auto returnDesc = paramsLogic.GetDescriptor( addressPlug );
-    REQUIRE CHECK( returnDesc != nullptr );
+    ASSERT_TRUE( returnDesc != nullptr );
 
-    CHECK( returnDesc->GetName() == "PluginDesc" );
-    CHECK( returnDesc->GetDescription() == "This is descriptor" );
+    EXPECT_EQ( returnDesc->GetName(), "PluginDesc" );
+    EXPECT_EQ( returnDesc->GetDescription(), "This is descriptor" );
 
     // ***********************
     // Add Resource param descriptor
@@ -52,13 +52,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     desc.SetName( "ResourceDesc" );
 
     // Add
-    CHECK( paramsLogic.AddDescriptor( ParameterAddress( addressRes ), EndUserParamDescriptor( desc ) ) );
+    EXPECT_TRUE( paramsLogic.AddDescriptor( ParameterAddress( addressRes ), EndUserParamDescriptor( desc ) ) );
 
     returnDesc = paramsLogic.GetDescriptor( addressRes );
-    REQUIRE CHECK( returnDesc != nullptr );
+    ASSERT_TRUE( returnDesc != nullptr );
 
-    CHECK( returnDesc->GetName() == "ResourceDesc" );
-    CHECK( returnDesc->GetDescription() == "This is descriptor" );
+    EXPECT_EQ( returnDesc->GetName(), "ResourceDesc" );
+    EXPECT_EQ( returnDesc->GetDescription(), "This is descriptor" );
 
     // ***********************
     // Add Light param descriptor
@@ -74,13 +74,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     desc.SetName( "LightDesc" );
 
     // Add
-    CHECK( paramsLogic.AddDescriptor( ParameterAddress( addressLight ), EndUserParamDescriptor( desc ) ) );
+    EXPECT_TRUE( paramsLogic.AddDescriptor( ParameterAddress( addressLight ), EndUserParamDescriptor( desc ) ) );
 
     returnDesc = paramsLogic.GetDescriptor( addressLight );
-    REQUIRE CHECK( returnDesc != nullptr );
+    ASSERT_TRUE( returnDesc != nullptr );
 
-    CHECK( returnDesc->GetName() == "LightDesc" );
-    CHECK( returnDesc->GetDescription() == "This is descriptor" );
+    EXPECT_EQ( returnDesc->GetName(), "LightDesc" );
+    EXPECT_EQ( returnDesc->GetDescription(), "This is descriptor" );
 
     // ***********************
     // Add Camera param descriptor
@@ -96,13 +96,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     desc.SetName( "CameraDesc" );
 
     // Add
-    CHECK( paramsLogic.AddDescriptor( ParameterAddress( addressCamera ), EndUserParamDescriptor( desc ) ) );
+    EXPECT_TRUE( paramsLogic.AddDescriptor( ParameterAddress( addressCamera ), EndUserParamDescriptor( desc ) ) );
 
     returnDesc = paramsLogic.GetDescriptor( addressCamera );
-    REQUIRE CHECK( returnDesc != nullptr );
+    ASSERT_TRUE( returnDesc != nullptr );
 
-    CHECK( returnDesc->GetName() == "CameraDesc" );
-    CHECK( returnDesc->GetDescription() == "This is descriptor" );
+    EXPECT_EQ( returnDesc->GetName(), "CameraDesc" );
+    EXPECT_EQ( returnDesc->GetDescription(), "This is descriptor" );
 
     // ***********************
     // Add Logic param descriptor
@@ -118,13 +118,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     desc.SetName( "LogicDesc" );
 
     // Add
-    CHECK( paramsLogic.AddDescriptor( ParameterAddress( addressLogic ), EndUserParamDescriptor( desc ) ) );
+    EXPECT_TRUE( paramsLogic.AddDescriptor( ParameterAddress( addressLogic ), EndUserParamDescriptor( desc ) ) );
 
     returnDesc = paramsLogic.GetDescriptor( addressLogic );
-    REQUIRE CHECK( returnDesc != nullptr );
+    ASSERT_TRUE( returnDesc != nullptr );
 
-    CHECK( returnDesc->GetName() == "LogicDesc" );
-    CHECK( returnDesc->GetDescription() == "This is descriptor" );
+    EXPECT_EQ( returnDesc->GetName(), "LogicDesc" );
+    EXPECT_EQ( returnDesc->GetDescription(), "This is descriptor" );
 
     // ***********************
     // Add Effect param descriptor
@@ -140,47 +140,47 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     desc.SetName( "EffectDesc" );
 
     // Add
-    CHECK( paramsLogic.AddDescriptor( ParameterAddress( addressEffect ), EndUserParamDescriptor( desc ) ) );
+    EXPECT_TRUE( paramsLogic.AddDescriptor( ParameterAddress( addressEffect ), EndUserParamDescriptor( desc ) ) );
 
     returnDesc = paramsLogic.GetDescriptor( addressEffect );
-    REQUIRE CHECK( returnDesc != nullptr );
+    ASSERT_TRUE( returnDesc != nullptr );
 
-    CHECK( returnDesc->GetName() == "EffectDesc" );
-    CHECK( returnDesc->GetDescription() == "This is descriptor" );
+    EXPECT_EQ( returnDesc->GetName(), "EffectDesc" );
+    EXPECT_EQ( returnDesc->GetDescription(), "This is descriptor" );
 
 
 
     // ***********************
     // Remove phase
-    CHECK( paramsLogic.RemoveDescriptor( addressLight ) );
-    CHECK( paramsLogic.RemoveDescriptor( addressCamera ) );
-    CHECK( paramsLogic.RemoveDescriptor( addressEffect ) );
-    CHECK( paramsLogic.RemoveDescriptor( addressLogic ) );
-    CHECK( paramsLogic.RemoveDescriptor( addressPlug ) );
-    CHECK( paramsLogic.RemoveDescriptor( addressRes ) );
+    EXPECT_TRUE( paramsLogic.RemoveDescriptor( addressLight ) );
+    EXPECT_TRUE( paramsLogic.RemoveDescriptor( addressCamera ) );
+    EXPECT_TRUE( paramsLogic.RemoveDescriptor( addressEffect ) );
+    EXPECT_TRUE( paramsLogic.RemoveDescriptor( addressLogic ) );
+    EXPECT_TRUE( paramsLogic.RemoveDescriptor( addressPlug ) );
+    EXPECT_TRUE( paramsLogic.RemoveDescriptor( addressRes ) );
 
     
-    CHECK( paramsLogic.GetDescriptor( addressLight ) == nullptr );
-    CHECK( paramsLogic.GetDescriptor( addressCamera ) == nullptr );
-    CHECK( paramsLogic.GetDescriptor( addressEffect ) == nullptr );
-    CHECK( paramsLogic.GetDescriptor( addressLogic ) == nullptr );
-    CHECK( paramsLogic.GetDescriptor( addressPlug ) == nullptr );
-    CHECK( paramsLogic.GetDescriptor( addressRes ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( addressLight ), nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( addressCamera ), nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( addressEffect ), nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( addressLogic ), nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( addressPlug ), nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( addressRes ), nullptr );
 }
 
 
 // ***********************
 // Tests adding and removing parameter descriptor.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_RemovingNodeDeletesDescriptor )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_ParameterDescriptor, EndUserParamsLogic_RemovingNodeDeletesDescriptor )
 {
     auto editor = GetProjectEditor();
 
     auto scene = CreateSceneForParamDesc( editor, "Scene" );
     EndUserParamsLogic paramsLogic( scene.get() );
 
-    AddParamDescriptors( paramsLogic, scene );
+    AddParamDescriptors( paramsLogic, scene );  if( HasFatalFailure() ) return;
 
-    CHECK( editor->DeleteChildNode( "Scene", "root/ColoredRect", false ) );
+    EXPECT_TRUE( editor->DeleteChildNode( "Scene", "root/ColoredRect", false ) );
 
     // ***********************
     // Check if descriptors were deleted.
@@ -191,7 +191,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.PluginName = "solid color";
     address.ParamName = "color";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.ParamTargetType = ParameterAddress::GlobalEffectParam;
     address.PluginName = "";
@@ -199,20 +199,20 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.ParamTargetType = ParameterAddress::PluginParam;
     address.PluginName = "rectangle";
     address.ParamName = "width";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     // ***********************
     // Remove second node
-    CHECK( editor->DeleteChildNode( "Scene", "root/TexturedRect", false ) );
+    EXPECT_TRUE( editor->DeleteChildNode( "Scene", "root/TexturedRect", false ) );
 
     // ***********************
-    // Check if descriptors were deleted.
+    // EXPECT_EQ if descriptors were deleted.
     address.NodeName = "root/TexturedRect";
     address.ParamTargetType = ParameterAddress::NodeLogicParam;
     address.PluginName = "";
@@ -220,7 +220,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.SceneName = scene->GetName();
     address.NodeName = "root/TexturedRect";
@@ -229,21 +229,21 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamName = "wrapModeX";
     address.ParamSubName = "Tex0";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 }
 
 // ***********************
 // Deleting camera should delete camera param descriptor. If we delete camera under index 0, camera from index 1 gets index 0.
 // In this example we have to cameras, each have the same parameter pinned. After removing first camera, we access
 // parameter using the same address and we should get descriptors of the second camera parameter.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_RemovingCameraDeletesDescriptor )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_ParameterDescriptor, EndUserParamsLogic_RemovingCameraDeletesDescriptor )
 {
     auto editor = GetProjectEditor();
 
     auto scene = CreateSceneForParamDesc( editor, "Scene" );
     EndUserParamsLogic paramsLogic( scene.get() );
 
-    AddParamDescriptors( paramsLogic, scene );
+    AddParamDescriptors( paramsLogic, scene );  if( HasFatalFailure() ) return;
 
     // ***********************
     // Remove camera
@@ -261,9 +261,9 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.Index = 0;
 
     auto desc = paramsLogic.GetDescriptor( address );
-    REQUIRE CHECK( desc != nullptr );                   // Camera from index 1 replaces camera under index 0.
+    ASSERT_TRUE( desc != nullptr );                   // Camera from index 1 replaces camera under index 0.
     
-    CHECK( desc->GetName() == "Camera1" );
+    EXPECT_EQ( desc->GetName(), "Camera1" );
 
     // ***********************
     // There's no camera under index 1 now.
@@ -276,21 +276,21 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.Index = 1;
 
     desc = paramsLogic.GetDescriptor( address );
-    REQUIRE CHECK( desc == nullptr );
+    ASSERT_EQ( desc, nullptr );
 }
 
 // ***********************
 // Deleting light should delete camera param descriptor. If we delete camera under index 0, camera from index 1 gets index 0.
 // In this example we have to lights, each have the same parameter pinned. After removing first light, we access
 // parameter using the same address and we should get descriptors of the second light parameter.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_RemovingLightDeletesDescriptor )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_ParameterDescriptor, EndUserParamsLogic_RemovingLightDeletesDescriptor )
 {
     auto editor = GetProjectEditor();
 
     auto scene = CreateSceneForParamDesc( editor, "Scene" );
     EndUserParamsLogic paramsLogic( scene.get() );
 
-    AddParamDescriptors( paramsLogic, scene );
+    AddParamDescriptors( paramsLogic, scene );  if( HasFatalFailure() ) return;
 
     // ***********************
     // Remove camera
@@ -308,9 +308,9 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.Index = 0;
 
     auto desc = paramsLogic.GetDescriptor( address );
-    REQUIRE CHECK( desc != nullptr );                   // Camera from index 1 replaces camera under index 0.
+    ASSERT_TRUE( desc != nullptr );                   // Camera from index 1 replaces camera under index 0.
 
-    CHECK( desc->GetName() == "Light1" );
+    EXPECT_EQ( desc->GetName(), "Light1" );
 
     // ***********************
     // There's no camera under index 1 now.
@@ -323,23 +323,23 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.Index = 1;
 
     desc = paramsLogic.GetDescriptor( address );
-    REQUIRE CHECK( desc == nullptr );
+    ASSERT_EQ( desc, nullptr );
 }
 
 // ***********************
 // Move node whose parameters are registered and check if we can access descriptor with new address.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_MovingNodeChangesDescsAddress )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_ParameterDescriptor, EndUserParamsLogic_MovingNodeChangesDescsAddress )
 {
     auto editor = GetProjectEditor();
 
     auto scene = CreateSceneForParamDesc( editor, "Scene" );
     EndUserParamsLogic paramsLogic( scene.get() );
 
-    AddParamDescriptors( paramsLogic, scene );
+    AddParamDescriptors( paramsLogic, scene );  if( HasFatalFailure() ) return;
 
     // ***********************
     // Move node
-    REQUIRE CHECK( editor->MoveNode( scene->GetName(), "root/TexturedRect", 0, scene->GetName(), "root/ColoredRect" ) );
+    ASSERT_TRUE( editor->MoveNode( scene->GetName(), "root/TexturedRect", 0, scene->GetName(), "root/ColoredRect" ) );
 
     // ***********************
     // Check old addresses. Descriptor shouldn't be accessed.
@@ -350,7 +350,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.PluginName = "solid color";
     address.ParamName = "color";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.ParamTargetType = ParameterAddress::GlobalEffectParam;
     address.NodeName = "root/ColoredRect";
@@ -359,14 +359,14 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.NodeName = "root/ColoredRect";
     address.ParamTargetType = ParameterAddress::PluginParam;
     address.PluginName = "rectangle";
     address.ParamName = "width";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     // ***********************
     // Check new adresses for existance of descriptos.
@@ -376,7 +376,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.PluginName = "solid color";
     address.ParamName = "color";
 
-    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_NE( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.ParamTargetType = ParameterAddress::GlobalEffectParam;
     address.NodeName = "root/TexturedRect/ColoredRect";
@@ -384,18 +384,18 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamName = "alpha";
     address.ParamSubName = "";
 
-    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_NE( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.NodeName = "root/TexturedRect/ColoredRect";
     address.ParamTargetType = ParameterAddress::PluginParam;
     address.PluginName = "rectangle";
     address.ParamName = "width";
 
-    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_NE( paramsLogic.GetDescriptor( address ), nullptr );
 
     // ***********************
     // Move TexturedNode (it holds logic and resource param descriptors)
-    REQUIRE CHECK( editor->MoveNode( scene->GetName(), "root/Group1", 0, scene->GetName(), "root/TexturedRect" ) );
+    ASSERT_TRUE( editor->MoveNode( scene->GetName(), "root/Group1", 0, scene->GetName(), "root/TexturedRect" ) );
 
     // ***********************
     // Check old addresses. Descriptor shouldn't be accessed.
@@ -406,7 +406,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.SceneName = scene->GetName();
     address.NodeName = "root/TexturedRect";
@@ -415,7 +415,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamName = "wrapModeX";
     address.ParamSubName = "Tex0";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     // ***********************
     // Check new adresses for existance of descriptos.
@@ -426,7 +426,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_NE( paramsLogic.GetDescriptor( address ), nullptr );
 
     address.SceneName = scene->GetName();
     address.NodeName = "root/Group1/TexturedRect";
@@ -435,23 +435,23 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.ParamName = "wrapModeX";
     address.ParamSubName = "Tex0";
 
-    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_NE( paramsLogic.GetDescriptor( address ), nullptr );
 }
 
 // ***********************
 // Move plugin whose parameters are registered and check if we can access descriptor with new address.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserParamsLogic_MovingPluginChangesDescsAddress )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_ParameterDescriptor, EndUserParamsLogic_MovingPluginChangesDescsAddress )
 {
     auto editor = GetProjectEditor();
 
     auto scene = CreateSceneForParamDesc( editor, "Scene" );
     EndUserParamsLogic paramsLogic( scene.get() );
 
-    AddParamDescriptors( paramsLogic, scene );
+    AddParamDescriptors( paramsLogic, scene );  if( HasFatalFailure() ) return;
 
     // ***********************
     // Move plugin
-    REQUIRE CHECK( editor->MovePlugin( scene->GetName(), "root/Group1", 1, scene->GetName(), "root/ColoredRect", "solid color" ) );
+    ASSERT_TRUE( editor->MovePlugin( scene->GetName(), "root/Group1", 1, scene->GetName(), "root/ColoredRect", "solid color" ) );
 
     // ***********************
     // Check old addresses. Descriptor shouldn't be accessed.
@@ -462,7 +462,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.PluginName = "solid color";
     address.ParamName = "color";
 
-    CHECK( paramsLogic.GetDescriptor( address ) == nullptr );
+    EXPECT_EQ( paramsLogic.GetDescriptor( address ), nullptr );
 
     // ***********************
     // Check new address
@@ -472,6 +472,6 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.ParameterDescriptor, EndUserPara
     address.PluginName = "solid color";
     address.ParamName = "color";
 
-    CHECK( paramsLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_NE( paramsLogic.GetDescriptor( address ), nullptr );
 
 }

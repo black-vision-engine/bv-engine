@@ -26,7 +26,7 @@
 
 #include "Serialization/BV/XML/BVXMLSerializer.h"
 
-#include "UnitTest++.h"
+#include "gtest/gtest.h"
 
 
 namespace bv {
@@ -52,7 +52,7 @@ void					TestScene::InitBasicColorPluginTest	()
         SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
         editor->AddChildNode( scene, col, lChild );
         editor->AddChildNode( scene, col, rChild );
-        CHECK( col->GetNumChildren() == 2 );
+        EXPECT_TRUE( col->GetNumChildren() == 2 );
     };
 
     m_testSteps.push_back( add );
@@ -107,11 +107,11 @@ void					TestScene::InitOrderColorPluginTest	()
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
 
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, col );
         editor->AddChildNode( scene, col, lChild );
         editor->AddChildNode( scene, col, rChild );
-        CHECK( col->GetNumChildren() == 2 );
+        EXPECT_TRUE( col->GetNumChildren() == 2 );
     };
 
     for( auto & test : tests )
@@ -155,7 +155,7 @@ void					TestScene::InitBasicTexturePluginTest	()
         editor->AddChildNode( scene, tex, lChild );
         editor->AddChildNode( scene, tex, rChild );
 
-        CHECK( tex->GetNumChildren() == 2 );
+        EXPECT_TRUE( tex->GetNumChildren() == 2 );
     };
 
     m_testSteps.push_back( add0 );
@@ -188,8 +188,8 @@ void					TestScene::InitBasicTexturePluginTest	()
         auto fm0 = QueryTypedValue< ValueIntPtr >( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetValue( "filteringMode" ) )->GetValue();
         auto fm1 = QueryTypedValue< ValueIntPtr >( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetValue( "filteringMode" ) )->GetValue();
 
-        CHECK( fm0 == ( int )TextureFilteringMode::TFM_POINT );
-        CHECK( fm0 == fm1 );
+        EXPECT_TRUE( fm0 == ( int )TextureFilteringMode::TFM_POINT );
+        EXPECT_TRUE( fm0 == fm1 );
     } );
     m_testSteps.push_back( [&]{} );
     m_testSteps.push_back( [&]
@@ -251,11 +251,11 @@ void					TestScene::InitOrderTexturePluginTest	()
         auto child = root->GetChild( TEX_NODE );
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, tex );
         editor->AddChildNode( scene, tex, lChild );
         editor->AddChildNode( scene, tex, rChild );
-        CHECK( tex->GetNumChildren() == 2 );
+        EXPECT_TRUE( tex->GetNumChildren() == 2 );
     };
 
     for( auto & test : tests )
@@ -302,7 +302,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
         editor->AddChildNode( scene, anim, lChild );
         editor->AddChildNode( scene, anim, rChild );
 
-        CHECK( anim->GetNumChildren() == 2 );
+        EXPECT_TRUE( anim->GetNumChildren() == 2 );
     };
 
     m_testSteps.push_back( add0 );
@@ -379,11 +379,11 @@ void					TestScene::InitOrderAnimationPluginTest	()
         auto child = root->GetChild( ANIM_NODE );
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, anim );
         editor->AddChildNode( scene, anim, lChild );
         editor->AddChildNode( scene, anim, rChild );
-        CHECK( anim->GetNumChildren() == 2 );
+        EXPECT_TRUE( anim->GetNumChildren() == 2 );
     };
 
     for( auto & test : tests )
@@ -418,7 +418,7 @@ void					TestScene::InitBasicGradientPluginTest	()
         editor->AddChildNode( scene, grad, lChild );
         editor->AddChildNode( scene, grad, rChild );
 
-        CHECK( grad->GetNumChildren() == 2 );
+        EXPECT_TRUE( grad->GetNumChildren() == 2 );
     };
 
     m_testSteps.push_back( add );
@@ -484,11 +484,11 @@ void					TestScene::InitOrderGradientPluginTest	()
         auto child = root->GetChild( GRAD_NODE );
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, grad );
         editor->AddChildNode( scene, grad, lChild );
         editor->AddChildNode( scene, grad, rChild );
-        CHECK( grad->GetNumChildren() == 2 );
+        EXPECT_TRUE( grad->GetNumChildren() == 2 );
     };
 
     for( auto & test : tests )
@@ -535,7 +535,7 @@ void					TestScene::InitColoredTextTest			()
         editor->AddChildNode( scene, txt, lChild );
         editor->AddChildNode( scene, txt, rChild );
 
-        CHECK( txt->GetNumChildren() == 2 );
+        EXPECT_TRUE( txt->GetNumChildren() == 2 );
     };
 
     std::string test0[] = { "text", "alpha_mask" };
@@ -576,11 +576,11 @@ void					TestScene::InitColoredTextTest			()
         auto child = root->GetChild( TXT_NODE );
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, txt );
         editor->AddChildNode( scene, txt, lChild );
         editor->AddChildNode( scene, txt, rChild );
-        CHECK( txt->GetNumChildren() == 2 );
+        EXPECT_TRUE( txt->GetNumChildren() == 2 );
     };
 
 
@@ -666,7 +666,7 @@ void					TestScene::InitGradientTextTest			()
         editor->AddChildNode( scene, txt, lChild );
         editor->AddChildNode( scene, txt, rChild );
 
-        CHECK( txt->GetNumChildren() == 2 );
+        EXPECT_TRUE( txt->GetNumChildren() == 2 );
     };
 
     std::string test0[] = { "text", "alpha_mask" };
@@ -706,7 +706,7 @@ void					TestScene::InitGradientTextTest			()
         auto root = scene->GetRootNode();
         auto lChild = root->GetChild( TXT_NODE )->GetChild( "lChild" );
         auto rChild = root->GetChild( TXT_NODE )->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, root->GetChild( TXT_NODE ) ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, root->GetChild( TXT_NODE ) ) );
         editor->AddChildNode( scene, root, txt );
         editor->AddChildNode( scene, txt, lChild );
         editor->AddChildNode( scene, txt, rChild );
@@ -754,7 +754,7 @@ void					TestScene::InitColoredTimerTest			()
         editor->AddChildNode( scene, tmr, lChild );
         editor->AddChildNode( scene, tmr, rChild );
 
-        CHECK( tmr->GetNumChildren() == 2 );
+        EXPECT_TRUE( tmr->GetNumChildren() == 2 );
     };
 
     std::string test0[] = { "timer", "alpha_mask" };
@@ -795,11 +795,11 @@ void					TestScene::InitColoredTimerTest			()
         auto child = root->GetChild( TMR_NODE );
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, tmr );
         editor->AddChildNode( scene, tmr, lChild );
         editor->AddChildNode( scene, tmr, rChild );
-        CHECK( tmr->GetNumChildren() == 2 );
+        EXPECT_TRUE( tmr->GetNumChildren() == 2 );
     };
 
 
@@ -898,7 +898,7 @@ void					TestScene::InitGradientTimerTest			()
         editor->AddChildNode( scene, tmr, lChild );
         editor->AddChildNode( scene, tmr, rChild );
 
-        CHECK( tmr->GetNumChildren() == 2 );
+        EXPECT_TRUE( tmr->GetNumChildren() == 2 );
     };
 
     std::string test0[] = { "linear_gradient", "timer" };
@@ -939,11 +939,11 @@ void					TestScene::InitGradientTimerTest			()
         auto child = root->GetChild( TMR_NODE );
         auto lChild = child->GetChild( "lChild" );
         auto rChild = child->GetChild( "rChild" );
-        CHECK( editor->DeleteChildNode( scene, root, child ) );
+        EXPECT_TRUE( editor->DeleteChildNode( scene, root, child ) );
         editor->AddChildNode( scene, root, tmr );
         editor->AddChildNode( scene, tmr, lChild );
         editor->AddChildNode( scene, tmr, rChild );
-        CHECK( tmr->GetNumChildren() == 2 );
+        EXPECT_TRUE( tmr->GetNumChildren() == 2 );
     };
 
 
@@ -1484,9 +1484,9 @@ void					TestScene::InitOrderTest			( const OrderTestCase & testCase )
             auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
             auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( node ) );
               
-            CHECK( editor->DeletePlugin( child, plugin ).first != nullptr );
-            CHECK( editor->DeletePlugin( child, plugin ).first == nullptr );
-            CHECK( child->GetPlugin( plugin ) == nullptr );
+            EXPECT_TRUE( editor->DeletePlugin( child, plugin ).first != nullptr );
+            EXPECT_TRUE( editor->DeletePlugin( child, plugin ).first == nullptr );
+            EXPECT_TRUE( child->GetPlugin( plugin ) == nullptr );
         });
     }
 }
@@ -1500,18 +1500,18 @@ void					TestScene::SwapPlugins			( const std::string & rootPlugin, UInt32 rootI
     auto root = editor->GetModelScene( SCENE_NAME )->GetRootNode();
     auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( childName ) );
 
-    CHECK( editor->DetachPlugin( root, rootPlugin ) );
-    CHECK( editor->DetachPlugin( child, childPlugin ) );
+    EXPECT_TRUE( editor->DetachPlugin( root, rootPlugin ) );
+    EXPECT_TRUE( editor->DetachPlugin( child, childPlugin ) );
 
-    CHECK( editor->GetDetachedPlugin( root ) != nullptr );
-    CHECK( editor->GetDetachedPlugin( root )->GetName() == rootPlugin );
+    EXPECT_TRUE( editor->GetDetachedPlugin( root ) != nullptr );
+    EXPECT_TRUE( editor->GetDetachedPlugin( root )->GetName() == rootPlugin );
 
-    CHECK( editor->AddPlugin( child, editor->GetDetachedPlugin( root ), childIdx ) );
+    EXPECT_TRUE( editor->AddPlugin( child, editor->GetDetachedPlugin( root ), childIdx ) );
 
-    CHECK( editor->GetDetachedPlugin( child ) != nullptr );
-    CHECK( editor->GetDetachedPlugin( child )->GetName() == childPlugin );
+    EXPECT_TRUE( editor->GetDetachedPlugin( child ) != nullptr );
+    EXPECT_TRUE( editor->GetDetachedPlugin( child )->GetName() == childPlugin );
 
-    CHECK( editor->AddPlugin( root, editor->GetDetachedPlugin( child ), rootIdx ) );
+    EXPECT_TRUE( editor->AddPlugin( root, editor->GetDetachedPlugin( child ), rootIdx ) );
 }
 
 // ****************************

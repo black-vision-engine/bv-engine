@@ -27,7 +27,7 @@ void            TestDeserialization     ( const IDeserializer & deser );
 //
 TEST( Serialization_Serializers_JSON, DoublePassArrayAccess )
 {
-    JsonDeserializeObject deser;
+    SimpleJsonDeserializeObject deser;
     deser.LoadFile( "TestAssets/TestSerializers/DoublePassArrayAccess.json" );
 
     TestDeserialization( deser );

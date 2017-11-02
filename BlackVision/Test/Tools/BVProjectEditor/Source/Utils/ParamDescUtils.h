@@ -24,8 +24,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     address.PluginName = "solid color";
     address.ParamName = "color";
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
     // ***********************
     //
@@ -35,8 +35,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     address.PluginName = "rectangle";
     address.ParamName = "width";
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
     // ***********************
     //
@@ -47,8 +47,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     address.ParamName = "wrapModeX";
     address.ParamSubName = "Tex0";
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
 
     // ***********************
@@ -65,8 +65,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     lightDesc.SetName( "Light0" );
     lightDesc.SetDescription( "This is descriptor 0" );
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( lightDesc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( lightDesc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
     // ***********************
     // Add Light param descriptor
@@ -81,8 +81,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     lightDesc.SetName( "Light1" );
     lightDesc.SetDescription( "This is descriptor 1" );
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( lightDesc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( lightDesc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
 
     // ***********************
@@ -99,8 +99,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     cameraDesc.SetName( "Camera1" );
     cameraDesc.SetDescription( "This is descriptor 1" );
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( cameraDesc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( cameraDesc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
     // ***********************
     // Add Camera param descriptor
@@ -115,8 +115,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     cameraDesc.SetName( "Camera0" );
     cameraDesc.SetDescription( "This is descriptor 0" );
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( cameraDesc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( cameraDesc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
 
     // ***********************
@@ -129,8 +129,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 
 
     // ***********************
@@ -143,8 +143,8 @@ inline void             AddParamDescriptors     ( EndUserParamsLogic & descLogic
     address.ParamSubName = "";
     address.Index = 0;
 
-    CHECK( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
-    REQUIRE CHECK( descLogic.GetDescriptor( address ) != nullptr );
+    EXPECT_TRUE( descLogic.AddDescriptor( ParameterAddress( address ), EndUserParamDescriptor( desc ) ) );
+    ASSERT_TRUE( descLogic.GetDescriptor( address ) != nullptr );
 }
 
 

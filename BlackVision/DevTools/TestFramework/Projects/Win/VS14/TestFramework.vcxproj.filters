@@ -36,15 +36,6 @@
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Framework\TestExecutor.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Framework\MultiframeTestRunner.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Framework\XmlGTestReporter.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h">
       <Filter>Utils\Mocks\FakeAssets</Filter>
     </ClInclude>
@@ -70,7 +61,12 @@
       <Filter>Utils\Accessors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Framework\UseLoggerTests.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\TestEnvironment.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\NodeComparator.h">
+      <Filter>Utils\Comparators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeInterpolatorAccessor.h">
       <Filter>Utils\Accessors</Filter>
@@ -81,6 +77,9 @@
     <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h">
       <Filter>Utils\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\TestMain.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -90,15 +89,6 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Framework\TestExecutor.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Framework\MultiframeTestRunner.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Framework\XmlGTestReporter.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.cpp">
@@ -112,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.cpp">
       <Filter>Utils\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Framework\TestEnvironment.cpp">
+      <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

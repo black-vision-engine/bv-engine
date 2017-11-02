@@ -18,8 +18,8 @@ namespace bv
 
 // ***********************
 //
-JsonSerializeObject::JsonSerializeObject()
-    :   m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) ),
+JsonSerializeObject::JsonSerializeObject( SerializeContext * context )
+    :   m_context( context ),
         m_root( Json::objectValue )
 {
     m_currentNode = &m_root;
@@ -28,7 +28,7 @@ JsonSerializeObject::JsonSerializeObject()
 // ***********************
 //
 JsonSerializeObject::JsonSerializeObject( Json::Value && initValue )
-    :   m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) ),
+    :   m_context( new SerializeContext() ),
         m_root( initValue )
 {
     m_currentNode = &m_root;

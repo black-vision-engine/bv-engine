@@ -2,9 +2,6 @@
 
 #include "BVAppLogic.h"
 
-#include "UnitTest++.h"
-#include "TestExecutor.h"
-
 
 
 namespace bv {
@@ -17,7 +14,7 @@ class BVTestAppLogic : public BVAppLogic
     friend class FrameworkTest;
 private:
 
-    TestExecutor *      m_testExecutor;
+    FrameworkTest *     m_test;
 
 public:
                     BVTestAppLogic      ( Renderer * renderer, audio::AudioRenderer * audioRenderer, const std::string & testname );
@@ -30,6 +27,10 @@ public:
     virtual void    PostFrameLogic      () override;
 
     void            RestartTimer        ();
+
+public:
+
+    void            InjectTest          ( FrameworkTest * test );
 
 private:
 

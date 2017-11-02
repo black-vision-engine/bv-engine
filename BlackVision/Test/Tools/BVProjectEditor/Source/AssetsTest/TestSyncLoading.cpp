@@ -13,15 +13,17 @@ using namespace bv;
 // Loads assets synchronously from main thread. BV should hang on loading.
 class SyncLoadTest : public bv::FrameworkTest
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( SyncLoadTest )
 public:
-    SyncLoadTest() : bv::FrameworkTest( "SyncLoadTest", "BVProjectEditor.Assets.Loading", __FILE__, __LINE__ ) {}
 
     virtual void        PreEvents           () override;
 
-} SyncLoadTestInstance;
+private:
 
-UnitTest::ListAdder adderSyncLoadTest ( UnitTest::Test::GetTestList(), &SyncLoadTestInstance );
+    AssetDescConstPtr       m_assetDesc;
+
+};
+REGISTER_FRAMEWORK_GTEST_INFO( SyncLoadTest, BVProjectEditor_Assets_Loading, SyncLoadTest )
 
 
 
@@ -45,14 +47,14 @@ void        SyncLoadTest::PreEvents           ()
     auto secondNode = editor->GetNode( "FirstScene", "root/Group2" );
 
     UInt32 idx = 1;
-    REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
-    REQUIRE CHECK( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+    ASSERT_TRUE( editor->AddPlugin( "FirstScene", "root/Group1", "DEFAULT_TEXTURE", "texture", "default", idx ) );
+    ASSERT_TRUE( editor->AddPlugin( "FirstScene", "root/Group2", "DEFAULT_TEXTURE", "texture", "default", idx ) );
 
     auto assetDesc = TextureAssetDesc::Create( imagePath_32x32, true );
 
     // Loading assets synchronously. BV should hang and load assets immediately.
-    REQUIRE CHECK( editor->LoadAsset( "FirstScene", "root/Group1", "texture", assetDesc ) );
-    REQUIRE CHECK( editor->LoadAsset( "FirstScene", "root/Group2", "texture", assetDesc ) );
+    ASSERT_TRUE( editor->LoadAsset( "FirstScene", "root/Group1", "texture", assetDesc ) );
+    ASSERT_TRUE( editor->LoadAsset( "FirstScene", "root/Group2", "texture", assetDesc ) );
 
     // Check if assets were loaded corectly.
 
@@ -61,11 +63,11 @@ void        SyncLoadTest::PreEvents           ()
 
     auto lassets1 = texPlugin1->GetLAssets();
     auto lassets2 = texPlugin2->GetLAssets();
-    REQUIRE CHECK( lassets1.size() == 1 );
-    REQUIRE CHECK( lassets2.size() == 1 );
+    ASSERT_EQ( lassets1.size(), 1 );
+    ASSERT_EQ( lassets2.size(), 1 );
 
-    CHECK( lassets1[ 0 ].assetDesc == assetDesc );
-    CHECK( lassets2[ 0 ].assetDesc == assetDesc );
+    EXPECT_EQ( lassets1[ 0 ].assetDesc, assetDesc );
+    EXPECT_EQ( lassets2[ 0 ].assetDesc, assetDesc );
 }
 
 

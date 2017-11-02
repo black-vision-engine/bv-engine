@@ -237,6 +237,9 @@
       <Filter>Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Exception.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\FilePosition.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -355,6 +358,7 @@
       <Filter>Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Exception.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">

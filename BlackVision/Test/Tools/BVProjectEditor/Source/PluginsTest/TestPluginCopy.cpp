@@ -15,8 +15,8 @@ namespace
 //
 void            CreateTimelines     ( bv::BVProjectEditor * editor, bv::model::SceneModelPtr scene, const std::string & timeline1, const std::string & timeline2 )
 {
-    CHECK( editor->AddTimeline( scene->GetName(), timeline1, bv::TimelineType::TT_DEFAULT ) );
-    CHECK( editor->AddTimeline( scene->GetName(), timeline2, bv::TimelineType::TT_DEFAULT ) );
+    EXPECT_TRUE( editor->AddTimeline( scene->GetName(), timeline1, bv::TimelineType::TT_DEFAULT ) );
+    EXPECT_TRUE( editor->AddTimeline( scene->GetName(), timeline2, bv::TimelineType::TT_DEFAULT ) );
 }
 
 // ***********************
@@ -53,7 +53,7 @@ void            SetTimelines        ( bv::BVProjectEditor * editor, bv::model::S
 
 // ***********************
 // Copied plugin should have the same timelines set as ancestor.
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.Plugin.Copy, CopyTimelines_OneScene )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Plugin_Copy, CopyTimelines_OneScene )
 {
     auto editor = GetProjectEditor();
     auto scene = CreateOneSceneWithColoredRect( editor, "FirstScene" );
@@ -75,20 +75,20 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.Plugin.Copy, CopyTimelines_OneSc
     auto paramValModelTimeline = editor->GetTimeEvaluator( bv::model::TimelineHelper::CombineTimelinePath( scene->GetName(), "ParamValModelTimeline" ) );
 
     // Parameters should have the same timeline as ancestor.
-    CHECK( plugin->GetParameter( "color" )->GetTimeEvaluator() == colorTimeline );
+    EXPECT_TRUE( plugin->GetParameter( "color" )->GetTimeEvaluator() == colorTimeline );
 
     // Parameters should have default timeline if no one changed it.
-    CHECK( plugin->GetParameter( bv::model::BlendHelper::PARAM::BLEND_ENABLE )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( scene ) );
+    EXPECT_TRUE( plugin->GetParameter( bv::model::BlendHelper::PARAM::BLEND_ENABLE )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( scene ) );
 
     // ParamValModel timeline should have default timeline set to proper value
-    CHECK( std::static_pointer_cast< bv::model::DefaultPluginParamValModel >( plugin->GetPluginParamValModel() )->GetTimeEvaluator() == paramValModelTimeline );
+    EXPECT_TRUE( std::static_pointer_cast< bv::model::DefaultPluginParamValModel >( plugin->GetPluginParamValModel() )->GetTimeEvaluator() == paramValModelTimeline );
 }
 
 
 // ***********************
 // Copy plugins between scenes. Since timelines are present in both scenes, copy operation should create
 // new timeline with Copy_ prefixes
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.Plugin.Copy, CopyTimelines_BetweenScenes )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Plugin_Copy, CopyTimelines_BetweenScenes )
 {
     auto editor = GetProjectEditor();
 
@@ -113,11 +113,11 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor.Plugin.Copy, CopyTimelines_Betwe
     auto destParamValModelTimeline = editor->GetTimeEvaluator( bv::model::TimelineHelper::CombineTimelinePath( destScene->GetName(), "Copy_ParamValModelTimeline" ) );
 
     // Copy operation should create new timelines and prefix them with Copy_
-    CHECK( plugin->GetParameter( "color" )->GetTimeEvaluator() == destColorTimeline );
+    EXPECT_TRUE( plugin->GetParameter( "color" )->GetTimeEvaluator() == destColorTimeline );
 
     // Parameters should have default timeline if no one changed it. Copy operation shouldn't create Copy_default timeline.
-    CHECK( plugin->GetParameter( bv::model::BlendHelper::PARAM::BLEND_ENABLE )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( destScene ) );
+    EXPECT_TRUE( plugin->GetParameter( bv::model::BlendHelper::PARAM::BLEND_ENABLE )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( destScene ) );
 
     // ParamValModel timeline should have default timeline set to proper value
-    CHECK( std::static_pointer_cast< bv::model::DefaultPluginParamValModel >( plugin->GetPluginParamValModel() )->GetTimeEvaluator() == destParamValModelTimeline );
+    EXPECT_TRUE( std::static_pointer_cast< bv::model::DefaultPluginParamValModel >( plugin->GetPluginParamValModel() )->GetTimeEvaluator() == destParamValModelTimeline );
 }

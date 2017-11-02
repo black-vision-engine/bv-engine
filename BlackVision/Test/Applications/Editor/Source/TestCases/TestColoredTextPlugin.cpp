@@ -8,15 +8,14 @@
 //
 class TestColoredTextPlugin : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestColoredTextPlugin )
 public:
-    TestColoredTextPlugin() : TestEditor( "TestColoredTextPlugin", "TestEditor.Plugins", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestColoredTextPluginInstance;
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestColoredTextPlugin, TestEditor_Plugins, TestColoredTextPlugin )
 
-UnitTest::ListAdder adderTestColoredTextPlugin ( UnitTest::Test::GetTestList(), &TestColoredTextPluginInstance );
 
 
 

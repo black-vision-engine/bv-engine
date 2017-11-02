@@ -108,6 +108,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Applications\LibBVLogic\Projects\Win\VS14\LibBVLogic.vcxproj">
+      <Project>{e92b5bdf-8bd5-4d22-b2cd-90d681deda85}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS14\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
@@ -121,6 +124,7 @@
     <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeys.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\InvalidKeyTime.cpp" />
     <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp" />
+    <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp" />
     <ClCompile Include="..\..\..\Source\TestScenes\VersionTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

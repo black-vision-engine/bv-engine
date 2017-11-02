@@ -26,4 +26,18 @@ void                                BVSerializeContext::SetAssets               
     m_assets = assets;
 }
 
+// ***********************
+//
+model::TimelineManager *            BVSerializeContext::GetTimelineManager      ()
+{
+    return m_timelineManager;
+}
+
+// ***********************
+//
+BVSerializeContext *                BVSerializeContext::CreateContextFromEmptiness  ()
+{
+    return new BVSerializeContext( model::TimelineManager::GetInstance() );
+}
+
 }

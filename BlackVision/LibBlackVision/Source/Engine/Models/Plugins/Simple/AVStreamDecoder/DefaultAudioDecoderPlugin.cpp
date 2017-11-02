@@ -349,7 +349,7 @@ void                                DefaultAudioDecoderPlugin::BroadcastHasFinis
     auto evt = std::make_shared< VideoDecoderEvent >();
     evt->AssetPath = m_assetDesc->GetStreamPath();
     evt->EventCommand = VideoDecoderEvent::Command::HasFinished;
-    JsonSerializeObject ser;
+    SimpleJsonSerializeObject ser;
     evt->Serialize( ser );
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }

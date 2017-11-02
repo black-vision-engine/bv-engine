@@ -24,8 +24,9 @@ private:
     std::unique_ptr< DeserializeContext >       m_context;
 
 public:
-    JsonDeserializeObject               ();
-    JsonDeserializeObject               ( JsonSerializeObject && serializer );
+    // JsonDeserializeObject becomes owner of this context
+    JsonDeserializeObject               ( DeserializeContext * context );
+    JsonDeserializeObject               ( JsonSerializeObject && serializer, DeserializeContext * context );
     virtual ~JsonDeserializeObject      ();
 
     virtual DeserializeContext* GetDeserializeContext() const;
@@ -63,6 +64,17 @@ private:
 
     JsonDeserializeObject       ( Json::Value && initValue );
 };
+
+
+// ***********************
+// This class is a "stupid" Deserializer, with a primitive context and not sufficient to handle BV objects deserialization
+class SimpleJsonDeserializeObject : public JsonDeserializeObject
+{
+public:
+    SimpleJsonDeserializeObject()
+        : JsonDeserializeObject( new DeserializeContext() ) {}
+};
+
 
 
 } //bv

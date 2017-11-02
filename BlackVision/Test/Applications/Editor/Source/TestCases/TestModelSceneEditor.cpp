@@ -4,19 +4,18 @@
 
 
 
+
 // ***********************
 //
 class TestModelSceneEditor : public TestEditor
 {
-private:
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( TestModelSceneEditor )
 public:
-    TestModelSceneEditor() : TestEditor( "TestModelSceneEditor", "TestEditor.ModelSceneEditor", __FILE__, __LINE__ ) {}
 
     virtual void        InitScene           () override;
 
-} TestModelSceneEditorInstance;
-
-UnitTest::ListAdder adderTestModelSceneEditor ( UnitTest::Test::GetTestList(), &TestModelSceneEditorInstance );
+};
+REGISTER_FRAMEWORK_GTEST_INFO( TestModelSceneEditor, TestEditor_ModelSceneEditor, TestModelSceneEditor )
 
 
 

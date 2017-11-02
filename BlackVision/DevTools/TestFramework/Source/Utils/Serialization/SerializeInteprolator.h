@@ -29,7 +29,7 @@ inline std::shared_ptr< CompositeInterpolator< TimeType, std::string > >        
 template< typename Type >
 inline std::shared_ptr< BezierEvaluator< TimeType, Type > >                     DeserializeBezier   ( const std::string & path, CurveType curve, Key< TimeType, Type > k1, Key< TimeType, Type > k2 )
 {
-    BVXMLDeserializer deser( path, nullptr, nullptr );
+    BVXMLDeserializer deser( path, BVDeserializeContext::CreateContextFromEmptiness() );
 
     TimeType tolerance = 0.00001f;
     auto bezier = CreateDummyInterpolator< TimeType, Type >( curve, k1, k2, tolerance );
