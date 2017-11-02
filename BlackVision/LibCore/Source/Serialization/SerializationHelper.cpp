@@ -137,7 +137,7 @@ template<> Expected< bool >         String2T        ( const std::string & s )
 template< typename IntType, typename std::enable_if< std::is_signed< IntType >::value, bool >::type = true >
 Int64                               CharToInt64     ( const char * str, char ** end )
 {
-    return strtol( str, end, 10 );
+    return strtoll( str, end, 10 );
 }
 
 // ***********************
@@ -145,9 +145,40 @@ Int64                               CharToInt64     ( const char * str, char ** 
 template< typename IntType, typename std::enable_if< std::is_unsigned< IntType >::value, bool >::type = true >
 UInt64                              CharToInt64     ( const char * str, char ** end )
 {
-    return strtoul( str, end, 10 );
+    return strtoull( str, end, 10 );
 }
 
+// ***********************
+//
+template< typename IntType, typename std::enable_if< std::is_signed< IntType >::value, bool >::type = true >
+bool                                 IsOverflow      ( Int64 value, const char * )
+{
+    auto max = std::numeric_limits< Int64 >::max();
+    return max == value;
+}
+
+// ***********************
+//
+template< typename IntType, typename std::enable_if< std::is_unsigned< IntType >::value, bool >::type = true >
+bool                                 IsOverflow      ( UInt64 value, const char * str )
+{
+    // Max value tells us about overflow.
+    if( std::numeric_limits< UInt64 >::max() == value )
+        return true;
+
+    // Underflows aren't reported !! :(
+    // We must find -sign. Ommit spaces and check first character if it isn't minus.
+    SizeType strIter = 0;
+    while( str[ strIter ] != '\0' )
+    {
+        if( !isspace( str[ strIter ] ) )
+            break;
+
+        strIter++;
+    }
+
+    return str[ strIter ] == '-';
+}
 
 // ***********************
 //
@@ -155,10 +186,18 @@ template< typename IntType>
 Expected< IntType >                 String2IntType  ( const std::string & s )
 {
     char * end = nullptr;
-    auto ret = CharToInt64< IntType >( s.c_str(), &end );
+    const char * str = s.c_str();
+    auto ret = CharToInt64< IntType >( str, &end );
 
-    if( !*end && end != s.c_str() )
+    if( !*end && end != str )
     {
+        // This means over- or underflow.
+        // Note that in case of Int64 and UInt64 we can't represent max value.
+        // I wanted to implement this with errno, but in spite of what is written in docs,
+        // conversion function don't set errno :(
+        if( IsOverflow< IntType >( ret, str ) )
+            return Expected< IntType >();
+
         if( ret < std::numeric_limits< IntType >::lowest() )
             return Expected< IntType >();
 
