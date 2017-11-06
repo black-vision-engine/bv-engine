@@ -86,11 +86,11 @@ void                                        ModelNodeEffect::Serialize          
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
     ser.EnterChild( "effect" );
-    ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
+    ser.SetAttribute( "type", Convert::T2String< NodeEffectType >( GetType() ) );
 
     if( context->detailedInfo )
     {
-        ser.SetAttribute( "numRequiredAssets", SerializationHelper::T2String< SizeType >( NumRequiredAssets() ) );
+        ser.SetAttribute( "numRequiredAssets", Convert::T2String< SizeType >( NumRequiredAssets() ) );
         m_paramValModel->Serialize( ser );
 
         if( m_assetsDescs.size() > 0 )
@@ -128,7 +128,7 @@ ModelNodeEffectPtr							ModelNodeEffect::CreateTyped 		( const IDeserializer & 
 {
     auto typeStr = deser.GetAttribute( "type" );
 
-    auto type = SerializationHelper::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
+    auto type = Convert::String2T< NodeEffectType >( typeStr, NodeEffectType::NET_DEFAULT );
 
     auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 

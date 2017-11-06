@@ -30,8 +30,8 @@ template<class TimeValueT, class ValueT >
 void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser ) const
 {
     ser.EnterChild( "key" );
-	ser.SetAttribute( "time", SerializationHelper::T2String( t ) );
-    ser.SetAttribute( "val", SerializationHelper::T2String( val ) );
+	ser.SetAttribute( "time", Convert::T2String( t ) );
+    ser.SetAttribute( "val", Convert::T2String( val ) );
     ser.ExitChild();
 }
 
@@ -40,8 +40,8 @@ void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser 
 template<class TimeValueT, class ValueT >
 ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializer & deser )
 {
-    auto time = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
-    auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
+    auto time = Convert::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
+    auto val = Convert::String2T< ValueT >( deser.GetAttribute( "val" ) );
 
     if( !time.IsValid() )
     {

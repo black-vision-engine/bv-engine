@@ -23,10 +23,11 @@
 
 
 namespace bv {
+namespace Convert
+{
 
-
-namespace SerializationHelper {
-
+// ***********************
+//
 std::pair< nodelogic::PieChart::PieChartType, const char * > pct2s[] = 
 {
     std::make_pair( nodelogic::PieChart::PieChartType::PST_COLOR, "color" ),
@@ -34,31 +35,9 @@ std::pair< nodelogic::PieChart::PieChartType, const char * > pct2s[] =
     std::make_pair( nodelogic::PieChart::PieChartType::PST_TOTAL, "" )
 };
 
+IMPLEMENT_ENUM_SERIALIZATION( nodelogic::PieChart::PieChartType, pct2s )
 
-template<> 
-std::string                         T2String    ( const nodelogic::PieChart::PieChartType & pct )
-{ 
-    return Enum2String( pct2s, pct ); 
-}
 
-// *************************************
-//
-template<> 
-nodelogic::PieChart::PieChartType              String2T    ( const std::string & s, const nodelogic::PieChart::PieChartType & defaultVal )
-{
-    auto type = String2Enum( pct2s, s );
-    if( type == nodelogic::PieChart::PieChartType::PST_TOTAL )
-    {
-        return defaultVal;
-    }
-    return type;
-}
-
-template<> 
-Expected< nodelogic::PieChart::PieChartType >  String2T    ( const std::string & s )
-{ 
-    return String2Enum( pct2s, s ); 
-}
 
 } // SerializationHelper
 
@@ -99,8 +78,8 @@ const std::string           PieChart::PLUGIN::TEXT                = "text";
 //
 PieChart::PieSliceDescPtr   PieChart::PieSliceDesc::Create          ( const IDeserializer & deser )
 {
-    auto percent = SerializationHelper::String2T< Float32 >( deser.GetAttribute( "percent" ), 0.f );
-    auto offset = SerializationHelper::String2T< Float32 >( deser.GetAttribute( "offset" ), 0.f );
+    auto percent = Convert::String2T< Float32 >( deser.GetAttribute( "percent" ), 0.f );
+    auto offset = Convert::String2T< Float32 >( deser.GetAttribute( "offset" ), 0.f );
 
     return std::make_shared< PieSliceDesc >( percent, offset );
 }
@@ -109,8 +88,8 @@ PieChart::PieSliceDescPtr   PieChart::PieSliceDesc::Create          ( const IDes
 //
 void                        PieChart::PieSliceDesc::Serialize       ( ISerializer & ser ) const
 {
-    ser.SetAttribute( "percent", SerializationHelper::T2String( percent ) );
-    ser.SetAttribute( "offset", SerializationHelper::T2String( offset ) );
+    ser.SetAttribute( "percent", Convert::T2String( percent ) );
+    ser.SetAttribute( "offset", Convert::T2String( offset ) );
 }
 
 // *******************************
@@ -156,11 +135,11 @@ void                PieChart::Serialize       ( ISerializer & ser ) const
 
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
-        /*ser.SetAttribute( "textureEnabled", SerializationHelper::T2String( m_textureEnabled ) );
-        ser.SetAttribute( "materialEnabled", SerializationHelper::T2String( m_materialEnabled ) );*/
+        /*ser.SetAttribute( "textureEnabled", Convert::T2String( m_textureEnabled ) );
+        ser.SetAttribute( "materialEnabled", Convert::T2String( m_materialEnabled ) );*/
 
-        ser.SetAttribute( "pieChartType", SerializationHelper::T2String( m_chartType ) );
-        ser.SetAttribute( "textEnabled", SerializationHelper::T2String( m_textEnabled ) );
+        ser.SetAttribute( "pieChartType", Convert::T2String( m_chartType ) );
+        ser.SetAttribute( "textEnabled", Convert::T2String( m_textEnabled ) );
 
         auto timeline = context->GetTimelineManager()->GetTimelinePath( m_timeEval );
         ser.SetAttribute( "timelinePath", timeline );
@@ -187,8 +166,8 @@ PieChartPtr             PieChart::Create          ( const IDeserializer & deser,
             }
             auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
         
-            auto chartType = SerializationHelper::String2T< PieChartType >( deser.GetAttribute( "pieChartType" ), PieChartType::PST_COLOR );
-            auto textEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "textEnabled" ), true );
+            auto chartType = Convert::String2T< PieChartType >( deser.GetAttribute( "pieChartType" ), PieChartType::PST_COLOR );
+            auto textEnabled = Convert::String2T< bool >( deser.GetAttribute( "textEnabled" ), true );
 
             return PieChart::Create( parent, timeEval, chartType, textEnabled );
         }
@@ -212,7 +191,7 @@ bool                    PieChart::HandleEvent     ( IDeserializer & eventSer, IS
     }
     else if( action == ACTION::UPDATE_PIESLICE )
     {
-        auto sliceDescIdx = SerializationHelper::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
+        auto sliceDescIdx = Convert::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
         if( RemoveSlice( scene, sliceDescIdx, editor ) )
         {
             auto sliceDesc = SerializationHelper::DeserializeObject< PieSliceDesc >( eventSer, "pieSlice" );
@@ -238,7 +217,7 @@ bool                    PieChart::HandleEvent     ( IDeserializer & eventSer, IS
     }
     else if( action == ACTION::REMOVE_PIESLICE )
     {
-        auto sliceDescIdx = SerializationHelper::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
+        auto sliceDescIdx = Convert::String2T< UInt32 >( eventSer.GetAttribute( "pieSliceIdx" ), 0 );
         if( RemoveSlice( scene, sliceDescIdx, editor ) )
         {
             UpdateChart();
@@ -504,7 +483,7 @@ std::string                 PieChart::LabelNodeName             ( const std::str
 //
 std::string                 PieChart::SliceNodeName             ( const std::string & parentNodeName, UInt32 idx )
 {
-    return parentNodeName + "_pieSlice" + SerializationHelper::T2String( idx );
+    return parentNodeName + "_pieSlice" + Convert::T2String( idx );
 }
 
 } //nodelogic

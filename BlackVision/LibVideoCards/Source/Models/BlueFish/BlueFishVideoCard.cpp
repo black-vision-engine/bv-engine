@@ -23,7 +23,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
     auto deviceID = 0;
     if( deser.EnterChild( "deviceID" ) )
     {
-        deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
+        deviceID = Convert::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
         
         deser.ExitChild(); //deviceID
     }
@@ -42,13 +42,13 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                     ChannelInputDataUPtr input = nullptr;
                     ChannelOutputDataUPtr output = nullptr;
 
-                    auto name = SerializationHelper::String2T< ChannelName >( deser.GetAttribute( "name" ) );
+                    auto name = Convert::String2T< ChannelName >( deser.GetAttribute( "name" ) );
 
                     if( deser.EnterChild( "input" ) )
                     {
                         input = std::unique_ptr< ChannelInputData >( new ChannelInputData() );
-                        input->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
-                        input->playthrough = SerializationHelper::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
+                        input->type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
                     
                         deser.ExitChild(); //input
                     }
@@ -56,16 +56,16 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          ( const IDeseria
                     if( deser.EnterChild( "output" ) )
                     {
                         output = std::unique_ptr< ChannelOutputData >( new ChannelOutputData() );
-                        output->type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
-                        output->resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                        output->refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
-                        output->interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
-                        output->flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
-                        output->referenceMode = ReferenceModeMap[ SerializationHelper::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
-                        output->referenceH = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceH" ), 0 );
-                        output->referenceV = SerializationHelper::String2T< Int32 >( deser.GetAttribute( "referenceV" ), 0 );
+                        output->type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        output->resolution = Convert::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
+                        output->refresh = Convert::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
+                        output->interlaced = Convert::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
+                        output->flipped = Convert::String2T< bool >( deser.GetAttribute( "flipped" ), false );
+                        output->referenceMode = ReferenceModeMap[ Convert::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
+                        output->referenceH = Convert::String2T< Int32 >( deser.GetAttribute( "referenceH" ), 0 );
+                        output->referenceV = Convert::String2T< Int32 >( deser.GetAttribute( "referenceV" ), 0 );
                         output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
-                        output->linkedVideoOutput = ( UInt32 ) SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
+                        output->linkedVideoOutput = ( UInt32 ) Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
 
                         //FIXME?
                         output->updateFormat = UPD_FMT_FIELD;

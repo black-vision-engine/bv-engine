@@ -389,7 +389,7 @@ MeshAssetConstPtr   MeshUtils::ConvertToMesh            ( FbxNode * node )
                     std::string attName = att->GetNameOnly().Buffer();
                     if( attName.empty() )
                     {
-                        attName = meshName + SerializationHelper::T2String( attIdx );
+                        attName = meshName + Convert::T2String( attIdx );
                     }
 
                     auto childMesh = MeshAsset::Create( attName );

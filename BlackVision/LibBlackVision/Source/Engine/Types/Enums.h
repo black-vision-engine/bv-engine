@@ -1,6 +1,9 @@
 #pragma once
 
 #include "CoreEnums.h"
+#include "Serialization/ConversionHelper.h"
+
+
 
 namespace bv
 {
@@ -196,6 +199,8 @@ enum class LoopEventAction : int
     LEA_TOTAL
 };
 
+// ***********************
+//
 enum class MipMapFilterType : int
 {
     BOX = 0,
@@ -208,6 +213,10 @@ enum class MipMapFilterType : int
     MMFT_TOTAL
 };
 
+DECLARE_ENUM_SERIALIZATION( MipMapFilterType )
+
+// ***********************
+//
 enum class LightType : int 
 {
     LT_DIRECTIONAL = 0,
@@ -216,5 +225,7 @@ enum class LightType : int
 
     LT_TOTAL
 };
+
+DECLARE_ENUM_SERIALIZATION( LightType )
 
 } // bv

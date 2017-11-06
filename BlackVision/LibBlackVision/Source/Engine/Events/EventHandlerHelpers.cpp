@@ -237,7 +237,7 @@ ParameterPtr    GetLightParameter           ( model::SceneModel * scene, UInt32 
             }
         }
 
-		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( lightIndex ) + "], param [" + paramName + "] not found";
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + Convert::T2String( lightIndex ) + "], param [" + paramName + "] not found";
 	}
 	else
 	{
@@ -309,7 +309,7 @@ ParameterPtr    GetCameraParameter          ( model::SceneModel * scene, UInt32 
             }
         }
 
-		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + SerializationHelper::T2String( cameraIndex ) + "], param [" + paramName + "] not found";
+		LOG_MESSAGE( SeverityLevel::warning ) << "Parameter: scene [" + scene->GetName() + "], index [" + Convert::T2String( cameraIndex ) + "], param [" + paramName + "] not found";
 	}
 	else
 	{

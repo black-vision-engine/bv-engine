@@ -48,7 +48,7 @@ public:
     virtual void                    Serialize       ( ISerializer& ser ) const override
     {
         ser.EnterChild( "interpolation" );
-            ser.SetAttribute( "type", SerializationHelper::T2String( CurveType::CT_LINEAR ) );
+            ser.SetAttribute( "type", Convert::T2String( CurveType::CT_LINEAR ) );
         ser.ExitChild();
     }
 

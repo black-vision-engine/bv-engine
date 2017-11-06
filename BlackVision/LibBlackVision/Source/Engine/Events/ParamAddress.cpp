@@ -6,12 +6,12 @@
 
 
 
-namespace bv
+namespace bv {
+namespace Convert
 {
 
-namespace SerializationHelper
-{
-
+// ***********************
+//
 std::pair< ParameterAddress::TargetType, const char* > TargetTypeMapping[] = 
     { std::make_pair( ParameterAddress::TargetType::GlobalEffectParam, "GlobalEffectParam" )
     , std::make_pair( ParameterAddress::TargetType::PluginParam, "PluginParam" )
@@ -24,13 +24,13 @@ std::pair< ParameterAddress::TargetType, const char* > TargetTypeMapping[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( ParameterAddress::TargetType, TargetTypeMapping );
 
-}   // SerializationHelper
+}   // Convert
 
 // ***********************
 //
 void                    ParameterAddress::Serialize       ( ISerializer & ser ) const
 {
-    ser.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, SerializationHelper::T2String( ParamTargetType ) );
+    ser.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING, Convert::T2String( ParamTargetType ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
@@ -38,7 +38,7 @@ void                    ParameterAddress::Serialize       ( ISerializer & ser ) 
     ser.SetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING, ParamSubName );
 
     if( ParamTargetType == ParameterAddress::TargetType::LightParam || ParamTargetType ==  ParameterAddress::TargetType::CameraParam )
-        ser.SetAttribute( SerializationHelper::PARAM_INDEX, SerializationHelper::T2String( Index ) );
+        ser.SetAttribute( SerializationHelper::PARAM_INDEX, Convert::T2String( Index ) );
 }
 
 // ***********************
@@ -52,8 +52,8 @@ ParameterAddress        ParameterAddress::Create          ( const IDeserializer 
     address.NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
     address.ParamName         = deser.GetAttribute( SerializationHelper::PARAM_NAME_STRING );
     address.ParamSubName      = deser.GetAttribute( SerializationHelper::PARAM_SUB_NAME_STRING );
-    address.Index             = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::PARAM_INDEX ), std::numeric_limits< UInt32 >::quiet_NaN() );
-    address.ParamTargetType   = SerializationHelper::String2T<ParameterAddress::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING ), ParameterAddress::TargetType::FailTarget );
+    address.Index             = Convert::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::PARAM_INDEX ), std::numeric_limits< UInt32 >::quiet_NaN() );
+    address.ParamTargetType   = Convert::String2T<ParameterAddress::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_STRING ), ParameterAddress::TargetType::FailTarget );
 
     return address;
 }

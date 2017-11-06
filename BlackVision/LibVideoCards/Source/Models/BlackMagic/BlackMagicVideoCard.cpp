@@ -28,7 +28,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
         auto deviceID = 0;
         if( deser.EnterChild( "deviceID" ) )
         {
-            deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
+            deviceID = Convert::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
 
             deser.ExitChild(); //deviceID
         }
@@ -44,14 +44,14 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & de
                     if( deser.EnterChild( "output" ) )
                     {
                         ChannelOutputData output;
-                        output.type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
-                        output.resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                        output.refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
-                        output.interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
-                        output.flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
+                        output.type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
+                        output.resolution = Convert::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
+                        output.refresh = Convert::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
+                        output.interlaced = Convert::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
+                        output.flipped = Convert::String2T< bool >( deser.GetAttribute( "flipped" ), false );
                         output.videoMode = ConvertVideoMode( output.resolution, output.refresh, output.interlaced );
 
-						card->m_linkedVideoOutputID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ) );
+						card->m_linkedVideoOutputID = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ) );
 
                         deser.ExitChild(); //output
 

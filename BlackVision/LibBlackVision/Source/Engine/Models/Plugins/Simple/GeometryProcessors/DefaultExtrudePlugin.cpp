@@ -245,7 +245,7 @@ void        DefaultExtrudePlugin::ProcessConnectedComponent       ( model::Conne
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "[PluginExtrude] input topology: [" << SerializationHelper::T2String( topology ) << "] is not supported.";
+        LOG_MESSAGE( SeverityLevel::error ) << "[PluginExtrude] input topology: [" << Convert::T2String( topology ) << "] is not supported.";
         //assert( !"This primitive topology is not supported" );
         return;
     }

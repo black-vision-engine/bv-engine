@@ -6,12 +6,15 @@
 #include "Memory/MemoryLeaks.h"
 
 
-namespace bv { 
-    
-namespace SerializationHelper {
+namespace bv {     
+namespace Convert
+{
 
 // FIXME: nrl - refactor effects
-std::pair< NodeEffectType, const char* > ne2s[] = {
+// ***********************
+//
+std::pair< NodeEffectType, const char* > ne2s[] =
+{
     std::make_pair( NodeEffectType::NET_ALPHA_MASK, "alpha mask" )
     , std::make_pair( NodeEffectType::NET_BLUR, "blur" )
     , std::make_pair( NodeEffectType::NET_DEFAULT, "default" )
@@ -24,24 +27,13 @@ std::pair< NodeEffectType, const char* > ne2s[] = {
 	, std::make_pair( NodeEffectType::NET_SOFT_MASK, "soft mask" )
 //    , std::make_pair( NodeEffectType::NET_IMAGE_MASK, "image mask" )
     , std::make_pair( NodeEffectType::NET_Z_SORT, "z sort" )
-    , std::make_pair( NodeEffectType::NET_TOTAL, "" ) };
+    , std::make_pair( NodeEffectType::NET_TOTAL, "" )
+};
 
-template<>
-std::string T2String< NodeEffectType >( const NodeEffectType& t )
-{
-    return SerializationHelper::Enum2String< NodeEffectType >( ne2s, t );
-}
+IMPLEMENT_ENUM_SERIALIZATION( NodeEffectType, ne2s )
 
-template<>
-NodeEffectType String2T( const std::string & s, const NodeEffectType& defaultType )
-{
-    auto effectType = String2Enum( ne2s, s );
-    if( effectType == NodeEffectType::NET_TOTAL )
-        return defaultType;
-    return effectType;
-}
 
-} // SerializationHelper
+} // Convert
 
 
 namespace model {

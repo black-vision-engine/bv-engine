@@ -919,7 +919,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> std::string              SerializationHelper::T2String   ( const VideoCardEvent::Command & t );
+template<> std::string              Convert::T2String   ( const VideoCardEvent::Command & t );
 
 DEFINE_PTR_TYPE( VideoCardEvent )
 

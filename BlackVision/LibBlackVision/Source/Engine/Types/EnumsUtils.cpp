@@ -33,7 +33,8 @@ TextureFormat	EnumsUtils::Convert	( image::ImageFormat ifmt )
 
 
 
-namespace SerializationHelper {
+namespace Convert
+{
 
 
 std::pair< bv::PrimitiveType, const char* > PrimitiveTypeMapping[] = {
@@ -55,5 +56,5 @@ std::pair< bv::PrimitiveType, const char* > PrimitiveTypeMapping[] = {
 IMPLEMENT_ENUM_SERIALIZATION( PrimitiveType, PrimitiveTypeMapping );
 
 
-}   // SerializationHelper
+}   // Convert
 }   // bv

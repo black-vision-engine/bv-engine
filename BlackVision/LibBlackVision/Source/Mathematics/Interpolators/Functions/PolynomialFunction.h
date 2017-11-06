@@ -62,7 +62,7 @@ public:
     virtual void                                        Serialize       ( ISerializer & ser ) const override
     {
         ser.EnterChild( "interpolation" );
-            ser.SetAttribute( "type", SerializationHelper::T2String( m_curveType ) );
+            ser.SetAttribute( "type", Convert::T2String( m_curveType ) );
         ser.ExitChild();
     }
 

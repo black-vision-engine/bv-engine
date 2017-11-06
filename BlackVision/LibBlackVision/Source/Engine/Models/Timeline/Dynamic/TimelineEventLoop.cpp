@@ -9,9 +9,9 @@
 
 
 
-namespace bv { 
-    
-namespace SerializationHelper {
+namespace bv {
+namespace Convert
+{
 
 std::pair< LoopEventAction, const char* > lea2s[] =
 { std::make_pair( LoopEventAction::LEA_GOTO, "goto" )
@@ -21,9 +21,11 @@ std::pair< LoopEventAction, const char* > lea2s[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( LoopEventAction, lea2s );
 
-}
-    
-namespace model {
+}   // Convert
+
+
+namespace model 
+{
 
 // *********************************
 //
@@ -69,10 +71,10 @@ TimelineEventLoopPtr TimelineEventLoop::Create          ( const std::string & na
 TimelineEventLoopPtr TimelineEventLoop::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
     return TimelineEventLoop::Create( deser.GetAttribute( "name" ),
-        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
-        SerializationHelper::String2T( deser.GetAttribute( "action" ), LoopEventAction::LEA_TOTAL ),
-        SerializationHelper::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 0 ),
-        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "targetTime" ), 0.f ),
+        Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
+        Convert::String2T( deser.GetAttribute( "action" ), LoopEventAction::LEA_TOTAL ),
+        Convert::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 0 ),
+        Convert::String2T< TimeType >( deser.GetAttribute( "targetTime" ), 0.f ),
         timeline );
 }
 

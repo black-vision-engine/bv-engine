@@ -179,7 +179,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
         if( node )
         {
-            auto color = SerializationHelper::String2T< glm::vec4 >( newNodeName, glm::vec4( 1, 1, 1, 1 ) );
+            auto color = Convert::String2T< glm::vec4 >( newNodeName, glm::vec4( 1, 1, 1, 1 ) );
 
             result = editor->SelectNode( node, color );
         }
@@ -214,7 +214,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         //FIXME: replace with sth more generic
         auto destSceneName = request->GetAttribute( "DestSceneName" );
         auto destNodePath = request->GetAttribute( "DestPath" );
-        auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
+        auto destIdx = Convert::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         
@@ -298,7 +298,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
         //FIXME: replace with sth more generic
         auto destSceneName = request->GetAttribute( "SrcSceneName" );
         auto destNodePath = request->GetAttribute( "DestPath" );
-        auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
+        auto destIdx = Convert::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         auto srcPluginName = request->GetAttribute( "SrcName" );
@@ -319,7 +319,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
         //FIXME: replace with sth more generic
         auto destSceneName = request->GetAttribute( "SrcSceneName" );
         auto destNodePath = request->GetAttribute( "DestPath" );
-        auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
+        auto destIdx = Convert::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
         auto srcSceneName = request->GetAttribute( "SrcSceneName" );
         auto srcNodePath = request->GetAttribute( "SrcPath" );
         auto srcPluginName = request->GetAttribute( "SrcName" );
@@ -448,7 +448,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         if( saveTo.empty() || Path::IsValisPathName( saveTo ) )
         {
             auto forceSaveStr = request.GetAttribute( "forceSave" );
-            bool renameScene = SerializationHelper::String2T( request.GetAttribute( "renameScene" ), true );
+            bool renameScene = Convert::String2T( request.GetAttribute( "renameScene" ), true );
 
             bool forceSave = false;
 
@@ -581,7 +581,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto destPath = request.GetAttribute( "DestPath" );
         auto sceneName = request.GetAttribute( "SceneName" );
         auto nodePath = request.GetAttribute( "NodePath" );
-        m_closeSavedPreset = SerializationHelper::String2T( request.GetAttribute( "CloseSavedPreset" ), false );
+        m_closeSavedPreset = Convert::String2T( request.GetAttribute( "CloseSavedPreset" ), false );
 
         auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
@@ -951,8 +951,8 @@ void        SceneEventsHandlers::GridLines           ( bv::IEventPtr evt )
     auto & sceneName    = gridLineEvent->SceneName;
     auto & gridName     = gridLineEvent->GridLineName;
     auto gridLineIdx    = gridLineEvent->GridLineIndex;
-    auto gridType       = SerializationHelper::String2T( gridLineEvent->GridLineType, model::GridLineType::TST_Horizontal );
-    auto alignement     = SerializationHelper::String2T( gridLineEvent->AlignementType, model::GridLineAlignement::TSA_WeightCenter );
+    auto gridType       = Convert::String2T( gridLineEvent->GridLineType, model::GridLineType::TST_Horizontal );
+    auto alignement     = Convert::String2T( gridLineEvent->AlignementType, model::GridLineAlignement::TSA_WeightCenter );
 
     auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
     if( scene == nullptr )

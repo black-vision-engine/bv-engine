@@ -36,8 +36,6 @@ std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 const EventType ScreenShotRenderedEvent::m_sEventType       = EventManager::RegisterType();
 std::string ScreenShotRenderedEvent::m_sEventName           = "ScreenShotRenderedEvent";
 
-// FIXME: MORE EVENTS IN ScrollerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
-
 
 std::string LoadAssetEvent::m_sEventName            = "LoadAssetEvent";
 const EventType LoadAssetEvent::m_sEventType        = EventManager::RegisterType( LoadAssetEvent::Name(), LoadAssetEvent::Create );
@@ -132,52 +130,93 @@ const EventType GizmoEvent::m_sEventType            = EventManager::RegisterType
 
 // ************************************* Events Serialization *****************************************
 
+
+// ========================================================================= //
+// ResponseEvent
+// ========================================================================= //
+
 namespace SerializationHelper
 {
+    const std::string RESPONSE_STRING = "Response";
+}
+
 
 // ========================================================================= //
 // LoadAssetEvent
 // ========================================================================= //
-const std::string ASSET_DATA_STRING         = "AssetData";
-const std::string ASSET_ASYNC_LOAD          = "AsyncLoad";
 
-std::pair< LoadAssetEvent::Command, const char* > LoadAssetMapping[] = 
-    { std::make_pair( LoadAssetEvent::Command::LoadAsset, "LoadAsset" )
-    , std::make_pair( LoadAssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+namespace SerializationHelper
+{
+
+const std::string ASSET_DATA_STRING = "AssetData";
+const std::string ASSET_ASYNC_LOAD = "AsyncLoad";
+
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< LoadAssetEvent::Command, const char* > LoadAssetMapping[] =
+{ std::make_pair( LoadAssetEvent::Command::LoadAsset, "LoadAsset" )
+, std::make_pair( LoadAssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
 IMPLEMENT_ENUM_SERIALIZATION( LoadAssetEvent::Command, LoadAssetMapping );
 
+}   // Convert
+
 // ========================================================================= //
 // ParamKeyEvent
 // ========================================================================= //
-const std::string PARAM_VALUE_STRING          = "ParamValue";
-const std::string KEY_TIME_STRING             = "Time";
 
-std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] = 
-    { std::make_pair( ParamKeyEvent::Command::AddKey, "AddKey" )
-    , std::make_pair( ParamKeyEvent::Command::RemoveKey, "RemoveKey" ) 
-    , std::make_pair( ParamKeyEvent::Command::MoveKey, "MoveKey" ) 
-    , std::make_pair( ParamKeyEvent::Command::SetInterpolatorType, "SetInterpolator" ) 
-    , std::make_pair( ParamKeyEvent::Command::SetAddedInterpolatorType, "SetAddedInterpolatorType" ) 
-    , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPreWrapMethod, "SetInterpolatorPreWrapMethod" )
-    , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPostWrapMethod, "SetInterpolatorPostWrapMethod" )
-    , std::make_pair( ParamKeyEvent::Command::AssignTimeline, "AssignTimeline" )
-    , std::make_pair( ParamKeyEvent::Command::SampleCurve, "SampleCurve" )
-    , std::make_pair( ParamKeyEvent::Command::ListKeys, "ListKeys" )
-    , std::make_pair( ParamKeyEvent::Command::ListParameters, "ListParameters" )
-    , std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+
+namespace SerializationHelper
+{
+
+const std::string PARAM_VALUE_STRING = "ParamValue";
+const std::string KEY_TIME_STRING = "Time";
+
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< ParamKeyEvent::Command, const char* > ParameterCommandMapping[] =
+{ std::make_pair( ParamKeyEvent::Command::AddKey, "AddKey" )
+, std::make_pair( ParamKeyEvent::Command::RemoveKey, "RemoveKey" )
+, std::make_pair( ParamKeyEvent::Command::MoveKey, "MoveKey" )
+, std::make_pair( ParamKeyEvent::Command::SetInterpolatorType, "SetInterpolator" )
+, std::make_pair( ParamKeyEvent::Command::SetAddedInterpolatorType, "SetAddedInterpolatorType" )
+, std::make_pair( ParamKeyEvent::Command::SetInterpolatorPreWrapMethod, "SetInterpolatorPreWrapMethod" )
+, std::make_pair( ParamKeyEvent::Command::SetInterpolatorPostWrapMethod, "SetInterpolatorPostWrapMethod" )
+, std::make_pair( ParamKeyEvent::Command::AssignTimeline, "AssignTimeline" )
+, std::make_pair( ParamKeyEvent::Command::SampleCurve, "SampleCurve" )
+, std::make_pair( ParamKeyEvent::Command::ListKeys, "ListKeys" )
+, std::make_pair( ParamKeyEvent::Command::ListParameters, "ListParameters" )
+, std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 
 
 IMPLEMENT_ENUM_SERIALIZATION( ParamKeyEvent::Command, ParameterCommandMapping );
 
+
+}
+
 // ========================================================================= //
 // ParamDescriptorEvent
 // ========================================================================= //
 
-std::pair< ParamDescriptorEvent::Command, const char* > ParamDescriptorCommandMapping[] = 
-{   std::make_pair( ParamDescriptorEvent::Command::AddParamDescriptor, "AddParamDescriptor" )
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< ParamDescriptorEvent::Command, const char* > ParamDescriptorCommandMapping[] =
+{ std::make_pair( ParamDescriptorEvent::Command::AddParamDescriptor, "AddParamDescriptor" )
     , std::make_pair( ParamDescriptorEvent::Command::RemoveParamDescriptor, "RemoveParamDescriptor" )
     , std::make_pair( ParamDescriptorEvent::Command::AddAvaibleKeyTimes, "AddAvaibleKeyTimes" )
     , std::make_pair( ParamDescriptorEvent::Command::RemoveAvaibleKeyTimes, "RemoveAvaibleKeyTimes" )
@@ -188,11 +227,19 @@ std::pair< ParamDescriptorEvent::Command, const char* > ParamDescriptorCommandMa
 
 IMPLEMENT_ENUM_SERIALIZATION( ParamDescriptorEvent::Command, ParamDescriptorCommandMapping );
 
+}
+
+
 // ========================================================================= //
 // AssetEvent
 // ========================================================================= //
 
-std::pair< AssetEvent::Command, const char* > AssetCommandMapping[] = 
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< AssetEvent::Command, const char* > AssetCommandMapping[] =
 {
     std::make_pair( AssetEvent::Command::ClearCache, "ClearCache" )
     , std::make_pair( AssetEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
@@ -200,17 +247,29 @@ std::pair< AssetEvent::Command, const char* > AssetCommandMapping[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( AssetEvent::Command, AssetCommandMapping );
 
+}
+
 // ========================================================================= //
 // SceneEvent
 // ========================================================================= //
-const std::string NEW_SCENE_NAME_STRING        = "NewSceneName";
 
-std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] = 
+namespace SerializationHelper
+{
+const std::string NEW_SCENE_NAME_STRING = "NewSceneName";
+}
+
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
 {
     std::make_pair( SceneEvent::Command::AddScene, "AddScene" )
     , std::make_pair( SceneEvent::Command::RemoveScene, "RemoveScene" )
     , std::make_pair( SceneEvent::Command::RemoveAllScenes, "RemoveAllScenes" )
-    , std::make_pair( SceneEvent::Command::SetSceneVisible, "SetSceneVisible" ) 
+    , std::make_pair( SceneEvent::Command::SetSceneVisible, "SetSceneVisible" )
     , std::make_pair( SceneEvent::Command::SetSceneInvisible, "SetSceneInvisible" )
     , std::make_pair( SceneEvent::Command::RenameScene, "RenameScene" )
     , std::make_pair( SceneEvent::Command::AttachScene, "AttachScene" )
@@ -223,47 +282,82 @@ std::pair< SceneEvent::Command, const char* > SceneCommandMapping[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( SceneEvent::Command, SceneCommandMapping );
 
+}   // Convert
+
 // ========================================================================= //
 // LightEvent
 // ========================================================================= //
-const std::string LIGHT_TYPE_STRING        = "LightType";
-const std::string LIGHT_INDEX_STRING       = "LightIndex";
 
-std::pair< LightEvent::Command, const char* > LightCommandMapping[] = 
+namespace SerializationHelper
+{
+
+const std::string LIGHT_TYPE_STRING = "LightType";
+const std::string LIGHT_INDEX_STRING = "LightIndex";
+
+}
+
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< LightEvent::Command, const char* > LightCommandMapping[] =
 {
     std::make_pair( LightEvent::Command::AddLight, "AddLight" )
     , std::make_pair( LightEvent::Command::RemoveLight, "RemoveLight" )
     , std::make_pair( LightEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
-
 IMPLEMENT_ENUM_SERIALIZATION( LightEvent::Command, LightCommandMapping );
+
+}
 
 // ========================================================================= //
 // CameraEvent
 // ========================================================================= //
-const std::string CAMERA_INDEX_STRING       = "CameraIndex";
 
-std::pair< CameraEvent::Command, const char* > CameraCommandMapping[] = 
+namespace SerializationHelper
+{
+    const std::string CAMERA_INDEX_STRING = "CameraIndex";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< CameraEvent::Command, const char* > CameraCommandMapping[] =
 {
     std::make_pair( CameraEvent::Command::AddCamera, "AddCamera" )
     , std::make_pair( CameraEvent::Command::RemoveCamera, "RemoveCamera" )
     , std::make_pair( CameraEvent::Command::SetCurrentCamera, "SetCurrentCamera" )
     , std::make_pair( CameraEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( CameraEvent::Command, CameraCommandMapping );
+
+}
+
 
 // ========================================================================= //
 // NodeStructureEvent
 // ========================================================================= //
-const std::string NEW_NODE_NAME_STRING        = "NewNodeName";
 
-std::pair< NodeStructureEvent::Command, const char* > NodeStructureCommandMapping[] = 
+
+namespace SerializationHelper
+{
+   const std::string NEW_NODE_NAME_STRING = "NewNodeName";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< NodeStructureEvent::Command, const char* > NodeStructureCommandMapping[] =
 {
     std::make_pair( NodeStructureEvent::Command::AddNode, "AddNode" )
-    , std::make_pair( NodeStructureEvent::Command::RemoveNode, "RemoveNode" ) 
-    , std::make_pair( NodeStructureEvent::Command::SetNodeInvisible, "SetNodeInvisible" ) 
+    , std::make_pair( NodeStructureEvent::Command::RemoveNode, "RemoveNode" )
+    , std::make_pair( NodeStructureEvent::Command::SetNodeInvisible, "SetNodeInvisible" )
     , std::make_pair( NodeStructureEvent::Command::SetNodeVisible, "SetNodeVisible" )
     , std::make_pair( NodeStructureEvent::Command::SelectNode, "SelectNode" )
     , std::make_pair( NodeStructureEvent::Command::UnselectNodes, "UnselectNodes" )
@@ -274,32 +368,50 @@ std::pair< NodeStructureEvent::Command, const char* > NodeStructureCommandMappin
     , std::make_pair( NodeStructureEvent::Command::CopyNode, "CopyNode" )
     , std::make_pair( NodeStructureEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( NodeStructureEvent::Command, NodeStructureCommandMapping );
+
+}
 
 // ========================================================================= //
 // PluginStructureEvent
 // ========================================================================= //
-const std::string ATTACH_INDEX_STRING           = "AttachIndex";
-const std::string PLUGIN_UID_STRING             = "PluginUID";
 
-std::pair< PluginStructureEvent::Command, const char* > PluginStructureCommandMapping[] = 
+namespace SerializationHelper
+{
+    const std::string ATTACH_INDEX_STRING = "AttachIndex";
+    const std::string PLUGIN_UID_STRING = "PluginUID";
+}
+
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< PluginStructureEvent::Command, const char* > PluginStructureCommandMapping[] =
 {
     std::make_pair( PluginStructureEvent::Command::AttachPlugin, "AttachPlugin" )
-    , std::make_pair( PluginStructureEvent::Command::DetachPlugin, "DetachPlugin" ) 
-    , std::make_pair( PluginStructureEvent::Command::AddPlugin, "AddPlugin" ) 
+    , std::make_pair( PluginStructureEvent::Command::DetachPlugin, "DetachPlugin" )
+    , std::make_pair( PluginStructureEvent::Command::AddPlugin, "AddPlugin" )
     , std::make_pair( PluginStructureEvent::Command::RemovePlugin, "RemovePlugin" )
     , std::make_pair( PluginStructureEvent::Command::CopyPlugin, "CopyPlugin" )
     , std::make_pair( PluginStructureEvent::Command::MovePlugin, "MovePlugin" )
     , std::make_pair( PluginStructureEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( PluginStructureEvent::Command, PluginStructureCommandMapping );
+
+}
 
 // ========================================================================= //
 // ProjectEvent
 // ========================================================================= //
-std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] = 
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
 {
     std::make_pair( ProjectEvent::Command::SaveScene, "SaveScene" )
     , std::make_pair( ProjectEvent::Command::LoadScene, "LoadScene" )
@@ -310,8 +422,8 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::AddExistingSceneToProject, "AddExistingSceneToProject" )
     , std::make_pair( ProjectEvent::Command::CreateSceneInProject, "CreateSceneInProject" )
 
-    , std::make_pair( ProjectEvent::Command::LoadProject, "LoadProject" ) 
-    , std::make_pair( ProjectEvent::Command::NewProject, "NewProject" ) 
+    , std::make_pair( ProjectEvent::Command::LoadProject, "LoadProject" )
+    , std::make_pair( ProjectEvent::Command::NewProject, "NewProject" )
     , std::make_pair( ProjectEvent::Command::SetCurrentProject, "SetCurrentProject" )
     , std::make_pair( ProjectEvent::Command::MoveProject, "MoveProject" )
     , std::make_pair( ProjectEvent::Command::DeleteProject, "DeleteProject" )
@@ -323,32 +435,33 @@ std::pair< ProjectEvent::Command, const char* > ProjectEventCommandMapping[] =
     , std::make_pair( ProjectEvent::Command::CopyFolder, "CopyFolder" )
     , std::make_pair( ProjectEvent::Command::MoveFolder, "MoveFolder" )
 
-    , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" ) 
-    , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" ) 
-    , std::make_pair( ProjectEvent::Command::RemoveAsset, "RemoveAsset" ) 
+    , std::make_pair( ProjectEvent::Command::CopyAsset, "CopyAsset" )
+    , std::make_pair( ProjectEvent::Command::MoveAsset, "MoveAsset" )
+    , std::make_pair( ProjectEvent::Command::RemoveAsset, "RemoveAsset" )
     , std::make_pair( ProjectEvent::Command::ImportAsset, "ImportAsset" )
-    
-    , std::make_pair( ProjectEvent::Command::SavePreset, "SavePreset" ) 
-    , std::make_pair( ProjectEvent::Command::LoadPreset, "LoadPreset" ) 
-    , std::make_pair( ProjectEvent::Command::EditPreset, "EditPreset" ) 
+
+    , std::make_pair( ProjectEvent::Command::SavePreset, "SavePreset" )
+    , std::make_pair( ProjectEvent::Command::LoadPreset, "LoadPreset" )
+    , std::make_pair( ProjectEvent::Command::EditPreset, "EditPreset" )
 
     , std::make_pair( ProjectEvent::Command::GenerateMeshThumbnail, "GenerateMeshThumbnail" ) //temp testing event
-    
+
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( ProjectEvent::Command, ProjectEventCommandMapping );
 
-// ========================================================================= //
-// ResponseEvent
-// ========================================================================= //
-const std::string RESPONSE_STRING                     = "Response";
+}
 
 // ========================================================================= //
 // InfoEvent
 // ========================================================================= //
 
-std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] = 
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
 {
     std::make_pair( InfoEvent::Command::TreeStructure, "TreeStructure" )
     , std::make_pair( InfoEvent::Command::MinimalTreeStructure, "MinimalTreeStructure" )
@@ -381,8 +494,8 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
 
     , std::make_pair( InfoEvent::Command::GetPMItemStats, "GetPMItemStats" )
 
-    , std::make_pair( InfoEvent::Command::Timelines, "TimeLines" ) 
-    , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, "ListTimelineKeyframes" ) 
+    , std::make_pair( InfoEvent::Command::Timelines, "TimeLines" )
+    , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, "ListTimelineKeyframes" )
     , std::make_pair( InfoEvent::Command::CheckTimelineTime, "CheckTimelineTime" )
     , std::make_pair( InfoEvent::Command::ListTimelinesParams, "ListTimelinesParams" )
 
@@ -390,97 +503,129 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::Videocards, "VideoCards" )
     , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( InfoEvent::Command, InfoEventCommandMapping );
+
+}
 
 // ========================================================================= //
 // TimeLineEvent
 // ========================================================================= //
-const std::string TIMELINE_TYPE_STRING                = "Type";
-const std::string TIMELINE_TIME_VALUE_STRING          = "Time";
-const std::string TIMELINE_DURATION_VALUE_STRING      = "Duration";
-const std::string TIMELINE_NEW_NAME_STRING            = "TimelineNewName";
-const std::string TIMELINE_WRAP_METHOD_STRING          = "WrapMethod";
 
-// Timeline Command
 
-std::pair< TimeLineEvent::Command, const char* > TimeLineEventCommandMapping[] = 
+namespace SerializationHelper
+{
+    const std::string TIMELINE_TYPE_STRING = "Type";
+    const std::string TIMELINE_TIME_VALUE_STRING = "Time";
+    const std::string TIMELINE_DURATION_VALUE_STRING = "Duration";
+    const std::string TIMELINE_NEW_NAME_STRING = "TimelineNewName";
+    const std::string TIMELINE_WRAP_METHOD_STRING = "WrapMethod";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< TimeLineEvent::Command, const char* > TimeLineEventCommandMapping[] =
 {
     std::make_pair( TimeLineEvent::Command::AddTimeline, "AddTimeline" )
-    , std::make_pair( TimeLineEvent::Command::DeleteTimeline, "DeleteTimeline" ) 
-    , std::make_pair( TimeLineEvent::Command::ForceDeleteTimeline, "ForceDeleteTimeline" ) 
+    , std::make_pair( TimeLineEvent::Command::DeleteTimeline, "DeleteTimeline" )
+    , std::make_pair( TimeLineEvent::Command::ForceDeleteTimeline, "ForceDeleteTimeline" )
     , std::make_pair( TimeLineEvent::Command::RenameTimeline, "RenameTimeline" )
     , std::make_pair( TimeLineEvent::Command::SetDuration, "SetDuration" )
-    , std::make_pair( TimeLineEvent::Command::SetWrapPreBehavior, "SetWrapPreBehavior" ) 
-    , std::make_pair( TimeLineEvent::Command::SetWrapPostBehavior, "SetWrapPostBehavior" ) 
+    , std::make_pair( TimeLineEvent::Command::SetWrapPreBehavior, "SetWrapPreBehavior" )
+    , std::make_pair( TimeLineEvent::Command::SetWrapPostBehavior, "SetWrapPostBehavior" )
     , std::make_pair( TimeLineEvent::Command::Play, "Play" )
     , std::make_pair( TimeLineEvent::Command::Stop, "Stop" )
-    , std::make_pair( TimeLineEvent::Command::PlayReverse, "PlayReverse" ) 
+    , std::make_pair( TimeLineEvent::Command::PlayReverse, "PlayReverse" )
     , std::make_pair( TimeLineEvent::Command::Goto, "Goto" )
     , std::make_pair( TimeLineEvent::Command::GotoAndPlay, "GotoAndPlay" )
     , std::make_pair( TimeLineEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( TimeLineEvent::Command, TimeLineEventCommandMapping );
 
-// Timeline Type
-
-std::pair< TimelineType, const char* > TimelineTypeMapping[] = 
+// ***********************
+//
+std::pair< TimelineType, const char* > TimelineTypeMapping[] =
 {
     std::make_pair( TimelineType::TT_DEFAULT, "Default" )
-    , std::make_pair( TimelineType::TT_OFFSET, "Offset" ) 
-    , std::make_pair( TimelineType::TT_CONST, "Const" ) 
+    , std::make_pair( TimelineType::TT_OFFSET, "Offset" )
+    , std::make_pair( TimelineType::TT_CONST, "Const" )
     , std::make_pair( TimelineType::TT_TOTAL, SerializationHelper::EMPTY_STRING )      // default
 };
-
-
 IMPLEMENT_ENUM_SERIALIZATION( TimelineType, TimelineTypeMapping );
+
+}   // Convert
+
+
 
 // ========================================================================= //
 // NodeLogicEvent
 // ========================================================================= //
-const std::string WIDGET_ACTION_STRING                = "Action";
-const std::string WIDGET_TIME_VALUE_STRING            = "Time";
 
-std::pair< NodeLogicEvent::Command, const char* > NodeLogicEventCommandMapping[] = 
+namespace SerializationHelper
+{
+    const std::string WIDGET_ACTION_STRING = "Action";
+    const std::string WIDGET_TIME_VALUE_STRING = "Time";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< NodeLogicEvent::Command, const char* > NodeLogicEventCommandMapping[] =
 {
     std::make_pair( NodeLogicEvent::Command::AddNodeLogic, "AddNodeLogic" )
     , std::make_pair( NodeLogicEvent::Command::DeleteNodeLogic, "DeleteNodeLogic" )
-    , std::make_pair( NodeLogicEvent::Command::LogicAction, "LogicAction" ) 
+    , std::make_pair( NodeLogicEvent::Command::LogicAction, "LogicAction" )
     , std::make_pair( NodeLogicEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( NodeLogicEvent::Command, NodeLogicEventCommandMapping );
+
+}
+
 
 // ========================================================================= //
 // VideoCardEvent
 // ========================================================================= //
-const std::string VIDEO_CARD_NUMBER_STRING            = "Number";
-const std::string VIDEO_CARD_VALUE_STRING             = "Value";
-const std::string VIDEO_CARD_REFERENCE_MODE_STRING    = "ReferenceMode";
+
+namespace SerializationHelper
+{
+    const std::string VIDEO_CARD_NUMBER_STRING = "Number";
+    const std::string VIDEO_CARD_VALUE_STRING = "Value";
+    const std::string VIDEO_CARD_REFERENCE_MODE_STRING = "ReferenceMode";
+}
 
 
-std::pair< VideoCardEvent::Command, const char* > VideoCardEventCommandMapping[] = 
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< VideoCardEvent::Command, const char* > VideoCardEventCommandMapping[] =
 {
     std::make_pair( VideoCardEvent::Command::EnableOutput, "EnableOutput" )
-    , std::make_pair( VideoCardEvent::Command::DisableOutput, "DisableOutput" ) 
-    , std::make_pair( VideoCardEvent::Command::EnableKey, "EnableKey" ) 
+    , std::make_pair( VideoCardEvent::Command::DisableOutput, "DisableOutput" )
+    , std::make_pair( VideoCardEvent::Command::EnableKey, "EnableKey" )
     , std::make_pair( VideoCardEvent::Command::DisableKey, "DisableKey" )
     , std::make_pair( VideoCardEvent::Command::ReferenceMode, "ReferenceMode" )
-    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetH, "ReferenceOffsetH" ) 
-    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetV, "ReferenceOffsetV" ) 
+    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetH, "ReferenceOffsetH" )
+    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetV, "ReferenceOffsetV" )
     , std::make_pair( VideoCardEvent::Command::EnableInput, "EnableInput" )
     , std::make_pair( VideoCardEvent::Command::DisableInput, "DisableInput" )
     , std::make_pair( VideoCardEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::Command, VideoCardEventCommandMapping );
 
-std::pair< VideoCardEvent::VideoReferenceMode, const char* > VideoCardVideoReferenceModeMapping[] = 
+
+// ***********************
+//
+std::pair< VideoCardEvent::VideoReferenceMode, const char* > VideoCardVideoReferenceModeMapping[] =
 {
     std::make_pair( VideoCardEvent::VideoReferenceMode::FreeRun, "FreeRun" )
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogBlackBurst, "AnalogBlackBurst" ) 
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogTriLevel, "AnalogTriLevel" ) 
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogBlackBurst, "AnalogBlackBurst" )
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogTriLevel, "AnalogTriLevel" )
     , std::make_pair( VideoCardEvent::VideoReferenceMode::DigitalInput1, "DigitalInput1" )
     , std::make_pair( VideoCardEvent::VideoReferenceMode::DigitalInput2, "DigitalInput2" )
     , std::make_pair( VideoCardEvent::VideoReferenceMode::FailMode, SerializationHelper::EMPTY_STRING )      // default
@@ -488,99 +633,167 @@ std::pair< VideoCardEvent::VideoReferenceMode, const char* > VideoCardVideoRefer
 
 IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::VideoReferenceMode, VideoCardVideoReferenceModeMapping );
 
+}   // Convert
+
+
 // ========================================================================= //
 // TimerEvent
 // ========================================================================= //
-const std::string TIMER_HOURS_STRING                  = "Hours";
-const std::string TIMER_MINUTES_STRING                = "Minutes";
-const std::string TIMER_SECONDS_STRING                = "Seconds";
-const std::string TIMER_MILLISECONDS_STRING           = "Milliseconds";
-const std::string TIMER_TIME_PATERN_STRING            = "TimePatern";
 
-std::pair< TimerEvent::Command, const char* > TimerEventCommandMapping[] = 
+
+namespace SerializationHelper
+{
+    const std::string TIMER_HOURS_STRING = "Hours";
+    const std::string TIMER_MINUTES_STRING = "Minutes";
+    const std::string TIMER_SECONDS_STRING = "Seconds";
+    const std::string TIMER_MILLISECONDS_STRING = "Milliseconds";
+    const std::string TIMER_TIME_PATERN_STRING = "TimePatern";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< TimerEvent::Command, const char* > TimerEventCommandMapping[] =
 {
     std::make_pair( TimerEvent::Command::Start, "Start" )
-    , std::make_pair( TimerEvent::Command::Stop, "Stop" ) 
-    , std::make_pair( TimerEvent::Command::Reset, "Reset" ) 
+    , std::make_pair( TimerEvent::Command::Stop, "Stop" )
+    , std::make_pair( TimerEvent::Command::Reset, "Reset" )
     , std::make_pair( TimerEvent::Command::SetTime, "SetTime" )
     , std::make_pair( TimerEvent::Command::SetTimeStart, "SetTimeStart" )
-    , std::make_pair( TimerEvent::Command::SetTimeStop, "SetTimeStop" ) 
-    , std::make_pair( TimerEvent::Command::SetTimePatern, "SetTimePatern" ) 
+    , std::make_pair( TimerEvent::Command::SetTimeStop, "SetTimeStop" )
+    , std::make_pair( TimerEvent::Command::SetTimePatern, "SetTimePatern" )
     , std::make_pair( TimerEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( TimerEvent::Command, TimerEventCommandMapping );
+
+}
+
 
 // ========================================================================= //
 // VideoDecoderEvent
 // ========================================================================= //
-const std::string ASSET_PATH_STRING                  = "AssetPath";
 
-std::pair< VideoDecoderEvent::Command, const char* > VideoDecoderEventMapping[] = 
+namespace SerializationHelper
+{
+    const std::string ASSET_PATH_STRING = "AssetPath";
+}
+
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< VideoDecoderEvent::Command, const char* > VideoDecoderEventMapping[] =
 {
     std::make_pair( VideoDecoderEvent::Command::HasFinished, "HasFinished" )
     , std::make_pair( VideoDecoderEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( VideoDecoderEvent::Command, VideoDecoderEventMapping );
+
+}
+
+
 
 // ========================================================================= //
 // EngineStateEvent
 // ========================================================================= //
-const std::string REQUESTED_FPS_STRING              = "FPS";
-const std::string NUM_FRAMES_STRING                 = "NumberFrames";
-const std::string RENDERING_FILE_PATH               = "FilePath";
-const std::string GAIN_VAL_STRING					= "Gain";
 
-std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMapping[] = 
+
+namespace SerializationHelper
+{
+    const std::string REQUESTED_FPS_STRING = "FPS";
+    const std::string NUM_FRAMES_STRING = "NumberFrames";
+    const std::string RENDERING_FILE_PATH = "FilePath";
+    const std::string GAIN_VAL_STRING = "Gain";
+}
+
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< EngineStateEvent::Command, const char* > EngineStateEventCommandMapping[] =
 {
     std::make_pair( EngineStateEvent::Command::ScreenShot, "ScreenShot" )
     , std::make_pair( EngineStateEvent::Command::RenderOffscreen, "RenderOffscreen" )
     , std::make_pair( EngineStateEvent::Command::CloseApplication, "CloseApplication" )
     , std::make_pair( EngineStateEvent::Command::LockEventQueue, "LockEventQueue" )
-	, std::make_pair( EngineStateEvent::Command::SetGain, "SetGain" )
+    , std::make_pair( EngineStateEvent::Command::SetGain, "SetGain" )
     , std::make_pair( EngineStateEvent::Command::OutputCommand, "OutputCommand" )
     , std::make_pair( EngineStateEvent::Command::SwitchEditMode, "SwitchEditMode" )
     , std::make_pair( EngineStateEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( EngineStateEvent::Command, EngineStateEventCommandMapping );
+
+}
 
 // ========================================================================= //
 // GlobalEffectEvent
 // ========================================================================= //
-const std::string GLOBAL_EFFECT_NAME_STRING                = "GlobalEffectName";
 
-std::pair< GlobalEffectEvent::Command, const char* > GlobalEffectEventCommandMapping[] = 
+
+namespace SerializationHelper
+{
+    const std::string GLOBAL_EFFECT_NAME_STRING = "GlobalEffectName";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< GlobalEffectEvent::Command, const char* > GlobalEffectEventCommandMapping[] =
 {
     std::make_pair( GlobalEffectEvent::Command::SetGlobalEffect, "SetGlobalEffect" )
-    , std::make_pair( GlobalEffectEvent::Command::LoadGlobalEffectAsset, "LoadGlobalEffectAsset")
+    , std::make_pair( GlobalEffectEvent::Command::LoadGlobalEffectAsset, "LoadGlobalEffectAsset" )
     , std::make_pair( GlobalEffectEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( GlobalEffectEvent::Command, GlobalEffectEventCommandMapping );
+}
+
+
 
 // ========================================================================= //
 // TimelineKeyframeEvent
 // ========================================================================= //
-const std::string KEYFRAME_NAME_STRING                = "KeyframeName";
-const std::string KEYFRAME_INDEX_STRING               = "KeyframeIndex";
-const std::string NEW_KEYFRAME_TYPE_STRING            = "NewKeyframeType";
-const std::string JUMP_TO_TIME_STRING                 = "JumpToTime";
-const std::string TOTAL_LOOP_COUNT_STRING             = "TotalLoopCount";
-const std::string TRIGGER_EVENTS                      = "TriggerEvents";
 
-std::pair< TimelineKeyframeEvent::Command, const char* > TimelineKeyframeEventCommandMapping[] = 
+
+namespace SerializationHelper
+{
+    const std::string KEYFRAME_NAME_STRING = "KeyframeName";
+    const std::string KEYFRAME_INDEX_STRING = "KeyframeIndex";
+    const std::string NEW_KEYFRAME_TYPE_STRING = "NewKeyframeType";
+    const std::string JUMP_TO_TIME_STRING = "JumpToTime";
+    const std::string TOTAL_LOOP_COUNT_STRING = "TotalLoopCount";
+    const std::string TRIGGER_EVENTS = "TriggerEvents";
+}
+
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< TimelineKeyframeEvent::Command, const char* > TimelineKeyframeEventCommandMapping[] =
 {
     std::make_pair( TimelineKeyframeEvent::Command::AddKeyframe, "AddKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::Command::RemoveKeyframe, "RemoveKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( TimelineKeyframeEvent::Command, TimelineKeyframeEventCommandMapping );
 
+}
 
-std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMapping[] = 
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMapping[] =
 {
     std::make_pair( TimelineKeyframeEvent::KeyframeType::StopKeyframe, "StopKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe, "LoopReverseKeyframe" )
@@ -590,71 +803,113 @@ std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMappin
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::NullKeyframe, "NullKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( TimelineKeyframeEvent::KeyframeType, KeyframeTypeMapping );
+
+}
 
 // ========================================================================= //
 // MouseEvent
 // ========================================================================= //
 
-const std::string MOUSE_X_STRING                = "MouseX";
-const std::string MOUSE_Y_STRING                = "MouseY";
-const std::string MOUSE_AUTO_SELECT_FLAG        = "AutoSelect";
-const std::string MOUSE_AUTO_SELECT_COLOR       = "AutoSelectColor";
+namespace SerializationHelper
+{
+    const std::string MOUSE_X_STRING = "MouseX";
+    const std::string MOUSE_Y_STRING = "MouseY";
+    const std::string MOUSE_AUTO_SELECT_FLAG = "AutoSelect";
+    const std::string MOUSE_AUTO_SELECT_COLOR = "AutoSelectColor";
+}
 
-std::pair< MouseEvent::Command, const char* > MouseEventCommandMapping[] = 
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< MouseEvent::Command, const char* > MouseEventCommandMapping[] =
 {
     std::make_pair( MouseEvent::Command::MouseUp, "MouseUp" )
     , std::make_pair( MouseEvent::Command::MouseDown, "MouseDown" )
     , std::make_pair( MouseEvent::Command::MouseMove, "MouseMove" )
     , std::make_pair( MouseEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( MouseEvent::Command, MouseEventCommandMapping );
+
+}
+
 
 // ========================================================================= //
 // SceneVariableEvent
 // ========================================================================= //
 
-const std::string SCENE_VARIABLE_NAME_STRING            = "VariableName";
-const std::string SCENE_VARAIBLE_CONTENT_STRING         = "VariableContent";
+namespace SerializationHelper
+{
+    const std::string SCENE_VARIABLE_NAME_STRING = "VariableName";
+    const std::string SCENE_VARAIBLE_CONTENT_STRING = "VariableContent";
+}
 
-std::pair< SceneVariableEvent::Command, const char* > SceneVariableEventCommandMapping[] = 
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< SceneVariableEvent::Command, const char* > SceneVariableEventCommandMapping[] =
 {
     std::make_pair( SceneVariableEvent::Command::AddVariable, "AddVariable" )
     , std::make_pair( SceneVariableEvent::Command::GetVariable, "GetVariable" )
     , std::make_pair( SceneVariableEvent::Command::DeleteVariable, "DeleteVariable" )
     , std::make_pair( SceneVariableEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( SceneVariableEvent::Command, SceneVariableEventCommandMapping );
+
+}
 
 // ========================================================================= //
 // ConfigEvent
 // ========================================================================= //
-const std::string CONFIG_VALUE_STRING                   = "Value";
-const std::string CONFIG_KEY_STRING                     = "Key";
 
-std::pair< ConfigEvent::Command, const char* > ConfigEventCommandMapping[] = 
+
+namespace SerializationHelper
+{
+    const std::string CONFIG_VALUE_STRING = "Value";
+    const std::string CONFIG_KEY_STRING = "Key";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< ConfigEvent::Command, const char* > ConfigEventCommandMapping[] =
 {
     std::make_pair( ConfigEvent::Command::ReadValue, "ReadValue" )
     , std::make_pair( ConfigEvent::Command::SetValue, "SetValue" )
     , std::make_pair( ConfigEvent::Command::SaveConfig, "SaveConfig" )
     , std::make_pair( ConfigEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( ConfigEvent::Command, ConfigEventCommandMapping );
+
+}
+
 
 // ========================================================================= //
 // GridLineEvent
 // ========================================================================= //
-const std::string GRIDLINE_NAME_STRING              = "GridLineName";
-const std::string GRIDLINE_POSITION_STRING          = "GridLinePosition";
-const std::string GRIDLINE_TYPE_STRING              = "GridLineType";
-const std::string GRIDLINE_INDEX_STRING             = "GridLineIndex";
-const std::string GRIDLINE_ALIGNEMENT_TYPE_STRING   = "AlignementType";
 
-std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMapping[] = 
+
+namespace SerializationHelper
+{
+    const std::string GRIDLINE_NAME_STRING = "GridLineName";
+    const std::string GRIDLINE_POSITION_STRING = "GridLinePosition";
+    const std::string GRIDLINE_TYPE_STRING = "GridLineType";
+    const std::string GRIDLINE_INDEX_STRING = "GridLineIndex";
+    const std::string GRIDLINE_ALIGNEMENT_TYPE_STRING = "AlignementType";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMapping[] =
 {
     std::make_pair( GridLineEvent::Command::SetGridLinePosition, "SetGridLinePosition" )
     , std::make_pair( GridLineEvent::Command::RenameGridLine, "RenameGridLine" )
@@ -664,62 +919,89 @@ std::pair< GridLineEvent::Command, const char* > GridLineEventEventCommandMappin
     , std::make_pair( GridLineEvent::Command::HideGridLines, "HideGridLines" )
     , std::make_pair( GridLineEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( GridLineEvent::Command, GridLineEventEventCommandMapping );
+
+}
+
+
 
 // ========================================================================= //
 // UndoRedoEvent
 // ========================================================================= //
-const std::string UNDO_REDO_NUM_STEPS_STRING            = "Steps";
-const std::string UNDO_REDO_OPERATION_BUFF_SIZE_STRING  = "MaxOperations";
 
 
-std::pair< UndoRedoEvent::Command, const char* > UndoRedoEventCommandMapping[] = 
+namespace SerializationHelper
+{
+    const std::string UNDO_REDO_NUM_STEPS_STRING = "Steps";
+    const std::string UNDO_REDO_OPERATION_BUFF_SIZE_STRING = "MaxOperations";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< UndoRedoEvent::Command, const char* > UndoRedoEventCommandMapping[] =
 {
     std::make_pair( UndoRedoEvent::Command::Redo, "Redo" )
     , std::make_pair( UndoRedoEvent::Command::SetOperationsBufferSize, "SetOperationsBufferSize" )
     , std::make_pair( UndoRedoEvent::Command::Undo, "Undo" )
     , std::make_pair( UndoRedoEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( UndoRedoEvent::Command, UndoRedoEventCommandMapping );
+
+}
 
 // ========================================================================= //
 // HightmapEvent
 // ========================================================================= //
-const std::string COMMAND_HM_ENABLE_STRING    = "Enable";
-const std::string COMMAND_HM_START_STRING     = "Start";
-const std::string COMMAND_HM_RESET_STRING     = "Reset";
-const std::string COMMAND_HM_SHOW_STRING      = "Show";
-const std::string COMMAND_HM_ZOOM_STRING      = "Zoom";
-const std::string COMMAND_HM_ZOOM_OUT_STRING  = "ZoomOut";
-const std::string COMMAND_HM_SET_STRING       = "Set";
-const std::string COMMAND_HM_ANIM_STRING      = "Anim";
-const std::string COMMAND_HM_ANIM2_STRING     = "Anim2";
-const std::string COMMAND_HM_SET3_STRING      = "Set3";
 
-std::pair< HightmapEvent::Command, const char* > HightmapEventCommandMapping[] = 
+namespace SerializationHelper
+{
+    const std::string COMMAND_HM_ENABLE_STRING = "Enable";
+    const std::string COMMAND_HM_START_STRING = "Start";
+    const std::string COMMAND_HM_RESET_STRING = "Reset";
+    const std::string COMMAND_HM_SHOW_STRING = "Show";
+    const std::string COMMAND_HM_ZOOM_STRING = "Zoom";
+    const std::string COMMAND_HM_ZOOM_OUT_STRING = "ZoomOut";
+    const std::string COMMAND_HM_SET_STRING = "Set";
+    const std::string COMMAND_HM_ANIM_STRING = "Anim";
+    const std::string COMMAND_HM_ANIM2_STRING = "Anim2";
+    const std::string COMMAND_HM_SET3_STRING = "Set3";
+}
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< HightmapEvent::Command, const char* > HightmapEventCommandMapping[] =
 {
     std::make_pair( HightmapEvent::Command::Enable, "Enable" )
-    , std::make_pair( HightmapEvent::Command::Start, "Start" ) 
-    , std::make_pair( HightmapEvent::Command::Reset, "Reset" ) 
+    , std::make_pair( HightmapEvent::Command::Start, "Start" )
+    , std::make_pair( HightmapEvent::Command::Reset, "Reset" )
     , std::make_pair( HightmapEvent::Command::Show, "Show" )
     , std::make_pair( HightmapEvent::Command::Zoom, "Zoom" )
-    , std::make_pair( HightmapEvent::Command::ZoomOut, "ZoomOut" ) 
-    , std::make_pair( HightmapEvent::Command::Set, "Set" ) 
+    , std::make_pair( HightmapEvent::Command::ZoomOut, "ZoomOut" )
+    , std::make_pair( HightmapEvent::Command::Set, "Set" )
     , std::make_pair( HightmapEvent::Command::Anim, "Anim" )
     , std::make_pair( HightmapEvent::Command::Anim2, "Anim2" )
-    , std::make_pair( HightmapEvent::Command::Set3, "Set3" ) 
+    , std::make_pair( HightmapEvent::Command::Set3, "Set3" )
     , std::make_pair( HightmapEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
-
 IMPLEMENT_ENUM_SERIALIZATION( HightmapEvent::Command, HightmapEventCommandMapping );
 
+}
 
 // ========================================================================= //
 // GizmoEvent
 // ========================================================================= //
 
+namespace Convert
+{
+
+// ***********************
+//
 std::pair< GizmoEvent::Command, const char* > GizmoEventCommandMapping[] =
 {
     std::make_pair( GizmoEvent::Command::CreateGizmo, "CreateGizmo" )
@@ -968,7 +1250,7 @@ void                LoadAssetEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-    ser.SetAttribute( SerializationHelper::ASSET_ASYNC_LOAD, SerializationHelper::T2String( AsyncLoad ) );
+    ser.SetAttribute( SerializationHelper::ASSET_ASYNC_LOAD, Convert::T2String( AsyncLoad ) );
 
     ser.EnterChild( SerializationHelper::ASSET_DATA_STRING );
     ser.ExitChild();
@@ -985,7 +1267,7 @@ IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser 
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->AssetData         = deser.DetachBranch( SerializationHelper::ASSET_DATA_STRING );
-        newEvent->AsyncLoad         = SerializationHelper::String2T< bool >( deser.GetAttribute( SerializationHelper::ASSET_ASYNC_LOAD ), false );
+        newEvent->AsyncLoad         = Convert::String2T< bool >( deser.GetAttribute( SerializationHelper::ASSET_ASYNC_LOAD ), false );
         return newEvent;
     }
     return nullptr;
@@ -1024,8 +1306,8 @@ void                ParamKeyEvent::Serialize            ( ISerializer& ser ) con
     ParamAddress.Serialize( ser );
 
     ser.SetAttribute( SerializationHelper::PARAM_VALUE_STRING, Value );
-    ser.SetAttribute( SerializationHelper::KEY_TIME_STRING, SerializationHelper::T2String( Time ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ParamCommand ) );
+    ser.SetAttribute( SerializationHelper::KEY_TIME_STRING, Convert::T2String( Time ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( ParamCommand ) );
 }
 
 // *************************************
@@ -1039,8 +1321,8 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->ParamAddress      = ParameterAddress::Create( deser );
 
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_STRING );
-        newEvent->ParamCommand      = SerializationHelper::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );        
-        newEvent->Time              = SerializationHelper::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
+        newEvent->ParamCommand      = Convert::String2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamKeyEvent::Command::Fail );        
+        newEvent->Time              = Convert::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
 
         return newEvent;
     }
@@ -1080,7 +1362,7 @@ EventType           ParamKeyEvent::GetEventType         () const
 void                ParamDescriptorEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ParamCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( ParamCommand ) );
 
     ParamAddress.Serialize( ser );
 
@@ -1097,7 +1379,7 @@ IEventPtr           ParamDescriptorEvent::Create          ( IDeserializer& deser
         ParamDescriptorEventPtr newEvent   = std::make_shared<ParamDescriptorEvent>();
 
         newEvent->ParamAddress      = ParameterAddress::Create( deser );
-        newEvent->ParamCommand      = SerializationHelper::String2T<ParamDescriptorEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamDescriptorEvent::Command::Fail );        
+        newEvent->ParamCommand      = Convert::String2T<ParamDescriptorEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ParamDescriptorEvent::Command::Fail );        
         newEvent->Request           = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
@@ -1137,7 +1419,7 @@ EventType               ParamDescriptorEvent::GetEventType         () const
 //
 void                    AssetEvent::Serialize            ( ISerializer& ser ) const
 {
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( AssetCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( AssetCommand ) );
 }
 
 // *************************************
@@ -1147,7 +1429,7 @@ IEventPtr                AssetEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         AssetEventPtr newEvent        = std::make_shared< AssetEvent >();
-        newEvent->AssetCommand      = SerializationHelper::String2T< AssetEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), AssetEvent::Command::Fail );
+        newEvent->AssetCommand      = Convert::String2T< AssetEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), AssetEvent::Command::Fail );
         
         return newEvent;
     }
@@ -1185,8 +1467,8 @@ void                    SceneEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::NEW_SCENE_NAME_STRING, NewSceneName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( SceneCommand ) );
-    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, SerializationHelper::T2String( AttachIndex ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( SceneCommand ) );
+    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, Convert::T2String( AttachIndex ) );
 }
 
 // *************************************
@@ -1198,8 +1480,8 @@ IEventPtr                SceneEvent::Create          ( IDeserializer& deser )
         SceneEventPtr newEvent        = std::make_shared< SceneEvent >();
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->NewSceneName      = deser.GetAttribute( SerializationHelper::NEW_SCENE_NAME_STRING );
-        newEvent->SceneCommand      = SerializationHelper::String2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneEvent::Command::Fail );
-        newEvent->AttachIndex       = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
+        newEvent->SceneCommand      = Convert::String2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneEvent::Command::Fail );
+        newEvent->AttachIndex       = Convert::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
         
         return newEvent;
     }
@@ -1236,9 +1518,9 @@ void                    LightEvent::Serialize            ( ISerializer& ser ) co
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( SceneCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( SceneCommand ) );
     ser.SetAttribute( SerializationHelper::LIGHT_TYPE_STRING, LightType );
-    ser.SetAttribute( SerializationHelper::LIGHT_INDEX_STRING, SerializationHelper::T2String( LightIndex ) );
+    ser.SetAttribute( SerializationHelper::LIGHT_INDEX_STRING, Convert::T2String( LightIndex ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
 }
 
@@ -1250,9 +1532,9 @@ IEventPtr                LightEvent::Create          ( IDeserializer& deser )
     {
         LightEventPtr newEvent        = std::make_shared< LightEvent >();
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->SceneCommand      = SerializationHelper::String2T< LightEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), LightEvent::Command::Fail );
+        newEvent->SceneCommand      = Convert::String2T< LightEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), LightEvent::Command::Fail );
         newEvent->LightType         = deser.GetAttribute( SerializationHelper::LIGHT_TYPE_STRING );
-        newEvent->LightIndex        = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::LIGHT_INDEX_STRING ), 0 );
+        newEvent->LightIndex        = Convert::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::LIGHT_INDEX_STRING ), 0 );
         newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         
         return newEvent;
@@ -1290,8 +1572,8 @@ void                    CameraEvent::Serialize            ( ISerializer& ser ) c
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( CameraCommand ) );
-    ser.SetAttribute( SerializationHelper::LIGHT_INDEX_STRING, SerializationHelper::T2String( CameraIndex ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( CameraCommand ) );
+    ser.SetAttribute( SerializationHelper::LIGHT_INDEX_STRING, Convert::T2String( CameraIndex ) );
     //ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
 }
 
@@ -1303,8 +1585,8 @@ IEventPtr                CameraEvent::Create          ( IDeserializer& deser )
     {
         CameraEventPtr newEvent        = std::make_shared< CameraEvent >();
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->CameraCommand      = SerializationHelper::String2T< CameraEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), CameraEvent::Command::Fail );
-        newEvent->CameraIndex        = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::LIGHT_INDEX_STRING ), 0 );
+        newEvent->CameraCommand      = Convert::String2T< CameraEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), CameraEvent::Command::Fail );
+        newEvent->CameraIndex        = Convert::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::LIGHT_INDEX_STRING ), 0 );
         //newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         
         return newEvent;
@@ -1346,8 +1628,8 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodePath );
     ser.SetAttribute( SerializationHelper::NEW_NODE_NAME_STRING, NewNodeName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( SceneCommand ) );
-    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, SerializationHelper::T2String( AttachIndex ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( SceneCommand ) );
+    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, Convert::T2String( AttachIndex ) );
 
     ser.EnterChild( SerializationHelper::REQUEST_STRING );
     ser.ExitChild();
@@ -1363,8 +1645,8 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->NodePath          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->NewNodeName       = deser.GetAttribute( SerializationHelper::NEW_NODE_NAME_STRING );
-        newEvent->SceneCommand      = SerializationHelper::String2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), NodeStructureEvent::Command::Fail );
-        newEvent->AttachIndex       = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
+        newEvent->SceneCommand      = Convert::String2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), NodeStructureEvent::Command::Fail );
+        newEvent->AttachIndex       = Convert::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
 
         newEvent->Request           = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
         
@@ -1404,9 +1686,9 @@ void                PluginStructureEvent::Serialize            ( ISerializer& se
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodePath );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( PluginCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( PluginCommand ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
-    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, SerializationHelper::T2String( AttachIndex ) );
+    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, Convert::T2String( AttachIndex ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_UID_STRING, PluginUID );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
 
@@ -1424,8 +1706,8 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->NodePath          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->PluginName        = deser.GetAttribute( SerializationHelper::PLUGIN_NAME_STRING );
-        newEvent->PluginCommand     = SerializationHelper::String2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), PluginStructureEvent::Command::Fail );
-        newEvent->AttachIndex       = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
+        newEvent->PluginCommand     = Convert::String2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), PluginStructureEvent::Command::Fail );
+        newEvent->AttachIndex       = Convert::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
         newEvent->PluginUID         = deser.GetAttribute( SerializationHelper::PLUGIN_UID_STRING );
         newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
 
@@ -1465,7 +1747,7 @@ EventType           PluginStructureEvent::GetEventType() const
 void                ProjectEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ProjectCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( ProjectCommand ) );
 
     ser.EnterChild( SerializationHelper::REQUEST_STRING );
     ser.ExitChild();
@@ -1478,7 +1760,7 @@ IEventPtr                ProjectEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         ProjectEventPtr newEvent            = std::make_shared<ProjectEvent>();
-        newEvent->ProjectCommand            = SerializationHelper::String2T<ProjectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ProjectEvent::Command::Fail );
+        newEvent->ProjectCommand            = Convert::String2T<ProjectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ProjectEvent::Command::Fail );
         
         newEvent->Request                   = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
@@ -1563,7 +1845,7 @@ EventType           ResponseEvent::GetEventType() const
 void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( InfoCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( InfoCommand ) );
 
     ser.EnterChild( SerializationHelper::REQUEST_STRING );
     ser.ExitChild();
@@ -1576,7 +1858,7 @@ IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         InfoEventPtr newEvent   = std::make_shared<InfoEvent>();
-        newEvent->InfoCommand   = SerializationHelper::String2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), InfoEvent::Command::Fail );
+        newEvent->InfoCommand   = Convert::String2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), InfoEvent::Command::Fail );
         newEvent->Request       = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
         
         return newEvent;
@@ -1613,13 +1895,13 @@ EventType           InfoEvent::GetEventType() const
 void                TimeLineEvent::Serialize            ( ISerializer & ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( TimelineCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( TimelineCommand ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelineName );
     ser.SetAttribute( SerializationHelper::TIMELINE_NEW_NAME_STRING, NewTimelineName );
-    ser.SetAttribute( SerializationHelper::TIMELINE_TYPE_STRING, SerializationHelper::T2String( TimelineType ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING, SerializationHelper::T2String( Time ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_STRING, SerializationHelper::T2String( Duration ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_STRING, SerializationHelper::T2String( WrapMethod ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_TYPE_STRING, Convert::T2String( TimelineType ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING, Convert::T2String( Time ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_STRING, Convert::T2String( Duration ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_STRING, Convert::T2String( WrapMethod ) );
 }
 
 // *************************************
@@ -1630,13 +1912,13 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer & deser 
     {
         TimeLineEventPtr newEvent   = std::make_shared< TimeLineEvent >();
 
-        newEvent->Time = SerializationHelper::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
+        newEvent->Time = Convert::String2T< TimeType >( deser.GetAttribute( SerializationHelper::KEY_TIME_STRING ), std::numeric_limits< TimeType >::quiet_NaN() );
 
-        newEvent->TimelineCommand   = SerializationHelper::String2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimeLineEvent::Command::Fail );
+        newEvent->TimelineCommand   = Convert::String2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimeLineEvent::Command::Fail );
         newEvent->TimelineName      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
-        newEvent->TimelineType      = SerializationHelper::String2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_STRING ), bv::TimelineType::TT_OFFSET );
-        newEvent->Duration          = SerializationHelper::String2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_STRING ), 0.0f );
-        newEvent->WrapMethod        = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_STRING ), TimelineWrapMethod::TWM_CLAMP );
+        newEvent->TimelineType      = Convert::String2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_STRING ), bv::TimelineType::TT_OFFSET );
+        newEvent->Duration          = Convert::String2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_STRING ), 0.0f );
+        newEvent->WrapMethod        = Convert::String2T< TimelineWrapMethod >( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_STRING ), TimelineWrapMethod::TWM_CLAMP );
         newEvent->NewTimelineName   = deser.GetAttribute( SerializationHelper::TIMELINE_NEW_NAME_STRING );
 
         return newEvent;
@@ -1686,13 +1968,13 @@ EventType           TimeLineEvent::GetEventType () const
 void                TimerEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( TimerCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( TimerCommand ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
-    ser.SetAttribute( SerializationHelper::TIMER_HOURS_STRING, SerializationHelper::T2String( Hours ) );
-    ser.SetAttribute( SerializationHelper::TIMER_MINUTES_STRING, SerializationHelper::T2String( Minutes ) );
-    ser.SetAttribute( SerializationHelper::TIMER_SECONDS_STRING, SerializationHelper::T2String( Seconds ) );
+    ser.SetAttribute( SerializationHelper::TIMER_HOURS_STRING, Convert::T2String( Hours ) );
+    ser.SetAttribute( SerializationHelper::TIMER_MINUTES_STRING, Convert::T2String( Minutes ) );
+    ser.SetAttribute( SerializationHelper::TIMER_SECONDS_STRING, Convert::T2String( Seconds ) );
     ser.SetAttribute( SerializationHelper::TIMER_TIME_PATERN_STRING, TimePatern );
-    ser.SetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING, SerializationHelper::T2String( Milliseconds ) );
+    ser.SetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING, Convert::T2String( Milliseconds ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
 }
 
@@ -1703,14 +1985,14 @@ IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         TimerEventPtr newEvent      = std::make_shared<TimerEvent>();
-        newEvent->TimerCommand      = SerializationHelper::String2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimerEvent::Command::Fail );
+        newEvent->TimerCommand      = Convert::String2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimerEvent::Command::Fail );
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->Hours             = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_STRING ), 0.0f );
-        newEvent->Minutes           = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_STRING ), 0.0f );
-        newEvent->Seconds           = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_STRING ), 0.0f );
-        newEvent->Milliseconds      = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING ), 0.0f );
+        newEvent->Hours             = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_STRING ), 0.0f );
+        newEvent->Minutes           = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_STRING ), 0.0f );
+        newEvent->Seconds           = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_STRING ), 0.0f );
+        newEvent->Milliseconds      = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING ), 0.0f );
         newEvent->TimePatern        = deser.GetAttribute( SerializationHelper::TIMER_TIME_PATERN_STRING );
 
         return newEvent;
@@ -1747,7 +2029,7 @@ EventType           TimerEvent::GetEventType() const
 void                VideoDecoderEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( EventCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( EventCommand ) );
     ser.SetAttribute( SerializationHelper::ASSET_PATH_STRING, AssetPath );
 }
 
@@ -1758,7 +2040,7 @@ IEventPtr                VideoDecoderEvent::Create          ( IDeserializer& des
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         VideoDecoderEventPtr newEvent   = std::make_shared< VideoDecoderEvent >();
-        newEvent->EventCommand          = SerializationHelper::String2T< VideoDecoderEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoDecoderEvent::Command::Fail );
+        newEvent->EventCommand          = Convert::String2T< VideoDecoderEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoDecoderEvent::Command::Fail );
         newEvent->AssetPath             = deser.GetAttribute( SerializationHelper::ASSET_PATH_STRING );
 
         return newEvent;
@@ -1795,7 +2077,7 @@ EventType           VideoDecoderEvent::GetEventType() const
 void                NodeLogicEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( WidgetCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( WidgetCommand ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     
@@ -1810,7 +2092,7 @@ IEventPtr                NodeLogicEvent::Create          ( IDeserializer& deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         NodeLogicEventPtr newEvent     = std::make_shared<NodeLogicEvent>();
-        newEvent->WidgetCommand     = SerializationHelper::String2T<NodeLogicEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), NodeLogicEvent::Command::Fail );
+        newEvent->WidgetCommand     = Convert::String2T<NodeLogicEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), NodeLogicEvent::Command::Fail );
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->Action            = deser.DetachBranch( SerializationHelper::WIDGET_ACTION_STRING );
@@ -1849,10 +2131,10 @@ EventType           NodeLogicEvent::GetEventType() const
 void                VideoCardEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( VideoCommand ) );
-    ser.SetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING, SerializationHelper::T2String( Number ) );
-    ser.SetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING, SerializationHelper::T2String( Value ) );
-    ser.SetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING, SerializationHelper::T2String( Mode ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( VideoCommand ) );
+    ser.SetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING, Convert::T2String( Number ) );
+    ser.SetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING, Convert::T2String( Value ) );
+    ser.SetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING, Convert::T2String( Mode ) );
 }
 
 // *************************************
@@ -1862,10 +2144,10 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
-        newEvent->VideoCommand          = SerializationHelper::String2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoCardEvent::Command::Fail );
-        newEvent->Mode                  = SerializationHelper::String2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING ), VideoCardEvent::VideoReferenceMode::FailMode );
-        newEvent->Value                 = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING ), 0.0f );
-        newEvent->Number                = SerializationHelper::String2T<int>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );
+        newEvent->VideoCommand          = Convert::String2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoCardEvent::Command::Fail );
+        newEvent->Mode                  = Convert::String2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING ), VideoCardEvent::VideoReferenceMode::FailMode );
+        newEvent->Value                 = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING ), 0.0f );
+        newEvent->Number                = Convert::String2T<int>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );
 
         return newEvent;
     }
@@ -1901,11 +2183,11 @@ EventType           VideoCardEvent::GetEventType() const
 void                EngineStateEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::REQUESTED_FPS_STRING, SerializationHelper::T2String( FPS ) );
+    ser.SetAttribute( SerializationHelper::REQUESTED_FPS_STRING, Convert::T2String( FPS ) );
     ser.SetAttribute( SerializationHelper::RENDERING_FILE_PATH, FilePath );
-	ser.SetAttribute( SerializationHelper::GAIN_VAL_STRING, SerializationHelper::T2String( Gain ) );
-    ser.SetAttribute( SerializationHelper::NUM_FRAMES_STRING, SerializationHelper::T2String( NumFrames ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( RenderingCommand ) );
+	ser.SetAttribute( SerializationHelper::GAIN_VAL_STRING, Convert::T2String( Gain ) );
+    ser.SetAttribute( SerializationHelper::NUM_FRAMES_STRING, Convert::T2String( NumFrames ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( RenderingCommand ) );
 }
 
 // *************************************
@@ -1916,10 +2198,10 @@ IEventPtr                EngineStateEvent::Create          ( IDeserializer& dese
     {
         EngineStateEventPtr newEvent  = std::make_shared<EngineStateEvent>();
         newEvent->FilePath              = deser.GetAttribute( SerializationHelper::RENDERING_FILE_PATH );
-        newEvent->FPS                   = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_STRING ), 60 );
-        newEvent->NumFrames             = SerializationHelper::String2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_STRING ), 0 );
-		newEvent->Gain					= SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::GAIN_VAL_STRING ), 1.f );
-        newEvent->RenderingCommand      = SerializationHelper::String2T<EngineStateEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), EngineStateEvent::Command::Fail );
+        newEvent->FPS                   = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_STRING ), 60 );
+        newEvent->NumFrames             = Convert::String2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_STRING ), 0 );
+		newEvent->Gain					= Convert::String2T<float>( deser.GetAttribute( SerializationHelper::GAIN_VAL_STRING ), 1.f );
+        newEvent->RenderingCommand      = Convert::String2T<EngineStateEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), EngineStateEvent::Command::Fail );
         newEvent->Request               = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
@@ -1960,7 +2242,7 @@ void                GlobalEffectEvent::Serialize            ( ISerializer& ser )
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodePath );
     ser.SetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_STRING, EffectName );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( EffectCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( EffectCommand ) );
 }
 
 // *************************************
@@ -1974,7 +2256,7 @@ IEventPtr                GlobalEffectEvent::Create          ( IDeserializer& des
         newEvent->SceneName             = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->EffectName            = deser.GetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_STRING );
         newEvent->TimelinePath          = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
-        newEvent->EffectCommand         = SerializationHelper::String2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GlobalEffectEvent::Command::Fail );
+        newEvent->EffectCommand         = Convert::String2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GlobalEffectEvent::Command::Fail );
         newEvent->AssetData             = deser.DetachBranch( SerializationHelper::ASSET_DATA_STRING );
         newEvent->Request               = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
@@ -2014,13 +2296,13 @@ void                TimelineKeyframeEvent::Serialize            ( ISerializer& s
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
     ser.SetAttribute( SerializationHelper::KEYFRAME_NAME_STRING, KeyframeName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( KeyframeCommand ) );
-    ser.SetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_STRING, SerializationHelper::T2String( NewKeyframeType ) );
-    ser.SetAttribute( SerializationHelper::KEYFRAME_INDEX_STRING, SerializationHelper::T2String( KeyframeIndex ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( KeyframeCommand ) );
+    ser.SetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_STRING, Convert::T2String( NewKeyframeType ) );
+    ser.SetAttribute( SerializationHelper::KEYFRAME_INDEX_STRING, Convert::T2String( KeyframeIndex ) );
 
-    ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING, SerializationHelper::T2String( Time ) );
-    ser.SetAttribute( SerializationHelper::JUMP_TO_TIME_STRING, SerializationHelper::T2String( JumpToTime ) );
-    ser.SetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_STRING, SerializationHelper::T2String( TotalLoopCount ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING, Convert::T2String( Time ) );
+    ser.SetAttribute( SerializationHelper::JUMP_TO_TIME_STRING, Convert::T2String( JumpToTime ) );
+    ser.SetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_STRING, Convert::T2String( TotalLoopCount ) );
     ser.SetAttribute( SerializationHelper::TRIGGER_EVENTS, TriggerEvents );
 }
 
@@ -2033,13 +2315,13 @@ IEventPtr                TimelineKeyframeEvent::Create          ( IDeserializer&
         TimelineKeyframeEventPtr newEvent   = std::make_shared<TimelineKeyframeEvent>();
         newEvent->TimelinePath          = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         newEvent->KeyframeName          = deser.GetAttribute( SerializationHelper::KEYFRAME_NAME_STRING );
-        newEvent->KeyframeCommand       = SerializationHelper::String2T<TimelineKeyframeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimelineKeyframeEvent::Command::Fail );
-        newEvent->NewKeyframeType       = SerializationHelper::String2T<TimelineKeyframeEvent::KeyframeType>( deser.GetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_STRING ), TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail );
-        newEvent->KeyframeIndex         = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::KEYFRAME_INDEX_STRING ), -1 );
+        newEvent->KeyframeCommand       = Convert::String2T<TimelineKeyframeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), TimelineKeyframeEvent::Command::Fail );
+        newEvent->NewKeyframeType       = Convert::String2T<TimelineKeyframeEvent::KeyframeType>( deser.GetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_STRING ), TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail );
+        newEvent->KeyframeIndex         = Convert::String2T( deser.GetAttribute( SerializationHelper::KEYFRAME_INDEX_STRING ), -1 );
 
-        newEvent->Time                  = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ), std::numeric_limits<float>::quiet_NaN() );
-        newEvent->JumpToTime            = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::JUMP_TO_TIME_STRING ), std::numeric_limits<float>::quiet_NaN() );
-        newEvent->TotalLoopCount        = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_STRING ), 0 );
+        newEvent->Time                  = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_STRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->JumpToTime            = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::JUMP_TO_TIME_STRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->TotalLoopCount        = Convert::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_STRING ), 0 );
         newEvent->TriggerEvents         = deser.GetAttribute( SerializationHelper::TRIGGER_EVENTS );
 
         return newEvent;
@@ -2077,10 +2359,10 @@ void                MouseEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( MouseCommand ) );
-    ser.SetAttribute( SerializationHelper::MOUSE_X_STRING, SerializationHelper::T2String( MouseX ) );
-    ser.SetAttribute( SerializationHelper::MOUSE_Y_STRING, SerializationHelper::T2String( MouseY ) );
-    ser.SetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_FLAG, SerializationHelper::T2String( AutoSelect ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( MouseCommand ) );
+    ser.SetAttribute( SerializationHelper::MOUSE_X_STRING, Convert::T2String( MouseX ) );
+    ser.SetAttribute( SerializationHelper::MOUSE_Y_STRING, Convert::T2String( MouseY ) );
+    ser.SetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_FLAG, Convert::T2String( AutoSelect ) );
 }
 
 // *************************************
@@ -2090,11 +2372,11 @@ IEventPtr                MouseEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         MouseEventPtr newEvent      = std::make_shared<MouseEvent>();
-        newEvent->MouseX            = SerializationHelper::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_X_STRING ), -1.0f );
-        newEvent->MouseY            = SerializationHelper::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1.0f );
-        newEvent->AutoSelect        = SerializationHelper::String2T<bool>( deser.GetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_FLAG ), true );
-        newEvent->AutoSelectColor   = SerializationHelper::String2T<glm::vec4>( deser.GetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_COLOR ), glm::vec4( 1, 1, 1, 1 ) );
-        newEvent->MouseCommand      = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), MouseEvent::Command::Fail );
+        newEvent->MouseX            = Convert::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_X_STRING ), -1.0f );
+        newEvent->MouseY            = Convert::String2T<Float32>( deser.GetAttribute( SerializationHelper::MOUSE_Y_STRING ), -1.0f );
+        newEvent->AutoSelect        = Convert::String2T<bool>( deser.GetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_FLAG ), true );
+        newEvent->AutoSelectColor   = Convert::String2T<glm::vec4>( deser.GetAttribute( SerializationHelper::MOUSE_AUTO_SELECT_COLOR ), glm::vec4( 1, 1, 1, 1 ) );
+        newEvent->MouseCommand      = Convert::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), MouseEvent::Command::Fail );
 
         return newEvent;
     }
@@ -2130,8 +2412,8 @@ void                SceneVariableEvent::Serialize            ( ISerializer& ser 
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( VariableCommand ) );
-    ser.SetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING, SerializationHelper::T2String( VariableName ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( VariableCommand ) );
+    ser.SetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING, Convert::T2String( VariableName ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING, VariableContent );
 }
@@ -2146,7 +2428,7 @@ IEventPtr           SceneVariableEvent::Create          ( IDeserializer& deser )
         newEvent->SceneName                 = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->VariableName              = deser.GetAttribute( SerializationHelper::SCENE_VARIABLE_NAME_STRING );
         newEvent->VariableContent           = deser.GetAttribute( SerializationHelper::SCENE_VARAIBLE_CONTENT_STRING );
-        newEvent->VariableCommand           = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneVariableEvent::Command::Fail );
+        newEvent->VariableCommand           = Convert::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), SceneVariableEvent::Command::Fail );
 
         return newEvent;
     }
@@ -2183,8 +2465,8 @@ void                ConfigEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ConfigCommand ) );
-    ser.SetAttribute( SerializationHelper::CONFIG_VALUE_STRING, SerializationHelper::T2String( Value ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( ConfigCommand ) );
+    ser.SetAttribute( SerializationHelper::CONFIG_VALUE_STRING, Convert::T2String( Value ) );
     ser.SetAttribute( SerializationHelper::CONFIG_KEY_STRING, Key );
 }
 
@@ -2197,7 +2479,7 @@ IEventPtr           ConfigEvent::Create          ( IDeserializer& deser )
         ConfigEventPtr newEvent             = std::make_shared<ConfigEvent>();
         newEvent->Value                     = deser.GetAttribute( SerializationHelper::CONFIG_VALUE_STRING );
         newEvent->Key                       = deser.GetAttribute( SerializationHelper::CONFIG_KEY_STRING );
-        newEvent->ConfigCommand             = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ConfigEvent::Command::Fail );
+        newEvent->ConfigCommand             = Convert::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ConfigEvent::Command::Fail );
 
         return newEvent;
     }
@@ -2234,13 +2516,13 @@ void                GridLineEvent::Serialize            ( ISerializer& ser ) con
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( GridLineCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( GridLineCommand ) );
     ser.SetAttribute( SerializationHelper::GRIDLINE_NAME_STRING, GridLineName );
     ser.SetAttribute( SerializationHelper::GRIDLINE_TYPE_STRING, GridLineType );
-    ser.SetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING, SerializationHelper::T2String< float >( GridLinePosition ) );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING, Convert::T2String< float >( GridLinePosition ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
-    ser.SetAttribute( SerializationHelper::GRIDLINE_INDEX_STRING, SerializationHelper::T2String( GridLineIndex ) );
+    ser.SetAttribute( SerializationHelper::GRIDLINE_INDEX_STRING, Convert::T2String( GridLineIndex ) );
     ser.SetAttribute( SerializationHelper::GRIDLINE_ALIGNEMENT_TYPE_STRING, AlignementType );
 }
 
@@ -2255,11 +2537,11 @@ IEventPtr           GridLineEvent::Create          ( IDeserializer& deser )
         newEvent->NodeName                      = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->GridLineName                  = deser.GetAttribute( SerializationHelper::GRIDLINE_NAME_STRING );
         newEvent->GridLineType                  = deser.GetAttribute( SerializationHelper::GRIDLINE_TYPE_STRING );
-        newEvent->GridLinePosition              = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING ), 0.0f );
-        newEvent->GridLineIndex                 = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_INDEX_STRING ), 0 );
+        newEvent->GridLinePosition              = Convert::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_POSITION_STRING ), 0.0f );
+        newEvent->GridLineIndex                 = Convert::String2T( deser.GetAttribute( SerializationHelper::GRIDLINE_INDEX_STRING ), 0 );
         newEvent->AlignementType                = deser.GetAttribute( SerializationHelper::GRIDLINE_ALIGNEMENT_TYPE_STRING );
 
-        newEvent->GridLineCommand               = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GridLineEvent::Command::Fail );
+        newEvent->GridLineCommand               = Convert::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GridLineEvent::Command::Fail );
 
         return newEvent;
     }
@@ -2296,10 +2578,10 @@ void                UndoRedoEvent::Serialize            ( ISerializer& ser ) con
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( UndoCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( UndoCommand ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
-    ser.SetAttribute( SerializationHelper::UNDO_REDO_NUM_STEPS_STRING, SerializationHelper::T2String( (int)NumSteps ) );
-    ser.SetAttribute( SerializationHelper::UNDO_REDO_OPERATION_BUFF_SIZE_STRING, SerializationHelper::T2String( (int)Size ) );
+    ser.SetAttribute( SerializationHelper::UNDO_REDO_NUM_STEPS_STRING, Convert::T2String( (int)NumSteps ) );
+    ser.SetAttribute( SerializationHelper::UNDO_REDO_OPERATION_BUFF_SIZE_STRING, Convert::T2String( (int)Size ) );
 }
 
 // *************************************
@@ -2310,9 +2592,9 @@ IEventPtr           UndoRedoEvent::Create          ( IDeserializer& deser )
     {
         UndoRedoEventPtr newEvent               = std::make_shared<UndoRedoEvent>();
         newEvent->SceneName                     = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->NumSteps                      = (UInt16)SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::UNDO_REDO_NUM_STEPS_STRING ), 0 );
-        newEvent->Size                          = (UInt16)SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::UNDO_REDO_OPERATION_BUFF_SIZE_STRING ), 0 );
-        newEvent->UndoCommand                   = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), UndoRedoEvent::Command::Fail );
+        newEvent->NumSteps                      = (UInt16)Convert::String2T( deser.GetAttribute( SerializationHelper::UNDO_REDO_NUM_STEPS_STRING ), 0 );
+        newEvent->Size                          = (UInt16)Convert::String2T( deser.GetAttribute( SerializationHelper::UNDO_REDO_OPERATION_BUFF_SIZE_STRING ), 0 );
+        newEvent->UndoCommand                   = Convert::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), UndoRedoEvent::Command::Fail );
 
         return newEvent;
     }
@@ -2349,7 +2631,7 @@ void                GenericEvent::Serialize            ( ISerializer& ser ) cons
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
 
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( CommandName ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( CommandName ) );
 }
 
 // *************************************
@@ -2408,11 +2690,11 @@ EventType           GenericEvent::GetEventType() const
 void                HightmapEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( HightmapCommand ) );
-    ser.SetAttribute( SerializationHelper::TIMER_HOURS_STRING, SerializationHelper::T2String( Hours ) );
-    ser.SetAttribute( SerializationHelper::TIMER_MINUTES_STRING, SerializationHelper::T2String( Minutes ) );
-    ser.SetAttribute( SerializationHelper::TIMER_SECONDS_STRING, SerializationHelper::T2String( Seconds ) );
-    ser.SetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING, SerializationHelper::T2String( Milliseconds ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( HightmapCommand ) );
+    ser.SetAttribute( SerializationHelper::TIMER_HOURS_STRING, Convert::T2String( Hours ) );
+    ser.SetAttribute( SerializationHelper::TIMER_MINUTES_STRING, Convert::T2String( Minutes ) );
+    ser.SetAttribute( SerializationHelper::TIMER_SECONDS_STRING, Convert::T2String( Seconds ) );
+    ser.SetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING, Convert::T2String( Milliseconds ) );
 }
 
 // *************************************
@@ -2422,11 +2704,11 @@ IEventPtr                HightmapEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         HightmapEventPtr newEvent   = std::make_shared<HightmapEvent>();
-        newEvent->HightmapCommand   = SerializationHelper::String2T<HightmapEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), HightmapEvent::Command::Fail );
-        newEvent->Hours             = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_STRING ), 0.0f );
-        newEvent->Minutes           = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_STRING ), 0.0f );
-        newEvent->Seconds           = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_STRING ), 0.0f );
-        newEvent->Milliseconds      = SerializationHelper::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING ), 0.0f );
+        newEvent->HightmapCommand   = Convert::String2T<HightmapEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), HightmapEvent::Command::Fail );
+        newEvent->Hours             = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_STRING ), 0.0f );
+        newEvent->Minutes           = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_STRING ), 0.0f );
+        newEvent->Seconds           = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_STRING ), 0.0f );
+        newEvent->Milliseconds      = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_STRING ), 0.0f );
 
         return newEvent;
     }
@@ -2560,7 +2842,7 @@ bool                AssetTrackerInternalEvent::HasKey                   () const
 void                GizmoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( CommandName ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( CommandName ) );
     Address.Serialize( ser );
 }
 
@@ -2571,7 +2853,7 @@ IEventPtr           GizmoEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         GizmoEventPtr newEvent = std::make_shared< GizmoEvent >();
-        newEvent->CommandName = SerializationHelper::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GizmoEvent::Command::Fail );
+        newEvent->CommandName = Convert::String2T( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), GizmoEvent::Command::Fail );
         newEvent->Address = GizmoAddress::Create( deser );
 
         return newEvent;

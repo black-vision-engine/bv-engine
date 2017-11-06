@@ -147,7 +147,8 @@ struct VideoModeInfo gVideoModeInfo [] = {
 } //videocards
 
 
-namespace SerializationHelper {
+namespace Convert
+{
 
 //**************************************
 //

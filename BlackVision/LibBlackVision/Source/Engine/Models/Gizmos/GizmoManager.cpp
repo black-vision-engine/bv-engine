@@ -139,7 +139,7 @@ std::string         GizmoManager::QueryPluginGizmoLogicName ( const std::string 
 //
 std::string         GizmoManager::QueryEffectGizmoLogicName ( const std::string & ownerTypeName, const std::string & functionalityName )
 {
-    auto effectType = SerializationHelper::String2T< NodeEffectType >( ownerTypeName, NodeEffectType::NET_TOTAL );
+    auto effectType = Convert::String2T< NodeEffectType >( ownerTypeName, NodeEffectType::NET_TOTAL );
     return model::ModelNodeEffectFactory::QueryGizmoName( effectType, functionalityName );
 }
 

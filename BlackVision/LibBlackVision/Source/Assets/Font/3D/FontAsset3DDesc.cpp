@@ -22,7 +22,7 @@ void                    FontAsset3DDesc::Serialize       ( ISerializer& sob ) co
 
     sob.SetAttribute( "type", GetUID() );
     sob.SetAttribute( "path", m_fontFileName );
-    sob.SetAttribute( "size", SerializationHelper::T2String( m_fontSize ) );
+    sob.SetAttribute( "size", Convert::T2String( m_fontSize ) );
 
     sob.ExitChild();
 }
@@ -34,7 +34,7 @@ ISerializableConstPtr   FontAsset3DDesc::Create          ( const IDeserializer& 
     assert( dob.GetAttribute( "type" ) == UID() );
 
     auto path = dob.GetAttribute( "path" );
-    auto size = SerializationHelper::String2T( dob.GetAttribute( "size" ), 10 );
+    auto size = Convert::String2T( dob.GetAttribute( "size" ), 10 );
 
     return FontAsset3DDesc::Create( path, size );
 }

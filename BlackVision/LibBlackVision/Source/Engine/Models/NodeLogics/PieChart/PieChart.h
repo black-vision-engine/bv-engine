@@ -4,7 +4,9 @@
 #include "Engine/Models/SceneModel.h"
 
 
-namespace bv { namespace nodelogic {
+namespace bv {
+namespace nodelogic
+{
 
 
 class PieChart;
@@ -13,7 +15,7 @@ DEFINE_PTR_TYPE( PieChart )
 DEFINE_CONST_PTR_TYPE( PieChart )
 
 
-class PieChart:  public model::NodeLogicBase, public std::enable_shared_from_this< PieChart >
+class PieChart :  public model::NodeLogicBase, public std::enable_shared_from_this< PieChart >
 {
 public:
 
@@ -117,5 +119,9 @@ private:
 
 };
 
+
 } //nodelogic
+
+DECLARE_ENUM_SERIALIZATION( nodelogic::PieChart::PieChartType )
+
 } //bv

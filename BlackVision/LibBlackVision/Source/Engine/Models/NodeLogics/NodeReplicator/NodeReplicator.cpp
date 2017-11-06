@@ -78,7 +78,7 @@ void                NodeReplicator::Serialize       ( ISerializer & ser ) const
 
         if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
         {
-            ser.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
+            ser.SetAttribute( "numRepetitions", Convert::T2String( m_repNum ) );
             m_repModifier->Serialize( ser );
         }
 
@@ -89,7 +89,7 @@ void                NodeReplicator::Serialize       ( ISerializer & ser ) const
 //
 NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & deser, model::BasicNodeWeakPtr parentNode )
 {
-    SizeType repetitions = SerializationHelper::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
+    SizeType repetitions = Convert::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
     
     deser.EnterChild( "replicatorModifier" );
 
@@ -177,12 +177,12 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer & eventSer, 
         }
         else if( action == "GetNumRepetitions" )
         {
-            response.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
+            response.SetAttribute( "numRepetitions", Convert::T2String( m_repNum ) );
             return true;
         }
         else if( action == "SetNumRepetitions" )
         {
-            m_repNum = SerializationHelper::String2T< int >( eventSer.GetAttribute( "numRepetitions" ), 0 );
+            m_repNum = Convert::String2T< int >( eventSer.GetAttribute( "numRepetitions" ), 0 );
             return true;
         }
         else if( action == "AddParamShift" )
@@ -222,7 +222,7 @@ bool            NodeReplicator::RemoveParamShift    ( IDeserializer & eventSer, 
 
     std::string pluginName = eventSer.GetAttribute( "pluginName" );
     std::string paramName = eventSer.GetAttribute( "paramName" );
-    TimeType startTime = SerializationHelper::String2T( eventSer.GetAttribute( "startTime" ), 0.0f );
+    TimeType startTime = Convert::String2T( eventSer.GetAttribute( "startTime" ), 0.0f );
 
     return modifier->RemoveParamShift( pluginName, paramName, startTime );
 }

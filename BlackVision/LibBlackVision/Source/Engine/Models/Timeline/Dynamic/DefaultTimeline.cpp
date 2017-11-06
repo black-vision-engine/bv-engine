@@ -32,7 +32,8 @@
 
 namespace bv { 
 
-namespace SerializationHelper {
+namespace Convert
+{
 
 std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
     std::make_pair( TimelineWrapMethod::TWM_CLAMP, "clamp" ),
@@ -44,7 +45,7 @@ template<> std::string                      T2String    ( const TimelineWrapMeth
 template<> TimelineWrapMethod               String2T    ( const std::string& s, const TimelineWrapMethod& defaultVal )  { return String2Enum( TWM2S, s, defaultVal ); }
 template<> Expected< TimelineWrapMethod >   String2T    ( const std::string & s )                                       { return String2Enum( TWM2S, s ); }
 
-} // SerializationHelper
+} // Convert
 
 namespace model {
 
@@ -91,13 +92,13 @@ void                                DefaultTimeline::Serialize           ( ISeri
     ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
     if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() )
     {
-        ser.SetAttribute( "loop", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+        ser.SetAttribute( "loop", Convert::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
     }
     else
     {
         ser.SetAttribute( "loop", "true" );
-        ser.SetAttribute( "loopPre", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
-        ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPost() ) );
+        ser.SetAttribute( "loopPre", Convert::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+        ser.SetAttribute( "loopPost", Convert::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPost() ) );
     }
 
     ser.EnterArray( "events" );
@@ -126,18 +127,18 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
 {
     auto name = deser.GetAttribute( "name" );
 
-    auto duration = SerializationHelper::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
+    auto duration = Convert::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
 
     auto loop = deser.GetAttribute( "loop" );
     TimelineWrapMethod preWrap, postWrap;
     if( loop == "true" )
     {
-        preWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPre" ) );
-        postWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPost" ) );
+        preWrap = Convert::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPre" ) );
+        postWrap = Convert::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPost" ) );
     }
     else
     {
-        preWrap = postWrap = SerializationHelper::String2T< TimelineWrapMethod >( loop );
+        preWrap = postWrap = Convert::String2T< TimelineWrapMethod >( loop );
     }
 
     auto te = DefaultTimeline::Create( name, duration, preWrap, postWrap );
@@ -170,7 +171,7 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
     for( auto child : children )
         te->AddChild( child );
 
-    if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), false ) )
+    if( Convert::String2T< bool >( deser.GetAttribute( "play" ), false ) )
         te->Play();
 
     return te;
@@ -575,11 +576,11 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
     SimpleJsonSerializeObject ser;
 	ser.SetAttribute( "TriggerEvent", "KeyframeTrigger" );
     ser.SetAttribute( "cmd", "KeyframeEvent" );
-    ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );
+    ser.SetAttribute( "KeyframeType", Convert::T2String( keyframeType ) );
     ser.SetAttribute( "KeyframeName", evt->GetName() );
     ser.SetAttribute( "Timeline", this->GetName() );
     ser.SetAttribute( "SceneName", TimelineHelper::GetSceneName( this ) );
-    ser.SetAttribute( "Time", SerializationHelper::T2String( this->GetLocalTime() ) );
+    ser.SetAttribute( "Time", Convert::T2String( this->GetLocalTime() ) );
 
     ResponseEventPtr msg = std::make_shared<ResponseEvent>();
     msg->Response = ser.GetString();

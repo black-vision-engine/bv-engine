@@ -29,7 +29,8 @@ namespace SerializationHelper
     static const std::string PARAM_INDEX                = "Index";          // Light and cameras
 
     static const char* EMPTY_STRING = "";
-}
+
+}   // SerializationHelper
 
 
 

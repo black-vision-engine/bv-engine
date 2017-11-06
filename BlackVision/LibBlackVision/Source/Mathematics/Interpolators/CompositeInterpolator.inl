@@ -59,7 +59,7 @@ inline void                                        CompositeInterpolator< TimeVa
 
         if( context->detailedInfo )
         {
-            ser.SetAttribute( "curve_type", SerializationHelper::T2String< CurveType >( m_type ) );
+            ser.SetAttribute( "curve_type", Convert::T2String< CurveType >( m_type ) );
             SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
             SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
         }
@@ -97,9 +97,9 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
     auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
 
     // Read CompositeInterpolator parameters.
-    CurveType defaultCurveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR );
-    WrapMethod preWrapMethod = SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp );
-    WrapMethod postWrapMethod = SerializationHelper::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp );
+    CurveType defaultCurveType = Convert::String2T< CurveType >( deser.GetAttribute( "curve_type" ), CurveType::CT_LINEAR );
+    WrapMethod preWrapMethod = Convert::String2T< WrapMethod >( deser.GetAttribute( "preMethod" ), WrapMethod::clamp );
+    WrapMethod postWrapMethod = Convert::String2T< WrapMethod >( deser.GetAttribute( "postMethod" ), WrapMethod::clamp );
 
     auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
     auto curves = DeserializeCurves( deser );       // Reads curve types to add keys with proper interpolator.
@@ -125,7 +125,7 @@ inline std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     Compos
                     // Mark omited curve.
                     if( curves.size() > curveIdx ) curves[ curveIdx ] = CurveType::CT_TOTAL;
 
-                    Warn< SerializationException >( deser, "Duplicate key. Time [" + SerializationHelper::T2String( keys[ i ]->t ) + "], value [" + SerializationHelper::T2String( keys[ i ]->val ) + "]" );
+                    Warn< SerializationException >( deser, "Duplicate key. Time [" + Convert::T2String( keys[ i ]->t ) + "], value [" + Convert::T2String( keys[ i ]->val ) + "]" );
                 }
             }
 
@@ -157,14 +157,14 @@ inline std::vector< CurveType >         CompositeInterpolator< TimeValueT, Value
         {
             do
             {
-                auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
+                auto curveType = Convert::String2T< CurveType >( deser.GetAttribute( "type" ) );
 
                 if( curveType.IsValid() )
                 {
                     curves.push_back( curveType.GetVal() );
 
                     if( !IsValidCurveType< ValueT >( curveType.GetVal() ) )
-                        Warn< SerializationException >( deser, "Interpolation has invalid curveType for this parameter type. Default curve set [" + SerializationHelper::T2String( DefaultCurveType< ValueT >() ) + "]." );
+                        Warn< SerializationException >( deser, "Interpolation has invalid curveType for this parameter type. Default curve set [" + Convert::T2String( DefaultCurveType< ValueT >() ) + "]." );
                 }
                 else
                     Warn< SerializationException >( deser, "Cannot deserialize curveType. Interpolation ignored." );
@@ -200,7 +200,7 @@ inline void                             CompositeInterpolator< TimeValueT, Value
                     // to find next matching interpolation in file. We marked omitted values with CurveType::CT_TOTAL.
                     if( curves[ interpolatorIdx ] != CurveType::CT_TOTAL )
                     {
-                        auto curveType = SerializationHelper::String2T< CurveType >( deser.GetAttribute( "type" ) );
+                        auto curveType = Convert::String2T< CurveType >( deser.GetAttribute( "type" ) );
 
                         if( curveType.IsValid() )
                         {
@@ -251,14 +251,14 @@ inline bool                             CompositeInterpolator< TimeValueT, Value
     if( keys.size() - 1 > curves.size() )
     {
         SizeType numLacks = ( keys.size() - 1 ) - curves.size();
-        Warn< SerializationException >( deser, "Not enough interpolations. Replacing [" + SerializationHelper::T2String( numLacks ) + "] with default evaluators." );
+        Warn< SerializationException >( deser, "Not enough interpolations. Replacing [" + Convert::T2String( numLacks ) + "] with default evaluators." );
 
         return false;
     }
     else if( keys.size() - 1 < curves.size() - 1 )
     {
         SizeType toMany = curves.size() - keys.size() + 1;
-        Warn< SerializationException >( deser, "To many interpolations. [" + SerializationHelper::T2String( toMany ) + "] ignored." );
+        Warn< SerializationException >( deser, "To many interpolations. [" + Convert::T2String( toMany ) + "] ignored." );
 
         return false;
     }
