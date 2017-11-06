@@ -24,19 +24,19 @@ protected:
 // ***********************
 //
 template< class Type >
-class LibCore_String2T_Integer_Signed : public testing::Test
+class LibCore_String2T_IntegerSigned : public testing::Test
 {
 protected:
-    LibCore_String2T_Integer_Signed() {};
+    LibCore_String2T_IntegerSigned() {};
 };
 
 // ***********************
 //
 template< class Type >
-class LibCore_String2T_Integer_Unsigned : public testing::Test
+class LibCore_String2T_IntegerUnsigned : public testing::Test
 {
 protected:
-    LibCore_String2T_Integer_Unsigned() {};
+    LibCore_String2T_IntegerUnsigned() {};
 };
 
 typedef testing::Types< UInt64, Int64, UInt32, Int32, UInt16, Int16, UInt8, Int8 > IntegerTypesList;
@@ -44,8 +44,8 @@ typedef testing::Types< Int64, Int32, Int16, Int8 > SignedIntegerTypesList;
 typedef testing::Types< UInt64, UInt32, UInt16, UInt8 > UnsignedIntegerTypesList;
 
 TYPED_TEST_CASE( LibCore_String2T_Integer, IntegerTypesList );
-TYPED_TEST_CASE( LibCore_String2T_Integer_Signed, SignedIntegerTypesList );
-TYPED_TEST_CASE( LibCore_String2T_Integer_Unsigned, UnsignedIntegerTypesList );
+TYPED_TEST_CASE( LibCore_String2T_IntegerSigned, SignedIntegerTypesList );
+TYPED_TEST_CASE( LibCore_String2T_IntegerUnsigned, UnsignedIntegerTypesList );
 
 
 // ========================================================================= //
@@ -67,7 +67,7 @@ TYPED_TEST( LibCore_String2T_Integer, ValidInput )
 
 // ***********************
 // Convert int from valid negative input data.
-TYPED_TEST( LibCore_String2T_Integer_Signed, NegativeInput )
+TYPED_TEST( LibCore_String2T_IntegerSigned, NegativeInput )
 {
     Expected< TypeParam > intExp = SerializationHelper::String2T< TypeParam >( "-123" );
     TypeParam intDef = SerializationHelper::String2T< TypeParam >( "-123", 5 );
@@ -79,7 +79,7 @@ TYPED_TEST( LibCore_String2T_Integer_Signed, NegativeInput )
 
 // ***********************
 // Convert int from valid negative input data.
-TYPED_TEST( LibCore_String2T_Integer_Unsigned, NegativeInput )
+TYPED_TEST( LibCore_String2T_IntegerUnsigned, NegativeInput )
 {
     Expected< TypeParam > intExp = SerializationHelper::String2T< TypeParam >( "-123" );
     TypeParam intDef = SerializationHelper::String2T< TypeParam >( "-123", 5 );
