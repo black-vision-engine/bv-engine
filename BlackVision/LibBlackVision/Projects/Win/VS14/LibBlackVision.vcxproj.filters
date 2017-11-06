@@ -5384,6 +5384,9 @@
     <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.h">
       <Filter>Exceptions\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\KeyTraits.h">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

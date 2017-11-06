@@ -28,5 +28,8 @@
     <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestEvaluators.cpp">
       <Filter>TestCompositeInterpolator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCompositeInterpolator\TestKeyTraits.cpp">
+      <Filter>TestCompositeInterpolator</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
