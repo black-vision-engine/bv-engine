@@ -40,18 +40,19 @@ namespace SerializationHelper
 {
 
 
-namespace
+namespace impl
 {
 
 
 // ***********************
 //
-inline std::vector<std::string> &_split(const std::string &s, char delim, std::vector<std::string> &elems) 
+inline std::vector< std::string > &     Split      ( const std::string & s, char delim, std::vector< std::string > & elems ) 
 {
-    std::stringstream ss(s);
+    std::stringstream ss( s );
     std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
+    while( std::getline( ss, item, delim ) )
+    {
+        elems.push_back( item );
     }
     return elems;
 }
@@ -59,10 +60,10 @@ inline std::vector<std::string> &_split(const std::string &s, char delim, std::v
 
 // ***********************
 //
-inline std::vector<std::string> _split(const std::string &s, char delim) 
+inline std::vector< std::string >       Split      ( const std::string & s, char delim )
 {
-    std::vector<std::string> elems;
-    _split(s, delim, elems);
+    std::vector< std::string > elems;
+    Split( s, delim, elems );
     return elems;
 }
 
@@ -295,7 +296,7 @@ Expected< std::vector< T > >        Strings2T       ( std::vector< std::string >
 //
 template<> Expected< glm::vec2 >    String2T        ( const std::string & s ) 
 { 
-    auto strings = SerializationHelper::_split( s, ',' );
+    auto strings = SerializationHelper::impl::Split( s, ',' );
 
     if( strings.size() == 2 )
     {
@@ -315,7 +316,7 @@ template<> Expected< glm::vec2 >    String2T        ( const std::string & s )
 //
 template<> Expected< glm::vec3 >    String2T        ( const std::string & s )
 { 
-    auto strings = SerializationHelper::_split( s, ',' );
+    auto strings = SerializationHelper::impl::Split( s, ',' );
 
     if( strings.size() == 3 )
     {
@@ -334,7 +335,7 @@ template<> Expected< glm::vec3 >    String2T        ( const std::string & s )
 //
 template<> Expected< glm::vec4 >    String2T        ( const std::string & s )
 { 
-    auto strings = SerializationHelper::_split( s, ',' );
+    auto strings = SerializationHelper::impl::Split( s, ',' );
 
     if( strings.size() == 4 )
     {
