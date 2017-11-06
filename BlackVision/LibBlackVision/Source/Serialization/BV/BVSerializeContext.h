@@ -9,6 +9,12 @@ namespace bv {
 
 namespace model { class TimelineManager; }
 
+class BVSerializeContext;
+
+BVSerializeContext *      Context             ( const ISerializer & deser );
+
+// ***********************
+//
 class BVSerializeContext : public SerializeContext
 {
 private:
