@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Conversions\String2Double.cpp" />
+    <ClCompile Include="..\..\..\Source\Conversions\String2Enum.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2Float.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2Integer.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2TBool.cpp" />

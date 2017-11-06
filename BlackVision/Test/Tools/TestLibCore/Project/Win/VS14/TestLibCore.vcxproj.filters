@@ -37,6 +37,9 @@
     <ClCompile Include="..\..\..\Source\Conversions\String2Vec2.cpp">
       <Filter>Conversions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Conversions\String2Enum.cpp">
+      <Filter>Conversions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.h">
