@@ -172,6 +172,16 @@ TEST( LibCore_String2T, Double_TextSpaceDouble )
     EXPECT_EQ( doubleDef, 0.0 );
 }
 
+// ***********************
+// Check if conversion is inversible. T2String should produce value which can be converted back to typed value.
+TEST( LibCore_String2T, Double_ConversionReversibility )
+{
+    Expected< double > doubleExp = SerializationHelper::String2T< double >( SerializationHelper::T2String( 1.034423 ) );
+
+    EXPECT_TRUE( doubleExp.IsValid() );
+    EXPECT_EQ( doubleExp.GetVal(), 1.034423 );
+}
+
 // ========================================================================= //
 // Test only for double different then in String2Float
 // ========================================================================= //

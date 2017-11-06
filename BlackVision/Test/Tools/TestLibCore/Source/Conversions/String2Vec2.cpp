@@ -106,6 +106,18 @@ TEST( LibCore_String2T, Vec4_OneInvalidComponent )
 // Generic vector tests
 // ========================================================================= //
 
+// ***********************
+//
+template< typename ParamType >
+ParamType           GetTestValue    ()
+{    return ParamType();    }
+
+// ***********************
+//
+template<> glm::vec2    GetTestValue< glm::vec2 >    ()  { return glm::vec2( 123.05, 321.01 ); }
+template<> glm::vec3    GetTestValue< glm::vec3 >    ()  { return glm::vec3( 123.05, 321.01, 1.0032 ); }
+template<> glm::vec4    GetTestValue< glm::vec4 >    ()  { return glm::vec4( 123.05, 321.01, 1.0032, -15 ); }
+
 
 // ***********************
 // To many vector components for type.
@@ -127,4 +139,14 @@ TYPED_TEST( LibCore_String2T_Vec, ToFewComponents )
 
     EXPECT_FALSE( vecExp.IsValid() );
     EXPECT_EQ( vecDef, TypeParam() );
+}
+
+// ***********************
+// Check if conversion is inversible. T2String should produce value which can be converted back to typed value.
+TYPED_TEST( LibCore_String2T_Vec, ConversionReversibility )
+{
+    Expected< TypeParam > vecExp = SerializationHelper::String2T< TypeParam >( SerializationHelper::T2String( GetTestValue< TypeParam >() ) );
+
+    EXPECT_TRUE( vecExp.IsValid() );
+    EXPECT_EQ( vecExp.GetVal(), GetTestValue< TypeParam >() );
 }

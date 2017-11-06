@@ -153,3 +153,13 @@ TYPED_TEST( LibCore_String2T_Integer, TextInTheMiddleOfNumber )
     EXPECT_FALSE( intExp.IsValid() );
     EXPECT_EQ( intDef, 5 );
 }
+
+// ***********************
+// Check if conversion is inversible. T2String should produce value which can be converted back to typed value.
+TYPED_TEST( LibCore_String2T_Integer, ConversionReversibility )
+{
+    Expected< TypeParam > intExp = SerializationHelper::String2T< TypeParam >( SerializationHelper::T2String( 123 ) );
+
+    EXPECT_TRUE( intExp.IsValid() );
+    EXPECT_EQ( intExp.GetVal(), 123 );
+}

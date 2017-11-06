@@ -96,3 +96,20 @@ TEST( LibCore_String2T, Bool_False2String )
     std::string boolVal = SerializationHelper::T2String( false );
     EXPECT_EQ( boolVal, "false" );
 }
+
+// ***********************
+// Check if conversion is inversible. T2String should produce value which can be converted back to typed value.
+TEST( LibCore_String2T, Bool_ConversionReversibility )
+{
+    Expected< bool > expBool = SerializationHelper::String2T< bool >( SerializationHelper::T2String( false ) );
+    
+    EXPECT_TRUE( expBool.IsValid() );
+    EXPECT_EQ( expBool.GetVal(), false );
+
+    expBool = SerializationHelper::String2T< bool >( SerializationHelper::T2String( true ) );
+
+    EXPECT_TRUE( expBool.IsValid() );
+    EXPECT_EQ( expBool.GetVal(), true );
+}
+
+
