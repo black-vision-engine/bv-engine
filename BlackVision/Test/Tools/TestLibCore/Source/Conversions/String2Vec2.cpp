@@ -8,6 +8,20 @@
 using namespace bv;
 
 
+// ***********************
+//
+template< class Type >
+class LibCore_String2T_Vec : public testing::Test
+{
+protected:
+    LibCore_String2T_Vec() {};
+};
+
+
+typedef testing::Types< glm::vec2, glm::vec3, glm::vec4 > VecTypesList;
+
+TYPED_TEST_CASE( LibCore_String2T_Vec, VecTypesList );
+
 
 
 // ***********************
@@ -46,3 +60,24 @@ TEST( LibCore_String2T, Vec4_ValidInput )
     EXPECT_EQ( vecDef, glm::vec4( 123.05, 321.01, 1.0032, -15 ) );
 }
 
+// ***********************
+// To many vector components for type.
+TYPED_TEST( LibCore_String2T_Vec, ToManyComponents )
+{
+    Expected< TypeParam > vecExp = SerializationHelper::String2T< TypeParam >( "123.05, 321.01, 1.0032, -15, -12" );
+    TypeParam vecDef = SerializationHelper::String2T< TypeParam >( "123.05, 321.01, 1.0032, -15, -12", TypeParam() );
+
+    EXPECT_FALSE( vecExp.IsValid() );
+    EXPECT_EQ( vecDef, TypeParam() );
+}
+
+// ***********************
+// To few vector components for type.
+TYPED_TEST( LibCore_String2T_Vec, ToFewComponents )
+{
+    Expected< TypeParam > vecExp = SerializationHelper::String2T< TypeParam >( "123.05" );
+    TypeParam vecDef = SerializationHelper::String2T< TypeParam >( "123.05", TypeParam() );
+
+    EXPECT_FALSE( vecExp.IsValid() );
+    EXPECT_EQ( vecDef, TypeParam() );
+}
