@@ -41,6 +41,19 @@ inline bool                IsValidFloat    ( float val )
 }
 
 // ***********************
+//
+inline bool                IsValidDouble    ( double val )
+{
+    if( std::isnan( val ) )
+        return false;
+
+    if( std::isinf( val ) )
+        return false;
+
+    return true;
+}
+
+// ***********************
 // Default implementation checks only if key time is not NaN or Infinity.
 template< typename ParamType >
 inline bool                IsValidKey      ( TimeType time, const ParamType & )
@@ -57,6 +70,20 @@ inline bool                IsValidKey      ( TimeType time, const float & keyVal
         return false;
 
     if( !IsValidFloat( keyVal ) )
+        return false;
+
+    return true;
+}
+
+// ***********************
+//
+template<>
+inline bool                IsValidKey      ( TimeType time, const double & keyVal )
+{
+    if( !IsValidKeyTime( time ) )
+        return false;
+
+    if( !IsValidDouble( keyVal ) )
         return false;
 
     return true;
