@@ -396,7 +396,8 @@ inline std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpo
 template< class TimeValueT, class ValueT >
 inline bool         CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
-    //if( IsValidKey< ValueT >( ) )
+    if( !IsValidKey< ValueT >( t, v ) )
+        return false;
 
     if( keys.empty() )
     {

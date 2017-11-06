@@ -16,7 +16,7 @@ using namespace bv;
 //
 TEST( Model_ParamValModel, Keys_Float_ValidKey )
 {
-    EXPECT_FALSE( IsValidKey< float >( 0.0f, 1.0f ) );
+    EXPECT_TRUE( IsValidKey< float >( 0.0f, 1.0f ) );
 }
 
 // ***********************
