@@ -2,9 +2,15 @@
 
 #include "Serialization/ISerializable.h"
 
+
+
 namespace bv
 {
 
+
+
+// ***********************
+//
 template<class TimeValueT/* = bv::TimeType*/, class ValueT>
 class Key : public ISerializable
 {
@@ -68,4 +74,8 @@ Key< bv::TimeType, std::wstring > Key< bv::TimeType, std::wstring >::operator+( 
 template<>
 Key< bv::TimeType, std::wstring > Key< bv::TimeType, std::wstring >::operator-( const Key< bv::TimeType, std::wstring > & ) const;
 
+
+
+
 } // bv
+

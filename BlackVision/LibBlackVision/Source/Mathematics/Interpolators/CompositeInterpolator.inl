@@ -19,6 +19,7 @@
 //#include <initializer_list>
 
 #include "Mathematics/glm_inc.h"
+#include "KeyTraits.h"
 
 #include "Memory/MemoryLeaks.h"
 
@@ -395,6 +396,9 @@ inline std::shared_ptr< IEvaluator< TimeType, std::string > > CreateDummyInterpo
 template< class TimeValueT, class ValueT >
 inline bool         CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
+    if( !IsValidKey< ValueT >( t, v ) )
+        return false;
+
     if( keys.empty() )
     {
         keys.push_back( Key( t, v ) );
@@ -526,6 +530,9 @@ inline void CompositeInterpolator< TimeValueT, ValueT >::RemoveAllKeys     ()
 template< class TimeValueT, class ValueT >
 inline bool CompositeInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
 {
+    if( !IsValidKeyTime( t ) || !IsValidKeyTime( newTime ) )
+        return false;
+
     // Find key to move
     SizeType index = std::numeric_limits<SizeType>::max();
     for( SizeType i = 0; i < keys.size(); ++i )

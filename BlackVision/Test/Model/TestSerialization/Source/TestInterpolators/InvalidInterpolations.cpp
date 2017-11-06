@@ -134,3 +134,25 @@ TEST( Serialization_ParamValModel, Interpolators_NotParsingKey )
     EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
     EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_LINEAR );
 }
+
+// ***********************
+// NaN key time will be parsed correctly but keys shouldn't be added.
+// Behavior of interpolations should be equal to doubled keys.
+TEST( Serialization_ParamValModel, Interpolators_NaNKeyTime )
+{
+    auto actual = Deserialize< CompositeInterpolator< TimeType, float > >( "TestAssets/Serialization/Interpolators/NANKeyTime.xml", "interpolator" );
+    ASSERT_NE( actual, nullptr );
+
+    auto & actualEvals = TEST_ACCESSOR( CompositeInterpolator )::GetEvaluators( actual.get() );
+    ASSERT_EQ( actualEvals.size(), 2 );
+
+    EXPECT_EQ( actualEvals[ 0 ]->GetCurveType(), CurveType::CT_POINT );
+    EXPECT_EQ( actualEvals[ 1 ]->GetCurveType(), CurveType::CT_QUARTIC_INOUT );
+
+    ASSERT_EQ( actual->GetNumKeys(), 3 );
+
+    EXPECT_EQ( actual->GetKeys()[ 0 ].val, 3.0f );
+    EXPECT_EQ( actual->GetKeys()[ 1 ].val, 5.0f );
+    EXPECT_EQ( actual->GetKeys()[ 2 ].val, 7.0f );
+}
+
