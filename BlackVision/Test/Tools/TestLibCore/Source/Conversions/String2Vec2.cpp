@@ -4,6 +4,13 @@
 #include "Mathematics/glm_inc.h"
 
 
+// ========================================================================= //
+// Test vectors (glm:: vec2, vec3, vec4) conversion. Internal implementation
+// uses String2T< float >, so Float tests cover all posible float formats issues.
+// ========================================================================= //
+
+
+
 
 using namespace bv;
 
@@ -59,6 +66,46 @@ TEST( LibCore_String2T, Vec4_ValidInput )
     EXPECT_EQ( vecExp.GetVal(), glm::vec4( 123.05, 321.01, 1.0032, -15 ) );
     EXPECT_EQ( vecDef, glm::vec4( 123.05, 321.01, 1.0032, -15 ) );
 }
+
+
+// ***********************
+// One component conversion fail, causes whole conversion fail.
+TEST( LibCore_String2T, Vec2_OneInvalidComponent )
+{
+    Expected< glm::vec2 > vecExp = SerializationHelper::String2T< glm::vec2 >( "123.05, bla bla" );
+    glm::vec2 vecDef = SerializationHelper::String2T< glm::vec2 >( "123.05, bla bla", glm::vec2() );
+
+    EXPECT_FALSE( vecExp.IsValid() );
+    EXPECT_EQ( vecDef, glm::vec2() );
+}
+
+// ***********************
+// One component conversion fail, causes whole conversion fail.
+TEST( LibCore_String2T, Vec3_OneInvalidComponent )
+{
+    Expected< glm::vec3 > vecExp = SerializationHelper::String2T< glm::vec3 >( "123.05, bla bla, 1.0032" );
+    glm::vec3 vecDef = SerializationHelper::String2T< glm::vec3 >( "123.05, bla bla, 1.0032", glm::vec3() );
+
+    EXPECT_FALSE( vecExp.IsValid() );
+    EXPECT_EQ( vecDef, glm::vec3() );
+}
+
+// ***********************
+// One component conversion fail, causes whole conversion fail.
+TEST( LibCore_String2T, Vec4_OneInvalidComponent )
+{
+    Expected< glm::vec4 > vecExp = SerializationHelper::String2T< glm::vec4 >( "123.05, 321.01, bla bla, -15" );
+    glm::vec4 vecDef = SerializationHelper::String2T< glm::vec4 >( "123.05, 321.01, bla bla, -15", glm::vec4() );
+
+    EXPECT_FALSE( vecExp.IsValid() );
+    EXPECT_EQ( vecDef, glm::vec4() );
+}
+
+
+// ========================================================================= //
+// Generic vector tests
+// ========================================================================= //
+
 
 // ***********************
 // To many vector components for type.
