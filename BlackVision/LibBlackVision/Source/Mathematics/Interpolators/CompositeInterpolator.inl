@@ -530,6 +530,9 @@ inline void CompositeInterpolator< TimeValueT, ValueT >::RemoveAllKeys     ()
 template< class TimeValueT, class ValueT >
 inline bool CompositeInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
 {
+    if( !IsValidKeyTime( t ) || !IsValidKeyTime( newTime ) )
+        return false;
+
     // Find key to move
     SizeType index = std::numeric_limits<SizeType>::max();
     for( SizeType i = 0; i < keys.size(); ++i )

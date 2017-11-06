@@ -275,4 +275,73 @@ TEST( Model_ParamValModel, CompositeInterpolator_RemoveKeyInNaN )
     EXPECT_FALSE( interpolator.RemoveKey( std::numeric_limits< float >::quiet_NaN() ) );
 }
 
+// ***********************
+// Try to move key with invalid data.
+TEST( Model_ParamValModel, CompositeInterpolator_MoveKeyNaNTime )
+{
+    CompositeInterpolator< TimeType, float > interpolator;
+
+    interpolator.AddKey( 1.0f, 2.0f );
+    interpolator.AddKey( 2.0f, 22.0f );
+    interpolator.AddKey( 5.0f, 222.0f );
+    interpolator.AddKey( 8.0f, 2222.0f );
+
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+    EXPECT_FALSE( interpolator.MoveKey( std::numeric_limits< float >::quiet_NaN(), 4.0f ) );
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+}
+
+// ***********************
+// Try to move key with invalid data.
+TEST( Model_ParamValModel, CompositeInterpolator_MoveKeyInfinityTime )
+{
+    CompositeInterpolator< TimeType, float > interpolator;
+
+    interpolator.AddKey( 1.0f, 2.0f );
+    interpolator.AddKey( 2.0f, 22.0f );
+    interpolator.AddKey( 5.0f, 222.0f );
+    interpolator.AddKey( 8.0f, 2222.0f );
+
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+    EXPECT_FALSE( interpolator.MoveKey( std::numeric_limits< float >::infinity(), 4.0f ) );
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+}
+
+// ***********************
+// Try to move key with invalid data.
+TEST( Model_ParamValModel, CompositeInterpolator_MoveKeyToInfinityTime )
+{
+    CompositeInterpolator< TimeType, float > interpolator;
+
+    interpolator.AddKey( 1.0f, 2.0f );
+    interpolator.AddKey( 2.0f, 22.0f );
+    interpolator.AddKey( 5.0f, 222.0f );
+    interpolator.AddKey( 8.0f, 2222.0f );
+
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+    EXPECT_FALSE( interpolator.MoveKey( 5.0f, std::numeric_limits< float >::infinity() ) );
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 2 ].t, 5.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 2 ].val, 222.0f );
+}
+
+// ***********************
+// Try to move key with invalid data.
+TEST( Model_ParamValModel, CompositeInterpolator_MoveKeyToNaNTime )
+{
+    CompositeInterpolator< TimeType, float > interpolator;
+
+    interpolator.AddKey( 1.0f, 2.0f );
+    interpolator.AddKey( 2.0f, 22.0f );
+    interpolator.AddKey( 5.0f, 222.0f );
+    interpolator.AddKey( 8.0f, 2222.0f );
+
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+    EXPECT_FALSE( interpolator.MoveKey( 5.0f, std::numeric_limits< float >::quiet_NaN() ) );
+    ASSERT_EQ( interpolator.GetNumKeys(), 4 );
+
+    EXPECT_EQ( interpolator.GetKeys()[ 2 ].t, 5.0f );
+    EXPECT_EQ( interpolator.GetKeys()[ 2 ].val, 222.0f );
+}
 
