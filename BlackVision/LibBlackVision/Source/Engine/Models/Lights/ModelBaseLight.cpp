@@ -27,7 +27,7 @@ void                    ModelBaseLight::Serialize             ( ISerializer & se
 {
     ser.EnterChild( "light" );
 
-    ser.SetAttribute( "type", SerializationHelper::T2String( GetType() ) );
+    ser.SetAttribute( "type", Convert::T2String( GetType() ) );
 
     ser.EnterArray( "params" );
     for( auto param : m_paramModel->GetParameters() )
@@ -44,7 +44,7 @@ void                    ModelBaseLight::Serialize             ( ISerializer & se
 ISerializablePtr	    ModelBaseLight::Create				( const IDeserializer & deser )
 {
     auto typeName = deser.GetAttribute( "type" );
-    auto type = SerializationHelper::String2T< LightType >( typeName );
+    auto type = Convert::String2T< LightType >( typeName );
 
     // params
     auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );

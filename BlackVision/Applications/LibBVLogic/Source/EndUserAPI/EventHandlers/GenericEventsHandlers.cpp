@@ -141,7 +141,7 @@ void    GenericEventsHandlers::SetWeightCenterHandler   ( const std::string & co
     std::string alignY = request->GetAttribute( "AlignY" );
     std::string alignZ = request->GetAttribute( "AlignZ" );
 
-    TimeType keyTime = SerializationHelper::String2T( request->GetAttribute( "Time" ), TimeType( 0.0 ) );
+    TimeType keyTime = Convert::String2T( request->GetAttribute( "Time" ), TimeType( 0.0 ) );
 
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodeName );
     if( node == nullptr )
@@ -166,7 +166,7 @@ void    GenericEventsHandlers::SetNodeScaleHandler      ( const std::string & co
     std::string nodeName = request->GetAttribute( SerializationHelper::NODE_NAME_STRING );
     std::string sceneName = request->GetAttribute( SerializationHelper::SCENE_NAME_STRING );
 
-    TimeType keyTime = SerializationHelper::String2T( request->GetAttribute( "Time" ), TimeType( 0.0 ) );
+    TimeType keyTime = Convert::String2T( request->GetAttribute( "Time" ), TimeType( 0.0 ) );
 
     auto scene = m_appLogic->GetBVProject()->GetModelScene( sceneName );
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodeName );

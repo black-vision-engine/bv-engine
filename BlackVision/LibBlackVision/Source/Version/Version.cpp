@@ -35,10 +35,10 @@ Version         Version::Create      ( const IDeserializer & deser )
 
     if( deser.EnterChild( "version" ) )
     {
-        version.MajorVersion        = SerializationHelper::String2T< Int32 >( deser.GetAttribute( MAJOR_VERSION ) );
-        version.MinorVersion        = SerializationHelper::String2T< Int32 >( deser.GetAttribute( MINOR_VERSION ) );
-        version.SerializerVersion   = SerializationHelper::String2T< Int32 >( deser.GetAttribute( SERIALIZER_VERSION ) );
-        version.BuildVersion        = SerializationHelper::String2T< Int64 >( deser.GetAttribute( BUILD_VERSION ) );
+        version.MajorVersion        = Convert::String2T< Int32 >( deser.GetAttribute( MAJOR_VERSION ) );
+        version.MinorVersion        = Convert::String2T< Int32 >( deser.GetAttribute( MINOR_VERSION ) );
+        version.SerializerVersion   = Convert::String2T< Int32 >( deser.GetAttribute( SERIALIZER_VERSION ) );
+        version.BuildVersion        = Convert::String2T< Int64 >( deser.GetAttribute( BUILD_VERSION ) );
         version.Platform            = deser.GetAttribute( PLATFORM );
 
         deser.ExitChild();
@@ -58,10 +58,10 @@ void            Version::Serialize   ( ISerializer & ser )
 {
     ser.EnterChild( "version" );
 
-    ser.SetAttribute( MAJOR_VERSION, SerializationHelper::T2String( MajorVersion ) );
-    ser.SetAttribute( MINOR_VERSION, SerializationHelper::T2String( MinorVersion ) );
-    ser.SetAttribute( SERIALIZER_VERSION, SerializationHelper::T2String( SerializerVersion ) );
-    ser.SetAttribute( BUILD_VERSION, SerializationHelper::T2String( BuildVersion ) );
+    ser.SetAttribute( MAJOR_VERSION, Convert::T2String( MajorVersion ) );
+    ser.SetAttribute( MINOR_VERSION, Convert::T2String( MinorVersion ) );
+    ser.SetAttribute( SERIALIZER_VERSION, Convert::T2String( SerializerVersion ) );
+    ser.SetAttribute( BUILD_VERSION, Convert::T2String( BuildVersion ) );
     ser.SetAttribute( PLATFORM, Platform );
 
     ser.ExitChild();    // Version

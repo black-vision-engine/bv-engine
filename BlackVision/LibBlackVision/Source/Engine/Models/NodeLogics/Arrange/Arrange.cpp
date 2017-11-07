@@ -10,9 +10,11 @@
 
 
 namespace bv {
+namespace Convert
+{
 
-namespace SerializationHelper {
-
+// ***********************
+//
 std::pair< nodelogic::Arrange::ArrangmentType, const char* > ArrangeTypeMapping[] = 
 {   std::make_pair( nodelogic::Arrange::ArrangmentType::Circle, "Circle" )
     , std::make_pair( nodelogic::Arrange::ArrangmentType::Grid2D, "Grid2D" )
@@ -22,10 +24,11 @@ std::pair< nodelogic::Arrange::ArrangmentType, const char* > ArrangeTypeMapping[
     , std::make_pair( nodelogic::Arrange::ArrangmentType::Total, "" )      // default
 };
 
-template<> nodelogic::Arrange::ArrangmentType   String2T        ( const std::string & s, const nodelogic::Arrange::ArrangmentType & defaultVal )    { return String2Enum( ArrangeTypeMapping, s, defaultVal ); }
-template<> std::string                          T2String        ( const nodelogic::Arrange::ArrangmentType & t )                                    { return Enum2String( ArrangeTypeMapping, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( nodelogic::Arrange::ArrangmentType, ArrangeTypeMapping )
 
-}   // SerializationHelper
+}   // Convert
+
+
 
 namespace nodelogic
 {
@@ -144,7 +147,7 @@ void                        Arrange::Serialize       ( ISerializer & ser ) const
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
         NodeLogicBase::Serialize( ser );
-        ser.SetAttribute( "ArrangementType", SerializationHelper::T2String( m_lastArrangementType ) );
+        ser.SetAttribute( "ArrangementType", Convert::T2String( m_lastArrangementType ) );
     }
 
     ser.ExitChild();    // logic
@@ -170,7 +173,7 @@ void                    Arrange::Deserialize     ( const IDeserializer & ser )
     m_paramValModel->Update();
 
     bool arrangeAfterLoad = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::ARRANGE_AFTER_LOAD ) )->GetValue();
-    ArrangmentType type = SerializationHelper::String2T( ser.GetAttribute( "ArrangementType" ), ArrangmentType::Grid2D );
+    ArrangmentType type = Convert::String2T( ser.GetAttribute( "ArrangementType" ), ArrangmentType::Grid2D );
 
     if( arrangeAfterLoad )
     {
@@ -214,9 +217,9 @@ void                            Arrange::CircleArrangeParams::Serialize       ( 
 {
     ser.EnterChild( "CircleArrangeParams" );
     
-    ser.SetAttribute( "Center", SerializationHelper::T2String( Center ) );
-    ser.SetAttribute( "Radius", SerializationHelper::T2String( Radius ) );
-    ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
+    ser.SetAttribute( "Center", Convert::T2String( Center ) );
+    ser.SetAttribute( "Radius", Convert::T2String( Radius ) );
+    ser.SetAttribute( "Rotation", Convert::T2String( Rotation ) );
 
     ser.ExitChild();    // CircleArrangeParams
 }
@@ -227,9 +230,9 @@ std::unique_ptr< Arrange::CircleArrangeParams >   Arrange::CircleArrangeParams::
 {
     std::unique_ptr< CircleArrangeParams > params = std::unique_ptr< CircleArrangeParams >( new CircleArrangeParams );
 
-    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
-    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Center = Convert::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Radius = Convert::String2T( deser.GetAttribute( "Radius" ), 2.0f );
+    params->Rotation = Convert::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
     
     return params;
 }
@@ -253,8 +256,8 @@ void                            Arrange::LineArrangeParams::Serialize       ( IS
 {
     ser.EnterChild( "LineArrangeParams" );
 
-    ser.SetAttribute( "StartPoint", SerializationHelper::T2String( StartPoint ) );
-    ser.SetAttribute( "EndPoint", SerializationHelper::T2String( EndPoint ) );
+    ser.SetAttribute( "StartPoint", Convert::T2String( StartPoint ) );
+    ser.SetAttribute( "EndPoint", Convert::T2String( EndPoint ) );
 
     ser.ExitChild();    // LineArrangeParams
 }
@@ -265,8 +268,8 @@ std::unique_ptr< Arrange::LineArrangeParams >     Arrange::LineArrangeParams::Cr
 {
     std::unique_ptr< LineArrangeParams > params = std::unique_ptr< LineArrangeParams >( new LineArrangeParams );
 
-    params->StartPoint = SerializationHelper::String2T( deser.GetAttribute( "StartPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->EndPoint = SerializationHelper::String2T( deser.GetAttribute( "EndPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->StartPoint = Convert::String2T( deser.GetAttribute( "StartPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->EndPoint = Convert::String2T( deser.GetAttribute( "EndPoint" ), glm::vec3( 0.0, 0.0, 0.0 ) );
 
     return params;
 }
@@ -289,14 +292,14 @@ void                            Arrange::Grid2DArrangeParams::Serialize       ( 
 {
     ser.EnterChild( "Grid2DArrangeParams" );
 
-    ser.SetAttribute( "Rows", SerializationHelper::T2String( Rows ) );
-    ser.SetAttribute( "Columns", SerializationHelper::T2String( Columns ) );
+    ser.SetAttribute( "Rows", Convert::T2String( Rows ) );
+    ser.SetAttribute( "Columns", Convert::T2String( Columns ) );
 
-    ser.SetAttribute( "Center", SerializationHelper::T2String( Center ) );
-    ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
-    ser.SetAttribute( "Interspaces", SerializationHelper::T2String( Interspaces ) );
+    ser.SetAttribute( "Center", Convert::T2String( Center ) );
+    ser.SetAttribute( "Rotation", Convert::T2String( Rotation ) );
+    ser.SetAttribute( "Interspaces", Convert::T2String( Interspaces ) );
 
-    //ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
+    //ser.SetAttribute( "DistributeUniform", Convert::T2String( Uniform ) );
 
     ser.ExitChild();    // Grid2DArrangeParams
 }
@@ -307,14 +310,14 @@ std::unique_ptr< Arrange::Grid2DArrangeParams >   Arrange::Grid2DArrangeParams::
 {
     std::unique_ptr< Grid2DArrangeParams > params = std::unique_ptr< Grid2DArrangeParams >( new Grid2DArrangeParams );
 
-    params->Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 3 );
-    params->Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 3 );
+    params->Rows = Convert::String2T( deser.GetAttribute( "Rows" ), 3 );
+    params->Columns = Convert::String2T( deser.GetAttribute( "Columns" ), 3 );
 
-    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec2( 1.0, 1.0 ) );
+    params->Center = Convert::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Rotation = Convert::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Interspaces = Convert::String2T( deser.GetAttribute( "Interspaces" ), glm::vec2( 1.0, 1.0 ) );
 
-    //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    //params->Uniform = Convert::String2T( deser.GetAttribute( "DistributeUniform" ), false );
     
     return params;
 }
@@ -341,15 +344,15 @@ void                            Arrange::Grid3DArrangeParams::Serialize       ( 
 {
     ser.EnterChild( "Grid3DArrangeParams" );
 
-    ser.SetAttribute( "Rows", SerializationHelper::T2String( Rows ) );
-    ser.SetAttribute( "Columns", SerializationHelper::T2String( Columns ) );
-    ser.SetAttribute( "Layets", SerializationHelper::T2String( Layers ) );
+    ser.SetAttribute( "Rows", Convert::T2String( Rows ) );
+    ser.SetAttribute( "Columns", Convert::T2String( Columns ) );
+    ser.SetAttribute( "Layets", Convert::T2String( Layers ) );
 
-    ser.SetAttribute( "Center", SerializationHelper::T2String( Center ) );
-    ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
-    ser.SetAttribute( "Interspaces", SerializationHelper::T2String( Interspaces ) );
+    ser.SetAttribute( "Center", Convert::T2String( Center ) );
+    ser.SetAttribute( "Rotation", Convert::T2String( Rotation ) );
+    ser.SetAttribute( "Interspaces", Convert::T2String( Interspaces ) );
 
-    //ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
+    //ser.SetAttribute( "DistributeUniform", Convert::T2String( Uniform ) );
 
     ser.ExitChild();    // Grid3DArrangeParams
 }
@@ -360,15 +363,15 @@ std::unique_ptr< Arrange::Grid3DArrangeParams >   Arrange::Grid3DArrangeParams::
 {
     std::unique_ptr< Grid3DArrangeParams > params = std::unique_ptr< Grid3DArrangeParams >( new Grid3DArrangeParams );
 
-    params->Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 3 );
-    params->Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 3 );
-    params->Layers = SerializationHelper::String2T( deser.GetAttribute( "Layers" ), 3 );
+    params->Rows = Convert::String2T( deser.GetAttribute( "Rows" ), 3 );
+    params->Columns = Convert::String2T( deser.GetAttribute( "Columns" ), 3 );
+    params->Layers = Convert::String2T( deser.GetAttribute( "Layers" ), 3 );
 
-    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->Interspaces = SerializationHelper::String2T( deser.GetAttribute( "Interspaces" ), glm::vec3( 1.0, 1.0, 1.0 ) );
+    params->Center = Convert::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Rotation = Convert::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Interspaces = Convert::String2T( deser.GetAttribute( "Interspaces" ), glm::vec3( 1.0, 1.0, 1.0 ) );
 
-    //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    //params->Uniform = Convert::String2T( deser.GetAttribute( "DistributeUniform" ), false );
 
     return params;
 }
@@ -396,14 +399,14 @@ void                            Arrange::SphereArrangeParams::Serialize       ( 
 {
     ser.EnterChild( "SphereArrangeParams" );
 
-    ser.SetAttribute( "Rows", SerializationHelper::T2String( Rows ) );
-    ser.SetAttribute( "Columns", SerializationHelper::T2String( Columns ) );
+    ser.SetAttribute( "Rows", Convert::T2String( Rows ) );
+    ser.SetAttribute( "Columns", Convert::T2String( Columns ) );
 
-    ser.SetAttribute( "Center", SerializationHelper::T2String( Center ) );
-    ser.SetAttribute( "Radius", SerializationHelper::T2String( Radius ) );
-    ser.SetAttribute( "Rotation", SerializationHelper::T2String( Rotation ) );
+    ser.SetAttribute( "Center", Convert::T2String( Center ) );
+    ser.SetAttribute( "Radius", Convert::T2String( Radius ) );
+    ser.SetAttribute( "Rotation", Convert::T2String( Rotation ) );
 
-    //ser.SetAttribute( "DistributeUniform", SerializationHelper::T2String( Uniform ) );
+    //ser.SetAttribute( "DistributeUniform", Convert::T2String( Uniform ) );
 
     ser.ExitChild();
 }
@@ -414,14 +417,14 @@ std::unique_ptr< Arrange::SphereArrangeParams >   Arrange::SphereArrangeParams::
 {
     std::unique_ptr< SphereArrangeParams > params = std::unique_ptr< SphereArrangeParams >( new SphereArrangeParams);
 
-    params->Center = SerializationHelper::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
-    params->Radius = SerializationHelper::String2T( deser.GetAttribute( "Radius" ), 2.0f );
-    params->Rotation = SerializationHelper::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Center = Convert::String2T( deser.GetAttribute( "Center" ), glm::vec3( 0.0, 0.0, 0.0 ) );
+    params->Radius = Convert::String2T( deser.GetAttribute( "Radius" ), 2.0f );
+    params->Rotation = Convert::String2T( deser.GetAttribute( "Rotation" ), glm::vec3( 0.0, 0.0, 0.0 ) );
 
-    params->Rows = SerializationHelper::String2T( deser.GetAttribute( "Rows" ), 4 );
-    params->Columns = SerializationHelper::String2T( deser.GetAttribute( "Columns" ), 4 );
+    params->Rows = Convert::String2T( deser.GetAttribute( "Rows" ), 4 );
+    params->Columns = Convert::String2T( deser.GetAttribute( "Columns" ), 4 );
 
-    //params->Uniform = SerializationHelper::String2T( deser.GetAttribute( "DistributeUniform" ), false );
+    //params->Uniform = Convert::String2T( deser.GetAttribute( "DistributeUniform" ), false );
 
     return params;
 }

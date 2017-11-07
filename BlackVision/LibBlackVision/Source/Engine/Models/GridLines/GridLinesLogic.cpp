@@ -47,7 +47,7 @@ void            GridLinesLogic::Deserialize             ( const IDeserializer & 
 
     if( deser.EnterChild( "gridlines" ) )
     {
-        //m_showGridLines = SerializationHelper::String2T( deser.GetAttribute( "show" ), false );
+        //m_showGridLines = Convert::String2T( deser.GetAttribute( "show" ), false );
 
         if( deser.EnterChild( "horizontal" ) )
         {
@@ -56,8 +56,8 @@ void            GridLinesLogic::Deserialize             ( const IDeserializer & 
                 do
                 {
                     std::string gridLineName = deser.GetAttribute( "name" );
-                    float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
-                    int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
+                    float position = Convert::String2T( deser.GetAttribute( "position" ), 0.0f );
+                    int index = Convert::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
                 
                     if( index != std::numeric_limits< int >::max() )
                     {
@@ -79,8 +79,8 @@ void            GridLinesLogic::Deserialize             ( const IDeserializer & 
                 do
                 {
                     std::string gridLineName = deser.GetAttribute( "name" );
-                    float position = SerializationHelper::String2T( deser.GetAttribute( "position" ), 0.0f );
-                    int index = SerializationHelper::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
+                    float position = Convert::String2T( deser.GetAttribute( "position" ), 0.0f );
+                    int index = Convert::String2T( deser.GetAttribute( "index" ), std::numeric_limits< int >::max() );
                 
                     if( index != std::numeric_limits< int >::max() )
                     {
@@ -107,8 +107,8 @@ void            GridLinesLogic::SerializeGridArray      ( ISerializer & ser, con
         if( gridArray[ i ] )
         {
             ser.EnterChild( "gridline" );
-                ser.SetAttribute( "index", SerializationHelper::T2String( i ) );
-                ser.SetAttribute( "position", SerializationHelper::T2String( gridArray[ i ]->GetPosition() ) );
+                ser.SetAttribute( "index", Convert::T2String( i ) );
+                ser.SetAttribute( "position", Convert::T2String( gridArray[ i ]->GetPosition() ) );
                 ser.SetAttribute( "name", gridArray[ i ]->GetName() );
             ser.ExitChild();    //  gridline
         }
@@ -121,7 +121,7 @@ void            GridLinesLogic::Serialize               ( ISerializer & ser ) co
 {
     ser.EnterChild( "gridlines" );
 
-        //ser.SetAttribute( "show", SerializationHelper::T2String( m_showGridLines ) );
+        //ser.SetAttribute( "show", Convert::T2String( m_showGridLines ) );
         
         ser.EnterArray( "horizontal" );
             SerializeGridArray( ser, m_horizontalGridLines );
@@ -230,7 +230,7 @@ void            GridLinesLogic::AllocGridLine   ( GridLineType gridType, int gri
 
     if( gridLinesVec[ gridIndex ] == nullptr )
     {
-        gridLinesVec[ gridIndex ] = new GridLine( gridType, std::string( "GridLine" + SerializationHelper::T2String( gridIndex ) ) );
+        gridLinesVec[ gridIndex ] = new GridLine( gridType, std::string( "GridLine" + Convert::T2String( gridIndex ) ) );
         UpdateID();
     }
 }

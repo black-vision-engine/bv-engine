@@ -35,8 +35,8 @@ TYPED_TEST_CASE( LibCore_String2T_Vec, VecTypesList );
 // Basic vec2 conversion test.
 TEST( LibCore_String2T, Vec2_ValidInput )
 {
-    Expected< glm::vec2 > vecExp = SerializationHelper::String2T< glm::vec2 >( "123.05, 321.01" );
-    glm::vec2 vecDef = SerializationHelper::String2T< glm::vec2 >( "123.05, 321.01", glm::vec2() );
+    Expected< glm::vec2 > vecExp = Convert::String2T< glm::vec2 >( "123.05, 321.01" );
+    glm::vec2 vecDef = Convert::String2T< glm::vec2 >( "123.05, 321.01", glm::vec2() );
 
     EXPECT_TRUE( vecExp.IsValid() );
     EXPECT_EQ( vecExp.GetVal(), glm::vec2( 123.05, 321.01 ) );
@@ -47,8 +47,8 @@ TEST( LibCore_String2T, Vec2_ValidInput )
 // Basic vec3 conversion test.
 TEST( LibCore_String2T, Vec3_ValidInput )
 {
-    Expected< glm::vec3 > vecExp = SerializationHelper::String2T< glm::vec3 >( "123.05, 321.01, 1.0032" );
-    glm::vec3 vecDef = SerializationHelper::String2T< glm::vec3 >( "123.05, 321.01, 1.0032", glm::vec3() );
+    Expected< glm::vec3 > vecExp = Convert::String2T< glm::vec3 >( "123.05, 321.01, 1.0032" );
+    glm::vec3 vecDef = Convert::String2T< glm::vec3 >( "123.05, 321.01, 1.0032", glm::vec3() );
 
     EXPECT_TRUE( vecExp.IsValid() );
     EXPECT_EQ( vecExp.GetVal(), glm::vec3( 123.05, 321.01, 1.0032 ) );
@@ -59,8 +59,8 @@ TEST( LibCore_String2T, Vec3_ValidInput )
 // Basic vec4 conversion test.
 TEST( LibCore_String2T, Vec4_ValidInput )
 {
-    Expected< glm::vec4 > vecExp = SerializationHelper::String2T< glm::vec4 >( "123.05, 321.01, 1.0032, -15" );
-    glm::vec4 vecDef = SerializationHelper::String2T< glm::vec4 >( "123.05, 321.01, 1.0032, -15", glm::vec4() );
+    Expected< glm::vec4 > vecExp = Convert::String2T< glm::vec4 >( "123.05, 321.01, 1.0032, -15" );
+    glm::vec4 vecDef = Convert::String2T< glm::vec4 >( "123.05, 321.01, 1.0032, -15", glm::vec4() );
 
     EXPECT_TRUE( vecExp.IsValid() );
     EXPECT_EQ( vecExp.GetVal(), glm::vec4( 123.05, 321.01, 1.0032, -15 ) );
@@ -72,8 +72,8 @@ TEST( LibCore_String2T, Vec4_ValidInput )
 // One component conversion fail, causes whole conversion fail.
 TEST( LibCore_String2T, Vec2_OneInvalidComponent )
 {
-    Expected< glm::vec2 > vecExp = SerializationHelper::String2T< glm::vec2 >( "123.05, bla bla" );
-    glm::vec2 vecDef = SerializationHelper::String2T< glm::vec2 >( "123.05, bla bla", glm::vec2() );
+    Expected< glm::vec2 > vecExp = Convert::String2T< glm::vec2 >( "123.05, bla bla" );
+    glm::vec2 vecDef = Convert::String2T< glm::vec2 >( "123.05, bla bla", glm::vec2() );
 
     EXPECT_FALSE( vecExp.IsValid() );
     EXPECT_EQ( vecDef, glm::vec2() );
@@ -83,8 +83,8 @@ TEST( LibCore_String2T, Vec2_OneInvalidComponent )
 // One component conversion fail, causes whole conversion fail.
 TEST( LibCore_String2T, Vec3_OneInvalidComponent )
 {
-    Expected< glm::vec3 > vecExp = SerializationHelper::String2T< glm::vec3 >( "123.05, bla bla, 1.0032" );
-    glm::vec3 vecDef = SerializationHelper::String2T< glm::vec3 >( "123.05, bla bla, 1.0032", glm::vec3() );
+    Expected< glm::vec3 > vecExp = Convert::String2T< glm::vec3 >( "123.05, bla bla, 1.0032" );
+    glm::vec3 vecDef = Convert::String2T< glm::vec3 >( "123.05, bla bla, 1.0032", glm::vec3() );
 
     EXPECT_FALSE( vecExp.IsValid() );
     EXPECT_EQ( vecDef, glm::vec3() );
@@ -94,8 +94,8 @@ TEST( LibCore_String2T, Vec3_OneInvalidComponent )
 // One component conversion fail, causes whole conversion fail.
 TEST( LibCore_String2T, Vec4_OneInvalidComponent )
 {
-    Expected< glm::vec4 > vecExp = SerializationHelper::String2T< glm::vec4 >( "123.05, 321.01, bla bla, -15" );
-    glm::vec4 vecDef = SerializationHelper::String2T< glm::vec4 >( "123.05, 321.01, bla bla, -15", glm::vec4() );
+    Expected< glm::vec4 > vecExp = Convert::String2T< glm::vec4 >( "123.05, 321.01, bla bla, -15" );
+    glm::vec4 vecDef = Convert::String2T< glm::vec4 >( "123.05, 321.01, bla bla, -15", glm::vec4() );
 
     EXPECT_FALSE( vecExp.IsValid() );
     EXPECT_EQ( vecDef, glm::vec4() );
@@ -123,8 +123,8 @@ template<> glm::vec4    GetTestValue< glm::vec4 >    ()  { return glm::vec4( 123
 // To many vector components for type.
 TYPED_TEST( LibCore_String2T_Vec, ToManyComponents )
 {
-    Expected< TypeParam > vecExp = SerializationHelper::String2T< TypeParam >( "123.05, 321.01, 1.0032, -15, -12" );
-    TypeParam vecDef = SerializationHelper::String2T< TypeParam >( "123.05, 321.01, 1.0032, -15, -12", TypeParam() );
+    Expected< TypeParam > vecExp = Convert::String2T< TypeParam >( "123.05, 321.01, 1.0032, -15, -12" );
+    TypeParam vecDef = Convert::String2T< TypeParam >( "123.05, 321.01, 1.0032, -15, -12", TypeParam() );
 
     EXPECT_FALSE( vecExp.IsValid() );
     EXPECT_EQ( vecDef, TypeParam() );
@@ -134,8 +134,8 @@ TYPED_TEST( LibCore_String2T_Vec, ToManyComponents )
 // To few vector components for type.
 TYPED_TEST( LibCore_String2T_Vec, ToFewComponents )
 {
-    Expected< TypeParam > vecExp = SerializationHelper::String2T< TypeParam >( "123.05" );
-    TypeParam vecDef = SerializationHelper::String2T< TypeParam >( "123.05", TypeParam() );
+    Expected< TypeParam > vecExp = Convert::String2T< TypeParam >( "123.05" );
+    TypeParam vecDef = Convert::String2T< TypeParam >( "123.05", TypeParam() );
 
     EXPECT_FALSE( vecExp.IsValid() );
     EXPECT_EQ( vecDef, TypeParam() );
@@ -145,7 +145,7 @@ TYPED_TEST( LibCore_String2T_Vec, ToFewComponents )
 // Check if conversion is inversible. T2String should produce value which can be converted back to typed value.
 TYPED_TEST( LibCore_String2T_Vec, ConversionReversibility )
 {
-    Expected< TypeParam > vecExp = SerializationHelper::String2T< TypeParam >( SerializationHelper::T2String( GetTestValue< TypeParam >() ) );
+    Expected< TypeParam > vecExp = Convert::String2T< TypeParam >( Convert::T2String( GetTestValue< TypeParam >() ) );
 
     EXPECT_TRUE( vecExp.IsValid() );
     EXPECT_EQ( vecExp.GetVal(), GetTestValue< TypeParam >() );

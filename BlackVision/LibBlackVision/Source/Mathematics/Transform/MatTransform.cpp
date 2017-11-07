@@ -21,7 +21,8 @@
 
 namespace bv { 
 
-namespace SerializationHelper {
+namespace Convert
+{
 
 std::pair< TransformKind, const char* > tk2s[] = {
     std::make_pair( TransformKind::center, "center" ),
@@ -47,7 +48,7 @@ template<> TransformKind String2T( const std::string & s, const TransformKind & 
 
 template<> Expected< TransformKind > String2T( const std::string & s ) { return String2Enum( tk2s, s ); }
 
-} // SerializationHelper
+} // Convert
 
 
 // ******************* Transform **************** 
@@ -333,7 +334,7 @@ CompositeTransformPtr    CompositeTransform::Create      ( const IDeserializer &
         do
         {
             auto kindName = deser.GetAttribute( "kind" );
-            auto kind = SerializationHelper::String2T< TransformKind >( kindName );
+            auto kind = Convert::String2T< TransformKind >( kindName );
 
             auto params = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "interpolators" );
             if( params.size() == 3 )

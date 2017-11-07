@@ -240,7 +240,7 @@ void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject &
     context->detailedInfo = false;
 
     scene->Serialize( ser );
-    ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( scene->GetName() ) ) );
+    ser.SetAttribute( "preset", Convert::T2String( IsPresetScene( scene->GetName() ) ) );
     PrepareResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, true );
 }
 
@@ -275,20 +275,20 @@ void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser
 
     PrepareResponseTemplate( ser, InfoEvent::Command::Performance, eventID, true );
 
-    ser.SetAttribute( "fps", SerializationHelper::T2String( PerformanceMonitor::Stats.fps ) );
-    ser.SetAttribute( "fps_avg", SerializationHelper::T2String( PerformanceMonitor::Stats.fps_avg ) );
-    ser.SetAttribute( "ram", SerializationHelper::T2String( PerformanceMonitor::Stats.ram ) );
-    ser.SetAttribute( "vram", SerializationHelper::T2String( PerformanceMonitor::Stats.vram ) );
-    ser.SetAttribute( "cpu", SerializationHelper::T2String( PerformanceMonitor::Stats.cpu ) );
+    ser.SetAttribute( "fps", Convert::T2String( PerformanceMonitor::Stats.fps ) );
+    ser.SetAttribute( "fps_avg", Convert::T2String( PerformanceMonitor::Stats.fps_avg ) );
+    ser.SetAttribute( "ram", Convert::T2String( PerformanceMonitor::Stats.ram ) );
+    ser.SetAttribute( "vram", Convert::T2String( PerformanceMonitor::Stats.vram ) );
+    ser.SetAttribute( "cpu", Convert::T2String( PerformanceMonitor::Stats.cpu ) );
 
     for( auto name : sections )
     {
         ser.EnterChild( name );
 
-        ser.SetAttribute( "average", SerializationHelper::T2String( frameStats.ExpectedValue( name ) ) );
-        ser.SetAttribute( "minVal", SerializationHelper::T2String( frameStats.MinVal( name ) ) );
-        ser.SetAttribute( "maxVal", SerializationHelper::T2String( frameStats.MaxVal( name ) ) );
-        ser.SetAttribute( "variance", SerializationHelper::T2String( frameStats.Variance( name ) ) );
+        ser.SetAttribute( "average", Convert::T2String( frameStats.ExpectedValue( name ) ) );
+        ser.SetAttribute( "minVal", Convert::T2String( frameStats.MinVal( name ) ) );
+        ser.SetAttribute( "maxVal", Convert::T2String( frameStats.MaxVal( name ) ) );
+        ser.SetAttribute( "variance", Convert::T2String( frameStats.Variance( name ) ) );
 
         ser.ExitChild();
     }
@@ -336,9 +336,9 @@ void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser, mod
     auto secondsCPU = (double)sceneNode->GetPerformanceData()->CPURenderDuration;
     auto secondsQueue = (double)sceneNode->GetPerformanceData()->SortNodeDuration;
 
-    ser.SetAttribute( "GPU render time", SerializationHelper::T2String( secondsGPU ) );
-    ser.SetAttribute( "CPU render time", SerializationHelper::T2String( secondsCPU ) );
-    ser.SetAttribute( "CPU queueing time", SerializationHelper::T2String( secondsQueue ) );
+    ser.SetAttribute( "GPU render time", Convert::T2String( secondsGPU ) );
+    ser.SetAttribute( "CPU render time", Convert::T2String( secondsCPU ) );
+    ser.SetAttribute( "CPU queueing time", Convert::T2String( secondsQueue ) );
 
     ser.EnterArray( "Children" );
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )
@@ -363,7 +363,7 @@ void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, ID
     for( auto sceneModel : m_appLogic->GetBVProject()->GetModelScenes() )
     {
         ser.EnterChild( "scene" );
-            ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
+            ser.SetAttribute( "preset", Convert::T2String( IsPresetScene( sceneModel->GetName() ) ) );
             sceneModel->Serialize( ser );
         ser.ExitChild();
     }
@@ -535,7 +535,7 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, IDes
         auto scenesCount = pm->ListScenesNames( p, "", true ).size();
 
         ser.SetAttribute( "name", p.Str() );
-        ser.SetAttribute( "scenesCount", SerializationHelper::T2String( scenesCount ) );
+        ser.SetAttribute( "scenesCount", Convert::T2String( scenesCount ) );
     }
     ser.ExitChild();
 }
@@ -746,8 +746,8 @@ void        QueryHandlers::GetPMItemStats      ( JsonSerializeObject & ser, IDes
     {
         ser.EnterChild( "" );
         ser.SetAttribute( "categoryName", r.first );
-        ser.SetAttribute( "count", SerializationHelper::T2String( r.second.first ) );
-        ser.SetAttribute( "size", SerializationHelper::T2String( r.second.second ) );
+        ser.SetAttribute( "count", Convert::T2String( r.second.first ) );
+        ser.SetAttribute( "size", Convert::T2String( r.second.second ) );
         ser.ExitChild();
     }
     ser.ExitChild();
@@ -785,7 +785,7 @@ void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, ID
 
     PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, true );
     TimeType time = checkedTimeline->GetLocalTime();
-    ser.SetAttribute( "Time", SerializationHelper::T2String( time ) );
+    ser.SetAttribute( "Time", Convert::T2String( time ) );
     ser.SetAttribute( "SceneName", sceneName );
     ser.SetAttribute( "TimelineName", timelineName );
 }
@@ -807,7 +807,7 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
     {
         ser.EnterChild( "scene" );
             sceneModel->Serialize( ser );
-            ser.SetAttribute( "preset", SerializationHelper::T2String( IsPresetScene( sceneModel->GetName() ) ) );
+            ser.SetAttribute( "preset", Convert::T2String( IsPresetScene( sceneModel->GetName() ) ) );
         ser.ExitChild();
     }
 
@@ -1036,13 +1036,13 @@ void    QueryHandlers::ListTimelinesParams     ( JsonSerializeObject & ser, IDes
                     ser.SetAttribute( "ParamSubName", timelineParamInfo.paramSubName );
                 
                     if( timelineParamInfo.paramOwner == ParamOwner::PO_Plugin )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::PluginParam ) );
+                        ser.SetAttribute( "ParamOwner", Convert::T2String( ParameterAddress::TargetType::PluginParam ) );
                     else if( timelineParamInfo.paramOwner == ParamOwner::PO_Resource )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::ResourceParam ) );
+                        ser.SetAttribute( "ParamOwner", Convert::T2String( ParameterAddress::TargetType::ResourceParam ) );
                     else if( timelineParamInfo.paramOwner == ParamOwner::PO_GlobalEffect )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::GlobalEffectParam ) );
+                        ser.SetAttribute( "ParamOwner", Convert::T2String( ParameterAddress::TargetType::GlobalEffectParam ) );
                     else if( timelineParamInfo.paramOwner == ParamOwner::PO_NodeLogic )
-                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParameterAddress::TargetType::NodeLogicParam ) );
+                        ser.SetAttribute( "ParamOwner", Convert::T2String( ParameterAddress::TargetType::NodeLogicParam ) );
                 
                     timelineParamInfo.param->Serialize( ser );
                 ser.ExitChild();    //  Param

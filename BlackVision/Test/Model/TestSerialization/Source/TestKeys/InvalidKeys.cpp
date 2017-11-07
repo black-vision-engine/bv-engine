@@ -19,7 +19,7 @@ using namespace bv;
 // Creating keys with different type than expected. If time value is valid
 // keys are created with default value for expected type.
 // Note: this test doesn't check all posibilities to provide not parsing key.
-// Testing this is responsibility of SerializationHelper::String2T tests.
+// Testing this is responsibility of Convert::String2T tests.
 // ========================================================================= //
 
 

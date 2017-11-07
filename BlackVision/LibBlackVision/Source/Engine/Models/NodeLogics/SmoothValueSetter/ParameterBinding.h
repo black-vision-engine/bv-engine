@@ -5,11 +5,17 @@
 #include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
 
 
-namespace bv { namespace nodelogic {
+namespace bv {
+namespace nodelogic
+{
 
 
+// ***********************
+//
 struct ParameterBinding
 {
+public:
+
     enum class VectorComponent
     {
         X = 0,
@@ -20,6 +26,7 @@ struct ParameterBinding
         Invalid
     };
 
+public:
 
     std::string                     Node;
     std::string                     Plugin;
@@ -31,6 +38,8 @@ struct ParameterBinding
     TransformKind                   TransformKind;
     VectorComponent                 Component;
 
+// ***********************
+//
     ParameterBinding()
     {
         Parameter = nullptr;
@@ -42,4 +51,7 @@ struct ParameterBinding
 };
 
 }   // nodelogic
+
+DECLARE_ENUM_SERIALIZATION( bv::nodelogic::ParameterBinding::VectorComponent );
+
 }	// bv

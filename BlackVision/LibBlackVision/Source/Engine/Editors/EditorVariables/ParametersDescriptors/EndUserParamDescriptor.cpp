@@ -76,14 +76,14 @@ void            EndUserParamDescriptor::Serialize       ( ISerializer & ser ) co
     
     ser.SetAttribute( "name", m_name );
     ser.SetAttribute( "description", m_description );
-    ser.SetAttribute( "order", SerializationHelper::T2String( m_order ) );
-    ser.SetAttribute( "enabled", SerializationHelper::T2String( m_enabled ) );
+    ser.SetAttribute( "order", Convert::T2String( m_order ) );
+    ser.SetAttribute( "enabled", Convert::T2String( m_enabled ) );
 
     ser.EnterArray( "avaibleTimeValues" );
     for( auto & time : m_avaibleTimeValues )
     {
         ser.EnterChild( "time" );
-        ser.SetAttribute( "timeValue", SerializationHelper::T2String( time ) );
+        ser.SetAttribute( "timeValue", Convert::T2String( time ) );
         ser.ExitChild();    // time
     }
     ser.ExitChild();    // keyTime
@@ -99,8 +99,8 @@ EndUserParamDescriptor      EndUserParamDescriptor::Create          ( const IDes
 
     descriptor.SetName( deser.GetAttribute( "name" ) );
     descriptor.SetDescription( deser.GetAttribute( "description" ) );
-    descriptor.SetOrder( SerializationHelper::String2T< int >( deser.GetAttribute( "order" ), 0 ) );
-    descriptor.Enable( SerializationHelper::String2T( deser.GetAttribute( "enable" ), false ) );
+    descriptor.SetOrder( Convert::String2T< int >( deser.GetAttribute( "order" ), 0 ) );
+    descriptor.Enable( Convert::String2T( deser.GetAttribute( "enable" ), false ) );
 
     if( deser.EnterChild( "avaibleTimeValues" ) )
     {
@@ -108,7 +108,7 @@ EndUserParamDescriptor      EndUserParamDescriptor::Create          ( const IDes
         {
             do
             {
-                Expected< float > key = SerializationHelper::String2T< float >( deser.GetAttribute( "timeValue" ) );
+                Expected< float > key = Convert::String2T< float >( deser.GetAttribute( "timeValue" ) );
                 if( key.IsValid() )
                 {
                     descriptor.AddKeyTimeValue( key );

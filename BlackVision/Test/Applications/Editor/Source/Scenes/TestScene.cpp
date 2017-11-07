@@ -218,7 +218,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         auto root = scene->GetRootNode();
         auto child = root->GetChild( 0 );
 
-        auto effect = SerializationHelper::String2T< NodeEffectType >( "alpha mask", NodeEffectType::NET_DEFAULT );
+        auto effect = Convert::String2T< NodeEffectType >( "alpha mask", NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, "alpha mask", m_timeEvaluator );
 
         editor->SetNodeEffect( child, newEffect );

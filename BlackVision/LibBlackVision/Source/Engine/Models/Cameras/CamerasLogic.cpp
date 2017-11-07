@@ -47,7 +47,7 @@ void            CamerasLogic::Deserialize             ( const IDeserializer & de
     }
 
 
-    int currCameraIdx = SerializationHelper::String2T( deser.GetAttribute( "CurrentCamera" ), 0 );
+    int currCameraIdx = Convert::String2T( deser.GetAttribute( "CurrentCamera" ), 0 );
 
     // Add default camera in case we deserialized nothing.
     if( m_cameras.empty() )
@@ -81,7 +81,7 @@ void            CamerasLogic::Serialize               ( ISerializer & ser ) cons
     ser.ExitChild();    // cameras
         
     if( currCameraIdx > -1 )
-        ser.SetAttribute( "CurrentCamera", SerializationHelper::T2String( currCameraIdx ) );
+        ser.SetAttribute( "CurrentCamera", Convert::T2String( currCameraIdx ) );
 }
 
 // ========================================================================= //

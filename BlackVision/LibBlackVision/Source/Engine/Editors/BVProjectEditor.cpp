@@ -107,7 +107,7 @@ BVProjectEditor::BVProjectEditor                ( BVProject * project, const ICo
     assert( project != nullptr );
     assert( project->m_renderer != nullptr );
 
-    m_maxHistorySize = (UInt16)SerializationHelper::String2T< UInt32 >( config->PropertyValue( "Application/HistorySize" ), 15 );
+    m_maxHistorySize = (UInt16)Convert::String2T< UInt32 >( config->PropertyValue( "Application/HistorySize" ), 15 );
 
     project->m_engineSceneRoot = BVProjectTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
     m_engineSceneEditor = new SceneEditor( project->m_renderer, project->m_engineSceneRoot );
@@ -1229,7 +1229,7 @@ void            BVProjectEditor::LoadedAssetResponse        ( AssetAsyncLoadFini
 bool            BVProjectEditor::AddLight                   ( const std::string & sceneName, const std::string & lightType, const std::string & timelinePath, bool enableUndo )
 {
     auto modelScene = m_project->GetModelScene( sceneName );
-    auto type = SerializationHelper::String2T< LightType >( lightType , LightType::LT_DIRECTIONAL );
+    auto type = Convert::String2T< LightType >( lightType , LightType::LT_DIRECTIONAL );
     auto timeline = GetTimeEvaluator( timelinePath );
 
     return AddLight( modelScene, type, timeline, enableUndo );
@@ -1607,7 +1607,7 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
 
     if( timeEval )
     {
-        auto effect = SerializationHelper::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
+        auto effect = Convert::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
         auto curEffect = node->GetNodeEffect();

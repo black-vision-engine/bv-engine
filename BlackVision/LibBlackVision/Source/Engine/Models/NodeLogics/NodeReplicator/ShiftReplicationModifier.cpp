@@ -27,8 +27,8 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
                 ser.SetAttribute( "paramName", shift.first.first.second );
 
                 ser.EnterChild( "paramDelta" );
-                    ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
-                    ser.SetAttribute( "deltaTime", SerializationHelper::T2String( shift.second.deltaTime ) );
+                    ser.SetAttribute( "startTime", Convert::T2String( shift.second.startTime ) );
+                    ser.SetAttribute( "deltaTime", Convert::T2String( shift.second.deltaTime ) );
 
                     ser.EnterChild( "delta" );
 
@@ -81,8 +81,8 @@ bool                            ShiftReplicationModifier::AddParamShift ( const 
             std::string paramName = deser.GetAttribute( "paramName" );
 
             deser.EnterChild( "paramDelta" );
-            shift.deltaTime = SerializationHelper::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
-            shift.startTime = SerializationHelper::String2T( deser.GetAttribute( "startTime" ), 0.0f );
+            shift.deltaTime = Convert::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
+            shift.startTime = Convert::String2T( deser.GetAttribute( "startTime" ), 0.0f );
 
             deser.EnterChild( "delta" );
 

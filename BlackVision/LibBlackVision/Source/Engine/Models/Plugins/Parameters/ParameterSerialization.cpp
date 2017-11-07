@@ -23,10 +23,12 @@
 
 
 
-namespace bv { 
-    
-namespace SerializationHelper {
+namespace bv {     
+namespace Convert
+{
 
+// ***********************
+//
 std::pair< bv::ModelParamType, const char* > mpt2s[] = {
     std::make_pair( bv::ModelParamType::MPT_BOOL, "bool" ),
     std::make_pair( bv::ModelParamType::MPT_ENUM, "enum" ),
@@ -45,6 +47,8 @@ std::pair< bv::ModelParamType, const char* > mpt2s[] = {
 IMPLEMENT_ENUM_SERIALIZATION( bv::ModelParamType, mpt2s );
 
 
+// ***********************
+//
 std::pair< bv::ParamType, const char* > ParamTypeStringsArray[] = {
     std::make_pair( bv::ParamType::PT_BOOL, "bool" ),
     std::make_pair( bv::ParamType::PT_ENUM, "enum" ),
@@ -66,9 +70,12 @@ IMPLEMENT_ENUM_SERIALIZATION( bv::ParamType, ParamTypeStringsArray );
 }
 
     
-namespace model {
+namespace model
+{
 
 
+// ***********************
+//
 class KeyFrame : public ISerializable // FIXME: to remove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
 public:

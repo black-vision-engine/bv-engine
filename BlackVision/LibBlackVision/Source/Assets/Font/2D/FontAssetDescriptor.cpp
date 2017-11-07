@@ -23,10 +23,10 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 
     sob.SetAttribute( "type", GetUID() );
     sob.SetAttribute( "path", m_fontFileName );
-    sob.SetAttribute( "size", SerializationHelper::T2String( m_fontSize ) );
-    sob.SetAttribute( "blur", SerializationHelper::T2String( m_blurSize ) );
-    sob.SetAttribute( "glowBlur", SerializationHelper::T2String( m_glowBlurSize ) );
-    sob.SetAttribute( "outline", SerializationHelper::T2String( m_outlineSize ) );
+    sob.SetAttribute( "size", Convert::T2String( m_fontSize ) );
+    sob.SetAttribute( "blur", Convert::T2String( m_blurSize ) );
+    sob.SetAttribute( "glowBlur", Convert::T2String( m_glowBlurSize ) );
+    sob.SetAttribute( "outline", Convert::T2String( m_outlineSize ) );
     sob.SetAttribute( "mipmaps", m_generateMipmaps ? "true" : "false" );
 
     sob.ExitChild();
@@ -40,10 +40,10 @@ ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& dob 
     assert( dob.GetAttribute( "type" ) == UID() );
 
     auto path = dob.GetAttribute( "path" );
-    auto size = SerializationHelper::String2T( dob.GetAttribute( "size" ), 10 );
-    auto blurSize = SerializationHelper::String2T( dob.GetAttribute( "blur" ), 0 );
-    auto glowBlurSize = SerializationHelper::String2T( dob.GetAttribute( "glowBlur" ), 0 );
-    auto outSize = SerializationHelper::String2T( dob.GetAttribute( "outline" ), 0 );
+    auto size = Convert::String2T( dob.GetAttribute( "size" ), 10 );
+    auto blurSize = Convert::String2T( dob.GetAttribute( "blur" ), 0 );
+    auto glowBlurSize = Convert::String2T( dob.GetAttribute( "glowBlur" ), 0 );
+    auto outSize = Convert::String2T( dob.GetAttribute( "outline" ), 0 );
     auto mipmaps = dob.GetAttribute( "mipmaps" ) == "true" ? true : false;
 
     return FontAssetDesc::Create( path, size, blurSize, glowBlurSize, outSize, mipmaps );

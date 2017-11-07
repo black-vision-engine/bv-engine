@@ -16,8 +16,8 @@ using namespace bv;
 // Converts string containing simple int value to double.
 TEST( LibCore_String2T, Double_ConvertFromStrInt )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "123" );
-    double doubleDef = SerializationHelper::String2T< double >( "123", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "123" );
+    double doubleDef = Convert::String2T< double >( "123", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 123 );
@@ -28,8 +28,8 @@ TEST( LibCore_String2T, Double_ConvertFromStrInt )
 // Converts string containing simple negative int value to double.
 TEST( LibCore_String2T, Double_ConvertFromStrNegativeInt )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "-943" );
-    double doubleDef = SerializationHelper::String2T< double >( "-943", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "-943" );
+    double doubleDef = Convert::String2T< double >( "-943", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), -943 );
@@ -40,8 +40,8 @@ TEST( LibCore_String2T, Double_ConvertFromStrNegativeInt )
 // Converts string containing simple double.
 TEST( LibCore_String2T, Double_ConvertFromStrWithDot )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "123.43002" );
-    double doubleDef = SerializationHelper::String2T< double >( "123.43002", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "123.43002" );
+    double doubleDef = Convert::String2T< double >( "123.43002", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 123.43002 );
@@ -52,8 +52,8 @@ TEST( LibCore_String2T, Double_ConvertFromStrWithDot )
 // Converts string containing simple double.
 TEST( LibCore_String2T, Double_ConvertFromStrWithDotNegative )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "-123.43002" );
-    double doubleDef = SerializationHelper::String2T< double >( "-123.43002", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "-123.43002" );
+    double doubleDef = Convert::String2T< double >( "-123.43002", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), -123.43002 );
@@ -64,8 +64,8 @@ TEST( LibCore_String2T, Double_ConvertFromStrWithDotNegative )
 // Converts string containing double with negative exponent.
 TEST( LibCore_String2T, Double_ConvertStrWithNegativeExponent )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "2.43001e-2" );
-    double doubleDef = SerializationHelper::String2T< double >( "2.43001e-2", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "2.43001e-2" );
+    double doubleDef = Convert::String2T< double >( "2.43001e-2", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 2.43001e-2 );
@@ -76,8 +76,8 @@ TEST( LibCore_String2T, Double_ConvertStrWithNegativeExponent )
 // Converts string containing double with exponent.
 TEST( LibCore_String2T, Double_ConvertStrWitheExponent )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "2.43001e2" );
-    double doubleDef = SerializationHelper::String2T< double >( "2.43001e2", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "2.43001e2" );
+    double doubleDef = Convert::String2T< double >( "2.43001e2", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 2.43001e2 );
@@ -88,8 +88,8 @@ TEST( LibCore_String2T, Double_ConvertStrWitheExponent )
 // Converts string containing double with exponent. Here we test use of letter E instead of e.
 TEST( LibCore_String2T, Double_ConvertStrWitheExponentE )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "2.43001E2" );
-    double doubleDef = SerializationHelper::String2T< double >( "2.43001E2", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "2.43001E2" );
+    double doubleDef = Convert::String2T< double >( "2.43001E2", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 2.43001e2 );
@@ -100,8 +100,8 @@ TEST( LibCore_String2T, Double_ConvertStrWitheExponentE )
 // Converts string containing NAN. Not a number ingnores case
 TEST( LibCore_String2T, Double_ConvertStrNaN )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "NaN" );
-    double doubleDef = SerializationHelper::String2T< double >( "NaN", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "NaN" );
+    double doubleDef = Convert::String2T< double >( "NaN", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_FALSE( doubleExp.GetVal() == doubleExp.GetVal() );
@@ -112,15 +112,15 @@ TEST( LibCore_String2T, Double_ConvertStrNaN )
 // Converts string containing infinity. Infinity ignores case.
 TEST( LibCore_String2T, Double_ConvertStrInifinity )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "Inf" );
-    double doubleDef = SerializationHelper::String2T< double >( "Inf", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "Inf" );
+    double doubleDef = Convert::String2T< double >( "Inf", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_TRUE( std::isinf( doubleExp.GetVal() ) );
     EXPECT_TRUE( std::isinf( doubleDef ) );
 
-    doubleExp = SerializationHelper::String2T< double >( "InFiniTy" );
-    doubleDef = SerializationHelper::String2T< double >( "InFiniTy", 0.0f );
+    doubleExp = Convert::String2T< double >( "InFiniTy" );
+    doubleDef = Convert::String2T< double >( "InFiniTy", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_TRUE( std::isinf( doubleExp.GetVal() ) );
@@ -131,8 +131,8 @@ TEST( LibCore_String2T, Double_ConvertStrInifinity )
 // Converts string containing double preceded by illigal text.
 TEST( LibCore_String2T, Double_TextBeforeDouble )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "blabla3.14" );
-    double doubleDef = SerializationHelper::String2T< double >( "blabla3.14", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "blabla3.14" );
+    double doubleDef = Convert::String2T< double >( "blabla3.14", 0.0f );
 
     EXPECT_FALSE( doubleExp.IsValid() );
     EXPECT_EQ( doubleDef, 0.0 );
@@ -142,8 +142,8 @@ TEST( LibCore_String2T, Double_TextBeforeDouble )
 // Converts string containing double followed by illigal text.
 TEST( LibCore_String2T, Double_TextAfterDouble )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "3.14blabla" );
-    double doubleDef = SerializationHelper::String2T< double >( "3.14blabla", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "3.14blabla" );
+    double doubleDef = Convert::String2T< double >( "3.14blabla", 0.0f );
 
     EXPECT_FALSE( doubleExp.IsValid() );
     EXPECT_EQ( doubleDef, 0.0 );
@@ -153,8 +153,8 @@ TEST( LibCore_String2T, Double_TextAfterDouble )
 // Converts string containing infinity text followed by double.
 TEST( LibCore_String2T, Double_InfinityBeforeDouble )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "Inf3.14" );
-    double doubleDef = SerializationHelper::String2T< double >( "Inf3.14", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "Inf3.14" );
+    double doubleDef = Convert::String2T< double >( "Inf3.14", 0.0f );
 
     EXPECT_FALSE( doubleExp.IsValid() );
     EXPECT_EQ( doubleDef, 0.0 );
@@ -165,8 +165,8 @@ TEST( LibCore_String2T, Double_InfinityBeforeDouble )
 // Whole string passed to function must be double. Function never ignores anything.
 TEST( LibCore_String2T, Double_TextSpaceDouble )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "blabla 3.14" );
-    double doubleDef = SerializationHelper::String2T< double >( "blabla 3.14", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "blabla 3.14" );
+    double doubleDef = Convert::String2T< double >( "blabla 3.14", 0.0f );
 
     EXPECT_FALSE( doubleExp.IsValid() );
     EXPECT_EQ( doubleDef, 0.0 );
@@ -176,7 +176,7 @@ TEST( LibCore_String2T, Double_TextSpaceDouble )
 // Check if conversion is inversible. T2String should produce value which can be converted back to typed value.
 TEST( LibCore_String2T, Double_ConversionReversibility )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( SerializationHelper::T2String( 1.034423 ) );
+    Expected< double > doubleExp = Convert::String2T< double >( Convert::T2String( 1.034423 ) );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 1.034423 );
@@ -191,8 +191,8 @@ TEST( LibCore_String2T, Double_ConversionReversibility )
 // Convertes string containing floating point number greater then float range.
 TEST( LibCore_String2T, Double_NumberGreaterThenFloatRange )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "3.02e100" );
-    double doubleDef = SerializationHelper::String2T< double >( "3.02e100", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "3.02e100" );
+    double doubleDef = Convert::String2T< double >( "3.02e100", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_EQ( doubleExp.GetVal(), 3.02e100 );
@@ -204,8 +204,8 @@ TEST( LibCore_String2T, Double_NumberGreaterThenFloatRange )
 // To big number is converted to infinity.
 TEST( LibCore_String2T, Double_NumberGreaterDoubleFloatRange )
 {
-    Expected< double > doubleExp = SerializationHelper::String2T< double >( "3.02e500" );
-    double doubleDef = SerializationHelper::String2T< double >( "3.02e500", 0.0f );
+    Expected< double > doubleExp = Convert::String2T< double >( "3.02e500" );
+    double doubleDef = Convert::String2T< double >( "3.02e500", 0.0f );
 
     EXPECT_TRUE( doubleExp.IsValid() );
     EXPECT_TRUE( std::isinf( doubleExp.GetVal() ) );

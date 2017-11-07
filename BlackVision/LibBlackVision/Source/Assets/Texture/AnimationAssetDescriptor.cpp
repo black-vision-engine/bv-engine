@@ -31,9 +31,9 @@ ser.EnterChild( "asset" );
     
     if( context->extendedAssetData )
     {
-        ser.SetAttribute( "numFrames", SerializationHelper::T2String( m_numFrames ) );
-        ser.SetAttribute( "width", SerializationHelper::T2String( m_width ) );
-        ser.SetAttribute( "height", SerializationHelper::T2String( m_height ) );
+        ser.SetAttribute( "numFrames", Convert::T2String( m_numFrames ) );
+        ser.SetAttribute( "width", Convert::T2String( m_width ) );
+        ser.SetAttribute( "height", Convert::T2String( m_height ) );
     }
 
     ser.SetAttribute( "filter", m_filter );
@@ -45,10 +45,10 @@ ser.ExitChild();
 ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeserializer& dob )
 {
     //return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
-    SizeType numFrames = SerializationHelper::String2T( dob.GetAttribute( "numFrames" ), std::numeric_limits<UInt32>::max() );
+    SizeType numFrames = Convert::String2T( dob.GetAttribute( "numFrames" ), std::numeric_limits<UInt32>::max() );
 
-    UInt32 width = SerializationHelper::String2T( dob.GetAttribute( "width" ), std::numeric_limits<UInt32>::max() );
-    UInt32 height = SerializationHelper::String2T( dob.GetAttribute( "height" ), std::numeric_limits<UInt32>::max() );
+    UInt32 width = Convert::String2T( dob.GetAttribute( "width" ), std::numeric_limits<UInt32>::max() );
+    UInt32 height = Convert::String2T( dob.GetAttribute( "height" ), std::numeric_limits<UInt32>::max() );
 
     return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), numFrames, width, height, dob.GetAttribute( "filter" ) ) );
 }

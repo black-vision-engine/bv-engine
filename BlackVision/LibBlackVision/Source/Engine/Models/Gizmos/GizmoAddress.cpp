@@ -5,13 +5,12 @@
 
 
 
-namespace bv
+namespace bv {
+namespace Convert
 {
 
-
-namespace SerializationHelper
-{
-
+// ***********************
+//
 std::pair< model::GizmoType, const char* > GizmoTypeMapping[] =
 { std::make_pair( model::GizmoType::Effect, "Effect" )
 , std::make_pair( model::GizmoType::Logic, "Logic" )
@@ -23,12 +22,17 @@ std::pair< model::GizmoType, const char* > GizmoTypeMapping[] =
 
 IMPLEMENT_ENUM_SERIALIZATION( model::GizmoType, GizmoTypeMapping );
 
+}   // Convert
+
+
+namespace SerializationHelper
+{
 
 const std::string GIZMO_TYPE_NAME       = "GizmoType";
 const std::string ELEMENT_NAME          = "ElementName";
 const std::string FUNCTIONALITY_NAME    = "FunctionalityName";
 
-}   // SerializationHelper
+}   // Convert
 
 
 
@@ -36,7 +40,7 @@ const std::string FUNCTIONALITY_NAME    = "FunctionalityName";
     //
 void                    GizmoAddress::Serialize       ( ISerializer & ser ) const
 {
-    ser.SetAttribute( SerializationHelper::GIZMO_TYPE_NAME, SerializationHelper::T2String( GizmoType ) );
+    ser.SetAttribute( SerializationHelper::GIZMO_TYPE_NAME, Convert::T2String( GizmoType ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
     ser.SetAttribute( SerializationHelper::ELEMENT_NAME, ElementName );
@@ -53,7 +57,7 @@ GizmoAddress            GizmoAddress::Create          ( const IDeserializer & de
     address.ElementName = deser.GetAttribute( SerializationHelper::ELEMENT_NAME );
     address.NodeName = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
     address.FunctionalityName = deser.GetAttribute( SerializationHelper::FUNCTIONALITY_NAME );
-    address.GizmoType = SerializationHelper::String2T< model::GizmoType >( deser.GetAttribute( SerializationHelper::GIZMO_TYPE_NAME ), model::GizmoType::Total );
+    address.GizmoType = Convert::String2T< model::GizmoType >( deser.GetAttribute( SerializationHelper::GIZMO_TYPE_NAME ), model::GizmoType::Total );
 
     return address;
 }

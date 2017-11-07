@@ -47,7 +47,7 @@ TimelineEventStopPtr    TimelineEventStop::Create           ( const std::string 
 TimelineEventStopPtr    TimelineEventStop::Create           ( const IDeserializer & deser, const ITimeline * timeline )
 {
     return TimelineEventStop::Create( deser.GetAttribute( "name" ),
-        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
+        Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
         timeline );
 }
 

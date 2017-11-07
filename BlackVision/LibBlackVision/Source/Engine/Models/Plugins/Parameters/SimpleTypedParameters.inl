@@ -33,7 +33,7 @@ void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
 
     ser.EnterChild( "param" );
     ser.SetAttribute( "name", GetName() );
-    ser.SetAttribute( "type", SerializationHelper::T2String< ModelParamType >( GetType() ) );
+    ser.SetAttribute( "type", Convert::T2String< ModelParamType >( GetType() ) );
     
     std::string timeline;
     if( serContext->sceneNameInTimeline )
@@ -129,7 +129,7 @@ inline  std::string         SimpleParameterImpl< InterpolatorType, ValueType, ty
 {
     auto val = m_interpolator.Evaluate( t );
 
-    return SerializationHelper::T2String( val );
+    return Convert::T2String( val );
 }
 
 

@@ -75,7 +75,7 @@ std::vector< IEventPtr >        EventFactory::ParseEventsList( IDeserializer & d
             {
                 RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
                 newEventBase->SocketID = socketID;
-                newEventBase->EventID = SerializationHelper::String2T( deser.GetAttribute( "EventID" ), std::numeric_limits< int >::max() );
+                newEventBase->EventID = Convert::String2T( deser.GetAttribute( "EventID" ), std::numeric_limits< int >::max() );
 
                 result.push_back( newEventBase );
             }

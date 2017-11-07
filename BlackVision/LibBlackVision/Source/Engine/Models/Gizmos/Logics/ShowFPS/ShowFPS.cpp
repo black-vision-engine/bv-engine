@@ -180,7 +180,7 @@ void                        ShowFPS::SetText            ( model::BasicNodePtr no
 //
 std::wstring                ShowFPS::FormatFPS          ( float fps )
 {
-    return StringToWString( SerializationHelper::T2String( fps ) );
+    return StringToWString( Convert::T2String( fps ) );
 }
 
 

@@ -152,7 +152,8 @@ void BlueMemZero(void* pData, size_t size)
 } //videocards
 
 
-namespace SerializationHelper {
+namespace Convert
+{
     
 //**************************************
 //
@@ -168,6 +169,6 @@ template<> std::string                                      T2String        ( co
     return Enum2String( videocards::bluefish::ChannelNameMapping, t );
 }
 
-} //SerializationHelper
+} //Convert
 
 } //bv

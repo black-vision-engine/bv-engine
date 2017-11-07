@@ -47,7 +47,7 @@ TimelineEventNullPtr     TimelineEventNull::Create         ( const std::string &
 TimelineEventNullPtr    TimelineEventNull::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
     return TimelineEventNull::Create( deser.GetAttribute( "name" ),
-        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
+        Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
         timeline );
 }
 

@@ -12,8 +12,7 @@
 
 #include "Tools/StringHeplers.h"
 
-namespace bv
-{
+namespace bv {
 namespace SerializationHelper
 {
 
@@ -30,28 +29,28 @@ namespace SerializationHelper
 //
 IValuePtr CreateValue( const IDeserializer & deser, const std::string & name )
 {
-    auto valType = String2T( deser.GetAttribute( "type" ), ParamType::PT_FLOAT1 );
+    auto valType = Convert::String2T( deser.GetAttribute( "type" ), ParamType::PT_FLOAT1 );
 
     switch( valType )
     {
     case ParamType::PT_FLOAT1:
     {
         auto iValuePtr = ValuesFactory::CreateValueFloat( name );
-        float value = SerializationHelper::String2T( deser.GetAttribute( "value" ), 0.f );
+        float value = Convert::String2T( deser.GetAttribute( "value" ), 0.f );
         iValuePtr->SetValue( value );
         return iValuePtr;
     }
     case ParamType::PT_FLOAT2:
     {
         auto iValuePtr = ValuesFactory::CreateValueVec2( name );
-        glm::vec2 value = SerializationHelper::String2T( deser.GetAttribute( "value" ), glm::vec2( 0.f ) );
+        glm::vec2 value = Convert::String2T( deser.GetAttribute( "value" ), glm::vec2( 0.f ) );
         iValuePtr->SetValue( value );
         return iValuePtr;
     }
     case ParamType::PT_FLOAT3:
     {
         auto iValuePtr = ValuesFactory::CreateValueVec3( name );
-        glm::vec3 value = SerializationHelper::String2T( deser.GetAttribute( "value" ), glm::vec3( 0.f ) );
+        glm::vec3 value = Convert::String2T( deser.GetAttribute( "value" ), glm::vec3( 0.f ) );
         iValuePtr->SetValue( value );
         return iValuePtr;
 
@@ -59,14 +58,14 @@ IValuePtr CreateValue( const IDeserializer & deser, const std::string & name )
     case ParamType::PT_FLOAT4:
     {
         auto iValuePtr = ValuesFactory::CreateValueVec4( name );
-        glm::vec4 value = SerializationHelper::String2T( deser.GetAttribute( "value" ), glm::vec4( 0.f ) );
+        glm::vec4 value = Convert::String2T( deser.GetAttribute( "value" ), glm::vec4( 0.f ) );
         iValuePtr->SetValue( value );
         return iValuePtr;
     }
     case ParamType::PT_INT:
     {
         auto iValuePtr = ValuesFactory::CreateValueInt( name );
-        int value = SerializationHelper::String2T( deser.GetAttribute( "value" ), 0 );
+        int value = Convert::String2T( deser.GetAttribute( "value" ), 0 );
         iValuePtr->SetValue( value );
         return iValuePtr;
     }
@@ -108,7 +107,7 @@ IValuePtr CreateValue( const IDeserializer & deser, const std::string & name )
 void                SerializeValue                      ( ISerializer & ser, IValueConstPtr val )
 {
     auto valType = val->GetType();
-    ser.SetAttribute( "type", SerializationHelper::T2String( valType ) );
+    ser.SetAttribute( "type", Convert::T2String( valType ) );
 
     switch( valType )
     {
@@ -116,35 +115,35 @@ void                SerializeValue                      ( ISerializer & ser, IVa
     {
         auto iValuePtr = QueryTypedValue< ValueFloatPtr> ( val );
         float value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
+        ser.SetAttribute( "value", Convert::T2String( value ) );
         break;
     }
     case ParamType::PT_FLOAT2:
     {
         auto iValuePtr = QueryTypedValue< ValueVec2Ptr> ( val );
         glm::vec2 value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
+        ser.SetAttribute( "value", Convert::T2String( value ) );
         break;
     }
     case ParamType::PT_FLOAT3:
     {
         auto iValuePtr = QueryTypedValue< ValueVec3Ptr> ( val );
         glm::vec3 value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
+        ser.SetAttribute( "value", Convert::T2String( value ) );
         break;
     }
     case ParamType::PT_FLOAT4:
     {
         auto iValuePtr = QueryTypedValue< ValueVec4Ptr> ( val );
         glm::vec4 value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
+        ser.SetAttribute( "value", Convert::T2String( value ) );
         break;
     }
     case ParamType::PT_INT:
     {
         auto iValuePtr = QueryTypedValue< ValueIntPtr> ( val );
         int value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
+        ser.SetAttribute( "value", Convert::T2String( value ) );
         break;
     }
     case ParamType::PT_MAT2:
@@ -168,7 +167,7 @@ void                SerializeValue                      ( ISerializer & ser, IVa
     {
         auto iValuePtr = QueryTypedValue< ValueWStringPtr> ( val );
         std::wstring value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
+        ser.SetAttribute( "value", Convert::T2String( value ) );
         break;
     }
     default:

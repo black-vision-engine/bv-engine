@@ -11,13 +11,15 @@
 
 
 
-namespace bv { 
-    
-namespace SerializationHelper{ 
+namespace bv {     
+namespace Convert
+{
 
 template< typename T >
 T String2Enum( std::string s );
 
+// ***********************
+//
 std::pair< model::AlphaContext::SrcBlendMode, const char* > sbm2s[] =
 {
     std::make_pair( model::AlphaContext::SrcBlendMode::SBM_ZERO, "SBM_ZERO" )
@@ -39,7 +41,8 @@ std::pair< model::AlphaContext::SrcBlendMode, const char* > sbm2s[] =
 template<> std::string T2String( const model::AlphaContext::SrcBlendMode& sbm ) { return Enum2String( sbm2s, sbm ); }
 template<> model::AlphaContext::SrcBlendMode String2Enum( std::string s ) { return String2Enum( sbm2s, s ); }
 
-
+// ***********************
+//
 std::pair< model::AlphaContext::DstBlendMode, const char* > dbm2s[] =
 {
     std::make_pair( model::AlphaContext::DstBlendMode::DBM_ZERO, "DBM_ZERO" )
@@ -73,7 +76,8 @@ template<> model::FillContext::Mode String2Enum( std::string s ) { return String
 
 }
    
-namespace model {
+namespace model
+{
 
 // *****************************
 //
@@ -190,26 +194,26 @@ ser.ExitChild();
 void                        RendererContext::Deserialize     ( const IDeserializer& deser )
 {
     deser.EnterChild( "alpha_context" );
-    alphaCtx->blendEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "blendEnabled" ), false );
-    alphaCtx->srcRGBBlendMode = SerializationHelper::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcRGBBlendMode" ) );
-    alphaCtx->dstRGBBlendMode = SerializationHelper::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstRGBBlendMode" ) );
-    alphaCtx->srcAlphaBlendMode = SerializationHelper::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcAlphaBlendMode" ) );
-    alphaCtx->dstAlphaBlendMode = SerializationHelper::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstAlphaBlendMode" ) );
-    alphaCtx->blendColor = SerializationHelper::String2T< glm::vec4 >( deser.GetAttribute( "blendColor" ), glm::vec4( 0, 0, 0, 0 ) );
+    alphaCtx->blendEnabled = Convert::String2T< bool >( deser.GetAttribute( "blendEnabled" ), false );
+    alphaCtx->srcRGBBlendMode = Convert::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcRGBBlendMode" ) );
+    alphaCtx->dstRGBBlendMode = Convert::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstRGBBlendMode" ) );
+    alphaCtx->srcAlphaBlendMode = Convert::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcAlphaBlendMode" ) );
+    alphaCtx->dstAlphaBlendMode = Convert::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstAlphaBlendMode" ) );
+    alphaCtx->blendColor = Convert::String2T< glm::vec4 >( deser.GetAttribute( "blendColor" ), glm::vec4( 0, 0, 0, 0 ) );
     deser.ExitChild(); // alpha_context
 
     deser.EnterChild( "cull_context" );
-    cullCtx->enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), true );
-    cullCtx->isCCWOrdered = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), true );
+    cullCtx->enabled = Convert::String2T< bool >( deser.GetAttribute( "enabled" ), true );
+    cullCtx->isCCWOrdered = Convert::String2T< bool >( deser.GetAttribute( "enabled" ), true );
     deser.ExitChild(); // cull_context
 
     deser.EnterChild( "depth_context" );
-    depthCtx->enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), true );
-    depthCtx->writable = SerializationHelper::String2T< bool >( deser.GetAttribute( "writable" ), true );
+    depthCtx->enabled = Convert::String2T< bool >( deser.GetAttribute( "enabled" ), true );
+    depthCtx->writable = Convert::String2T< bool >( deser.GetAttribute( "writable" ), true );
     deser.ExitChild(); // depth_context
 
     deser.EnterChild( "fill_context" );
-    fillCtx->fillMode = SerializationHelper::String2Enum< FillContext::Mode >( deser.GetAttribute( "fillMode" ) );
+    fillCtx->fillMode = Convert::String2Enum< FillContext::Mode >( deser.GetAttribute( "fillMode" ) );
     deser.ExitChild(); // fill_context
 
 }

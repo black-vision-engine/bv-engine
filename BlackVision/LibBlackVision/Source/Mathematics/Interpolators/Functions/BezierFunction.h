@@ -88,7 +88,7 @@ public:
     virtual void                        Serialize       ( ISerializer & ser ) const override
     {
         ser.EnterChild( "interpolation" );
-            ser.SetAttribute( "type", SerializationHelper::T2String( m_curveType ) );
+            ser.SetAttribute( "type", Convert::T2String( m_curveType ) );
         
             ser.EnterChild( "v1" );
                 SerializationHelper::SerializeAttribute( ser, v1.t, "dt" );
@@ -118,8 +118,8 @@ public:
 
             if( deser.EnterChild( "v1" ) )
             {
-                t1 = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-                val1 = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
+                t1 = Convert::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+                val1 = Convert::String2T< ValueT >( deser.GetAttribute( "dval" ) );
 
                 if( !t1.IsValid() )     { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dt1." ); }
                 if( !val1.IsValid() )   { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dval1." ); }
@@ -135,8 +135,8 @@ public:
 
             if( deser.EnterChild( "v2" ) )
             {
-                t2 = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-                val2 = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
+                t2 = Convert::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+                val2 = Convert::String2T< ValueT >( deser.GetAttribute( "dval" ) );
 
                 if( !t2.IsValid() )     { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dt2." ); }
                 if( !val2.IsValid() )   { somethingFailed = true; Warn< SerializationException >( deser, "Invalid dval2." ); }

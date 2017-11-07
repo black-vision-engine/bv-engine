@@ -1,6 +1,6 @@
 #include "stdafxCore.h"
 
-#include "SerializationHelper.h"
+#include "ConversionHelper.h"
 
 #include "Tools/StringHeplers.h"
 
@@ -36,7 +36,7 @@ namespace std
 
 
 namespace bv {
-namespace SerializationHelper
+namespace Convert
 {
 
 
@@ -296,7 +296,7 @@ Expected< std::vector< T > >        Strings2T       ( std::vector< std::string >
 //
 template<> Expected< glm::vec2 >    String2T        ( const std::string & s ) 
 { 
-    auto strings = SerializationHelper::impl::Split( s, ',' );
+    auto strings = Convert::impl::Split( s, ',' );
 
     if( strings.size() == 2 )
     {
@@ -316,7 +316,7 @@ template<> Expected< glm::vec2 >    String2T        ( const std::string & s )
 //
 template<> Expected< glm::vec3 >    String2T        ( const std::string & s )
 { 
-    auto strings = SerializationHelper::impl::Split( s, ',' );
+    auto strings = Convert::impl::Split( s, ',' );
 
     if( strings.size() == 3 )
     {
@@ -335,7 +335,7 @@ template<> Expected< glm::vec3 >    String2T        ( const std::string & s )
 //
 template<> Expected< glm::vec4 >    String2T        ( const std::string & s )
 { 
-    auto strings = SerializationHelper::impl::Split( s, ',' );
+    auto strings = Convert::impl::Split( s, ',' );
 
     if( strings.size() == 4 )
     {
@@ -429,5 +429,5 @@ template std::string T2String( const unsigned int& v );
 template std::string T2String( const UInt64& v );
 template std::string T2String( const Int64& v );
 
-} 
-}
+}   // Convert
+}   // bv

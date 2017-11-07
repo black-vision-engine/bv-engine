@@ -72,8 +72,8 @@ void                MeshLoader::Serialize       ( ISerializer & ser ) const
 
     if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
     {
-        ser.SetAttribute( "textureEnabled", SerializationHelper::T2String( m_textureEnabled ) );
-        ser.SetAttribute( "materialEnabled", SerializationHelper::T2String( m_materialEnabled ) );
+        ser.SetAttribute( "textureEnabled", Convert::T2String( m_textureEnabled ) );
+        ser.SetAttribute( "materialEnabled", Convert::T2String( m_materialEnabled ) );
 
         ser.SetAttribute( "assetPath", m_assetDesc->GetPath() );
 
@@ -117,8 +117,8 @@ bool                    MeshLoader::HandleEvent     ( IDeserializer & eventSer, 
 
     if( action == ACTION::LOAD ) 
     {
-        m_textureEnabled = SerializationHelper::String2T( eventSer.GetAttribute( "textureEnabled" ), false );
-        m_materialEnabled = SerializationHelper::String2T( eventSer.GetAttribute( "materialEnabled" ), false );
+        m_textureEnabled = Convert::String2T( eventSer.GetAttribute( "textureEnabled" ), false );
+        m_materialEnabled = Convert::String2T( eventSer.GetAttribute( "materialEnabled" ), false );
         
         Load( eventSer, editor );
     }
@@ -256,7 +256,7 @@ bool                        MeshLoader::MeshInfo                  ( ISerializer 
         std::vector< MeshAssetConstPtr > meshes;
         GetMeshes( m_asset, meshes );
 
-        response.SetAttribute( "meshNum", SerializationHelper::T2String( meshes.size() ) );
+        response.SetAttribute( "meshNum", Convert::T2String( meshes.size() ) );
 
         response.EnterArray( "meshes" );
         

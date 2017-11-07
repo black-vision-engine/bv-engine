@@ -97,7 +97,7 @@ std::string                         ModelState::BuildIndexPath  ( const IModelNo
     {
         if( parent->GetChild( i ) == node )
         {
-            std::string indexPath = BuildIndexPath( parent ) +  "/#" + SerializationHelper::T2String( i );
+            std::string indexPath = BuildIndexPath( parent ) +  "/#" + Convert::T2String( i );
             return indexPath;
         }
     }

@@ -36,7 +36,7 @@ DataArrayRowBase *      CreateRow  ( DataArrayAssetDescConstPtr desc, int idx )
     while( endIdx < row.size() )
     {
         endIdx = row.find_first_of( separator, beginIdx );
-        typedRow.push_back( SerializationHelper::String2T( std::string( row.begin() + beginIdx, row.begin() + endIdx ), std::numeric_limits< RowType >::quiet_NaN() ) );
+        typedRow.push_back( Convert::String2T( std::string( row.begin() + beginIdx, row.begin() + endIdx ), std::numeric_limits< RowType >::quiet_NaN() ) );
 
         // Omit separator.
         beginIdx = endIdx + 1;
