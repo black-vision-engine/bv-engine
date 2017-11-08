@@ -62,7 +62,8 @@ public:
     model::OffsetTimeEvaluatorPtr       GetSceneTimeline        ();
     void                                SetSceneTimeline        ( const model::OffsetTimeEvaluatorPtr & timeline );
     model::ITimeEvaluatorPtr            GetTimeline             ( const std::string & name, const std::string & paramName );
-    model::TimelineManager *            GetTimelineManager      ();
+    model::ITimeEvaluatorPtr            GetRootTimeline         ();
+//    model::TimelineManager *            GetTimelineManager      ();
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );

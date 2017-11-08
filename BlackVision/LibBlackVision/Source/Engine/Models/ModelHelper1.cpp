@@ -114,8 +114,7 @@ model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserialize
 {
     bv::model::ITimeEvaluatorPtr timeEvaluator = nullptr;
 
-
-    auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+    auto deserContext = Context( deser );
 
     if( deserContext == nullptr )
     {
@@ -126,7 +125,7 @@ model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserialize
     bv::model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
     if( sceneTimeline == nullptr )
     {
-        sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
+        sceneTimeline = deserContext->GetRootTimeline();
     }
 
     timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( "default", sceneTimeline );

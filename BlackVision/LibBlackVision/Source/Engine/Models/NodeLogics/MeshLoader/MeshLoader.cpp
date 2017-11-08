@@ -99,7 +99,7 @@ MeshLoaderPtr           MeshLoader::Create          ( const IDeserializer & dese
             model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
             if( !sceneTimeline )
             {
-                sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
+                sceneTimeline = deserContext->GetRootTimeline();
             }
             auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
         
