@@ -1,3 +1,4 @@
+#include "TimeEvaluatorBase.h"
 namespace bv { namespace model {
 
 // *******************************
@@ -115,6 +116,26 @@ void                                        TimeEvaluatorBase< ITimeEvaluatorIfa
         auto & child = m_children[ i ];
         child->SetGlobalTime( t );
     }
+}
+
+// ***********************
+//
+template<typename ITimeEvaluatorIface>
+inline void TimeEvaluatorBase<ITimeEvaluatorIface>::SerializeChildren( ISerializer & ser ) const
+{
+    ser.EnterArray( "children" );
+    for( auto child : m_children )
+        child->Serialize( ser );
+    ser.ExitChild(); // children
+}
+
+template<typename ITimeEvaluatorIface>
+inline void TimeEvaluatorBase<ITimeEvaluatorIface>::DeserializeChildren( const IDeserializer & deser )
+{
+    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
+
+    for( auto child : children )
+        AddChild( child );
 }
 
 } //model

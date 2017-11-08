@@ -100,15 +100,12 @@ void                                DefaultTimeline::Serialize           ( ISeri
         ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPost() ) );
     }
 
+//    SerializeChildren( ser );
+
     ser.EnterArray( "events" );
     for( auto event : m_keyFrameEvents )
         event->Serialize( ser );
     ser.ExitChild();
-
-    ser.EnterArray( "children" );
-    for( auto child : m_children )
-        child->Serialize( ser );
-    ser.ExitChild(); // children
 
     ser.ExitChild();
 }
@@ -165,10 +162,7 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
         deser.ExitChild(); // events
     }
 
-    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
-
-    for( auto child : children )
-        te->AddChild( child );
+//    te->DeserializeChildren( deser );
 
     if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), false ) )
         te->Play();
