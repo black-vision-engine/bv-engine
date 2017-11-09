@@ -184,39 +184,6 @@ void BVAppLogic::UnloadScenes   ()
 void BVAppLogic::LoadScene          ( void )
 {
     auto projectEditor = m_bvProject->GetProjectEditor();
-
-    //if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
-    //{
-    //    //if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
-    //    //{
-    //    //    //m_solution.SetTimeline(m_timelineManager);
-    //    //    m_solution.LoadSolution( ConfigManager::GetString("solution") );
-    //    //    auto sceneModel = SceneModel::Create( "root" );
-    //    //    projectEditor->AddScene( sceneModel );
-
-    //    //    projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
-
-    //    //    //if(ConfigManager::GetBool("hm"))
-    //    //    //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
-    //    //}
-    //    //else
-    //    //{
-    //        auto pm = ProjectManager::GetInstance();
-
-    //        auto projectName = ConfigManager::GetString( "default_project_name" );
-    //        
-    //        if( !projectName.empty() )
-    //        {
-    //            auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
-
-    //            if( !projectScenesNames.empty() )
-    //            {
-    //                LoadScenes( projectScenesNames );
-    //            }
-    //        }
-    //    //}
-    //}
-
     auto pmSceneName = DefaultConfig.LoadSceneFromProjectManager();
 
     if( !pmSceneName.empty() )
@@ -633,32 +600,5 @@ RenderMode &                    BVAppLogic::GetRenderMode        ()
 }
 
 
-
-
-//// *********************************
-////
-//void BlackVisionApp::ReadBackFrameBuffer ()
-//{
-//    if ( !DefaultConfig.ReadbackFlag() )
-//    {
-//        return;
-//    }
-//
-//    GframeRenderedEvent->SetResolution( m_Width, m_Height );
-//    GEventManager->TriggerEvent( GframeRenderedEvent );
-//}
-
-//SOME code for hands-on profiling
-        //static unsigned int frame = 0;
-        //    static TimeType tt = TimeType( 0 );
-        //    double elasp = GTimer.CurElapsed();
-        //    if( elasp > 0.01 )
-        //    {
-        //        printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
-        //        t = TimeType( 0 );
-        //    }
-   
-        //    tt += t;
-        //    frame++;
 
 } //bv
