@@ -5,4 +5,4 @@
 bool bv::BlackVisionAppFramework::m_configOverrideInitialized = bv::BlackVisionAppFramework::OverrideConfig( "TestConfigs/DefaultConfig.xml" );
 bool bv::BlackVisionApp::m_sWindowedApplicationInitialized = bv::BlackVisionAppFramework::RegisterFrameworkInitializer();
 
-#include "Application/Main.h"
+#include "Framework/TestMain.h"
