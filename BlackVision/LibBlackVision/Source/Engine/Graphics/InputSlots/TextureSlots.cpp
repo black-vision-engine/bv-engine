@@ -18,10 +18,10 @@ TextureSlots::TextureSlots()
 
 // ***********************
 //
-SlotIndex           TextureSlots::RegisterSource        ( Texture2DPtr tex, const std::string & name )
+Expected< SlotIndex >       TextureSlots::RegisterSource        ( Texture2DPtr tex, const std::string & name )
 {
     if( !CanAddSource( tex, name ) )
-        return sInvalidIdx;
+        return "Can't add source. Name already exists or texture is nullptr";
 
     TextureSlot texSlot;
     texSlot.SlotName = name;
@@ -32,7 +32,7 @@ SlotIndex           TextureSlots::RegisterSource        ( Texture2DPtr tex, cons
 
 // ***********************
 //
-bool                TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
+bool                        TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
 {
     assert( IsValidIndex( slotIdx ) );
     
@@ -54,28 +54,28 @@ bool                TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
 
 // ***********************
 //
-bool                TextureSlots::UnregisterSource      ( const std::string & name )
+bool                        TextureSlots::UnregisterSource      ( const std::string & name )
 {
     return UnregisterSource( FindSourceByName( name ) );
 }
 
 // ***********************
 //
-Texture2DPtr        TextureSlots::AccessSource          ( const std::string & name )
+Texture2DPtr                TextureSlots::AccessSource          ( const std::string & name )
 {
     return AccessSource( FindSourceByName( name ) );
 }
 
 // ***********************
 //
-void                TextureSlots::ReleaseSource         ( const std::string & name )
+void                        TextureSlots::ReleaseSource         ( const std::string & name )
 {
     ReleaseSource( FindSourceByName( name ) );
 }
 
 // ***********************
 //
-Texture2DPtr        TextureSlots::AccessSource          ( SlotIndex slotIdx )
+Texture2DPtr                TextureSlots::AccessSource          ( SlotIndex slotIdx )
 {
     if( !IsValidIndex( slotIdx ) )
         return nullptr;
@@ -86,7 +86,7 @@ Texture2DPtr        TextureSlots::AccessSource          ( SlotIndex slotIdx )
 
 // ***********************
 //
-void                TextureSlots::ReleaseSource         ( SlotIndex slotIdx )
+void                        TextureSlots::ReleaseSource         ( SlotIndex slotIdx )
 {
     if( !IsValidIndex( slotIdx ) )
         return ;
@@ -103,7 +103,7 @@ void                TextureSlots::ReleaseSource         ( SlotIndex slotIdx )
 
 // ***********************
 //
-SlotIndex           TextureSlots::FindSourceByName      ( const std::string & name ) const
+SlotIndex                   TextureSlots::FindSourceByName      ( const std::string & name ) const
 {
     for( SlotIndex idx = 0; idx < m_slots.size(); ++idx )
     {
@@ -116,7 +116,7 @@ SlotIndex           TextureSlots::FindSourceByName      ( const std::string & na
 
 // ***********************
 //
-SlotIndex           TextureSlots::FindEmptySlot         () const
+SlotIndex                   TextureSlots::FindEmptySlot         () const
 {
     for( SlotIndex idx = 0; idx < m_slots.size(); idx++ )
     {
@@ -129,7 +129,7 @@ SlotIndex           TextureSlots::FindEmptySlot         () const
 
 // ***********************
 //
-SlotIndex           TextureSlots::AddSource             ( const TextureSlot & slot )
+Expected< SlotIndex >       TextureSlots::AddSource             ( const TextureSlot & slot )
 {
     SlotIndex emptySlot = FindEmptySlot();
     if( emptySlot == sInvalidIdx )

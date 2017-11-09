@@ -16,7 +16,7 @@ typedef SizeType SlotIndex;
 //
 class TextureSlots
 {
-public:
+private:
 
     static const SlotIndex       sInvalidIdx;
 
@@ -29,21 +29,21 @@ public:
     explicit    TextureSlots    ();
 
 
-    SlotIndex           RegisterSource      ( Texture2DPtr tex, const std::string & name );
-    bool                UnregisterSource    ( SlotIndex slotIdx );
-    bool                UnregisterSource    ( const std::string & name );
+    Expected< SlotIndex >   RegisterSource      ( Texture2DPtr tex, const std::string & name );
+    bool                    UnregisterSource    ( SlotIndex slotIdx );
+    bool                    UnregisterSource    ( const std::string & name );
 
-    Texture2DPtr        AccessSource        ( const std::string & name );
-    void                ReleaseSource       ( const std::string & name );
+    Texture2DPtr            AccessSource        ( const std::string & name );
+    void                    ReleaseSource       ( const std::string & name );
 
-    Texture2DPtr        AccessSource        ( SlotIndex slotIdx );
-    void                ReleaseSource       ( SlotIndex slotIdx );
+    Texture2DPtr            AccessSource        ( SlotIndex slotIdx );
+    void                    ReleaseSource       ( SlotIndex slotIdx );
 
 private:
 
-    SlotIndex           FindSourceByName    ( const std::string & name ) const;
-    SlotIndex           FindEmptySlot       () const;
-    SlotIndex           AddSource           ( const TextureSlot & slot );
+    SlotIndex               FindSourceByName    ( const std::string & name ) const;
+    SlotIndex               FindEmptySlot       () const;
+    Expected< SlotIndex >   AddSource           ( const TextureSlot & slot );
 
     bool                IsValidIndex        ( SlotIndex idx ) const;
     bool                CanAddSource        ( Texture2DPtr tex, const std::string & name ) const;
