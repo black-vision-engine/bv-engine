@@ -8,7 +8,7 @@
 namespace bv
 {
 
-SlotIndex       TextureSlots::sInvalidIdx = std::numeric_limits< SlotIndex >::max();
+const SlotIndex       TextureSlots::sInvalidIdx = std::numeric_limits< SlotIndex >::max();
 
 
 // ***********************
@@ -20,11 +20,7 @@ TextureSlots::TextureSlots()
 //
 SlotIndex           TextureSlots::RegisterSource        ( Texture2DPtr tex, const std::string & name )
 {
-    if( !tex )
-        return sInvalidIdx;
-
-    auto idx = FindSourceByName( name );
-    if( idx == sInvalidIdx )
+    if( !CanAddSource( tex, name ) )
         return sInvalidIdx;
 
     TextureSlot texSlot;
@@ -36,7 +32,7 @@ SlotIndex           TextureSlots::RegisterSource        ( Texture2DPtr tex, cons
 
 // ***********************
 //
-void                TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
+bool                TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
 {
     assert( IsValidIndex( slotIdx ) );
     
@@ -49,14 +45,18 @@ void                TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
 
         m_slots[ slotIdx ].Texture = nullptr;
         m_slots[ slotIdx ].SlotName = "";
+
+        return true;
     }
+
+    return false;
 }
 
 // ***********************
 //
-void                TextureSlots::UnregisterSource      ( const std::string & name )
+bool                TextureSlots::UnregisterSource      ( const std::string & name )
 {
-    UnregisterSource( FindSourceByName( name ) );
+    return UnregisterSource( FindSourceByName( name ) );
 }
 
 // ***********************
@@ -155,6 +155,21 @@ bool                TextureSlots::IsValidIndex          ( SlotIndex idx ) const
         return false;
 
     if( !m_slots[ idx ].Texture )
+        return false;
+
+    return true;
+}
+
+// ***********************
+//
+
+bool                TextureSlots::CanAddSource          ( Texture2DPtr tex, const std::string & name ) const
+{
+    if( !tex )
+        return false;
+
+    auto idx = FindSourceByName( name );
+    if( idx != sInvalidIdx )
         return false;
 
     return true;
