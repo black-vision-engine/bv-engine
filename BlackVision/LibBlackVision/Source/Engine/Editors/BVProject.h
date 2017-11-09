@@ -26,13 +26,22 @@ class BasicNode;
 class BVProjectEditor;
 class BVProject;
 
+class UpdatersManager;
+DEFINE_PTR_TYPE( UpdatersManager )
+
+
 namespace audio {
     class AudioRenderer;
 }
 
+
+
 DEFINE_PTR_TYPE(BVProject)
 DEFINE_CONST_PTR_TYPE(BVProject)
 
+
+// ***********************
+//
 class BVProject : public IUpdatable
 {
 private:
@@ -48,6 +57,7 @@ private:
 
     model::TimelineManagerPtr		m_timelineManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
+    UpdatersManagerPtr              m_updaters;         ///< @todo BVProject should be owner of UpdatersManager. Remove staticness.
 
     model::SceneModelVec	        m_sceneModelVec;
     SceneUPtrVec                    m_sceneVec;

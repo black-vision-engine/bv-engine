@@ -9,15 +9,28 @@
 
 
 
-namespace bv {
+namespace bv
+{
 
-namespace model {
-class IModelNode;
-class SceneModel;
+
+namespace model
+{
+    class IModelNode;
+    class SceneModel;
 } // model
 
+class UpdatersManager;
+DEFINE_PTR_TYPE( UpdatersManager )
+
+
+// ***********************
+//
 class UpdatersManager
 {
+private:
+
+    static UpdatersManagerPtr       sInstancePtr;
+
 private:
 
     std::hash_map< const model::IModelNode *, IUpdaterPtr > m_nodeUpdatersMapping;
@@ -44,7 +57,10 @@ public:
 
     void                        RemoveAllUpdaters   ();
 
+    // FIXME: Get rid of static classes. First step could be to use GetShared function
+    // to remember UpdatersManager as class member. In future these functions should disappear.
     static UpdatersManager &    Get                 ();
+    static UpdatersManagerPtr   GetShared           ();
 
 private:
 
@@ -55,5 +71,8 @@ private:
     void                        RemoveUpdater       ( const T * obj, std::hash_map< const T *, IUpdaterPtr > & mapping );
 
 };
+
+
+
 
 } // bv
