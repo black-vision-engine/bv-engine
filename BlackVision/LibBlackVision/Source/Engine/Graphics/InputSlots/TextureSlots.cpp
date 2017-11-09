@@ -105,7 +105,7 @@ SlotIndex                   TextureSlots::FindSourceByName      ( const std::str
 {
     for( SlotIndex idx = 0; idx < m_slots.size(); ++idx )
     {
-        if( m_slots[ idx ].Texture && m_slots[ idx ].SlotName == name )
+        if( !IsEmptySlot( idx ) && m_slots[ idx ].SlotName == name )
             return idx;
     }
 
@@ -118,7 +118,7 @@ SlotIndex                   TextureSlots::FindEmptySlot         () const
 {
     for( SlotIndex idx = 0; idx < m_slots.size(); idx++ )
     {
-        if( m_slots[ idx ].Texture == nullptr )
+        if( IsEmptySlot( idx ) )
             return idx;
     }
 
@@ -152,10 +152,20 @@ bool                TextureSlots::IsValidIndex          ( SlotIndex idx ) const
     if( idx >= m_slots.size() )
         return false;
 
-    if( !m_slots[ idx ].Texture )
+    if( IsEmptySlot( idx ) )
         return false;
 
     return true;
+}
+
+// ***********************
+//
+
+bool                TextureSlots::IsEmptySlot           ( SlotIndex idx ) const
+{
+    if( !m_slots[ idx ].Texture )
+        return true;
+    return false;
 }
 
 // ***********************

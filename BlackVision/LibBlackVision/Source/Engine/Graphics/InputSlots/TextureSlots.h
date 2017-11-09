@@ -46,6 +46,7 @@ private:
     Expected< SlotIndex >   AddSource           ( const TextureSlot & slot );
 
     bool                IsValidIndex        ( SlotIndex idx ) const;
+    bool                IsEmptySlot         ( SlotIndex idx ) const;
     bool                CanAddSource        ( Texture2DPtr tex, const std::string & name ) const;
 };
 
