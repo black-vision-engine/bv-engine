@@ -5,7 +5,7 @@
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/SceneModel.h"
 
-
+#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 
 #include "Memory/MemoryLeaks.h"
@@ -18,13 +18,14 @@ namespace bv {
 //
 UpdatersManager::UpdatersManager        ()
 {
+    // FIXME: Maybe Textrue2DCache should be owned by UpdatersManager.
+    m_engineResources.TexturesMap = &GTexture2DCache;
 }
 
 // *******************************
 //
 UpdatersManager::~UpdatersManager       ()
-{
-}
+{}
 
 // *******************************
 //
@@ -32,7 +33,7 @@ void UpdatersManager::UpdateStep        ()
 {
     for( auto updater : m_updaters )
     {
-        updater->DoUpdate();
+        updater->DoUpdate( m_engineResources );
     }
 }
 

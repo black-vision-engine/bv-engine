@@ -50,6 +50,8 @@ private:
     bool                CanAddSource        ( Texture2DPtr tex, const std::string & name ) const;
 };
 
+DEFINE_PTR_TYPE( TextureSlots )
+
 
 }	// bv
 

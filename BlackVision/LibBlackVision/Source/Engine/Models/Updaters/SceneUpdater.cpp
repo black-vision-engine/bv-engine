@@ -53,7 +53,7 @@ SceneUpdaterPtr     SceneUpdater::Create            ( Scene * scene, model::Scen
 
 // *****************************
 //
-void                SceneUpdater::DoUpdate          ()
+void                SceneUpdater::DoUpdate          ( EngineResources & )
 {
     m_scene->SetOutputChannelIdx( m_modelScene->GetRenderChannelIdx() );
     UpdateCamera();

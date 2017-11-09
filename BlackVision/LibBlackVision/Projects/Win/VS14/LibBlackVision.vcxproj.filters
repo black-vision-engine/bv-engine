@@ -5399,6 +5399,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\TextureSlot.h">
       <Filter>Engine\Graphics\InputSlots</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\EngineResources.h">
+      <Filter>Engine\Models\Updaters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

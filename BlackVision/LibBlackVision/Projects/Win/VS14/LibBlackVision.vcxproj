@@ -809,6 +809,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\SamplerEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\Texture2DEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\EngineResources.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationException.h" />

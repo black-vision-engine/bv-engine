@@ -5,6 +5,9 @@
 
 #include "Engine/Interfaces/IUpdater.h"
 
+#include "EngineResources.h"
+
+
 
 namespace bv {
 
@@ -20,7 +23,9 @@ private:
     std::hash_map< const model::IModelNode *, IUpdaterPtr > m_nodeUpdatersMapping;
     std::hash_map< const model::SceneModel *, IUpdaterPtr > m_sceneUpdatersMapping;
 
-    std::vector< IUpdaterPtr >                              m_updaters;
+    std::vector< IUpdaterPtr >      m_updaters;
+
+    EngineResources                 m_engineResources;
 
 public:
 
