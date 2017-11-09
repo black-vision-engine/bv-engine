@@ -34,8 +34,6 @@ Expected< SlotIndex >       TextureSlots::RegisterSource        ( Texture2DPtr t
 //
 bool                        TextureSlots::UnregisterSource      ( SlotIndex slotIdx )
 {
-    assert( IsValidIndex( slotIdx ) );
-    
     if( IsValidIndex( slotIdx ) )
     {
         if( m_slots[ slotIdx ].References > 0 )
