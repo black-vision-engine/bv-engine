@@ -186,9 +186,9 @@ node {
 		{
 		
             notifyBuild('STARTED', 'Test')
-			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
+			//bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
 
-     	    generate_tests_report( "BlackVision\\" + testResPath )
+     	    //generate_tests_report( "BlackVision\\" + testResPath )
 			
         } catch( e ){
             currentBuild.result = "FAILED"
