@@ -122,18 +122,18 @@ model::ITimeEvaluatorPtr            GetDefaultTimeline      ( const IDeserialize
         return nullptr;
     }
 
-    bv::model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
-    if( sceneTimeline == nullptr )
-    {
-        sceneTimeline = deserContext->GetRootTimeline();
-    }
+    //bv::model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
+    //if( sceneTimeline == nullptr )
+    //{
+    //    sceneTimeline = deserContext->GetRootTimeline();
+    //}
 
-    timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( "default", sceneTimeline );
-    if( timeEvaluator == nullptr ) 
-    {
-        assert( false );
-        timeEvaluator = sceneTimeline;
-    }
+    timeEvaluator = deserContext->GetTimeline( "default" );
+    //if( timeEvaluator == nullptr ) 
+    //{
+    //    assert( false );
+    //    timeEvaluator = sceneTimeline;
+    //}
 
     return timeEvaluator;
 }

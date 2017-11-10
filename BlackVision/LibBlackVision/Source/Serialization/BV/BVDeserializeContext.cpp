@@ -80,12 +80,12 @@ model::ITimeEvaluatorPtr            BVDeserializeContext::GetTimeline           
     return te;
 }
 
-// ***********************
-//
-model::ITimeEvaluatorPtr BVDeserializeContext::GetRootTimeline()
-{
-    return m_timelineManager->GetRootTimeline();
-}
+//// ***********************
+////
+//model::ITimeEvaluatorPtr BVDeserializeContext::GetRootTimeline()
+//{
+//    return m_timelineManager->GetRootTimeline();
+//}
 
 // ***********************
 //
