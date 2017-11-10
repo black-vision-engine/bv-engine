@@ -33,10 +33,10 @@ public:
     bool                    UnregisterSource    ( SlotIndex slotIdx );
     bool                    UnregisterSource    ( const std::string & name );
 
-    InputSlot               AccessSource        ( const std::string & name );
+    Expected< InputSlot >   AccessSource        ( const std::string & name );
     void                    ReleaseSource       ( const std::string & name );
 
-    InputSlot               AccessSource        ( SlotIndex slotIdx );
+    Expected< InputSlot >   AccessSource        ( SlotIndex slotIdx );
     void                    ReleaseSource       ( SlotIndex slotIdx );
 
 private:

@@ -59,7 +59,7 @@ bool                        InputSlots::UnregisterSource      ( const std::strin
 
 // ***********************
 //
-InputSlot                   InputSlots::AccessSource          ( const std::string & name )
+Expected< InputSlot >       InputSlots::AccessSource          ( const std::string & name )
 {
     return AccessSource( FindSourceByName( name ) );
 }
@@ -73,10 +73,10 @@ void                        InputSlots::ReleaseSource         ( const std::strin
 
 // ***********************
 //
-InputSlot                   InputSlots::AccessSource          ( SlotIndex slotIdx )
+Expected< InputSlot >       InputSlots::AccessSource          ( SlotIndex slotIdx )
 {
     if( !IsValidIndex( slotIdx ) )
-        return InputSlot();
+        return Expected< InputSlot >();
 
     m_slots[ slotIdx ].References++;
     return m_slots[ slotIdx ].Slot;
