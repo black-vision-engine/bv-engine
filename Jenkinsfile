@@ -107,6 +107,11 @@ def generateBuildNumber()
 	bat 'BlackVision/GenBuildVersion.bat ' + "${env.BUILD_NUMBER}"
 }
 
+def generateDoxygenDocs()
+{
+    bat 'doxygen Doxyfile'
+}
+
 node {
     checkout scm
     
@@ -191,6 +196,23 @@ node {
         }
         finally {
             notifyBuild(currentBuild.result, 'Test')
+        }
+    }
+    
+    stage( 'Generate Docs' )
+    {
+  	    try
+		{
+            generateDoxygenDocs()
+			
+        } catch( e )
+        {
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally
+        {
+            notifyBuild(currentBuild.result, 'Generate Docs')
         }
     }
 	
