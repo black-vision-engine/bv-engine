@@ -109,7 +109,7 @@ def generateBuildNumber()
 
 def generateDoxygenDocs()
 {
-    bat 'doxygen Doxyfile'
+    bat "\"${tool 'MSBuild'}\" Doxyfile"
 }
 
 node {
@@ -154,7 +154,7 @@ node {
 	{
 		try {
 			notifyBuild('STARTED', 'Build')
-			make_build( configurations[1], currentPlatform )
+			//make_build( configurations[1], currentPlatform )
 		} catch( e ){
 			currentBuild.result = "FAILED"
 			throw e
