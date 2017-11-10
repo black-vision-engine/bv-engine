@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\..\Source\BVTimeCode.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IVideoCardDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IVideoInputSlots.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\VideoInputSlotDesc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />

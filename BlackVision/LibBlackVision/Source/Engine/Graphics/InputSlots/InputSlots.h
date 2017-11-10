@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "TextureSlot.h"
+#include "InputSlot.h"
 
 #include <vector>
 
@@ -14,7 +14,7 @@ typedef SizeType SlotIndex;
 
 // ***********************
 //
-class TextureSlots
+class InputSlots
 {
 private:
 
@@ -22,11 +22,11 @@ private:
 
 private:
 
-    std::vector< TextureSlot >      m_slots;
+    std::vector< InputSlot >        m_slots;
 
 public:
 
-    explicit    TextureSlots    ();
+    explicit    InputSlots    ();
 
 
     Expected< SlotIndex >   RegisterSource      ( Texture2DPtr tex, const std::string & name );
@@ -43,14 +43,14 @@ private:
 
     SlotIndex               FindSourceByName    ( const std::string & name ) const;
     SlotIndex               FindEmptySlot       () const;
-    Expected< SlotIndex >   AddSource           ( const TextureSlot & slot );
+    Expected< SlotIndex >   AddSource           ( const InputSlot & slot );
 
     bool                IsValidIndex        ( SlotIndex idx ) const;
     bool                IsEmptySlot         ( SlotIndex idx ) const;
     bool                CanAddSource        ( Texture2DPtr tex, const std::string & name ) const;
 };
 
-DEFINE_PTR_TYPE( TextureSlots )
+DEFINE_PTR_TYPE( InputSlots )
 
 
 }	// bv

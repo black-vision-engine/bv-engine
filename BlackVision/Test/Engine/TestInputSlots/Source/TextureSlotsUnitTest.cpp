@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "Engine/Graphics/InputSlots/TextureSlots.h"
+#include "Engine/Graphics/InputSlots/InputSlots.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 using namespace bv;
@@ -28,7 +28,7 @@ Texture2DPtr        CreateFakeTexture   ( UInt32 width, UInt32 height )
 //
 TEST( Engine_TextureSlot, RegisterSource )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
@@ -47,7 +47,7 @@ TEST( Engine_TextureSlot, RegisterSource )
 // Registration fails if someone tries to register source with the same name.
 TEST( Engine_TextureSlot, RegisterSourceWithSameName )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
@@ -60,7 +60,7 @@ TEST( Engine_TextureSlot, RegisterSourceWithSameName )
 // Registration fails if someone passes nullptr
 TEST( Engine_TextureSlot, RegisterNullTexture )
 {
-    TextureSlots slots;
+    InputSlots slots;
     ASSERT_FALSE( slots.RegisterSource( nullptr, "Source1" ).IsValid() );
 }
 
@@ -68,7 +68,7 @@ TEST( Engine_TextureSlot, RegisterNullTexture )
 //
 TEST( Engine_TextureSlot, AccessSourceByName )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
@@ -84,7 +84,7 @@ TEST( Engine_TextureSlot, AccessSourceByName )
 //
 TEST( Engine_TextureSlot, UnregisterSourceByIdx )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
@@ -109,7 +109,7 @@ TEST( Engine_TextureSlot, UnregisterSourceByIdx )
 //
 TEST( Engine_TextureSlot, UnregisterSourceByName )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
@@ -134,7 +134,7 @@ TEST( Engine_TextureSlot, UnregisterSourceByName )
 // If we pass non existing name to Unregister function, it should return false.
 TEST( Engine_TextureSlot, UnregisterSourceInvalidName )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
@@ -151,7 +151,7 @@ TEST( Engine_TextureSlot, UnregisterSourceInvalidName )
 // If we pass non existing slotIndex to Unregister function, it should return false.
 TEST( Engine_TextureSlot, UnregisterSourceInvalidIdx )
 {
-    TextureSlots slots;
+    InputSlots slots;
 
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );

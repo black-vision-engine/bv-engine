@@ -12,7 +12,7 @@ namespace bv
 
 // ***********************
 //
-struct TextureSlot
+struct InputSlot
 {
     Texture2DPtr        Texture;
 
@@ -21,7 +21,7 @@ struct TextureSlot
 
 // ***********************
 //
-    TextureSlot()
+    InputSlot()
         : References( 0 )
     {}
 

@@ -2092,7 +2092,10 @@
     <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.cpp">
       <Filter>Exceptions\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\TextureSlots.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\VideoInputSlots.cpp">
+      <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.cpp">
       <Filter>Engine\Graphics\InputSlots</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5393,14 +5396,17 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\KeyTraits.h">
       <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\TextureSlots.h">
-      <Filter>Engine\Graphics\InputSlots</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\TextureSlot.h">
-      <Filter>Engine\Graphics\InputSlots</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\EngineResources.h">
       <Filter>Engine\Models\Updaters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\VideoInputSlots.h">
+      <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h">
+      <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.h">
+      <Filter>Engine\Graphics\InputSlots</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

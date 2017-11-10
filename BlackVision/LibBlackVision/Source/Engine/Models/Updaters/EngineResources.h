@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/InputSlots/TextureSlots.h"
+#include "Engine/Graphics/InputSlots/InputSlots.h"
 
 
 
@@ -16,7 +16,7 @@ class Texture2DCache;
 struct EngineResources
 {
     Texture2DCache *    TexturesMap;
-    TextureSlotsPtr     InputSlots;
+    InputSlotsPtr       InputSlots;
 
     // ***********************
     //
