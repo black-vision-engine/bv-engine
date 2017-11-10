@@ -463,6 +463,12 @@
     <Filter Include="Engine\Graphics\InputSlots">
       <UniqueIdentifier>{e0d82584-4698-4272-ab41-31fd8050405d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\InputSlots\Logic">
+      <UniqueIdentifier>{5ebadd32-4a6d-4406-b8d9-02127957c92f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\InputSlots\Logic\Handlers">
+      <UniqueIdentifier>{3aee12f6-eac1-43c7-a505-376460dc00c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2097,6 +2103,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.cpp">
       <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.cpp">
+      <Filter>Engine\Graphics\InputSlots\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.cpp">
+      <Filter>Engine\Graphics\InputSlots\Logic\Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5410,6 +5422,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlotDescriptor.h">
       <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.h">
+      <Filter>Engine\Graphics\InputSlots\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\IInputHandler.h">
+      <Filter>Engine\Graphics\InputSlots\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.h">
+      <Filter>Engine\Graphics\InputSlots\Logic\Handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
