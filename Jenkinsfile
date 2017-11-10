@@ -169,7 +169,7 @@ node {
   	    
   	    try {
             //notifyBuild('STARTED', 'Archive')
- 	        make_archive( buildDir, currentConfiguration, currentPlatform, true )
+ 	        //make_archive( buildDir, currentConfiguration, currentPlatform, true )
         } catch( e ){
             currentBuild.result = "FAILED"
             throw e
