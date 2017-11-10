@@ -109,7 +109,7 @@ def generateBuildNumber()
 
 def generateDoxygenDocs()
 {
-    bat "\"${tool 'doxygen'}\" Doxyfile"
+    bat "${tool 'doxygen'} Doxyfile"
 }
 
 node {
