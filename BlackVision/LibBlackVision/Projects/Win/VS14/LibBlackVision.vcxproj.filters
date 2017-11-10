@@ -5408,6 +5408,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.h">
       <Filter>Engine\Graphics\InputSlots</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlotDescriptor.h">
+      <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

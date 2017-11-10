@@ -33,14 +33,14 @@ TEST( Engine_TextureSlot, RegisterSource )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    Expected< SlotIndex > slot1Idx = slots.RegisterSource( tex1, "Source1" );
-    Expected< SlotIndex > slot2Idx = slots.RegisterSource( tex2, "Source2" );
+    Expected< SlotIndex > slot1Idx = slots.RegisterSource( InputSlot( tex1 ), "Source1" );
+    Expected< SlotIndex > slot2Idx = slots.RegisterSource( InputSlot( tex2 ), "Source2" );
 
     ASSERT_TRUE( slot1Idx.IsValid() );
     ASSERT_TRUE( slot2Idx.IsValid() );
 
-    EXPECT_EQ( tex1, slots.AccessSource( slot1Idx ) );
-    EXPECT_EQ( tex2, slots.AccessSource( slot2Idx ) );
+    EXPECT_EQ( tex1, slots.AccessSource( slot1Idx ).Texture );
+    EXPECT_EQ( tex2, slots.AccessSource( slot2Idx ).Texture );
 }
 
 // ***********************
@@ -52,8 +52,8 @@ TEST( Engine_TextureSlot, RegisterSourceWithSameName )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    ASSERT_TRUE( slots.RegisterSource( tex1, "Source1" ).IsValid() );
-    ASSERT_FALSE( slots.RegisterSource( tex2, "Source1" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex1 ), "Source1" ).IsValid() );
+    ASSERT_FALSE( slots.RegisterSource( InputSlot( tex2 ), "Source1" ).IsValid() );
 }
 
 // ***********************
@@ -61,7 +61,7 @@ TEST( Engine_TextureSlot, RegisterSourceWithSameName )
 TEST( Engine_TextureSlot, RegisterNullTexture )
 {
     InputSlots slots;
-    ASSERT_FALSE( slots.RegisterSource( nullptr, "Source1" ).IsValid() );
+    ASSERT_FALSE( slots.RegisterSource( InputSlot(), "Source1" ).IsValid() );
 }
 
 // ***********************
@@ -73,11 +73,11 @@ TEST( Engine_TextureSlot, AccessSourceByName )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    ASSERT_TRUE( slots.RegisterSource( tex1, "Source1" ).IsValid() );
-    ASSERT_TRUE( slots.RegisterSource( tex2, "Source2" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex1 ), "Source1" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex2 ), "Source2" ).IsValid() );
 
-    EXPECT_EQ( tex1, slots.AccessSource( "Source1" ) );
-    EXPECT_EQ( tex2, slots.AccessSource( "Source2" ) );
+    EXPECT_EQ( tex1, slots.AccessSource( "Source1" ).Texture );
+    EXPECT_EQ( tex2, slots.AccessSource( "Source2" ).Texture );
 }
 
 // ***********************
@@ -89,20 +89,20 @@ TEST( Engine_TextureSlot, UnregisterSourceByIdx )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    Expected< SlotIndex > slot1Idx = slots.RegisterSource( tex1, "Source1" );
-    Expected< SlotIndex > slot2Idx = slots.RegisterSource( tex2, "Source2" );
+    Expected< SlotIndex > slot1Idx = slots.RegisterSource( InputSlot( tex1 ), "Source1" );
+    Expected< SlotIndex > slot2Idx = slots.RegisterSource( InputSlot( tex2 ), "Source2" );
 
     ASSERT_TRUE( slot1Idx.IsValid() );
     ASSERT_TRUE( slot2Idx.IsValid() );
 
-    ASSERT_EQ( tex1, slots.AccessSource( slot1Idx ) );
-    ASSERT_EQ( tex2, slots.AccessSource( slot2Idx ) );
+    ASSERT_EQ( tex1, slots.AccessSource( slot1Idx ).Texture );
+    ASSERT_EQ( tex2, slots.AccessSource( slot2Idx ).Texture );
 
     ASSERT_TRUE( slots.UnregisterSource( slot1Idx ) );
-    ASSERT_EQ( slots.AccessSource( slot1Idx ), nullptr );
+    ASSERT_EQ( slots.AccessSource( slot1Idx ).Texture, nullptr );
 
     ASSERT_TRUE( slots.UnregisterSource( slot2Idx ) );
-    ASSERT_EQ( slots.AccessSource( slot2Idx ), nullptr );
+    ASSERT_EQ( slots.AccessSource( slot2Idx ).Texture, nullptr );
 }
 
 // ***********************
@@ -114,20 +114,20 @@ TEST( Engine_TextureSlot, UnregisterSourceByName )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    Expected< SlotIndex > slot1Idx = slots.RegisterSource( tex1, "Source1" );
-    Expected< SlotIndex > slot2Idx = slots.RegisterSource( tex2, "Source2" );
+    Expected< SlotIndex > slot1Idx = slots.RegisterSource( InputSlot( tex1 ), "Source1" );
+    Expected< SlotIndex > slot2Idx = slots.RegisterSource( InputSlot( tex2 ), "Source2" );
 
     ASSERT_TRUE( slot1Idx.IsValid() );
     ASSERT_TRUE( slot2Idx.IsValid() );
 
-    ASSERT_EQ( tex1, slots.AccessSource( slot1Idx ) );
-    ASSERT_EQ( tex2, slots.AccessSource( slot2Idx ) );
+    ASSERT_EQ( tex1, slots.AccessSource( slot1Idx ).Texture );
+    ASSERT_EQ( tex2, slots.AccessSource( slot2Idx ).Texture );
 
     ASSERT_TRUE( slots.UnregisterSource( "Source1" ) );
-    ASSERT_EQ( slots.AccessSource( slot1Idx ), nullptr );
+    ASSERT_EQ( slots.AccessSource( slot1Idx ).Texture, nullptr );
 
     ASSERT_TRUE( slots.UnregisterSource( "Source2" ) );
-    ASSERT_EQ( slots.AccessSource( slot2Idx ), nullptr );
+    ASSERT_EQ( slots.AccessSource( slot2Idx ).Texture, nullptr );
 }
 
 // ***********************
@@ -139,12 +139,12 @@ TEST( Engine_TextureSlot, UnregisterSourceInvalidName )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    ASSERT_TRUE( slots.RegisterSource( tex1, "Source1" ).IsValid() );
-    ASSERT_TRUE( slots.RegisterSource( tex2, "Source2" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex1 ), "Source1" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex2 ), "Source2" ).IsValid() );
 
     ASSERT_FALSE( slots.UnregisterSource( "bla bla" ) );
-    ASSERT_NE( slots.AccessSource( "Source1" ), nullptr );
-    ASSERT_NE( slots.AccessSource( "Source2" ), nullptr );
+    ASSERT_NE( slots.AccessSource( "Source1" ).Texture, nullptr );
+    ASSERT_NE( slots.AccessSource( "Source2" ).Texture, nullptr );
 }
 
 // ***********************
@@ -156,11 +156,11 @@ TEST( Engine_TextureSlot, UnregisterSourceInvalidIdx )
     Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
     Texture2DPtr tex2 = CreateFakeTexture( 50, 50 );
 
-    ASSERT_TRUE( slots.RegisterSource( tex1, "Source1" ).IsValid() );
-    ASSERT_TRUE( slots.RegisterSource( tex2, "Source2" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex1 ), "Source1" ).IsValid() );
+    ASSERT_TRUE( slots.RegisterSource( InputSlot( tex2 ), "Source2" ).IsValid() );
 
     ASSERT_FALSE( slots.UnregisterSource( 500 ) );
-    ASSERT_NE( slots.AccessSource( "Source1" ), nullptr );
-    ASSERT_NE( slots.AccessSource( "Source2" ), nullptr );
+    ASSERT_NE( slots.AccessSource( "Source1" ).Texture, nullptr );
+    ASSERT_NE( slots.AccessSource( "Source2" ).Texture, nullptr );
 }
 
