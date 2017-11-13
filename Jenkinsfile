@@ -129,7 +129,9 @@ node {
     def currentPlatform = platforms[1]
 	
 
-    stage('Clean') {
+    stage('Clean')
+    {
+        removeDir( 'wiki' )
         removeDir( buildDir )
         removeDir( tempDir )
         removeDir( testResPath )
