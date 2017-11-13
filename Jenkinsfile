@@ -119,7 +119,7 @@ def generateDoxygenDocs( buildDir, conf, platform )
     bat "\"${tool 'doxygen'}\" Doxyfile"
     
     def doxygenDir = "BlackVision/Doc/html" + "/**"
-    archiveArtifacts artifacts: includes_app, fingerprint: fEnabled
+    archiveArtifacts artifacts: doxygenDir, fingerprint: true
 }
 
 node {
