@@ -100,7 +100,15 @@ def generateBuildNumber()
 
 def generateDoxygenDocs( buildDir, conf, platform )
 {
-    bat "\"${tool 'doxygen'}\" Doxyfile"
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ba67e605-8722-47c7-8157-df3e38aea671',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+
+    bat "\"${tool 'TortoiseHg'}\" clone https://nieznanysprawiciel@bitbucket.org/blackvision/bv_engine/wiki --config auth.jenkins.prefix=* --config ${env.USERNAME} --config ${env.PASSWORD}"
+                    
+    dir( "wiki" )
+    {
+        bat "\"${tool 'doxygen'}\" ../Doxyfile"
+    }
     
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'BlackVision/Doc/html/', reportFiles: 'index.html', reportName: 'BlackVision Documentation', reportTitles: ''])
 }
@@ -147,8 +155,8 @@ node {
 	{
 		try
         {
-			notifyBuild('STARTED', 'Build')
-			make_build( configurations[1], currentPlatform )
+			//notifyBuild('STARTED', 'Build')
+			//make_build( configurations[1], currentPlatform )
 		} catch( e ){
 			currentBuild.result = "FAILED"
 			throw e
@@ -164,7 +172,7 @@ node {
   	    try
         {
             notifyBuild('STARTED', 'Archive')
- 	        make_archive( buildDir, currentConfiguration, currentPlatform, true )
+ 	        //make_archive( buildDir, currentConfiguration, currentPlatform, true )
         } catch( e )
         {
             currentBuild.result = "FAILED"
@@ -182,9 +190,9 @@ node {
 		{
 		
             notifyBuild('STARTED', 'Test')
-			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
+			//bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
 
-     	    generate_tests_report( "BlackVision\\" + testResPath )
+     	    //generate_tests_report( "BlackVision\\" + testResPath )
 			
         } catch( e )
         {
