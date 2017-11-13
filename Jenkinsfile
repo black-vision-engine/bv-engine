@@ -48,22 +48,6 @@ def get_app_dir( buildDir, conf, platform )
      return get_build_dir( buildDir, conf, platform ) + '\\Applications\\'
 }
 
-def get_auto_tester_path( buildDir, conf, platform ) {
-     return buildDir + platform + '-v140-' + conf + '\\DevTools\\AutomaticTester\\AutomaticTester.exe'
-}
-
-def make_auto_tests( buildDir, conf, platform, outputDir ) {
-    def autoTesterExec = get_auto_tester_path( buildDir, conf, platform )
-    
-    createDir( outputDir )
-    
-    def HARDCODED_TEST_PATH = 'F:\\GoogleDrive\\bv_data\\Regression'
-    def HARDCODED_CONFIG_PATH = 'F:\\GoogleDrive\\bv_data\\bv_media\\configs\\auto_test_config.xml'
-    
-    copyFile( HARDCODED_CONFIG_PATH, get_app_dir( buildDir, conf, platform ) + 'BlackVision\\config.xml' )
-    
-    bat autoTesterExec + ' -i ' + HARDCODED_TEST_PATH + ' -e ' + get_app_dir(  buildDir, conf, platform ) + 'BlackVision\\' + 'BlackVision.exe' + ' -v ' + '--output=' + outputDir
-}
 
 def make_build( conf, platform ) {
     def info = conf + '|' + platform
@@ -161,9 +145,10 @@ node {
 	
 	stage('Build Release')
 	{
-		try {
+		try
+        {
 			notifyBuild('STARTED', 'Build')
-			//make_build( configurations[1], currentPlatform )
+			make_build( configurations[1], currentPlatform )
 		} catch( e ){
 			currentBuild.result = "FAILED"
 			throw e
@@ -176,15 +161,17 @@ node {
   	stage('Archive')
 	{
   	    
-  	    try {
-            //notifyBuild('STARTED', 'Archive')
- 	        //make_archive( buildDir, currentConfiguration, currentPlatform, true )
-        } catch( e ){
+  	    try
+        {
+            notifyBuild('STARTED', 'Archive')
+ 	        make_archive( buildDir, currentConfiguration, currentPlatform, true )
+        } catch( e )
+        {
             currentBuild.result = "FAILED"
             throw e
         }
         finally {
-            //notifyBuild(currentBuild.result, 'Archive')
+            notifyBuild(currentBuild.result, 'Archive')
         }
   	}
 
@@ -195,15 +182,17 @@ node {
 		{
 		
             notifyBuild('STARTED', 'Test')
-			//bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
+			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
 
-     	    //generate_tests_report( "BlackVision\\" + testResPath )
+     	    generate_tests_report( "BlackVision\\" + testResPath )
 			
-        } catch( e ){
+        } catch( e )
+        {
             currentBuild.result = "FAILED"
             throw e
         }
-        finally {
+        finally
+        {
             notifyBuild(currentBuild.result, 'Test')
         }
     }
