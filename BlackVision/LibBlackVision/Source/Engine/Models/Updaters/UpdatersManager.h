@@ -5,22 +5,40 @@
 
 #include "Engine/Interfaces/IUpdater.h"
 
+#include "EngineResources.h"
 
-namespace bv {
 
-namespace model {
-class IModelNode;
-class SceneModel;
+
+namespace bv
+{
+
+
+namespace model
+{
+    class IModelNode;
+    class SceneModel;
 } // model
 
+class UpdatersManager;
+DEFINE_PTR_TYPE( UpdatersManager )
+
+
+// ***********************
+//
 class UpdatersManager
 {
+private:
+
+    static UpdatersManagerPtr       sInstancePtr;
+
 private:
 
     std::hash_map< const model::IModelNode *, IUpdaterPtr > m_nodeUpdatersMapping;
     std::hash_map< const model::SceneModel *, IUpdaterPtr > m_sceneUpdatersMapping;
 
-    std::vector< IUpdaterPtr >                              m_updaters;
+    std::vector< IUpdaterPtr >      m_updaters;
+
+    EngineResources                 m_engineResources;
 
 public:
 
@@ -39,7 +57,10 @@ public:
 
     void                        RemoveAllUpdaters   ();
 
+    // FIXME: Get rid of static classes. First step could be to use GetShared function
+    // to remember UpdatersManager as class member. In future these functions should disappear.
     static UpdatersManager &    Get                 ();
+    static UpdatersManagerPtr   GetShared           ();
 
 private:
 
@@ -50,5 +71,8 @@ private:
     void                        RemoveUpdater       ( const T * obj, std::hash_map< const T *, IUpdaterPtr > & mapping );
 
 };
+
+
+
 
 } // bv

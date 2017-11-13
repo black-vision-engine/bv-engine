@@ -111,7 +111,7 @@ public:
     virtual                 ~NodeUpdater        ();
 
     static NodeUpdaterPtr   Create              ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
-    virtual void            DoUpdate            () override;
+    virtual void            DoUpdate            ( EngineResources & resources ) override;
 
 private:
 
@@ -141,7 +141,7 @@ private:
     inline  void    UpdateBoundingBox   ();
 
     inline	void	UpdateShaderParams  ();
-    inline  void    UpdateTexturesData	();
+    inline  void    UpdateTexturesData	( EngineResources & resources );
 
     inline  void    UpdateAudio     	();
 

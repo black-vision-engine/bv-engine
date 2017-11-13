@@ -54,11 +54,12 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
     , m_audioRenderer( audioRenderer )
     , m_engineSceneRoot( nullptr )
     , m_timelineManager( std::make_shared < model::TimelineManager >() )
+    , m_updaters( nullptr )
     , m_globalTimeline( model::OffsetTimeEvaluator::Create( GLOBAL_TIMELINE_NAME, TimeType( 0.0 ) ) )
 {
     //initialize static managers in correct order
     GetDefaultEventManager();
-    UpdatersManager::Get();
+    m_updaters = UpdatersManager::GetShared();
 
     m_timelineManager->RegisterRootTimeline( m_globalTimeline );
     model::TimelineManager::SetInstance( m_timelineManager.get() );
@@ -96,7 +97,7 @@ void            BVProject::Update( TimeType t )
             scene->Update( t );
         }
 
-        UpdatersManager::Get().UpdateStep();
+        m_updaters->UpdateStep();
 
         auto scenes = GetScenes();
         auto identityTrans = Transform();

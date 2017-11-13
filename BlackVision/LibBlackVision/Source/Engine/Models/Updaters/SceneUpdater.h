@@ -35,7 +35,7 @@ public:
 
     static SceneUpdaterPtr  Create              ( Scene * scene, model::SceneModel * modelScene );
 
-    virtual void            DoUpdate            () override;
+    virtual void            DoUpdate            ( EngineResources & resources ) override;
 
 private:
 
