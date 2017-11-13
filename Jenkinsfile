@@ -156,8 +156,8 @@ node {
 	{
 		try
         {
-			//notifyBuild('STARTED', 'Build')
-			//make_build( configurations[1], currentPlatform )
+			notifyBuild('STARTED', 'Build')
+			make_build( configurations[1], currentPlatform )
 		} catch( e ){
 			currentBuild.result = "FAILED"
 			throw e
@@ -173,7 +173,7 @@ node {
   	    try
         {
             notifyBuild('STARTED', 'Archive')
- 	        //make_archive( buildDir, currentConfiguration, currentPlatform, true )
+ 	        make_archive( buildDir, currentConfiguration, currentPlatform, true )
         } catch( e )
         {
             currentBuild.result = "FAILED"
@@ -191,9 +191,9 @@ node {
 		{
 		
             notifyBuild('STARTED', 'Test')
-			//bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
+			bat 'BlackVision/RunAllTests.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + testResPath + '/'
 
-     	    //generate_tests_report( "BlackVision\\" + testResPath )
+     	    generate_tests_report( "BlackVision\\" + testResPath )
 			
         } catch( e )
         {
