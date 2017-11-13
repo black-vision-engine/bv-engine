@@ -877,7 +877,10 @@ EXCLUDE                = BlackVision/_Builds \
                          BlackVision/_Temp \
                          BlackVision/Assets \
                          BlackVision/Logs \
-                         BlackVision/Dep
+                         BlackVision/Dep \
+                         BlackVision/Tools/Triangulator/Source/Clipper \
+                         BlackVision/Tools/Triangulator/Source/poly2tri \
+                         BlackVision/Tools/RapidXML
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
