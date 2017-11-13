@@ -100,7 +100,7 @@ def generateBuildNumber()
 
 def generateDoxygenDocs( buildDir, conf, platform )
 {
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ba67e605-8722-47c7-8157-df3e38aea671',
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '7d30c872-4901-4bfd-bddc-50de3a25dd94',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
     {
         bat "\"${tool 'TortoiseHg'}\\hg.exe\" --debug --config auth.jenkins.prefix=* --config auth.jenkins.username=${env.USERNAME} --config auth.jenkins.password=${env.PASSWORD} --config \"auth.jenkins.schemes=https\" clone https://nieznanysprawiciel@bitbucket.org/blackvision/bv_engine/wiki"
