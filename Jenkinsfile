@@ -33,12 +33,19 @@ def notifyBuild(String buildStatus = 'STARTED', stageName = "") {
   step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])])
 }
 
-def get_tests_dir( buildDir, conf, platform ) {
-     return buildDir + platform + '-v140-' + conf + '\\Tests\\'
+def get_build_dir( buildDir, conf, platform )
+{
+    return buildDir + platform + '-v140-' + conf
 }
 
-def get_app_dir( buildDir, conf, platform ) {
-     return buildDir + platform + '-v140-' + conf + '\\Applications\\'
+def get_tests_dir( buildDir, conf, platform )
+{
+     return get_build_dir( buildDir, conf, platform ) + '\\Tests\\'
+}
+
+def get_app_dir( buildDir, conf, platform )
+{
+     return get_build_dir( buildDir, conf, platform ) + '\\Applications\\'
 }
 
 def get_auto_tester_path( buildDir, conf, platform ) {
@@ -107,9 +114,12 @@ def generateBuildNumber()
 	bat 'BlackVision/GenBuildVersion.bat ' + "${env.BUILD_NUMBER}"
 }
 
-def generateDoxygenDocs()
+def generateDoxygenDocs( buildDir, conf, platform )
 {
     bat "\"${tool 'doxygen'}\" Doxyfile"
+    
+    def doxygenDir = "BlackVision/Doc/html" + "/**"
+    archiveArtifacts artifacts: includes_app, fingerprint: fEnabled
 }
 
 node {
@@ -203,7 +213,7 @@ node {
     {
   	    try
 		{
-            generateDoxygenDocs()
+            generateDoxygenDocs( buildDir, currentConfiguration, currentPlatform )
 			
         } catch( e )
         {
