@@ -118,8 +118,7 @@ def generateDoxygenDocs( buildDir, conf, platform )
 {
     bat "\"${tool 'doxygen'}\" Doxyfile"
     
-    def doxygenDir = "BlackVision/Doc/html" + "/**"
-    archiveArtifacts artifacts: doxygenDir, fingerprint: true
+    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'BlackVision/Doc/html/', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
 }
 
 node {
