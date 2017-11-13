@@ -103,7 +103,7 @@ def generateDoxygenDocs( buildDir, conf, platform )
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ba67e605-8722-47c7-8157-df3e38aea671',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
     {
-        bat "\"${tool 'TortoiseHg'}\\hg.exe\" --debug --config auth.jenkins.prefix=* --config auth.x.username=${env.USERNAME} --config auth.x.password=${env.PASSWORD} --config \"auth.jenkins.schemes=http https\" clone https://nieznanysprawiciel@bitbucket.org/blackvision/bv_engine/wiki"
+        bat "\"${tool 'TortoiseHg'}\\hg.exe\" --debug --config auth.jenkins.prefix=* --config auth.jenkins.username=${env.USERNAME} --config auth.jenkins.password=${env.PASSWORD} --config \"auth.jenkins.schemes=https\" clone https://nieznanysprawiciel@bitbucket.org/blackvision/bv_engine/wiki"
     }
     
     dir( "wiki" )
