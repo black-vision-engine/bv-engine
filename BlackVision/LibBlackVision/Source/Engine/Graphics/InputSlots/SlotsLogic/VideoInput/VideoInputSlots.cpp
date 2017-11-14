@@ -10,7 +10,8 @@ namespace bv
 
 // ***********************
 //
-VideoInputSlots::VideoInputSlots()
+VideoInputSlots::VideoInputSlots    ( InputSlotsPtr slots )
+    :   m_avInputSlots( slots )
 {}
 
 // ***********************

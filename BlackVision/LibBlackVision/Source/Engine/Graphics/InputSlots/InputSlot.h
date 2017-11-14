@@ -13,7 +13,7 @@ namespace bv
 
 
 // ***********************
-//
+///@ingroup EngineInputs
 struct InputSlot
 {
     Texture2DPtr            Texture;
@@ -49,7 +49,7 @@ struct InputSlot
 };
 
 // ***********************
-//
+/// @ingroup EngineInputs
 struct InputEntry
 {
     InputSlot               Slot;

@@ -162,7 +162,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\VideoInputSlots.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp" />
@@ -659,7 +660,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\IInputHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\VideoInputSlots.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />

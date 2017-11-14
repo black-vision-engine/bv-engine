@@ -19,6 +19,17 @@ class AudioRenderer;
 class OutputLogic;
 class RenderedChannelsData;
 
+
+
+
+/**@defgroup Engine*/
+
+/**@defgroup RenderingLogic
+@ingroup Engine*/
+
+
+// ***********************
+/// @ingroup RenderingLogic
 class RenderLogic
 {
 public:

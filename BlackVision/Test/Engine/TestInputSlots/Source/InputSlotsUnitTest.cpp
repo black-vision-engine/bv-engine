@@ -26,7 +26,7 @@ Texture2DPtr        CreateFakeTexture   ( UInt32 width, UInt32 height )
 
 // ***********************
 //
-TEST( Engine_TextureSlot, RegisterSource )
+TEST( Engine_InputSlots, RegisterSource )
 {
     InputSlots slots;
 
@@ -50,7 +50,7 @@ TEST( Engine_TextureSlot, RegisterSource )
 
 // ***********************
 // Registration fails if someone tries to register source with the same name.
-TEST( Engine_TextureSlot, RegisterSourceWithSameName )
+TEST( Engine_InputSlots, RegisterSourceWithSameName )
 {
     InputSlots slots;
 
@@ -63,7 +63,7 @@ TEST( Engine_TextureSlot, RegisterSourceWithSameName )
 
 // ***********************
 // Registration fails if someone passes nullptr
-TEST( Engine_TextureSlot, RegisterNullTexture )
+TEST( Engine_InputSlots, RegisterNullTexture )
 {
     InputSlots slots;
     ASSERT_FALSE( slots.RegisterSource( InputSlot(), "Source1" ).IsValid() );
@@ -71,7 +71,7 @@ TEST( Engine_TextureSlot, RegisterNullTexture )
 
 // ***********************
 //
-TEST( Engine_TextureSlot, AccessSourceByName )
+TEST( Engine_InputSlots, AccessSourceByName )
 {
     InputSlots slots;
 
@@ -90,7 +90,7 @@ TEST( Engine_TextureSlot, AccessSourceByName )
 
 // ***********************
 //
-TEST( Engine_TextureSlot, UnregisterSourceByIdx )
+TEST( Engine_InputSlots, UnregisterSourceByIdx )
 {
     InputSlots slots;
 
@@ -120,7 +120,7 @@ TEST( Engine_TextureSlot, UnregisterSourceByIdx )
 
 // ***********************
 //
-TEST( Engine_TextureSlot, UnregisterSourceByName )
+TEST( Engine_InputSlots, UnregisterSourceByName )
 {
     InputSlots slots;
 
@@ -150,7 +150,7 @@ TEST( Engine_TextureSlot, UnregisterSourceByName )
 
 // ***********************
 // If we pass non existing name to Unregister function, it should return false.
-TEST( Engine_TextureSlot, UnregisterSourceInvalidName )
+TEST( Engine_InputSlots, UnregisterSourceInvalidName )
 {
     InputSlots slots;
 
@@ -169,7 +169,7 @@ TEST( Engine_TextureSlot, UnregisterSourceInvalidName )
 
 // ***********************
 // If we pass non existing slotIndex to Unregister function, it should return false.
-TEST( Engine_TextureSlot, UnregisterSourceInvalidIdx )
+TEST( Engine_InputSlots, UnregisterSourceInvalidIdx )
 {
     InputSlots slots;
 

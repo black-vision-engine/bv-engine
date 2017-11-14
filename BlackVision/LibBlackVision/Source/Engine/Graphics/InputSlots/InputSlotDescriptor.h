@@ -9,7 +9,7 @@ namespace bv
 {
 
 // ***********************
-//
+/// @ingroup EngineInputs
 struct InputSlotDescriptor
 {
     std::string         SlotName;

@@ -12,8 +12,21 @@ namespace bv
 typedef SizeType SlotIndex;
 
 
+
+/**@defgroup EngineInputs Inputs
+@ingroup Engine
+
+@brief Engine video or audio input mechanism.
+
+Input slots provide mechanism to access global signal sources (for example textures or audio).
+Unlike normal textures form files, such sources can be generated internally by engine or
+supllied by other mechanism like video card inputs.
+*/
+
+
+
 // ***********************
-//
+/// @ingroup EngineInputs
 class InputSlots
 {
 private:

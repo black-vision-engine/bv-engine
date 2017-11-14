@@ -70,9 +70,6 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Interfaces\IVideoInputSlots.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\VideoInput\VideoInputSlotDesc.h">
       <Filter>VideoInput</Filter>
     </ClInclude>

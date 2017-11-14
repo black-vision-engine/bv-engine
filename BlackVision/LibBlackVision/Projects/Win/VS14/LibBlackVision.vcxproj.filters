@@ -469,6 +469,15 @@
     <Filter Include="Engine\Graphics\InputSlots\Logic\Handlers">
       <UniqueIdentifier>{3aee12f6-eac1-43c7-a505-376460dc00c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\InputSlots\SlotsLogic">
+      <UniqueIdentifier>{b04d28a5-e7c6-424d-907e-d7e5895ded0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\InputSlots\SlotsLogic\VideoInput">
+      <UniqueIdentifier>{246bdcfc-8639-4301-b5b1-daf5a87ec745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot">
+      <UniqueIdentifier>{8c2ed0e6-2d04-4196-aa53-35da3162f7f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2098,9 +2107,6 @@
     <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationLogicError.cpp">
       <Filter>Exceptions\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\VideoInputSlots.cpp">
-      <Filter>Engine\Graphics\InputSlots</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.cpp">
       <Filter>Engine\Graphics\InputSlots</Filter>
     </ClCompile>
@@ -2109,6 +2115,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.cpp">
       <Filter>Engine\Graphics\InputSlots\Logic\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.cpp">
+      <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.cpp">
+      <Filter>Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5411,9 +5423,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\EngineResources.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\VideoInputSlots.h">
-      <Filter>Engine\Graphics\InputSlots</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h">
       <Filter>Engine\Graphics\InputSlots</Filter>
     </ClInclude>
@@ -5431,6 +5440,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.h">
       <Filter>Engine\Graphics\InputSlots\Logic\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotDesc.h">
+      <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.h">
+      <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.h">
+      <Filter>Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

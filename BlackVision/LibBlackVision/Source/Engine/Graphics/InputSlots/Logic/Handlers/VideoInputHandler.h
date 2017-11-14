@@ -9,7 +9,7 @@ namespace bv
 {
 
 // ***********************
-//
+/// @ingroup EngineInputs
 class VideoInputHandler : public IInputHandler
 {
 private:
