@@ -14,7 +14,7 @@
       <UniqueIdentifier>{889608f3-1e44-4bad-8852-04d42962c23a}</UniqueIdentifier>
     </Filter>
     <Filter Include="VideoInput">
-      <UniqueIdentifier>{4e324cf8-7ea1-46c1-b4b3-3a4f9ee9998e}</UniqueIdentifier>
+      <UniqueIdentifier>{d839ba06-191f-445b-a46c-b5ba0aefbfa0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,7 +70,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\VideoInput\VideoInputSlotDesc.h">
+    <ClInclude Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
   </ItemGroup>

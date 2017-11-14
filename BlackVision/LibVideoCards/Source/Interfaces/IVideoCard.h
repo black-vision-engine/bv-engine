@@ -7,8 +7,19 @@
 #include <functional>
 #include <set>
 
-namespace bv { namespace videocards {
 
+
+namespace bv {
+namespace videocards
+{
+
+
+
+/**@defgroup VideoCards Video Cards*/
+
+
+/**@brief VideoCard interface.
+@ingroup VideoCards*/
 class IVideoCard
 {
 public:

@@ -21,7 +21,7 @@ void        AVFrameInputSlots::UpdateSlot       ( SlotIndex slotIdx, AVFramePtr 
 {
     slotIdx;
     frame;
-
+    assert( !"Implment me" );
 }
 
 

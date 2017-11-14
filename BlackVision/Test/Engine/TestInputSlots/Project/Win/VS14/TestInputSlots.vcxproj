@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\InputSlotsUnitTest.cpp" />
+    <ClCompile Include="VideoInputSlotsTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

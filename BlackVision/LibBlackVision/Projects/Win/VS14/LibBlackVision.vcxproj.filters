@@ -5441,14 +5441,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.h">
       <Filter>Engine\Graphics\InputSlots\Logic\Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotDesc.h">
-      <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.h">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.h">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h">
+      <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

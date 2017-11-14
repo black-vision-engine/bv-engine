@@ -661,7 +661,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\IInputHandler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
