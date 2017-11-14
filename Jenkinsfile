@@ -100,7 +100,16 @@ def generateBuildNumber()
 
 def generateDoxygenDocs( buildDir, conf, platform )
 {
-    bat "\"${tool 'doxygen'}\" Doxyfile"
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '7d30c872-4901-4bfd-bddc-50de3a25dd94',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
+    {
+        bat "\"${tool 'TortoiseHg'}\\hg.exe\" --debug --config auth.jenkins.prefix=* --config auth.jenkins.username=${env.USERNAME} --config auth.jenkins.password=${env.PASSWORD} --config \"auth.jenkins.schemes=https\" clone https://nieznanysprawiciel@bitbucket.org/blackvision/bv_engine/wiki"
+    }
+    
+    dir( "wiki" )
+    {
+        bat "\"${tool 'doxygen'}\" ../Doxyfile"
+    }
     
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'BlackVision/Doc/html/', reportFiles: 'index.html', reportName: 'BlackVision Documentation', reportTitles: ''])
 }
@@ -120,7 +129,9 @@ node {
     def currentPlatform = platforms[1]
 	
 
-    stage('Clean') {
+    stage('Clean')
+    {
+        removeDir( 'wiki' )
         removeDir( buildDir )
         removeDir( tempDir )
         removeDir( testResPath )
