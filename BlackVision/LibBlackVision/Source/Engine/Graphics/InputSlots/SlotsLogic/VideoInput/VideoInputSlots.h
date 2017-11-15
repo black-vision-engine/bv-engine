@@ -34,6 +34,8 @@ public:
 
 
     bool            RegisterVideoInputChannel       ( const videocards::VideoInputChannelDesc & vidInputDesc );    
+    void            UpdateVideoInput                ( videocards::VideoInputID id, AVFramePtr frame );
+
 
 public:
 

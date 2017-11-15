@@ -52,7 +52,7 @@ TEST( Engine_InputSlots, VideoInput_RegisterSource )
 }
 
 // ***********************
-//
+// VideoInputSlots should fail to register channel for the second time.
 TEST( Engine_InputSlots, VideoInput_RegisterExistingSource )
 {
     VideoInputSlots slots( std::make_shared< InputSlots >() );
@@ -65,4 +65,23 @@ TEST( Engine_InputSlots, VideoInput_RegisterExistingSource )
 
     ASSERT_FALSE( slots.RegisterVideoInputChannel( channel2 ) );
     EXPECT_TRUE( slots.Exists( 0 ) );
+}
+
+// ***********************
+// VideoInputSlots can register and hold data for multiple channels.
+TEST( Engine_InputSlots, VideoInput_Register2DifferentChannels )
+{
+    VideoInputSlots slots( std::make_shared< InputSlots >() );
+
+    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel2( 1, "BlueFish", "C", CreateDefaultAVFrame() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+    ASSERT_TRUE( slots.Exists( channel1 ) );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel2 ) );
+    ASSERT_TRUE( slots.Exists( channel2 ) );
+
+    EXPECT_TRUE( slots.Exists( 0 ) );
+    EXPECT_TRUE( slots.Exists( 1 ) );
 }

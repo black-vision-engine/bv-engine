@@ -46,6 +46,14 @@ bool            VideoInputSlots::RegisterVideoInputChannel      ( const videocar
 
 // ***********************
 //
+void                        VideoInputSlots::UpdateVideoInput   ( videocards::VideoInputID id, AVFramePtr frame )
+{
+    auto slotIdx = GetSlotIndex( id );
+    m_avInputSlots.UpdateSlot( slotIdx, frame );
+}
+
+// ***********************
+//
 Expected< SlotIndex >       VideoInputSlots::Register       ( const videocards::VideoInputChannelDesc & vidInputDesc )
 {
     auto texture = CreateTexture( vidInputDesc );
