@@ -35,6 +35,9 @@ public:
 
     SlotIndex                   GetSlotIdx      () const { return m_slotIdx; }
     videocards::VideoInputID    GetVideoInputID () const { return m_videoChannel.GetInputID(); }
+
+
+    const videocards::VideoInputChannelDesc &   GetVideoChannelDesc     () const { return m_videoChannel; }
 };
 
 

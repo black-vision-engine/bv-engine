@@ -3,6 +3,8 @@
 
 #include "CoreDEF.h"
 
+#include "Memory/AVFrame.h"
+
 #include <string>
 
 
@@ -25,15 +27,24 @@ private:
     std::string         m_channelName;
 
     VideoInputID        m_videoInputID;
+    AVFrameDescriptor   m_dataDesc;
 
 public:
 
-    explicit    VideoInputChannelDesc       ( VideoInputID id, const std::string & cardName, const std::string & channelName );
+    explicit    VideoInputChannelDesc       ( VideoInputID id, const std::string & cardName, const std::string & channelName, const AVFrameDescriptor & dataDesc );
 
     VideoInputID            GetInputID      () const { return m_videoInputID; }
 
     const std::string &     GetCardName     () const { return m_cardName; }
     const std::string &     GetChannelName  () const { return m_channelName; }
+    
+    const AVFrameDescriptor &   GetDataDesc () const { return m_dataDesc; }
+
+public:
+
+
+    /**@brief Checks if objects describe the same video card channel.*/
+    bool                    IsEquivalent    ( const VideoInputChannelDesc & other ) const;
 
 };
 
@@ -44,12 +55,28 @@ public:
 
 // ***********************
 //
-inline VideoInputChannelDesc::VideoInputChannelDesc    ( VideoInputID id, const std::string & cardName, const std::string & channelName )
+inline VideoInputChannelDesc::VideoInputChannelDesc    ( VideoInputID id, const std::string & cardName, const std::string & channelName, const AVFrameDescriptor & dataDesc )
     : m_cardName( cardName )
     , m_channelName( channelName )
     , m_videoInputID( id )
+    , m_dataDesc( dataDesc )
 {}
 
+// ***********************
+//
+inline bool             VideoInputChannelDesc::IsEquivalent     ( const VideoInputChannelDesc & other ) const
+{
+    if( m_videoInputID != other.m_videoInputID )
+        return false;
+
+    if( m_cardName != other.m_cardName )
+        return false;
+
+    if( m_channelName != other.m_channelName )
+        return false;
+
+    return true;
+}
 
 
 }   // videocards
