@@ -9,10 +9,16 @@
       <Filter>VideoCardsUtils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestCardStart.cpp" />
+    <ClCompile Include="..\..\..\Source\Initialization\TestVideoCardFactory.cpp">
+      <Filter>Initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="VideoCardsUtils">
       <UniqueIdentifier>{02382fa5-7dd1-4967-a451-e6f524868c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Initialization">
+      <UniqueIdentifier>{e111e550-6840-4b03-8071-c8f35e427536}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

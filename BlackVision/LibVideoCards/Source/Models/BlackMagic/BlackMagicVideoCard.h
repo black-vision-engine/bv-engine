@@ -5,7 +5,7 @@
 #include "BlackMagicVideoCardDesc.h"
 #include "BlackMagicUtils.h"
 #include "Memory/AVFrame.h"
-#include "BlackMagic/DeckLinkAPI_h.h"
+#include "DeckLinkAPI_h.h"
 #include "BlackMagicVCThread.h"
 #include "AudioVideoOutputDelegate.h"
 
