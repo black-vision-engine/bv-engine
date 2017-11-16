@@ -15,6 +15,7 @@ namespace bv {
 XMLDeserializer::XMLDeserializer()
     : m_rootDoc( new rapidxml::xml_document<> )
     , m_context( nullptr )
+    , m_buf( nullptr )
 {
 }
 
@@ -23,6 +24,7 @@ XMLDeserializer::XMLDeserializer()
 XMLDeserializer::XMLDeserializer        ( const std::string & fileName, DeserializeContext * context )
     : m_rootDoc( new rapidxml::xml_document<> )
     , m_context( std::unique_ptr< DeserializeContext >( context ) ) 
+    , m_buf( nullptr )
 { 
     LoadFile( fileName );
 }
@@ -32,6 +34,7 @@ XMLDeserializer::XMLDeserializer        ( const std::string & fileName, Deserial
 XMLDeserializer::XMLDeserializer        ( std::istream & in, SizeType numBytes, DeserializeContext * context )
     : m_rootDoc( new rapidxml::xml_document<> )
     , m_context( std::unique_ptr< DeserializeContext >( context ) ) 
+    , m_buf( nullptr )
 {
     m_buf = new char[ numBytes + 1 ];
 

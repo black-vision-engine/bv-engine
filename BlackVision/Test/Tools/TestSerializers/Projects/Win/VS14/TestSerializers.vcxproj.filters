@@ -19,5 +19,8 @@
     <ClCompile Include="..\..\..\Source\TestQueringLineNumber.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestSerializerCreation.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
