@@ -1,6 +1,12 @@
-#include "TestVideoCardsMainThread.h"
+#include "gtest/gtest.h"
 
-namespace bv { namespace videocards {
+#include "VideoCardsUtils/TestVideoCardsMainThread.h"
+
+
+namespace bv {
+namespace videocards
+{
+
 
 static std::shared_ptr< TestVideoCardsMainThread > mt = nullptr;
 
@@ -17,16 +23,17 @@ TestVideoCardsMainThread *  RunTest ()
 } // videocards
 } // bv
 
+
+
+
 // ****************************
 //
-int main()
+TEST( Tools_VideoCards, InitAndRun )
 {
     auto th = bv::videocards::RunTest ();
     th->Join();
 
     bv::videocards::mt = nullptr;
-
-    return 0;
 }
 
 

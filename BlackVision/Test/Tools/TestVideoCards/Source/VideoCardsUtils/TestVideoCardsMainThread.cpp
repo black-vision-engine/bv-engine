@@ -11,10 +11,15 @@
 #include "UseLoggerTestVideoCardsModule.h"
 
 
-namespace bv { namespace videocards {
+namespace bv {
+namespace videocards
+{
 
-const std::string   CONFIG_PATH = "config.xml";
+const std::string   CONFIG_PATH = "TestConfigs/DefaultConfig.xml";
 const SizeType      BUFFER_SIZE = 10;
+
+
+
 // ****************************
 //
 TestVideoCardsMainThread::TestVideoCardsMainThread() 
