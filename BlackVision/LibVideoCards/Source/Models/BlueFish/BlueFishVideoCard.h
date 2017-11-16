@@ -5,29 +5,25 @@
 #include "Memory/AVFrame.h"
 #include "Channel.h"
 
+#include "BlueFishVideoCardDesc.h"
 
-namespace bv { namespace videocards { namespace bluefish {
+
+
+namespace bv {
+namespace videocards {
+namespace bluefish
+{
 
 DEFINE_PTR_TYPE( CBlueVelvet4 )
 
-// ***************************** DESCRIPTOR **********************************
-//
-class VideoCardDesc : public IVideoCardDesc
-{
-private:
 
-    std::string     m_uid;
 
-public:
+/**@defgroup BlueFishVideoCard BlueFish Video Card
+@ingroup VideoCards*/
 
-                                            VideoCardDesc           ();
 
-    virtual IVideoCardPtr                   CreateVideoCard         ( const IDeserializer & deser ) const override;
-
-    virtual const std::string &             GetVideoCardUID         () const override;
-
-};
-
+// ***********************
+/// @ingroup BlueFishVideoCard
 class VideoCard : public IVideoCard
 {
 private:

@@ -132,9 +132,12 @@ void BVAppLogic::Initialize         ()
         //FIXME: maybe config should be read by bvconfig
         //FIXME: move this initialization to some other place
         m_videoCardManager = new videocards::VideoCardManager();
+        auto & videCardsFactory = m_videoCardManager->GetFactory();
 
-        m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-        m_videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
+        videCardsFactory.RegisterDefaultCreators();
+        auto descriptors = videCardsFactory.ReadDescriptorsFromConfig( DefaultConfig.GetNode( "config" ) );
+
+        m_videoCardManager->CreateVideoCards( descriptors );
         m_videoCardManager->Start();
 
         BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );

@@ -28,14 +28,13 @@ TestVideoCardsMainThread::TestVideoCardsMainThread()
     }
 
     m_vcm = new VideoCardManager();
-
-    m_vcm->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
+    m_vcm->GetFactory().RegisterDefaultCreators();
 
     m_deserializer.LoadFile( CONFIG_PATH );
     m_deserializer.Reset();
     m_deserializer.EnterChild( "config" );
     
-    m_vcm->ReadConfig( m_deserializer );
+    m_vcm->CreateVideoCards( m_vcm->GetFactory().ReadDescriptorsFromConfig( m_deserializer ) );
 
     m_vcm->Start();
 }

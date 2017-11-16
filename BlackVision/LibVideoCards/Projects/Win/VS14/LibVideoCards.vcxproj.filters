@@ -73,6 +73,13 @@
     <ClInclude Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCardDesc.h">
+      <Filter>Models\BlueFish</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoCardDescFactory.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCardDesc.h">
+      <Filter>Models\BlackMagic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp">
@@ -119,6 +126,13 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp">
       <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCardDesc.cpp">
+      <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoCardDescFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCardDesc.cpp">
+      <Filter>Models\BlackMagic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

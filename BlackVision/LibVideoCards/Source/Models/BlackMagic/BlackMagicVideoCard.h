@@ -2,6 +2,7 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
+#include "BlackMagicVideoCardDesc.h"
 #include "BlackMagicUtils.h"
 #include "Memory/AVFrame.h"
 #include "BlackMagic/DeckLinkAPI_h.h"
@@ -14,28 +15,19 @@
 
 #include <ctime>
 
-namespace bv { namespace videocards { namespace blackmagic {
-
-// ***************************** DESCRIPTOR **********************************
-//
-class VideoCardDesc : public IVideoCardDesc
+namespace bv {
+namespace videocards {
+namespace blackmagic
 {
-private:
 
-    std::string             m_uid;
 
-public:
+/**@defgroup BlackMagicVideoCard BlackMagic Video Card
+@ingroup VideoCards*/
 
-                                            VideoCardDesc       ();
 
-    virtual IVideoCardPtr                   CreateVideoCard     ( const IDeserializer & deser ) const override;
-
-    virtual const std::string &             GetVideoCardUID     () const override;
-
-};
 
 // ***************************************************************
-//
+/// @ingroup BlackMagicVideoCard
 class VideoCard : public IVideoCard
 {
 private:
