@@ -10,6 +10,9 @@
 namespace bv
 {
 
+class RenderContext;
+
+
 // ***********************
 //
 class InputLogic
@@ -24,16 +27,16 @@ public:
     explicit            InputLogic      ();
     virtual             ~InputLogic     ();
 
-    void                ProcessInputs   ();
+    void                ProcessInputs   ( RenderContext * ctx );
 
 
 public:
 
-    void                AddInputHandler ( IInputHandlerPtr newHandler );
+    void                AppendInputHandler  ( RenderContext * ctx, IInputHandlerPtr newHandler );
 
 public:
 
-    InputSlotsPtr       GetInputSlots   () const { return m_inputSlots; }
+    InputSlotsPtr       GetInputSlots       () const { return m_inputSlots; }
 };
 
 

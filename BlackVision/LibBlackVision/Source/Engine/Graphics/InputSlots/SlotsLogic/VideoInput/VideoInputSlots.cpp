@@ -2,6 +2,8 @@
 #include "VideoInputSlots.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
+#include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
+
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -41,6 +43,38 @@ bool            VideoInputSlots::RegisterVideoInputChannel      ( const videocar
     }
 
     // Fail message was already logged by InputSlots class.
+    return false;
+}
+
+// ***********************
+//
+bool                        VideoInputSlots::UnregisterVideoInputChannel    ( RenderContext * ctx, videocards::VideoInputID id )
+{
+    auto entryIdx = FindEntry( id );
+    if( entryIdx.IsValid() )
+    {
+        auto slotIdx = GetSlotIndex( id );
+        auto slot = m_avInputSlots.GetInputSlots()->AccessSource( slotIdx );
+
+        if( slot.IsValid() )
+        {
+            // Free texture and audio entity after removing slot.
+            auto texture = slot.GetVal().Texture;
+            auto audio = slot.GetVal().Audio;
+
+            if( m_avInputSlots.GetInputSlots()->UnregisterSource( slotIdx ) )
+            {
+                FreeTexture( ctx, texture );
+                FreeAudio( ctx, audio );
+
+                m_entries.erase( m_entries.begin() + entryIdx.GetVal() );
+                return true;
+            }
+
+            LOG_MESSAGE( SeverityLevel::error ) << "Input Slot disapeared. This looks like race conditions!";
+        }
+    }
+
     return false;
 }
 
@@ -95,6 +129,25 @@ audio::AudioEntity *        VideoInputSlots::CreateAudio    ( const videocards::
 {
     vidInputDesc;
     return nullptr;
+}
+
+// ***********************
+//
+void                        VideoInputSlots::FreeTexture    ( RenderContext * ctx, Texture2DPtr texture )
+{
+    if( texture )
+        ctx->GetRenderer()->DeletePDR( texture.get() );
+}
+
+// ***********************
+//
+void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioEntity * audio )
+{
+    if( audio )
+    {
+        ctx->GetAudio()->DeletePDR( audio );
+        delete audio;
+    }
 }
 
 // ***********************

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/InputSlots/Logic/IInputHandler.h"
+#include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 #include "VideoCardManager.h"
 
@@ -15,15 +16,18 @@ class VideoInputHandler : public IInputHandler
 private:
 
     videocards::VideoCardManager *      m_videoCardManager;
+    
+    Renderer *              m_renderer;
+    audio::AudioRenderer *  m_audioRenderer;
 
 public:
 
     explicit                VideoInputHandler       ( videocards::VideoCardManager * videoCardMan );
 
     virtual void            UnregisterInputs        () override;
-    virtual void            ProcessInputs           () override;
+    virtual void            ProcessInputs           ( RenderContext * ctx ) override;
 
-    virtual void            RegisterInputs          ( InputSlotsPtr inputSlots );
+    virtual void            RegisterInputs          ( RenderContext * ctx, InputSlotsPtr inputSlots ) override;
 
 };
 

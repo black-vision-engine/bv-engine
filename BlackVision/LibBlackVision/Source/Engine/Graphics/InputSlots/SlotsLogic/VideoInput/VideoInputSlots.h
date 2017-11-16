@@ -10,6 +10,8 @@
 namespace bv
 {
 
+class RenderContext;
+
 
 /**@brief Wrapper for inputs slots from video cards.
 
@@ -34,6 +36,7 @@ public:
 
 
     bool            RegisterVideoInputChannel       ( const videocards::VideoInputChannelDesc & vidInputDesc );    
+    bool            UnregisterVideoInputChannel     ( RenderContext * ctx, videocards::VideoInputID id );
     void            UpdateVideoInput                ( videocards::VideoInputID id, AVFramePtr frame );
 
 
@@ -53,6 +56,9 @@ private:
 
     Texture2DPtr                CreateTexture   ( const videocards::VideoInputChannelDesc & vidInputDesc );
     audio::AudioEntity *        CreateAudio     ( const videocards::VideoInputChannelDesc & vidInputDesc );
+
+    void                        FreeTexture     ( RenderContext * ctx, Texture2DPtr texture );
+    void                        FreeAudio       ( RenderContext * ctx, audio::AudioEntity * audio );
 
     std::string                 GenerateName    ( const videocards::VideoInputChannelDesc & vidInputDesc );
 };

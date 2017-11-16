@@ -28,21 +28,21 @@ InputLogic::~InputLogic()
 
 // ***********************
 //
-void            InputLogic::ProcessInputs       ()
+void            InputLogic::ProcessInputs       ( RenderContext * ctx )
 {
     for( auto inputHandler : m_inputsHandlers )
     {
-        inputHandler->ProcessInputs();
+        inputHandler->ProcessInputs( ctx );
     }
 }
 
 // ***********************
 //
-void            InputLogic::AddInputHandler     ( IInputHandlerPtr newHandler )
+void            InputLogic::AppendInputHandler  ( RenderContext * ctx, IInputHandlerPtr newHandler )
 {
     if( std::find( m_inputsHandlers.begin(), m_inputsHandlers.end(), newHandler ) != m_inputsHandlers.end() )
     {
-        newHandler->RegisterInputs( m_inputSlots );
+        newHandler->RegisterInputs( ctx, m_inputSlots );
         m_inputsHandlers.push_back( newHandler );
     }
     else

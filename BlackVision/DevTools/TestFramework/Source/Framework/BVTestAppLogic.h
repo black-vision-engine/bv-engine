@@ -35,6 +35,16 @@ public:
 private:
 
     void            EndExecution        ();
+
+public:
+
+    ///@name Test Accessors
+    /// Use these functions in your tests to access BVAppLogic members.
+    ///{@
+
+    audio::AudioRenderer *      GetAudioRenderer        () { return m_audioRenderer; }
+
+    ///@}
 };
 
 } //bv

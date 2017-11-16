@@ -1,7 +1,11 @@
 #include "gtest/gtest.h"
+#include "Framework/FrameworkTest.h"
+#include "Framework/BVTestAppLogic.h"
 
 #include "Engine/Graphics/InputSlots/SlotsLogic/VideoInput/VideoInputSlots.h"
 #include "VideoInput/VideoInputChannelDesc.h"
+
+#include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
 
 using namespace bv;
@@ -85,3 +89,25 @@ TEST( Engine_InputSlots, VideoInput_Register2DifferentChannels )
     EXPECT_TRUE( slots.Exists( 0 ) );
     EXPECT_TRUE( slots.Exists( 1 ) );
 }
+
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterSource )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+    ASSERT_TRUE( slots.UnregisterVideoInputChannel( &renderCtx, 0 ) );
+
+    EXPECT_FALSE( slots.Exists( 0 ) );
+    EXPECT_FALSE( slots.Exists( channel1 ) );
+}
+

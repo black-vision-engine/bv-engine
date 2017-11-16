@@ -17,10 +17,10 @@ public:
 
     virtual     ~IInputHandler  () = 0 {}
 
-    virtual void        RegisterInputs      ( InputSlotsPtr inputSlots )    = 0;
-    virtual void        UnregisterInputs    ()                              = 0;
+    virtual void        RegisterInputs      ( RenderContext * ctx, InputSlotsPtr inputSlots )    = 0;
+    virtual void        UnregisterInputs    ()                                                   = 0;
 
-    virtual void        ProcessInputs       ()                              = 0;
+    virtual void        ProcessInputs       ( RenderContext * ctx )         = 0;
 };
 
 DEFINE_PTR_TYPE( IInputHandler )
