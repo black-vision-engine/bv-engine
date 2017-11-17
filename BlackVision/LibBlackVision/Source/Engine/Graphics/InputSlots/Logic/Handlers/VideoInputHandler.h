@@ -3,6 +3,8 @@
 #include "Engine/Graphics/InputSlots/Logic/IInputHandler.h"
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
+#include "Engine/Graphics/InputSlots/SlotsLogic/VideoInput/VideoInputSlots.h"
+
 #include "VideoCardManager.h"
 
 
@@ -17,6 +19,7 @@ private:
 
     videocards::VideoCardManager *      m_videoCardManager;
     
+    // We need this to release resources.
     Renderer *              m_renderer;
     audio::AudioRenderer *  m_audioRenderer;
 

@@ -37,6 +37,7 @@ public:
 
     bool            RegisterVideoInputChannel       ( const videocards::VideoInputChannelDesc & vidInputDesc );    
     bool            UnregisterVideoInputChannel     ( RenderContext * ctx, videocards::VideoInputID id );
+    bool            UnregisterAllChannels           ( RenderContext * ctx );
     void            UpdateVideoInput                ( videocards::VideoInputID id, AVFramePtr frame );
 
 

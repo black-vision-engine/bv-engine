@@ -19,7 +19,8 @@ VideoInputSlots::VideoInputSlots    ( InputSlotsPtr slots )
 {}
 
 // ***********************
-//
+/// @todo Destructor of VideoInputSlots should release all textures and eudio entities.
+/// We can't do this without RenderContext so resposibility goes to outside class to call Unregister all.
 VideoInputSlots::~VideoInputSlots()
 {}
 
@@ -76,6 +77,22 @@ bool                        VideoInputSlots::UnregisterVideoInputChannel    ( Re
     }
 
     return false;
+}
+
+// ***********************
+//
+bool                        VideoInputSlots::UnregisterAllChannels          ( RenderContext * ctx )
+{
+    bool result = true;
+    auto entriesCopy = m_entries;   // Can't iterate over vector and remove elements in the same time.
+
+    for( auto & entry : entriesCopy )
+    {
+        bool entryRemoveresult = UnregisterVideoInputChannel( ctx, entry.GetVideoInputID() );
+        result = result && entryRemoveresult;
+    }
+
+    return result;
 }
 
 // ***********************

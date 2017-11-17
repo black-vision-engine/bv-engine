@@ -111,3 +111,28 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterSource )
     EXPECT_FALSE( slots.Exists( channel1 ) );
 }
 
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterAllSources )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel2( 1, "BlueFish", "C", CreateDefaultAVFrame() );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel2 ) );
+
+    ASSERT_TRUE( slots.UnregisterAllChannels( &renderCtx ) );
+
+    EXPECT_FALSE( slots.Exists( 0 ) );
+    EXPECT_FALSE( slots.Exists( channel1 ) );
+
+    EXPECT_FALSE( slots.Exists( 1 ) );
+    EXPECT_FALSE( slots.Exists( channel2 ) );
+}
