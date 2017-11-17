@@ -28,13 +28,13 @@ TestVideoCardsMainThread *  RunTest ()
 
 // ****************************
 //
-TEST( Tools_VideoCards, InitAndRun )
-{
-    auto th = bv::videocards::RunTest ();
-    th->Join();
-
-    bv::videocards::mt = nullptr;
-}
+//TEST( Tools_VideoCards, InitAndRun )
+//{
+//    auto th = bv::videocards::RunTest ();
+//    th->Join();
+//
+//    bv::videocards::mt = nullptr;
+//}
 
 
 

@@ -18,14 +18,16 @@ class VideoInputHandler : public IInputHandler
 private:
 
     videocards::VideoCardManager *      m_videoCardManager;
+    VideoInputSlots                     m_inputSlots;
     
-    // We need this to release resources.
+    // We need this to release resources. Resources need better handling :(
     Renderer *              m_renderer;
     audio::AudioRenderer *  m_audioRenderer;
 
 public:
 
-    explicit                VideoInputHandler       ( videocards::VideoCardManager * videoCardMan );
+    explicit                VideoInputHandler       ( videocards::VideoCardManager * videoCardMan, InputSlotsPtr slots );
+    virtual                 ~VideoInputHandler      ();
 
     virtual void            UnregisterInputs        () override;
     virtual void            ProcessInputs           ( RenderContext * ctx ) override;

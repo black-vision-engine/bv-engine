@@ -12,6 +12,7 @@ namespace bv
 // ***********************
 //
 InputLogic::InputLogic()
+    : m_inputSlots( std::make_shared< InputSlots >() )
 {}
 
 // ***********************

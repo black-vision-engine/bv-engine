@@ -9,17 +9,33 @@ namespace bv
 
 // ***********************
 //
-VideoInputHandler::VideoInputHandler( videocards::VideoCardManager * videoCardMan )
+VideoInputHandler::VideoInputHandler( videocards::VideoCardManager * videoCardMan, InputSlotsPtr slots )
     :   m_videoCardManager( videoCardMan )
+    ,   m_inputSlots( slots )
     ,   m_audioRenderer( nullptr )
     ,   m_renderer( nullptr )
 {}
 
 // ***********************
 //
+VideoInputHandler::~VideoInputHandler()
+{
+    // Call as not virtual function. Virtuals in destructor not allowed.
+    VideoInputHandler::UnregisterInputs();
+}
+
+// ***********************
+//
 void            VideoInputHandler::UnregisterInputs ()
 {
-    assert( false );
+    if( m_renderer && m_audioRenderer )
+    {
+        RenderContext ctx;
+        ctx.SetRenderer( m_renderer );
+        ctx.SetAudio( m_audioRenderer );
+
+        m_inputSlots.UnregisterAllChannels( &ctx );
+    }
 }
 
 // ***********************
