@@ -19,7 +19,9 @@
 
 
 
-namespace bv { namespace videocards {
+namespace bv {
+namespace videocards
+{
 
 
 enum class DisplayMode : int
@@ -31,7 +33,6 @@ enum class DisplayMode : int
 };
 
 
-std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ();
 
 
 struct InputConfig
@@ -99,6 +100,7 @@ DEFINE_UPTR_TYPE( VideoCardProcessingThread )
 
 
 // ******************************
+/// @ingroup VideoCards
 class VideoCardManager
 {
 private:
@@ -111,6 +113,7 @@ private:
     std::vector< IVideoCardPtr >                                        m_videoCards;
 
 	std::multimap< UInt64, IVideoCardPtr >								m_outputsToCardsMapping;
+    std::map< VideoInputID, IVideoCardPtr >                             m_inputsToCardMapping;
 
     /**@brief Circular blocking frames queue */
 	CircularBufferConcurrent< VCMInputDataConstPtr, FRAME_BUFFER_SIZE >	m_inputDataBuffer;
@@ -151,12 +154,14 @@ public:
     void                                Stop                    ();
 
 	void								Display     			( const VCMInputDataConstPtr & outputs );
-    
+    AVFramePtr                          QueryInputFrame         ( VideoInputID inputID );
+
+
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */
     bool                                ProcessOutputsData      ();
    
-
+    InputChannelsDescsVec               GetInputChannelsDescs   () const;
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
     UInt32                              GetRequiredFPS          () const;

@@ -21,7 +21,7 @@ namespace blackmagic
 {
 
 
-/**@defgroup BlackMagicVideoCard BlackMagic Video Card
+/**@defgroup BlackMagicVideoCard BlackMagic
 @ingroup VideoCards*/
 
 
@@ -94,9 +94,12 @@ public:
     virtual void            EnableAudioChannel  ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) override;
 
 	virtual void            ProcessFrame        ( const AVFrameConstPtr & data, UInt64 avOutputID ) override;
+    virtual AVFramePtr      QueryInputFrame     ( VideoInputID inputID ) override;
+
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
 
-	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const override;
+	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs () const override;
+    InputChannelsDescsVec       GetInputChannelsDescs       () const override;
 	
     virtual UInt32              GetRequiredFPS  () const override;
 

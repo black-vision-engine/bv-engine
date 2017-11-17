@@ -80,6 +80,9 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCardDesc.h">
       <Filter>Models\BlackMagic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\VideoInputFrameData.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp">

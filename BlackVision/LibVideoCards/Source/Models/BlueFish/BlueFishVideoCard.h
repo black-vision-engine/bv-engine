@@ -18,7 +18,7 @@ DEFINE_PTR_TYPE( CBlueVelvet4 )
 
 
 
-/**@defgroup BlueFishVideoCard BlueFish Video Card
+/**@defgroup BlueFishVideoCard BlueFish
 @ingroup VideoCards*/
 
 
@@ -69,8 +69,10 @@ public:
     void                    Stop                        () override;
 
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
+    virtual AVFramePtr      QueryInputFrame             ( VideoInputID inputID ) override;
 
     std::set< UInt64 >	    GetDisplayedVideoOutputsIDs () const override;
+    InputChannelsDescsVec   GetInputChannelsDescs       () const override;
 
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 

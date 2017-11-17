@@ -333,6 +333,14 @@ void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr 
 	}
 }
 
+// ***********************
+//
+AVFramePtr              VideoCard::QueryInputFrame      ( VideoInputID inputID )
+{
+    inputID;
+    return AVFramePtr();
+}
+
 //**************************************
 //
 UInt32                  VideoCard::AvailableVideoCards = EnumerateDevices();
@@ -396,11 +404,18 @@ UInt64                          VideoCard::GetFrameTime         () const
 
 //**************************************
 //
-std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs() const
+std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs  () const
 {
 	std::set< UInt64 > ret;
 	ret.insert( m_linkedVideoOutputID );
 	return ret;
+}
+
+// ***********************
+//
+InputChannelsDescsVec           VideoCard::GetInputChannelsDescs        () const
+{
+    return InputChannelsDescsVec();
 }
 
 //**************************************

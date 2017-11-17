@@ -9,6 +9,29 @@
 
 namespace bv { namespace videocards { namespace bluefish {
 
+
+
+
+// ***********************
+/// @todo Add SD resolution.
+UInt32          Resolution2Width    ( UInt32 resolutionWidth )
+{
+    switch( resolutionWidth )
+    {
+    case 1080:
+        return 1920;
+    case 720:
+        return 1280;
+    }
+
+    return 1920;
+}
+
+
+
+
+
+
 //**************************************
 //
 Channel::ChannelOptionMap     Channel::ChannelOptions = CreateChannelOptionMap();
@@ -138,6 +161,19 @@ UInt64      Channel::GetOutputId                 () const
     return MAXDWORD64;
 }
 
+// ***********************
+//
+
+VideoInputID Channel::GetInputId() const
+{
+    if( m_captureData )
+    {
+        return m_captureData->linkedVideoInput;
+    }
+
+    return MAXDWORD32;
+}
+
 //**************************************
 //
 UInt32      Channel::GetEpochSDIOutput          () const
@@ -206,6 +242,22 @@ UInt32      Channel::GetEpochInputMemInterface  () const
     if( m_captureData )
     {
         return ChannelOptions.at( m_channelName ).EpochInputMemInterface;
+    }
+
+    return 0;
+}
+
+// ***********************
+//
+UInt32          Channel::GetResolution          () const
+{
+    if( m_captureData )
+    {
+        return m_captureData->resolution;
+    }
+    else if( m_playbackData )
+    {
+        return m_playbackData->resolution;
     }
 
     return 0;
@@ -319,6 +371,10 @@ UInt32          Channel::GetUpdateFormat        () const
     {
         return m_playbackData->updateFormat;
     }
+    else if( m_captureData )
+    {
+        return m_captureData->updateFormat;
+    }
 
     return 0;
 }
@@ -330,6 +386,10 @@ UInt32          Channel::GetMemoryFormat        () const
     if( m_playbackData )
     {
         return m_playbackData->memoryFormat;
+    }
+    else if( m_captureData )
+    {
+        return m_captureData->updateFormat;
     }
 
     return false;
@@ -468,9 +528,36 @@ void Channel::SetVideoOutput        ( bool enable )
     }
 }
 
+// ***********************
+//
+bool        Channel::IsInputChannel     () const
+{
+    return m_captureChannel != nullptr;
+}
+
+// ***********************
+//
+bool        Channel::IsOutputChannel    () const
+{
+    return m_playbackChannel != nullptr;
+}
+
+// ***********************
+//
+AVFrameDescriptor       Channel::CreateFrameDesc        () const
+{
+    AVFrameDescriptor frameDesc;
+
+    frameDesc.height = GetResolution();
+    frameDesc.width = Resolution2Width( frameDesc.height );
+    frameDesc.depth = 4;
+
+    return frameDesc;
+}
+
 //**************************************
 //
-void Channel::UpdateFrameTime      ( UInt64 t )
+void        Channel::UpdateFrameTime      ( UInt64 t )
 {
     std::unique_lock< std::mutex > lock( m_mutex );
     m_lastFrameTime = t;
@@ -478,7 +565,7 @@ void Channel::UpdateFrameTime      ( UInt64 t )
 
 //**************************************
 //
-UInt64 Channel::GetFrameTime         () const
+UInt64      Channel::GetFrameTime         () const
 {
     std::unique_lock< std::mutex > lock( m_mutex );
     return m_lastFrameTime;

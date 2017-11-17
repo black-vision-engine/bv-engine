@@ -4,6 +4,8 @@
 #include "CoreDEF.h"
 #include "Memory/AVFrame.h"
 
+#include "VideoInput/VideoInputChannelDesc.h"
+
 #include <functional>
 #include <set>
 
@@ -13,6 +15,7 @@ namespace bv {
 namespace videocards
 {
 
+typedef std::vector< VideoInputChannelDesc > InputChannelsDescsVec;
 
 
 /**@defgroup VideoCards Video Cards*/
@@ -25,6 +28,7 @@ class IVideoCard
 public:
     typedef std::function< void ( UInt64, bool ) > FrameProcessingCompletedCallbackType;
 
+public:
 
     virtual                     ~IVideoCard             () {}
 
@@ -35,15 +39,17 @@ public:
 	virtual void                SetVideoOutput          ( bool enable ) = 0;
 
     //TODO: handle frames from GPU
-    virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID ) = 0;
+    virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID )     = 0;
+    virtual AVFramePtr          QueryInputFrame         ( VideoInputID inputID )                                = 0;
 
     virtual void                EnableAudioChannel      ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) = 0;
 
     virtual void                SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback  ) = 0;
 
-	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const = 0;
+    virtual UInt32                      GetRequiredFPS                  () const = 0;
 
-    virtual UInt32              GetRequiredFPS          () const = 0;
+    virtual std::set< UInt64 >	        GetDisplayedVideoOutputsIDs     () const = 0;
+    virtual InputChannelsDescsVec       GetInputChannelsDescs           () const = 0;
 
 	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;
 	//virtual void                EnableVideoOutput       () = 0;

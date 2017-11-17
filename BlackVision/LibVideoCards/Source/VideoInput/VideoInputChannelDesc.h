@@ -14,7 +14,7 @@ namespace videocards
 {
 
 typedef UInt32 VideoInputID;
-
+typedef UInt32 VideoCardID;
 
 
 /**@brief Descriptor of video input channel on video card.
@@ -26,13 +26,15 @@ private:
     std::string         m_cardName;
     std::string         m_channelName;
 
+    VideoCardID         m_videoCardID;
     VideoInputID        m_videoInputID;
     AVFrameDescriptor   m_dataDesc;
 
 public:
 
-    explicit    VideoInputChannelDesc       ( VideoInputID id, const std::string & cardName, const std::string & channelName, const AVFrameDescriptor & dataDesc );
+    explicit    VideoInputChannelDesc       ( VideoCardID cardId, VideoInputID inputID, const std::string & cardName, const std::string & channelName, const AVFrameDescriptor & dataDesc );
 
+    VideoCardID             GetCardID       () const { return m_videoCardID; }
     VideoInputID            GetInputID      () const { return m_videoInputID; }
 
     const std::string &     GetCardName     () const { return m_cardName; }
@@ -55,10 +57,11 @@ public:
 
 // ***********************
 //
-inline VideoInputChannelDesc::VideoInputChannelDesc    ( VideoInputID id, const std::string & cardName, const std::string & channelName, const AVFrameDescriptor & dataDesc )
+inline VideoInputChannelDesc::VideoInputChannelDesc    ( VideoCardID cardId, VideoInputID id, const std::string & cardName, const std::string & channelName, const AVFrameDescriptor & dataDesc )
     : m_cardName( cardName )
     , m_channelName( channelName )
     , m_videoInputID( id )
+    , m_videoCardID( cardId )
     , m_dataDesc( dataDesc )
 {}
 

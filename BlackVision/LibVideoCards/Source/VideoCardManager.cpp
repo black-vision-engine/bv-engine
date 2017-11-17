@@ -98,6 +98,12 @@ void                        VideoCardManager::CreateVideoCards      ( const std:
             {
                 m_outputsToCardsMapping.insert( std::make_pair( id, videocard ) );
             }
+
+            for( auto inputDesc : videocard->GetInputChannelsDescs() )
+            {
+                m_inputsToCardMapping.insert( std::make_pair( inputDesc.GetInputID(), videocard ) );
+            }
+
             //videocard->SetFrameProcessingCompletedCallback( FrameProcessingCompleted );
         }
     }
@@ -188,6 +194,19 @@ AVFrameConstPtr	VCMInputData::GetAVFrame( UInt64 avOutputID ) const
 void						 VideoCardManager::Display		        ( const VCMInputDataConstPtr & outputs )
 {
 	m_inputDataBuffer.Push( outputs );
+}
+
+// ***********************
+//
+AVFramePtr                  VideoCardManager::QueryInputFrame       ( VideoInputID inputID )
+{
+    auto iter = m_inputsToCardMapping.find( inputID );
+    if( iter != m_inputsToCardMapping.end() )
+    {
+        return iter->second->QueryInputFrame( inputID );
+    }
+
+    return AVFramePtr();
 }
 
 // *********************************

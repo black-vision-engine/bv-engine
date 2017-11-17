@@ -23,6 +23,7 @@ public:
 
     void                        PushFrame       ( std::shared_ptr< CFrame > frame );
     std::shared_ptr< CFrame >   PopFrame        ();
+    bool                        TryPopFrame     ( std::shared_ptr< CFrame > & frame );
 
     void                        PushEmptyFrame  ();
 

@@ -13,6 +13,7 @@ namespace bluefish
 
 
 
+
 //**************************************
 //
 VideoCard::VideoCard                ( UInt32 deviceID )
@@ -38,7 +39,7 @@ VideoCard::~VideoCard               ()
 
 //**************************************
 //
-std::set< UInt64 >	VideoCard::GetDisplayedVideoOutputsIDs() const
+std::set< UInt64 >	    VideoCard::GetDisplayedVideoOutputsIDs  () const
 {
     std::set< UInt64 > ret;
 
@@ -46,6 +47,29 @@ std::set< UInt64 >	VideoCard::GetDisplayedVideoOutputsIDs() const
         ret.insert( ch->GetOutputId() );
 
     return ret;
+}
+
+// ***********************
+//
+InputChannelsDescsVec   VideoCard::GetInputChannelsDescs        () const
+{
+    InputChannelsDescsVec descs;
+
+    for( auto channel : m_channels )
+    {
+        if( channel->IsInputChannel() )
+        {
+            VideoInputID inputID = channel->GetInputId();
+            const std::string channelName = Convert::T2String( channel->GetName() );
+            
+            AVFrameDescriptor frameDesc = channel->CreateFrameDesc();
+
+            VideoInputChannelDesc newDesc( m_deviceID, inputID, VideoCardDesc::UID(), channelName, frameDesc );
+            descs.push_back( newDesc );
+        }
+    }
+
+    return descs;
 }
 
 //**************************************
@@ -73,9 +97,10 @@ void            VideoCard::InitVideoCard            ()
 
 	for( auto & channel : m_channels )
 	{
-        auto captureChannel = channel->GetCaptureChannel();
-        if( captureChannel )
+        if( channel->IsInputChannel() )
 		{
+            auto captureChannel = channel->GetCaptureChannel();
+
             if( channel->GetInputType() != IOType::FILL_KEY )
             {
                 captureChannel->Init( m_deviceID, channel->GetInputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetCaptureBuffer() );
@@ -89,9 +114,11 @@ void            VideoCard::InitVideoCard            ()
 			captureChannel->InitThread();
 		}
 
-        auto playbackChannel = channel->GetPlaybackChannel();
-        if( playbackChannel )
+        
+        if( channel->IsOutputChannel() )
 		{
+            auto playbackChannel = channel->GetPlaybackChannel();
+
             playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(), 
             channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
 
@@ -200,6 +227,31 @@ void                            VideoCard::ProcessFrame             ( const AVFr
             channel->EnqueueFrame( frame );
         }
 	}   
+}
+
+// ***********************
+//
+AVFramePtr                      VideoCard::QueryInputFrame          ( VideoInputID inputID )
+{
+    for( auto channel : m_channels )
+    {
+        if( channel->GetInputId() == inputID )
+        {
+            std::shared_ptr< CFrame > cFrame;
+
+            if( channel->GetCaptureBuffer()->TryPopFrame( cFrame ) )
+            {
+                MemoryChunkPtr videoChunk = MemoryChunk::Create( ( char * )cFrame->m_pBuffer, cFrame->m_nSize );
+                MemoryChunkPtr audioChunk = MemoryChunk::Create( ( char * )cFrame->m_pAudioBuffer, cFrame->m_nAudioSize );
+                
+                return std::make_shared< AVFrame >( videoChunk, audioChunk, channel->CreateFrameDesc() );
+            }
+
+            break;
+        }
+    }
+
+    return AVFramePtr();
 }
 
 //**************************************

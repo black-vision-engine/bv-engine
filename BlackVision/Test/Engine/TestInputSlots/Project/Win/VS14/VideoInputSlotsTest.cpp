@@ -41,7 +41,7 @@ TEST( Engine_InputSlots, VideoInput_RegisterSource )
     auto inputSlots = std::make_shared< InputSlots >();
     VideoInputSlots slots( inputSlots );
 
-    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
 
     ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
     EXPECT_TRUE( slots.Exists( channel1 ) );
@@ -61,8 +61,8 @@ TEST( Engine_InputSlots, VideoInput_RegisterExistingSource )
 {
     VideoInputSlots slots( std::make_shared< InputSlots >() );
 
-    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
-    videocards::VideoInputChannelDesc channel2( 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel2( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
 
     ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
     ASSERT_TRUE( slots.Exists( channel1 ) );
@@ -77,8 +77,8 @@ TEST( Engine_InputSlots, VideoInput_Register2DifferentChannels )
 {
     VideoInputSlots slots( std::make_shared< InputSlots >() );
 
-    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
-    videocards::VideoInputChannelDesc channel2( 1, "BlueFish", "C", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel2( 1, 1, "BlueFish", "C", CreateDefaultAVFrame() );
 
     ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
     ASSERT_TRUE( slots.Exists( channel1 ) );
@@ -98,7 +98,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterSource )
     auto inputSlots = std::make_shared< InputSlots >();
     VideoInputSlots slots( inputSlots );
 
-    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
 
     RenderContext renderCtx;
     renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
@@ -118,8 +118,8 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterAllSourc
     auto inputSlots = std::make_shared< InputSlots >();
     VideoInputSlots slots( inputSlots );
 
-    videocards::VideoInputChannelDesc channel1( 0, "BlueFish", "A", CreateDefaultAVFrame() );
-    videocards::VideoInputChannelDesc channel2( 1, "BlueFish", "C", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel2( 1, 1, "BlueFish", "C", CreateDefaultAVFrame() );
 
     RenderContext renderCtx;
     renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
