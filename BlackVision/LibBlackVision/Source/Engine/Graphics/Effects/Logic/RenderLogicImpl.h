@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Effects/Logic/State/RenderLogicState.h"
 
 #include "Engine/Graphics/Effects/Logic/OutputRendering/OutputLogic.h"
+#include "Engine/Graphics/InputSlots/Logic/InputLogic.h"
 #include "Engine/Graphics/Effects/Logic/Components/RenderedChannelsData.h"
 
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
@@ -20,6 +21,7 @@ private:
 
     RenderedChannelsData *         m_renderedChannelsData;
     OutputLogic *                  m_outputLogic;
+    InputLogic *                   m_inputLogic;
 
     RenderLogicCore                m_renderLogicCore;
 
@@ -35,6 +37,7 @@ public:
     virtual void                    SwitchEditMode          ( bool value ) override;
 
     virtual OutputLogic *           GetOutputLogic          () override;
+    virtual InputLogic *            GetInputLogic           () override;
     virtual RenderedChannelsData *  GetRenderedChannelsData () override;
 
 private:
@@ -49,6 +52,7 @@ private:
 
     void                SetRenderedChannelsData ( RenderedChannelsData * rcd );
     void                SetOutputLogic          ( OutputLogic * outputLogic );
+    void                SetInputLogic           ( InputLogic * inputLogic );
 
     RenderLogicState & AccessState             ();
 

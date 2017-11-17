@@ -17,6 +17,7 @@ class AudioRenderer;
 
 
 class OutputLogic;
+class InputLogic;
 class RenderedChannelsData;
 
 
@@ -41,6 +42,7 @@ public:
 
     // FIXME: this may or may not be necessary as this interface is onlu used to set OutputLogic and RenderChannelsData state - for which there may be another means
     virtual OutputLogic *           GetOutputLogic          () = 0;
+    virtual InputLogic *            GetInputLogic           () = 0;
     virtual RenderedChannelsData *  GetRenderedChannelsData () = 0;
 
 public:

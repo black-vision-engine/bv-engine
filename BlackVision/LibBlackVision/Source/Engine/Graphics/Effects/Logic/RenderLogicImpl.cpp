@@ -13,8 +13,8 @@ RenderLogicImpl::RenderLogicImpl      ( unsigned int width, unsigned int height 
     : m_state( width, height )
     , m_renderedChannelsData( nullptr )
     , m_outputLogic( nullptr )
-{
-}
+    , m_inputLogic( new InputLogic )
+{}
 
 // **************************
 //
@@ -22,6 +22,7 @@ RenderLogicImpl::~RenderLogicImpl     ()
 {
     delete m_renderedChannelsData;
     delete m_outputLogic;
+    delete m_inputLogic;
 }
 
 // **************************
@@ -60,14 +61,21 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
 
 // **************************
 //
-OutputLogic *   RenderLogicImpl::GetOutputLogic    ()
+OutputLogic *           RenderLogicImpl::GetOutputLogic             ()
 {
     return m_outputLogic;
 }
 
+// ***********************
+//
+InputLogic *            RenderLogicImpl::GetInputLogic              ()
+{
+    return m_inputLogic;
+}
+
 // **************************
 //
-RenderedChannelsData *  RenderLogicImpl::GetRenderedChannelsData   ()
+RenderedChannelsData *  RenderLogicImpl::GetRenderedChannelsData    ()
 {
     return m_renderedChannelsData;
 }
