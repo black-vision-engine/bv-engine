@@ -5,6 +5,7 @@
 
 #include "VideoInputSlotEntryDesc.h"
 
+#include <mutex>
 
 
 namespace bv
@@ -28,6 +29,7 @@ private:
     AVFrameInputSlots       m_avInputSlots;
 
     std::vector< VideoInputSlotEntryDesc >      m_entries;
+    mutable std::recursive_mutex                m_lock;
 
 public:
 

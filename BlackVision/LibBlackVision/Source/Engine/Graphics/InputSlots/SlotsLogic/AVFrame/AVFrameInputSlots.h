@@ -28,6 +28,11 @@ public:
 public:
 
     InputSlotsPtr   GetInputSlots       () const { return m_inputSlots; }
+
+private:
+
+    void            UpdateTexture       ( Texture2DPtr texture, AVFramePtr frame );
+    void            UpdateAudio         ( audio::AudioEntity * audio, AVFramePtr frame );
 };
 
 

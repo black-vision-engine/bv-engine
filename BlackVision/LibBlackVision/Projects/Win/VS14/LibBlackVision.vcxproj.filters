@@ -478,6 +478,9 @@
     <Filter Include="Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot">
       <UniqueIdentifier>{8c2ed0e6-2d04-4196-aa53-35da3162f7f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Input">
+      <UniqueIdentifier>{e424bbe8-bd34-4fba-8b04-6f7ec2e3667e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -5449,6 +5452,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsseth.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h">
+      <Filter>Assets\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

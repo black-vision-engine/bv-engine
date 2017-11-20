@@ -28,6 +28,8 @@ VideoInputSlots::~VideoInputSlots()
 //
 bool            VideoInputSlots::RegisterVideoInputChannel      ( const videocards::VideoInputChannelDesc & vidInputDesc )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if( Exists( vidInputDesc ) || Exists( vidInputDesc.GetInputID() ) )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Can't add video input slot [" << vidInputDesc.GetCardName() << "], channel [" << vidInputDesc.GetChannelName() << "], input id [" << Convert::T2String( vidInputDesc.GetInputID() ) << "]. Similar input exists.";
@@ -51,6 +53,8 @@ bool            VideoInputSlots::RegisterVideoInputChannel      ( const videocar
 //
 bool                        VideoInputSlots::UnregisterVideoInputChannel    ( RenderContext * ctx, videocards::VideoInputID id )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     auto entryIdx = FindEntry( id );
     if( entryIdx.IsValid() )
     {
@@ -83,6 +87,8 @@ bool                        VideoInputSlots::UnregisterVideoInputChannel    ( Re
 //
 bool                        VideoInputSlots::UnregisterAllChannels          ( RenderContext * ctx )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     bool result = true;
     auto entriesCopy = m_entries;   // Can't iterate over vector and remove elements in the same time.
 
@@ -99,6 +105,8 @@ bool                        VideoInputSlots::UnregisterAllChannels          ( Re
 //
 void                        VideoInputSlots::UpdateVideoInput   ( videocards::VideoInputID id, AVFramePtr frame )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     auto slotIdx = GetSlotIndex( id );
     m_avInputSlots.UpdateSlot( slotIdx, frame );
 }
@@ -178,6 +186,8 @@ std::string                 VideoInputSlots::GenerateName   ( const videocards::
 //
 Expected< SlotIndex >       VideoInputSlots::GetSlotIndex   ( videocards::VideoInputID id ) const
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     Expected< EntryIdx > entryIdx = FindEntry( id );
     
     if( entryIdx.IsValid() )
@@ -186,8 +196,12 @@ Expected< SlotIndex >       VideoInputSlots::GetSlotIndex   ( videocards::VideoI
     return Expected< EntryIdx >();
 }
 
+// ***********************
+//
 bool            VideoInputSlots::Exists         ( videocards::VideoInputID id ) const
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     return FindEntry( id ).IsValid();
 }
 
@@ -195,6 +209,8 @@ bool            VideoInputSlots::Exists         ( videocards::VideoInputID id ) 
 //
 bool            VideoInputSlots::Exists         ( const videocards::VideoInputChannelDesc & vidInputDesc ) const
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     return FindEntry( vidInputDesc ).IsValid();
 }
 

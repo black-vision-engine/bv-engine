@@ -20,6 +20,8 @@ InputSlots::InputSlots()
 //
 Expected< SlotIndex >       InputSlots::RegisterSource        ( InputSlot inputSlot, const std::string & name )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if( !CanAddSource( inputSlot, name ) )
         return "Can't add source. Name already exists or texture is nullptr";
 
@@ -33,6 +35,8 @@ Expected< SlotIndex >       InputSlots::RegisterSource        ( InputSlot inputS
 //
 bool                        InputSlots::UnregisterSource      ( SlotIndex slotIdx )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if( IsValidIndex( slotIdx ) )
     {
         if( m_slots[ slotIdx ].References > 0 )
@@ -54,6 +58,8 @@ bool                        InputSlots::UnregisterSource      ( SlotIndex slotId
 //
 bool                        InputSlots::UnregisterSource      ( const std::string & name )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     return UnregisterSource( FindSourceByName( name ) );
 }
 
@@ -61,6 +67,8 @@ bool                        InputSlots::UnregisterSource      ( const std::strin
 //
 Expected< InputSlot >       InputSlots::AccessSource          ( const std::string & name )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     return AccessSource( FindSourceByName( name ) );
 }
 
@@ -68,6 +76,8 @@ Expected< InputSlot >       InputSlots::AccessSource          ( const std::strin
 //
 void                        InputSlots::ReleaseSource         ( const std::string & name )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     ReleaseSource( FindSourceByName( name ) );
 }
 
@@ -75,6 +85,8 @@ void                        InputSlots::ReleaseSource         ( const std::strin
 //
 Expected< InputSlot >       InputSlots::AccessSource          ( SlotIndex slotIdx )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if( !IsValidIndex( slotIdx ) )
         return Expected< InputSlot >();
 
@@ -86,6 +98,8 @@ Expected< InputSlot >       InputSlots::AccessSource          ( SlotIndex slotId
 //
 void                        InputSlots::ReleaseSource         ( SlotIndex slotIdx )
 {
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
     if( !IsValidIndex( slotIdx ) )
         return ;
 

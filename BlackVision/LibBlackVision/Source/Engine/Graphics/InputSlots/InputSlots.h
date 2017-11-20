@@ -4,6 +4,7 @@
 #include "InputSlot.h"
 
 #include <vector>
+#include <mutex>
 
 
 namespace bv
@@ -36,6 +37,7 @@ private:
 private:
 
     std::vector< InputEntry >       m_slots;
+    mutable std::recursive_mutex    m_lock;
 
 public:
 
