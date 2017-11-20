@@ -43,10 +43,10 @@ void            VideoInputHandler::UnregisterInputs ()
 
 // ***********************
 //
-void            VideoInputHandler::ProcessInputs    ( RenderContext * ctx )
+void            VideoInputHandler::ProcessInputs    ( RenderContext * )
 {
-    ctx;
-    assert( false );
+    auto inputFrameData = m_videoCardManager->QueryVideoInput();
+    ProcessFrameData( inputFrameData );
 }
 
 // ***********************
@@ -68,6 +68,21 @@ void            VideoInputHandler::RegisterInputs   ( const videocards::InputCha
     {
         // Don't check result. Error message is logged internally.
         m_inputSlots.RegisterVideoInputChannel( desc );
+    }
+}
+
+// ***********************
+//
+void            VideoInputHandler::ProcessFrameData ( videocards::VideoInputFrameData & frameData )
+{
+    for( auto & singleFrame : frameData.Frames )
+    {
+        // Note that it's fully legal to get nullptr here. Video input could not
+        // provide any frame. In this case input slots remains with previous content.
+        if( singleFrame.FrameData )
+        {
+            m_inputSlots.UpdateVideoInput( singleFrame.InputID, singleFrame.FrameData );
+        }
     }
 }
 

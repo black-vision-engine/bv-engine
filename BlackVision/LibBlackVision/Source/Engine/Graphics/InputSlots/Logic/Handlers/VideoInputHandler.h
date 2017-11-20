@@ -38,7 +38,7 @@ public:
 private:
 
     void                    RegisterInputs          ( const videocards::InputChannelsDescsVec & channelsDesc );
-
+    void                    ProcessFrameData        ( videocards::VideoInputFrameData & frameData );
 };
 
 DEFINE_PTR_TYPE( VideoInputHandler )

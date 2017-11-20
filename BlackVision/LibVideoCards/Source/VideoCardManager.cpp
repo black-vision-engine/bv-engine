@@ -227,6 +227,8 @@ VideoInputFrameData         VideoCardManager::QueryVideoInput       ()
         singleFrame.FrameData = frame;
         singleFrame.InputID = id;
         singleFrame.CardID = card->GetVideoCardID();
+
+        frameData.Frames.push_back( singleFrame );
     }
 
     return frameData;
