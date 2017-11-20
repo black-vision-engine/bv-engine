@@ -88,8 +88,8 @@ bool                        VideoInputSlots::UnregisterAllChannels          ( Re
 
     for( auto & entry : entriesCopy )
     {
-        bool entryRemoveresult = UnregisterVideoInputChannel( ctx, entry.GetVideoInputID() );
-        result = result && entryRemoveresult;
+        bool entryRemoveResult = UnregisterVideoInputChannel( ctx, entry.GetVideoInputID() );
+        result = result && entryRemoveResult;
     }
 
     return result;

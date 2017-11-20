@@ -4,6 +4,9 @@
 #include "CoreDEF.h"
 #include "Engine/Graphics/InputSlots/Logic/Handlers/VideoInputHandler.h"
 
+#include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
+
+
 
 
 namespace bv
@@ -17,8 +20,10 @@ class TEST_ACCESSOR( VideoInputHandler )
 private:
 public:
 
-   static  void        RegisterInputs          ( VideoInputHandlerPtr handler, const videocards::InputChannelsDescsVec & channelsDesc );
+    static  void        RegisterInputs          ( VideoInputHandlerPtr handler, const videocards::InputChannelsDescsVec & channelsDesc );
+    static  void        UnregisterInputs        ( VideoInputHandlerPtr handler );
 
+    static void         SetRenderContext        ( VideoInputHandlerPtr handler, Renderer * renderer, audio::AudioRenderer * audio );
 };
 
 
@@ -33,6 +38,20 @@ inline void         TEST_ACCESSOR( VideoInputHandler )::RegisterInputs      ( Vi
     handler->RegisterInputs( channelsDesc );
 }
 
+// ***********************
+//
+inline void         TEST_ACCESSOR( VideoInputHandler )::UnregisterInputs      ( VideoInputHandlerPtr handler )
+{
+    handler->UnregisterInputs();
+}
+
+// ***********************
+//
+inline void         TEST_ACCESSOR( VideoInputHandler )::SetRenderContext       ( VideoInputHandlerPtr handler, Renderer * renderer, audio::AudioRenderer * audio )
+{
+    handler->m_renderer = renderer;
+    handler->m_audioRenderer = audio;
+}
 
 
 }   // bv

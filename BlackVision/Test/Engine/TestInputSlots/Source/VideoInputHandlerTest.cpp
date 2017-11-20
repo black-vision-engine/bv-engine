@@ -42,5 +42,27 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInputHandler_Register )
     EXPECT_TRUE( inputSlots->AccessSource( 1 ).IsValid() );
 }
 
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInputHandler_Unregister )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputHandlerPtr handler = std::make_shared< VideoInputHandler >( GetAppLogic()->GetVideoCardManager(), inputSlots );
+
+    videocards::InputChannelsDescsVec channels;
+
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", CreateDefaultAVFrame() );
+    videocards::VideoInputChannelDesc channel2( 2, 1, "BlueFish", "C", CreateDefaultAVFrame() );
+
+    channels.push_back( channel1 );
+    channels.push_back( channel2 );
+
+    TEST_ACCESSOR( VideoInputHandler )::RegisterInputs( handler, channels );
+    TEST_ACCESSOR( VideoInputHandler )::SetRenderContext( handler, GetAppLogic()->GetRenderer(), GetAppLogic()->GetAudioRenderer() );
+    TEST_ACCESSOR( VideoInputHandler )::UnregisterInputs( handler );
+
+    EXPECT_FALSE( inputSlots->AccessSource( 0 ).IsValid() );
+    EXPECT_FALSE( inputSlots->AccessSource( 1 ).IsValid() );
+}
 
 

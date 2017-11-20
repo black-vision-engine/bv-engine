@@ -163,7 +163,7 @@ bool                InputSlots::IsValidIndex          ( SlotIndex idx ) const
 
 bool                InputSlots::IsEmptySlot           ( SlotIndex idx ) const
 {
-    if( !m_slots[ idx ].Slot.Texture && m_slots[ idx ].Slot.Audio )
+    if( !m_slots[ idx ].Slot.Texture && !m_slots[ idx ].Slot.Audio )
         return true;
     return false;
 }

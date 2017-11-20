@@ -110,12 +110,10 @@ TEST( Engine_InputSlots, UnregisterSourceByIdx )
     ASSERT_EQ( tex2, slots.AccessSource( slot2Idx ).GetVal().Texture );
 
     ASSERT_TRUE( slots.UnregisterSource( slot1Idx ) );
-    ASSERT_TRUE( slots.AccessSource( slot1Idx ).IsValid() );
-    ASSERT_EQ( slots.AccessSource( slot1Idx ).GetVal().Texture, nullptr );
+    ASSERT_FALSE( slots.AccessSource( slot1Idx ).IsValid() );
 
     ASSERT_TRUE( slots.UnregisterSource( slot2Idx ) );
-    ASSERT_TRUE( slots.AccessSource( slot2Idx ).IsValid() );
-    ASSERT_EQ( slots.AccessSource( slot2Idx ).GetVal().Texture, nullptr );
+    ASSERT_FALSE( slots.AccessSource( slot2Idx ).IsValid() );
 }
 
 // ***********************
@@ -140,12 +138,10 @@ TEST( Engine_InputSlots, UnregisterSourceByName )
     ASSERT_EQ( tex2, slots.AccessSource( slot2Idx ).GetVal().Texture );
 
     ASSERT_TRUE( slots.UnregisterSource( "Source1" ) );
-    ASSERT_TRUE( slots.AccessSource( slot1Idx ).IsValid() );
-    ASSERT_EQ( slots.AccessSource( slot1Idx ).GetVal().Texture, nullptr );
+    ASSERT_FALSE( slots.AccessSource( slot1Idx ).IsValid() );
 
     ASSERT_TRUE( slots.UnregisterSource( "Source2" ) );
-    ASSERT_TRUE( slots.AccessSource( slot2Idx ).IsValid() );
-    ASSERT_EQ( slots.AccessSource( slot2Idx ).GetVal().Texture, nullptr );
+    ASSERT_FALSE( slots.AccessSource( slot2Idx ).IsValid() );
 }
 
 // ***********************
