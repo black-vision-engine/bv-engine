@@ -14,7 +14,10 @@ VideoInputHandler::VideoInputHandler( videocards::VideoCardManager * videoCardMa
     ,   m_inputSlots( slots )
     ,   m_audioRenderer( nullptr )
     ,   m_renderer( nullptr )
-{}
+{
+    assert( videoCardMan );
+    assert( slots );
+}
 
 // ***********************
 //
@@ -53,10 +56,19 @@ void            VideoInputHandler::RegisterInputs   ( RenderContext * ctx, Input
     m_renderer = ctx->GetRenderer();
     m_audioRenderer = ctx->GetAudio();
 
+    auto inputDescs = m_videoCardManager->GetInputChannelsDescs();
+    RegisterInputs( inputDescs );
+}
 
-
-    inputSlots;
-    assert( false );
+// ***********************
+//
+void            VideoInputHandler::RegisterInputs   ( const videocards::InputChannelsDescsVec & channelsDesc )
+{
+    for( auto & desc : channelsDesc )
+    {
+        // Don't check result. Error message is logged internally.
+        m_inputSlots.RegisterVideoInputChannel( desc );
+    }
 }
 
 

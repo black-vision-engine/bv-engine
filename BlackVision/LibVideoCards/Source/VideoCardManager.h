@@ -8,6 +8,7 @@
 #include "VideoCardManagerUtils.h"
 
 #include "VideoCardDescFactory.h"
+#include "VideoInput/VideoInputFrameData.h"
 
 #include "Memory/MemoryChunk.h"
 #include "DataTypes/CircularBufferConcurrent.h"
@@ -154,7 +155,8 @@ public:
     void                                Stop                    ();
 
 	void								Display     			( const VCMInputDataConstPtr & outputs );
-    AVFramePtr                          QueryInputFrame         ( VideoInputID inputID );
+    AVFramePtr                          QueryChannelInputFrame  ( VideoInputID inputID );
+    VideoInputFrameData                 QueryVideoInput         ();
 
 
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.

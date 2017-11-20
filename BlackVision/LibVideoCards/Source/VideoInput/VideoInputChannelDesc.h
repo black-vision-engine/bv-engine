@@ -69,6 +69,9 @@ inline VideoInputChannelDesc::VideoInputChannelDesc    ( VideoCardID cardId, Vid
 //
 inline bool             VideoInputChannelDesc::IsEquivalent     ( const VideoInputChannelDesc & other ) const
 {
+    if( m_videoCardID != other.m_videoCardID )
+        return false;
+
     if( m_videoInputID != other.m_videoInputID )
         return false;
 

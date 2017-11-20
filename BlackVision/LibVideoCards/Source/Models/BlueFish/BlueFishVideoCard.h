@@ -60,6 +60,8 @@ public:
 
     virtual void            SetVideoOutput              ( bool enable ) override;
 
+    virtual VideoCardID     GetVideoCardID              () const { return m_deviceID; }
+
 	void				    AddChannel					( Channel * channel );
 	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
 	Channel *			    GetChannelByName			( ChannelName channelName ) const;   

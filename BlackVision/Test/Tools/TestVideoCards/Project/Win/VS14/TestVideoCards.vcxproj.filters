@@ -12,6 +12,9 @@
     <ClCompile Include="..\..\..\Source\Initialization\TestVideoCardFactory.cpp">
       <Filter>Initialization</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Initialization\TestInputsChannelsCreation.cpp">
+      <Filter>Initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="VideoCardsUtils">

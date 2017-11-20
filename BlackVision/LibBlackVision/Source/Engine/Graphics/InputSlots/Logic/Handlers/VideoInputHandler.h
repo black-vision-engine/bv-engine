@@ -15,6 +15,7 @@ namespace bv
 /// @ingroup EngineInputs
 class VideoInputHandler : public IInputHandler
 {
+    FRIEND_TEST_ACCESSOR( VideoInputHandler )
 private:
 
     videocards::VideoCardManager *      m_videoCardManager;
@@ -33,6 +34,10 @@ public:
     virtual void            ProcessInputs           ( RenderContext * ctx ) override;
 
     virtual void            RegisterInputs          ( RenderContext * ctx, InputSlotsPtr inputSlots ) override;
+
+private:
+
+    void                    RegisterInputs          ( const videocards::InputChannelsDescsVec & channelsDesc );
 
 };
 

@@ -85,22 +85,6 @@
 		</property>
 	</property>
 	
-    <videocards>
-        <videocard name="BlueFish" deviceID="1">
-            <channels>
-                <channel name="A" renderer="1" >
-                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
-				</channel>
-            </channels>
-        </videocard>
-		<videocard name="BlackMagic2" deviceID="1">
-            <channels>
-                <channel name="A" renderer="1" >
-                    <output type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="FREERUN" referenceH="0" referenceV="0" />
-				</channel>
-            </channels>
-        </videocard>
-    </videocards>
 	
 	<RenderChannels>
         <RenderChannel id="0" enabled="true" />

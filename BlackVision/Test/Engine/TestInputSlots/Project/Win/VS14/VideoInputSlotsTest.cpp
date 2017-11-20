@@ -7,26 +7,9 @@
 
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
+#include "Helpers/AVFrameHelpers.h"
 
 using namespace bv;
-
-
-// ========================================================================= //
-// Helpers
-// ========================================================================= //
-
-
-AVFrameDescriptor       CreateDefaultAVFrame    ()
-{
-    AVFrameDescriptor desc;
-    desc.width = 1000;
-    desc.height = 1000;
-    desc.channels = 2;
-    desc.depth = 4;
-    desc.sampleRate = 44000;
-
-    return desc;
-}
 
 
 // ========================================================================= //

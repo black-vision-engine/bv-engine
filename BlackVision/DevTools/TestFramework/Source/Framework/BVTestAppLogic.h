@@ -42,8 +42,8 @@ public:
     /// Use these functions in your tests to access BVAppLogic members.
     ///{@
 
-    audio::AudioRenderer *      GetAudioRenderer        () { return m_audioRenderer; }
-
+    audio::AudioRenderer *              GetAudioRenderer        () { return m_audioRenderer; }
+    videocards::VideoCardManager *      GetVideoCardManager     () { return m_videoCardManager; }
     ///@}
 };
 

@@ -8,10 +8,21 @@
     <ClCompile Include="VideoInputSlotsTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInputHandlerTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestCases">
       <UniqueIdentifier>{cf952665-acbe-42b6-b6cb-981a593639fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCases\Helpers">
+      <UniqueIdentifier>{50f38ce1-0f55-424a-9202-937b7647a2e1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Helpers\AVFrameHelpers.h">
+      <Filter>TestCases\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

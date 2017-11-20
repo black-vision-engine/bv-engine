@@ -38,6 +38,8 @@ public:
 
 	virtual void                SetVideoOutput          ( bool enable ) = 0;
 
+    virtual VideoCardID         GetVideoCardID          () const = 0;
+
     //TODO: handle frames from GPU
     virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID )     = 0;
     virtual AVFramePtr          QueryInputFrame         ( VideoInputID inputID )                                = 0;

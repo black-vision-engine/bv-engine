@@ -198,7 +198,7 @@ void						 VideoCardManager::Display		        ( const VCMInputDataConstPtr & out
 
 // ***********************
 //
-AVFramePtr                  VideoCardManager::QueryInputFrame       ( VideoInputID inputID )
+AVFramePtr                  VideoCardManager::QueryChannelInputFrame( VideoInputID inputID )
 {
     auto iter = m_inputsToCardMapping.find( inputID );
     if( iter != m_inputsToCardMapping.end() )
@@ -207,6 +207,29 @@ AVFramePtr                  VideoCardManager::QueryInputFrame       ( VideoInput
     }
 
     return AVFramePtr();
+}
+
+// ***********************
+//
+VideoInputFrameData         VideoCardManager::QueryVideoInput       ()
+{
+    VideoInputFrameData frameData;
+
+    for( auto inputID : m_inputsToCardMapping )
+    {
+        SingleChannelFrameData singleFrame;
+
+        auto & card = inputID.second;
+        auto id = inputID.first;
+
+        auto frame = card->QueryInputFrame( id );
+
+        singleFrame.FrameData = frame;
+        singleFrame.InputID = id;
+        singleFrame.CardID = card->GetVideoCardID();
+    }
+
+    return frameData;
 }
 
 // *********************************
@@ -264,6 +287,21 @@ UInt32                      VideoCardManager::GetRequiredFPS          () const
 //    instance.m_numReadyCards++;
 //    instance.m_waitFramesProcessed.notify_one();
 //}
+
+// ***********************
+//
+InputChannelsDescsVec       VideoCardManager::GetInputChannelsDescs     () const
+{
+    InputChannelsDescsVec allDescs;
+
+    for( auto & card : m_videoCards )
+    {
+        auto descs = card->GetInputChannelsDescs();
+        allDescs.insert( allDescs.end(), descs.begin(), descs.end() );
+    }
+
+    return allDescs;
+}
 
 //**************************************
 //
