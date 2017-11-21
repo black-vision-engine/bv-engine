@@ -36,6 +36,12 @@
 
 #include "Assets/AssetManager.h"
 
+
+
+/**@defgroup Assets
+@ingroup Engine*/
+
+
 namespace bv
 {
 
