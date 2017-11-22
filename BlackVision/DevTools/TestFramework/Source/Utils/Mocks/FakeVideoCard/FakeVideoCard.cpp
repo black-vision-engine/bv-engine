@@ -7,6 +7,11 @@ namespace bv {
 namespace videocards
 {
 
+// ***********************
+//
+FakeVideoCard::FakeVideoCard( UInt32 deviceID )
+    :   m_deviceID( deviceID )
+{}
 
 // ***********************
 //
@@ -88,6 +93,13 @@ std::set< UInt64 >      FakeVideoCard::GetDisplayedVideoOutputsIDs      () const
 InputChannelsDescsVec   FakeVideoCard::GetInputChannelsDescs            () const
 {
     return InputChannelsDescsVec();
+}
+
+// ***********************
+//
+void                    FakeVideoCard::AddChannel                       ( FakeChannelDesc & channelDesc )
+{
+    m_channels.push_back( std::move( channelDesc ) );
 }
 
 

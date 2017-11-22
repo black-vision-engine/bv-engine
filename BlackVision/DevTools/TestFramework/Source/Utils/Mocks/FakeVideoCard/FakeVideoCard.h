@@ -2,6 +2,7 @@
 
 
 #include "Interfaces/IVideoCard.h"
+#include "FakeVideoCardDesc.h"
 
 
 namespace bv {
@@ -14,8 +15,12 @@ class FakeVideoCard : public IVideoCard
 {
 private:
 
+    UInt32                          m_deviceID;
+    std::vector< FakeChannelDesc >  m_channels;
+
 public:
 
+    explicit                    FakeVideoCard           ( UInt32 deviceID );
     virtual                     ~FakeVideoCard          () {}
 
     virtual void                PreStart                () override;
@@ -38,6 +43,10 @@ public:
 
     virtual std::set< UInt64 >	        GetDisplayedVideoOutputsIDs     () const override;
     virtual InputChannelsDescsVec       GetInputChannelsDescs           () const override;
+
+public:
+
+    void                        AddChannel              ( FakeChannelDesc & channelDesc );
 };
 
 DEFINE_PTR_TYPE( FakeVideoCard )
