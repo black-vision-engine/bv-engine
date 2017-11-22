@@ -55,7 +55,7 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
         for( auto f : files )
         {
 			auto frame = TextureAssetDesc::Create( "file:/" + f.Str(), true );
-			if( frame )
+			if( frame && frame->GetOrigTextureDesc()->GetHeight() != 0 )
 			{
 				framesDesc.push_back( frame );
 			}
