@@ -38,6 +38,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeChannelsDescs.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.h" />
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.cpp" />
   </ItemGroup>
   <ItemGroup>

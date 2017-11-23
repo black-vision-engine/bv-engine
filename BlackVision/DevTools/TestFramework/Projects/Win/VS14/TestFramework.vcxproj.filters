@@ -34,6 +34,12 @@
     <Filter Include="Utils\Mocks\FakeVideoCard">
       <UniqueIdentifier>{64ba4b19-8224-4fc6-85b2-142b8e768d7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Mocks\Plugins">
+      <UniqueIdentifier>{1effbdfb-f56f-48e6-a25f-0fceda48a52f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Mocks\Plugins\Audio">
+      <UniqueIdentifier>{23244d06-9be0-4e54-bff4-79a7a3ef3673}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -101,6 +107,9 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeChannelsDescs.h">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.h">
+      <Filter>Utils\Mocks\Plugins\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -132,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.cpp">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.cpp">
+      <Filter>Utils\Mocks\Plugins\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
