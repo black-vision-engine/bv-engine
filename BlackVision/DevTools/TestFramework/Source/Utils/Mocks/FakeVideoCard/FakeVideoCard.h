@@ -4,10 +4,19 @@
 #include "Interfaces/IVideoCard.h"
 #include "FakeVideoCardDesc.h"
 
+#include <map>
+
 
 namespace bv {
 namespace videocards
 {
+
+
+struct FrameOutput
+{
+    std::map< UInt64, AVFrameConstPtr >     Outputs;
+};
+
 
 // ***********************
 //
@@ -17,6 +26,8 @@ private:
 
     UInt32                          m_deviceID;
     std::vector< FakeChannelDesc >  m_channels;
+
+    FrameOutput                     m_lastFrameOutput;
 
 public:
 
@@ -47,6 +58,9 @@ public:
 public:
 
     void                        AddChannel              ( FakeChannelDesc & channelDesc );
+
+    FrameOutput &               AccessOutputs           () { return m_lastFrameOutput; }
+    void                        ClearOutputs            ();
 };
 
 DEFINE_PTR_TYPE( FakeVideoCard )
