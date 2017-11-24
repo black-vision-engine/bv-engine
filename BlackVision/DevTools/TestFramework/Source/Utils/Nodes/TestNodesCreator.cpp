@@ -445,6 +445,22 @@ model::BasicNodePtr		TestNodesCreator::VideoStreamDecoder			( model::ITimeEvalua
     return node;
 }
 
+// ***********************
+//
+model::BasicNodePtr     TestNodesCreator::FakeAudioPlugin               ( model::ITimeEvaluatorPtr timeEval, const std::string & name )
+{
+    auto node = model::BasicNode::Create( name, nullptr );
+
+    std::vector< std::string > plugins;
+    plugins.push_back( "DEFAULT_TRANSFORM" );
+    plugins.push_back( "FAKE_AUDIO_PLUGIN" );
+
+    auto success = node->AddPlugins( plugins, timeEval );
+    assert( success );
+
+    return node;
+}
+
 
 
 }	// bv
