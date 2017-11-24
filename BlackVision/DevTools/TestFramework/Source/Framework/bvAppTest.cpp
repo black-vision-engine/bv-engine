@@ -7,8 +7,6 @@
 #include "System/InitSubsystem.h"
 #include "BVTestAppLogic.h"
 
-#include "Utils/Mocks/FakeVideoCard/FakeVideoCardDesc.h"
-
 #include "UseLoggerTests.h"
 
 #include "System/Path.h"
@@ -73,17 +71,7 @@ BVAppLogic *        BlackVisionAppFramework::CreateAppLogic     ( bv::Renderer *
 {
     auto bvTestAppLogic = new BVTestAppLogic( renderer, audioRenderer );
 
-    auto videoCardManager = bvTestAppLogic->GetVideoCardManager();
-    if( videoCardManager == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Something changed in BVAppLogic initialization code. VideoCardManager should exist in this place";
-        assert( false );
-
-        return bvTestAppLogic;
-    }
-
-    // Add posibility to create mock video card
-    videoCardManager->GetFactory().RegisterDescriptor( videocards::FakeVideoCardDesc::UID(), &videocards::FakeVideoCardDesc::CreateDescriptor );
+    bvTestAppLogic->RegisterMocks();
 
     return bvTestAppLogic;
 }

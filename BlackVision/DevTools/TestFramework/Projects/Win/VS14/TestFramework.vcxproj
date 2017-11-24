@@ -47,6 +47,7 @@
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Framework\MocksRegistration.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\TestEnvironment.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.cpp" />

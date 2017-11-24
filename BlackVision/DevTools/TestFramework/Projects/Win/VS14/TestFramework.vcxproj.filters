@@ -145,5 +145,8 @@
     <ClCompile Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.cpp">
       <Filter>Utils\Mocks\Plugins\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Framework\MocksRegistration.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

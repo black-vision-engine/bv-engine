@@ -112,7 +112,7 @@ void BVAppLogic::Initialize         ()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
 
-    m_pluginsManager = &model::PluginsManager::DefaultInstance();
+    m_pluginsManager = &model::PluginsManager::DefaultInstanceRef();
 
     bv::effect::InitializeLibEffect( m_renderer );
 

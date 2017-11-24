@@ -28,6 +28,13 @@ public:
 
     void            RestartTimer        ();
 
+
+    void            RegisterMocks       ();
+
+    void            RegisterMockVideoCard   ();
+    void            RegisterMockPlugins     ();
+    void            RegisterMockLogics      ();
+
 public:
 
     void            InjectTest          ( FrameworkTest * test );
