@@ -90,6 +90,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE( FakeAudioPlayerPlugin )
+
 
 } //model
 } //bv

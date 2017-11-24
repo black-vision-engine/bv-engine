@@ -79,7 +79,7 @@ void            FakeVideoCard::SetFrameProcessingCompletedCallback  ( FrameProce
 //
 UInt32                  FakeVideoCard::GetRequiredFPS                   () const
 {
-    return UInt32();
+    return 50;
 }
 
 // ***********************
