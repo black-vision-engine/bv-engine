@@ -57,7 +57,7 @@ extern HighResolutionTimer GTimer;
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : m_bvProject( BVProject::Create( renderer, audioRenderer, &DefaultConfig ) )
-    , m_pluginsManager( nullptr )
+    , m_pluginsManager( &model::PluginsManager::DefaultInstanceRef() )
     , m_renderer( nullptr )
     , m_audioRenderer( nullptr )
     , m_renderLogic( nullptr )
@@ -111,8 +111,6 @@ void BVAppLogic::Initialize         ()
     m_renderMode.Init( m_renderLogic, m_renderer );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
-
-    m_pluginsManager = &model::PluginsManager::DefaultInstanceRef();
 
     bv::effect::InitializeLibEffect( m_renderer );
 

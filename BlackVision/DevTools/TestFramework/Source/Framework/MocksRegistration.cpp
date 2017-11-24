@@ -49,6 +49,13 @@ void            BVTestAppLogic::RegisterMockVideoCard   ()
 //
 void            BVTestAppLogic::RegisterMockPlugins     ()
 {
+    if( m_pluginsManager == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Something changed in BVAppLogic initialization code. m_pluginsManager should exist in this place";
+        assert( false );
+    }
+
+
     std::vector< model::IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new model::FakeAudioPlayerPluginDesc() );
