@@ -80,6 +80,8 @@ BVProject::~BVProject         ()
 
     delete m_engineSceneRoot;
     delete m_projectEditor;
+
+	UpdatersManager::Deinitialize();
 }
 
 // *******************************
