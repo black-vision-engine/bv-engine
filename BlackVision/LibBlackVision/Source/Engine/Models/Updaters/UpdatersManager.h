@@ -61,6 +61,7 @@ public:
     // to remember UpdatersManager as class member. In future these functions should disappear.
     static UpdatersManager &    Get                 ();
     static UpdatersManagerPtr   GetShared           ();
+	static void					Deinitialize		();
 
 private:
 

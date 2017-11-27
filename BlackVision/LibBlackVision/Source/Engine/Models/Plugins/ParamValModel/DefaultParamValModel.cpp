@@ -112,7 +112,7 @@ IStatedValuePtr                                   DefaultParamValModel::GetState
 //
 void                                        DefaultParamValModel::Update            ()
 {
-    for( auto evaluator : m_evaluators )
+    for( auto & evaluator : m_evaluators )
     {
         evaluator->Evaluate();
     }

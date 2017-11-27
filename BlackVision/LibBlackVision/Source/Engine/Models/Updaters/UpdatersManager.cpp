@@ -111,6 +111,13 @@ UpdatersManagerPtr          UpdatersManager::GetShared()
 
 // *******************************
 //
+void			UpdatersManager::Deinitialize()
+{
+	sInstancePtr = nullptr;
+}
+
+// *******************************
+//
 template< typename T >
 void            UpdatersManager::RegisterUpdater    ( const T * obj, IUpdaterPtr updater, std::hash_map< const T *, IUpdaterPtr > & mapping )
 {

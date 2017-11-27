@@ -150,6 +150,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\TestAnimation.cpp" />
     <ClCompile Include="..\..\..\Source\TestAssetsThread.cpp" />
     <ClCompile Include="..\..\..\Source\TestCache.cpp" />
     <ClCompile Include="..\..\..\Source\TestLoadBarrier.cpp" />
