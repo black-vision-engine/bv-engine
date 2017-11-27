@@ -98,7 +98,9 @@
 	
 	
 	<RenderChannels>
-        <RenderChannel id="0" enabled="true" />
+        <RenderChannel id="0" enabled="true" >
+            <VideoOutput id="0" width="1920" height="1080" />
+        </RenderChannel>
         <RenderChannel id="1" enabled="false" />
         <RenderChannel id="2" enabled="false" />
         <RenderChannel id="3" enabled="false" />
