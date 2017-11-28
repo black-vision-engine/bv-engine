@@ -128,7 +128,7 @@ void            VideoCardsAudioOutputTest::PostRender   ()
     memcpy( samplesVec.data(), mem, audioChunk->Size() );
 
     // Find max sample value. Since we use sawtooth signal, max value will apear in each period.
-    auto maxValIter = std::max( samplesVec.begin(), samplesVec.end() );
+    auto maxValIter = std::max_element( samplesVec.begin(), samplesVec.end() );
     ASSERT_TRUE( maxValIter != samplesVec.end() );
 
     auto maxVal = *maxValIter;
@@ -141,24 +141,44 @@ void            VideoCardsAudioOutputTest::PostRender   ()
     ASSERT_NE( zeroIter, samplesVec.end() );
     ASSERT_NE( maxIter, samplesVec.end() );
 
+    maxIter++;
+
     UInt32 numIterations = 0;
 
     while( zeroIter != samplesVec.end() )
     {
-        auto length = std::distance( zeroIter, maxIter ) + 1;
+        // Ignore last not complete part of signal.
+        if( *std::max_element( zeroIter, maxIter ) != maxVal )
+            break;
+
+        auto length = std::distance( zeroIter, maxIter ) - 1;
 
         for( auto iter = zeroIter; iter != maxIter; ++iter )
         {
             auto i = std::distance( zeroIter, iter );
-            Int32 expectedSample = static_cast< Int32 >( maxVal * (float)i / (float)length );
 
-            EXPECT_TRUE( *iter < expectedSample + 1 && *iter < expectedSample - 1 );
+            Int32 actualSample = static_cast< Int32 >( *iter );
+            Int32 expectedSample = static_cast< Int32 >( ( double )maxVal * ( double )i / ( double )length );
+
+            EXPECT_LE( actualSample, ( expectedSample + 1 ) );
+            EXPECT_GE( actualSample, ( expectedSample - 1 ) );
         }
 
         // Find new period ranges.
         zeroIter = std::find( maxIter, samplesVec.end(), 0 );
         maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
+        maxIter = maxIter != samplesVec.end() ? ++maxIter : maxIter;    // Include biggest sample.
         
         numIterations++;
     }
+
+
+    // Check how many iteration are made. We expect that this number can be less then computed,
+    // because we ommit samples from beginning and end.
+    // Note: multiplication by 2 is from stereo channels. We ignored it while generating data.
+    const UInt32 numSamplesPerFrame = 2 * 44000 / 50;
+    const UInt32 expectedNumIter = numSamplesPerFrame / 200 - 1;
+
+    EXPECT_GE( numIterations, expectedNumIter );
+
 }

@@ -55,7 +55,7 @@ DefaultPluginParamValModelPtr   FakeAudioPlayerPluginDesc::CreateDefaultModel( I
 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( FakeAudioPlayerPlugin::PARAM::LOOP_COUNT, std::numeric_limits< int >::max(), false );
-    helper.AddSimpleParam( FakeAudioPlayerPlugin::PARAM::LOOP_ENABLED, false, false );
+    helper.AddSimpleParam( FakeAudioPlayerPlugin::PARAM::LOOP_ENABLED, true, false );
     helper.AddSimpleParam( FakeAudioPlayerPlugin::PARAM::GAIN, 1.f );
 
     return model;
