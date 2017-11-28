@@ -62,7 +62,7 @@ protected:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    const model::PluginsManager *   m_pluginsManager;
+    model::PluginsManager *         m_pluginsManager;
 
     BVProjectPtr                    m_bvProject;
 
