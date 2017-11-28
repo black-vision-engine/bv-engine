@@ -8,6 +8,8 @@
 
 using namespace bv;
 
+// This tests loading animation from a directory which contains not only graphic files
+// This was a cause of bug https://www.pivotaltracker.com/story/show/153056579
 TEST( Assets_Animation, DirectoryWithNonGraphicFiles )
 {
 	auto desc = AnimationAssetDesc::Create( "TestAssets/AssetManager/MixedAnimation", 7, ".*" );
@@ -15,6 +17,7 @@ TEST( Assets_Animation, DirectoryWithNonGraphicFiles )
 	AssetManager::GetInstance().LoadAsset( desc );
 }
 
+// The same test as above, but with loading descriptor from a XML file
 TEST( Assets_Animation, DirectoryWithNonGraphicFilesViaXML )
 {
 	BVXMLDeserializer deser( "TestAssets/AssetManager/MixedAnimation/asset.xml", nullptr );
