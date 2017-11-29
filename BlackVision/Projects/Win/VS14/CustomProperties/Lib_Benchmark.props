@@ -3,12 +3,12 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_PropertySheetDisplayName>Lib_3rdParty</_PropertySheetDisplayName>
+    <_PropertySheetDisplayName>Lib_Benchmark</_PropertySheetDisplayName>
   </PropertyGroup>
   
   <PropertyGroup>
   
-    <BenchmarkLibrary>benchmark.lib;</BenchmarkLibrary>
+    <BenchmarkLibrary>benchmark.lib;shlwapi.lib;</BenchmarkLibrary>
 
   </PropertyGroup>
   
