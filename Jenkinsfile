@@ -138,6 +138,11 @@ node {
         removeDir( 'generatedJUnitFiles' )
         removeDir( 'DefaultPMDir' )
         generateBuildNumber()
+        
+        if( env.JOB_NAME != "BlackVision-master" )
+        {
+            properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '1', daysToKeepStr: '', numToKeepStr: '']]]);
+        }
     }
 
 	//stage('Build Debug')

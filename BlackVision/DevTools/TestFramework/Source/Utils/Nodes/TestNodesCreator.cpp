@@ -456,7 +456,7 @@ model::BasicNodePtr     TestNodesCreator::FakeAudioPlugin               ( model:
     plugins.push_back( "FAKE_AUDIO_PLUGIN" );
 
     auto success = node->AddPlugins( plugins, timeEval );
-    assert( success );
+    assert( success );  success;
 
     return node;
 }
