@@ -114,13 +114,22 @@ def generateDoxygenDocs( buildDir, conf, platform )
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'BlackVision/Doc/html/', reportFiles: 'index.html', reportName: 'BlackVision Documentation', reportTitles: ''])
 }
 
+def generatePerformancePlots( buildDir, conf, platform )
+{
+    plot csvFileName: 'plot-88b365aa-6159-4f38-b23c-f5cfc48dc3f8.csv', csvSeries: [[displayTableFlag: false, exclusionValues: '', file: 'BlackVision/Reports/Benchmarks/BenchmarkParams.csv', inclusionFlag: 'INCLUDE_BY_STRING', url: '']], exclZero: false, group: 'Performance', keepRecords: false, logarithmic: false, numBuilds: '', style: 'line', title: 'Performance', useDescr: false, yaxis: '', yaxisMaximum: '', yaxisMinimum: ''
+}
+
+
+
+
 node {
     checkout scm
     
     def buildDir = 'BlackVision\\_Builds\\'
     def tempDir = 'BlackVision\\_Temp\\'
     
-    def testResPath = 'TestReports'
+    def testResPath = 'Reports/Test'
+    def bechmarksResPath = 'Reports/Benchmarks'
     
     def configurations = ['Debug', 'Release']
     def platforms = ['Win32', 'x64']
@@ -207,6 +216,7 @@ node {
             notifyBuild(currentBuild.result, 'Test')
         }
     }
+   
     
     stage( 'Generate Docs' )
     {
@@ -222,6 +232,24 @@ node {
         finally
         {
             notifyBuild(currentBuild.result, 'Generate Docs')
+        }
+    }
+    
+    stage( 'Performance Tests' )
+    {
+      	try
+		{
+            bat 'BlackVision/RunBenchmarks.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + bechmarksResPath + '/'
+            generatePerformancePlots( buildDir, currentConfiguration, currentPlatform )
+        }
+        catch( e )
+        {
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally
+        {
+            notifyBuild(currentBuild.result, 'Performance Tests')
         }
     }
 	
