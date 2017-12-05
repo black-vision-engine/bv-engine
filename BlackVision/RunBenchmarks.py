@@ -2,7 +2,7 @@ import os
 import sys
 import fnmatch
 import subprocess
-
+import shutil
 
 
 def EnsureDir(file_path):
@@ -19,6 +19,12 @@ def RemoveFirstLines( filePath, numlines ):
         fout.writelines( data[ numlines: ] )
         
         
+def CleanDirectory( directory ):
+
+    print "Clean directory: [" + directory + "]"
+    shutil.rmtree( directory )
+        
+        
 
 def ListBenchmarks( directory ):
 
@@ -32,6 +38,10 @@ def ListBenchmarks( directory ):
 
 def InvokeSingleBenchamark( file, resultDir ):
     
+    print "\n"
+    print "Execute benchmark: [" + file + "]"
+    print "=================================================================\n"
+    
     fileName = os.path.basename( file )
     fileWithoutExt = os.path.splitext( fileName )[0]
     
@@ -44,11 +54,15 @@ def InvokeSingleBenchamark( file, resultDir ):
     # We must remove it first.
     RemoveFirstLines( resultFile, 7 )
     
+    print "================================================================="
+    print "Report placed in " + resultFile
+    print "\n"
+    
 def InvokeBenchmarks( directory, resultDir ):
     
     EnsureDir( resultDir )
     
-    print "Looking for benchmark executables in [" + directory + "]"
+    print "Looking for benchmark executables in [" + directory + "]\n"
     
     benchList = ListBenchmarks( directory )
     
@@ -59,8 +73,18 @@ def InvokeBenchmarks( directory, resultDir ):
     for bench in benchList:
         InvokeSingleBenchamark( bench, resultDir )
 
+        
+def ProgramHeader():
+    
+    print "\n================================================================="
+    print "Automatic Performance Tests"
+    print "This program will call all benchmarks in BlackVision directories."
+    print "=================================================================\n"
+        
     
 def RunBenchmarks():
+    
+    ProgramHeader()
     
     if len( sys.argv ) < 5:
         print "Invalid number of arguments"
@@ -70,6 +94,8 @@ def RunBenchmarks():
         configuration = sys.argv[ 2 ]
         toolset = sys.argv[ 3 ]
         outputDir = sys.argv[ 4 ]
+        
+        CleanDirectory( outputDir )
         
         benchmarksExecs = "_Builds/" + arch + "-" + toolset + "-" + configuration + "/Benchmarks/"
     

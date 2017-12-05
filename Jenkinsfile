@@ -144,6 +144,7 @@ node {
         removeDir( buildDir )
         removeDir( tempDir )
         removeDir( testResPath )
+        removeDir( bechmarksResPath )
         removeDir( 'generatedJUnitFiles' )
         removeDir( 'DefaultPMDir' )
         generateBuildNumber()
