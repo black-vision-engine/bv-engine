@@ -116,7 +116,13 @@ def generateDoxygenDocs( buildDir, conf, platform )
 
 def generatePerformancePlots( buildDir, conf, platform )
 {
-    perfReport modeEvaluation: true, sourceDataFiles: 'BlackVision/Reports/Benchmarks/*'
+    def plotFiles = findFiles( glob: 'BlackVision/Reports/Benchmarks/*.csv' )
+
+    for (i = 0; i < plotFiles.size(); i++)
+    {
+        def file = plotFiles[ i ]
+        plot csvFileName: "$(file).name", csvSeries: [[displayTableFlag: true, exclusionValues: 'meanTime, medianTime', file: "$(file)", inclusionFlag: 'INCLUDE_BY_STRING', url: '']], exclZero: false, group: 'Performance', keepRecords: true, logarithmic: false, numBuilds: '', style: 'line', title: $(file.name), useDescr: false, yaxis: '', yaxisMaximum: '', yaxisMinimum: ''
+    }
 }
 
 

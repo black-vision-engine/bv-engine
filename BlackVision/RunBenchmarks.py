@@ -3,6 +3,7 @@ import sys
 import fnmatch
 import subprocess
 import shutil
+import csv
 
 
 def EnsureDir(file_path):
@@ -24,7 +25,65 @@ def CleanDirectory( directory ):
     print "Clean directory: [" + directory + "]"
     shutil.rmtree( directory )
         
+
+def GenLabels():
+    return [ "benchmark", "meanTime", "medianTime", "stddevTime", "meanCPU", "medianCPU", "stddevCPU", "Iterations" ]
         
+def GenSingleBenchmarkReport( rows, resultDir ):
+    
+    meanRow = rows[ 0 ]
+    medianRow = rows[ 1 ]
+    stddevRow = rows[ 2 ]
+    
+    nameColumn = meanRow[ 0 ]
+    baseName, problemSize, reportType = nameColumn.split( "/" )     # Report type consist of repeats count and mean,median,stddev string.
+    
+    plotName = baseName + "_ProblemSize_" + problemSize
+    fileName = os.path.join( resultDir, plotName + ".csv" )
+    
+    meanTime = meanRow[ 2 ]
+    medianTime = medianRow[ 2 ]
+    stddevTime = stddevRow[ 2 ]
+    iterations = meanRow[ 1 ]
+    
+    meanTimeCPU = meanRow[ 3 ]
+    medianTimeCPU = medianRow[ 3 ]
+    stddevTimeCPU = stddevRow[ 3 ]
+        
+    csvLine = [ plotName, meanTime, medianTime, stddevTime, meanTimeCPU, medianTimeCPU, stddevTimeCPU, iterations ]
+    
+    with open( fileName, 'w') as file:
+        csvWriter = csv.writer( file, delimiter=',' )
+        
+        csvWriter.writerow( GenLabels() )
+        csvWriter.writerow( csvLine )
+        
+    print "Generated report file: [" + fileName + "]"
+        
+def ProcessReport( reportFile, resultDir ):
+    
+    print "================================================================="
+    print "Generating separate report for each benchmark..."
+    
+    rows = []
+    
+    with open( reportFile, 'rb' ) as csvfile:
+        reader = csv.reader( csvfile, delimiter=',', quotechar='\"' )
+        for row in reader:
+            rows.append( row )
+    
+    # Remove Labels
+    del rows[ 0 ]
+    
+    while rows:
+        
+        # We want to extract mean, median and stddev.
+        rowsToProcess = rows[ 0:3 ]
+        
+        GenSingleBenchmarkReport( rowsToProcess, resultDir )
+        
+        del rows[ 0:3 ]
+    
 
 def ListBenchmarks( directory ):
 
@@ -45,7 +104,10 @@ def InvokeSingleBenchamark( file, resultDir ):
     fileName = os.path.basename( file )
     fileWithoutExt = os.path.splitext( fileName )[0]
     
-    resultFile = os.path.join( resultDir, fileWithoutExt + ".csv" )
+    tempResultDir = os.path.join( resultDir, "Temporary/" )
+    resultFile = os.path.join( tempResultDir, fileWithoutExt + ".csv" )
+    
+    EnsureDir( tempResultDir )
     
     args = file + " --benchmark_out_format=csv --benchmark_out=" + resultFile
     subprocess.call( args )
@@ -55,8 +117,15 @@ def InvokeSingleBenchamark( file, resultDir ):
     RemoveFirstLines( resultFile, 7 )
     
     print "================================================================="
-    print "Report placed in " + resultFile
-    print "\n"
+    print "Temporary report placed in [" + resultFile + "]"
+    
+    ProcessReport( resultFile, resultDir )
+    
+    print "================================================================="
+    print "Removing temporary report [" + resultFile + "]"
+    
+    os.remove( resultFile )
+    
     
 def InvokeBenchmarks( directory, resultDir ):
     
@@ -95,6 +164,7 @@ def RunBenchmarks():
         toolset = sys.argv[ 3 ]
         outputDir = sys.argv[ 4 ]
         
+        EnsureDir( outputDir )
         CleanDirectory( outputDir )
         
         benchmarksExecs = "_Builds/" + arch + "-" + toolset + "-" + configuration + "/Benchmarks/"
