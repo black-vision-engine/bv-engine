@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Framework\Benchmark.h" />
+    <ClInclude Include="..\..\..\Source\Framework\BenchmarkInclude.h" />
     <ClInclude Include="..\..\..\Source\Framework\BenchmarkMain.h" />
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
@@ -37,10 +39,12 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Scenes\SceneCreator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Framework\Benchmark.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />

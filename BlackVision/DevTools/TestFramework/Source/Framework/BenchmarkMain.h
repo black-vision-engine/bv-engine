@@ -8,6 +8,8 @@
 #include "benchmark/benchmark.h"
 
 #include "TestEnvironment.h"
+#include "Benchmark.h"
+#include "BVTestAppLogic.h"
 
 
 
@@ -20,6 +22,10 @@ int main( int argc, char** argv )
 
     env->SetUp();
 
+    auto benchmark = new bv::Benchmark();
+    benchmark->SetUp();
+
+
     ::benchmark::Initialize( &argc, argv );
     if( ::benchmark::ReportUnrecognizedArguments( argc, argv ) )
     {
@@ -29,7 +35,11 @@ int main( int argc, char** argv )
     
     ::benchmark::RunSpecifiedBenchmarks();
 
+    benchmark->TearDown();
     env->TearDown();
+
+    delete benchmark;
+
     return 0;
 }
 
