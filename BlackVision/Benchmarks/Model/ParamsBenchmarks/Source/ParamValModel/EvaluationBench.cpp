@@ -74,4 +74,4 @@ static void         BM_15ParamsEvaluation       ( benchmark::State& state )
 
 
 
-BENCHMARK( BM_15ParamsEvaluation )->Arg( 200 )->Arg( 1500 )->Repetitions( 30 )->ReportAggregatesOnly( true );
+BENCHMARK( BM_15ParamsEvaluation )->Unit( benchmark::TimeUnit::kMillisecond )->Arg( 200 )->Arg( 1500 )->Repetitions( 30 )->ReportAggregatesOnly( true );
