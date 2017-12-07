@@ -89,6 +89,9 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Engine\Inputs\VideoInputHandlerAccessor.h">
       <Filter>Utils\Accessors\Engine\Inputs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\BenchmarkMain.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
