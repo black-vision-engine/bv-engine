@@ -36,7 +36,10 @@ def GenSingleBenchmarkReport( rows, resultDir ):
     stddevRow = rows[ 2 ]
     
     nameColumn = meanRow[ 0 ]
-    baseName, problemSize, reportType = nameColumn.split( "/" )     # Report type consist of repeats count and mean,median,stddev string.
+    nameParts = nameColumn.split( "/" )     # Report type consist of repeats count and mean,median,stddev string.
+    
+    baseName = nameParts[ 0 ]
+    problemSize = nameParts[ 1 ]
     
     plotName = baseName + "_ProblemSize_" + problemSize
     fileName = os.path.join( resultDir, plotName + ".csv" )
