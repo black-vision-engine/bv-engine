@@ -121,7 +121,7 @@ def generatePerformancePlots( buildDir, conf, platform )
     for (i = 0; i < plotFiles.size(); i++)
     {
         def file = plotFiles[ i ]
-        plot csvFileName: "${file.name}", csvSeries: [[displayTableFlag: true, exclusionValues: 'meanTime,medianTime,meanCPU,medianCPU', file: "${file}", inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'Performance', exclZero: true, keepRecords: true, logarithmic: false, numBuilds: '', style: 'line', title: "${file.name}", useDescr: true, yaxis: '', yaxisMaximum: '', yaxisMinimum: ''
+        plot csvFileName: "${file.name}", csvSeries: [[displayTableFlag: true, exclusionValues: 'meanTime,medianTime,meanCPU,medianCPU,max,min', file: "${file}", inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'Performance', exclZero: true, keepRecords: true, logarithmic: false, numBuilds: '', style: 'line', title: "${file.name}", useDescr: true, yaxis: '', yaxisMaximum: '', yaxisMinimum: ''
     }
 }
 
