@@ -57,7 +57,7 @@ void            SceneBuffersOverhead  ( benchmark::State& state )
     env->GetAppLogic()->UnloadScenes();
 }
 
-BV_BENCHMARK( SceneBuffersOverhead )->Arg( 30 )->Iterations( 2000 )->Repetitions( 10 );
+BV_BENCHMARK( SceneBuffersOverhead )->Arg( 30 )->Iterations( 2000 )->Repetitions( 20 );
 
 
 
