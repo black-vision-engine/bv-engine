@@ -79,4 +79,4 @@ static void         BM_15ParamsEvaluation       ( benchmark::State& state )
 
 
 
-BV_BENCHMARK( BM_15ParamsEvaluation )->Unit( benchmark::TimeUnit::kMillisecond )->Arg( 200 )->Arg( 1500 )->Repetitions( 30 );
+BV_BENCHMARK( BM_15ParamsEvaluation )->Arg( 200 )->Arg( 1500 )->Repetitions( 30 );

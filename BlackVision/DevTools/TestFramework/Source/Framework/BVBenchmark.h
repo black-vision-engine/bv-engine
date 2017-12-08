@@ -23,6 +23,10 @@ inline double       MinValStatistic     ( const std::vector< double >& v )
 }
 
 
-#define BV_BENCHMARK( FunctionName ) BENCHMARK( FunctionName )->ReportAggregatesOnly( true )->ComputeStatistics( "Max", &MaxValStatistic )->ComputeStatistics( "Min", &MinValStatistic )
+#define BV_BENCHMARK( FunctionName ) BENCHMARK( FunctionName )  \
+->ReportAggregatesOnly( true )                                  \
+->ComputeStatistics( "Max", &MaxValStatistic )                  \
+->ComputeStatistics( "Min", &MinValStatistic )                  \
+->Unit( benchmark::TimeUnit::kMillisecond )
 
 
