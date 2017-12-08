@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BVBenchmark.h"
 #include "FrameworkTest.h"
 
 
@@ -43,7 +44,5 @@ public:
 
 }	// bv
 
-
-#define FRAMEWORK_BENCHMARK( FunctionName )
 
 

@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\..\Source\Framework\BenchmarkInclude.h" />
     <ClInclude Include="..\..\..\Source\Framework\BenchmarkMain.h" />
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h" />
+    <ClInclude Include="..\..\..\Source\Framework\BVBenchmark.h" />
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\NameMangler.h" />

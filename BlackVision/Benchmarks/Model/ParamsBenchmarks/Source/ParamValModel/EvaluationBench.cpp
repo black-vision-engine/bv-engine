@@ -1,4 +1,4 @@
-#include "benchmark/benchmark.h"
+#include "Framework/BVBenchmark.h"
 
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
@@ -79,4 +79,4 @@ static void         BM_15ParamsEvaluation       ( benchmark::State& state )
 
 
 
-BENCHMARK( BM_15ParamsEvaluation )->Unit( benchmark::TimeUnit::kMillisecond )->Arg( 200 )->Arg( 1500 )->Repetitions( 30 )->ReportAggregatesOnly( true );
+BV_BENCHMARK( BM_15ParamsEvaluation )->Unit( benchmark::TimeUnit::kMillisecond )->Arg( 200 )->Arg( 1500 )->Repetitions( 30 );

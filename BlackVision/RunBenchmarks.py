@@ -27,13 +27,15 @@ def CleanDirectory( directory ):
         
 
 def GenLabels():
-    return [ "benchmark", "meanTime", "medianTime", "stddevTime", "meanCPU", "medianCPU", "stddevCPU", "Iterations" ]
+    return [ "benchmark", "meanTime", "medianTime", "stddevTime", "meanCPU", "medianCPU", "stddevCPU", "max", "min", "Iterations" ]
         
 def GenSingleBenchmarkReport( rows, resultDir ):
     
     meanRow = rows[ 0 ]
     medianRow = rows[ 1 ]
     stddevRow = rows[ 2 ]
+    maxRow = rows[ 3 ]
+    minRow = rows[ 4 ]
     
     nameColumn = meanRow[ 0 ]
     nameParts = nameColumn.split( "/" )     # Report type consist of repeats count and mean,median,stddev string.
@@ -47,13 +49,17 @@ def GenSingleBenchmarkReport( rows, resultDir ):
     meanTime = meanRow[ 2 ]
     medianTime = medianRow[ 2 ]
     stddevTime = stddevRow[ 2 ]
+    maxTime = maxRow[ 2 ]
+    minTime = minRow[ 2 ]
     iterations = meanRow[ 1 ]
     
     meanTimeCPU = meanRow[ 3 ]
     medianTimeCPU = medianRow[ 3 ]
     stddevTimeCPU = stddevRow[ 3 ]
+    maxTimeCPU = maxRow[ 3 ]
+    minTimeCPU = minRow[ 3 ]
         
-    csvLine = [ plotName, meanTime, medianTime, stddevTime, meanTimeCPU, medianTimeCPU, stddevTimeCPU, iterations ]
+    csvLine = [ plotName, meanTime, medianTime, stddevTime, meanTimeCPU, medianTimeCPU, stddevTimeCPU, maxTime, minTime, iterations ]
     
     with open( fileName, 'w') as file:
         csvWriter = csv.writer( file, delimiter=',' )
@@ -80,12 +86,12 @@ def ProcessReport( reportFile, resultDir ):
     
     while rows:
         
-        # We want to extract mean, median and stddev.
-        rowsToProcess = rows[ 0:3 ]
+        # We want to extract mean, median and stddev, max and min.
+        rowsToProcess = rows[ 0:5 ]
         
         GenSingleBenchmarkReport( rowsToProcess, resultDir )
         
-        del rows[ 0:3 ]
+        del rows[ 0:5 ]
     
 
 def ListBenchmarks( directory ):

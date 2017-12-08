@@ -104,6 +104,9 @@
     <ClInclude Include="..\..\..\Source\Framework\BenchmarkInclude.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\BVBenchmark.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">

@@ -7,3 +7,5 @@
 #include "Framework/TestEnvironment.h"
 #include "Framework/BVTestAppLogic.h"
 
+#include "Framework/Benchmark.h"
+
