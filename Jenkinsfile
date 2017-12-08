@@ -246,7 +246,11 @@ node {
     {
       	try
 		{
-            bat 'BlackVision/RunBenchmarks.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + bechmarksResPath + '/'
+            throttle(['Perfomrance Meassure'])
+            {
+                bat 'BlackVision/RunBenchmarks.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + bechmarksResPath + '/'
+            }
+            
             generatePerformancePlots( buildDir, currentConfiguration, currentPlatform )
         }
         catch( e )
