@@ -246,7 +246,7 @@ node {
     {
       	try
 		{
-            throttle(['Perfomrance Meassure'])
+            throttle
             {
                 bat 'BlackVision/RunBenchmarks.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + bechmarksResPath + '/'
             }
