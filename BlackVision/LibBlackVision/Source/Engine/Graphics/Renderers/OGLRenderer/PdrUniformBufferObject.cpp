@@ -16,8 +16,9 @@ namespace bv {
 
 
 // Buffer access
-
 #define GL_MAP_INVALIDATE_BUFFER_BIT    0x8
+#define GL_MAP_INVALIDATE_RANGE_BIT     0x4
+#define GL_MAP_WRITE_BIT                0x2
 
 
 
@@ -97,7 +98,9 @@ void                PdrUniformBufferObject::Update          ( const UniformBuffe
     // Version with MapBufferrange and buffer invalidation.
     Bind();
 
-    BVGL::bvglMapBufferRange( GL_UNIFORM_BUFFER, 0, ub->Size(), GL_MAP_INVALIDATE_BUFFER_BIT | ConstantsMapper::GLConstant( MemoryLockingType::MLT_WRITE_ONLY ) );
+    void * data = BVGL::bvglMapBufferRange( GL_UNIFORM_BUFFER, 0, ub->Size(), GL_MAP_INVALIDATE_RANGE_BIT | GL_MAP_WRITE_BIT );
+    memcpy( data, ub->GetData(), ub->Size() );
+    BVGL::bvglUnmapBuffer( GL_UNIFORM_BUFFER );
 
     Unbind();
 
