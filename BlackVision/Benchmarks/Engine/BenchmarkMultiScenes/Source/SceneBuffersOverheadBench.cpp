@@ -37,9 +37,9 @@ model::SceneModelVec        CreateScenesWithLights  ( BVProjectEditor * editor, 
             editor->AddLight( scene, LightType::LT_POINT, editor->GetSceneDefaultTimeline( scene ) );
 
             auto light = scene->GetLight( 0 );
-            auto param = model::QueryTypedParam< model::ParamVec3 >( light->GetParameter( "color" ) );
+            auto param = model::QueryTypedParam< model::ParamVec3Ptr >( light->GetParameter( "color" ) );
             
-            param.SetVal( glm::vec3( 1.0, 0.0, 0.5 ), 1000.0f );
+            param->SetVal( glm::vec3( 1.0, 0.0, 0.5 ), 1000.0f );
         }
     }
     
