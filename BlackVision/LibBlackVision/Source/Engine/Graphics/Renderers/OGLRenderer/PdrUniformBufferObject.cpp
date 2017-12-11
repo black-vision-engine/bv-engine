@@ -76,9 +76,15 @@ void                PdrUniformBufferObject::Unlock         ()
 //
 void                PdrUniformBufferObject::Update          ( const UniformBuffer * ub )
 {
-    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
-    memcpy( data, ub->GetData(), ub->Size() );
-    Unlock();
+    //void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
+    //memcpy( data, ub->GetData(), ub->Size() );
+    //Unlock();
+
+    Bind();
+
+    BVGL::bvglBufferSubData( GL_UNIFORM_BUFFER, 0, ub->Size(), ub->GetData() );
+
+    Unbind();
 }
 
 // *******************************
