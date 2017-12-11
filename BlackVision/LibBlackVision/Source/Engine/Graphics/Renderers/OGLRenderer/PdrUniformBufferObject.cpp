@@ -15,6 +15,12 @@
 namespace bv {
 
 
+// Buffer access
+
+#define GL_MAP_INVALIDATE_BUFFER_BIT    0x8
+
+
+
 // *******************************
 //
 PdrUniformBufferObject::PdrUniformBufferObject     ( Renderer * renderer, const UniformBuffer * ub, UInt32 blockBindingIdx )
@@ -76,15 +82,25 @@ void                PdrUniformBufferObject::Unlock         ()
 //
 void                PdrUniformBufferObject::Update          ( const UniformBuffer * ub )
 {
+    //// First version inefficient
     //void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
     //memcpy( data, ub->GetData(), ub->Size() );
     //Unlock();
 
+    // Version with BufferSubData. Better but maybe we can do more.
+    //Bind();
+
+    //BVGL::bvglBufferSubData( GL_UNIFORM_BUFFER, 0, ub->Size(), ub->GetData() );
+
+    //Unbind();
+
+    // Version with MapBufferrange and buffer invalidation.
     Bind();
 
-    BVGL::bvglBufferSubData( GL_UNIFORM_BUFFER, 0, ub->Size(), ub->GetData() );
+    BVGL::bvglMapBufferRange( GL_UNIFORM_BUFFER, 0, ub->Size(), GL_MAP_INVALIDATE_BUFFER_BIT | ConstantsMapper::GLConstant( MemoryLockingType::MLT_WRITE_ONLY ) );
 
     Unbind();
+
 }
 
 // *******************************
