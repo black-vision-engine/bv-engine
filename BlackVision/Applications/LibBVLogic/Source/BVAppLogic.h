@@ -127,6 +127,8 @@ public:
     RenderMode &                    GetRenderMode       ();
     Renderer *                      GetRenderer         () const { return m_renderer; }
 
+    RemoteController *              GetRemoteController () const { return m_remoteController; }
+
     void                            LoadScenes          ( const PathVec & pathVec );
 
     FrameStatsCalculator *          GetStatsCalculator  ();

@@ -45,6 +45,10 @@ void    GenericEventsHandlers::EventHandler             ( bv::IEventPtr evt )
         {
             SetNodeScaleHandler( command, responseJSON, request, genericEvent->EventID );
         }
+        else if( command == "DebugEventsCount" )
+        {
+            DebugEventsCount( command, responseJSON, request, genericEvent->EventID );
+        }
         else
         {
             SendSimpleErrorResponse( command, genericEvent->EventID, genericEvent->SocketID, "Unknown command" );
@@ -215,6 +219,22 @@ void    GenericEventsHandlers::SetNodeScaleHandler      ( const std::string & co
     }
 
     transformParam->SetScale( scale, keyTime );
+    PrepareResponseTemplate( ser, command, eventID, true );
+}
+
+// ***********************
+//
+
+void    GenericEventsHandlers::DebugEventsCount     ( const std::string & command, JsonSerializeObject & ser, IDeserializer *, int eventID )
+{
+    auto remoteController = m_appLogic->GetRemoteController();
+    
+    auto eventsCount = remoteController->GetDebugEventsCounter();
+    auto resposeCount = remoteController->GetResponseEventsCounter();
+
+    ser.SetAttribute( "ReponseCount", Convert::T2String( resposeCount ) );
+    ser.SetAttribute( "EventsCount", Convert::T2String( eventsCount ) );
+
     PrepareResponseTemplate( ser, command, eventID, true );
 }
 

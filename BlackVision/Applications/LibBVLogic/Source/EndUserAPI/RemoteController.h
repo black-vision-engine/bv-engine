@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 #include "Engine/Events/EventFactory.h"
 #include "Engine/Events/Interfaces/IEvent.h"
 #include "Tools/Logger/LoggerEnums.h"
@@ -7,9 +9,13 @@
 #include <unordered_map>
 #include <string>
 
+
+
 namespace bv
 {
 
+// ***********************
+//
 class RemoteController
 {
 private:
@@ -32,6 +38,12 @@ protected:
 
     IEventPtr                           DeserializeEvent    ( IDeserializer & deser );
     void                                RegisterEvent       ( const std::string & eventName, EventCreatorDelegate eventCreator );
+
+public:
+
+    virtual UInt64              GetDebugEventsCounter       () const = 0;
+    virtual UInt64              GetResponseEventsCounter    () const = 0;
+
 };
 
 

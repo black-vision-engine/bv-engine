@@ -23,6 +23,8 @@ public:
 
     void        SetWeightCenterHandler      ( const std::string & command, JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void        SetNodeScaleHandler         ( const std::string & command, JsonSerializeObject & ser, IDeserializer * request, int eventID );
+
+    void        DebugEventsCount            ( const std::string & command, JsonSerializeObject & ser, IDeserializer * request, int eventID );
 };
 
 } //bv
