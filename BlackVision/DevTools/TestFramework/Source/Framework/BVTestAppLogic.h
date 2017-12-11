@@ -12,6 +12,7 @@ namespace bv {
 class BVTestAppLogic : public BVAppLogic
 {
     friend class FrameworkTest;
+    friend class Benchmark;
 private:
 
     FrameworkTest *     m_test;

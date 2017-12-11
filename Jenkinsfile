@@ -114,13 +114,28 @@ def generateDoxygenDocs( buildDir, conf, platform )
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'BlackVision/Doc/html/', reportFiles: 'index.html', reportName: 'BlackVision Documentation', reportTitles: ''])
 }
 
+def generatePerformancePlots( buildDir, conf, platform )
+{
+    def plotFiles = findFiles( glob: 'BlackVision/Reports/Benchmarks/*.csv' )
+
+    for (i = 0; i < plotFiles.size(); i++)
+    {
+        def file = plotFiles[ i ]
+        plot csvFileName: "${file.name}", csvSeries: [[displayTableFlag: true, exclusionValues: 'meanTime,medianTime,meanCPU,medianCPU,max,min', file: "${file}", inclusionFlag: 'INCLUDE_BY_STRING', url: '']], group: 'Performance', exclZero: true, keepRecords: true, logarithmic: false, numBuilds: '', style: 'line', title: "${file.name}", useDescr: true, yaxis: 'ms', yaxisMaximum: '', yaxisMinimum: ''
+    }
+}
+
+
+
+
 node {
     checkout scm
     
     def buildDir = 'BlackVision\\_Builds\\'
     def tempDir = 'BlackVision\\_Temp\\'
     
-    def testResPath = 'TestReports'
+    def testResPath = 'Reports/Test'
+    def bechmarksResPath = 'Reports/Benchmarks'
     
     def configurations = ['Debug', 'Release']
     def platforms = ['Win32', 'x64']
@@ -135,6 +150,7 @@ node {
         removeDir( buildDir )
         removeDir( tempDir )
         removeDir( testResPath )
+        removeDir( bechmarksResPath )
         removeDir( 'generatedJUnitFiles' )
         removeDir( 'DefaultPMDir' )
         generateBuildNumber()
@@ -207,6 +223,7 @@ node {
             notifyBuild(currentBuild.result, 'Test')
         }
     }
+   
     
     stage( 'Generate Docs' )
     {
@@ -222,6 +239,24 @@ node {
         finally
         {
             notifyBuild(currentBuild.result, 'Generate Docs')
+        }
+    }
+    
+    stage( 'Performance Tests' )
+    {
+      	try
+		{
+            bat 'BlackVision/RunBenchmarks.bat ' + currentPlatform + ' ' + currentConfiguration + ' v140 ' + bechmarksResPath + '/'
+            generatePerformancePlots( buildDir, currentConfiguration, currentPlatform )
+        }
+        catch( e )
+        {
+            currentBuild.result = "FAILED"
+            throw e
+        }
+        finally
+        {
+            notifyBuild(currentBuild.result, 'Performance Tests')
         }
     }
 	

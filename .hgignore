@@ -26,6 +26,7 @@ app/test.bmp
 app/testFreeType.bmp
 *.pyc
 workspace.xml
+BlackVision/Reports/
 BlackVision/_TestsResults/*
 BlackVision/Assets/BasicShapes/*
 BlackVision/Applications/ProjectManagerPrototype/bv_media/*
@@ -65,3 +66,4 @@ BlackVision/Projects/Win/VS14/.vs
 
 BlackVision/Doc/html
 wiki
+Performance/

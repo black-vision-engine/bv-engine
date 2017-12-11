@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Framework\Benchmark.h" />
+    <ClInclude Include="..\..\..\Source\Framework\BenchmarkInclude.h" />
+    <ClInclude Include="..\..\..\Source\Framework\BenchmarkMain.h" />
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h" />
+    <ClInclude Include="..\..\..\Source\Framework\BVBenchmark.h" />
     <ClInclude Include="..\..\..\Source\Framework\BVTestAppLogic.h" />
     <ClInclude Include="..\..\..\Source\Framework\FrameworkTest.h" />
     <ClInclude Include="..\..\..\Source\Framework\NameMangler.h" />
@@ -36,10 +40,12 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Scenes\SceneCreator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Framework\Benchmark.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\BVTestAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />
@@ -97,6 +103,8 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Benchmark.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Benchmark.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -106,6 +114,8 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Benchmark.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Benchmark.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -115,6 +125,8 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Benchmark.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Benchmark.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -124,6 +136,8 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_VideoCards.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Inc_Benchmark.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS14\CustomProperties\Lib_Benchmark.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

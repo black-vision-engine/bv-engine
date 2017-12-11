@@ -31,6 +31,9 @@
     <Filter Include="Utils\Accessors\Engine\Inputs">
       <UniqueIdentifier>{715cb4e7-ae33-4440-8eb4-817147686146}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Scenes">
+      <UniqueIdentifier>{6b100a37-6ee3-4a88-84bd-7274ad22700b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -89,6 +92,21 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Engine\Inputs\VideoInputHandlerAccessor.h">
       <Filter>Utils\Accessors\Engine\Inputs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\BenchmarkMain.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\Benchmark.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Scenes\SceneCreator.h">
+      <Filter>Utils\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\BenchmarkInclude.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Framework\BVBenchmark.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -113,6 +131,9 @@
       <Filter>Utils\Nodes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Framework\TestEnvironment.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Framework\Benchmark.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>
