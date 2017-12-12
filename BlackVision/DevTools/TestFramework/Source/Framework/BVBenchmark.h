@@ -27,6 +27,6 @@ inline double       MinValStatistic     ( const std::vector< double >& v )
 ->ReportAggregatesOnly( true )                                  \
 ->ComputeStatistics( "Max", &MaxValStatistic )                  \
 ->ComputeStatistics( "Min", &MinValStatistic )                  \
-->Unit( benchmark::TimeUnit::kMillisecond )
+->Unit( benchmark::TimeUnit::kMicrosecond )
 
 

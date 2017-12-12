@@ -12,7 +12,11 @@
 
 
 
-namespace bv {
+namespace bv
+{
+
+
+
 
 
 // *******************************
@@ -76,9 +80,15 @@ void                PdrUniformBufferObject::Unlock         ()
 //
 void                PdrUniformBufferObject::Update          ( const UniformBuffer * ub )
 {
-    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
+    // Version with MapBufferRange and buffer invalidation seems to be the fastest solution.
+    Bind();
+
+    void * data = BVGL::bvglMapBufferRange( GL_UNIFORM_BUFFER, 0, ub->Size(), GL_MAP_INVALIDATE_RANGE_BIT | GL_MAP_WRITE_BIT );
     memcpy( data, ub->GetData(), ub->Size() );
-    Unlock();
+    BVGL::bvglUnmapBuffer( GL_UNIFORM_BUFFER );
+
+    Unbind();
+
 }
 
 // *******************************
