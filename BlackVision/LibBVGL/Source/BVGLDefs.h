@@ -404,6 +404,13 @@ namespace bv {
 #define GL_QUERY_RESULT                 0x8866
 
 
+// Buffer access
+#define GL_MAP_INVALIDATE_BUFFER_BIT    0x0008
+#define GL_MAP_INVALIDATE_RANGE_BIT     0x0004
+#define GL_MAP_WRITE_BIT                0x0002
+
+
+
 typedef unsigned int GLenum;
 typedef unsigned int GLbitfield;
 typedef unsigned int GLuint;
