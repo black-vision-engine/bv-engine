@@ -44,7 +44,11 @@ std::set< UInt64 >	    VideoCard::GetDisplayedVideoOutputsIDs  () const
     std::set< UInt64 > ret;
 
     for( auto ch : m_channels )
-        ret.insert( ch->GetOutputId() );
+    {
+        if( ch->IsOutputChannel() )
+            ret.insert( ch->GetOutputId() );
+    }
+        
 
     return ret;
 }
