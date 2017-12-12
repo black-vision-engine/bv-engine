@@ -28,6 +28,10 @@ def CleanDirectory( directory ):
 
 def GenLabels():
     return [ "benchmark", "meanTime", "medianTime", "stddevTime", "meanCPU", "medianCPU", "stddevCPU", "max", "min", "Iterations" ]
+    
+def ToMillis( time ):
+    # Engine produces values in microseconds
+    return float( time ) / 1000
         
 def GenSingleBenchmarkReport( rows, resultDir ):
     
@@ -46,18 +50,18 @@ def GenSingleBenchmarkReport( rows, resultDir ):
     plotName = baseName + "_ProblemSize_" + problemSize
     fileName = os.path.join( resultDir, plotName + ".csv" )
     
-    meanTime = meanRow[ 2 ]
-    medianTime = medianRow[ 2 ]
-    stddevTime = stddevRow[ 2 ]
-    maxTime = maxRow[ 2 ]
-    minTime = minRow[ 2 ]
-    iterations = meanRow[ 1 ]
+    meanTime = ToMillis( meanRow[ 2 ] )
+    medianTime = ToMillis( medianRow[ 2 ] )
+    stddevTime = ToMillis( stddevRow[ 2 ] )
+    maxTime = ToMillis( maxRow[ 2 ] )
+    minTime = ToMillis( minRow[ 2 ] )
+    iterations = ToMillis( meanRow[ 1 ] )
     
-    meanTimeCPU = meanRow[ 3 ]
-    medianTimeCPU = medianRow[ 3 ]
-    stddevTimeCPU = stddevRow[ 3 ]
-    maxTimeCPU = maxRow[ 3 ]
-    minTimeCPU = minRow[ 3 ]
+    meanTimeCPU = ToMillis( meanRow[ 3 ] )
+    medianTimeCPU = ToMillis( medianRow[ 3 ] )
+    stddevTimeCPU = ToMillis( stddevRow[ 3 ] )
+    maxTimeCPU = ToMillis( maxRow[ 3 ] )
+    minTimeCPU = ToMillis( minRow[ 3 ] )
         
     csvLine = [ plotName, meanTime, medianTime, stddevTime, meanTimeCPU, medianTimeCPU, stddevTimeCPU, maxTime, minTime, iterations ]
     
