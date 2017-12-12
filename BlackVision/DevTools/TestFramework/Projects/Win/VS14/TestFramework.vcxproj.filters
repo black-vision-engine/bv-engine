@@ -154,8 +154,10 @@
     <ClCompile Include="..\..\..\Source\Framework\TestEnvironment.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\Benchmark.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.cpp" >
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.cpp">
