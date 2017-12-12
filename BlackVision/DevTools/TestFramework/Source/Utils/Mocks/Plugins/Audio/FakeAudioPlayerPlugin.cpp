@@ -170,7 +170,7 @@ MemoryChunkPtr                      FakeAudioPlayerPlugin::GenerateNextFrame    
 
                 memcpy( outData->GetWritable() + chunkOffset, m_signalSource->Get() + m_signalOffset, toCopy );
 
-                m_signalOffset += toCopy + m_signalOffset >= m_signalSource->Size() ? 0 : toCopy;
+                m_signalOffset = ( toCopy + m_signalOffset >= m_signalSource->Size() ) ? 0 : m_signalOffset + toCopy;
                 bytesPerFrame -= toCopy;
                 chunkOffset += toCopy;
             }
