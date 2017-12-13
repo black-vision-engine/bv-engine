@@ -116,14 +116,21 @@ def InvokeSingleBenchamark( file, resultDir ):
     
     fileName = os.path.basename( file )
     fileWithoutExt = os.path.splitext( fileName )[0]
+    fileDirectory = os.path.dirname( file )
     
     tempResultDir = os.path.join( resultDir, "Temporary/" )
     resultFile = os.path.join( tempResultDir, fileWithoutExt + ".csv" )
     
     EnsureDir( tempResultDir )
     
-    args = file + " --benchmark_out_format=csv --benchmark_out=" + resultFile
+    # Working directory should be the same as file directory
+    scriptWorkingDir = os.getcwd()
+    os.chdir( fileDirectory )
+    
+    args = fileName + " --benchmark_out_format=csv --benchmark_out=" + resultFile
     subprocess.call( args )
+    
+    os.chdir( scriptWorkingDir )
     
     # Benchmarks should prepare csv file, but it leaves some processor information on the beginning.
     # We must remove it first.
@@ -143,6 +150,8 @@ def InvokeSingleBenchamark( file, resultDir ):
 def InvokeBenchmarks( directory, resultDir ):
     
     EnsureDir( resultDir )
+    
+    resultDir = os.path.abspath( resultDir )
     
     print "Looking for benchmark executables in [" + directory + "]\n"
     
