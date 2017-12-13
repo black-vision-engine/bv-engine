@@ -4,7 +4,19 @@
 #include <process.h>
 #include "BVTimeCode.h"
 
-namespace bv { namespace videocards { namespace bluefish {
+
+#include "UseLoggerVideoModule.h"
+
+
+
+
+namespace bv {
+namespace videocards {
+namespace bluefish
+{
+
+
+
 
 #define MAX_HANC_BUFFER_SIZE (256*1024)
 extern struct blue_videomode_info gVideoModeInfo[];
@@ -544,7 +556,8 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 			//track UnderrunChA and UnderrunChB to see if frames were dropped
 			if (UnderrunChA != LastUnderrunChA)
 			{
-				std::cout << "Dropped a frame: ChA underruns: " << UnderrunChA << std::endl;
+				//std::cout << "Dropped a frame: ChA underruns: " << UnderrunChA << std::endl;
+                LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish channel A";
 				LastUnderrunChA = UnderrunChA;
 			}
 
