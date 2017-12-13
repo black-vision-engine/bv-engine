@@ -57,14 +57,14 @@ extern HighResolutionTimer GTimer;
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : m_bvProject( BVProject::Create( renderer, audioRenderer, &DefaultConfig ) )
-    , m_pluginsManager( nullptr )
+    , m_pluginsManager( &model::PluginsManager::DefaultInstanceRef() )
     , m_renderer( nullptr )
     , m_audioRenderer( nullptr )
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 	, m_gain( 1.f )
-    , m_videoCardManager( nullptr )
+    , m_videoCardManager( new videocards::VideoCardManager() )
 {
     GTimer.StartTimer();
 
@@ -112,8 +112,6 @@ void BVAppLogic::Initialize         ()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
 
-    m_pluginsManager = &model::PluginsManager::DefaultInstance();
-
     bv::effect::InitializeLibEffect( m_renderer );
 
     SetNodeLogicFactory( new NodeLogicFactory() );
@@ -131,7 +129,6 @@ void BVAppLogic::Initialize         ()
     {
         //FIXME: maybe config should be read by bvconfig
         //FIXME: move this initialization to some other place
-        m_videoCardManager = new videocards::VideoCardManager();
         auto & videCardsFactory = m_videoCardManager->GetFactory();
 
         videCardsFactory.RegisterDefaultCreators();

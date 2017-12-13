@@ -70,6 +70,7 @@ public:
 
     static model::BasicNodePtr	VideoStreamDecoder					( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask = "" );
 
+    static model::BasicNodePtr	FakeAudioPlugin                     ( model::ITimeEvaluatorPtr timeEval, const std::string & name );
 
 };
 
