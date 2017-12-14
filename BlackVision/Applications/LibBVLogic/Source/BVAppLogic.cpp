@@ -141,19 +141,6 @@ void BVAppLogic::Initialize         ()
     }
 }
 
-// *********************************
-//
-void BVAppLogic::Deinitialize    ()
-{
-    if( m_videoCardManager )
-    {
-        m_videoCardManager->Stop();
-
-        BVServiceProvider::GetInstance().UnregisterVideoCardManager();
-        delete m_videoCardManager;
-        m_videoCardManager = nullptr;
-    }
-}
 
 // *********************************
 //
@@ -403,7 +390,8 @@ void            BVAppLogic::RenderPhase         ( TimeType time, Renderer * rend
             audioRenderer->SetGain( m_gain );
             m_renderLogic->HandleFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
-            CheckDropFrame( time );
+            { time; }
+            //CheckDropFrame( time );
         }
     }
 }
@@ -502,17 +490,32 @@ BVAppState      BVAppLogic::GetState        ()
 
 // *********************************
 //
-void BVAppLogic::ShutDown           ()
+void            BVAppLogic::Deinitialize    ()
+{
+    m_remoteController->DeinitializeServer();
+
+    if( m_videoCardManager )
+    {
+        m_videoCardManager->Stop();
+
+        BVServiceProvider::GetInstance().UnregisterVideoCardManager();
+        delete m_videoCardManager;
+        m_videoCardManager = nullptr;
+    }
+}
+
+// *********************************
+//
+void            BVAppLogic::ShutDown        ()
 {
     //TODO: any required deinitialization
-    m_remoteController->DeinitializeServer();
     if( m_videoCardManager )
         m_videoCardManager->Stop();
 }
 
 // *********************************
 //
-void    BVAppLogic::PostFrameLogic   ()
+void            BVAppLogic::PostFrameLogic   ()
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {

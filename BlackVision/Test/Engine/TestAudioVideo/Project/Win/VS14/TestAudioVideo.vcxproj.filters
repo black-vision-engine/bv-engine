@@ -11,4 +11,9 @@
       <UniqueIdentifier>{356d1eef-a375-44f5-a185-44af8fd5babe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\AudioCardOut\AudioSignalPath.h">
+      <Filter>AudioCardOut</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

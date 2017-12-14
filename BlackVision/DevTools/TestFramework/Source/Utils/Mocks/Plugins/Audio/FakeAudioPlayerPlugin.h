@@ -58,6 +58,7 @@ private:
     SizeType                            m_signalOffset;
 
     MemoryChunkPtr                      m_signalSource;
+    float                               m_fps;
 
 public:
 
@@ -88,6 +89,10 @@ public:
     Memory chunk will be played until loop count will reach 0.*/
     void                    SetSignalSource     ( MemoryChunkPtr signal );
 
+
+    /**@brief Sets requested fps.
+    Plugin sends amount of data depending on requested fps.*/
+    void                    SetFPS              ( float fps )               { m_fps = fps; }
 };
 
 DEFINE_PTR_TYPE( FakeAudioPlayerPlugin )

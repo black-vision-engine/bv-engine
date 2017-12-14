@@ -86,6 +86,7 @@ bool					    FakeAudioPlayerPlugin::SetPrevPlugin        ( IPluginPtr prev )
 // 
 FakeAudioPlayerPlugin::FakeAudioPlayerPlugin				        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, model )
+    , m_fps( 50 )
 {
     m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 ); // Default video card format. It doesn't require converting.
 
@@ -143,9 +144,8 @@ void                                FakeAudioPlayerPlugin::UploadAudioFrame     
 SizeType                            FakeAudioPlayerPlugin::ComputeFrameSamples      ()
 {
     auto samplesPerSec = m_audioChannel->GetFrequency();
-    auto millisPerFrame = 20;   ///@todo Deal with other FPS than 50.
 
-    return samplesPerSec / millisPerFrame;
+    return SizeType( ceil( ( double)samplesPerSec / (double)m_fps ) );
 }
 
 // ***********************

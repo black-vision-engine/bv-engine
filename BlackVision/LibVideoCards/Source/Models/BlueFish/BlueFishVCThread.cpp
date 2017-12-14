@@ -3,6 +3,11 @@
 #include "UseLoggerVideoModule.h"
 
 #include "System/Time.h"
+#include "Serialization/ConversionHelper.h"
+
+#include "UseLoggerVideoModule.h"
+
+
 
 namespace bv { namespace videocards { namespace bluefish
 {
@@ -19,7 +24,7 @@ BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
     , m_videoChannel( vc )
     , m_odd( false )
     , m_outputFramesBuffer( BUFFER_SIZE )
-    , m_frameDuration( 0 )
+    , m_frameDuration( 20 )     // 20 ms 50 Hz by default
     , m_interlaceEnabled( false )
 {
     frameSize = frameSize / ( vc->m_playbackData->interlaced ? 2 : 1 ) + 2048; // FIXME: Why + 2048
@@ -65,8 +70,6 @@ void				BlueFishVCThread::Process					()
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
-        auto biginFrameProcessingTime = m_videoChannel->GetFrameTime();
-
         AVFrameConstPtr processedFrame = nullptr;
 
         if( m_interlaceEnabled )
@@ -77,13 +80,8 @@ void				BlueFishVCThread::Process					()
         else
             m_videoChannel->FrameProcessed( srcFrame );
 
-        if( m_frameDuration > 0 )
-        {
-            auto sleepFor = Int64( m_frameDuration ) - ( Int64( Time::Now() - biginFrameProcessingTime ) % Int64( m_frameDuration ) );
-            // sleep to the next multiple of m_frameDuration.
-
-            std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
-        }
+        
+        m_videoChannel->UpdateFrameTime( Time::Now() );
 	}
 }
 
