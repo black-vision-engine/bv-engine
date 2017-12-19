@@ -30,6 +30,8 @@ public:
     explicit AudioSignalPathTest()
         : m_fakeAudio( nullptr )
         , m_fakeVideoCard( nullptr )
+        , m_numTestFramesDuration( 10 )
+        , m_numCleanBuffersFrames( 100 )
     {}
 
 public:
@@ -42,6 +44,22 @@ protected:
     model::FakeAudioPlayerPluginPtr     m_fakeAudio;
     videocards::FakeVideoCardPtr        m_fakeVideoCard;
 
+    MemoryChunkPtr                      m_referenceSignal;
+    std::vector< UInt16 >               m_outputSignal;
+
+    UInt16              m_numTestFramesDuration;
+    UInt16              m_numCleanBuffersFrames;
+
+private:
+
+    virtual void                AggregateOutputSignal   ( AVFrameConstPtr frame );
+    virtual MemoryChunkPtr      GenerateTestSignal      ( UInt32 frequency );
+
+    void                        CompareFrames           ();
+    SizeType                    CompareSignals          ();
+    void                        ValidateNumSamples      ();
+
+    std::vector< UInt16 >       ChunkToVector           ( MemoryChunkPtr chunk );
 };
 
 
@@ -51,11 +69,13 @@ protected:
 // ========================================================================= //
 
 
+const UInt32 samplesRate = 48000;
+
+
 // ***********************
 //
-inline MemoryChunkPtr      GenerateTestSignal  ( UInt32 frequency )
+inline MemoryChunkPtr      AudioSignalPathTest::GenerateTestSignal  ( UInt32 frequency )
 {
-    const UInt32 samplesRate = 44000;
     UInt32 samplesToGen = samplesRate / frequency;
     UInt32 bytesPerSample = 2;
 
@@ -65,6 +85,9 @@ inline MemoryChunkPtr      GenerateTestSignal  ( UInt32 frequency )
     for( UInt32 i = 0; i < samplesToGen; ++i )
     {
         UInt16 sample = static_cast< UInt16 >( 0.8 * std::numeric_limits< UInt16 >::max() * ( float )i / ( float )samplesToGen );
+        
+        // Generate 2 channels stereo with the same data.
+        samplesVec.push_back( sample );
         samplesVec.push_back( sample );
     }
 
@@ -102,11 +125,15 @@ inline void            AudioSignalPathTest::PreEvents   ()
         ASSERT_NE( m_fakeAudio, nullptr );
         ASSERT_NE( m_fakeVideoCard, nullptr );
 
-        m_fakeAudio->SetSignalSource( GenerateTestSignal( 200 ) );
+        m_referenceSignal = GenerateTestSignal( 200 );
 
         EndTestAfterThisFrame( false );
     }
-    else if( GetFrameNumber() == 110 )
+    else if( GetFrameNumber() == m_numCleanBuffersFrames )
+    {
+        m_fakeAudio->SetSignalSource( m_referenceSignal );
+    }
+    else if( GetFrameNumber() == m_numCleanBuffersFrames + m_numTestFramesDuration )
     {
         EndTestAfterThisFrame( true );
     }
@@ -119,72 +146,177 @@ inline void            AudioSignalPathTest::PreEvents   ()
 inline void            AudioSignalPathTest::PostRender   ()
 {
     // Note: We wait 100 frames to empty queue from previous tests.
-    if( GetFrameNumber() >= 100 )
+    //if( GetFrameNumber() >= m_numCleanBuffersFrames )
+    //{
+    //    CompareFrames();
+    //}
+
+    if( GetFrameNumber() >= m_numCleanBuffersFrames && GetFrameNumber() < m_numCleanBuffersFrames + m_numTestFramesDuration )
     {
         auto & outputs = m_fakeVideoCard->AccessOutputs();
         auto & avFrame = outputs.Outputs.begin()->second;
 
-        auto audioChunk = avFrame->m_audioData;
-        auto mem = audioChunk->Get();
+        AggregateOutputSignal( avFrame );
+    }
 
-        std::vector< UInt16 > samplesVec;
-        samplesVec.resize( audioChunk->Size() / sizeof( UInt16 ) );
-
-        memcpy( samplesVec.data(), mem, audioChunk->Size() );
-
-        // Find max sample value. Since we use sawtooth signal, max value will apear in each period.
-        auto maxValIter = std::max_element( samplesVec.begin(), samplesVec.end() );
-        ASSERT_TRUE( maxValIter != samplesVec.end() );
-
-        auto maxVal = *maxValIter;
-
-        // Find first zero sample, ommit everything before it. Ignoring first samples shouldn't cause any problem.
-        // If there's big distortion in signal it should be visible in all samples.
-        auto zeroIter = std::find( samplesVec.begin(), samplesVec.end(), 0 );
-        auto maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
-
-        ASSERT_NE( zeroIter, samplesVec.end() );
-        ASSERT_NE( maxIter, samplesVec.end() );
-
-        maxIter++;
-
-        UInt32 numIterations = 0;
-
-        while( zeroIter != samplesVec.end() )
-        {
-            // Ignore last not complete part of signal.
-            if( *std::max_element( zeroIter, maxIter ) != maxVal )
-                break;
-
-            auto length = std::distance( zeroIter, maxIter ) - 1;
-
-            for( auto iter = zeroIter; iter != maxIter; ++iter )
-            {
-                auto i = std::distance( zeroIter, iter );
-
-                Int32 actualSample = static_cast< Int32 >( *iter );
-                Int32 expectedSample = static_cast< Int32 >( ( double )maxVal * ( double )i / ( double )length );
-
-                EXPECT_LE( actualSample, ( expectedSample + 1 ) );
-                EXPECT_GE( actualSample, ( expectedSample - 1 ) );
-            }
-
-            // Find new period ranges.
-            zeroIter = std::find( maxIter, samplesVec.end(), 0 );
-            maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
-            maxIter = maxIter != samplesVec.end() ? ++maxIter : maxIter;    // Include biggest sample.
-
-            numIterations++;
-        }
-
-
-        // Check how many iteration are made. We expect that this number can be less then computed,
-        // because we ommit samples from beginning and end.
-        // Note: multiplication by 2 is from stereo channels. We ignored it while generating data.
-        const UInt32 numSamplesPerFrame = 2 * 44000 / 50;
-        const UInt32 expectedNumIter = numSamplesPerFrame / 200 - 1;
-
-        EXPECT_GE( numIterations, expectedNumIter );
+    if( GetFrameNumber() == m_numCleanBuffersFrames + m_numTestFramesDuration )
+    {
+        EXPECT_EQ( CompareSignals(), 0 );
     }
 }
+
+// ***********************
+//
+inline void         AudioSignalPathTest::AggregateOutputSignal      ( AVFrameConstPtr frame )
+{
+    auto audioChunk = frame->m_audioData;
+    auto mem = audioChunk->Get();
+
+    auto outSize = m_outputSignal.size();
+    m_outputSignal.resize( outSize + audioChunk->Size() / sizeof( UInt16 ) );
+
+    memcpy( m_outputSignal.data() + outSize, mem, audioChunk->Size() );
+}
+
+// ***********************
+//
+inline void         AudioSignalPathTest::CompareFrames              ()
+{
+    auto & outputs = m_fakeVideoCard->AccessOutputs();
+    auto & avFrame = outputs.Outputs.begin()->second;
+
+    auto audioChunk = avFrame->m_audioData;
+    auto mem = audioChunk->Get();
+
+    std::vector< UInt16 > samplesVec;
+    samplesVec.resize( audioChunk->Size() / sizeof( UInt16 ) );
+
+    memcpy( samplesVec.data(), mem, audioChunk->Size() );
+
+    // Find max sample value. Since we use sawtooth signal, max value will apear in each period.
+    auto maxValIter = std::max_element( samplesVec.begin(), samplesVec.end() );
+    ASSERT_TRUE( maxValIter != samplesVec.end() );
+
+    auto maxVal = *maxValIter;
+    //ASSERT_GE( maxVal, std::numeric_limits< UInt16 >::max() / 3 );
+
+    // Find first zero sample, ommit everything before it. Ignoring first samples shouldn't cause any problem.
+    // If there's big distortion in signal it should be visible in all samples.
+    auto zeroIter = std::find( samplesVec.begin(), samplesVec.end(), 0 );
+    auto maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
+
+    ASSERT_NE( zeroIter, samplesVec.end() );
+    ASSERT_NE( maxIter, samplesVec.end() );
+
+    maxIter++;
+
+    UInt32 numIterations = 0;
+
+    while( zeroIter != samplesVec.end() )
+    {
+        // Ignore last not complete part of signal.
+        if( *std::max_element( zeroIter, maxIter ) != maxVal )
+            break;
+
+        auto length = std::distance( zeroIter, maxIter ) - 1;
+
+        for( auto iter = zeroIter; iter != maxIter; ++iter )
+        {
+            auto i = std::distance( zeroIter, iter );
+
+            Int32 actualSample = static_cast< Int32 >( *iter );
+            Int32 expectedSample = static_cast< Int32 >( ( double )maxVal * ( double )i / ( double )length );
+
+            EXPECT_LE( actualSample, ( expectedSample + 1 ) );
+            EXPECT_GE( actualSample, ( expectedSample - 1 ) );
+        }
+
+        // Find new period ranges.
+        zeroIter = std::find( maxIter, samplesVec.end(), 0 );
+        maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
+        maxIter = maxIter != samplesVec.end() ? ++maxIter : maxIter;    // Include biggest sample.
+
+        numIterations++;
+    }
+
+
+    // Check how many iteration are made. We expect that this number can be less then computed,
+    // because we ommit samples from beginning and end.
+    // Note: multiplication by 2 is from stereo channels. We ignored it while generating data.
+    const UInt32 numSamplesPerFrame = 2 * samplesRate / 50;
+    const UInt32 expectedNumIter = numSamplesPerFrame / 200 - 1;
+
+    EXPECT_GE( numIterations, expectedNumIter );
+}
+
+// ***********************
+//
+inline SizeType         AudioSignalPathTest::CompareSignals     ()
+{
+    std::vector< UInt16 > reference = ChunkToVector( m_referenceSignal );
+
+    ValidateNumSamples();
+
+
+    SizeType j = 0;
+    SizeType numErrors = 0;
+
+    // Find first non zero sample.
+    for( SizeType i = 0; i < m_outputSignal.size(); i++ )
+    {
+        if( m_outputSignal[ i ] > 0 )
+        {
+            EXPECT_GE( i, 1 );
+
+            // Start with zer osample just before first non-zero sample. @Note We have stereo output.
+            j = i - 2;
+            break;
+        }
+    }
+
+    // First sample should be in range of first frame.
+    const UInt32 numSamplesPerFrame = 2 * samplesRate / 50;
+    EXPECT_LE( j, numSamplesPerFrame );
+
+    while( j < m_outputSignal.size() )
+    {
+        for( SizeType i = 0; i < reference.size(); ++i )
+        {
+            auto outValue = m_outputSignal[ j + i ];
+            auto refValue = reference[ i ];
+
+            if( outValue != refValue )
+                numErrors++;
+        }
+
+        j += reference.size();
+    }
+
+
+    return numErrors;
+}
+
+// ***********************
+//
+inline void                             AudioSignalPathTest::ValidateNumSamples ()
+{
+    const UInt32 numSamplesPerFrame = 2 * samplesRate / 50;
+    auto expectedNumSamples = numSamplesPerFrame * m_numTestFramesDuration;
+
+    EXPECT_EQ( m_outputSignal.size(), expectedNumSamples );
+}
+
+// ***********************
+//
+inline std::vector< UInt16 >            AudioSignalPathTest::ChunkToVector      ( MemoryChunkPtr chunk )
+{
+    std::vector< UInt16 > samplesVec;
+    samplesVec.resize( chunk->Size() / sizeof( UInt16 ) );
+
+    memcpy( samplesVec.data(), chunk->Get(), chunk->Size() );
+
+    return samplesVec;
+}
+
+
 

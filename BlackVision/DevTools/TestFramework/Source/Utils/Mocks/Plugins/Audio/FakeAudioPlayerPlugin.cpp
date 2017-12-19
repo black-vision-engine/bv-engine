@@ -154,7 +154,7 @@ MemoryChunkPtr                      FakeAudioPlayerPlugin::GenerateNextFrame    
 {
     if( m_loopEnabledParam->Evaluate() )
     {
-        if( m_loopCount > 0 )
+        if( m_loopCount > 0 && m_signalSource )
         {
             Int64 samplesPerFrame = ComputeFrameSamples();
             auto sampleSize = 2;        ///< @todo We should support mocking other formats.

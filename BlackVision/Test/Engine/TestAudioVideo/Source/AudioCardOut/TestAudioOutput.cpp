@@ -38,12 +38,12 @@ void        VideoCardsAudioOutput50HzTest::PreEvents    ()
 
     if( GetFrameNumber() == 0 )
     {
-        m_fakeAudio->SetFPS( 50 );
+        m_fakeAudio->SetFPS( 49 );
     }
 }
 
 // ========================================================================= //
-// Test for 60 FPS frame generated from FakeAudioPlugin
+// Test for 20 FPS frame generated from FakeAudioPlugin
 // ========================================================================= //
 
 // ***********************
