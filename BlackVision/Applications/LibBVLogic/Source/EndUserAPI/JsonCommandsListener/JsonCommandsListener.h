@@ -2,8 +2,10 @@
 
 #include <map>
 #include <fstream>
+#include <mutex>
+#include <atomic>
 
-#include "../RemoteController.h"
+#include "EndUserAPI/RemoteController.h"
 #include "Util/IEventServer.h"
 #include "Threading/CriticalSection.h"
 #include "Engine/Events/Events.h"
@@ -22,11 +24,12 @@ private:
     CriticalSection                     m_eventsMapLock;
 
     // Debug layer
-    bool            m_debugLayer;
-    std::string     m_resultDirectory;
-    std::ofstream   m_resultFile;
-    UInt64          m_numEvents;
-    UInt64          m_numResponses;
+    bool                        m_debugLayer;
+    std::string                 m_resultDirectory;
+    std::ofstream               m_resultFile;
+    std::atomic< UInt64 >       m_numEvents;
+    std::atomic< UInt64 >       m_numResponses;
+    std::mutex                  m_debugFileMutex;
 
 public:
 
