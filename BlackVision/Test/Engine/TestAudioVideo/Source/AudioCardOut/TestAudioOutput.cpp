@@ -14,7 +14,7 @@ using namespace bv;
 
 // ***********************
 // This test sends generated sawtooth audio signal from fake plugin and reads results value from
-// video card.
+// video card. Fake plugin sends number of samples computed for 50 FPS frame rate.
 class VideoCardsAudioOutput50HzTest : public AudioSignalPathTest
 {
     DECALRE_GTEST_INFO( VideoCardsAudioOutput50HzTest )
@@ -38,7 +38,7 @@ void        VideoCardsAudioOutput50HzTest::PreEvents    ()
 
     if( GetFrameNumber() == 0 )
     {
-        m_fakeAudio->SetFPS( 49 );
+        m_fakeAudio->SetFPS( 50 );
     }
 }
 
@@ -48,7 +48,8 @@ void        VideoCardsAudioOutput50HzTest::PreEvents    ()
 
 // ***********************
 // This test sends generated sawtooth audio signal from fake plugin and reads results value from
-// video card.
+// video card. Fake plugin sends number of samples computed for 20 FPS frame rate.
+// Note: This means that we send more samples then needed, because 20 FPS frames last longer.
 class VideoCardsAudioOutput20HzTest : public AudioSignalPathTest
 {
     DECALRE_GTEST_INFO( VideoCardsAudioOutput20HzTest )

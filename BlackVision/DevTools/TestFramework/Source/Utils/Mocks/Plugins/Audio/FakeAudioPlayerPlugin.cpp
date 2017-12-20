@@ -158,7 +158,7 @@ MemoryChunkPtr                      FakeAudioPlayerPlugin::GenerateNextFrame    
         {
             Int64 samplesPerFrame = ComputeFrameSamples();
             auto sampleSize = 2;        ///< @todo We should support mocking other formats.
-            Int64 bytesPerFrame = samplesPerFrame * sampleSize;
+            Int64 bytesPerFrame = 2 * samplesPerFrame * sampleSize;     // Note: Multiply by 2 because of stereo.
 
             auto outData = MemoryChunk::Create( bytesPerFrame );
             Int64 chunkOffset = 0;

@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #undef max
+#undef min
 
 using namespace bv;
 
@@ -54,6 +55,7 @@ private:
 
     virtual void                AggregateOutputSignal   ( AVFrameConstPtr frame );
     virtual MemoryChunkPtr      GenerateTestSignal      ( UInt32 frequency );
+    MemoryChunkPtr              GenerateEmptySignal     ();
 
     void                        CompareFrames           ();
     SizeType                    CompareSignals          ();
@@ -97,6 +99,17 @@ inline MemoryChunkPtr      AudioSignalPathTest::GenerateTestSignal  ( UInt32 fre
     return chunk;
 }
 
+// ***********************
+//
+
+inline MemoryChunkPtr   AudioSignalPathTest::GenerateEmptySignal    ()
+{
+    UInt32 samplesToGen = samplesRate / 50;
+    UInt32 bytesPerSample = 2;
+
+    return MemoryChunk::Create( samplesToGen * bytesPerSample );
+}
+
 
 
 
@@ -126,6 +139,7 @@ inline void            AudioSignalPathTest::PreEvents   ()
         ASSERT_NE( m_fakeVideoCard, nullptr );
 
         m_referenceSignal = GenerateTestSignal( 200 );
+        m_fakeAudio->SetSignalSource( GenerateEmptySignal() );
 
         EndTestAfterThisFrame( false );
     }
@@ -146,10 +160,11 @@ inline void            AudioSignalPathTest::PreEvents   ()
 inline void            AudioSignalPathTest::PostRender   ()
 {
     // Note: We wait 100 frames to empty queue from previous tests.
-    //if( GetFrameNumber() >= m_numCleanBuffersFrames )
-    //{
-    //    CompareFrames();
-    //}
+    // First we must insert zero signal, after one frame we can send nullptr chunks to audio system.
+    if( GetFrameNumber() == 1 )
+    {
+        m_fakeAudio->SetSignalSource( nullptr );
+    }
 
     if( GetFrameNumber() >= m_numCleanBuffersFrames && GetFrameNumber() < m_numCleanBuffersFrames + m_numTestFramesDuration )
     {
@@ -280,7 +295,9 @@ inline SizeType         AudioSignalPathTest::CompareSignals     ()
 
     while( j < m_outputSignal.size() )
     {
-        for( SizeType i = 0; i < reference.size(); ++i )
+        auto maxLoop = std::min( reference.size(), m_outputSignal.size() - j );
+
+        for( SizeType i = 0; i < maxLoop; ++i )
         {
             auto outValue = m_outputSignal[ j + i ];
             auto refValue = reference[ i ];
