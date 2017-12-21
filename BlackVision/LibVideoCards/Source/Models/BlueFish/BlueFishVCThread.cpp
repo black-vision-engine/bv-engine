@@ -17,6 +17,8 @@ namespace
 const SizeType      BUFFER_SIZE = 10;
 }
 
+
+
 //**************************************
 //
 BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
@@ -110,21 +112,26 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         memcpy( &memDst[ j*( bytes_per_line ) ], &memSrc[ i*( bytes_per_line ) ], bytes_per_line );
 
     MemoryChunkPtr audioData = nullptr;
+    AVFrameDescriptor newDesc = frame->m_desc;
 
     if( !m_prevAudioData )
     {
         m_prevAudioData = MemoryChunk::Create( frame->m_audioData->Size() );
         memcpy( m_prevAudioData->GetWritable(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+
+        newDesc.sampleRate = 0;
     }
     else
     {
         audioData = MemoryChunk::Create( frame->m_audioData->Size() + m_prevAudioData->Size() );
         memcpy( audioData->GetWritable(), m_prevAudioData->Get(), m_prevAudioData->Size() );
         memcpy( audioData->GetWritable() + m_prevAudioData->Size(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+        newDesc.sampleRate = 2 * frame->m_desc.sampleRate;      // It's number of samples in reality.
+        
         m_prevAudioData = nullptr;
     }
 
-    return AVFrame::Create( outputFrame, audioData, frame->m_desc );
+    return AVFrame::Create( outputFrame, audioData, newDesc );
 }
 
 } // blackmagic

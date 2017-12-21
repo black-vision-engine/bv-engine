@@ -428,6 +428,8 @@ template std::string T2String( const int& v );
 template std::string T2String( const unsigned int& v );
 template std::string T2String( const UInt64& v );
 template std::string T2String( const Int64& v );
+template std::string T2String( const Int16& v );
+template std::string T2String( const UInt16& v );
 
 }   // Convert
 }   // bv
