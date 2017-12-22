@@ -122,11 +122,9 @@ void    RenderLogicCore::RenderScenes       ( const SceneVec & scenes, RenderedC
         auto outputType = ( RenderChannelType ) outIdx;
         auto outputRT = result->GetActiveRenderTarget( outputType );
 
-        NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
-
         audio::AudioRenderChannelData & arcd = const_cast< RenderChannel * >( result->GetRenderChannel( outputType ) )->GetAudioRenderChannelData();
-        arcd.ClearBuffers();
 
+        NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
         NodeRenderLogic::RenderAudio( scene, ctx, arcd );
 
         result->SetContainsValidData( outputType, true );
@@ -150,8 +148,10 @@ void    RenderLogicCore::ClearActiveChannels   ( RenderedChannelsData * result, 
         if( result->IsActive( channelType ) )
         {
             auto rt = result->GetActiveRenderTarget( channelType );
-
             NodeRenderLogic::Clear( rt, ctx );
+
+            audio::AudioRenderChannelData & arcd = const_cast< RenderChannel * >( result->GetRenderChannel( channelType ) )->GetAudioRenderChannelData();
+            arcd.ClearBuffers();
         }
     }
 }
