@@ -5,6 +5,9 @@
     <ClCompile Include="..\..\..\Source\AudioCardOut\TestAudioOutput.cpp">
       <Filter>AudioCardOut</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\AudioCardOut\TestCardsOutputUnloadScene.cpp">
+      <Filter>AudioCardOut</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AudioCardOut">

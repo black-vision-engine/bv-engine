@@ -35,6 +35,13 @@ public:
         , m_numCleanBuffersFrames( 100 )
     {}
 
+    explicit AudioSignalPathTest( UInt16 testFramesDuration )
+        : m_fakeAudio( nullptr )
+        , m_fakeVideoCard( nullptr )
+        , m_numTestFramesDuration( testFramesDuration )
+        , m_numCleanBuffersFrames( 100 )
+    {}
+
 public:
 
     virtual void        PreEvents           () override;
@@ -51,7 +58,7 @@ protected:
     UInt16              m_numTestFramesDuration;
     UInt16              m_numCleanBuffersFrames;
 
-private:
+protected:
 
     virtual void                AggregateOutputSignal   ( AVFrameConstPtr frame );
     virtual MemoryChunkPtr      GenerateTestSignal      ( UInt32 frequency );
@@ -143,6 +150,11 @@ inline void            AudioSignalPathTest::PreEvents   ()
 
         EndTestAfterThisFrame( false );
     }
+    else if( GetFrameNumber() == 1 )
+    {
+        // First we must insert zero signal, after one frame we can send nullptr chunks to audio system.
+        m_fakeAudio->SetSignalSource( nullptr );
+    }
     else if( GetFrameNumber() == m_numCleanBuffersFrames )
     {
         m_fakeAudio->SetSignalSource( m_referenceSignal );
@@ -159,12 +171,7 @@ inline void            AudioSignalPathTest::PreEvents   ()
 //
 inline void            AudioSignalPathTest::PostRender   ()
 {
-    // Note: We wait 100 frames to empty queue from previous tests.
-    // First we must insert zero signal, after one frame we can send nullptr chunks to audio system.
-    if( GetFrameNumber() == 1 )
-    {
-        m_fakeAudio->SetSignalSource( nullptr );
-    }
+    // Note: We wait m_numCleanBuffersFrames frames to empty queue from previous tests.
 
     if( GetFrameNumber() >= m_numCleanBuffersFrames && GetFrameNumber() < m_numCleanBuffersFrames + m_numTestFramesDuration )
     {
