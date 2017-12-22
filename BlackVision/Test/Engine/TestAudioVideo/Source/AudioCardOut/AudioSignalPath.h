@@ -64,7 +64,6 @@ protected:
     virtual MemoryChunkPtr      GenerateTestSignal      ( UInt32 frequency );
     MemoryChunkPtr              GenerateEmptySignal     ();
 
-    void                        CompareFrames           ();
     SizeType                    CompareSignals          ();
     void                        ValidateNumSamples      ();
 
@@ -200,76 +199,6 @@ inline void         AudioSignalPathTest::AggregateOutputSignal      ( AVFrameCon
     memcpy( m_outputSignal.data() + outSize, mem, audioChunk->Size() );
 }
 
-// ***********************
-//
-inline void         AudioSignalPathTest::CompareFrames              ()
-{
-    auto & outputs = m_fakeVideoCard->AccessOutputs();
-    auto & avFrame = outputs.Outputs.begin()->second;
-
-    auto audioChunk = avFrame->m_audioData;
-    auto mem = audioChunk->Get();
-
-    std::vector< UInt16 > samplesVec;
-    samplesVec.resize( audioChunk->Size() / sizeof( UInt16 ) );
-
-    memcpy( samplesVec.data(), mem, audioChunk->Size() );
-
-    // Find max sample value. Since we use sawtooth signal, max value will apear in each period.
-    auto maxValIter = std::max_element( samplesVec.begin(), samplesVec.end() );
-    ASSERT_TRUE( maxValIter != samplesVec.end() );
-
-    auto maxVal = *maxValIter;
-    //ASSERT_GE( maxVal, std::numeric_limits< UInt16 >::max() / 3 );
-
-    // Find first zero sample, ommit everything before it. Ignoring first samples shouldn't cause any problem.
-    // If there's big distortion in signal it should be visible in all samples.
-    auto zeroIter = std::find( samplesVec.begin(), samplesVec.end(), 0 );
-    auto maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
-
-    ASSERT_NE( zeroIter, samplesVec.end() );
-    ASSERT_NE( maxIter, samplesVec.end() );
-
-    maxIter++;
-
-    UInt32 numIterations = 0;
-
-    while( zeroIter != samplesVec.end() )
-    {
-        // Ignore last not complete part of signal.
-        if( *std::max_element( zeroIter, maxIter ) != maxVal )
-            break;
-
-        auto length = std::distance( zeroIter, maxIter ) - 1;
-
-        for( auto iter = zeroIter; iter != maxIter; ++iter )
-        {
-            auto i = std::distance( zeroIter, iter );
-
-            Int32 actualSample = static_cast< Int32 >( *iter );
-            Int32 expectedSample = static_cast< Int32 >( ( double )maxVal * ( double )i / ( double )length );
-
-            EXPECT_LE( actualSample, ( expectedSample + 1 ) );
-            EXPECT_GE( actualSample, ( expectedSample - 1 ) );
-        }
-
-        // Find new period ranges.
-        zeroIter = std::find( maxIter, samplesVec.end(), 0 );
-        maxIter = std::find( zeroIter, samplesVec.end(), maxVal );
-        maxIter = maxIter != samplesVec.end() ? ++maxIter : maxIter;    // Include biggest sample.
-
-        numIterations++;
-    }
-
-
-    // Check how many iteration are made. We expect that this number can be less then computed,
-    // because we ommit samples from beginning and end.
-    // Note: multiplication by 2 is from stereo channels. We ignored it while generating data.
-    const UInt32 numSamplesPerFrame = 2 * samplesRate / 50;
-    const UInt32 expectedNumIter = numSamplesPerFrame / 200 - 1;
-
-    EXPECT_GE( numIterations, expectedNumIter );
-}
 
 // ***********************
 //

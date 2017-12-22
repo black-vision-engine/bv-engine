@@ -125,6 +125,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AudioCardOut\TestCardsOutputFromMultiScenes.cpp" />
     <ClCompile Include="..\..\..\Source\AudioCardOut\TestCardsOutputUnloadScene.cpp" />
     <ClCompile Include="..\..\..\Source\AudioCardOut\TestAudioOutput.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
