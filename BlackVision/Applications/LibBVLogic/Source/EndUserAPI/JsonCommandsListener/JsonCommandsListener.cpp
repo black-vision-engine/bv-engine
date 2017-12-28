@@ -149,6 +149,8 @@ void                JsonCommandsListener::DebugLayerProcessResponse   ( Response
     if( !m_debugLayer )
         return;
 
+    std::lock_guard< std::mutex > lock( m_debugFileMutex );
+
     m_resultFile << RESPONSE_BEGIN_HEADER;
     m_resultFile << GetFormattedTime() << "#\n";
 
@@ -163,6 +165,8 @@ void                JsonCommandsListener::DebugLayerProcessEvent        ( const 
 {
     if( !m_debugLayer )
         return;
+
+    std::lock_guard< std::mutex > lock( m_debugFileMutex );
 
     m_resultFile << EVENT_BEGIN_HEADER;
     m_resultFile << GetFormattedTime() << "#\n";
