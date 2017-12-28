@@ -11,6 +11,8 @@ namespace videocards
 //
 FakeVideoCard::FakeVideoCard( UInt32 deviceID )
     :   m_deviceID( deviceID )
+    ,   m_frameNum( 0 )
+    ,   m_syncFrame( 0 )
 {}
 
 // ***********************
@@ -46,7 +48,12 @@ VideoCardID     FakeVideoCard::GetVideoCardID   () const
 //
 void            FakeVideoCard::ProcessFrame     ( const AVFrameConstPtr & data, UInt64 avOutputID )
 {
+    std::lock_guard< std::mutex > guard( m_syncLock );
+
     m_lastFrameOutput.Outputs[ avOutputID ] = data;
+    m_frameNum++;
+
+    m_waitForFrame.notify_all();
 }
 
 // ***********************
@@ -129,6 +136,26 @@ InputChannelsDescsVec   FakeVideoCard::GetInputChannelsDescs            () const
 void                    FakeVideoCard::AddChannel                       ( FakeChannelDesc & channelDesc )
 {
     m_channels.push_back( std::move( channelDesc ) );
+}
+
+// ***********************
+//
+void                    FakeVideoCard::SetOutputSyncPoint               ()
+{
+    m_syncFrame = m_frameNum + 1;
+}
+
+// ***********************
+//
+FrameOutput &           FakeVideoCard::AccessOutputs                    ()
+{
+    std::unique_lock< std::mutex > lock( m_syncLock );
+
+    // Wait until video card thread will insert new frame. You must call SetOutputSyncPoint
+    // before render step to remember frame number, you want to wait.
+    m_waitForFrame.wait( lock, [ this ]{ return m_frameNum >= m_syncFrame; } );
+
+    return m_lastFrameOutput;
 }
 
 // ***********************

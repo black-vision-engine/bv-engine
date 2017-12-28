@@ -45,6 +45,7 @@ public:
 public:
 
     virtual void        PreEvents           () override;
+    virtual void        PreRender           () override;
     virtual void        PostRender          () override;
 
 protected:
@@ -164,6 +165,13 @@ inline void            AudioSignalPathTest::PreEvents   ()
     }
 }
 
+
+// ***********************
+//
+inline void             AudioSignalPathTest::PreRender  ()
+{
+    m_fakeVideoCard->SetOutputSyncPoint();
+}
 
 
 // ***********************

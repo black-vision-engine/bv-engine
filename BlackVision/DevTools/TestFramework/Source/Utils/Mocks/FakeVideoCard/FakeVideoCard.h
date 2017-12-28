@@ -5,6 +5,9 @@
 #include "FakeVideoCardDesc.h"
 
 #include <map>
+#include <condition_variable>
+#include <mutex>
+#include <atomic>
 
 
 namespace bv {
@@ -28,6 +31,13 @@ private:
     std::vector< FakeChannelDesc >  m_channels;
 
     FrameOutput                     m_lastFrameOutput;
+
+    // Output frames synchronization
+    std::atomic< UInt64 >           m_frameNum;
+    UInt64                          m_syncFrame;
+
+    std::mutex                      m_syncLock;
+    std::condition_variable         m_waitForFrame;
 
 public:
 
@@ -59,7 +69,9 @@ public:
 
     void                        AddChannel              ( FakeChannelDesc & channelDesc );
 
-    FrameOutput &               AccessOutputs           () { return m_lastFrameOutput; }
+    void                        SetOutputSyncPoint      ();
+
+    FrameOutput &               AccessOutputs           ();
     void                        ClearOutputs            ();
 };
 
