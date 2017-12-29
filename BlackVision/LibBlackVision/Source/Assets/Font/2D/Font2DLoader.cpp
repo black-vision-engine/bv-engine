@@ -36,7 +36,7 @@ AssetConstPtr       Font2DLoader::LoadAsset( const bv::AssetDescConstPtr & desc 
     auto blurSize = typedDesc->GetBlurSize();
     auto glowBlurSize = typedDesc->GetGlowBlurSize();
     auto outlineSize = typedDesc->GetOutlineSize();
-    auto generateMipMaps = false;
+	auto generateMipMaps = typedDesc->GetGenerateMipmaps();
 
     auto text = TryLoadFont( filePath, fontSize, blurSize, glowBlurSize, outlineSize, generateMipMaps, atlasCharSetFile );
 
