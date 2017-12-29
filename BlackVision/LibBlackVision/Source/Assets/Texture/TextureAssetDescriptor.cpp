@@ -29,14 +29,15 @@ namespace Convert
 
 // ***********************
 //
-std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
-    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" )
-    , std::make_pair( MipMapFilterType::BILINEAR, "bilinear" )
-    , std::make_pair( MipMapFilterType::BOX, "box" )
-    , std::make_pair( MipMapFilterType::B_SPLINE, "b spline" )
-    , std::make_pair( MipMapFilterType::CATMULL_ROM, "catmull rom" )
-    , std::make_pair( MipMapFilterType::LANCZOS, "lanczos" )
-    , std::make_pair( MipMapFilterType::MMFT_TOTAL, "none" )
+	std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
+	{ std::make_pair( MipMapFilterType::BICUBIC, "bicubic" )
+	, std::make_pair( MipMapFilterType::BILINEAR, "bilinear" )
+	, std::make_pair( MipMapFilterType::BOX, "box" )
+	, std::make_pair( MipMapFilterType::B_SPLINE, "b spline" )
+	, std::make_pair( MipMapFilterType::CATMULL_ROM, "catmull rom" )
+	, std::make_pair( MipMapFilterType::LANCZOS, "lanczos" )
+	, std::make_pair( MipMapFilterType::MMFT_TOTAL, "none" )
+	, std::make_pair( MipMapFilterType::MMFT_TOTAL, "" )
 };
 
 IMPLEMENT_ENUM_SERIALIZATION( MipMapFilterType, mipmapFiltering )
