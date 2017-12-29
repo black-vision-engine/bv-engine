@@ -7,6 +7,8 @@
 #include "System/InitSubsystem.h"
 #include "BVTestAppLogic.h"
 
+#include "UseLoggerTests.h"
+
 #include "System/Path.h"
 
 
@@ -67,7 +69,11 @@ bool                BlackVisionAppFramework::OverrideConfig     ( const std::str
 //
 BVAppLogic *        BlackVisionAppFramework::CreateAppLogic     ( bv::Renderer * renderer, audio::AudioRenderer * audioRenderer ) const
 {
-    return new BVTestAppLogic( renderer, audioRenderer );
+    auto bvTestAppLogic = new BVTestAppLogic( renderer, audioRenderer );
+
+    bvTestAppLogic->RegisterMocks();
+
+    return bvTestAppLogic;
 }
 
 
