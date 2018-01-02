@@ -36,6 +36,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\EvaluatorsAccessors.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\NodeComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Events\EndOperationEvent.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="..\..\..\Source\Framework\FrameworkTest.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\MocksRegistration.cpp" />
     <ClCompile Include="..\..\..\Source\Framework\TestEnvironment.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\Events\EndOperationEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.cpp" />

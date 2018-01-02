@@ -4,6 +4,7 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "Engine/Events/Events.h"
+#include "Utils/Events/EndOperationEvent.h"
 
 
 using namespace bv;
@@ -40,6 +41,7 @@ public:
     void                        SpawnThread         ();
 
     void                        CountEventsHandler  ( bv::IEventPtr evt );
+    void                        SpammingThreadEnd   ( bv::IEventPtr evt );
 
 private:
 
@@ -74,6 +76,7 @@ void        Events_EventsManager_LostEvents::PreEvents           ()
         m_end = false;
         
         bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &Events_EventsManager_LostEvents::CountEventsHandler ), bv::ParamKeyEvent::Type() );
+        bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &Events_EventsManager_LostEvents::SpammingThreadEnd ), bv::EndOperationEvent::Type() );
 
         SpawnThread();
 
@@ -92,7 +95,7 @@ void        Events_EventsManager_LostEvents::PreModelUpdate        ()
     }
 
     // Wait some frames for the rest of events.
-    if( GetFrameNumber() == m_lastSendingFrame + 500 )
+    if( GetFrameNumber() == m_lastSendingFrame )
     {
         EXPECT_EQ( m_eventsCounter, totalEvents );
 
@@ -100,6 +103,7 @@ void        Events_EventsManager_LostEvents::PreModelUpdate        ()
 
         // Remove aded delegate since this class will be destroyed soon.
         bv::GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &Events_EventsManager_LostEvents::CountEventsHandler ), bv::ParamKeyEvent::Type() );
+        bv::GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &Events_EventsManager_LostEvents::SpammingThreadEnd ), bv::EndOperationEvent::Type() );
     }
 }
 
@@ -125,24 +129,36 @@ bv::IEventPtr       Events_EventsManager_LostEvents::CreateTestEvent       ()
 //
 void                Events_EventsManager_LostEvents::EventSpammingThread   ()
 {
+    using namespace std::chrono_literals;
+
     auto eventsLeft = totalEvents;
+
+    auto event = CreateTestEvent();
 
     while( eventsLeft > 0 )
     {
         for( Int64 i = 0; i < loopEvents; ++i )
         {
-            auto event = CreateTestEvent();
-
             bv::GetDefaultEventManager().ConcurrentQueueEvent( event );
         }
 
         eventsLeft -= loopEvents;
 
-        using namespace std::chrono_literals;
         std::this_thread::sleep_for( 8ms );
     }
 
-    m_end = true;
+    // Give engine some time to deal with events.
+    std::this_thread::sleep_for( 10000ms );
+
+    // Send notification that all events are send.
+    // Since this test checks if events are not lost during processing, we need to send multiple end events
+    // to make sure at least one will do the work.
+    for( int i = 0; i < 5; ++i )
+    {
+        bv::GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< EndOperationEvent >() );
+
+        std::this_thread::sleep_for( 100ms );
+    }
 }
 
 // ***********************
@@ -162,6 +178,13 @@ void                Events_EventsManager_LostEvents::CountEventsHandler    ( bv:
     {
         m_eventsCounter++;
     }
+}
+
+// ***********************
+//
+void                Events_EventsManager_LostEvents::SpammingThreadEnd      ( bv::IEventPtr evt )
+{
+    m_end = true;
 }
 
 

@@ -43,6 +43,9 @@
     <Filter Include="Utils\Mocks\Plugins\Audio">
       <UniqueIdentifier>{23244d06-9be0-4e54-bff4-79a7a3ef3673}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Events">
+      <UniqueIdentifier>{1a78cf01-ddaf-4a4a-b0b3-95bafa59553b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -128,6 +131,9 @@
     <ClInclude Include="..\..\..\Source\Framework\BVBenchmark.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Events\EndOperationEvent.h">
+      <Filter>Utils\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">
@@ -157,7 +163,7 @@
     <ClCompile Include="..\..\..\Source\Framework\Benchmark.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.cpp" >
+    <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.cpp">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.cpp">
@@ -168,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Framework\MocksRegistration.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Events\EndOperationEvent.cpp">
+      <Filter>Utils\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
