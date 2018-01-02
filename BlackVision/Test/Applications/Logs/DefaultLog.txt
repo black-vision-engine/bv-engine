@@ -1,0 +1,12 @@
+[BlackVisionApp   ] 2017-12-29 15:10:23 critical: License is not valid. Please contact your administrator or sales representative
+[BlackVisionApp   ] 2017-12-29 15:10:23    error: Config path 'TRUCTURE_INNER_EVENTS' doesn't exist.
+[LibBlackVision   ] 2017-12-29 15:10:23 critical: File: Assets/Shaders/Combinations/default.frag does not exist. Loading default shader failed!!!
+[LibBlackVision   ] 2017-12-29 15:10:23    error: Vertex shader(s) failed to link, fragment shader(s) failed to link.
+Vertex link error: INVALID_OPERATION.
+ERROR: error(#97) No program main found
+fragment link error: INVALID_OPERATION.
+ERROR: error(#97) No program main found
+
+[BlackVisionApp   ] 2017-12-29 15:12:26     info: BlackVision initialized, version: x64 Debug
+[BlackVisionApp   ] 2017-12-29 15:12:26 critical: License is not valid. Please contact your administrator or sales representative
+[BlackVisionApp   ] 2017-12-29 15:12:26    error: Config path '' doesn't exist.

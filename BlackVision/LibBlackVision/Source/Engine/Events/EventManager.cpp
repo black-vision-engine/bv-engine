@@ -189,9 +189,9 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         
         curMillis = Time::Now();
 
-        if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
+        if( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
-            assert( !"Concurrent events are DOSing event manager" );
+            LOG_MESSAGE( SeverityLevel::info ) << "Concurrent events are DOSing event manager";
         }
     }
 

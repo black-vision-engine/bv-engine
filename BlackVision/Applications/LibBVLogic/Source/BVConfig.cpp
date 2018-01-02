@@ -199,7 +199,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
 
         m_displayVideoCardOutput = Convert::String2T< bool >( m_properties[ "Renderer/DisplayVideoCardOutput" ], false );
 
-        m_eventLoopUpdateMillis = 20;
+        m_eventLoopUpdateMillis = Convert::String2T< UInt32 >( m_properties[ "Application/Events/MaxLoopUpdateTime" ], m_eventLoopUpdateMillis );
 
         m_defaultFOV = 90.f;
         m_defaultNearClippingPlane = 0.1f;
