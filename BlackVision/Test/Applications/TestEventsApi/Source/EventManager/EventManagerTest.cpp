@@ -62,7 +62,7 @@ const Int64 totalEvents = 100000;
 const Int64 loopEvents = 10000;
 #else
 const Int64 totalEvents = 100000;
-const Int64 loopEvents = 100;
+const Int64 loopEvents = 1000;
 #endif
 
 
@@ -95,7 +95,7 @@ void        Events_EventsManager_LostEvents::PreModelUpdate        ()
     }
 
     // Wait some frames for the rest of events.
-    if( GetFrameNumber() == m_lastSendingFrame )
+    if( GetFrameNumber() != 0 && GetFrameNumber() == m_lastSendingFrame )
     {
         EXPECT_EQ( m_eventsCounter, totalEvents );
 
