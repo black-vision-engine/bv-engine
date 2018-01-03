@@ -7,7 +7,9 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventTrigger.h"
 
+#include "Utils/Serialization/Serialize.h"
 
+using namespace bv;
 using namespace bv::model;
 
 
@@ -289,4 +291,30 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, TwoNearKeyframes )
     EXPECT_TRUE( abs( timeline->GetLocalTime() - 0.4f ) < 0.00001 );
 }
 
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZero )
+{
+	auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+	ASSERT_NE( timeline, nullptr );
 
+	auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.0f, timeline.get() );
+	ASSERT_TRUE( timeline->AddKeyFrame( stopKeyframe ) );
+
+	timeline->Play();
+
+	timeline->SetGlobalTime( 1.f );
+
+	ASSERT_NEAR( timeline->GetLocalTime(), 0, 0.0001 );
+}
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSerialization )
+{
+	auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/StopAtZero.xml", "timeline" );
+
+	timeline->SetGlobalTime( 1.f );
+
+	ASSERT_NEAR( timeline->GetLocalTime(), 0, 0.0001 );
+}

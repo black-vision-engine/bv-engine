@@ -11,6 +11,8 @@
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
+#include "gtest/gtest.h"
+
 #include "System/Path.h"
 
 namespace bv
@@ -56,12 +58,14 @@ std::shared_ptr< Type >     Deserialize     ( const std::string & path, const st
 template< typename Type >
 std::shared_ptr< Type >     Deserialize     ( const std::string & path, const std::string & enterName ) 
 {
-    auto context = BVDeserializeContext::CreateContextFromEmptiness();
-    return Deserialize< Type >( path, enterName, context );
+	auto context = BVDeserializeContext::CreateContextFromEmptiness();
+	if( Path::Exists( path ) )
+		return Deserialize< Type >( path, enterName, context );
+	else
+	{
+		EXPECT_TRUE( false ) << "Deserialized file does not exist: " << path;
+		return nullptr;
+	}
 }
-
-
-
-
 
 }	// bv
