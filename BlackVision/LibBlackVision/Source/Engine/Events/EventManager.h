@@ -2,6 +2,8 @@
 
 #include <list>
 #include <hash_map>
+#include <mutex>
+
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 
@@ -35,6 +37,8 @@ private:
     int m_activeQueue;
     int m_activeconcurrentQueue;
     int m_numLockedFrames;          // Locks processing events for m_numLockedFrames frames.
+
+    std::mutex              m_switchQueueLock;
 
 public:
 

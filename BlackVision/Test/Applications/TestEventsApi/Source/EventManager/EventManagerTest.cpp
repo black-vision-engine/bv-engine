@@ -62,7 +62,7 @@ const Int64 totalEvents = 100000;
 const Int64 loopEvents = 10000;
 #else
 const Int64 totalEvents = 100000;
-const Int64 loopEvents = 1000;
+const Int64 loopEvents = 100;
 #endif
 
 
