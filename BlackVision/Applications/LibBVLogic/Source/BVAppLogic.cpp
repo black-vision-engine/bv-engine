@@ -64,7 +64,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 	, m_gain( 1.f )
-    , m_videoCardManager( new videocards::VideoCardManager() )
+    , m_videoCardManager( nullptr )
 {
     GTimer.StartTimer();
 
@@ -127,6 +127,8 @@ void BVAppLogic::Initialize         ()
 
     if( DefaultConfig.ReadbackFlag() )
     {
+        m_videoCardManager = new videocards::VideoCardManager();
+
         //FIXME: maybe config should be read by bvconfig
         //FIXME: move this initialization to some other place
         auto & videCardsFactory = m_videoCardManager->GetFactory();

@@ -130,16 +130,13 @@ bool    EventManager::ConcurrentQueueEvent  ( const IEventPtr & evt )
 
     assert( evt );
 
-    auto listenersIt = m_eventListeners.find( evt->GetEventType() );
+    m_switchQueueLock.lock();
 
-    if( listenersIt != m_eventListeners.end() )
-    {
-        m_concurrentQueues[ m_activeQueue ].Push( evt );
+    m_concurrentQueues[ m_activeconcurrentQueue ].Push( evt );
 
-        return true;
-    }
+    m_switchQueueLock.unlock();
 
-    return false;
+    return true;
 }
 
 // *******************************
@@ -176,22 +173,27 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         m_numLockedFrames--;
 
     //Multithreaded part
+    m_switchQueueLock.lock();
+
     unsigned int activeConcurrentQueue = m_activeconcurrentQueue;
     m_activeconcurrentQueue = ( m_activeconcurrentQueue + 1 ) % NUM_CONCURRENT_QUEUES;
 
 	m_concurrentQueues[ m_activeconcurrentQueue ].Clear();
 
+    m_switchQueueLock.unlock();
+
+
 	IEventPtr  concurrentEvent;
 
-    while ( m_concurrentQueues[ activeConcurrentQueue ].TryPop( concurrentEvent ) )
+    while( m_concurrentQueues[ activeConcurrentQueue ].TryPop( concurrentEvent ) )
     {
         QueueEvent( concurrentEvent );
         
         curMillis = Time::Now();
 
-        if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
+        if( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
-            assert( !"Concurrent events are DOSing event manager" );
+            LOG_MESSAGE( SeverityLevel::info ) << "Concurrent events are DOSing event manager";
         }
     }
 
@@ -206,8 +208,6 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         IEventPtr evt = m_queues[ activeQueue ].Front();
         m_queues[ activeQueue ].Pop();
 
-
-
         EventType eventType = evt->GetEventType();
 
         auto listenersIt = m_eventListeners.find( eventType );
@@ -219,12 +219,15 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
 
         curMillis = Time::Now();
 
-        if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
+        if( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
+            LOG_MESSAGE( SeverityLevel::info ) << "Max events processing time exceeded.";
             break;
         }
     }
 	
+
+    // Rewrite all not processed events keeping their order.
     EventList tmp;
 
     bool pendingEvents = !m_queues[ activeQueue ].IsEmpty();

@@ -186,8 +186,14 @@ void main()
 		}
 	}
 		
-	if( result.a == 0.0 )
+	// if( result.a == 0.0 )
+		// discard;
+	if( result.a < 0.25 )
 		discard;
+	else if( result.a > 0.75 )
+		result.a = 1.f;
+	else
+		result.a = 2 * ( result.a - 0.5 ) + 0.5;
 	FragColor = result;
 }
 

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{5B8E3BA4-A921-4457-93E5-B108FC58B4B1}"
 EndProject
@@ -104,10 +104,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BenchmarkParams", "..\..\..
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BenchmarkMultiScenes", "..\..\..\Benchmarks\Engine\BenchmarkMultiScenes\Project\Win\VS14\BenchmarkMultiScenes.vcxproj", "{FB39427A-CD39-48BB-8AD2-04CA53D0D007}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestEventsApi", "..\..\..\Test\Applications\TestEventsApi\Project\Win\VS14\TestEventsApi.vcxproj", "{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -790,6 +789,20 @@ Global
 		{FB39427A-CD39-48BB-8AD2-04CA53D0D007}.Release|Win32.Build.0 = Release|Win32
 		{FB39427A-CD39-48BB-8AD2-04CA53D0D007}.Release|x64.ActiveCfg = Release|x64
 		{FB39427A-CD39-48BB-8AD2-04CA53D0D007}.Release|x64.Build.0 = Release|x64
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|Win32.Build.0 = Debug|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|x64.ActiveCfg = Debug|x64
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Debug|x64.Build.0 = Debug|x64
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|Any CPU.ActiveCfg = Release|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|Win32.ActiveCfg = Release|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|Win32.Build.0 = Release|Win32
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|x64.ActiveCfg = Release|x64
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -835,8 +848,12 @@ Global
 		{43B10C55-5A94-4F3D-B541-BEB72C502696} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{2340B3A1-35B0-49B5-94D2-375F4F79D960} = {A304A97A-C478-4A6C-85EE-DC04EAABD64C}
 		{FB39427A-CD39-48BB-8AD2-04CA53D0D007} = {A304A97A-C478-4A6C-85EE-DC04EAABD64C}
+		{321630DA-B551-4D0D-9D36-BA62AE1ACB1F} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23FC2EE1-0489-479F-B40E-61A4C92FB7D0}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

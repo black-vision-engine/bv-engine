@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\EventManager\EventManagerTest.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="EventManager">
+      <UniqueIdentifier>{c7115902-18e8-4deb-91e8-ef3ab6176265}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

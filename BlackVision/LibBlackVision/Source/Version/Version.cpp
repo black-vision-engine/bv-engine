@@ -13,7 +13,7 @@ namespace bv
 namespace impl
 {
 
-Version CurrentVersion = { 0, 47, 1, BuildVersion, "Windows 64bit" };
+Version CurrentVersion = { 0, 48, 1, BuildVersion, "Windows 64bit" };
 
 }
 
