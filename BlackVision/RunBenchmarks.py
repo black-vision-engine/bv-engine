@@ -121,7 +121,7 @@ def InvokeSingleBenchamark( file, resultDir ):
     tempResultDir = os.path.join( resultDir, "Temporary/" )
     resultFile = os.path.join( tempResultDir, fileWithoutExt + ".csv" )
     
-    EnsureDir( tempResultDir )
+    EnsureDir( resultFile )
     
     # Working directory should be the same as file directory
     scriptWorkingDir = os.getcwd()
