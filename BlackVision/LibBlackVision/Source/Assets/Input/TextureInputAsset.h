@@ -5,7 +5,7 @@
 
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
-
+#include "Engine/Graphics/InputSlots/InputSlots.h"
 
 
 namespace bv
@@ -19,9 +19,20 @@ class TextureInputAsset : public Asset, public std::enable_shared_from_this< Tex
 {
 private:
 
+    static const std::string		uid;
+
+protected:
+
+    InputSlotsPtr           m_slots;
+
 public:
 
 
+
+
+    virtual const std::string &	    GetUID			() const override;
+
+    static const std::string &	    UID				();
 
 };
 
