@@ -119,7 +119,7 @@ void         UpdatersHelpers::UpdateCamera                ( Camera * camera, mod
     float aspect = width / height;
 
     if( isPerspective->GetValue() )
-        camera->SetPerspective( fov->GetValue(), width, height, near->GetValue(), far->GetValue() );
+        camera->SetPerspective( glm::radians( fov->GetValue() ), width, height, near->GetValue(), far->GetValue() );
     else
         camera->SetOrthogonal( aspect * size, size, near->GetValue(), far->GetValue() );
 
