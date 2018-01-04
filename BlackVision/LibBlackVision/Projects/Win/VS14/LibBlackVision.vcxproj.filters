@@ -5468,6 +5468,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

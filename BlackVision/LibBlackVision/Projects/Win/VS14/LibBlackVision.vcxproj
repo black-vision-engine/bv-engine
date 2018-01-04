@@ -625,6 +625,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h" />
