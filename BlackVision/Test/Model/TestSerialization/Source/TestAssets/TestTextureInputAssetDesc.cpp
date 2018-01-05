@@ -59,4 +59,18 @@ TEST( Serialization_Assets, TextureInputSlot_IndexInsteadOfName )
     ASSERT_EQ( actual, nullptr );
 }
 
+// ***********************
+// XML contains empty slotBinding marker.
+TEST( Serialization_Assets, TextureInputSlot_EmptySlotBinding )
+{
+    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/EmptySlotBinding.xml", "asset" );
+    ASSERT_EQ( actual, nullptr );
+}
 
+// ***********************
+// XML contains no slotBinding marker.
+TEST( Serialization_Assets, TextureInputSlot_NoSlotBindingMarker )
+{
+    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/NoSlotBindingMarker.xml", "asset" );
+    ASSERT_EQ( actual, nullptr );
+}
