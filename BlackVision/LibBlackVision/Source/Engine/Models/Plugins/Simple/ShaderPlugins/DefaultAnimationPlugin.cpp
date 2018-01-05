@@ -307,8 +307,9 @@ void		DefaultAnimationPlugin::FrameUpdate		                    ()
         SetParameter( m_paramFrameNum, 0.f, 0.f );
         SetParameter( m_paramFrameNum, ( Float32 )m_texturesNum / m_paramFPS->Evaluate(), ( Float32 )m_texturesNum );
     }
+	
 
-    auto frameNum = ( UInt32 )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
+    auto frameNum = ( UInt32 )( m_paramFrameNum->Evaluate() + 0.01f ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 }
 
