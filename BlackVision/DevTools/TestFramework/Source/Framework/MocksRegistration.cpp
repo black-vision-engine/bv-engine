@@ -34,15 +34,11 @@ void            BVTestAppLogic::RegisterMocks           ()
 void            BVTestAppLogic::RegisterMockVideoCard   ()
 {
     auto videoCardManager = GetVideoCardManager();
-    if( videoCardManager == nullptr )
+    if( videoCardManager != nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Something changed in BVAppLogic initialization code. VideoCardManager should exist in this place";
-        assert( false );
+        // Add posibility to create mock video card
+        videoCardManager->GetFactory().RegisterDescriptor( videocards::FakeVideoCardDesc::UID(), &videocards::FakeVideoCardDesc::CreateDescriptor );
     }
-
-    // Add posibility to create mock video card
-    videoCardManager->GetFactory().RegisterDescriptor( videocards::FakeVideoCardDesc::UID(), &videocards::FakeVideoCardDesc::CreateDescriptor );
-
 }
 
 // ***********************
