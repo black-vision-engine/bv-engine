@@ -62,10 +62,8 @@ Expected< InputSlotBinding >    InputSlotBinding::Create        ( const IDeseria
         }
         else if( type == "ByName" )
         {
-            auto expectedName = Convert::String2T< std::string >( deser.GetAttribute( "name" ) );
-
-            if( expectedName.IsValid() )
-                return InputSlotBinding( expectedName.GetVal() );
+            if( deser.HasAttribute( "name" ) )
+                return InputSlotBinding( deser.GetAttribute( "name" ) );
             else
                 Warn< SerializationException >( deser, "Expected valid slot name" );
         }
