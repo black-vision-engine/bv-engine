@@ -1,16 +1,45 @@
 #include "gtest/gtest.h"
 
+#include "IO/DirIO.h"
 
 #include "Utils/Serialization/Serialize.h"
 #include "Serialization/SerializationHelper.h"
 
+#include "Utils/Comparators/Assets/TextureInputAssetComparator.h"
 
 #include "Assets/Input/TextureInputAssetDesc.h"
 
 
 using namespace bv;
 
+static int createOutputDirFirst = Dir::CreateDir( "Out" );
 
+
+// ***********************
+// Serialize and deserialize by index binding.
+TEST( Serialization_Assets, TextureInputSlot_SerDeserIndexed )
+{
+    InputSlotBinding binding( "slot blabla" );
+
+    auto expectedAssetDesc = TextureInputAssetDesc::Create( binding );
+    Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserIndexed.xml" );
+    auto actualAssetDesc = Deserialize< const TextureInputAssetDesc >( "Out/SerDeserIndexed.xml", "asset" );
+
+    EXPECT_TRUE( model::TextureInputAssetComparator::CompareStructure( expectedAssetDesc, actualAssetDesc ) );
+}
+
+// ***********************
+// Serialize and deserialize by name binding.
+TEST( Serialization_Assets, TextureInputSlot_SerDeserNamed )
+{
+    InputSlotBinding binding( 152 );
+
+    auto expectedAssetDesc = TextureInputAssetDesc::Create( binding );
+    Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserNamed.xml" );
+    auto actualAssetDesc = Deserialize< const TextureInputAssetDesc >( "Out/SerDeserNamed.xml", "asset" );
+
+    EXPECT_TRUE( model::TextureInputAssetComparator::CompareStructure( expectedAssetDesc, actualAssetDesc ) );
+}
 
 
 // ***********************

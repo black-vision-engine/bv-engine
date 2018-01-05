@@ -46,6 +46,9 @@
     <Filter Include="Utils\Events">
       <UniqueIdentifier>{1a78cf01-ddaf-4a4a-b0b3-95bafa59553b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Comparators\Assets">
+      <UniqueIdentifier>{c3f47a84-1474-4371-a87e-2646b4d62c82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Events\EndOperationEvent.h">
       <Filter>Utils\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\Assets\TextureInputAssetComparator.h">
+      <Filter>Utils\Comparators\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
