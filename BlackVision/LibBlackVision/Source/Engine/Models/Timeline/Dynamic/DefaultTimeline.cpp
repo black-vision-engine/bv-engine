@@ -51,7 +51,7 @@ namespace model {
 
 namespace {
 
-const TimeType GEvtTimeSeparation = TimeType( 0.2 ); //FIXME: some config (default) parameters should be used here - engine should expose it's connfiguration defaults for overriding
+const TimeType GEvtTimeSeparation = TimeType( 0.02 ); //FIXME: some config (default) parameters should be used here - engine should expose it's connfiguration defaults for overriding
 
 // *********************************
 //
