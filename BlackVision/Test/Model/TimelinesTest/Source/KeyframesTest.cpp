@@ -14,6 +14,7 @@ using namespace bv::model;
 
 
 
+const double epsilon = 0.00001;
 
 // ***********************
 //
@@ -132,7 +133,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopOnKeyframe )
     timeline->Play();
     timeline->SetGlobalTime( bv::TimeType( 1.65f ) );
 
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 1.05f ) < 0.00001 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.05f, epsilon );
 }
 
 // ***********************
@@ -152,10 +153,10 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, GotoOnKeyframe )
     timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.8f ) );
-    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.0f ) );
 
     // Keyframe should jump to time 0.2f
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 0.2f ) < 0.00001 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0.2f, epsilon );
 
     // Simulate bv updates
     timeline->SetGlobalTime( bv::TimeType( 1.7f ) );
@@ -163,7 +164,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, GotoOnKeyframe )
     timeline->SetGlobalTime( bv::TimeType( 2.4f ) );
 
     // Keyframe shouldn't jump this time since loop count is set to 1.
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 1.4f ) < 0.00001 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.6f, epsilon );
 }
 
 
@@ -172,7 +173,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, GotoOnKeyframe )
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, RestartKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
-    auto restartKeyframe = TimelineEventLoop::Create( "RestartKeyframe", 1.0f, bv::LoopEventAction::LEA_RESTART, 1, 0.2f, timeline.get() );
+    auto restartKeyframe = TimelineEventLoop::Create( "RestartKeyframe", 1.0f, bv::LoopEventAction::LEA_RESTART, 1 );
     ASSERT_TRUE( timeline->AddKeyFrame( restartKeyframe ) );
 
     ASSERT_TRUE( timeline );
@@ -186,11 +187,11 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, RestartKeyframe )
     timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
 
     // Keyframe should restart timeline. Local time should be equal to 0.0.
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 0.0f ) < 0.00001 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0.0f, epsilon );
 
     // Timeline is started after Restart.
     timeline->SetGlobalTime( bv::TimeType( 1.4f ) );
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 0.2f ) < 0.00001 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0.2f, epsilon );
 }
 
 
@@ -199,7 +200,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, RestartKeyframe )
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ReverseKeyframe )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
-    auto restartKeyframe = TimelineEventLoop::Create( "ReversesKeyframe", 1.0f, bv::LoopEventAction::LEA_REVERSE, 1, 0.2f, timeline.get() );
+    auto restartKeyframe = TimelineEventLoop::Create( "ReversesKeyframe", 1.0f, bv::LoopEventAction::LEA_REVERSE, 1 );
     ASSERT_TRUE( timeline->AddKeyFrame( restartKeyframe ) );
 
     ASSERT_TRUE( timeline );
@@ -210,19 +211,15 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ReverseKeyframe )
     // Simulate bv updates
     timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
-    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+	timeline->SetGlobalTime( bv::TimeType( 1.0f ) );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.0f, epsilon );
 
-    // Keyframe should reverse timeline direction.
-    // FIXME: This test checks currently implemented behavior. Maybe timeline shouldn't reach 1.2
-    // and time should be equal to 0.8 here.
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 1.2f ) < 0.00001 );
-
-    timeline->SetGlobalTime( bv::TimeType( 1.4f ) );
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 1.0f ) < 0.00001 );
+	timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0.8f, epsilon );
 
 
     timeline->SetGlobalTime( bv::TimeType( 1.8f ) );
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 0.6f ) < 0.00001 );
+    EXPECT_NEAR( timeline->GetLocalTime(), 0.2f, epsilon );
 }
 
 
@@ -238,7 +235,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ReverseKeyframe )
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopOnKeyframeAndPlay )
 {
     auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
-    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.2f, timeline.get() );
+    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.02f, timeline.get() );
     ASSERT_TRUE( timeline->AddKeyFrame( stopKeyframe ) );
 
     ASSERT_TRUE( timeline );
@@ -248,20 +245,20 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopOnKeyframeAndPlay )
 
     // Simulate bv updates
     timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
-    timeline->SetGlobalTime( bv::TimeType( 0.2f ) );
-    timeline->SetGlobalTime( bv::TimeType( 0.4f ) );        // Note: without this line bug doesn't occur. m_prevTime is 0.2f then.
+    timeline->SetGlobalTime( bv::TimeType( 0.02f ) );
+    timeline->SetGlobalTime( bv::TimeType( 0.04f ) );        // Note: without this line bug doesn't occur. m_prevTime is 0.2f then.
 
     // Here StopKeyframe should stop timeline
-    EXPECT_EQ( timeline->GetLocalTime(), 0.2f );
+    EXPECT_EQ( timeline->GetLocalTime(), 0.02f );
 
     // This offset should be greater than GEvtTimeSeparation in DefaultTimeline.cpp to see this bug.
-    bv::TimeType timelineOffset = 0.41f;
-    bv::TimeType stopDurationOffset = timelineOffset + 0.4f;
+    bv::TimeType timelineOffset = 0.041f;
+    bv::TimeType stopDurationOffset = timelineOffset + 0.04f;
 
     timeline->Play();
     timeline->SetGlobalTime( bv::TimeType( stopDurationOffset ) );
 
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - ( timelineOffset + 0.2f ) ) < 0.00001 );
+    EXPECT_NEAR( timeline->GetLocalTime(), timelineOffset + 0.02f, epsilon );
 }
 
 
@@ -288,7 +285,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, TwoNearKeyframes )
     timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.6f ) );
 
-    EXPECT_TRUE( abs( timeline->GetLocalTime() - 0.4f ) < 0.00001 );
+    EXPECT_NEAR( timeline->GetLocalTime(), 0.4, epsilon );
 }
 
 // ***********************
@@ -298,23 +295,107 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZero )
 	auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
 	ASSERT_NE( timeline, nullptr );
 
+	timeline->SetGlobalTime( 1 ); // update is needed
+
+	EXPECT_NEAR( timeline->GetLocalTime(), 0, epsilon );
+
 	auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 0.0f, timeline.get() );
 	ASSERT_TRUE( timeline->AddKeyFrame( stopKeyframe ) );
 
+	timeline->SetGlobalTime( 3 );
+
+	EXPECT_NEAR( timeline->GetLocalTime(), 0, epsilon );
+
 	timeline->Play();
 
-	timeline->SetGlobalTime( 1.f );
+	timeline->SetGlobalTime( 5 );
 
-	ASSERT_NEAR( timeline->GetLocalTime(), 0, 0.0001 );
+	ASSERT_NEAR( timeline->GetLocalTime(), 2, epsilon );
 }
 
 // ***********************
 //
-SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSerialization )
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSerPlayOn )
 {
-	auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/StopAtZero.xml", "timeline" );
+	auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/StopAtZeroPlayOn.xml", "timeline" );
+
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
 
 	timeline->SetGlobalTime( 1.f );
 
-	ASSERT_NEAR( timeline->GetLocalTime(), 0, 0.0001 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
+
+	timeline->SetGlobalTime( 3.f );
+
+	EXPECT_NEAR( timeline->GetLocalTime(), 3.5, epsilon );
+}
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSerPlayOff )
+{
+	auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/StopAtZeroPlayOff.xml", "timeline" );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
+
+	timeline->SetGlobalTime( 1.f );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
+
+	timeline->SetGlobalTime( 2.f );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
+
+	timeline->Play();
+	timeline->SetGlobalTime( 4.f );
+	EXPECT_NEAR( timeline->GetLocalTime(), 3.5, epsilon );
+}
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSer )
+{
+	auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/StopAtZero.xml", "timeline" );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0, epsilon );
+
+	timeline->SetGlobalTime( 1.f );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0, epsilon );
+
+	timeline->SetGlobalTime( 2.f );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0, epsilon );
+
+	timeline->Play();
+	timeline->SetGlobalTime( 4.f );
+	EXPECT_NEAR( timeline->GetLocalTime(), 2, epsilon );
+}
+
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, GotoAtLocalTime )
+{
+	auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+	ASSERT_TRUE( timeline );
+	timeline->SetGlobalTime( 1 ); // update is needed
+
+	timeline->Play();
+	timeline->SetGlobalTime( 2 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+	auto gotoKeyframe = TimelineEventLoop::Create( "GotoTest", 1, LoopEventAction::LEA_GOTO, 1, -1, timeline.get() );
+	ASSERT_TRUE( timeline->AddKeyFrame( gotoKeyframe ) );
+
+	EXPECT_NEAR( timeline->GetLocalTime(), -1, epsilon );
+
+	timeline->SetGlobalTime( 4 );
+
+	EXPECT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+	timeline->SetGlobalTime( 6 );
+
+	EXPECT_NEAR( timeline->GetLocalTime(), 3, epsilon );
+}
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ReverseKeyframeWithLag )
+{
+	FAIL(); // write when the behavious is specified
 }

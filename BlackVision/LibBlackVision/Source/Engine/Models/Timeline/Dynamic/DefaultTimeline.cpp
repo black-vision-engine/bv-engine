@@ -143,7 +143,13 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
 
     auto te = DefaultTimeline::Create( name, duration, preWrap, postWrap );
 
-    if( deser.EnterChild( "events" ) )
+	auto local_time = deser.GetAttribute( "local_time" );
+	if( local_time != "" )
+	{
+		te->SetLocalTime( Convert::String2T< float >( local_time, 0 ) );
+	}
+
+	if( deser.EnterChild( "events" ) )
     {
         if( deser.EnterChild( "event" ) )
         {

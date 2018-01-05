@@ -1,4 +1,4 @@
-<timeline name="default" type="default" local_time="1.500000" play="true" duration="340282346638528870000000000000000000000.000000" loop="clamp">
+<timeline name="default" type="default" local_time="0" play="false" duration="340282346638528870000000000000000000000.000000" loop="clamp">
 	<events>
 		<event type="stop" name="" time="0"/>
 	</events>
