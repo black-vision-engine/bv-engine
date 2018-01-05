@@ -126,7 +126,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp" />
@@ -625,6 +627,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h" />

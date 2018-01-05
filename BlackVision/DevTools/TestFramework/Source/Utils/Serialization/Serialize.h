@@ -48,7 +48,7 @@ std::shared_ptr< Type >     Deserialize     ( const std::string & path, const st
     auto object = Type::Create( deser );
     deser.ExitChild();
 
-    return object;
+    return std::static_pointer_cast< Type >( object );
 }
 
 // ***********************

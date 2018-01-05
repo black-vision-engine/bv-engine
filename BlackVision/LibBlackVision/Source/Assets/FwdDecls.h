@@ -26,6 +26,8 @@ class DataArrayAssetBaseDesc;
 class DataArrayAsset;
 class DataArrayAssetDesc;
 class DataArrayRowAssetDesc;
+class TextureInputAsset;
+class TextureInputAssetDesc;
 
 DEFINE_CONST_PTR_TYPE( FontAssetDesc )
 DEFINE_CONST_PTR_TYPE( FontAsset )
@@ -46,6 +48,8 @@ DEFINE_CONST_PTR_TYPE( DataArrayAssetBaseDesc )
 DEFINE_CONST_PTR_TYPE( DataArrayAsset )
 DEFINE_CONST_PTR_TYPE( DataArrayAssetDesc )
 DEFINE_CONST_PTR_TYPE( DataArrayRowAssetDesc )
+DEFINE_CONST_PTR_TYPE( TextureInputAsset )
+DEFINE_CONST_PTR_TYPE( TextureInputAssetDesc )
 
 DEFINE_PTR_TYPE( AnimationAssetDesc )
 

@@ -6,6 +6,7 @@
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
 #include "Engine/Graphics/InputSlots/InputSlots.h"
+#include "InputSlotBinding.h"
 
 
 namespace bv
@@ -24,6 +25,7 @@ private:
 protected:
 
     InputSlotsPtr           m_slots;
+    InputSlotBinding        m_binding;
 
 public:
 

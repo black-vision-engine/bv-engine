@@ -2128,6 +2128,12 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp">
       <Filter>Assets\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5469,6 +5475,9 @@
       <Filter>Assets\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
   </ItemGroup>
