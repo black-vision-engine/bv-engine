@@ -358,8 +358,10 @@
       <Filter>Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Exception.cpp" />
-    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\ConversionHelper.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
   </ItemGroup>

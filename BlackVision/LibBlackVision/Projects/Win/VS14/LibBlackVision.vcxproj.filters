@@ -481,6 +481,9 @@
     <Filter Include="Assets\Input">
       <UniqueIdentifier>{e424bbe8-bd34-4fba-8b04-6f7ec2e3667e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Input\Loaders">
+      <UniqueIdentifier>{aa6938b2-7979-43c6-8fac-20796f9b985d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2124,6 +2127,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.cpp">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.cpp">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp">
+      <Filter>Assets\Input\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5453,9 +5471,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsseth.h">
-      <Filter>Assets\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
@@ -5464,6 +5479,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h">
       <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.h">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.h">
+      <Filter>Assets\Input\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

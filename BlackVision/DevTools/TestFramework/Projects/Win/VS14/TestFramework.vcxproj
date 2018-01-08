@@ -34,6 +34,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Engine\Inputs\VideoInputHandlerAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\EvaluatorsAccessors.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\Assets\TextureInputAssetComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\NodeComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Events\EndOperationEvent.h" />
