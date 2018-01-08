@@ -6,6 +6,8 @@
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
 #include "Engine/Graphics/InputSlots/InputSlots.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+
 #include "InputSlotBinding.h"
 
 
@@ -36,6 +38,29 @@ public:
 
     static const std::string &	    UID				();
 
+
+public:
+    
+    // Inherited via ITextureInputAsset
+    virtual VoidConstPtr            QueryThis           () const override;
+
+    virtual void                    AddReference        () const override;
+    virtual void                    ReleaseReference    () const override;
+
+    virtual SlotIndex               GetTextureSlotIndex () const override;
+    virtual UInt64                  GetUpdateID         () const override;
+    
+    virtual UInt32                  GetWidth            ( UInt32 level = 0 ) const override;
+    virtual UInt32                  GetHeight           ( UInt32 level = 0 ) const override;
+    virtual UInt32                  GetDepth            ( UInt32 level = 0 ) const override;
+    virtual UInt32                  GetNumMipMapLevels  () const override;
+
+    virtual TextureFormat           GetFormat           () const override;
+    virtual DataBuffer::Semantic    GetSemantic         () const override;
+
+protected:
+
+    Texture2DPtr                    GetTexture      () const;
 };
 
 

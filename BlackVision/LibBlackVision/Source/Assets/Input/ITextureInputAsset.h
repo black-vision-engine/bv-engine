@@ -30,7 +30,26 @@ public:
     virtual void        AddReference        () const = 0;
     virtual void        ReleaseReference    () const = 0;
 
+    virtual SlotIndex   GetTextureSlotIndex () const = 0;
+    virtual UInt64      GetUpdateID         () const = 0;
+
+public:
+
+    ///@name Texture information
+    ///@{
+    virtual UInt32                      GetWidth        ( UInt32 level = 0 ) const = 0;
+    virtual UInt32                      GetHeight       ( UInt32 level = 0 ) const = 0;
+    virtual UInt32                      GetDepth        ( UInt32 level = 0 ) const = 0;
+
+    virtual TextureFormat               GetFormat       () const = 0;
+    virtual DataBuffer::Semantic        GetSemantic     () const = 0;
+
+    virtual UInt32                      GetNumMipMapLevels  () const = 0;
+    ///@}
 };
+
+DEFINE_PTR_TYPE( ITextureInputAsset );
+DEFINE_CONST_PTR_TYPE( ITextureInputAsset );
 
 
 }	// bv

@@ -524,6 +524,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.cpp" />
@@ -676,6 +677,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h" />

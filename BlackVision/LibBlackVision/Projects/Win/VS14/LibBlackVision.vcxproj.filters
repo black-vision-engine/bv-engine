@@ -2134,6 +2134,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp">
       <Filter>Assets\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.cpp">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5479,6 +5482,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h">
       <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.h">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
