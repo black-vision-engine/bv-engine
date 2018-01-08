@@ -78,6 +78,36 @@ Expected< InputSlotBinding >    InputSlotBinding::Create        ( const IDeseria
     return Expected< InputSlotBinding >();
 }
 
+// ***********************
+//
+Expected< InputSlot >           InputSlotBinding::EvaluateInputSlot         ( InputSlots * slots ) const
+{
+    if( m_bindType == Type::ByIndex )
+        return slots->AccessSource( m_slotIdx );
+    else
+        return slots->AccessSource( m_name );
+}
+
+// ***********************
+//
+void                            InputSlotBinding::AddReference              ( InputSlots * slots ) const
+{
+    if( m_bindType == Type::ByIndex )
+        return slots->ReferenceSource( m_slotIdx );
+    else
+        return slots->ReferenceSource( m_name );
+}
+
+// ***********************
+//
+void                            InputSlotBinding::ReleaseReference          ( InputSlots * slots ) const
+{
+    if( m_bindType == Type::ByIndex )
+        return slots->ReleaseSource( m_slotIdx );
+    else
+        return slots->ReleaseSource( m_name );
+}
+
 
 
 

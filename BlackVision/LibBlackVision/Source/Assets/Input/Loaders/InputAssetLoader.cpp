@@ -22,7 +22,7 @@ AssetConstPtr           InputAssetLoader::LoadAsset         ( const AssetDescCon
     if( desc->GetUID() == TextureInputAssetDesc::UID() )
     {
         auto typedDesc = std::static_pointer_cast< const TextureInputAssetDesc >( desc );
-        return TextureInputAsset::Create( m_inputSlots, typedDesc->BindingInfo() );
+        return m_inputSlots->CreateAsset( m_inputSlots, typedDesc );
     }
     //else if( Audio input asset descriptor )
 

@@ -17,7 +17,8 @@ class InputSlots;
 
 
 // ***********************
-//
+/// Class evaluates slot entry based on it's internal state.
+/// @ingroup InputSlots
 class InputSlotBinding
 {
 public:
@@ -47,6 +48,12 @@ public:
 
     void                                    Serialize   ( ISerializer & ser ) const;
     static Expected< InputSlotBinding >     Create      ( const IDeserializer & deser );
+
+public:
+
+    Expected< InputSlot >   EvaluateInputSlot           ( InputSlots * slots ) const;
+    void                    AddReference                ( InputSlots * slots ) const;
+    void                    ReleaseReference            ( InputSlots * slots ) const;
 };
 
 

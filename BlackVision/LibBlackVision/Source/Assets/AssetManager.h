@@ -43,10 +43,12 @@ public:
 
     static AssetManager &			GetInstance		();
 
-private:
+public:
 
     explicit						AssetManager();
                                     ~AssetManager();
+
+private:
 
     void							RegisterBasicLoaders();
 

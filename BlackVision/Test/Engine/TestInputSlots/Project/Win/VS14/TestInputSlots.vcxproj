@@ -127,11 +127,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\InputSlotsUnitTest.cpp" />
+    <ClCompile Include="..\..\..\Source\TextureInputAssetTest.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInputHandlerTest.cpp" />
     <ClCompile Include="VideoInputSlotsTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Helpers\AVFrameHelpers.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\InputAssetHelpers.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\TextureHelpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

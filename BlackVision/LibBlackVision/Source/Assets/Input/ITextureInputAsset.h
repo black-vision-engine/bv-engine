@@ -30,7 +30,6 @@ public:
     virtual void        AddReference        () const = 0;
     virtual void        ReleaseReference    () const = 0;
 
-    virtual SlotIndex   GetTextureSlotIndex () const = 0;
     virtual UInt64      GetUpdateID         () const = 0;
 
 public:

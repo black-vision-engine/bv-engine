@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TextureInputAsset.h"
 
-
+#include "Application/ApplicationContext.h"
 
 
 namespace bv
@@ -25,9 +25,26 @@ TextureInputAsset::TextureInputAsset        ( InputSlotsPtr slots, InputSlotBind
 
 // ***********************
 //
-TextureInputAssetConstPtr       TextureInputAsset::Create       ( InputSlotsPtr slots, InputSlotBinding binding )
+TextureInputAssetPtr            TextureInputAsset::Create       ( InputSlotsPtr slots, InputSlotBinding binding )
 {
-    return TextureInputAssetConstPtr( new TextureInputAsset( slots, binding ) );
+    return TextureInputAssetPtr( new TextureInputAsset( slots, binding ) );
+}
+
+// ***********************
+//
+void                            TextureInputAsset::EvaluateSlot()
+{
+    auto inputSlot = m_binding.EvaluateInputSlot( m_slots.get() );
+    if( inputSlot.IsValid() )
+    {
+        m_texture = inputSlot.GetVal().Texture;
+    }
+    else
+    {
+        m_texture = nullptr;
+    }
+
+    m_updateID = ApplicationContext::Instance().GetUpdateCounter() + 1;
 }
 
 
@@ -54,8 +71,7 @@ const std::string &         TextureInputAsset::UID          ()
 //
 Texture2DPtr                TextureInputAsset::GetTexture   () const
 {
-    assert( !"Implemnet me" );
-    return Texture2DPtr();
+    return m_texture;
 }
 
 // ***********************
@@ -70,7 +86,7 @@ VoidConstPtr                TextureInputAsset::QueryThis    () const
 void                        TextureInputAsset::AddReference () const
 {
     m_numReferences++;
-    assert( !"Implemnet me" );
+    m_binding.AddReference( m_slots.get() );
 }
 
 // ***********************
@@ -78,23 +94,14 @@ void                        TextureInputAsset::AddReference () const
 void                        TextureInputAsset::ReleaseReference () const
 {
     m_numReferences--;
-    assert( !"Implemnet me" );
-}
-
-// ***********************
-//
-SlotIndex                   TextureInputAsset::GetTextureSlotIndex  () const
-{
-    assert( !"Implemnet me" );
-    return SlotIndex();
+    m_binding.ReleaseReference( m_slots.get() );
 }
 
 // ***********************
 //
 UInt64                      TextureInputAsset::GetUpdateID          () const
 {
-    assert( !"Implemnet me" );
-    return UInt64();
+    return m_updateID;
 }
 
 // ***********************

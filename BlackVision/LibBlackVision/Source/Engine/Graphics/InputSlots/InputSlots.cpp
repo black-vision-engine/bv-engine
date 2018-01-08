@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "InputSlots.h"
 
-
+#include "Assets/Input/TextureInputAsset.h"
+#include "Assets/Input/TextureInputAssetDesc.h"
 
 
 
@@ -74,6 +75,28 @@ Expected< InputSlot >       InputSlots::AccessSource          ( const std::strin
 
 // ***********************
 //
+void                        InputSlots::ReferenceSource       ( const std::string & name )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    ReferenceSource( FindSourceByName( name ) );
+}
+
+// ***********************
+//
+void                        InputSlots::ReferenceSource       ( SlotIndex slotIdx )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    if( !IsValidIndex( slotIdx ) )
+        return;
+
+    m_slots[ slotIdx ].References++;
+}
+
+
+// ***********************
+//
 void                        InputSlots::ReleaseSource         ( const std::string & name )
 {
     std::lock_guard< std::recursive_mutex > guard( m_lock );
@@ -90,7 +113,6 @@ Expected< InputSlot >       InputSlots::AccessSource          ( SlotIndex slotId
     if( !IsValidIndex( slotIdx ) )
         return Expected< InputSlot >();
 
-    m_slots[ slotIdx ].References++;
     return m_slots[ slotIdx ].Slot;
 }
 
@@ -195,6 +217,19 @@ bool                InputSlots::CanAddSource          ( InputSlot inputSlot, con
         return false;
 
     return true;
+}
+
+// ***********************
+/// This function creates TextureInputAsset. We need to do this under lock, thats why this code is here.
+/// @Note: We must provide shared_ptr to InputSlots object and I don't won't to use enable_shared_from_this.
+TextureInputAssetConstPtr       InputSlots::CreateAsset     ( InputSlotsPtr thisPtr, TextureInputAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = TextureInputAsset::Create( thisPtr, desc->BindingInfo() );
+    asset->EvaluateSlot();
+
+    return asset;
 }
 
 

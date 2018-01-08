@@ -12,6 +12,14 @@ namespace bv
 
 typedef SizeType SlotIndex;
 
+class TextureInputAsset;
+class TextureInputAssetDesc;
+DEFINE_CONST_PTR_TYPE( TextureInputAssetDesc )
+DEFINE_CONST_PTR_TYPE( TextureInputAsset )
+
+class InputSlots;
+DEFINE_PTR_TYPE( InputSlots )
+
 
 
 /**@defgroup EngineInputs Inputs
@@ -30,6 +38,7 @@ supllied by other mechanism like video card inputs.
 /// @ingroup EngineInputs
 class InputSlots
 {
+    friend class InputAssetLoader;
 private:
 
     static const SlotIndex       sInvalidIdx;
@@ -49,9 +58,13 @@ public:
     bool                    UnregisterSource    ( const std::string & name );
 
     Expected< InputSlot >   AccessSource        ( const std::string & name );
+
+    void                    ReferenceSource     ( const std::string & name );
     void                    ReleaseSource       ( const std::string & name );
 
     Expected< InputSlot >   AccessSource        ( SlotIndex slotIdx );
+
+    void                    ReferenceSource     ( SlotIndex slotIdx );
     void                    ReleaseSource       ( SlotIndex slotIdx );
 
 private:
@@ -63,9 +76,18 @@ private:
     bool                IsValidIndex        ( SlotIndex idx ) const;
     bool                IsEmptySlot         ( SlotIndex idx ) const;
     bool                CanAddSource        ( InputSlot inputSlot, const std::string & name ) const;
+
+public:
+
+    ///@name TextureInputAsset creation
+    ///@{
+    TextureInputAssetConstPtr       CreateAsset     ( InputSlotsPtr thisPtr, TextureInputAssetDescConstPtr desc );
+
+    ///@}
+
 };
 
-DEFINE_PTR_TYPE( InputSlots )
+
 
 
 }	// bv
