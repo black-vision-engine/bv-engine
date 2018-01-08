@@ -481,6 +481,9 @@
     <Filter Include="Assets\Input">
       <UniqueIdentifier>{e424bbe8-bd34-4fba-8b04-6f7ec2e3667e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Input\Loaders">
+      <UniqueIdentifier>{aa6938b2-7979-43c6-8fac-20796f9b985d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2136,6 +2139,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp">
+      <Filter>Assets\Input\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5485,6 +5491,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.h">
+      <Filter>Assets\Input\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

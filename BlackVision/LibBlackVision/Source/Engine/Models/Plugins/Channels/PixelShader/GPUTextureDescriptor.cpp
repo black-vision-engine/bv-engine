@@ -4,8 +4,6 @@
 
 #include "Assets/AssetManager.h"
 #include "Assets/Input/ITextureInputAsset.h"
-#include "Engine/Graphics/Resources/Textures/Texture.h"
-
 
 #include "Application/ApplicationContext.h"
 
@@ -31,6 +29,8 @@ GPUTextureDescriptor::GPUTextureDescriptor        ( ITextureInputAssetConstPtr t
     auto width = texResource->GetWidth();
     auto height = texResource->GetHeight();
 
+    // We set these values but never use them in future. Moreover when texture changes
+    // these values won't be updated, so don't use these values and don't expose it to ouside world.
     m_params.SetWidth( width );
     m_params.SetHeight( height );
     m_params.SetDepth( texResource->GetDepth() );

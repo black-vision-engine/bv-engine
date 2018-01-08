@@ -11,6 +11,31 @@ const std::string       TextureInputAsset::uid = "TEXTURE_INPUT_ASSET";
 
 
 
+// ========================================================================= //
+// Creation
+// ========================================================================= //
+
+// ***********************
+//
+TextureInputAsset::TextureInputAsset        ( InputSlotsPtr slots, InputSlotBinding binding )
+    : m_numReferences( 0 )
+    , m_slots( slots )
+    , m_binding( binding )
+{}
+
+// ***********************
+//
+TextureInputAssetConstPtr       TextureInputAsset::Create       ( InputSlotsPtr slots, InputSlotBinding binding )
+{
+    return TextureInputAssetConstPtr( new TextureInputAsset( slots, binding ) );
+}
+
+
+// ========================================================================= //
+// Implemnetation
+// ========================================================================= //
+
+
 // ***********************
 //
 const std::string &         TextureInputAsset::GetUID       () const
@@ -44,6 +69,7 @@ VoidConstPtr                TextureInputAsset::QueryThis    () const
 //
 void                        TextureInputAsset::AddReference () const
 {
+    m_numReferences++;
     assert( !"Implemnet me" );
 }
 
@@ -51,6 +77,7 @@ void                        TextureInputAsset::AddReference () const
 //
 void                        TextureInputAsset::ReleaseReference () const
 {
+    m_numReferences--;
     assert( !"Implemnet me" );
 }
 

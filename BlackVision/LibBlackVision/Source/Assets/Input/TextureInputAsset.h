@@ -14,6 +14,11 @@
 namespace bv
 {
 
+class TextureInputAsset;
+DEFINE_CONST_PTR_TYPE( TextureInputAsset )
+
+
+
 
 /**@brief Gets data from input slot.
 @ingroup Assets
@@ -29,11 +34,17 @@ protected:
     InputSlotsPtr           m_slots;
     InputSlotBinding        m_binding;
 
+    mutable std::atomic< UInt32 >   m_numReferences;    ///< Remembers number of references to update it in new asset when texture under slot changes.
+
+protected:
+
+    explicit            TextureInputAsset   ( InputSlotsPtr slots, InputSlotBinding binding );
+
 public:
 
+    static TextureInputAssetConstPtr        Create   ( InputSlotsPtr slots, InputSlotBinding binding );
 
-
-
+    virtual VoidConstPtr            QueryThis       () const override;
     virtual const std::string &	    GetUID			() const override;
 
     static const std::string &	    UID				();
@@ -41,8 +52,8 @@ public:
 
 public:
     
-    // Inherited via ITextureInputAsset
-    virtual VoidConstPtr            QueryThis           () const override;
+    ///@name Inherited from ITextureInputAsset
+    ///@{
 
     virtual void                    AddReference        () const override;
     virtual void                    ReleaseReference    () const override;
@@ -57,6 +68,8 @@ public:
 
     virtual TextureFormat           GetFormat           () const override;
     virtual DataBuffer::Semantic    GetSemantic         () const override;
+
+    ///@}
 
 protected:
 
