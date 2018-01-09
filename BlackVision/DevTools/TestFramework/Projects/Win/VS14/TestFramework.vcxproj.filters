@@ -122,9 +122,6 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeChannelsDescs.h">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Utils\Scenes\SceneCreator.h">
-      <Filter>Utils\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.h">
       <Filter>Utils\Mocks\Plugins\Audio</Filter>
     </ClInclude>
@@ -139,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Comparators\Assets\TextureInputAssetComparator.h">
       <Filter>Utils\Comparators\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.h">
+      <Filter>Utils\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Events\EndOperationEvent.cpp">
       <Filter>Utils\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.cpp">
+      <Filter>Utils\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

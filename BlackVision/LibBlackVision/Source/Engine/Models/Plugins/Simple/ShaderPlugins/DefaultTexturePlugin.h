@@ -75,5 +75,7 @@ private:
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
+DEFINE_PTR_TYPE( DefaultTexturePlugin )
+
 } // model
 } // bv
