@@ -267,7 +267,10 @@ inline void		NodeUpdater::UpdateTexturesData				( EngineResources & resources )
             if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
                 auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
-                if( resources.TexturesMap->IsStored( tex2D ) && tex2D != resources.TexturesMap->GetTexture( texDesc.get() ) )
+                auto actualTex = resources.TexturesMap->GetTexture( texDesc.get() );
+
+                if( ( resources.TexturesMap->IsStored( tex2D ) && tex2D != actualTex )
+                    || texDesc->GetTextureType() == ITextureDescriptor::Type::GPU )
                 {
                     auto newTex2D = resources.TexturesMap->GetTexture( texDesc.get() );
                     shaderParams->SetTexture( j, newTex2D );
