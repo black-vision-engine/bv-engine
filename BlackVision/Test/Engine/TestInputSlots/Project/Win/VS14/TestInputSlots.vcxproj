@@ -125,6 +125,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\GPUTextureDescriptorTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\InputSlotsUnitTest.cpp" />
     <ClCompile Include="..\..\..\Source\TextureInputAssetTest.cpp" />

@@ -30,7 +30,7 @@ struct InputsContext
 
 // ***********************
 //
-inline InputsContext     CreateInputContext   ()
+inline InputsContext                CreateInputContext   ()
 {
     InputsContext context;
 
@@ -42,6 +42,21 @@ inline InputsContext     CreateInputContext   ()
     return context;
 }
 
+
+// ***********************
+//
+inline TextureInputAssetConstPtr    CreateSlotAndAsset      ( const InputsContext & ctx )
+{
+    Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
+    Expected< SlotIndex > slot1Idx = ctx.slots->RegisterSource( InputSlot( tex1 ), "Source1" );
+
+    EXPECT_TRUE( slot1Idx.IsValid() );
+
+    auto desc = TextureInputAssetDesc::Create( InputSlotBinding( slot1Idx ) );
+    auto asset = ctx.assetManager->LoadAsset( desc );
+
+    return std::static_pointer_cast< const TextureInputAsset >( asset );
+}
 
 
 

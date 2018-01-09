@@ -29,12 +29,15 @@ private:
     ITextureInputAssetConstPtr      m_texResource;
     DefaultTextureParams            m_params;
 
+    mutable UInt64                  m_updateID;
+
 public:
 
-    GPUTextureDescriptor        ();
     GPUTextureDescriptor        ( ITextureInputAssetConstPtr texResource, const std::string & name );
     ~GPUTextureDescriptor       ();
 
+
+    virtual ITextureDescriptor::Type    GetTextureType  () const override { return Type::GPU; }
     virtual uintptr_t                   GetUID          () const override;
 
     virtual UInt32                      GetNumLevels    () const override;

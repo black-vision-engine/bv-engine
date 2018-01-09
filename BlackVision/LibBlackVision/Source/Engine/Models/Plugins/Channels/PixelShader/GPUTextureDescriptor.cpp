@@ -16,14 +16,9 @@ namespace model
 
 // **************************
 //
-GPUTextureDescriptor::GPUTextureDescriptor        ()
-    : m_texResource( nullptr )
-{}
-
-// **************************
-//
 GPUTextureDescriptor::GPUTextureDescriptor        ( ITextureInputAssetConstPtr texResource, const std::string & name )
     : m_texResource( texResource )
+    , m_updateID( ApplicationContext::Instance().GetUpdateCounter() + 1 )
 {
     auto format = texResource->GetFormat();
     auto width = texResource->GetWidth();
@@ -80,7 +75,10 @@ MemoryChunkVector       GPUTextureDescriptor::GetBits           () const
 //
 UInt64                  GPUTextureDescriptor::GetUpdateID       () const
 {
-    return m_texResource->GetUpdateID();
+    // Update ID in m_texResource changes if someone changes content in input slot.
+    // m_updateID is this descriptor creation time which is independent from asset creation
+    // and multiple plugins can have different value here. We choose last update that has been made.
+    return std::max( m_texResource->GetUpdateID(), m_updateID );
 }
 
 // **************************
