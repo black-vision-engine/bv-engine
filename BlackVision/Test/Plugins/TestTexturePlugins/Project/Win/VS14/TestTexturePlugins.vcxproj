@@ -126,7 +126,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\TestHelpers\ParametersSets.cpp" />
     <ClCompile Include="..\..\..\Source\TexturePluginBase\LoadResourceTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\TestHelpers\ParametersSets.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

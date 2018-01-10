@@ -4,11 +4,22 @@
     <Filter Include="TexturePluginBase">
       <UniqueIdentifier>{dae470e5-7e1d-4365-9573-0cf15ef7900f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestHelpers">
+      <UniqueIdentifier>{8b707303-307b-4764-8c35-5468dcf07356}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\TexturePluginBase\LoadResourceTest.cpp">
       <Filter>TexturePluginBase</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestHelpers\ParametersSets.cpp">
+      <Filter>TestHelpers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\TestHelpers\ParametersSets.h">
+      <Filter>TestHelpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

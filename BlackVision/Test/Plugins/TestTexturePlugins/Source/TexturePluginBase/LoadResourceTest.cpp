@@ -4,10 +4,12 @@
 
 #include "Engine/Editors/BVProjectEditor.h"
 
-#include"Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
 
 #include "Utils/Scenes/TestScenesCreator.h"
 #include "Utils/Nodes/TestNodesCreator.h"
+
+#include "TestHelpers/ParametersSets.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -20,7 +22,8 @@
 using namespace bv;
 
 
-extern const char* imagePath_32x32 = "TestAssets/BVProjectEditor/checkerboard2_32x32.png";;
+const char* imagePath_32x32 = "TestAssets/BVProjectEditor/checkerboard2_32x32.png";
+const char* imagePath_checkerboard2 = "TestAssets/Common/checkerboard2.png";;
 
 
 // ***********************
@@ -33,7 +36,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_Fallback
     ASSERT_NE( texturePlugin, nullptr );
 
     // Loading fallback texture result in false return value.
-    EXPECT_TRUE( !texturePlugin->LoadResource( desc ) );
+    EXPECT_FALSE( texturePlugin->LoadResource( desc ) );
 
     auto lassets = texturePlugin->GetLAssets();
     ASSERT_TRUE( lassets.size() == 1 );
@@ -49,13 +52,17 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_Fallback
 }
 
 
-//// ***********************
-//// 
-//SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_ )
-//{
-//    auto texturePlugin = TestScenesCreator::TexturedRectangle( GetProjectEditor(), "Scene", 400, 400 );
-//
-//    auto texDesc = TextureAssetDesc::Create( "Plugins/TestTexturePlugins/NonExistingTexturePath.jpg", false );
-//
-//}
+// ***********************
+// Sampler parameters set for texture doesn't change when new texture is loaded.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_SamplerParamsRemainAfterLoad )
+{
+    auto texturePlugin = TestScenesCreator::TexturedRectangle( GetProjectEditor(), "Scene", 400, 400, imagePath_32x32 );
+
+    ParametersSets::SetSamplerStateParamsTestSet1( texturePlugin->GetResourceStateModel( "Tex0" ) );
+
+    auto texDesc = TextureAssetDesc::Create( imagePath_checkerboard2, false );
+    ASSERT_TRUE( texturePlugin->LoadResource( texDesc ) );
+
+    EXPECT_TRUE( ParametersSets::CompareToSamplerStateParamsTestSet1( texturePlugin->GetResourceStateModel( "Tex0" ) ) );
+}
 
