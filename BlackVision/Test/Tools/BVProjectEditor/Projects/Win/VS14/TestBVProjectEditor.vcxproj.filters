@@ -17,9 +17,6 @@
     <ClCompile Include="..\..\..\Source\AssetsTest\TestAsyncLoading.cpp">
       <Filter>AssetsTest</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\AssetsTest\TestFallbackTexture.cpp">
-      <Filter>AssetsTest</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginCopy.cpp">
       <Filter>PluginsTest</Filter>
     </ClCompile>
