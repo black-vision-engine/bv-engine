@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Assets/Input/TextureInputAssetDesc.h"
+
 
 
 namespace bv {
@@ -36,6 +38,20 @@ public:
 
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
 
+    virtual bool                                IsSupportedDescriptor       ( const AssetDescConstPtr & assetDesc );
+
+protected:
+
+    SamplerStateModelPtr                        CreateSamplerReplacment     ( UInt32 texIdx = 0 ) const;
+
+    void                                        ReplaceTexture              ( const AssetDescConstPtr & assetDesc, ITextureDescriptorPtr texDesc, UInt32 texIdx = 0 );
+    void                                        LoadFallbackTexture         ( const std::string & name, SamplerStateModelPtr samplerState, UInt32 texIdx = 0 );
+
+    static ITextureDescriptorPtr                LoadTexture                 ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState, DataBuffer::Semantic semantic );
+    static ITextureDescriptorPtr                LoadTexture                 ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState );
+
+    static ITextureDescriptorPtr                LoadMemoryTexture           ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState, DataBuffer::Semantic semantic );
+    static ITextureDescriptorPtr                LoadGPUTexture              ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState );
 };
 
 } // model

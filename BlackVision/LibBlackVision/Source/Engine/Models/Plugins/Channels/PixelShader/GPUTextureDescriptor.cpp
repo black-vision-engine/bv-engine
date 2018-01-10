@@ -4,6 +4,7 @@
 
 #include "Assets/AssetManager.h"
 #include "Assets/Input/ITextureInputAsset.h"
+#include "Assets/Input/TextureInputAsset.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -142,6 +143,26 @@ void                    GPUTextureDescriptor::SetName           ( const std::str
 void                    GPUTextureDescriptor::SetSamplerState   ( SamplerStateModelPtr samplerState )
 {
     m_params.SetSamplerState( samplerState );
+}
+
+// ***********************
+//
+GPUTextureDescriptorPtr GPUTextureDescriptor::LoadTexture       ( const TextureInputAssetDescConstPtr & inputTexDesc, const std::string & name )
+{
+    if( !inputTexDesc )
+        return nullptr;
+
+    auto inputAsset = LoadTypedAsset< TextureInputAsset >( inputTexDesc );
+
+    if( inputAsset == nullptr )
+    {
+        return nullptr;
+    }
+
+    auto texDesc = std::make_shared< GPUTextureDescriptor >( inputAsset, name );
+    texDesc->SetName( name );
+
+    return texDesc;
 }
 
 

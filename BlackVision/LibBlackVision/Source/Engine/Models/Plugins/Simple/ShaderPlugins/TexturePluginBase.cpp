@@ -10,6 +10,8 @@
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
+#include "Assets/Input/TextureInputAssetDesc.h"
+
 #include "Assets/DefaultAssets.h"
 
 
@@ -34,49 +36,155 @@ TexturePluginBase::TexturePluginBase            ( const std::string & name, cons
 // 
 bool                            TexturePluginBase::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-    auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
-
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if( txAssetDescr != nullptr )
+    if( IsSupportedDescriptor( assetDescr ) )
     {
-        bool success = true;
-
-        //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, GetTextureName() );
+        SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment();
+        
+        auto txDesc = LoadTexture( assetDescr, GetTextureName(), newSamplerStateModel );
 
         // If texture doesn't exists, read fallback texture. 
         if( txDesc == nullptr )
         {
-            txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
-            txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, GetTextureName() );
-
-            success = false;
+            LoadFallbackTexture( GetTextureName(), newSamplerStateModel );
+            return false;
         }
-
-        if( txDesc != nullptr )
+        else
         {
-            auto txData = m_psc->GetTexturesDataImpl();
-            auto replacedTex = txData->GetTexture( 0 );
+            ReplaceTexture( assetDescr, txDesc );
+            return true;
+        }
+    }
 
-            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+    return false;
+}
 
-            txDesc->SetSamplerState( newSamplerStateModel );
-            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+// ***********************
+//
+ITextureDescriptorPtr               TexturePluginBase::LoadTexture                  ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState )
+{
+    return LoadTexture( assetDesc, name, samplerState, DataBuffer::Semantic::S_TEXTURE_STATIC );
+}
 
-            txData->SetTexture( 0, txDesc );
-            SetAsset( 0, LAsset( txDesc->GetName(), txAssetDescr, txDesc->GetSamplerState() ) );
 
-            HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-            return success;
+// ***********************
+//
+ITextureDescriptorPtr               TexturePluginBase::LoadTexture                  ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState, DataBuffer::Semantic semantic )
+{
+    ITextureDescriptorPtr resultDesc = nullptr;
+
+    if( assetDesc )
+    {
+        resultDesc = LoadMemoryTexture( assetDesc, name, samplerState, semantic );
+        resultDesc = resultDesc ? resultDesc : LoadGPUTexture( assetDesc, name, samplerState );
+    }
+
+    return resultDesc;
+}
+
+// ***********************
+//
+ITextureDescriptorPtr               TexturePluginBase::LoadMemoryTexture            ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState, DataBuffer::Semantic semantic )
+{
+    // Normal memory texture loaded from disc.
+    auto txAssetDesc = QueryTypedDesc< TextureAssetDescConstPtr >( assetDesc );
+    if( txAssetDesc )
+    {
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDesc, name );
+
+        if( txDesc )
+        {
+            txDesc->SetSamplerState( samplerState );
+            txDesc->SetSemantic( semantic );
         }
 
+        return txDesc;
     }
+
+    return nullptr;
+}
+
+// ***********************
+//
+ITextureDescriptorPtr               TexturePluginBase::LoadGPUTexture               ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState )
+{
+    // GPU texture from input slot.
+    auto txInputAssetDesc = QueryTypedDesc< TextureInputAssetDescConstPtr >( assetDesc );
+    if( txInputAssetDesc )
+    {
+        auto inTexDesc = GPUTextureDescriptor::LoadTexture( txInputAssetDesc, name );
+
+        if( inTexDesc )
+        {
+            inTexDesc->SetSamplerState( samplerState );
+        }
+
+        return inTexDesc;
+    }
+
+    return nullptr;
+}
+
+// ***********************
+//
+void                                TexturePluginBase::LoadFallbackTexture          ( const std::string & name, SamplerStateModelPtr samplerState, UInt32 texIdx )
+{
+    auto txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, name );
+
+    if( txDesc )
+    {
+        txDesc->SetSamplerState( samplerState );
+        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
+        ReplaceTexture( txAssetDescr, txDesc, texIdx );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Failed to load fallback texture.";
+    }
+}
+
+// ***********************
+//
+void                                TexturePluginBase::ReplaceTexture               ( const AssetDescConstPtr & assetDesc, ITextureDescriptorPtr texDesc, UInt32 texIdx )
+{
+    auto txData = m_psc->GetTexturesDataImpl();
+
+    txData->SetTexture( texIdx, texDesc );
+    SetAsset( texIdx, LAsset( texDesc->GetName(), assetDesc, texDesc->GetSamplerState() ) );
+
+    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+}
+
+// ***********************
+/// Checks if this descriptor type can be loaded by this plugin.
+bool                                TexturePluginBase::IsSupportedDescriptor        ( const AssetDescConstPtr & assetDesc )
+{
+    auto & uid = assetDesc->GetUID();
+
+    if( uid == TextureAssetDesc::UID() )
+        return true;
+
+    if( uid == TextureInputAssetDesc::UID() )
+        return true;
+
     return false;
+}
+
+// ***********************
+/// Creates sampler for new loaded asset. Function tries to use previous sampler to avoid changing parameters.
+SamplerStateModelPtr                TexturePluginBase::CreateSamplerReplacment      ( UInt32 texIdx ) const
+{
+    auto txData = m_psc->GetTexturesDataImpl();
+    auto replacedTex = txData->GetTexture( texIdx );
+
+    return replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
+
 }
 
 // *************************************
 // 
-IPixelShaderChannelPtr              TexturePluginBase::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              TexturePluginBase::GetPixelShaderChannel        () const
 {
     return m_psc;
 }

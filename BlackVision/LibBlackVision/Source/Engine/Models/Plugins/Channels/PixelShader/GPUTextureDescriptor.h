@@ -60,6 +60,7 @@ public:
 
     void                                SetSamplerState ( SamplerStateModelPtr samplerState );
 
+    static GPUTextureDescriptorPtr      LoadTexture     ( const TextureInputAssetDescConstPtr& inputTexDesc, const std::string & name );
 };
 
 } //model

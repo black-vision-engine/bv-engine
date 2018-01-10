@@ -2,6 +2,7 @@
 
 
 #include "ITextureInputAsset.h"
+#include "TextureInputAssetDesc.h"
 
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
@@ -81,6 +82,14 @@ public:
     Texture2DPtr                    GetTexture      () const;
 };
 
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string &   GetAssetDescUID< TextureInputAsset >()
+{
+    return TextureInputAssetDesc::UID();
+}
 
 
 }	// bv
