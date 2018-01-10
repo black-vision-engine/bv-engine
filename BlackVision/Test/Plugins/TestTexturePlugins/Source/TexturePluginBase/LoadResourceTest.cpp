@@ -27,6 +27,26 @@ const char* imagePath_checkerboard2 = "TestAssets/Common/checkerboard2.png";;
 
 
 // ***********************
+// Test checks normal valid exisitng texture loading scenario.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_ValidTexture )
+{
+    auto texturePlugin = TestScenesCreator::TexturedRectangle( GetProjectEditor(), "Scene", 400, 400, imagePath_32x32 );
+    auto desc = TextureAssetDesc::Create( imagePath_checkerboard2, false );
+
+    ASSERT_NE( texturePlugin, nullptr );
+    EXPECT_TRUE( texturePlugin->LoadResource( desc ) );
+
+    auto lassets = texturePlugin->GetLAssets();
+    ASSERT_TRUE( lassets.size() == 1 );
+
+    auto texDesc = std::static_pointer_cast< const TextureAssetDesc >( lassets[ 0 ].assetDesc );
+
+    EXPECT_EQ( texDesc->GetOrigTextureDesc()->GetImagePath(), desc->GetOrigTextureDesc()->GetImagePath() );
+}
+
+
+
+// ***********************
 // Providing path to non existing file should load fallback texture.
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_FallbackTexture )
 {
