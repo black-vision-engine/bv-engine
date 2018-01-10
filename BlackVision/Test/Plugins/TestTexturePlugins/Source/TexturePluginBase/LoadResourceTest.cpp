@@ -5,6 +5,7 @@
 #include "Engine/Editors/BVProjectEditor.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/SVG/SVGAssetDescriptor.h"
 
 #include "Utils/Scenes/TestScenesCreator.h"
 #include "Utils/Nodes/TestNodesCreator.h"
@@ -86,3 +87,24 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_SamplerP
     EXPECT_TRUE( ParametersSets::CompareToSamplerStateParamsTestSet1( texturePlugin->GetResourceStateModel( "Tex0" ) ) );
 }
 
+// ***********************
+// If someone provide descriptor with type not accepted by texture plugins, LoadResource should return
+// and texture state shouldn't change.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_WrongDescriptorType )
+{
+    auto texturePlugin = TestScenesCreator::TexturedRectangle( GetProjectEditor(), "Scene", 400, 400, imagePath_32x32 );
+
+    ParametersSets::SetSamplerStateParamsTestSet1( texturePlugin->GetResourceStateModel( "Tex0" ) );
+
+    auto svgDesc = SVGAssetDescriptor::Create( "SomeSVGAsset.svg" );
+    ASSERT_FALSE( texturePlugin->LoadResource( svgDesc ) );
+
+    // Check number of assets.
+    auto lassets = texturePlugin->GetLAssets();
+    ASSERT_TRUE( lassets.size() == 1 );
+
+    auto texDesc = std::static_pointer_cast< const TextureAssetDesc >( lassets[ 0 ].assetDesc );
+
+    EXPECT_TRUE( ParametersSets::CompareToSamplerStateParamsTestSet1( texturePlugin->GetResourceStateModel( "Tex0" ) ) );
+    EXPECT_EQ( texDesc->GetOrigTextureDesc()->GetImagePath(), imagePath_32x32 );
+}
