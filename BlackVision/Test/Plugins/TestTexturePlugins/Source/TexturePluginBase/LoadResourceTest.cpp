@@ -5,6 +5,7 @@
 #include "Engine/Editors/BVProjectEditor.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Input/TextureInputAssetDesc.h"
 #include "Assets/SVG/SVGAssetDescriptor.h"
 
 #include "Utils/Scenes/TestScenesCreator.h"
@@ -108,3 +109,25 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_WrongDes
     EXPECT_TRUE( ParametersSets::CompareToSamplerStateParamsTestSet1( texturePlugin->GetResourceStateModel( "Tex0" ) ) );
     EXPECT_EQ( texDesc->GetOrigTextureDesc()->GetImagePath(), imagePath_32x32 );
 }
+
+// ***********************
+// TexturePlugin can load input slots as textures.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_TextureInputSlot )
+{
+    auto texturePlugin = TestScenesCreator::TexturedRectangle( GetProjectEditor(), "Scene", 400, 400, imagePath_32x32 );
+    auto inputSlotDesc = TextureInputAssetDesc::Create( InputSlotBinding( 0 ) );
+
+    ASSERT_TRUE( texturePlugin->LoadResource( inputSlotDesc ) );
+
+    auto lassets = texturePlugin->GetLAssets();
+    ASSERT_TRUE( lassets.size() == 1 );
+
+    EXPECT_EQ( lassets[ 0 ].assetDesc->GetUID(), TextureInputAssetDesc::UID() );
+    
+    auto slotDesc = std::static_pointer_cast< const TextureInputAssetDesc >( lassets[ 0 ].assetDesc );
+    
+    EXPECT_EQ( slotDesc->BindingInfo().GetIndex(), 0 );
+}
+
+
+
