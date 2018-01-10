@@ -19,7 +19,9 @@ namespace model
 
 
 
-// ***************************** PLUGIN ********************************** 
+/// ***********************
+/// Implementation of texture or input slots loading functionality.
+/// Even if you don't won't standard loading function you can use this base class as assets helpers.
 class TexturePluginBase : public BasePlugin
 {
 protected:

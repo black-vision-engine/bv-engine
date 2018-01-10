@@ -4,7 +4,6 @@
 
 #include "Assets/AssetManager.h"
 #include "Assets/Input/ITextureInputAsset.h"
-#include "Assets/Input/TextureInputAsset.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -152,7 +151,10 @@ GPUTextureDescriptorPtr GPUTextureDescriptor::LoadTexture       ( const TextureI
     if( !inputTexDesc )
         return nullptr;
 
-    auto inputAsset = LoadTypedAsset< TextureInputAsset >( inputTexDesc );
+    // We don't use LoadTypedAsset functionality here. Descriptor from parameters can be
+    // one of subclasses either. We use only interface to original asset to provide separation between engine and model.
+    auto asset = AssetManager::GetInstance().LoadAsset( inputTexDesc );
+    auto inputAsset = std::static_pointer_cast< const ITextureInputAsset >( asset );
 
     if( inputAsset == nullptr )
     {
