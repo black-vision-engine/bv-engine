@@ -32,7 +32,7 @@ public:
 
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
-    virtual const std::string &                 GetTextureName              ( UInt32 idx = 0 ) const = 0;
+    virtual std::string                         GetTextureName              ( UInt32 idx = 0 ) const = 0;
 
     virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
 

@@ -6,6 +6,7 @@
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/TexturePluginBase.h"
 
 #include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
@@ -32,7 +33,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class DefaultTexturePlugin : public BasePlugin
+class DefaultTexturePlugin : public TexturePluginBase
 {
 public:
 
@@ -44,7 +45,6 @@ public:
 
 protected:
 
-    DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
@@ -59,10 +59,9 @@ public:
 
     virtual bool                                IsValid						() const override;
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
+    virtual std::string                         GetTextureName              ( UInt32 idx = 0 ) const;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
