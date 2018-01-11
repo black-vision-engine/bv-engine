@@ -30,6 +30,7 @@
     <ClInclude Include="..\..\..\Source\Framework\TestEnvironment.h" />
     <ClInclude Include="..\..\..\Source\Framework\UseLoggerTests.h" />
     <ClInclude Include="..\..\..\Source\Framework\TestMain.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\Assets\AssetManagerAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeInterpolatorAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Engine\Inputs\VideoInputHandlerAccessor.h" />

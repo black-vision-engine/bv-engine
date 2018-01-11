@@ -49,6 +49,9 @@
     <Filter Include="Utils\Comparators\Assets">
       <UniqueIdentifier>{c3f47a84-1474-4371-a87e-2646b4d62c82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Accessors\Assets">
+      <UniqueIdentifier>{c7cfa3f2-33b3-48e3-b4bd-b8138fb7b763}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.h">
       <Filter>Utils\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\Assets\AssetManagerAccessor.h">
+      <Filter>Utils\Accessors\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

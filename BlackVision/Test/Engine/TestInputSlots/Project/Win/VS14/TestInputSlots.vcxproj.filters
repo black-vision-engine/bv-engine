@@ -17,6 +17,9 @@
     <ClCompile Include="..\..\..\Source\GPUTextureDescriptorTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\InputsInitializationTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestCases">
