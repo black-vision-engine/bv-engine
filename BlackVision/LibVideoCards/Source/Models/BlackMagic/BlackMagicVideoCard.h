@@ -2,9 +2,10 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
+#include "BlackMagicVideoCardDesc.h"
 #include "BlackMagicUtils.h"
 #include "Memory/AVFrame.h"
-#include "BlackMagic/DeckLinkAPI_h.h"
+#include "DeckLinkAPI_h.h"
 #include "BlackMagicVCThread.h"
 #include "AudioVideoOutputDelegate.h"
 
@@ -14,28 +15,19 @@
 
 #include <ctime>
 
-namespace bv { namespace videocards { namespace blackmagic {
-
-// ***************************** DESCRIPTOR **********************************
-//
-class VideoCardDesc : public IVideoCardDesc
+namespace bv {
+namespace videocards {
+namespace blackmagic
 {
-private:
 
-    std::string             m_uid;
 
-public:
+/**@defgroup BlackMagicVideoCard BlackMagic
+@ingroup VideoCards*/
 
-                                            VideoCardDesc       ();
 
-    virtual IVideoCardPtr                   CreateVideoCard     ( const IDeserializer & deser ) const override;
-
-    virtual const std::string &             GetVideoCardUID     () const override;
-
-};
 
 // ***************************************************************
-//
+/// @ingroup BlackMagicVideoCard
 class VideoCard : public IVideoCard
 {
 private:
@@ -93,6 +85,8 @@ public:
 	bool                    InitVideoCard       ();
     virtual void            SetVideoOutput      ( bool enable ) override;
 
+    virtual VideoCardID     GetVideoCardID      () const { return m_deviceID; }
+
     void                    AddOutput           ( ChannelOutputData output );
 
     virtual void            PreStart            () override;
@@ -102,9 +96,12 @@ public:
     virtual void            EnableAudioChannel  ( AudioSampleType audioSampleType, UInt32 sampleRate, UInt32 channelCount ) override;
 
 	virtual void            ProcessFrame        ( const AVFrameConstPtr & data, UInt64 avOutputID ) override;
+    virtual AVFramePtr      QueryInputFrame     ( VideoInputID inputID ) override;
+
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType callback ) override;
 
-	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs() const override;
+	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs () const override;
+    InputChannelsDescsVec       GetInputChannelsDescs       () const override;
 	
     virtual UInt32              GetRequiredFPS  () const override;
 

@@ -60,10 +60,10 @@ SPECIALIZE_TYPE_DEFAULT_CURVE( bool, CurveType::CT_POINT )
 template< class TimeValueT, class ValueT >
 inline bool             IEvaluator< TimeValueT, ValueT >::ValidateCurveType     ( const IDeserializer & deser, CurveType curve )
 {
-    if( deser.GetAttribute( "type" ) != SerializationHelper::T2String( curve ) )
+    if( deser.GetAttribute( "type" ) != Convert::T2String( curve ) )
     {
         Warn< SerializationLogicError >( deser, "Created interpolator of other type ["
-            + SerializationHelper::T2String( curve )
+            + Convert::T2String( curve )
             + "] then serialized in file ["
             + deser.GetAttribute( "type" ) + "]." );
 

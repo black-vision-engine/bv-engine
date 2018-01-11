@@ -29,6 +29,7 @@ public:
 
     void        Push                ( const T & val );
     T           Pop                 ();
+    bool        TryPop              ( T & val );
 
     T           Front               ();
 
@@ -100,6 +101,26 @@ T           CircularBufferConcurrent< T, N >::Pop      ()
     m_condVarPop.notify_one();
     return val;
 }
+
+// ***********************
+//
+template< typename T, size_t N >
+inline bool     CircularBufferConcurrent< T, N >::TryPop        ( T & val )
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+
+    if( IsEmpty() )
+        return false;
+
+    val = m_queue.front();
+    m_queue.pop_front();
+
+    m_condVarPop.notify_one();
+
+    return true;
+}
+
+
 //
 //// *************************************
 ////

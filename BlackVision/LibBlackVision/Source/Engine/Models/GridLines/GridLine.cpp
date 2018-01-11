@@ -12,9 +12,7 @@
 
 
 namespace bv {
-
-
-namespace SerializationHelper
+namespace Convert
 {
 
 
@@ -44,7 +42,7 @@ IMPLEMENT_ENUM_SERIALIZATION( bv::model::GridLineType, GridLineTypeMapping );
 IMPLEMENT_ENUM_SERIALIZATION( bv::model::GridLineAlignement, GridLineAlignementMapping );
 
 
-}   // SerializationHelper
+}   // Convert
 
 
 

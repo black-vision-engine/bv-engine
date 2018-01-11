@@ -95,7 +95,7 @@ ser.EnterChild( "asset" );
             
         ser.SetAttribute( "name", m_rowNames[ i ] );
         ser.SetAttribute( "data", m_rows[ i ] );
-        ser.SetAttribute( "type", SerializationHelper::T2String( m_rowTypes[ i ] ) );
+        ser.SetAttribute( "type", Convert::T2String( m_rowTypes[ i ] ) );
 
         ser.ExitChild();    // row
     }
@@ -104,7 +104,7 @@ ser.EnterChild( "asset" );
 
     if( context->extendedAssetData )
     {
-        ser.SetAttribute( "estimatedMemoryUsage", SerializationHelper::T2String( EstimateMemoryUsage() ) );
+        ser.SetAttribute( "estimatedMemoryUsage", Convert::T2String( EstimateMemoryUsage() ) );
     }
 
 ser.ExitChild();
@@ -131,7 +131,7 @@ ISerializableConstPtr   DataArrayAssetDesc::Create          ( const IDeserialize
             {
                 rowNames.push_back( deser.GetAttribute( "name" ) );
                 rows.push_back( deser.GetAttribute( "data" ) );
-                types.push_back( SerializationHelper::String2T( deser.GetAttribute( "type" ), ModelParamType::MPT_TOTAL ) );
+                types.push_back( Convert::String2T( deser.GetAttribute( "type" ), ModelParamType::MPT_TOTAL ) );
 
             } while( deser.NextChild() );
 

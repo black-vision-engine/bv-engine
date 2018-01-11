@@ -585,7 +585,7 @@ void GetParamsOfTimelinesRecursively                ( const std::string & nodePa
     // Process node children.
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); i++ )
     {
-        std::string childNodePath = nodePath + "/#" + SerializationHelper::T2String( i );
+        std::string childNodePath = nodePath + "/#" + Convert::T2String( i );
         GetParamsOfTimelinesRecursively( childNodePath, modelNode->GetChild( i ), map );
     }
 }

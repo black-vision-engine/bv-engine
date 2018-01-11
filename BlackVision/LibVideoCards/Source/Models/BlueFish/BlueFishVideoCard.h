@@ -5,29 +5,25 @@
 #include "Memory/AVFrame.h"
 #include "Channel.h"
 
+#include "BlueFishVideoCardDesc.h"
 
-namespace bv { namespace videocards { namespace bluefish {
+
+
+namespace bv {
+namespace videocards {
+namespace bluefish
+{
 
 DEFINE_PTR_TYPE( CBlueVelvet4 )
 
-// ***************************** DESCRIPTOR **********************************
-//
-class VideoCardDesc : public IVideoCardDesc
-{
-private:
 
-    std::string     m_uid;
 
-public:
+/**@defgroup BlueFishVideoCard BlueFish
+@ingroup VideoCards*/
 
-                                            VideoCardDesc           ();
 
-    virtual IVideoCardPtr                   CreateVideoCard         ( const IDeserializer & deser ) const override;
-
-    virtual const std::string &             GetVideoCardUID         () const override;
-
-};
-
+// ***********************
+/// @ingroup BlueFishVideoCard
 class VideoCard : public IVideoCard
 {
 private:
@@ -64,6 +60,8 @@ public:
 
     virtual void            SetVideoOutput              ( bool enable ) override;
 
+    virtual VideoCardID     GetVideoCardID              () const { return m_deviceID; }
+
 	void				    AddChannel					( Channel * channel );
 	void                    RouteChannel                ( ULONG source, ULONG destination, ULONG linkType );
 	Channel *			    GetChannelByName			( ChannelName channelName ) const;   
@@ -73,8 +71,10 @@ public:
     void                    Stop                        () override;
 
     virtual void            ProcessFrame                ( const AVFrameConstPtr & avFrame, UInt64 avOutputID ) override;
+    virtual AVFramePtr      QueryInputFrame             ( VideoInputID inputID ) override;
 
     std::set< UInt64 >	    GetDisplayedVideoOutputsIDs () const override;
+    InputChannelsDescsVec   GetInputChannelsDescs       () const override;
 
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 

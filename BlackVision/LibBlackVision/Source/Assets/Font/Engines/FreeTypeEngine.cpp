@@ -5,7 +5,7 @@
 #include "Assets/Font/Glyph.h"
 #include "ProjectManager.h"
 #include "Tools/Utils.h"
-
+#include "IO/FileIO.h"
 
 namespace bv { 
 
@@ -497,7 +497,7 @@ TextAtlasPtr    FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth
     
     auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
 
-    auto singleTex = SingleTextureAsset::Create( atlasMC, "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
+    auto singleTex = SingleTextureAsset::Create( atlasMC, File::GetFileName( m_fontFilePath ) + Convert::T2String( m_fontSize ), altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
     auto atlasTextureRes = TextureAsset::Create( singleTex, nullptr );
         
     atlas->m_textureAsset = atlasTextureRes;

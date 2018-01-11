@@ -7,11 +7,17 @@
 #include "Engine/Interfaces/IValue.h"
 
 
-namespace bv {
+namespace bv
+{
 
 class SceneNodeRepr; 
 class RenderablePass; // FIXME: nrl - hack
+class RenderContext;
 
+
+
+// ***********************
+//
 enum class NodeEffectType : int
 {
     NET_DEFAULT = 0,
@@ -30,8 +36,9 @@ enum class NodeEffectType : int
     NET_TOTAL
 };
 
-class RenderContext;
 
+// ***********************
+//
 class NodeEffect
 {
 private:
@@ -65,5 +72,7 @@ public:
 
 DEFINE_PTR_TYPE(NodeEffect)
 DEFINE_CONST_PTR_TYPE(NodeEffect)
+
+DECLARE_ENUM_SERIALIZATION( NodeEffectType )
 
 } // bv

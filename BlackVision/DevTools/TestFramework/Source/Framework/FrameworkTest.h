@@ -109,7 +109,7 @@ private:
 ::testing::TestInfo* const testClassName\
 ::test_info_ = \
 ::testing::internal::MakeAndRegisterTestInfo( \
-    MangleName( #test_case_name ).c_str(), MangleName( #test_name ).c_str(), NULL, NULL, \
+    #test_case_name, #test_name, NULL, NULL, \
     ::testing::internal::CodeLocation( __FILE__, __LINE__ ), \
     ( parent_id ), \
     parent_class::SetUpTestCase, \

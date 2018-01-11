@@ -24,7 +24,7 @@ void                MeshAssetDesc::Serialize       ( ISerializer & ser ) const
 
     ser.SetAttribute( "path", m_path );
     ser.SetAttribute( "groupName", m_groupName );
-    ser.SetAttribute( "recursive", SerializationHelper::T2String( m_recursive ) );
+    ser.SetAttribute( "recursive", Convert::T2String( m_recursive ) );
 
     ser.ExitChild();
 }
@@ -35,7 +35,7 @@ ISerializableConstPtr MeshAssetDesc::Create          ( const IDeserializer & des
 {
     auto path = deser.GetAttribute( "path" );
     auto groupName = deser.GetAttribute( "groupName" );
-    auto recursive = SerializationHelper::String2T< bool >( deser.GetAttribute( "recursive" ), true );
+    auto recursive = Convert::String2T< bool >( deser.GetAttribute( "recursive" ), true );
 
     return Create( path, groupName, recursive );
 }

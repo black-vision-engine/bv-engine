@@ -1,0 +1,66 @@
+1. Preview - done
+2. Shared - done
+3. Video - done (videocardmanager and all machinery for multiple cards to be implemented)
+4. Cache intermediate result in result - skipped
+15. Reimplementacja shared buf tak, żeby był przechowytwany w System i tylko wykorzystany na bazie niskopoziomowej implementacji
+
+3_1/2. Warstwa do konfiguracji outputów
+  - statyczna (w, h, domyślny input), domyślna konfiguracja włączonych outputów
+  - dynamiczna (input, parametry stanu (mask, mix)) - sensowne API do tego
+5. Buffer free rect generation
+6. Optimize model evaluation
+6_1/2. Optimize state changes (if shader doesn't change then don't reload it for each new node - just update uniforms if necessary)
+  - think of instancing for that matter
+7. Daria zadania
+8. skrypty (oskryptowane pythonowo parametry):  http://realmike.org/blog/2012/07/05/supercharging-c-code-with-embedded-python/
+9. klient, do pełnoprawnego sterowania silnikiem
+10. Project conf
+ - deps
+ - build times - teraz jest kurwa dramat (linkowanie, wypisywanie pdb w LibBlackVision)
+ - każdorazowe pytanie o rebuild całości
+ - asset copying
+ - additional project for shaders only
+11. Wywalic gowno w formie kebaba
+12. Porządna klasa kontrolera nad klientem (zamiast GwFK - patrz punkt 9.)
+13. Generic FSE implementation
+14. Generic Output implementation
+  - i dodatkowy shader (mix channels) + readback tylko, jeśli naprawdę trzeba (w, h, state inne, niż domyślne) - problem jest taki, że keszowanie w takim wypadku
+     wymagałoby zapamiętania w kluczu właśnie w, h i state, a to nie jest generyczny sposób keszowania (do tego potrzebny by był oddzielny kesz)
+     więc na razie zostaje tak, że dodatkowy efekt tylko, jeśli trzeba, ale wyniki dodatkowego efektu nie są keszowane (bo nawet jeśli da się skeszować w i h, to
+     zmiana state spowoduje, że i tak trzeba go wyrenderować jeszcze raz i jeszcze reaz robić readback)
+  - no subclassing
+  - UpdateEffectValues in a generic way
+  - ten shader FSE do przetwarzania mixchannels też użyć przed resztą - ładna kompozycja
+    - input->mix_channels (if necessary) -> output_component( readback_texture )
+16. Możliwość konfigurowania FSE (czyli jakiś generyczny deskryptor)
+17. Zmieniane shadery wcale się nie kopiują (e.g. mixchannels.frag z FullscreenEffects)
+18. Potestować zbuffering w render targetach
+18. m_activeRenderOutput zamienić na coś znaczącego i sensownego (bo to jest przecież input dla efektu)
+19. Opakować
+    m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
+    m_mixChannelsEffect->Render( ctx, m_shmRT, m_activeRenderOutput );
+    w pojedyncze wywołanie
+20. Enable/Disable output, set active renderchannel, set output params, inicjalizacja outputów
+21. Wywalić stary kod render logic, w nowym zmienić nazwy (bez prefiksu N i bez namespace nrl)
+22. Dowiedziec się od Pawełka dlaczego jak jest shared video mem buffer, to jeśli jest < FullHD, to się nie wyświetla na podglądzie?
+23. Podmienić implementację video output tak, żeby jedna instancja obsługiwała wszystkie karty video (w tym HD i SD).
+24. Zoptymalizować dopinanie samplerów.
+25. Przemyśleć generyczne rozwiązanie minimalizujące liczbę zmian stanów.
+26. Shader caching. Teraz bez sensu jest tworzone tyle instancji, ile jest węzłów (nawet jeśli każdy węzeł ma identyczny shader)
+27. Okienko preview powinno
+  - mieścić się na domyślnym monitorze
+  - zachowywać proporcje (teraz jest jakies głupie rozciąganie - wystarczy poprawić vertex shader - bo renderowanie ma odbywać się do pełnowymiarowego 1920x1080 zawsze)
+28. Struktura projektu
+  - poprawić tak, żeby includy wymagały poprawnego podania nazwy projektu (teraz jeśli nazwa pliku powtórzy się między projektami, to include nie wybierze popraawnie ścieżki)
+  - np. #include "AVFrame.h" (jest tylko w LibVideoCards, ale tego z poziomu include w ogóle nie widać)
+29. Dodać do FSE (oraz do FSE factory) metody pozwalające na dodanie custo VS (na przykład blit na preview musi utrzymać skalę, a to wymaga generowania FSE quad tak, żeby utrztmać proporcje). To też do budzika pawełkowego.
+30. Tester do synchronizowania wielu kart video (czyli bez żadnego GL, na każdy output pchamy obrazek z ID outputu oraz timecodem - można wczytać takie sekwencje wcześniej)
+31. Ustawianie aktywnych kanałów render channel - z poziomu render logic
+32. OutputVideo ma pchać całą listę avframe do video card managera. OutputVideo pozwala konfigurować stan poszczególnych outputów (kanały, enable, disable). Powinien też keszować pośrednie wyniki (czyli tworzy tylko tyle nowych avframe, ile jest różnych wyników). Widać, że reaqdbacki też muszą się odbyć wcześniej.
+33. Override video output data - blank - pusta pamięć.
+34. Implementacja output stream - oraz w jego ramach podimplementacja outputu shared memory.
+35. Upewnić się, że struktura katalogów w nrl jest poprawna, a jeśli nie jest, to ją odpowiednio zmodyfikować.
+36. Namierzyć te miejsca, które w debug powinny lecieć na assert, ale w release NIE POWINNY WYWALAĆ silnika (generalnie nie powinny się zdarzać, ale zakładamy, że mogą i o ile coś może się brzydko renderować, to silnik powinien to przetrzymywać bez padu).
+37. Tematy przegadane z Darią opisać.
+38. Zastanowić się nad alternatywnym grupowaniem plików (teraz jest meta, a może trzeba bardziej konkretnie - czyli nie state/output state/logic tylko logic/state output/state itd.) - przemyśleć i ewentualnie zgodnie z tym podzielić.
+39. Zdecydować czy komponenty render logic tworzone ze statycznych deskryptorów są trzymane jako wskaźniki (preferowane) i tworzone tylko przez metody create czy może inaczej. Ta pierwsza wersja jest preferowana, bo pozwala na initialization in place oraz przekazanie dodatkowych parametrów do create (czyli konstruktor tworzy obiekt, a potem, przed returnem jeszcze się go inicjalizuje i dopiero zwraca już w pełni poprawnym stanie).

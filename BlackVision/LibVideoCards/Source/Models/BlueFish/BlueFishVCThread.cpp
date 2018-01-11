@@ -3,6 +3,11 @@
 #include "UseLoggerVideoModule.h"
 
 #include "System/Time.h"
+#include "Serialization/ConversionHelper.h"
+
+#include "UseLoggerVideoModule.h"
+
+
 
 namespace bv { namespace videocards { namespace bluefish
 {
@@ -12,6 +17,8 @@ namespace
 const SizeType      BUFFER_SIZE = 10;
 }
 
+
+
 //**************************************
 //
 BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
@@ -19,7 +26,7 @@ BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
     , m_videoChannel( vc )
     , m_odd( false )
     , m_outputFramesBuffer( BUFFER_SIZE )
-    , m_frameDuration( 0 )
+    , m_frameDuration( 20 )     // 20 ms 50 Hz by default
     , m_interlaceEnabled( false )
 {
     frameSize = frameSize / ( vc->m_playbackData->interlaced ? 2 : 1 ) + 2048; // FIXME: Why + 2048
@@ -65,8 +72,6 @@ void				BlueFishVCThread::Process					()
 
 	if( m_frameQueue.WaitAndPop( srcFrame ) )
 	{
-        auto biginFrameProcessingTime = m_videoChannel->GetFrameTime();
-
         AVFrameConstPtr processedFrame = nullptr;
 
         if( m_interlaceEnabled )
@@ -77,13 +82,8 @@ void				BlueFishVCThread::Process					()
         else
             m_videoChannel->FrameProcessed( srcFrame );
 
-        if( m_frameDuration > 0 )
-        {
-            auto sleepFor = Int64( m_frameDuration ) - ( Int64( Time::Now() - biginFrameProcessingTime ) % Int64( m_frameDuration ) );
-            // sleep to the next multiple of m_frameDuration.
-
-            std::this_thread::sleep_for( std::chrono::milliseconds( sleepFor ) );
-        }
+        
+        m_videoChannel->UpdateFrameTime( Time::Now() );
 	}
 }
 
@@ -112,21 +112,26 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         memcpy( &memDst[ j*( bytes_per_line ) ], &memSrc[ i*( bytes_per_line ) ], bytes_per_line );
 
     MemoryChunkPtr audioData = nullptr;
+    AVFrameDescriptor newDesc = frame->m_desc;
 
     if( !m_prevAudioData )
     {
         m_prevAudioData = MemoryChunk::Create( frame->m_audioData->Size() );
         memcpy( m_prevAudioData->GetWritable(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+
+        newDesc.sampleRate = 0;
     }
     else
     {
         audioData = MemoryChunk::Create( frame->m_audioData->Size() + m_prevAudioData->Size() );
         memcpy( audioData->GetWritable(), m_prevAudioData->Get(), m_prevAudioData->Size() );
         memcpy( audioData->GetWritable() + m_prevAudioData->Size(), frame->m_audioData->Get(), frame->m_audioData->Size() );
+        newDesc.sampleRate = 2 * frame->m_desc.sampleRate;      // It's number of samples in reality.
+        
         m_prevAudioData = nullptr;
     }
 
-    return AVFrame::Create( outputFrame, audioData, frame->m_desc );
+    return AVFrame::Create( outputFrame, audioData, newDesc );
 }
 
 } // blackmagic

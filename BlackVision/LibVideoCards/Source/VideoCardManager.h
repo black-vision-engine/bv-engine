@@ -7,6 +7,9 @@
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "VideoCardManagerUtils.h"
 
+#include "VideoCardDescFactory.h"
+#include "VideoInput/VideoInputFrameData.h"
+
 #include "Memory/MemoryChunk.h"
 #include "DataTypes/CircularBufferConcurrent.h"
 #include "Threading/Thread.h"
@@ -17,7 +20,9 @@
 
 
 
-namespace bv { namespace videocards {
+namespace bv {
+namespace videocards
+{
 
 
 enum class DisplayMode : int
@@ -29,7 +34,6 @@ enum class DisplayMode : int
 };
 
 
-std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ();
 
 
 struct InputConfig
@@ -97,6 +101,7 @@ DEFINE_UPTR_TYPE( VideoCardProcessingThread )
 
 
 // ******************************
+/// @ingroup VideoCards
 class VideoCardManager
 {
 private:
@@ -104,12 +109,12 @@ private:
     static VCMInputDataConstPtr											KILLER_FRAME;
 	char* m_PreviousFrame;
 
-    std::hash_map< std::string, const IVideoCardDesc * >                m_descMap;
-    std::vector< const IVideoCardDesc * >                               m_descVec;
+    VideoCardDescFactory                                                m_descriptorsFactory;
 
     std::vector< IVideoCardPtr >                                        m_videoCards;
 
 	std::multimap< UInt64, IVideoCardPtr >								m_outputsToCardsMapping;
+    std::map< VideoInputID, IVideoCardPtr >                             m_inputsToCardMapping;
 
     /**@brief Circular blocking frames queue */
 	CircularBufferConcurrent< VCMInputDataConstPtr, FRAME_BUFFER_SIZE >	m_inputDataBuffer;
@@ -140,10 +145,7 @@ public:
     virtual                             ~VideoCardManager       ();
 
 
-    void                                ReadConfig              ( const IDeserializer & deser );
-    void                                RegisterDescriptors     ( const std::vector< IVideoCardDesc * > & descriptors );
-
-    bool                                IsRegistered            ( const std::string & uid ) const;
+    void                                CreateVideoCards        ( const std::vector< IVideoCardDescPtr > & descriptors );
 
     /**@brief Enables/disabled videooutput. */
     void                                SetVideoOutput          ( bool enable );
@@ -153,17 +155,25 @@ public:
     void                                Stop                    ();
 
 	void								Display     			( const VCMInputDataConstPtr & outputs );
-    
+    AVFramePtr                          QueryChannelInputFrame  ( VideoInputID inputID );
+    VideoInputFrameData                 QueryVideoInput         ();
+
+
     /**@brief Runs in processing thread. Can be stopped by queueing KILLER_FRAME.
     @return Returns true if processed correct frame, false for KILLER_FRAME. */
     bool                                ProcessOutputsData      ();
    
-
+    InputChannelsDescsVec               GetInputChannelsDescs   () const;
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
     UInt32                              GetRequiredFPS          () const;
 
    // static VideoCardManager &           Instance                ();
+
+
+public:
+
+    VideoCardDescFactory &              GetFactory              () { return m_descriptorsFactory; }
 
 };
 

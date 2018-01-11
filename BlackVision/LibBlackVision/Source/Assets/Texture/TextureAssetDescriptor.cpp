@@ -24,48 +24,26 @@ namespace bv
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
 
-namespace SerializationHelper
+namespace Convert
 {
+
 // ***********************
 //
-std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
-    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" )
-    , std::make_pair( MipMapFilterType::BILINEAR, "bilinear" )
-    , std::make_pair( MipMapFilterType::BOX, "box" )
-    , std::make_pair( MipMapFilterType::B_SPLINE, "b spline" )
-    , std::make_pair( MipMapFilterType::CATMULL_ROM, "catmull rom" )
-    , std::make_pair( MipMapFilterType::LANCZOS, "lanczos" )
-    , std::make_pair( MipMapFilterType::MMFT_TOTAL, "none" )
+	std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
+	{ std::make_pair( MipMapFilterType::BICUBIC, "bicubic" )
+	, std::make_pair( MipMapFilterType::BILINEAR, "bilinear" )
+	, std::make_pair( MipMapFilterType::BOX, "box" )
+	, std::make_pair( MipMapFilterType::B_SPLINE, "b spline" )
+	, std::make_pair( MipMapFilterType::CATMULL_ROM, "catmull rom" )
+	, std::make_pair( MipMapFilterType::LANCZOS, "lanczos" )
+	, std::make_pair( MipMapFilterType::MMFT_TOTAL, "none" )
+	, std::make_pair( MipMapFilterType::MMFT_TOTAL, "" )
 };
 
-
-template<> MipMapFilterType         String2T      ( const std::string & s, const MipMapFilterType & defaultVal )
-{
-    auto filter = String2Enum( mipmapFiltering, s );
-    if( filter == MipMapFilterType::MMFT_TOTAL )
-        return defaultVal;
-    return filter;
-}
-
-template<> std::string              T2String      ( const MipMapFilterType& t )                         { return Enum2String( mipmapFiltering, t ); }
+IMPLEMENT_ENUM_SERIALIZATION( MipMapFilterType, mipmapFiltering )
 
 
-// ***********************
-//
-std::string Filter2String( MipMapFilterType filter )
-{
-    std::string filterString = Enum2String( mipmapFiltering, filter );
-
-    if( filterString == "none" )
-    {
-        assert( false );
-        return std::to_string( (int) filter );
-    }
-    return std::move( filterString );
-}
-
-
-} // SerializationHelper
+} // Convert
 
 
 // ***********************
@@ -80,13 +58,13 @@ ser.EnterChild( "asset" );
 
     if( context->extendedAssetData )
     {
-        ser.SetAttribute( "width", SerializationHelper::T2String( m_originalTextureDesc->GetWidth() ) );
-        ser.SetAttribute( "height", SerializationHelper::T2String( m_originalTextureDesc->GetHeight() ) );
-        ser.SetAttribute( "estimatedMemoryUsage", SerializationHelper::T2String( EstimateMemoryUsage() ) );
+        ser.SetAttribute( "width", Convert::T2String( m_originalTextureDesc->GetWidth() ) );
+        ser.SetAttribute( "height", Convert::T2String( m_originalTextureDesc->GetHeight() ) );
+        ser.SetAttribute( "estimatedMemoryUsage", Convert::T2String( EstimateMemoryUsage() ) );
     }
 
     if( m_mipMapsDescs )
-        ser.SetAttribute( "filter", SerializationHelper::T2String( m_mipMapsDescs->GetFilter() ) );
+        ser.SetAttribute( "filter", Convert::T2String( m_mipMapsDescs->GetFilter() ) );
     else
         ser.SetAttribute( "filter", "none" );
 
@@ -118,18 +96,6 @@ void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
     }
 
     *this = *obj; // if you think this is ugly, see why it cannot be done:
-
-//sob.EnterChild( "asset" );
-//    if( UID() != sob.GetAttribute( "uid" ) )
-//        assert( false ); // FIXME: error handling
-//
-//    sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
-//
-//    if( m_mipMapsDescs )
-//        sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
-//    else
-//        sob.SetAttribute( "mipmap", "none" );
-//sob.ExitChild();
 }
 
 
@@ -154,7 +120,7 @@ ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& d
     if( filterS == "none" )
         return Create( path, true );
     else
-        return Create( path, SerializationHelper::String2T( filterS, MipMapFilterType::BILINEAR ), true );
+        return Create( path, Convert::String2T( filterS, MipMapFilterType::BILINEAR ), true );
 }
 
 

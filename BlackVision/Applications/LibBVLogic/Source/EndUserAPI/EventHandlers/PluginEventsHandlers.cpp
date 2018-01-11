@@ -131,7 +131,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     }
     else if( !keyTimeIsNaN && command == ParamKeyEvent::Command::MoveKey )
     {
-        TimeType newKeyTime = SerializationHelper::String2T( value, std::numeric_limits<TimeType>::quiet_NaN() );
+        TimeType newKeyTime = Convert::String2T( value, std::numeric_limits<TimeType>::quiet_NaN() );
 
         if( newKeyTime != std::numeric_limits<TimeType>::quiet_NaN() )
         {
@@ -146,13 +146,13 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         }
     }
     else if( command == ParamKeyEvent::Command::SetInterpolatorType )
-        result = BezierSetGlobalCurveType( param, SerializationHelper::String2T( value, CurveType::CT_BEZIER ) );
+        result = BezierSetGlobalCurveType( param, Convert::String2T( value, CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetAddedInterpolatorType )
-        result = BezierSetAddedKeyCurveType( param, SerializationHelper::String2T( value, CurveType::CT_BEZIER ) );
+        result = BezierSetAddedKeyCurveType( param, Convert::String2T( value, CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
-        result = SetWrapPreMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
+        result = SetWrapPreMethod( param, Convert::String2T( value, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
-        result = SetWrapPostMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
+        result = SetWrapPostMethod( param, Convert::String2T( value, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::AssignTimeline )
     {
         result = m_projectEditor->AssignTimeline( sceneName, param, value, enableUndo );
@@ -163,9 +163,9 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         
         if( params.size() == 3 )
         {
-            auto start = SerializationHelper::String2T< TimeType >( params[ 0 ] );
-            auto end = SerializationHelper::String2T< TimeType >( params[ 1 ] );
-            auto steps = SerializationHelper::String2T< UInt32 >( params[ 2 ] );
+            auto start = Convert::String2T< TimeType >( params[ 0 ] );
+            auto end = Convert::String2T< TimeType >( params[ 1 ] );
+            auto steps = Convert::String2T< UInt32 >( params[ 2 ] );
 
             if( start.IsValid() && end.IsValid() & steps.IsValid() )
             {
@@ -178,8 +178,8 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
                     TimeType t = start + ( end - start ) / steps * i;
                     responseJSON.EnterChild( "sample" );
                     auto val = EvaluateParamToString( param, t );
-                    responseJSON.SetAttribute( "t", SerializationHelper::T2String( t ) );
-                    responseJSON.SetAttribute( "val", SerializationHelper::T2String( val ) );
+                    responseJSON.SetAttribute( "t", Convert::T2String( t ) );
+                    responseJSON.SetAttribute( "val", Convert::T2String( val ) );
                     responseJSON.ExitChild(); // sample
                 }
                 responseJSON.ExitChild(); // quants
@@ -198,7 +198,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {
-            auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
+            auto transformKind = Convert::String2T( paramSubName, TransformKind::invalid );
             model::QueryTypedParam< model::ParamTransformPtr >( param )->Serialize( responseJSON, transformKind );
         }
         else
@@ -235,7 +235,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
     if( result )
     {
-        LOG_MESSAGE( SeverityLevel::info ) << SerializationHelper::T2String( command ) + " Node [" + nodeName + "] Plugin [" + pluginName + "] Param [" + paramName + " " + paramSubName + "] : (" + SerializationHelper::T2String( value ) + ") key: " + SerializationHelper::T2String( keyTime ) + " s";
+        LOG_MESSAGE( SeverityLevel::info ) << Convert::T2String( command ) + " Node [" + nodeName + "] Plugin [" + pluginName + "] Param [" + paramName + " " + paramSubName + "] : (" + Convert::T2String( value ) + ") key: " + Convert::T2String( keyTime ) + " s";
     }
 
     SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
@@ -251,25 +251,25 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
     {
         case ModelParamType::MPT_FLOAT:
         {
-            float floatValue = SerializationHelper::String2T( stringValue, 0.f );
+            float floatValue = Convert::String2T( stringValue, 0.f );
 
             return SetParameter( param, ( TimeType )keyTime, floatValue );
         }
         case ModelParamType::MPT_VEC2:
         {
-            glm::vec2 vec2Value = SerializationHelper::String2T( stringValue, glm::vec2( 0.f ) );
+            glm::vec2 vec2Value = Convert::String2T( stringValue, glm::vec2( 0.f ) );
 
             return SetParameter( param, ( TimeType )keyTime, vec2Value );
         }
         case ModelParamType::MPT_VEC3:
         {
-            glm::vec3 vec3Value = SerializationHelper::String2T( stringValue, glm::vec3( 0.f ) );
+            glm::vec3 vec3Value = Convert::String2T( stringValue, glm::vec3( 0.f ) );
 
             return SetParameter( param, ( TimeType )keyTime, vec3Value );
         }
         case ModelParamType::MPT_VEC4:
         {
-            glm::vec4 vec4Value = SerializationHelper::String2T( stringValue, glm::vec4( 0.f ) );
+            glm::vec4 vec4Value = Convert::String2T( stringValue, glm::vec4( 0.f ) );
 
             return SetParameter( param, ( TimeType )keyTime, vec4Value );
         }
@@ -282,25 +282,25 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
             return SetParameter( param, ( TimeType )keyTime, stringValue );
         case ModelParamType::MPT_INT:
         {
-            int intValue = SerializationHelper::String2T( stringValue, 0 );
+            int intValue = Convert::String2T( stringValue, 0 );
 
             return SetParameter( param, ( TimeType )keyTime, intValue );
         }
         case ModelParamType::MPT_BOOL:
         {
-            bool boolValue = SerializationHelper::String2T( stringValue, false );
+            bool boolValue = Convert::String2T( stringValue, false );
 
             return SetParameter( param, ( TimeType )keyTime, boolValue );
         }
         case ModelParamType::MPT_ENUM:
         {
-            int enumValue = SerializationHelper::String2T( stringValue, 0 );
+            int enumValue = Convert::String2T( stringValue, 0 );
 
             return SetParameter( param, ( TimeType )keyTime, static_cast< model::GenericEnumType >( enumValue ) );
         }
         case ModelParamType::MPT_MAT2:
         {
-            glm::vec4 vec4Value = SerializationHelper::String2T( stringValue, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+            glm::vec4 vec4Value = Convert::String2T( stringValue, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
             glm::mat2 mat2Value( vec4Value.x, vec4Value.y, vec4Value.z, vec4Value.w );
 
             return SetParameter( param, ( TimeType )keyTime, mat2Value );
@@ -381,18 +381,18 @@ void PluginEventsHandlers::TimerHandler        ( IEventPtr eventPtr )
 //
 bool        PluginEventsHandlers::AddTransformKey        ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue )
 {
-    auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
+    auto transformKind = Convert::String2T( paramSubName, TransformKind::invalid );
 
     switch ( transformKind )
     {
         case TransformKind::translation:
-            return SetParameterTranslation( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 0.f ) ) );
+            return SetParameterTranslation( param, keyTime, Convert::String2T( strValue, glm::vec3( 0.f ) ) );
         case TransformKind::rotation:
-            return SetParameterRotation( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 0.f ) ) );
+            return SetParameterRotation( param, keyTime, Convert::String2T( strValue, glm::vec3( 0.f ) ) );
         case TransformKind::scale:
-            return SetParameterScale( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
+            return SetParameterScale( param, keyTime, Convert::String2T( strValue, glm::vec3( 1.f ) ) );
         case TransformKind::center:
-            return SetParameterCenterMass( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
+            return SetParameterCenterMass( param, keyTime, Convert::String2T( strValue, glm::vec3( 1.f ) ) );
         default:
             return false;;
     }
@@ -402,7 +402,7 @@ bool        PluginEventsHandlers::AddTransformKey        ( ParameterPtr & param,
 //
 bool        PluginEventsHandlers::RemoveTransformKey        ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime )
 {
-    auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
+    auto transformKind = Convert::String2T( paramSubName, TransformKind::invalid );
 
     switch ( transformKind )
     {
@@ -423,7 +423,7 @@ bool        PluginEventsHandlers::RemoveTransformKey        ( ParameterPtr & par
 //
 bool        PluginEventsHandlers::MoveTransformKey        ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, TimeType newTime )
 {
-    auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
+    auto transformKind = Convert::String2T( paramSubName, TransformKind::invalid );
 
     switch ( transformKind )
     {

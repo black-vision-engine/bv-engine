@@ -5,26 +5,33 @@
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/SceneModel.h"
 
-
+#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 
 #include "Memory/MemoryLeaks.h"
 
 
 
-namespace bv {
+namespace bv
+{
+
+// ***********************
+//
+UpdatersManagerPtr       UpdatersManager::sInstancePtr = nullptr;
+
 
 // *******************************
 //
 UpdatersManager::UpdatersManager        ()
 {
+    // FIXME: Maybe Textrue2DCache should be owned by UpdatersManager.
+    m_engineResources.TexturesMap = &GTexture2DCache;
 }
 
 // *******************************
 //
 UpdatersManager::~UpdatersManager       ()
-{
-}
+{}
 
 // *******************************
 //
@@ -32,7 +39,7 @@ void UpdatersManager::UpdateStep        ()
 {
     for( auto updater : m_updaters )
     {
-        updater->DoUpdate();
+        updater->DoUpdate( m_engineResources );
     }
 }
 
@@ -52,45 +59,61 @@ void    UpdatersManager::RegisterUpdater    ( const model::IModelNode * node, IU
 
 // *******************************
 //
-void    UpdatersManager::RemoveNodeUpdater  ( const model::IModelNode * node )
+void            UpdatersManager::RemoveNodeUpdater  ( const model::IModelNode * node )
 {
     RemoveUpdater( node, m_nodeUpdatersMapping );
 }
 
 // *******************************
 //
-bool    UpdatersManager::IsRegistered       ( const model::SceneModel * scene )
+bool            UpdatersManager::IsRegistered       ( const model::SceneModel * scene )
 {
     return m_sceneUpdatersMapping.find( scene ) != m_sceneUpdatersMapping.end();
 }
 
 // *******************************
 //
-void    UpdatersManager::RegisterUpdater    ( const model::SceneModel * scene, IUpdaterPtr updater )
+void            UpdatersManager::RegisterUpdater    ( const model::SceneModel * scene, IUpdaterPtr updater )
 {
     RegisterUpdater( scene, updater, m_sceneUpdatersMapping );
 }
 
 // *******************************
 //
-void    UpdatersManager::RemoveSceneUpdater ( const model::SceneModel * scene )
+void            UpdatersManager::RemoveSceneUpdater ( const model::SceneModel * scene )
 {
     RemoveUpdater( scene, m_sceneUpdatersMapping );
 }
 
 // *******************************
 //
-void UpdatersManager::RemoveAllUpdaters     ()
+void                        UpdatersManager::RemoveAllUpdaters     ()
 {
     m_updaters.clear();
 }
 
 // *******************************
 //
-UpdatersManager & UpdatersManager::Get  ()
+UpdatersManager &           UpdatersManager::Get  ()
 {
-    static UpdatersManager instance = UpdatersManager();
-    return instance;
+    return *GetShared().get();
+}
+
+// ***********************
+//
+UpdatersManagerPtr          UpdatersManager::GetShared()
+{
+    if( !UpdatersManager::sInstancePtr )
+        UpdatersManager::sInstancePtr = std::make_shared< UpdatersManager >();
+
+    return sInstancePtr;
+}
+
+// *******************************
+//
+void			UpdatersManager::Deinitialize()
+{
+	sInstancePtr = nullptr;
 }
 
 // *******************************

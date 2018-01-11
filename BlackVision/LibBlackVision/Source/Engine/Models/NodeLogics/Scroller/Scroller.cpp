@@ -22,45 +22,55 @@
 #include "System/Time.h"
 
 
-namespace bv {
-    
-namespace SerializationHelper {
+namespace bv {    
+namespace Convert
+{
 
 
-std::pair< nodelogic::Scroller::ScrollDirection, const char* > ScrollDirectionMapping[] = 
-    { std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Down, "ScrollDown" )
-    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Up, "ScrollUp" )
-    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Left, "ScrollLeft" )
-    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Right, "ScrollRight" )
-    , std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Total, "" )      // default
+// ***********************
+//
+std::pair< nodelogic::Scroller::ScrollDirection, const char* > ScrollDirectionMapping[] =
+{ std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Down, "ScrollDown" )
+, std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Up, "ScrollUp" )
+, std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Left, "ScrollLeft" )
+, std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Right, "ScrollRight" )
+, std::make_pair( nodelogic::Scroller::ScrollDirection::SD_Total, "" )      // default
 };
 
-template<> nodelogic::Scroller::ScrollDirection String2T        ( const std::string & s, const nodelogic::Scroller::ScrollDirection & defaultVal )    { return String2Enum( ScrollDirectionMapping, s, defaultVal ); }
-template<> std::string                              T2String        ( const nodelogic::Scroller::ScrollDirection & t )                                    { return Enum2String( ScrollDirectionMapping, t ); }
-    
+IMPLEMENT_ENUM_SERIALIZATION( nodelogic::Scroller::ScrollDirection, ScrollDirectionMapping )
 
-std::pair< nodelogic::Scroller::OffscreenNodeBehavior, const char* > OffscreenNodeBehaviorMapping[] = 
-{   std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_Looping, "Looping" )
+
+// ***********************
+//
+std::pair< nodelogic::Scroller::OffscreenNodeBehavior, const char* > OffscreenNodeBehaviorMapping[] =
+{ std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_Looping, "Looping" )
     , std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_DeleteNode, "DeleteNode" )
     , std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_SetNonActive, "SetNonActive" )
     , std::make_pair( nodelogic::Scroller::OffscreenNodeBehavior::ONB_Total, "" )      // default
 };
 
-template<> nodelogic::Scroller::OffscreenNodeBehavior   String2T        ( const std::string & s, const nodelogic::Scroller::OffscreenNodeBehavior & defaultVal )    { return String2Enum( OffscreenNodeBehaviorMapping, s, defaultVal ); }
-template<> std::string                                      T2String        ( const nodelogic::Scroller::OffscreenNodeBehavior & t )                                    { return Enum2String( OffscreenNodeBehaviorMapping, t ); }
-    
+IMPLEMENT_ENUM_SERIALIZATION( nodelogic::Scroller::OffscreenNodeBehavior, OffscreenNodeBehaviorMapping )
 
-std::pair< nodelogic::Scroller::ScrollerItemType, const char* > ScrollerItemTypeMapping[] = 
-{   std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_All, "All" )
+
+// ***********************
+//
+std::pair< nodelogic::Scroller::ScrollerItemType, const char* > ScrollerItemTypeMapping[] =
+{ std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_All, "All" )
     , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_Enqueued, "Enqueued" )
     , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_OffScreen, "OffScreen" )
     , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_OnScreen, "OnScreen" )
     , std::make_pair( nodelogic::Scroller::ScrollerItemType::SIT_All, "" )      // default
 };
 
-template<> nodelogic::Scroller::ScrollerItemType    String2T        ( const std::string & s, const nodelogic::Scroller::ScrollerItemType & defaultVal )    { return String2Enum( ScrollerItemTypeMapping, s, defaultVal ); }
-template<> std::string                                  T2String        ( const nodelogic::Scroller::ScrollerItemType & t )                                    { return Enum2String( ScrollerItemTypeMapping, t ); }
-    
+IMPLEMENT_ENUM_SERIALIZATION( nodelogic::Scroller::ScrollerItemType, ScrollerItemTypeMapping )
+
+}   // Convert
+
+
+
+namespace SerializationHelper
+{
+
 
 // ***********************
 //
@@ -70,13 +80,13 @@ mathematics::RectPtr        CreateRect      ( const IDeserializer & deser )
 
     if( deser.EnterChild( "view" ) )
     {
-        bool empty = SerializationHelper::String2T( deser.GetAttribute( "empty" ), true );
+        bool empty = Convert::String2T( deser.GetAttribute( "empty" ), true );
         if( !empty )
         {
-            rect->xmin = SerializationHelper::String2T( deser.GetAttribute( "xmin" ), 0.0f );
-            rect->xmax = SerializationHelper::String2T( deser.GetAttribute( "xmax" ), 0.0f );
-            rect->ymax = SerializationHelper::String2T( deser.GetAttribute( "ymax" ), 0.0f );
-            rect->ymin = SerializationHelper::String2T( deser.GetAttribute( "ymin" ), 0.0f );
+            rect->xmin = Convert::String2T( deser.GetAttribute( "xmin" ), 0.0f );
+            rect->xmax = Convert::String2T( deser.GetAttribute( "xmax" ), 0.0f );
+            rect->ymax = Convert::String2T( deser.GetAttribute( "ymax" ), 0.0f );
+            rect->ymin = Convert::String2T( deser.GetAttribute( "ymin" ), 0.0f );
         }
         rect->m_empty = empty;
 
@@ -91,13 +101,13 @@ mathematics::RectPtr        CreateRect      ( const IDeserializer & deser )
 void                        SerializeRect       ( ISerializer & ser, mathematics::RectPtr view )
 {
     ser.EnterChild( "view" );
-        ser.SetAttribute( "empty", SerializationHelper::T2String( view->m_empty ) );
+        ser.SetAttribute( "empty", Convert::T2String( view->m_empty ) );
         if( !view->m_empty )
         {
-            ser.SetAttribute( "xmin", SerializationHelper::T2String( view->xmin ) );
-            ser.SetAttribute( "xmax", SerializationHelper::T2String( view->xmax ) );
-            ser.SetAttribute( "ymin", SerializationHelper::T2String( view->ymin ) );
-            ser.SetAttribute( "ymax", SerializationHelper::T2String( view->ymax ) );
+            ser.SetAttribute( "xmin", Convert::T2String( view->xmin ) );
+            ser.SetAttribute( "xmax", Convert::T2String( view->xmax ) );
+            ser.SetAttribute( "ymin", Convert::T2String( view->ymin ) );
+            ser.SetAttribute( "ymax", Convert::T2String( view->ymax ) );
         }
     ser.ExitChild(); // view
 }
@@ -734,12 +744,12 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
         {
             SerializationHelper::SerializeRect( ser, m_view );
 
-            ser.SetAttribute( "Speed", SerializationHelper::T2String( m_speed ) );
-            ser.SetAttribute( "Spacing", SerializationHelper::T2String( m_interspace ) );
-            ser.SetAttribute( "ScrollDirection", SerializationHelper::T2String( m_scrollDirection ) );
-            ser.SetAttribute( "EnableEvents", SerializationHelper::T2String( m_enableEvents ) );
-            ser.SetAttribute( "OffscreenNodeBehavior", SerializationHelper::T2String( m_offscreenNodeBehavior ) );
-            ser.SetAttribute( "SmoothTime", SerializationHelper::T2String( GetSmoothTime() ) );
+            ser.SetAttribute( "Speed", Convert::T2String( m_speed ) );
+            ser.SetAttribute( "Spacing", Convert::T2String( m_interspace ) );
+            ser.SetAttribute( "ScrollDirection", Convert::T2String( m_scrollDirection ) );
+            ser.SetAttribute( "EnableEvents", Convert::T2String( m_enableEvents ) );
+            ser.SetAttribute( "OffscreenNodeBehavior", Convert::T2String( m_offscreenNodeBehavior ) );
+            ser.SetAttribute( "SmoothTime", Convert::T2String( GetSmoothTime() ) );
 
             NodeLogicBase::Serialize( ser );
 
@@ -774,7 +784,7 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
                 }
 
                 assert( nodeIndex >= 0 );   // Node held by Scroller exists in tree no more.
-                ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
+                ser.SetAttribute( "nodeIdx", Convert::T2String( nodeIndex ) );
 
                 SerializeMargin( ser, node );
 
@@ -796,12 +806,12 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, model:
     {
         mathematics::RectPtr rect = SerializationHelper::CreateRect( deser );
 
-        float speed = SerializationHelper::String2T( deser.GetAttribute( "Speed" ), 0.0f );
-        float interspace = SerializationHelper::String2T( deser.GetAttribute( "Spacing" ), 0.0f );
-        ScrollDirection scrollDirection = SerializationHelper::String2T( deser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
-        bool enableEvents = SerializationHelper::String2T( deser.GetAttribute( "EnableEvents" ), false );
-        auto offscreenBahavior = SerializationHelper::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
-        float smoothTime = SerializationHelper::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
+        float speed = Convert::String2T( deser.GetAttribute( "Speed" ), 0.0f );
+        float interspace = Convert::String2T( deser.GetAttribute( "Spacing" ), 0.0f );
+        ScrollDirection scrollDirection = Convert::String2T( deser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
+        bool enableEvents = Convert::String2T( deser.GetAttribute( "EnableEvents" ), false );
+        auto offscreenBahavior = Convert::String2T( deser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_Looping );
+        float smoothTime = Convert::String2T( deser.GetAttribute( "SmoothTime" ), 1.0f );
 
         auto timeline = SerializationHelper::GetDefaultTimeline( deser );
 
@@ -823,7 +833,7 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, model:
         {
             do
             {
-                UInt32 nodeIdx = SerializationHelper::String2T( deser.GetAttribute( "nodeIdx" ), -1 );
+                UInt32 nodeIdx = Convert::String2T( deser.GetAttribute( "nodeIdx" ), -1 );
 
                 assert( nodeIdx >= 0 && nodeIdx < parentNode->GetNumChildren() );
                 if( nodeIdx >= 0 && nodeIdx < parentNode->GetNumChildren() )
@@ -859,10 +869,10 @@ void                        Scroller::SerializeMargin     ( ISerializer & ser, m
         if( margin.IsEmpty() )
             return;
 
-        ser.SetAttribute( "MarginLeft", SerializationHelper::T2String( margin.Left ) );
-        ser.SetAttribute( "MarginRight", SerializationHelper::T2String( margin.Right ) );
-        ser.SetAttribute( "MarginTop", SerializationHelper::T2String( margin.Top ) );
-        ser.SetAttribute( "MarginBottom", SerializationHelper::T2String( margin.Bottom ) );
+        ser.SetAttribute( "MarginLeft", Convert::T2String( margin.Left ) );
+        ser.SetAttribute( "MarginRight", Convert::T2String( margin.Right ) );
+        ser.SetAttribute( "MarginTop", Convert::T2String( margin.Top ) );
+        ser.SetAttribute( "MarginBottom", Convert::T2String( margin.Bottom ) );
     }
 }
 
@@ -871,10 +881,10 @@ void                        Scroller::SerializeMargin     ( ISerializer & ser, m
 Scroller::NodeMargin        Scroller::DeserializeMargin   ( const IDeserializer & deser )
 {
     NodeMargin margin;
-    margin.Left = SerializationHelper::String2T( deser.GetAttribute( "MarginLeft" ), 0.0f );
-    margin.Top = SerializationHelper::String2T( deser.GetAttribute( "MarginTop" ), 0.0f );
-    margin.Bottom = SerializationHelper::String2T( deser.GetAttribute( "MarginBottom" ), 0.0f );
-    margin.Right = SerializationHelper::String2T( deser.GetAttribute( "MarginRight" ), 0.0f );
+    margin.Left = Convert::String2T( deser.GetAttribute( "MarginLeft" ), 0.0f );
+    margin.Top = Convert::String2T( deser.GetAttribute( "MarginTop" ), 0.0f );
+    margin.Bottom = Convert::String2T( deser.GetAttribute( "MarginBottom" ), 0.0f );
+    margin.Right = Convert::String2T( deser.GetAttribute( "MarginRight" ), 0.0f );
     return margin;
 }
 
@@ -949,13 +959,13 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     else if( scrollAction == "SetSpeed" )
     {
         std::string param = eventDeser.GetAttribute( "Speed" );
-        float speed = SerializationHelper::String2T( param, 0.0f );
+        float speed = Convert::String2T( param, 0.0f );
 
         SetSpeed( speed );
     }
     else if( scrollAction == "GetSpeed" )
     {
-        response.SetAttribute( "Speed", SerializationHelper::T2String( m_speed ) );
+        response.SetAttribute( "Speed", Convert::T2String( m_speed ) );
     }
     else if( scrollAction == "GetStatus" )
     {
@@ -963,44 +973,44 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     }
     else if( scrollAction == "SetScrollDirection" )
     {
-        m_scrollDirection = SerializationHelper::String2T( eventDeser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
+        m_scrollDirection = Convert::String2T( eventDeser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
     }
     else if( scrollAction == "GetScrollDirection" )
     {
-        response.SetAttribute( "ScrollDirection", SerializationHelper::T2String( m_scrollDirection ) );
+        response.SetAttribute( "ScrollDirection", Convert::T2String( m_scrollDirection ) );
     }
     else if( scrollAction == "GetEnableEvents" )
     {
-        response.SetAttribute( "EnableEvents", SerializationHelper::T2String( m_enableEvents ) );
+        response.SetAttribute( "EnableEvents", Convert::T2String( m_enableEvents ) );
     }
     else if( scrollAction == "SetEnableEvents" )
     {
-        m_enableEvents = SerializationHelper::String2T( eventDeser.GetAttribute( "ScrollDirection" ), false );
+        m_enableEvents = Convert::String2T( eventDeser.GetAttribute( "ScrollDirection" ), false );
     }
     else if( scrollAction == "SetSpacing" )
     {
-        m_interspace = SerializationHelper::String2T( eventDeser.GetAttribute( "Spacing" ), 0.0f );
+        m_interspace = Convert::String2T( eventDeser.GetAttribute( "Spacing" ), 0.0f );
     }
     else if( scrollAction == "GetSpacing" )
     {
-        response.SetAttribute( "Spacing", SerializationHelper::T2String( m_interspace ) );
+        response.SetAttribute( "Spacing", Convert::T2String( m_interspace ) );
     }
     else if( scrollAction == "GetOffscreenNodeBehavior" )
     {
-        response.SetAttribute( "OffscreenNodeBehavior", SerializationHelper::T2String( m_offscreenNodeBehavior ) );
+        response.SetAttribute( "OffscreenNodeBehavior", Convert::T2String( m_offscreenNodeBehavior ) );
     }
     else if( scrollAction == "SetOffscreenNodeBehavior" )
     {
-        m_offscreenNodeBehavior = SerializationHelper::String2T( eventDeser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_SetNonActive );
+        m_offscreenNodeBehavior = Convert::String2T( eventDeser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_SetNonActive );
     }
     else if( scrollAction == "SetSmoothTime" )
     {
-        auto smoothTime = SerializationHelper::String2T( eventDeser.GetAttribute( "SmoothTime" ), 1.0f );
+        auto smoothTime = Convert::String2T( eventDeser.GetAttribute( "SmoothTime" ), 1.0f );
         SetSmoothTime( smoothTime );
     }
     else if( scrollAction == "GetSmoothTime" )
     {
-        response.SetAttribute( "SmoothTime", SerializationHelper::T2String( GetSmoothTime() ) );
+        response.SetAttribute( "SmoothTime", Convert::T2String( GetSmoothTime() ) );
     }
     else if( scrollAction == "GetItems" )
     {
@@ -1008,7 +1018,7 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     }
     else if( scrollAction == "ContentLength" )
     {
-        response.SetAttribute( "ContentLength", SerializationHelper::T2String( GetContentLength() ) );
+        response.SetAttribute( "ContentLength", Convert::T2String( GetContentLength() ) );
     }
     else if( scrollAction == "SetNodeMargin" )
     {
@@ -1283,7 +1293,7 @@ bool            Scroller::RemoveNodes         ( IDeserializer & eventDeser, ISer
 {
     if( auto parentNode = m_parentNode.lock() )
     {
-        bool deleteNodes = SerializationHelper::String2T( eventDeser.GetAttribute( "DeleteFromTree" ), false );
+        bool deleteNodes = Convert::String2T( eventDeser.GetAttribute( "DeleteFromTree" ), false );
 
         if( eventDeser.EnterChild( "NodesArray" ) )
         {
@@ -1366,7 +1376,7 @@ bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerialize
         if( AddNode( node.get() ) )
         {
             // Prepare response. Send path to new node.
-            std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( parentNode->GetNumChildren() - 1 );
+            std::string addedNodePath = context->GetNodePath() + "/#" + Convert::T2String( parentNode->GetNumChildren() - 1 );
             response.SetAttribute( "AddedNodePath", addedNodePath );
             return true;
         }
@@ -1401,7 +1411,7 @@ void            Scroller::AddTexts            ( IDeserializer & eventSer, ISeria
             do
             {
                 std::string setText = eventSer.GetAttribute( "Text" );
-                std::string searchedNode = "text_" + SerializationHelper::T2String( textsCounter );
+                std::string searchedNode = "text_" + Convert::T2String( textsCounter );
 
                 auto foundNode = editor->FindNode( node, searchedNode );
                 if( foundNode != nullptr )
@@ -1436,7 +1446,7 @@ void            Scroller::AddImages           ( IDeserializer & eventSer, ISeria
             do
             {
                 std::string texPath = eventSer.GetAttribute( "TexturePath" );
-                std::string searchedNode = "image_" + SerializationHelper::T2String( imgCounter );
+                std::string searchedNode = "image_" + Convert::T2String( imgCounter );
 
                 auto foundNode = editor->FindNode( node, searchedNode );
                 if( foundNode != nullptr )
@@ -1462,7 +1472,7 @@ void            Scroller::AddImages           ( IDeserializer & eventSer, ISeria
 //
 bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISerializer & response, BVProjectEditor * /*editor*/ )
 {
-    ScrollerItemType type = SerializationHelper::String2T( eventDeser.GetAttribute( "Type" ), ScrollerItemType::SIT_All );
+    ScrollerItemType type = Convert::String2T( eventDeser.GetAttribute( "Type" ), ScrollerItemType::SIT_All );
 
     response.EnterArray( "Items" );
 
@@ -1494,7 +1504,7 @@ bool            Scroller::GetItems            ( IDeserializer & eventDeser, ISer
 //
 void            Scroller::ListTypedItems      ( std::vector< model::BasicNode * > & items, ISerializer & response, ScrollerItemType type )
 {
-    std::string typeString = SerializationHelper::T2String( type );
+    std::string typeString = Convert::T2String( type );
 
     for( auto & item : items )
     {
@@ -1504,7 +1514,7 @@ void            Scroller::ListTypedItems      ( std::vector< model::BasicNode * 
         SerializeMargin( response, item );
         
         if( m_nodesStates.IsVisible( item ) )
-            response.SetAttribute( "Type", SerializationHelper::T2String( ScrollerItemType::SIT_OnScreen ) );
+            response.SetAttribute( "Type", Convert::T2String( ScrollerItemType::SIT_OnScreen ) );
         else
             response.SetAttribute( "Type", typeString );
 

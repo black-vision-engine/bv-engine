@@ -240,6 +240,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\FilePosition.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\ConversionHelper.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -317,9 +320,6 @@
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
       <Filter>Serialization\XML</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp">
-      <Filter>Serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
     <ClCompile Include="..\..\..\Source\Memory\LinearAllocator.cpp">
       <Filter>Memory</Filter>
@@ -359,12 +359,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Exception.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\ConversionHelper.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">
       <Filter>Tools\Profiler</Filter>
     </None>
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
+      <Filter>Serialization</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\ConversionHelper.inl">
       <Filter>Serialization</Filter>
     </None>
   </ItemGroup>

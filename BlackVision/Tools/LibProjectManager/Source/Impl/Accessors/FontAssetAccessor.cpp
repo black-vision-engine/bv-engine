@@ -42,7 +42,7 @@ AssetDescConstPtr	FontAssetAccessor::GetAssetDesc	( const Path & path ) const
 
     if( Path::Exists( p ) )
     {
-        return FontAssetDesc::Create( ( Path( "fonts" ) / path ).Str(), 0, 0, 0, 0, false );
+        return FontAssetDesc::Create( ( Path( "fonts" ) / path ).Str(), 0, 0, 0, 0, true );
     }
     else
     {

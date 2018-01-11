@@ -132,17 +132,17 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_defaultHeight = m_defaultWindowHeight = 1080;
 
         m_pmFolder = m_properties[ "PMFolder" ];
-        m_fullscreeMode = SerializationHelper::String2T< bool >( m_properties[ "FullScreen" ], true );
-        m_isCameraPerspective = SerializationHelper::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
-        m_readbackOn = SerializationHelper::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
-        m_renderToSharedMemory = SerializationHelper::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
-        m_sharedMemoryScaleFactor = SerializationHelper::String2T< int >( m_properties[ "Renderer/SharedMemoryScaleFactor" ], 1 );
+        m_fullscreeMode = Convert::String2T< bool >( m_properties[ "FullScreen" ], true );
+        m_isCameraPerspective = Convert::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
+        m_readbackOn = Convert::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
+        m_renderToSharedMemory = Convert::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
+        m_sharedMemoryScaleFactor = Convert::String2T< int >( m_properties[ "Renderer/SharedMemoryScaleFactor" ], 1 );
 
-        m_globalGain = SerializationHelper::String2T< Float32 >( m_properties[ "Audio/GlobalGain" ], 1.f );
+        m_globalGain = Convert::String2T< Float32 >( m_properties[ "Audio/GlobalGain" ], 1.f );
 
-        m_sockerServerPort = SerializationHelper::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
+        m_sockerServerPort = Convert::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
 
-        m_useDebugLayer = SerializationHelper::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );
+        m_useDebugLayer = Convert::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );
         m_debugFilePath = m_properties[ "Debug/CommandsDebugLayer/FilePath" ];
 
         if( m_properties[ "Resolution" ] == "SD" )
@@ -166,14 +166,14 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
                 m_windowMode = WindowMode::WINDOWED;
             }
 
-            m_defaultWindowWidth = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Window/Size/Width" ], m_defaultWidth );
-            m_defaultWindowHeight = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Window/Size/Height" ], m_defaultHeight );
+            m_defaultWindowWidth = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Width" ], m_defaultWidth );
+            m_defaultWindowHeight = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Height" ], m_defaultHeight );
 
-            m_defaultWidth = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Width" ], m_defaultWidth );
-            m_defaultHeight = SerializationHelper::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Height" ], m_defaultHeight );
+            m_defaultWidth = Convert::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Width" ], m_defaultWidth );
+            m_defaultHeight = Convert::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Height" ], m_defaultHeight );
         }
 
-        m_vsync = SerializationHelper::String2T< bool >( m_properties[ "Application/VSYNC" ], true );
+        m_vsync = Convert::String2T< bool >( m_properties[ "Application/VSYNC" ], true );
         if( m_vsync )
         {
             m_rendererInput.m_DisableVerticalSync = false;
@@ -193,26 +193,26 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_rendererInput.m_PixelFormat = 0;
         m_rendererInput.m_RendererDC = 0;
 
-        m_fps = SerializationHelper::String2T< Int32 >( m_properties[ "Renderer/MaxFPS" ], 60 );
+        m_fps = Convert::String2T< Int32 >( m_properties[ "Renderer/MaxFPS" ], 60 );
         m_frameTimeMillis = 1000 / m_fps;
-        m_timerFPS = SerializationHelper::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
+        m_timerFPS = Convert::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
 
-        m_displayVideoCardOutput = SerializationHelper::String2T< bool >( m_properties[ "Renderer/DisplayVideoCardOutput" ], false );
+        m_displayVideoCardOutput = Convert::String2T< bool >( m_properties[ "Renderer/DisplayVideoCardOutput" ], false );
 
-        m_eventLoopUpdateMillis = 20;
+        m_eventLoopUpdateMillis = Convert::String2T< UInt32 >( m_properties[ "Application/Events/MaxLoopUpdateTime" ], m_eventLoopUpdateMillis );
 
         m_defaultFOV = 90.f;
         m_defaultNearClippingPlane = 0.1f;
         m_defaultFarClippingPlane = 100.f;
 
-        m_defaultFOV = SerializationHelper::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
+        m_defaultFOV = Convert::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
 
-        m_defaultCameraPosition = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
-        m_defaultCameraDirection = glm::vec3( SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/x" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
+        m_defaultCameraPosition = glm::vec3( Convert::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
+        m_defaultCameraDirection = glm::vec3( Convert::String2T< Float32 >( m_properties[ "camera/direction/x" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
         m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
 
         m_defaultStatsMovingAverageWindowSize = 500; //500
@@ -223,19 +223,19 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
 
         m_numRedbackBuffersPerRenderTarget = 4; //up to 200+, when 32 bit build is enabled
 
-        m_defaultClearColor = glm::vec4( SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
-            SerializationHelper::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
+        m_defaultClearColor = glm::vec4( Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
+            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
         m_defaultClearDepth = 1.0f;
 
         m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
         m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
-        m_loadSceneFromEnv = SerializationHelper::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
+        m_loadSceneFromEnv = Convert::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
         m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
-        m_useVideoInputFeeding = SerializationHelper::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
+        m_useVideoInputFeeding = Convert::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
 
-        m_enableQueueLocking = SerializationHelper::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
+        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
 
         m_onFailedTextureLoadBehavior = m_properties[ "Plugins/Textures/OnFailedLoadBehavior" ];
     }

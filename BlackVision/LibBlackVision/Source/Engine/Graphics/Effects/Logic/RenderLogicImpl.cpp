@@ -13,8 +13,8 @@ RenderLogicImpl::RenderLogicImpl      ( unsigned int width, unsigned int height 
     : m_state( width, height )
     , m_renderedChannelsData( nullptr )
     , m_outputLogic( nullptr )
-{
-}
+    , m_inputLogic( new InputLogic )
+{}
 
 // **************************
 //
@@ -22,6 +22,7 @@ RenderLogicImpl::~RenderLogicImpl     ()
 {
     delete m_renderedChannelsData;
     delete m_outputLogic;
+    delete m_inputLogic;
 }
 
 // **************************
@@ -34,16 +35,19 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
         m_state.Initialize( renderer, audio );
     }
 
-    // 1. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
+    // 1. Process all input sources
+    m_inputLogic->ProcessInputs( context( m_state ) );
+
+    // 2. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
     m_renderedChannelsData->UpdateRenderChannels();
 
-    // 2. Low level renderer per frame initialization
+    // 3. Low level renderer per frame initialization
     renderer->PreDraw();
 
-    // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
+    // 4. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
     RenderQueued( scenes );
 
-    // 4. In edit mode render depth buffer from current scene and gizmos after it.
+    // 5. In edit mode render depth buffer from current scene and gizmos after it.
     if( m_state.IsEditMode() )
     {
         RenderDepth( scenes );
@@ -51,23 +55,30 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
         BlitGizmoTargets();
     }
 
-    // 4. Low level rendere per frame cleanup
+    // 6. Low level rendere per frame cleanup
     renderer->PostDraw();
 
-    // 5. Handle frame data rendered during this call and all logic associated with custom outputs
+    // 7. Handle frame data rendered during this call and all logic associated with custom outputs
     m_outputLogic->ProcessFrameData( context( m_state ), m_renderedChannelsData );
 }
 
 // **************************
 //
-OutputLogic *   RenderLogicImpl::GetOutputLogic    ()
+OutputLogic *           RenderLogicImpl::GetOutputLogic             ()
 {
     return m_outputLogic;
 }
 
+// ***********************
+//
+InputLogic *            RenderLogicImpl::GetInputLogic              ()
+{
+    return m_inputLogic;
+}
+
 // **************************
 //
-RenderedChannelsData *  RenderLogicImpl::GetRenderedChannelsData   ()
+RenderedChannelsData *  RenderLogicImpl::GetRenderedChannelsData    ()
 {
     return m_renderedChannelsData;
 }

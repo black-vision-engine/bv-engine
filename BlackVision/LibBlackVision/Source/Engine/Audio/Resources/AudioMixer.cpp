@@ -15,9 +15,7 @@ AudioMixer::AudioMixer      ()
 //
 bool AudioMixer::PopAndMixAudioData           ( const MemoryChunkPtr & output )
 {
-    // check whether any data needs uploading
-    if( IsAnyBufferReady( output->Size() ) )
-        output->Clear();
+    output->Clear();
     
     if( m_gain == 0.f )
     {

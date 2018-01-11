@@ -6,7 +6,7 @@ namespace bv
 {
 
 
-namespace SerializationHelper
+namespace Convert
 {
 
 // ***********************
@@ -40,6 +40,6 @@ IMPLEMENT_ENUM_SERIALIZATION( CurveType, ct2s_data );
 IMPLEMENT_ENUM_SERIALIZATION( WrapMethod, wm2s_data );
 
 
-} // SerializationHelper
+} // Convert
 
 } // bv

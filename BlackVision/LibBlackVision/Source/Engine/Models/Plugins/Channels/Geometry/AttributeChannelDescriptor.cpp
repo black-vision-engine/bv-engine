@@ -114,7 +114,7 @@ std::string     AttributeChannelDescriptor::DefaultName                         
             assert( false );
     }
 
-    name += SerializationHelper::T2String( num );
+    name += Convert::T2String( num );
 
     return name;
 }

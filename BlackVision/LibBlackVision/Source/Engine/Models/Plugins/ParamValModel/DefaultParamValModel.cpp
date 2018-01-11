@@ -112,7 +112,7 @@ IStatedValuePtr                                   DefaultParamValModel::GetState
 //
 void                                        DefaultParamValModel::Update            ()
 {
-    for( auto evaluator : m_evaluators )
+    for( auto & evaluator : m_evaluators )
     {
         evaluator->Evaluate();
     }
@@ -127,7 +127,7 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
 	if( out->GetType() != in->GetType() ) // FIXME: This should be checked earlier. Not here. 
 	{
-		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << SerializationHelper::T2String( out->GetType() ) << " != " << SerializationHelper::T2String( in->GetType() ) << "'. Check a type of param '" << in->GetName() << "'.";
+		LOG_MESSAGE( SeverityLevel::error ) << "Params types are not equal. '" << Convert::T2String( out->GetType() ) << " != " << Convert::T2String( in->GetType() ) << "'. Check a type of param '" << in->GetName() << "'.";
 	}
 	else
 	{

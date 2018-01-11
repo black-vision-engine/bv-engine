@@ -62,7 +62,7 @@ protected:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    const model::PluginsManager *   m_pluginsManager;
+    model::PluginsManager *         m_pluginsManager;
 
     BVProjectPtr                    m_bvProject;
 
@@ -126,6 +126,8 @@ public:
     RenderLogic *                   GetRenderLogic      () const;
     RenderMode &                    GetRenderMode       ();
     Renderer *                      GetRenderer         () const { return m_renderer; }
+
+    RemoteController *              GetRemoteController () const { return m_remoteController; }
 
     void                            LoadScenes          ( const PathVec & pathVec );
 

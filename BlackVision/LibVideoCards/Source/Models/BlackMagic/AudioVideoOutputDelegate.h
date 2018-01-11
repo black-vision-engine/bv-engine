@@ -1,8 +1,11 @@
 #pragma once
 
-#include "BlackMagic/DeckLinkAPI_h.h"
+#include "DeckLinkAPI_h.h"
 
-namespace bv { namespace videocards { namespace blackmagic {
+namespace bv {
+namespace videocards {
+namespace blackmagic
+{
 
 class VideoCard;
 

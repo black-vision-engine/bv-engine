@@ -15,6 +15,9 @@
 namespace bv
 {
 
+
+/**@brief Assets managment
+@ingroup Assets*/
 class AssetManager
 {
 private:

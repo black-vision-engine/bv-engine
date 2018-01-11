@@ -25,11 +25,13 @@
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCardDesc.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_h.h" />
     <ClInclude Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCardDesc.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Channel.h" />
@@ -37,25 +39,31 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoCapture.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerVideoModule.h" />
+    <ClInclude Include="..\..\..\Source\VideoCardDescFactory.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManagerUtils.h" />
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\VideoInputFrameData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCard.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlackMagic\BlackMagicVideoCardDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\DeckLinkAPI_i.c" />
     <ClCompile Include="..\..\..\Source\Models\BlackMagic\AudioVideoOutputDelegate.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCardDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Channel.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoCapture.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoCardDescFactory.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManagerUtils.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
   </ItemGroup>

@@ -43,8 +43,8 @@ void            RenderLogicInitializer::Initialize      ( RenderedChannelsDataDe
 
         do
         {
-            Expected< UInt32 > expectedId = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "id" ) );
-            auto enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+            Expected< UInt32 > expectedId = Convert::String2T< UInt32 >( deser.GetAttribute( "id" ) );
+            auto enabled = Convert::String2T< bool >( deser.GetAttribute( "enabled" ), false );
 
             if( expectedId.IsValid() )
             {
@@ -204,7 +204,7 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
         do
         {
             auto rdID = deser.GetAttribute( "id" );
-            bool rcEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), false );
+            bool rcEnabled = Convert::String2T< bool >( deser.GetAttribute( "enabled" ), false );
             bool duplicated = processedChannels.find( rdID ) != processedChannels.end();
 
             if( !duplicated && deser.EnterChild( "VideoOutput" ) )

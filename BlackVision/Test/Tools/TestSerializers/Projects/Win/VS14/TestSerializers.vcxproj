@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\SerializeDeserialize.cpp" />
     <ClCompile Include="..\..\..\Source\TestQueringLineNumber.cpp" />
+    <ClCompile Include="..\..\..\Source\TestSerializerCreation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

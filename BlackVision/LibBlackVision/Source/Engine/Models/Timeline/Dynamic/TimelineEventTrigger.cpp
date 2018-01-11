@@ -47,7 +47,7 @@ ser.ExitChild();
 TimelineEventTriggerPtr     TimelineEventTrigger::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
     std::string     name = deser.GetAttribute( "name" );
-    TimeType        time = SerializationHelper::String2T< TimeType >( "time", 0.f );
+    TimeType        time = Convert::String2T< TimeType >( "time", 0.f );
     std::string     events = deser.GetAttribute( "events" );
 
     return std::make_shared< TimelineEventTrigger >( name, time, timeline, events );

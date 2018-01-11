@@ -9,22 +9,15 @@
 //#include "UseLoggerVideoModule.h"
 
 
-namespace bv { namespace videocards {
+namespace bv {
+namespace videocards
+{
 
 
 VCMInputDataConstPtr VideoCardManager::KILLER_FRAME = nullptr;
 
-//**************************************
-//
-std::vector< IVideoCardDesc * >  DefaultVideoCardDescriptors  ()
-{
-    std::vector< IVideoCardDesc * > descriptors;
-    
-    descriptors.push_back( new bluefish::VideoCardDesc() );
-    descriptors.push_back( new blackmagic::VideoCardDesc() );
 
-    return descriptors;
-}
+
 
 //**************************************
 //
@@ -82,72 +75,38 @@ VideoCardManager::~VideoCardManager     ()
         }
         m_videoCards.clear();
     }
-
-    for( auto desc : m_descVec )
-    {
-        delete desc;
-    }
 }
 
-// *********************************
+// ***********************
 //
-void                        VideoCardManager::ReadConfig            ( const IDeserializer & deser )
+void                        VideoCardManager::CreateVideoCards      ( const std::vector< IVideoCardDescPtr > & descriptors )
 {
     std::unique_lock< std::mutex > lock( m_mutex );
 
-    if( deser.EnterChild( "videocards" ) )
+    for( auto & videoCardDesc : descriptors )
     {
-        if( deser.EnterChild( "videocard" ) )
+        if( videoCardDesc->GetVideoCardUID() == "BlackMagic" )
         {
-            do
+            m_InterlaceProducesFullFrames = true; // kinda hack - bluefish requires 50 x fields and blackamgic requires 25 x interlaced frames - they need different refresh rates and data size inside frame memory
+        }
+
+        auto videocard = videoCardDesc->CreateVideoCard();
+        if( videocard )
+        {
+            m_videoCards.push_back( videocard );
+            for( auto id : videocard->GetDisplayedVideoOutputsIDs() )
             {
-                auto name = deser.GetAttribute( "name" );
-				if (name == "BlackMagic")
-				{
-					m_InterlaceProducesFullFrames = true; // kinda hack - bluefish requires 50 x fields and blackamgic requires 25 x interlaced frames - they need different refresh rates and data size inside frame memory
-				}
+                m_outputsToCardsMapping.insert( std::make_pair( id, videocard ) );
+            }
 
-                if( IsRegistered( name ) )
-                {
-                    auto videocard = m_descMap[ name ]->CreateVideoCard( deser );
-                    if( videocard )
-                    {
-                        m_videoCards.push_back( videocard );
-						for( auto id : videocard->GetDisplayedVideoOutputsIDs() )
-						{
-							m_outputsToCardsMapping.insert( std::make_pair( id, videocard ) );
-						}
-                        //videocard->SetFrameProcessingCompletedCallback( FrameProcessingCompleted );
-                    }
-                }
-            } while( deser.NextChild() );
+            for( auto inputDesc : videocard->GetInputChannelsDescs() )
+            {
+                m_inputsToCardMapping.insert( std::make_pair( inputDesc.GetInputID(), videocard ) );
+            }
 
-            deser.ExitChild(); //videocard
-        }
-
-        deser.ExitChild(); //videocards
-    }
-}
-
-// *********************************
-//
-void                        VideoCardManager::RegisterDescriptors   ( const std::vector< IVideoCardDesc * > & descriptors )
-{
-    for( auto desc : descriptors )
-    {
-        if( !IsRegistered( desc->GetVideoCardUID() ) )
-        {
-            m_descMap[ desc->GetVideoCardUID() ] = desc;
-            m_descVec.push_back( desc );
+            //videocard->SetFrameProcessingCompletedCallback( FrameProcessingCompleted );
         }
     }
-}
-
-// *********************************
-//
-bool                        VideoCardManager::IsRegistered          ( const std::string & uid ) const
-{
-    return ( m_descMap.find( uid ) != m_descMap.end() );
 }
 
 //**************************************
@@ -237,6 +196,44 @@ void						 VideoCardManager::Display		        ( const VCMInputDataConstPtr & out
 	m_inputDataBuffer.Push( outputs );
 }
 
+// ***********************
+//
+AVFramePtr                  VideoCardManager::QueryChannelInputFrame( VideoInputID inputID )
+{
+    auto iter = m_inputsToCardMapping.find( inputID );
+    if( iter != m_inputsToCardMapping.end() )
+    {
+        return iter->second->QueryInputFrame( inputID );
+    }
+
+    return AVFramePtr();
+}
+
+// ***********************
+//
+VideoInputFrameData         VideoCardManager::QueryVideoInput       ()
+{
+    VideoInputFrameData frameData;
+
+    for( auto inputID : m_inputsToCardMapping )
+    {
+        SingleChannelFrameData singleFrame;
+
+        auto & card = inputID.second;
+        auto id = inputID.first;
+
+        auto frame = card->QueryInputFrame( id );
+
+        singleFrame.FrameData = frame;
+        singleFrame.InputID = id;
+        singleFrame.CardID = card->GetVideoCardID();
+
+        frameData.Frames.push_back( singleFrame );
+    }
+
+    return frameData;
+}
+
 // *********************************
 //
 bool                        VideoCardManager::ProcessOutputsData     ()
@@ -292,6 +289,21 @@ UInt32                      VideoCardManager::GetRequiredFPS          () const
 //    instance.m_numReadyCards++;
 //    instance.m_waitFramesProcessed.notify_one();
 //}
+
+// ***********************
+//
+InputChannelsDescsVec       VideoCardManager::GetInputChannelsDescs     () const
+{
+    InputChannelsDescsVec allDescs;
+
+    for( auto & card : m_videoCards )
+    {
+        auto descs = card->GetInputChannelsDescs();
+        allDescs.insert( allDescs.end(), descs.begin(), descs.end() );
+    }
+
+    return allDescs;
+}
 
 //**************************************
 //

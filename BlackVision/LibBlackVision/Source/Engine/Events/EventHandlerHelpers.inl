@@ -20,7 +20,7 @@ Json::Value             GetParamDescription         ( model::IParameterPtr p )
     Json::Value entry;
 
     entry[ "name" ] = s_name;
-    entry[ "type" ] = SerializationHelper::T2String( paramType );
+    entry[ "type" ] = Convert::T2String( paramType );
 
     Json::Value jsonKeys;
 
@@ -67,7 +67,7 @@ inline void             SendResponse                ( JsonSerializeObject & ser,
 template< typename CommandType >
 inline void             PrepareResponseTemplate     ( ISerializer & ser, const CommandType & commandType, Int32 eventID, bool success )
 {
-    PrepareResponseTemplate( ser, SerializationHelper::T2String( commandType ), eventID, success );
+    PrepareResponseTemplate( ser, Convert::T2String( commandType ), eventID, success );
 }
 
 // ***********************
@@ -75,7 +75,7 @@ inline void             PrepareResponseTemplate     ( ISerializer & ser, const C
 template<>
 inline void             PrepareResponseTemplate< std::string >  ( ISerializer & ser, const std::string & commandName, Int32 eventID, bool success )
 {
-    ser.SetAttribute( EVENT_ID_TYPE_STRING, SerializationHelper::T2String( eventID ) );
+    ser.SetAttribute( EVENT_ID_TYPE_STRING, Convert::T2String( eventID ) );
     ser.SetAttribute( COMMAND_TYPE_STRING, commandName );
     if( success )
     {

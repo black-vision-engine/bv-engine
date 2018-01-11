@@ -66,6 +66,7 @@ TextureAssetConstPtr    TextureUtils::GenerateMipMaps ( SingleTextureAssetConstP
         {       
             assert( ToBPP( texture->GetFormat() ) == mipmap[ i ].bpp );  // Mipmaps should have same format.
             mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, "", mipmap[ i ].width, mipmap[ i ].height, texture->GetFormat(), true ) );
+//image::SaveBMPImage( texture->GetKey()+" - level " + Convert::T2String( i ) + ".bmp", mipmap[ i ].data, mipmap[ i ].width, mipmap[ i ].height, mipmap[ i ].bpp );
         }
 
         auto mipmaps = MipMapAsset::Create( mipMapsRes );

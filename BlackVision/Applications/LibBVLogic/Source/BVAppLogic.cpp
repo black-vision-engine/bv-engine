@@ -57,7 +57,7 @@ extern HighResolutionTimer GTimer;
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer * audioRenderer )
     : m_bvProject( BVProject::Create( renderer, audioRenderer, &DefaultConfig ) )
-    , m_pluginsManager( nullptr )
+    , m_pluginsManager( &model::PluginsManager::DefaultInstanceRef() )
     , m_renderer( nullptr )
     , m_audioRenderer( nullptr )
     , m_renderLogic( nullptr )
@@ -112,8 +112,6 @@ void BVAppLogic::Initialize         ()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
 
-    m_pluginsManager = &model::PluginsManager::DefaultInstance();
-
     bv::effect::InitializeLibEffect( m_renderer );
 
     SetNodeLogicFactory( new NodeLogicFactory() );
@@ -129,31 +127,22 @@ void BVAppLogic::Initialize         ()
 
     if( DefaultConfig.ReadbackFlag() )
     {
-        //FIXME: maybe config should be read by bvconfig
-        //FIXME: move this initialization to some other place
         m_videoCardManager = new videocards::VideoCardManager();
 
-        m_videoCardManager->RegisterDescriptors( videocards::DefaultVideoCardDescriptors() );
-        m_videoCardManager->ReadConfig( DefaultConfig.GetNode( "config" ) );
+        //FIXME: maybe config should be read by bvconfig
+        //FIXME: move this initialization to some other place
+        auto & videCardsFactory = m_videoCardManager->GetFactory();
+
+        videCardsFactory.RegisterDefaultCreators();
+        auto descriptors = videCardsFactory.ReadDescriptorsFromConfig( DefaultConfig.GetNode( "config" ) );
+
+        m_videoCardManager->CreateVideoCards( descriptors );
         m_videoCardManager->Start();
 
         BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
     }
 }
 
-// *********************************
-//
-void BVAppLogic::Deinitialize    ()
-{
-    if( m_videoCardManager )
-    {
-        m_videoCardManager->Stop();
-
-        BVServiceProvider::GetInstance().UnregisterVideoCardManager();
-        delete m_videoCardManager;
-        m_videoCardManager = nullptr;
-    }
-}
 
 // *********************************
 //
@@ -184,39 +173,6 @@ void BVAppLogic::UnloadScenes   ()
 void BVAppLogic::LoadScene          ( void )
 {
     auto projectEditor = m_bvProject->GetProjectEditor();
-
-    //if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
-    //{
-    //    //if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
-    //    //{
-    //    //    //m_solution.SetTimeline(m_timelineManager);
-    //    //    m_solution.LoadSolution( ConfigManager::GetString("solution") );
-    //    //    auto sceneModel = SceneModel::Create( "root" );
-    //    //    projectEditor->AddScene( sceneModel );
-
-    //    //    projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
-
-    //    //    //if(ConfigManager::GetBool("hm"))
-    //    //    //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
-    //    //}
-    //    //else
-    //    //{
-    //        auto pm = ProjectManager::GetInstance();
-
-    //        auto projectName = ConfigManager::GetString( "default_project_name" );
-    //        
-    //        if( !projectName.empty() )
-    //        {
-    //            auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
-
-    //            if( !projectScenesNames.empty() )
-    //            {
-    //                LoadScenes( projectScenesNames );
-    //            }
-    //        }
-    //    //}
-    //}
-
     auto pmSceneName = DefaultConfig.LoadSceneFromProjectManager();
 
     if( !pmSceneName.empty() )
@@ -436,7 +392,8 @@ void            BVAppLogic::RenderPhase         ( TimeType time, Renderer * rend
             audioRenderer->SetGain( m_gain );
             m_renderLogic->HandleFrame( renderer, audioRenderer, m_bvProject->GetScenes() );
 
-            CheckDropFrame( time );
+            { time; }
+            //CheckDropFrame( time );
         }
     }
 }
@@ -535,17 +492,32 @@ BVAppState      BVAppLogic::GetState        ()
 
 // *********************************
 //
-void BVAppLogic::ShutDown           ()
+void            BVAppLogic::Deinitialize    ()
+{
+    m_remoteController->DeinitializeServer();
+
+    if( m_videoCardManager )
+    {
+        m_videoCardManager->Stop();
+
+        BVServiceProvider::GetInstance().UnregisterVideoCardManager();
+        delete m_videoCardManager;
+        m_videoCardManager = nullptr;
+    }
+}
+
+// *********************************
+//
+void            BVAppLogic::ShutDown        ()
 {
     //TODO: any required deinitialization
-    m_remoteController->DeinitializeServer();
     if( m_videoCardManager )
         m_videoCardManager->Stop();
 }
 
 // *********************************
 //
-void    BVAppLogic::PostFrameLogic   ()
+void            BVAppLogic::PostFrameLogic   ()
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
@@ -633,32 +605,5 @@ RenderMode &                    BVAppLogic::GetRenderMode        ()
 }
 
 
-
-
-//// *********************************
-////
-//void BlackVisionApp::ReadBackFrameBuffer ()
-//{
-//    if ( !DefaultConfig.ReadbackFlag() )
-//    {
-//        return;
-//    }
-//
-//    GframeRenderedEvent->SetResolution( m_Width, m_Height );
-//    GEventManager->TriggerEvent( GframeRenderedEvent );
-//}
-
-//SOME code for hands-on profiling
-        //static unsigned int frame = 0;
-        //    static TimeType tt = TimeType( 0 );
-        //    double elasp = GTimer.CurElapsed();
-        //    if( elasp > 0.01 )
-        //    {
-        //        printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
-        //        t = TimeType( 0 );
-        //    }
-   
-        //    tt += t;
-        //    frame++;
 
 } //bv

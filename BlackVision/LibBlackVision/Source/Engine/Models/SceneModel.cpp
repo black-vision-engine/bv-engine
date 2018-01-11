@@ -65,7 +65,7 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
     ser.EnterChild( "scene" );
 
         ser.SetAttribute( "name", m_name );
-        ser.SetAttribute( "RenderChannelIdx", SerializationHelper::T2String( m_renderChannelIdx ) );
+        ser.SetAttribute( "RenderChannelIdx", Convert::T2String( m_renderChannelIdx ) );
 
         auto version = Version::GetCurrentVersion();
         version.Serialize( ser );
@@ -131,7 +131,7 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
     //FIXME: pass nullptr as camera because we don't have camera model yet
     auto obj = SceneModel::Create( sceneName );
 
-    obj->SetRenderChannelIdx( SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "RenderChannelIdx" ), 0 ) );
+    obj->SetRenderChannelIdx( Convert::String2T< UInt32 >( deser.GetAttribute( "RenderChannelIdx" ), 0 ) );
 
 // timelines
     auto sceneTimeline = obj->GetTimeline();

@@ -27,10 +27,14 @@ namespace bv
 JsonCommandsListener::JsonCommandsListener()
     :   m_eventServer( nullptr )
     ,   m_debugLayer( false )
+    ,   m_numEvents( 0 )
+    ,   m_numResponses( 0 )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsListener::SendResponse ), ResponseEvent::Type() );
 }
 
+// ***********************
+//
 JsonCommandsListener::~JsonCommandsListener()
 {
     DeinitDebugLayer();
@@ -51,16 +55,19 @@ void                JsonCommandsListener::QueueEvent          ( const std::strin
     for( auto & evt : eventsVec )
     {
         GetDefaultEventManager().ConcurrentQueueEvent( evt );
+
+        m_numEvents++;
     }
 }
 
 
 // ***********************
 //
-void        JsonCommandsListener::SendResponse           ( const IEventPtr evt )
+void                JsonCommandsListener::SendResponse      ( const IEventPtr evt )
 {
     if( evt->GetEventType() != bv::ResponseEvent::Type() )
         return;
+
     ResponseEventPtr response = std::static_pointer_cast<ResponseEvent>( evt );
 
     ResponseMsg responseMessage;
@@ -75,7 +82,7 @@ void        JsonCommandsListener::SendResponse           ( const IEventPtr evt )
 
 // ***********************
 //
-bool JsonCommandsListener::InitializeServer    ( int port )
+bool                JsonCommandsListener::InitializeServer  ( int port )
 {
     m_eventServer = IEventServer::CreateServerObject();
 
@@ -85,7 +92,7 @@ bool JsonCommandsListener::InitializeServer    ( int port )
 
 // ***********************
 //
-void JsonCommandsListener::DeinitializeServer  ()
+void                JsonCommandsListener::DeinitializeServer  ()
 {    m_eventServer->DeinitializeServer();   }
 
 
@@ -100,7 +107,7 @@ const char* END_OF_INSCRIPTION      = "#End#\n";
 
 // ***********************
 //
-void JsonCommandsListener::InitializeDebugLayer( const std::string & resultPath )
+void                JsonCommandsListener::InitializeDebugLayer  ( const std::string & resultPath )
 {
     m_debugLayer = true;
     m_resultDirectory = resultPath;
@@ -122,7 +129,7 @@ void JsonCommandsListener::InitializeDebugLayer( const std::string & resultPath 
 
 // ***********************
 //
-void JsonCommandsListener::DeinitDebugLayer    ()
+void                JsonCommandsListener::DeinitDebugLayer      ()
 {
     if( m_debugLayer )
     {
@@ -135,10 +142,14 @@ void JsonCommandsListener::DeinitDebugLayer    ()
 
 // ***********************
 //
-void JsonCommandsListener::DebugLayerProcessResponse   ( ResponseMsg & response )
+void                JsonCommandsListener::DebugLayerProcessResponse   ( ResponseMsg & response )
 {
+    m_numResponses++;
+
     if( !m_debugLayer )
         return;
+
+    std::lock_guard< std::mutex > lock( m_debugFileMutex );
 
     m_resultFile << RESPONSE_BEGIN_HEADER;
     m_resultFile << GetFormattedTime() << "#\n";
@@ -150,10 +161,12 @@ void JsonCommandsListener::DebugLayerProcessResponse   ( ResponseMsg & response 
 
 // ***********************
 //
-void JsonCommandsListener::DebugLayerProcessEvent      ( const std::string & eventString )
+void                JsonCommandsListener::DebugLayerProcessEvent        ( const std::string & eventString )
 {
     if( !m_debugLayer )
         return;
+
+    std::lock_guard< std::mutex > lock( m_debugFileMutex );
 
     m_resultFile << EVENT_BEGIN_HEADER;
     m_resultFile << GetFormattedTime() << "#\n";

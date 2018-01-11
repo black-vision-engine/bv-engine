@@ -186,7 +186,7 @@ void Text::GenerateMipMaps( TextAtlasPtr atlas ) const
     {
         UInt32 numLevels = GetMMLevelsNum( m_fontSize );
 
-        auto texWithMipMaps = TextureUtils::GenerateMipMaps( atlas->m_textureAsset->GetOriginal(), numLevels, MipMapFilterType::BILINEAR );
+        auto texWithMipMaps = TextureUtils::GenerateMipMaps( atlas->m_textureAsset->GetOriginal(), numLevels, MipMapFilterType::BOX );
 
         std::const_pointer_cast< TextAtlas >( atlas )->m_textureAsset = texWithMipMaps;
     }

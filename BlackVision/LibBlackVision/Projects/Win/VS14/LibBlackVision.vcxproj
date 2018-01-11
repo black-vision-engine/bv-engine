@@ -159,6 +159,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\DepthImpl\DefaultDepthFinalizeStep.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutput.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\OutputRendering\Impl\FrameDataHandlers\AVFileOutput\AVFileOutputHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp" />
@@ -619,6 +624,10 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsseth.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h" />
@@ -649,6 +658,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlotDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\Handlers\VideoInputHandler.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\IInputHandler.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\Logic\InputLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />
@@ -805,6 +823,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\SamplerEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\Texture2DEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\EngineResources.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\Serialization\SerializationException.h" />
@@ -830,6 +849,7 @@
     </ClCompile>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\Evaluators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\IEvaluator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\KeyTraits.h" />
     <ClInclude Include="..\..\..\Source\Version\BuildVersion.h" />
     <ClInclude Include="..\..\..\Source\Version\Version.h" />
   </ItemGroup>

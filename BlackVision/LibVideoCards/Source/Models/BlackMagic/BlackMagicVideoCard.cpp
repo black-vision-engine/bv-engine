@@ -12,77 +12,6 @@ namespace bv { namespace videocards { namespace blackmagic {
 
 UInt32   VideoCard::PREROLL_FRAMES_NUM = 4;
 
-//**************************************
-//
-VideoCardDesc::VideoCardDesc()
-    : m_uid( "BlackMagic" )
-{
-}
-
-//**************************************
-//
-IVideoCardPtr           VideoCardDesc::CreateVideoCard( const IDeserializer & deser ) const
-{
-    if( VideoCard::AvailableVideoCards > 0 )
-    {
-        auto deviceID = 0;
-        if( deser.EnterChild( "deviceID" ) )
-        {
-            deviceID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "value" ), 0 );
-
-            deser.ExitChild(); //deviceID
-        }
-
-        auto card = std::make_shared< VideoCard >( deviceID );
-
-        if( deser.EnterChild( "channels" ) )
-        {
-            if( deser.EnterChild( "channel" ) )
-            {
-                do
-                {
-                    if( deser.EnterChild( "output" ) )
-                    {
-                        ChannelOutputData output;
-                        output.type = SerializationHelper::String2T< IOType >( deser.GetAttribute( "type" ) );
-                        output.resolution = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                        output.refresh = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
-                        output.interlaced = SerializationHelper::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
-                        output.flipped = SerializationHelper::String2T< bool >( deser.GetAttribute( "flipped" ), false );
-                        output.videoMode = ConvertVideoMode( output.resolution, output.refresh, output.interlaced );
-
-						card->m_linkedVideoOutputID = SerializationHelper::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ) );
-
-                        deser.ExitChild(); //output
-
-                        card->AddOutput( output );
-                    }
-                }
-                while( deser.NextChild() );
-
-                deser.ExitChild(); //channel
-            }
-
-            deser.ExitChild(); //channels
-        }
-
-		bool result = card->InitOutput();
-		{result;}
-
-        VideoCard::AvailableVideoCards--;
-
-        return card;
-    }
-
-    return nullptr;
-}
-
-//**************************************
-//
-const std::string &     VideoCardDesc::GetVideoCardUID  () const
-{
-    return m_uid;
-}
 
 
 //**************************************
@@ -404,6 +333,14 @@ void                    VideoCard::ProcessFrame         ( const AVFrameConstPtr 
 	}
 }
 
+// ***********************
+//
+AVFramePtr              VideoCard::QueryInputFrame      ( VideoInputID inputID )
+{
+    inputID;
+    return AVFramePtr();
+}
+
 //**************************************
 //
 UInt32                  VideoCard::AvailableVideoCards = EnumerateDevices();
@@ -467,11 +404,18 @@ UInt64                          VideoCard::GetFrameTime         () const
 
 //**************************************
 //
-std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs() const
+std::set< UInt64 >				VideoCard::GetDisplayedVideoOutputsIDs  () const
 {
 	std::set< UInt64 > ret;
 	ret.insert( m_linkedVideoOutputID );
 	return ret;
+}
+
+// ***********************
+//
+InputChannelsDescsVec           VideoCard::GetInputChannelsDescs        () const
+{
+    return InputChannelsDescsVec();
 }
 
 //**************************************

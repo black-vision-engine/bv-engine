@@ -33,7 +33,7 @@ void                ConstTimeEvaluator::Serialize           ( ISerializer & ser 
     ser.EnterChild( "timeline" );
     ser.SetAttribute( "name", GetName() );
     ser.SetAttribute( "type", "const" );
-    ser.SetAttribute( "value", SerializationHelper::T2String< TimeType >( m_timeVal ) );
+    ser.SetAttribute( "value", Convert::T2String< TimeType >( m_timeVal ) );
 //    SerializeChildren( ser );
     ser.ExitChild();
 }
@@ -50,7 +50,7 @@ ConstTimeEvaluatorPtr    ConstTimeEvaluator::Create         ( const std::string 
 ConstTimeEvaluatorPtr     ConstTimeEvaluator::Create         ( const IDeserializer & deser )
 {
     auto name = deser.GetAttribute( "name" );
-    auto value = SerializationHelper::String2T< TimeType >( deser.GetAttribute( "value" ) );
+    auto value = Convert::String2T< TimeType >( deser.GetAttribute( "value" ) );
 
     auto te = Create( name, value );
     te->DeserializeChildren( deser );

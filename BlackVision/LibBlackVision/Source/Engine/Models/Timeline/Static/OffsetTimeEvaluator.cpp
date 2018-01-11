@@ -58,8 +58,8 @@ OffsetTimeEvaluatorPtr     OffsetTimeEvaluator::Create              ( const IDes
 {
     auto name = deser.GetAttribute( "name" );
 
-    auto offset = SerializationHelper::String2T< float >( deser.GetAttribute( "offset" ), 0.f );
-    auto scale = SerializationHelper::String2T< float >( deser.GetAttribute( "scale" ), 1.f );
+    auto offset = Convert::String2T< float >( deser.GetAttribute( "offset" ), 0.f );
+    auto scale = Convert::String2T< float >( deser.GetAttribute( "scale" ), 1.f );
 
     auto te = OffsetTimeEvaluator::Create( name, offset, scale );
 

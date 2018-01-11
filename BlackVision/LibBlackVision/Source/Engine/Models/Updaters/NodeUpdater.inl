@@ -247,7 +247,7 @@ inline void     NodeUpdater::UpdateShaderParams				()
 
 // *****************************
 //
-inline void		NodeUpdater::UpdateTexturesData				()
+inline void		NodeUpdater::UpdateTexturesData				( EngineResources & resources )
 {
     for( unsigned int txIdx = 0; txIdx < ( unsigned int )m_texDataMappingVec.size(); ++txIdx )
     {
@@ -267,9 +267,9 @@ inline void		NodeUpdater::UpdateTexturesData				()
             if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
                 auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
-                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
+                if( resources.TexturesMap->IsStored( tex2D ) && tex2D != resources.TexturesMap->GetTexture( texDesc.get() ) )
                 {
-                    auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
+                    auto newTex2D = resources.TexturesMap->GetTexture( texDesc.get() );
                     shaderParams->SetTexture( j, newTex2D );
                 }
                 else //Some other texture type which just requires contents to be swapped

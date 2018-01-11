@@ -114,7 +114,7 @@ NodeUpdater::~NodeUpdater    ()
 
 // *****************************
 //
-void    NodeUpdater::DoUpdate               ()
+void    NodeUpdater::DoUpdate               ( EngineResources & resources )
 {
     //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
     //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
@@ -137,7 +137,7 @@ void    NodeUpdater::DoUpdate               ()
             UpdateNodeEffect();
             UpdateShaderParams();
 
-            UpdateTexturesData();
+            UpdateTexturesData( resources );
             UpdateRendererState();
         }
         else

@@ -26,6 +26,7 @@ app/test.bmp
 app/testFreeType.bmp
 *.pyc
 workspace.xml
+BlackVision/Reports/
 BlackVision/_TestsResults/*
 BlackVision/Assets/BasicShapes/*
 BlackVision/Applications/ProjectManagerPrototype/bv_media/*
@@ -62,3 +63,7 @@ BlackVision/Dep/3rdParty/tclap-1.2.1/tests/
 BlackVision/Projects/Win/VS14/packages
 BlackVision/Projects/Win/VS14/.vs/BlackVision/v15/Solution.VC.db-shm
 BlackVision/Projects/Win/VS14/.vs
+
+BlackVision/Doc/html
+wiki
+Performance/

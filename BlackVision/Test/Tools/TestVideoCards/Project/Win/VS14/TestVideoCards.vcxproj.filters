@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoCardsUtils\TestVideoCardsMainThread.cpp">
+      <Filter>VideoCardsUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoCardsUtils\TestVideoCardsUtils.cpp">
+      <Filter>VideoCardsUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestCardStart.cpp" />
+    <ClCompile Include="..\..\..\Source\Initialization\TestVideoCardFactory.cpp">
+      <Filter>Initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Initialization\TestInputsChannelsCreation.cpp">
+      <Filter>Initialization</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="VideoCardsUtils">
+      <UniqueIdentifier>{02382fa5-7dd1-4967-a451-e6f524868c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Initialization">
+      <UniqueIdentifier>{e111e550-6840-4b03-8071-c8f35e427536}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\VideoCardsUtils\TestVideoCardsMainThread.h">
+      <Filter>VideoCardsUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoCardsUtils\TestVideoCardsUtils.h">
+      <Filter>VideoCardsUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoCardsUtils\UseLoggerTestVideoCardsModule.h">
+      <Filter>VideoCardsUtils</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -352,7 +352,7 @@ void    EngineStateHandlers::AssingChannels             ( JsonSerializeObject & 
     auto sceneName = evt->Request->GetAttribute( "SceneName" );
     auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetModelScene( sceneName );
 
-    Expected< int > channel = SerializationHelper::String2T< int >( evt->Request->GetAttribute( "ChannelIdx" ) );
+    Expected< int > channel = Convert::String2T< int >( evt->Request->GetAttribute( "ChannelIdx" ) );
 
     if( channel.IsValid() &&
         scene &&
@@ -381,7 +381,7 @@ void    EngineStateHandlers::ListChannelsMapping        ( JsonSerializeObject & 
         response.EnterChild( "Mapping" );
 
         response.SetAttribute( "SceneName", scene->GetName() );
-        response.SetAttribute( "ChannelIdx", SerializationHelper::T2String( scene->GetRenderChannelIdx() ) );
+        response.SetAttribute( "ChannelIdx", Convert::T2String( scene->GetRenderChannelIdx() ) );
 
         response.ExitChild();
     }

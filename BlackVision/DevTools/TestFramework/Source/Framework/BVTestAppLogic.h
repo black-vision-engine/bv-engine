@@ -12,6 +12,7 @@ namespace bv {
 class BVTestAppLogic : public BVAppLogic
 {
     friend class FrameworkTest;
+    friend class Benchmark;
 private:
 
     FrameworkTest *     m_test;
@@ -28,6 +29,13 @@ public:
 
     void            RestartTimer        ();
 
+
+    void            RegisterMocks       ();
+
+    void            RegisterMockVideoCard   ();
+    void            RegisterMockPlugins     ();
+    void            RegisterMockLogics      ();
+
 public:
 
     void            InjectTest          ( FrameworkTest * test );
@@ -35,6 +43,16 @@ public:
 private:
 
     void            EndExecution        ();
+
+public:
+
+    ///@name Test Accessors
+    /// Use these functions in your tests to access BVAppLogic members.
+    ///{@
+
+    audio::AudioRenderer *              GetAudioRenderer        () { return m_audioRenderer; }
+    videocards::VideoCardManager *      GetVideoCardManager     () { return m_videoCardManager; }
+    ///@}
 };
 
 } //bv

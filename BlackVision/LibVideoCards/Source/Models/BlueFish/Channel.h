@@ -7,6 +7,8 @@
 #include "FifoCapture.h"
 #include "FifoPlayback.h"
 
+#include "VideoInput/VideoInputChannelDesc.h"
+
 #include "CoreDEF.h"
 
 #include <atomic>
@@ -24,6 +26,9 @@ struct MainThreadArgs
     BOOL            bDoRun;
 };
 
+
+// ***********************
+/// @ingroup BlueFishVideoCard
 class Channel
 {
 private:
@@ -74,6 +79,7 @@ public:
     IOType          GetInputType        () const;
 
     UInt64          GetOutputId                 () const;
+    VideoInputID    GetInputId                  () const;
     UInt32          GetOutputChannel            () const;
     UInt32          GetEpochSDIOutput           () const;
     UInt32          GetEpochOutputMemInterface  () const;
@@ -81,6 +87,7 @@ public:
     UInt32          GetEpochSDIInput            () const;
 	UInt32			GetEpochSDIKeyOutput		() const;
     UInt32          GetEpochInputMemInterface   () const;
+    UInt32          GetResolution               () const;
 
     void            EnqueueFrame        ( const AVFrameConstPtr & frame );
 
@@ -109,7 +116,12 @@ public:
 
     void            SetVideoOutput      ( bool enable );
 
-    unsigned int static __stdcall PlaythroughThread ( void * pArg );
+    bool            IsInputChannel      () const;
+    bool            IsOutputChannel     () const;
+
+    AVFrameDescriptor               CreateFrameDesc () const;
+
+    unsigned int static __stdcall   PlaythroughThread ( void * pArg );
 
     static ChannelOptionMap CreateChannelOptionMap      ();
 

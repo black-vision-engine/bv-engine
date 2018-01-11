@@ -128,12 +128,12 @@ void                    SmoothValueSetter::SerializeBinding        ( ISerializer
     ser.SetAttribute( "PluginName", binding.Plugin );
     ser.SetAttribute( "ParamName", binding.Parameter->GetName() );
     ser.SetAttribute( "SourceName", binding.ValueSrc->GetName() );
-    ser.SetAttribute( "SourceParamType", SerializationHelper::T2String( GetParameter( binding.ValueSrc->GetName() )->GetType() ) );
+    ser.SetAttribute( "SourceParamType", Convert::T2String( GetParameter( binding.ValueSrc->GetName() )->GetType() ) );
     
     if( binding.TransformKind != TransformKind::invalid )
-        ser.SetAttribute( "Kind", SerializationHelper::T2String( binding.TransformKind ) );
+        ser.SetAttribute( "Kind", Convert::T2String( binding.TransformKind ) );
     if( binding.Component != ParameterBinding::VectorComponent::Invalid )
-        ser.SetAttribute( "Component", SerializationHelper::T2String( binding.Component ) );
+        ser.SetAttribute( "Component", Convert::T2String( binding.Component ) );
 
     ser.ExitChild();    // binding
 }
@@ -145,11 +145,11 @@ bool                    SmoothValueSetter::DeserializeBinding      ( const IDese
     auto nodePath       = deser.GetAttribute( "NodePath" );
     auto pluginName     = deser.GetAttribute( "PluginName" );
     auto paramName      = deser.GetAttribute( "ParamName" );
-    auto component      = SerializationHelper::String2T( deser.GetAttribute( "Component" ), ParameterBinding::VectorComponent::Invalid );
-    auto transformKind  = SerializationHelper::String2T( deser.GetAttribute( "Kind" ), TransformKind::invalid );
+    auto component      = Convert::String2T( deser.GetAttribute( "Component" ), ParameterBinding::VectorComponent::Invalid );
+    auto transformKind  = Convert::String2T( deser.GetAttribute( "Kind" ), TransformKind::invalid );
 
     auto sourceName     = deser.GetAttribute( "SourceName" );
-    auto sourceType     = SerializationHelper::String2T( deser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
+    auto sourceType     = Convert::String2T( deser.GetAttribute( "SourceParamType" ), ModelParamType::MPT_TOTAL );
 
     ParameterBinding newBinding = FillTargetData( nodePath, pluginName, paramName, transformKind, component );
     if( newBinding.Parameter == nullptr || FindTarget( newBinding.Parameter ) != nullptr )
@@ -203,8 +203,8 @@ bool                    SmoothValueSetter::RemoveBinding   ( IDeserializer & eve
     auto pluginName     = eventDeser.GetAttribute( "PluginName" );
     auto paramName      = eventDeser.GetAttribute( "ParamName" );
 
-    auto component      = SerializationHelper::String2T( eventDeser.GetAttribute( "Component" ), ParameterBinding::VectorComponent::Invalid );
-    auto transformKind  = SerializationHelper::String2T( eventDeser.GetAttribute( "Kind" ), TransformKind::invalid );
+    auto component      = Convert::String2T( eventDeser.GetAttribute( "Component" ), ParameterBinding::VectorComponent::Invalid );
+    auto transformKind  = Convert::String2T( eventDeser.GetAttribute( "Kind" ), TransformKind::invalid );
 
     // We must find bound parameter and compare pointers, not node and param paths (strings).
     ParameterBinding data = FillTargetData( nodePath, pluginName, paramName, transformKind, component );
@@ -278,7 +278,7 @@ bool                    SmoothValueSetter::SetParameter    ( IDeserializer & eve
         return SetSmoothParam( typedeParam, deltaTime, response, srcParamName, paramValue );
     }
 
-    response.SetAttribute( "ErrorInfo", "Parameter type [" + SerializationHelper::T2String( param->GetType() ) + "] not supported" );
+    response.SetAttribute( "ErrorInfo", "Parameter type [" + Convert::T2String( param->GetType() ) + "] not supported" );
     return false;
 }
 
@@ -589,11 +589,11 @@ void                            SmoothValueSetter::UpdateParameter         ( IVa
 template< typename InterpolatorType, typename ValType, ModelParamType type >
 bool                    SmoothValueSetter::SetSmoothParam      ( std::shared_ptr< model::SimpleParameterImpl< InterpolatorType, ValType, type > > & param, float deltaTime, ISerializer & response, const std::string & srcParamName, const std::string & paramValue )
 {
-    Expected< ValType > newValue = SerializationHelper::String2T< ValType >( paramValue );
+    Expected< ValType > newValue = Convert::String2T< ValType >( paramValue );
 
     if( !newValue.IsValid() )
     {
-        response.SetAttribute( "ErrorInfo", "Error parsing [" + srcParamName + "]. Value [" + paramValue + "] is invalid " + SerializationHelper::T2String( param->GetType() )  );
+        response.SetAttribute( "ErrorInfo", "Error parsing [" + srcParamName + "]. Value [" + paramValue + "] is invalid " + Convert::T2String( param->GetType() )  );
         return false;
     }
 
