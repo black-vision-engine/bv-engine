@@ -140,6 +140,8 @@ void BVAppLogic::Initialize         ()
     m_videoCardManager->Start();
 
     BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
+
+    RenderLogicInitializer::InitializeInputSlots( m_renderLogic, DefaultConfig, m_videoCardManager );
 }
 
 

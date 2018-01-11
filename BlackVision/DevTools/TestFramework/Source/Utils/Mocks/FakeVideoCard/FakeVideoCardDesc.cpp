@@ -45,9 +45,9 @@ void                            FakeVideoCardDesc::Deserialize          ( const 
                 {
                     input = std::unique_ptr< FakeInputChannelData >( new FakeInputChannelData() );
 
-                    output->Height = Convert::String2T< UInt32 >( deser.GetAttribute( "height" ), 1080 );
-                    output->Width = Convert::String2T< UInt32 >( deser.GetAttribute( "width" ), 1920 );
-                    input->LinkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
+                    input->Height = Convert::String2T< UInt32 >( deser.GetAttribute( "height" ), 1080 );
+                    input->Width = Convert::String2T< UInt32 >( deser.GetAttribute( "width" ), 1920 );
+                    input->LinkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoInput" ), 0 );
 
                     deser.ExitChild(); //input
                 }
