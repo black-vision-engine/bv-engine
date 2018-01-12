@@ -91,7 +91,7 @@ void				BlueFishVCThread::Process					()
 //
 AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame )
 {		
-	//m_odd = !m_odd;
+	
 
     const char *memSrc = frame->m_videoData->Get();
 
@@ -130,7 +130,7 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         
         m_prevAudioData = nullptr;
     }
-
+	m_odd = !m_odd;
     return AVFrame::Create( outputFrame, audioData, newDesc );
 }
 
