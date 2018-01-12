@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\..\Source\InputSlotsUnitTest.cpp" />
     <ClCompile Include="..\..\..\Source\TextureInputAssetTest.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInputHandlerTest.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoInputPipelineTest.cpp" />
     <ClCompile Include="VideoInputSlotsTest.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@ struct FakeInputFrames
 {
     UInt32          m_nextFramePtr;
 
-    std::vector< AVFrameConstPtr >      m_frames;
+    std::vector< AVFramePtr >       m_frames;
 
 
 // ***********************

@@ -20,6 +20,9 @@
     <ClCompile Include="..\..\..\Source\InputsInitializationTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInputPipelineTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestCases">

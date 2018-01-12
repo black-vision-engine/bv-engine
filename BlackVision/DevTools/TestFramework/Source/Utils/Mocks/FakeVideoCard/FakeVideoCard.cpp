@@ -61,10 +61,20 @@ void            FakeVideoCard::ProcessFrame     ( const AVFrameConstPtr & data, 
 //
 AVFramePtr      FakeVideoCard::QueryInputFrame  ( VideoInputID inputID )
 {
-    // @todo Make mechanism to provide frames from outside in test, which will be queried here.
+    AVFramePtr resultFrame;
 
-    inputID;
-    return AVFramePtr();
+    auto & frames = m_inputFrames[ inputID ];
+
+    auto nextFrame = frames.m_nextFramePtr;
+    
+    if( nextFrame < frames.m_frames.size() )
+    {
+        resultFrame = frames.m_frames[ nextFrame ];
+    }
+        
+    frames.m_nextFramePtr = ( frames.m_nextFramePtr + 1 ) % frames.m_frames.size();
+
+    return resultFrame;
 }
 
 // ***********************
@@ -182,7 +192,11 @@ void                    FakeVideoCard::LoadInputChannelFrames           ( const 
             auto imageChunk = LoadImage( file, channelDesc.Width, channelDesc.Height );
             if( imageChunk )
             {
-                auto frame = AVFrame::Create( imageChunk, nullptr, CreateAVFrameDesc( &channelDesc ) );
+                auto frame = AVFrame::Create();
+                frame->m_audioData = nullptr;
+                frame->m_videoData = imageChunk;
+                frame->m_desc = CreateAVFrameDesc( &channelDesc );
+
                 inputFrames.m_frames.push_back( frame );
             }
         }

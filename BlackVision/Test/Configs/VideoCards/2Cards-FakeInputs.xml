@@ -73,7 +73,7 @@
         <videocard name="FakeVideoCard" deviceID="1">
             <channels>
                 <channel name="A" renderer="1" >
-                    <input linkedVideoInput="0" width="1920" height="1080" />
+                    <input linkedVideoInput="0" width="1920" height="1080" imagesDirectory="TestAssets/VideoInputs/" />
 				</channel>
                 <channel name="B" renderer="1" >
                     <input linkedVideoInput="1" width="1920" height="1080" />
