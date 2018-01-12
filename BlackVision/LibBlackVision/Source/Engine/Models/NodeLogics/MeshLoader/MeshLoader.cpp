@@ -96,12 +96,13 @@ MeshLoaderPtr           MeshLoader::Create          ( const IDeserializer & dese
         auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
         if( deserContext )
         {
-            model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
-            if( !sceneTimeline )
-            {
-                sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
-            }
-            auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
+            //model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
+            //if( !sceneTimeline )
+            //{
+            //    sceneTimeline = deserContext->GetRootTimeline();
+            //}
+            //auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
+			auto timeEval = deserContext->GetTimeline( timelinePath );
         
             return MeshLoader::Create( parent, timeEval, assetPath );
         }

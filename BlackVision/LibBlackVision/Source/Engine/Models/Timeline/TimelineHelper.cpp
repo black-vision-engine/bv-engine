@@ -27,7 +27,7 @@ ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const 
     case TimelineType::TT_DEFAULT:
         return CreateDefaultTimeline( name, INFINITE_DURATION, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     case TimelineType::TT_OFFSET:
-        return CreateOffsetTimeEvaluator( name, 0.f );
+        return CreateOffsetTimeEvaluator( name, 0.f, 1.f );
     case TimelineType::TT_CONST:
         return CreateConstTimeEvaluator( name, 0.f );
     default:
@@ -37,9 +37,9 @@ ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const 
 
 // *********************************
 //
-OffsetTimeEvaluatorPtr	TimelineHelper::CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime )
+OffsetTimeEvaluatorPtr	TimelineHelper::CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime, TimeType scale )
 {
-    return OffsetTimeEvaluator::Create( name, -startTime ); 
+    return OffsetTimeEvaluator::Create( name, -startTime, scale ); 
 }
 
 // *********************************

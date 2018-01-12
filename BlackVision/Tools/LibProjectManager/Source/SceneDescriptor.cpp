@@ -147,7 +147,7 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    XMLDeserializer deser( in, numBytes, new BVDeserializeContext( nullptr, nullptr, &model::PluginsManager::DefaultInstanceRef(), model::TimelineManager::GetInstance() ) );
+    XMLDeserializer deser( in, numBytes, BVDeserializeContext::CreateContextFromEmptiness() );
 
     // assets
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );

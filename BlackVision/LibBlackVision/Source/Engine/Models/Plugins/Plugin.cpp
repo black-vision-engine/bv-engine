@@ -576,7 +576,7 @@ void                                BasePlugin::SetAsset                    ( in
 //
 void                                BasePlugin::Serialize        ( ISerializer& ser ) const
 {
-    auto serContext = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    auto serContext = Context( ser );
 
 ser.EnterChild( "plugin" );
     ser.SetAttribute( "uid", GetTypeUid() );
