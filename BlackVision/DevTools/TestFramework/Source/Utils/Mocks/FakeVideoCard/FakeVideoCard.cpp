@@ -1,6 +1,7 @@
 #include "FakeVideoCard.h"
 
-
+#include "System/Path.h"
+#include "LibImage.h"
 
 
 namespace bv {
@@ -117,11 +118,7 @@ InputChannelsDescsVec   FakeVideoCard::GetInputChannelsDescs            () const
             VideoInputID inputID = channel.InputChannelData->LinkedVideoInput;
             const std::string channelName = channel.Name;
 
-            AVFrameDescriptor frameDesc;
-
-            frameDesc.height = channel.InputChannelData->Height;
-            frameDesc.width = channel.InputChannelData->Width;
-            frameDesc.depth = 4;
+            AVFrameDescriptor frameDesc = CreateAVFrameDesc( channel.InputChannelData.get() );
 
             VideoInputChannelDesc newDesc( m_deviceID, inputID, FakeVideoCardDesc::UID(), channelName, frameDesc );
             descs.push_back( newDesc );
@@ -135,7 +132,12 @@ InputChannelsDescsVec   FakeVideoCard::GetInputChannelsDescs            () const
 //
 void                    FakeVideoCard::AddChannel                       ( FakeChannelDesc & channelDesc )
 {
-    m_channels.push_back( std::move( channelDesc ) );
+    if( channelDesc.InputChannelData )
+    {
+        LoadInputChannelFrames( *( channelDesc.InputChannelData.get() ) );
+    }
+    
+    m_channels.push_back( std::move( channelDesc ) );   
 }
 
 // ***********************
@@ -163,6 +165,58 @@ FrameOutput &           FakeVideoCard::AccessOutputs                    ()
 void                    FakeVideoCard::ClearOutputs                     ()
 {
     m_lastFrameOutput.Outputs.clear();
+}
+
+// ***********************
+//
+void                    FakeVideoCard::LoadInputChannelFrames           ( const FakeInputChannelData & channelDesc )
+{
+    FakeInputFrames inputFrames;
+    Path imagesPath = channelDesc.ImagesDirectory;
+
+    if( Path::Exists( imagesPath ) )
+    {
+        auto fileList = Path::List( imagesPath, false );
+        for( auto & file : fileList )
+        {
+            auto imageChunk = LoadImage( file, channelDesc.Width, channelDesc.Height );
+            if( imageChunk )
+            {
+                auto frame = AVFrame::Create( imageChunk, nullptr, CreateAVFrameDesc( &channelDesc ) );
+                inputFrames.m_frames.push_back( frame );
+            }
+        }
+    }
+}
+
+// ***********************
+//
+MemoryChunkPtr          FakeVideoCard::LoadImage        ( const Path & imagePath, UInt32 expectedWidth, UInt32 expectedHeight )
+{
+    UInt32 width;
+    UInt32 height;
+    UInt32 bpp;
+    UInt32 channelNum;
+
+    auto data = image::LoadImageImpl( imagePath.Str(), &width, &height, &bpp, &channelNum );
+    auto resized = image::ResizeImpl( data, width, height, bpp, expectedWidth, expectedHeight, image::FilterType::FT_BOX );
+
+    delete[] data;
+
+    return MemoryChunk::Create( resized, expectedWidth * expectedHeight * bpp / 8 );
+}
+
+// ***********************
+//
+AVFrameDescriptor       FakeVideoCard::CreateAVFrameDesc        ( const FakeInputChannelData * channelDesc ) const
+{
+    AVFrameDescriptor frameDesc;
+
+    frameDesc.height = channelDesc->Height;
+    frameDesc.width = channelDesc->Width;
+    frameDesc.depth = 4;
+
+    return frameDesc;
 }
 
 

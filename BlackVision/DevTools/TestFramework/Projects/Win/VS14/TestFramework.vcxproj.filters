@@ -146,6 +146,9 @@
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Assets\AssetManagerAccessor.h">
       <Filter>Utils\Accessors\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeInputFrames.h">
+      <Filter>Utils\Mocks\FakeVideoCard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Framework\bvAppTest.cpp">

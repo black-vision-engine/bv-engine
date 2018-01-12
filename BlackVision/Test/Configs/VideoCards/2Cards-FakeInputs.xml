@@ -85,6 +85,9 @@
                 <channel name="A" renderer="1" >
                     <input linkedVideoInput="2" width="1920" height="1080" />
 				</channel>
+                <channel name="A" renderer="1" >
+                    <output linkedVideoOutput="0" width="1920" height="1080" />
+				</channel>
             </channels>
         </videocard>
     </videocards>

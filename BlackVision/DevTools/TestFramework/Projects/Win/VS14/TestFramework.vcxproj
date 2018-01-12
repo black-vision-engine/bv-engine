@@ -43,6 +43,7 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeChannelsDescs.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeInputFrames.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.h" />
