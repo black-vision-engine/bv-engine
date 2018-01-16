@@ -70,9 +70,9 @@ AVFramePtr      FakeVideoCard::QueryInputFrame  ( VideoInputID inputID )
     if( nextFrame < frames.m_frames.size() )
     {
         resultFrame = frames.m_frames[ nextFrame ];
+
+        frames.m_nextFramePtr = ( frames.m_nextFramePtr + 1 ) % frames.m_frames.size();
     }
-        
-    frames.m_nextFramePtr = ( frames.m_nextFramePtr + 1 ) % frames.m_frames.size();
 
     return resultFrame;
 }
@@ -179,6 +179,13 @@ void                    FakeVideoCard::ClearOutputs                     ()
 
 // ***********************
 //
+void                    FakeVideoCard::ResetInputFrame                  ( VideoInputID id )
+{
+    m_inputFrames[ id ].m_nextFramePtr = 0;
+}
+
+// ***********************
+//
 void                    FakeVideoCard::LoadInputChannelFrames           ( const FakeInputChannelData & channelDesc )
 {
     FakeInputFrames inputFrames;
@@ -201,6 +208,8 @@ void                    FakeVideoCard::LoadInputChannelFrames           ( const 
             }
         }
     }
+
+    m_inputFrames[ channelDesc.LinkedVideoInput ] = inputFrames;
 }
 
 // ***********************

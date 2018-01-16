@@ -80,6 +80,7 @@ public:
     FrameOutput &               AccessOutputs           ();
     void                        ClearOutputs            ();
 
+    void                        ResetInputFrame         ( VideoInputID id );
 
 private:
 
