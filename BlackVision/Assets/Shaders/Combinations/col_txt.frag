@@ -122,6 +122,18 @@ float animateAlpha()
     }
 }
 
+vec4 ApplyTreshold( vec4 result )
+{
+	if( result.a < 0.25 )
+		result.a = 0.f;
+	else if( result.a > 0.75 )
+		result.a = 1.f;
+	else
+		result.a = 2 * ( result.a - 0.5 ) + 0.5;
+	
+	return result;
+}
+
 void main()
 {
     float text = texture( AtlasTex0, uvCoord ).b;
@@ -186,14 +198,9 @@ void main()
 		}
 	}
 		
-	// if( result.a == 0.0 )
-		// discard;
-	if( result.a < 0.25 )
+	result = ApplyTreshold( result );
+	if( result.a == 0.0 )
 		discard;
-	else if( result.a > 0.75 )
-		result.a = 1.f;
-	else
-		result.a = 2 * ( result.a - 0.5 ) + 0.5;
 	FragColor = result;
 }
 
