@@ -17,34 +17,34 @@ const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
 // ***********************
 //
-void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
+void                FontAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-    sob.EnterChild( "asset" );
+    ser.EnterChild( "asset" );
 
-    sob.SetAttribute( "type", GetUID() );
-    sob.SetAttribute( "path", m_fontFileName );
-    sob.SetAttribute( "size", Convert::T2String( m_fontSize ) );
-    sob.SetAttribute( "blur", Convert::T2String( m_blurSize ) );
-    sob.SetAttribute( "glowBlur", Convert::T2String( m_glowBlurSize ) );
-    sob.SetAttribute( "outline", Convert::T2String( m_outlineSize ) );
-    sob.SetAttribute( "mipmaps", m_generateMipmaps ? "true" : "false" );
+    ser.SetAttribute( "type", GetUID() );
+    ser.SetAttribute( "path", m_fontFileName );
+    ser.SetAttribute( "size", Convert::T2String( m_fontSize ) );
+    ser.SetAttribute( "blur", Convert::T2String( m_blurSize ) );
+    ser.SetAttribute( "glowBlur", Convert::T2String( m_glowBlurSize ) );
+    ser.SetAttribute( "outline", Convert::T2String( m_outlineSize ) );
+    ser.SetAttribute( "mipmaps", Convert::T2String( m_generateMipmaps ) );
 
-    sob.ExitChild();
+    ser.ExitChild();
 }
 
 
 // ***********************
 //
-ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& dob )
+ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& deser )
 {
-    assert( dob.GetAttribute( "type" ) == UID() );
+    assert( deser.GetAttribute( "type" ) == UID() );
 
-    auto path = dob.GetAttribute( "path" );
-    auto size = Convert::String2T( dob.GetAttribute( "size" ), 10 );
-    auto blurSize = Convert::String2T( dob.GetAttribute( "blur" ), 0 );
-    auto glowBlurSize = Convert::String2T( dob.GetAttribute( "glowBlur" ), 0 );
-    auto outSize = Convert::String2T( dob.GetAttribute( "outline" ), 0 );
-    auto mipmaps = dob.GetAttribute( "mipmaps" ) == "true" ? true : false;
+    auto path = deser.GetAttribute( "path" );
+    auto size = Convert::String2T( deser.GetAttribute( "size" ), 10 );
+    auto blurSize = Convert::String2T( deser.GetAttribute( "blur" ), 0 );
+    auto glowBlurSize = Convert::String2T( deser.GetAttribute( "glowBlur" ), 0 );
+    auto outSize = Convert::String2T( deser.GetAttribute( "outline" ), 0 );
+	auto mipmaps = Convert::String2T( deser.GetAttribute( "mipmaps" ), true );
 
     return FontAssetDesc::Create( path, size, blurSize, glowBlurSize, outSize, mipmaps );
 }
