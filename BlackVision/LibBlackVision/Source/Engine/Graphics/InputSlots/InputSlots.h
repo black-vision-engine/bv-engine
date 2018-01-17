@@ -48,6 +48,8 @@ private:
     std::vector< InputEntry >       m_slots;
     mutable std::recursive_mutex    m_lock;
 
+    InputSlot                       m_fallbackSlot;
+
 public:
 
     explicit    InputSlots    ();
@@ -67,6 +69,8 @@ public:
     void                    ReferenceSource     ( SlotIndex slotIdx );
     void                    ReleaseSource       ( SlotIndex slotIdx );
 
+    InputSlot               GetFallbackSlot     () { return m_fallbackSlot; }
+
 private:
 
     SlotIndex               FindSourceByName    ( const std::string & name ) const;
@@ -76,6 +80,13 @@ private:
     bool                IsValidIndex        ( SlotIndex idx ) const;
     bool                IsEmptySlot         ( SlotIndex idx ) const;
     bool                CanAddSource        ( InputSlot inputSlot, const std::string & name ) const;
+
+private:
+
+    Texture2DPtr            CreateFallbackTexture   ();
+    audio::AudioEntity *    CreateFallbackAudio     ();
+
+    MemoryChunkPtr          GenerateFallbackTexture ( UInt32 width, UInt32 height, UInt32 bpp );
 
 public:
 

@@ -4,6 +4,7 @@
 #include "Assets/Input/TextureInputAsset.h"
 #include "Assets/Input/TextureInputAssetDesc.h"
 
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 
 namespace bv
@@ -15,6 +16,7 @@ const SlotIndex       InputSlots::sInvalidIdx = std::numeric_limits< SlotIndex >
 // ***********************
 //
 InputSlots::InputSlots()
+    :   m_fallbackSlot( CreateFallbackTexture(), CreateFallbackAudio() )
 {}
 
 // ***********************
@@ -217,6 +219,41 @@ bool                InputSlots::CanAddSource          ( InputSlot inputSlot, con
         return false;
 
     return true;
+}
+
+// ***********************
+//
+Texture2DPtr                    InputSlots::CreateFallbackTexture   ()
+{
+    auto width = 8;
+    auto height = 8;
+    TextureFormat format = TextureFormat::F_A8R8G8B8;
+    DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC;
+    UInt32 levels = 1;
+
+    auto tex = std::make_shared< Texture2D >( format, width, height, semantic, levels );
+    tex->SetData( GenerateFallbackTexture( width, height, 4 ) );
+
+    return tex;
+}
+
+// ***********************
+//
+audio::AudioEntity *            InputSlots::CreateFallbackAudio     ()
+{
+    return nullptr;
+}
+
+// ***********************
+//
+MemoryChunkPtr                  InputSlots::GenerateFallbackTexture ( UInt32 width, UInt32 height, UInt32 bpp )
+{
+    auto chunk = MemoryChunk::Create( width * height * bpp );
+    
+    // Fully transparent and empty texture.
+    chunk->Clear();
+
+    return chunk;
 }
 
 // ***********************

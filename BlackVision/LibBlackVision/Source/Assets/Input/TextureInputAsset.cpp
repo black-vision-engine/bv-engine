@@ -41,7 +41,7 @@ void                            TextureInputAsset::EvaluateSlot()
     }
     else
     {
-        m_texture = nullptr;
+        m_texture = m_slots->GetFallbackSlot().Texture;
     }
 
     m_updateID = ApplicationContext::Instance().GetUpdateCounter() + 1;

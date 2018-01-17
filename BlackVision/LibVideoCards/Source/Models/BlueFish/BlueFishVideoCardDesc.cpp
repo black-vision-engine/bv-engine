@@ -79,10 +79,10 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
                     input->type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
                     input->resolution = Convert::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
                     input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
-                    input->linkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
+                    input->linkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoInput" ), 0 );
 
-                    output->updateFormat = UPD_FMT_FIELD;
-                    output->memoryFormat = MEM_FMT_BGRA;
+                    input->updateFormat = UPD_FMT_FIELD;
+                    input->memoryFormat = MEM_FMT_BGRA;
 
                     deser.ExitChild(); //input
                 }
