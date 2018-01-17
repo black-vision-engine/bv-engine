@@ -130,7 +130,9 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         
         m_prevAudioData = nullptr;
     }
-	m_odd = !m_odd;
+
+    m_odd = !m_odd;
+
     return AVFrame::Create( outputFrame, audioData, newDesc );
 }
 
