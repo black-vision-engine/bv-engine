@@ -32,6 +32,9 @@
     <ClCompile Include="..\..\..\Source\TestAssets\TestTextureInputAssetDesc.cpp">
       <Filter>TestAssets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAssets\TestVideoInputAssetDesc.cpp">
+      <Filter>TestAssets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestKeys">

@@ -130,6 +130,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp" />

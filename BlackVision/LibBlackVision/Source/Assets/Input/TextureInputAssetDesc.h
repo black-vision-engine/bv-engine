@@ -33,7 +33,7 @@ protected:
 
     virtual const std::string &			GetUID				() const override;
 
-private:
+protected:
 
     explicit        TextureInputAssetDesc   ( InputSlotBinding binding );
 
