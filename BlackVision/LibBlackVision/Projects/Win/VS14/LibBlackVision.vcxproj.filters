@@ -2149,6 +2149,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.cpp">
       <Filter>Assets\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAsset.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5503,6 +5506,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\TexturePluginBase.h">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\IAudioInputAsset.h">
+      <Filter>Assets\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

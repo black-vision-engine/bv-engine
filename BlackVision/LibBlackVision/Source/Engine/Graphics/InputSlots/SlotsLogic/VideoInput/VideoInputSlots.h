@@ -12,6 +12,13 @@ namespace bv
 {
 
 class RenderContext;
+class VideoInputSlots;
+class VideoInputAssetDesc;
+class VideoInputAsset;
+DEFINE_PTR_TYPE( VideoInputSlots )
+DEFINE_CONST_PTR_TYPE( VideoInputAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
+
 
 
 /**@brief Wrapper for inputs slots from video cards.
@@ -50,6 +57,8 @@ public:
 
     Expected< SlotIndex >       GetSlotIndex        ( videocards::VideoInputID id ) const;
 
+    InputSlotsPtr               GetInputSlots       () const { return m_avInputSlots.GetInputSlots(); }
+
 private:
 
     Expected< EntryIdx >        FindEntry       ( const videocards::VideoInputChannelDesc & vidInputDesc ) const;
@@ -64,6 +73,15 @@ private:
     void                        FreeAudio       ( RenderContext * ctx, audio::AudioEntity * audio );
 
     std::string                 GenerateName    ( const videocards::VideoInputChannelDesc & vidInputDesc );
+
+public:
+
+    ///@name VideoInputAsset creation
+    ///@{
+    VideoInputAssetConstPtr     CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputAssetDescConstPtr desc );
+
+    ///@}
+
 };
 
 

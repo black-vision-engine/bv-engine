@@ -4,6 +4,8 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
+#include "Assets/Input/VideoInputAsset.h"
+#include "Assets/Input/VideoInputAssetDesc.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -238,6 +240,19 @@ Expected< VideoInputSlots::EntryIdx >       VideoInputSlots::FindEntry  ( videoc
     }
 
     return Expected< VideoInputSlots::EntryIdx >();
+}
+
+
+// ***********************
+//
+VideoInputAssetConstPtr         VideoInputSlots::CreateAsset        ( VideoInputSlotsPtr thisPtr, VideoInputAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = VideoInputAsset::Create( thisPtr, desc->GetVideoInputID() );
+    asset->EvaluateSlot();
+
+    return asset;
 }
 
 
