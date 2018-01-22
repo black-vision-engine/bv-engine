@@ -47,6 +47,9 @@ public:
 
     void            Save        ( char * memory ) const;
 
+    ColorRGBA       operator+   ( const ColorRGBA & color2 ) const;
+    ColorRGBA       operator/   ( float div ) const;
+
 public:
 
     static ColorRGBA        Load    ( const char * mem );
@@ -178,6 +181,31 @@ inline void             ColorRGBA::SetA     ( UInt32 a )
 {
     SetColor( a, aMask, 0 );
 }
+
+// ========================================================================= //
+// Operators
+// ========================================================================= //
+
+// ***********************
+//
+inline ColorRGBA        ColorRGBA::operator+    ( const ColorRGBA & color2 ) const
+{
+    return ColorRGBA( R() + color2.R(), G() + color2.G(), B() + color2.B(), A() + color2.A() );
+}
+
+// ***********************
+//
+inline ColorRGBA        ColorRGBA::operator/    ( float div ) const
+{
+    return ColorRGBA( UInt32( ( float )R() / div ), UInt32( ( float )G() / div ), UInt32( ( float )B() / div ), UInt32( ( float )A() / div ) );
+}
+
+
+
+// ========================================================================= //
+// Private impl
+// ========================================================================= //
+
 
 // ***********************
 //

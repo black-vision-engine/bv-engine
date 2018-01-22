@@ -112,3 +112,31 @@ TEST( LibCore_Memory, ColorRGBA_SaveAndLoad )
     delete[] memory;
 }
 
+// ***********************
+// Operator add test. Colors should be clamped.
+TEST( LibCore_Memory, ColorRGBA_OperatorAdd )
+{
+    ColorRGBA color1 = ColorRGBA( 24, 34, 104, 64 );
+    ColorRGBA color2 = ColorRGBA( 200, 200, 250, 64 );
+
+    auto newColor = color1 + color2;
+
+    EXPECT_EQ( newColor.R(), 224 );
+    EXPECT_EQ( newColor.G(), 234 );
+    EXPECT_EQ( newColor.B(), 255 );
+    EXPECT_EQ( newColor.A(), 128 );
+}
+
+// ***********************
+// Operator devide test.
+TEST( LibCore_Memory, ColorRGBA_OperatorDevide )
+{
+    ColorRGBA color1 = ColorRGBA( 200, 150, 250, 64 );
+
+    auto newColor = color1 / 2;;
+
+    EXPECT_EQ( newColor.R(), 100 );
+    EXPECT_EQ( newColor.G(), 75 );
+    EXPECT_EQ( newColor.B(), 125 );
+    EXPECT_EQ( newColor.A(), 32 );
+}
