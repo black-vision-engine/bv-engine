@@ -109,7 +109,7 @@ inline bool     CircularBufferConcurrent< T, N >::TryPop        ( T & val )
 {
     std::unique_lock< std::mutex > lock( m_mutex );
 
-    if( IsEmpty() )
+    if( m_queue.empty() )
         return false;
 
     val = m_queue.front();

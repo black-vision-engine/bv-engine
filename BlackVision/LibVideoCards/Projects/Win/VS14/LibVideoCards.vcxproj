@@ -32,6 +32,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCardDesc.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishInputThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Channel.h" />
@@ -57,6 +58,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCardDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishInputThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Channel.cpp" />

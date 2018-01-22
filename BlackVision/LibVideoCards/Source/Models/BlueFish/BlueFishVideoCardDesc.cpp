@@ -78,7 +78,7 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
                     input = std::unique_ptr< ChannelInputData >( new ChannelInputData() );
                     input->type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
                     input->resolution = Convert::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                    input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
+                    input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), false );
                     input->linkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoInput" ), 0 );
 
                     input->updateFormat = UPD_FMT_FIELD;

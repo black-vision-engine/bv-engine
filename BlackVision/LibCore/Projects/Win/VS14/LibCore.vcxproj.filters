@@ -243,6 +243,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\ConversionHelper.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\ColorRGBA.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />

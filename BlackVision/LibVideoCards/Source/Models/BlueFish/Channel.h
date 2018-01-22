@@ -9,6 +9,8 @@
 
 #include "VideoInput/VideoInputChannelDesc.h"
 
+#include "BlueFishInputThread.h"
+
 #include "CoreDEF.h"
 
 #include <atomic>
@@ -54,6 +56,7 @@ private:
     mutable std::mutex      m_mutex;
 
     BlueFishVCThread *      m_frameProcessingThread;
+    BlueFishInputThread *   m_inputFramesThread;
 
     void                    UpdateFrameTime             ( UInt64 t );
     UInt64                  GetFrameTime                () const;
@@ -90,6 +93,7 @@ public:
     UInt32          GetResolution               () const;
 
     void            EnqueueFrame        ( const AVFrameConstPtr & frame );
+    AVFramePtr      QueryInputFrame     ();
 
     CFifoCapture *  GetCaptureChannel   () const;
     CFifoPlayback * GetPlaybackChannel  () const;

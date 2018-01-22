@@ -10,6 +10,9 @@
     <Filter Include="Conversions">
       <UniqueIdentifier>{fcceb571-61ec-4bd6-bb74-455cbb0f245f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MemoryTest">
+      <UniqueIdentifier>{6d12a7bf-3b0d-45d7-bad6-e53b1787faf1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
@@ -39,6 +42,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Conversions\String2Enum.cpp">
       <Filter>Conversions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBA.cpp">
+      <Filter>MemoryTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

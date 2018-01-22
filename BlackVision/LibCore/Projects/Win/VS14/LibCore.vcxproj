@@ -43,6 +43,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Memory\AVFrame.h" />
+    <ClInclude Include="..\..\..\Source\Memory\ColorRGBA.h" />
     <ClInclude Include="..\..\..\Source\Memory\LinearAllocator.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Source\Memory\MemoryLeaks.h" />

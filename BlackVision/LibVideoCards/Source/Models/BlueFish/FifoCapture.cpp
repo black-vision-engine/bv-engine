@@ -103,10 +103,11 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 	varVal.ulVal = m_nMemoryFormat;
 	m_pSDK->SetCardProperty(VIDEO_INPUT_MEMORY_FORMAT, varVal);
 
-
-
 	varVal.ulVal = VIDEO_ENGINE_DUPLEX;	//do not set it to VIDEO_ENGINE_CAPTURE as this will automatically do a playthrough and this will conflict with our playback thread
 	m_pSDK->SetCardProperty(VIDEO_INPUT_ENGINE, varVal);
+
+    varVal.ulVal = ImageOrientation_VerticalFlip;
+    m_pSDK->SetCardProperty( VIDEO_IMAGE_ORIENTATION, varVal );
 
 	GoldenSize = BlueVelvetGolden(m_nVideoMode, m_nMemoryFormat, m_nUpdateFormat);
 	BytesPerLine = BlueVelvetLineBytes(m_nVideoMode, m_nMemoryFormat);

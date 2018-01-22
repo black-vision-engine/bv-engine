@@ -241,17 +241,7 @@ AVFramePtr                      VideoCard::QueryInputFrame          ( VideoInput
     {
         if( channel->GetInputId() == inputID )
         {
-            std::shared_ptr< CFrame > cFrame;
-
-            if( channel->GetCaptureBuffer()->TryPopFrame( cFrame ) )
-            {
-                MemoryChunkPtr videoChunk = MemoryChunk::Create( ( char * )cFrame->m_pBuffer, cFrame->m_nSize );
-                MemoryChunkPtr audioChunk = MemoryChunk::Create( ( char * )cFrame->m_pAudioBuffer, cFrame->m_nAudioSize );
-                
-                return std::make_shared< AVFrame >( videoChunk, audioChunk, channel->CreateFrameDesc() );
-            }
-
-            break;
+            return channel->QueryInputFrame();
         }
     }
 
@@ -277,7 +267,7 @@ UInt32                          VideoCard::EnumerateDevices         ()
 //
 UInt32                          VideoCard::GetRequiredFPS  () const
 {
-    UInt32 fps = 1;
+    UInt32 fps = 5000;
 
     for( auto & ch : m_channels )
     {

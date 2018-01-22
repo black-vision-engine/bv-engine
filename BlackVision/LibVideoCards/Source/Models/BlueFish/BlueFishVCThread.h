@@ -3,7 +3,6 @@
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
-#pragma once
 
 #include "Threading/StoppableThread.h"
 #include "DataTypes/QueueConcurrentLimited.h"

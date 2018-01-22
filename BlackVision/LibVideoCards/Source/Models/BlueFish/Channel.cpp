@@ -47,6 +47,7 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
     , m_playbackChannel( nullptr )
     , m_playbackFifoBuffer( nullptr )
     , m_frameProcessingThread( nullptr )
+    , m_inputFramesThread( nullptr )
     , m_odd( 0 )
 {
     if( input ) 
@@ -54,6 +55,10 @@ Channel::Channel( ChannelName name, ChannelInputDataUPtr & input, ChannelOutputD
         m_captureData = std::move( input );
         m_captureFifoBuffer = new CFifoBuffer();
         m_captureChannel = new CFifoCapture();
+
+        m_inputFramesThread = new BlueFishInputThread( this );
+
+        m_inputFramesThread->Start();
     }
 
     if( output )
@@ -90,6 +95,13 @@ Channel::~Channel()
         m_captureChannel->StopThread();
         delete m_captureChannel;
         m_captureChannel = nullptr;
+
+        m_inputFramesThread->Kill();
+        m_inputFramesThread->EnqueueEndMessage();
+        m_inputFramesThread->Join();
+
+        delete m_inputFramesThread;
+        m_inputFramesThread = nullptr;
     }
 
     if( m_playbackChannel )
@@ -389,7 +401,7 @@ UInt32          Channel::GetMemoryFormat        () const
     }
     else if( m_captureData )
     {
-        return m_captureData->updateFormat;
+        return m_captureData->memoryFormat;
     }
 
     return false;
@@ -513,6 +525,15 @@ void Channel::ResumeThreads()
 void Channel::EnqueueFrame          ( const AVFrameConstPtr & frame )
 {
     m_frameProcessingThread->EnqueueFrame( frame );
+}
+
+// ***********************
+//
+AVFramePtr              Channel::QueryInputFrame()
+{
+    if( IsInputChannel() )
+        return m_inputFramesThread->PopNextFrame();
+    return nullptr;
 }
 
 //**************************************
