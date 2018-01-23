@@ -3,8 +3,6 @@
 #include "Channel.h"
 
 #include "LibImage.h"
-#include "Mathematics/glm_inc.h"
-
 
 
 namespace bv {
@@ -68,6 +66,7 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
         memcpy( targetLine1Ptr, srcLine1Ptr, lineLength );
     }
 
+    // Lacking line is computed as averaged 2 neighboring lines.
     for( SizeType lineNum = 0; lineNum < numLines - 2; lineNum += 2 )
     {
         const char * srcLine1Ptr = outputChunk->Get() + lineNum * lineLength;
@@ -84,8 +83,11 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
         }
     }
 
-    // FIXME: copy last line.
+    // Copy last line.
+    const char * srcLine1Ptr = outputChunk->Get() + ( numLines - 2 ) * lineLength;
+    char * targetLine1Ptr = outputChunk->GetWritable() + ( numLines - 1 ) * lineLength;
 
+    memcpy( targetLine1Ptr, srcLine1Ptr, lineLength );
 }
 
 //**************************************

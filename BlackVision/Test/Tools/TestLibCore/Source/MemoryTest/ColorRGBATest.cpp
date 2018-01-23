@@ -89,7 +89,7 @@ TEST( LibCore_Memory, ColorRGBA_LoadFromMemory )
     memcpy( memory, &intColor, 4 );
 
     ColorRGBA actual = ColorRGBA::Load( memory );
-    ColorRGBA expected = ColorRGBA( intColor );
+    ColorRGBA expected = ColorRGBA( 0xDD, 0xCC, 0xBB, 0xAA );
 
     EXPECT_EQ( actual.GetColorInt(), expected.GetColorInt() );
 
