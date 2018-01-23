@@ -59,24 +59,28 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
     auto lineLength = desc.width * desc.depth;
     auto numLines = desc.height;
 
-    // Lacking line is computed as averaged 2 neighboring lines.
-    for( SizeType lineNum = 0; lineNum < numLines / 2 - 1; ++lineNum )
+
+    for( SizeType lineNum = 0; lineNum < numLines / 2; ++lineNum )
     {
         const char * srcLine1Ptr = inputChunk->Get() + lineNum * lineLength;
-        const char * srcLine2Ptr = inputChunk->Get() + ( lineNum + 1 ) * lineLength;
-
         char * targetLine1Ptr = outputChunk->GetWritable() + 2 * lineNum * lineLength;
-        char * targetMiddleLinePtr = outputChunk->GetWritable() + ( 2 * lineNum + 1 ) * lineLength;
-        char * targetLine2Ptr = outputChunk->GetWritable() + ( 2 * lineNum + 2 ) * lineLength;
+
+        memcpy( targetLine1Ptr, srcLine1Ptr, lineLength );
+    }
+
+    for( SizeType lineNum = 0; lineNum < numLines - 2; lineNum += 2 )
+    {
+        const char * srcLine1Ptr = outputChunk->Get() + lineNum * lineLength;
+        const char * srcLine2Ptr = outputChunk->Get() + ( lineNum + 2 ) * lineLength;
+
+        char * targetMiddleLinePtr = outputChunk->GetWritable() + ( lineNum + 1 ) * lineLength;
 
         for( SizeType i = 0; i < lineLength; ++i )
         {
             int srcByte1 = ( unsigned char )srcLine1Ptr[ i ];
             int srcByte2 = ( unsigned char )srcLine2Ptr[ i ];
 
-            targetLine1Ptr[ i ] = ( char )srcByte1;
-            targetLine2Ptr[ i ] = ( char )srcByte2;
-            targetMiddleLinePtr[ i ] = (char)( ( srcByte1 + srcByte2 ) / 2 );
+            targetMiddleLinePtr[ i ] = ( char )( ( srcByte1 + srcByte2 ) / 2 );
         }
     }
 

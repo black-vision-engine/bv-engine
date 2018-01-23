@@ -126,7 +126,7 @@
     <ClCompile Include="..\..\..\Source\ExceptionsTest\TestExceptions.cpp" />
     <ClCompile Include="..\..\..\Source\ExpectedTest\ExpectedTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
-    <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBA.cpp" />
+    <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBATest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.h" />

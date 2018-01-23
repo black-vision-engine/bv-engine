@@ -43,7 +43,7 @@
     <ClCompile Include="..\..\..\Source\Conversions\String2Enum.cpp">
       <Filter>Conversions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBA.cpp">
+    <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBATest.cpp">
       <Filter>MemoryTest</Filter>
     </ClCompile>
   </ItemGroup>

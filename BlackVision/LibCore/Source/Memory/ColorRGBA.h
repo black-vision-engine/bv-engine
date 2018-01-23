@@ -14,14 +14,15 @@ namespace bv
 /// Use it to hide low level bit operations and endiannes of platform.
 class ColorRGBA
 {
-    const UInt32    rShift = 24;
-    const UInt32    gShift = 16;
-    const UInt32    bShift = 8;
+    static const UInt32    rShift = 24;
+    static const UInt32    gShift = 16;
+    static const UInt32    bShift = 8;
 
-    const UInt32    rMask = 0xFF << rShift;
-    const UInt32    gMask = 0xFF << gShift;
-    const UInt32    bMask = 0xFF << bShift;
-    const UInt32    aMask = 0xFF;
+    static const UInt32    rMask = ( UInt32 )0xFF << rShift;
+    static const UInt32    gMask = ( UInt32 )0xFF << gShift;
+    static const UInt32    bMask = ( UInt32 )0xFF << bShift;
+    static const UInt32    aMask = ( UInt32 )0xFF;
+
 private:
 
     UInt32          m_color;
@@ -32,33 +33,33 @@ public:
     explicit        ColorRGBA   ( UInt32 r, UInt32 g, UInt32 b, UInt32 a );
     explicit        ColorRGBA   ( const glm::vec4 & color );
 
-    glm::vec4       GetColor    () const;
-    glm::ivec4      GetColorInt () const;
+    inline glm::vec4       GetColor    () const;
+    inline glm::ivec4      GetColorInt () const;
 
-    UInt32          R           () const;
-    UInt32          G           () const;
-    UInt32          B           () const;
-    UInt32          A           () const;
+    inline UInt32          R           () const;
+    inline UInt32          G           () const;
+    inline UInt32          B           () const;
+    inline UInt32          A           () const;
 
-    void            SetR        ( UInt32 r );
-    void            SetG        ( UInt32 r );
-    void            SetB        ( UInt32 r );
-    void            SetA        ( UInt32 r );
+    inline void            SetR        ( UInt32 r );
+    inline void            SetG        ( UInt32 r );
+    inline void            SetB        ( UInt32 r );
+    inline void            SetA        ( UInt32 r );
 
-    void            Save        ( char * memory ) const;
+    inline void            Save        ( char * memory ) const;
 
-    ColorRGBA       operator+   ( const ColorRGBA & color2 ) const;
-    ColorRGBA       operator/   ( float div ) const;
+    inline ColorRGBA       operator+   ( const ColorRGBA & color2 ) const;
+    inline ColorRGBA       operator/   ( float div ) const;
 
 public:
 
-    static ColorRGBA        Load    ( const char * mem );
+    inline static ColorRGBA        Load    ( const char * mem );
 
 private:
 
-    void            ClearWithMask   ( UInt32 mask );
-    UInt32          ClampColor      ( UInt32 color );
-    void            SetColor        ( UInt32 val, UInt32 mask, UInt32 shift );
+    inline void            ClearWithMask   ( UInt32 mask );
+    inline UInt32          ClampColor      ( UInt32 color );
+    inline void            SetColor        ( UInt32 val, UInt32 mask, UInt32 shift );
 };
 
 
@@ -99,17 +100,17 @@ inline      ColorRGBA::ColorRGBA    ( const glm::vec4 & color )
 //
 inline ColorRGBA        ColorRGBA::Load     ( const char * mem )
 {
-    return ColorRGBA( ( UInt8 )mem[ 3 ], ( UInt8 )mem[ 2 ], ( UInt8 )mem[ 1 ], ( UInt8 )mem[ 0 ] );
+    return ColorRGBA( ( UInt8 )mem[ 0 ], ( UInt8 )mem[ 1 ], ( UInt8 )mem[ 2 ], ( UInt8 )mem[ 3 ] );
 }
 
 // ***********************
 //
 inline void             ColorRGBA::Save     ( char * memory ) const
 {
-    memory[ 0 ] = ( UInt8 )A();
-    memory[ 1 ] = ( UInt8 )B();
-    memory[ 2 ] = ( UInt8 )G();
-    memory[ 3 ] = ( UInt8 )R();
+    memory[ 3 ] = ( UInt8 )A();
+    memory[ 2 ] = ( UInt8 )B();
+    memory[ 1 ] = ( UInt8 )G();
+    memory[ 0 ] = ( UInt8 )R();
 }
 
 // ***********************
