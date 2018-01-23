@@ -57,17 +57,17 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
     auto lineLength = desc.width * desc.depth;
     auto numLines = desc.height;
 
-
+    // Copy each second line. Flip image vertically.
     for( SizeType lineNum = 0; lineNum < numLines / 2; ++lineNum )
     {
         const char * srcLine1Ptr = inputChunk->Get() + lineNum * lineLength;
-        char * targetLine1Ptr = outputChunk->GetWritable() + 2 * lineNum * lineLength;
+        char * targetLine1Ptr = outputChunk->GetWritable() + ( numLines - 2 * lineNum - 1 ) * lineLength;
 
         memcpy( targetLine1Ptr, srcLine1Ptr, lineLength );
     }
 
     // Lacking line is computed as averaged 2 neighboring lines.
-    for( SizeType lineNum = 0; lineNum < numLines - 2; lineNum += 2 )
+    for( SizeType lineNum = 1; lineNum < numLines - 2; lineNum += 2 )
     {
         const char * srcLine1Ptr = outputChunk->Get() + lineNum * lineLength;
         const char * srcLine2Ptr = outputChunk->Get() + ( lineNum + 2 ) * lineLength;
@@ -83,9 +83,9 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
         }
     }
 
-    // Copy last line.
-    const char * srcLine1Ptr = outputChunk->Get() + ( numLines - 2 ) * lineLength;
-    char * targetLine1Ptr = outputChunk->GetWritable() + ( numLines - 1 ) * lineLength;
+    // Fill first line.
+    const char * srcLine1Ptr = outputChunk->Get() + lineLength;
+    char * targetLine1Ptr = outputChunk->GetWritable();
 
     memcpy( targetLine1Ptr, srcLine1Ptr, lineLength );
 }
