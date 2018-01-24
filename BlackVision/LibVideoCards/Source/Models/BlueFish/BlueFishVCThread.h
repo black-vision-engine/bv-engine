@@ -8,7 +8,7 @@
 #include "DataTypes/QueueConcurrentLimited.h"
 
 #include "Memory/AVFrame.h"
-#include "Channel.h"
+#include "Output/OutputChannel.h"
 
 #include <boost/circular_buffer.hpp>
 
@@ -32,12 +32,12 @@ class BlueFishVCThread : public StoppableThread
 
     UInt64                      m_frameDuration;
 
-	Channel *					m_videoChannel;
+    OutputChannel *             m_videoChannel;
 
 	AVFrameConstPtr				InterlaceFrame			( const AVFrameConstPtr & frame );
 
 public:
-	explicit					BlueFishVCThread		( Channel * vc, SizeType frameSize );
+	explicit					BlueFishVCThread		( OutputChannel * vc, SizeType frameSize );
 
     void                        SetFrameDuration        ( UInt64 frameDuration );
     void                        EnableInterlacing       ( bool enable );

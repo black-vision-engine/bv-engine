@@ -21,15 +21,15 @@ const SizeType      BUFFER_SIZE = 10;
 
 //**************************************
 //
-BlueFishVCThread::BlueFishVCThread							( Channel * vc, SizeType frameSize )
+BlueFishVCThread::BlueFishVCThread							( OutputChannel * vc, SizeType frameSize )
     : m_frameQueue( 1 )
-    , m_videoChannel( vc )
+    , m_videoChannel( static_cast< OutputChannel * >( vc ) )
     , m_odd( false )
     , m_outputFramesBuffer( BUFFER_SIZE )
     , m_frameDuration( 20 )     // 20 ms 50 Hz by default
     , m_interlaceEnabled( false )
 {
-    frameSize = frameSize / ( vc->m_playbackData->interlaced ? 2 : 1 ) + 2048; // FIXME: Why + 2048
+    frameSize = frameSize / ( m_videoChannel->PlaybackData->interlaced ? 2 : 1 ) + 2048; // FIXME: Why + 2048
 
 	for( SizeType i = 0; i < BUFFER_SIZE; ++i )
         m_outputFramesBuffer.push_back( MemoryChunk::Create( frameSize ) );
@@ -131,7 +131,7 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         m_prevAudioData = nullptr;
     }
 
-    m_odd = !m_odd;
+    //m_odd = !m_odd;
 
     return AVFrame::Create( outputFrame, audioData, newDesc );
 }

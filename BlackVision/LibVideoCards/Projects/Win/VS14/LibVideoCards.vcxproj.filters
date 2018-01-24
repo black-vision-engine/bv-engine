@@ -16,6 +16,12 @@
     <Filter Include="VideoInput">
       <UniqueIdentifier>{d839ba06-191f-445b-a46c-b5ba0aefbfa0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Models\BlueFish\Input">
+      <UniqueIdentifier>{a50f682f-695a-4f88-a4a3-3769753e9d88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models\BlueFish\Output">
+      <UniqueIdentifier>{3d703831-76ac-44b5-9808-f96d22f367f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoPlayback.h">
@@ -86,6 +92,12 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishInputThread.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\InputChannel.h">
+      <Filter>Models\BlueFish\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\Output\OutputChannel.h">
+      <Filter>Models\BlueFish\Output</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoPlayback.cpp">
@@ -142,6 +154,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishInputThread.cpp">
       <Filter>Models\BlueFish</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\Input\InputChannel.cpp">
+      <Filter>Models\BlueFish\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\Output\OutputChannel.cpp">
+      <Filter>Models\BlueFish\Output</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

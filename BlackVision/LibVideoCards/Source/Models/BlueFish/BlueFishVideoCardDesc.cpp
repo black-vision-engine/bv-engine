@@ -5,6 +5,9 @@
 
 #include "Mathematics/Core/mathfuncs.h"
 
+#include "Models/BlueFish/Input/InputChannel.h"
+#include "Models/BlueFish/Output/OutputChannel.h"
+
 #include "UseLoggerVideoModule.h"
 
 
@@ -39,12 +42,16 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          () const
 
             // Copy input and output data from descriptor.
             if( channelDesc.InputChannelData )
+            {
                 input = std::unique_ptr< ChannelInputData >( new ChannelInputData( *( channelDesc.InputChannelData.get() ) ) );
+                card->AddChannel( new InputChannel( channelDesc.Name, input ) );
+            }
 
             if( channelDesc.OutputChannelData )
+            {
                 output = std::unique_ptr< ChannelOutputData >( new ChannelOutputData( *( channelDesc.OutputChannelData.get() ) ) );
-
-            card->AddChannel( new Channel( channelDesc.Name, input, output ) );
+                card->AddChannel( new OutputChannel( channelDesc.Name, output ) );
+            }
         }
 
         card->InitVideoCard();

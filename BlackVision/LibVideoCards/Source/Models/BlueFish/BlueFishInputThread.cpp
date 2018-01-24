@@ -1,6 +1,6 @@
 #include "BlueFishInputThread.h"
 
-#include "Channel.h"
+#include "Input/InputChannel.h"
 
 #include "LibImage.h"
 
@@ -13,7 +13,7 @@ namespace bluefish
 
 // ***********************
 //
-BlueFishInputThread::BlueFishInputThread( Channel * vc )
+BlueFishInputThread::BlueFishInputThread( InputChannel * vc )
     : m_processedFrameQueue( 1 )
     , m_inputChannel( vc )
 {}

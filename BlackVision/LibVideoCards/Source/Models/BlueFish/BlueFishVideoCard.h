@@ -3,7 +3,10 @@
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "Memory/AVFrame.h"
+
 #include "Channel.h"
+#include "Output/OutputChannel.h"
+#include "Input/InputChannel.h"
 
 #include "BlueFishVideoCardDesc.h"
 

@@ -21,7 +21,7 @@ namespace bluefish
 {
 
 
-class Channel;
+class InputChannel;
 class VideoCard;
 
 
@@ -35,12 +35,12 @@ class BlueFishInputThread : public StoppableThread
 private:
 
     FrameQueue					m_processedFrameQueue;
-    Channel *					m_inputChannel;
+    InputChannel *              m_inputChannel;
 
 
 public:
 
-    explicit					BlueFishInputThread		( Channel * vc );
+    explicit					BlueFishInputThread		( InputChannel * vc );
 
     virtual void				Process					() override;
 

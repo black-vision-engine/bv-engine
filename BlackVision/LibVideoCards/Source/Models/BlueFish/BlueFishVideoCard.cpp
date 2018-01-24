@@ -46,9 +46,8 @@ std::set< UInt64 >	    VideoCard::GetDisplayedVideoOutputsIDs  () const
     for( auto ch : m_channels )
     {
         if( ch->IsOutputChannel() )
-            ret.insert( ch->GetOutputId() );
+            ret.insert( static_cast< OutputChannel * >( ch )->GetOutputId() );
     }
-        
 
     return ret;
 }
@@ -63,7 +62,9 @@ InputChannelsDescsVec   VideoCard::GetInputChannelsDescs        () const
     {
         if( channel->IsInputChannel() )
         {
-            VideoInputID inputID = channel->GetInputId();
+            auto typedChannel = static_cast< InputChannel * >( channel );
+
+            VideoInputID inputID = typedChannel->GetInputId();
             const std::string channelName = Convert::T2String( channel->GetName() );
             
             AVFrameDescriptor frameDesc = channel->CreateFrameDesc();
@@ -99,10 +100,12 @@ void            VideoCard::InitVideoCard            ()
 
     SetVideoOutput( false );
 
-	for( auto & channel : m_channels )
+	for( auto & chan : m_channels )
 	{
-        if( channel->IsInputChannel() )
+        if( chan->IsInputChannel() )
 		{
+            auto channel = static_cast< InputChannel * >( chan );
+
             auto captureChannel = channel->GetCaptureChannel();
 
             if( channel->GetInputType() != IOType::FILL_KEY )
@@ -119,8 +122,10 @@ void            VideoCard::InitVideoCard            ()
 		}
 
         
-        if( channel->IsOutputChannel() )
+        if( chan->IsOutputChannel() )
 		{
+            auto channel = static_cast< OutputChannel * >( chan );
+
             auto playbackChannel = channel->GetPlaybackChannel();
 
             playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(), 
@@ -157,7 +162,10 @@ void            VideoCard::SetVideoOutput        ( bool enable )
 {
     for( auto channel : m_channels )
     {
-        channel->SetVideoOutput( enable );
+        if( channel->IsOutputChannel() )
+        {
+            static_cast< OutputChannel * >( channel )->SetVideoOutput( enable );
+        }
     }
 }
 
@@ -224,11 +232,16 @@ void                            VideoCard::Stop                         ()
 //
 void                            VideoCard::ProcessFrame             ( const AVFrameConstPtr & frame, UInt64 outputId )
 {
-    for( auto channel : m_channels )
+    for( auto chn : m_channels )
     {
-        if( channel->GetOutputId() == outputId )
+        if( chn->IsOutputChannel() )
         {
-            channel->EnqueueFrame( frame );
+            auto channel = static_cast< OutputChannel * >( chn );
+
+            if( channel->GetOutputId() == outputId )
+            {
+                channel->EnqueueFrame( frame );
+            }
         }
 	}   
 }
@@ -237,11 +250,16 @@ void                            VideoCard::ProcessFrame             ( const AVFr
 //
 AVFramePtr                      VideoCard::QueryInputFrame          ( VideoInputID inputID )
 {
-    for( auto channel : m_channels )
+    for( auto chn : m_channels )
     {
-        if( channel->GetInputId() == inputID )
+        if( chn->IsInputChannel() )
         {
-            return channel->QueryInputFrame();
+            auto channel = static_cast< InputChannel *> ( chn );
+
+            if( channel->GetInputId() == inputID )
+            {
+                return channel->QueryInputFrame();
+            }
         }
     }
 
@@ -269,10 +287,15 @@ UInt32                          VideoCard::GetRequiredFPS  () const
 {
     UInt32 fps = 5000;
 
-    for( auto & ch : m_channels )
+    for( auto & chn : m_channels )
     {
-        if( ch->m_playbackData )
-            fps = mathematics::lcm( ch->m_playbackData->refresh, fps );
+        if( chn->IsOutputChannel() )
+        {
+            auto channel = static_cast< OutputChannel * >( chn );
+
+            if( channel->PlaybackData )
+                fps = mathematics::lcm( channel->PlaybackData->refresh, fps );
+        }
     }
  
     return fps / 100;
