@@ -5,23 +5,36 @@
 
 #include "FifoBuffer.h"
 
+#include "Expected.h"
 
-namespace bv { namespace videocards { namespace bluefish {
 
+
+
+namespace bv {
+namespace videocards {
+namespace bluefish
+{
+
+
+// ***********************
+//
 class CFifoCapture
 {
 public:
 	CFifoCapture();
 	~CFifoCapture();
 
-	BLUE_INT32						Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer);
-	BLUE_INT32                      InitDualLink(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer);
-	void							RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType);
-	unsigned int static __stdcall	CaptureThread(void * pArg);
-	BLUE_INT32						InitThread();
-	void							StartThread();
-	void							SuspendThread();
-	void							StopThread();
+    Expected< bool >                Init            ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer );
+    Expected< bool >                InitDualLink    ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer );
+
+    void							RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType);
+	
+    unsigned int static __stdcall	CaptureThread(void * pArg);
+
+    Expected< bool >                InitThread      ();
+	void							StartThread     ();
+	void							SuspendThread   ();
+	void							StopThread      ();
 
 public:
 

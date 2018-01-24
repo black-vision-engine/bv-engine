@@ -2,6 +2,8 @@
 
 #include <process.h>
 
+#include "Serialization/ConversionHelper.h"
+
 
 namespace bv { namespace videocards { namespace bluefish {
 
@@ -40,7 +42,10 @@ CFifoCapture::~CFifoCapture()
 	m_pSDK = NULL;
 
 }
-BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer)
+
+// ***********************
+//
+Expected< bool >        CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer )
 {
 	ULONG FieldCount = 0;
 	VARIANT varVal;
@@ -53,8 +58,7 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 
 	if(CardNumber <= 0 || CardNumber > m_iDevices)
 	{
-		//cout << "Card " << CardNumber << " not available; maximum card number is: " << m_iDevices << endl;
-		return -1;
+		return Expected< bool >::fromError( "Card " + Convert::T2String( CardNumber ) + " not available; maximum card number is: " + Convert::T2String( m_iDevices ) );
 	}
 
 	m_pSDK->device_attach(CardNumber, 0);
@@ -69,10 +73,10 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 	unsigned int nInputStreams = CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
 	if(!nInputStreams)
 	{
-		//cout << "Card does not support input channels" << endl;
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
-		return -1;
+
+        return Expected< bool >::fromError( "Card does not support input channels" );
 	}
 
 	varVal.vt = VT_UI4;
@@ -87,10 +91,10 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 	m_pSDK->QueryCardProperty(VIDEO_INPUT_SIGNAL_VIDEO_MODE, varVal);
 	if(varVal.ulVal >= m_InvalidVideoModeFlag)
 	{
-		//cout << "No valid input signal" << endl;
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
-		return -1;
+
+        return Expected< bool >::fromError( "No valid input signal" );
 	}
 	m_nVideoMode = varVal.ulVal;
 	//cout << "Video Input mode: " << gVideoModeInfo[m_nVideoMode].strVideoModeFriendlyName.c_str() << endl;
@@ -117,12 +121,15 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 	::ZeroMemory(&m_Overlap, sizeof(m_Overlap));
 	m_Overlap.hEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
 
-	return 0;
+	return true;
 }
 
-BLUE_INT32 CFifoCapture::InitDualLink(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer)
+// ***********************
+//
+Expected< bool >        CFifoCapture::InitDualLink  ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer )
 {
-    if( !Init( CardNumber, VideoChannel, UpdateFormat, MemoryFormat, pFifoBuffer ) )
+    auto result = Init( CardNumber, VideoChannel, UpdateFormat, MemoryFormat, pFifoBuffer );
+    if( result.IsValid() )
     {
 	    VARIANT varVal;
 
@@ -135,12 +142,16 @@ BLUE_INT32 CFifoCapture::InitDualLink(BLUE_INT32 CardNumber, BLUE_UINT32 VideoCh
 	    //vr.ulVal = Signal_FormatType_444_10BitSDI;
 	    //vr.ulVal = Signal_FormatType_444_12BitSDI;
 	    m_pSDK->SetCardProperty(VIDEO_DUAL_LINK_INPUT_SIGNAL_FORMAT_TYPE, varVal);
+
+        return true;
     }
 
-	return 0;
+	return result;
 }
 
-void CFifoCapture::RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType)
+// ***********************
+//
+void                    CFifoCapture::RouteChannel      ( ULONG Source, ULONG Destination, ULONG LinkType )
 {
 	VARIANT varVal;
 	varVal.vt = VT_UI4;
@@ -149,14 +160,16 @@ void CFifoCapture::RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType)
 	m_pSDK->SetCardProperty(MR2_ROUTING, varVal);
 }
 
-BLUE_INT32 CFifoCapture::InitThread()
+// ***********************
+//
+Expected< bool >        CFifoCapture::InitThread        ()
 {
 	unsigned int ThreadId = 0;
 
 	if(m_hThread)
 	{
 		//cout << "Capture Thread already started" << endl;
-		return 0;
+		return true;
 	}
 
 	//cout << "Starting Capture Thread..." << endl;
@@ -164,26 +177,32 @@ BLUE_INT32 CFifoCapture::InitThread()
 	if(!m_hThread)
 	{
 		//cout << "Error starting Capture Thread" << endl;
-		return -1;
+		return false;
 	}
 
 	m_nThreadStopping = FALSE;
 	SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
 	//cout << "...done." << endl;
-	return 0;
+	return false;
 }
 
-void CFifoCapture::StartThread()
+// ***********************
+//
+void                    CFifoCapture::StartThread()
 {
 	ResumeThread(m_hThread);
 }
 
-void CFifoCapture::SuspendThread()
+// ***********************
+//
+void                    CFifoCapture::SuspendThread()
 {
 	::SuspendThread(m_hThread);
 }
 
-void CFifoCapture::StopThread()
+// ***********************
+//
+void                    CFifoCapture::StopThread()
 {
 	DWORD dw = 0;
 
@@ -202,6 +221,8 @@ void CFifoCapture::StopThread()
 	return;
 }
 
+// ***********************
+//
 unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 {
 	CFifoCapture* pThis = (CFifoCapture*)pArg;

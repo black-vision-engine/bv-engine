@@ -146,7 +146,10 @@ bool ExpectedBase< HamType, ErrorType >::IsValid()
 template< typename HamType, typename ErrorType >
 std::string             ExpectedBase< HamType, ErrorType >::GetErrorReason  () 
 { 
-    return spam->GetReason(); 
+    if( spam )
+        return spam->GetReason();
+    else
+        return std::string();
 }
 
 template< typename HamType, typename ErrorType >
