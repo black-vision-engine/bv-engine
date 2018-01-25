@@ -2,18 +2,17 @@
 
 #include "win_sock.h"
 #include "BlueFish/inc/BlueVelvet4.h"
-
-#include "FifoBuffer.h"
-#include "FifoCapture.h"
-#include "FifoPlayback.h"
+#include "Models/BlueFish/BlueFishUtils.h"
 
 #include "VideoInput/VideoInputChannelDesc.h"
-
-#include "BlueFishInputThread.h"
+#include "Models/BlueFish/FifoBuffer.h"
 
 #include "CoreDEF.h"
 
 #include <atomic>
+
+
+
 
 namespace bv { namespace videocards { namespace bluefish {
 

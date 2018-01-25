@@ -1,7 +1,7 @@
 #include "OutputChannel.h"
 
 
-#include "Models/BlueFish/BlueFishVCThread.h"
+#include "BlueFishVCThread.h"
 
 
 

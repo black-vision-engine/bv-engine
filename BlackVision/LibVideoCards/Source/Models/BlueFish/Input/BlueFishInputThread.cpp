@@ -1,6 +1,6 @@
 #include "BlueFishInputThread.h"
 
-#include "Input/InputChannel.h"
+#include "InputChannel.h"
 
 #include "LibImage.h"
 

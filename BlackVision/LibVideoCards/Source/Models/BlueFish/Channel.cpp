@@ -2,7 +2,6 @@
 
 #include "System/Time.h"
 
-#include "BlueFishVCThread.h"
 
 #include <process.h>
 

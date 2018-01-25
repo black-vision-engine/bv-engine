@@ -3,7 +3,9 @@
 #include "Models/BlueFish/Channel.h"
 
 #include "Models/BlueFish/FifoBuffer.h"
-#include "Models/BlueFish/FifoCapture.h"
+#include "FifoCapture.h"
+
+#include "BlueFishInputThread.h"
 
 
 

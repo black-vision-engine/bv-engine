@@ -1,5 +1,6 @@
 #include "BlueFishVCThread.h"
-#include "BlueFishVideoCard.h"
+
+#include "Models/BlueFish/BlueFishVideoCard.h"
 #include "UseLoggerVideoModule.h"
 
 #include "System/Time.h"
