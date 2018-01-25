@@ -107,7 +107,7 @@ void            VideoCard::InitVideoCard            ()
             auto channel = static_cast< InputChannel * >( ( *channelIter ) );
             auto captureChannel = channel->GetCaptureChannel();
 
-            Expected< bool > result;
+            ReturnResult result;
 
             if( channel->GetInputType() != IOType::FILL_KEY )
             {

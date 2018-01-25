@@ -45,7 +45,7 @@ CFifoCapture::~CFifoCapture()
 
 // ***********************
 //
-Expected< bool >        CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer )
+ReturnResult            CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer )
 {
 	ULONG FieldCount = 0;
 	VARIANT varVal;
@@ -58,7 +58,7 @@ Expected< bool >        CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 
 	if(CardNumber <= 0 || CardNumber > m_iDevices)
 	{
-		return Expected< bool >::fromError( "Card " + Convert::T2String( CardNumber ) + " not available; maximum card number is: " + Convert::T2String( m_iDevices ) );
+		return ReturnResult::fromError( "Card " + Convert::T2String( CardNumber ) + " not available; maximum card number is: " + Convert::T2String( m_iDevices ) );
 	}
 
 	m_pSDK->device_attach(CardNumber, 0);
@@ -76,7 +76,7 @@ Expected< bool >        CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
 
-        return Expected< bool >::fromError( "Card does not support input channels" );
+        return "Card does not support input channels";
 	}
 
 	varVal.vt = VT_UI4;
@@ -94,7 +94,7 @@ Expected< bool >        CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
 
-        return Expected< bool >::fromError( "No valid input signal" );
+        return "No valid input signal";
 	}
 	m_nVideoMode = varVal.ulVal;
 	//cout << "Video Input mode: " << gVideoModeInfo[m_nVideoMode].strVideoModeFriendlyName.c_str() << endl;
@@ -121,12 +121,12 @@ Expected< bool >        CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 	::ZeroMemory(&m_Overlap, sizeof(m_Overlap));
 	m_Overlap.hEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
 
-	return true;
+	return Result::Success();
 }
 
 // ***********************
 //
-Expected< bool >        CFifoCapture::InitDualLink  ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer )
+ReturnResult            CFifoCapture::InitDualLink  ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer )
 {
     auto result = Init( CardNumber, VideoChannel, UpdateFormat, MemoryFormat, pFifoBuffer );
     if( result.IsValid() )
@@ -143,7 +143,7 @@ Expected< bool >        CFifoCapture::InitDualLink  ( BLUE_INT32 CardNumber, BLU
 	    //vr.ulVal = Signal_FormatType_444_12BitSDI;
 	    m_pSDK->SetCardProperty(VIDEO_DUAL_LINK_INPUT_SIGNAL_FORMAT_TYPE, varVal);
 
-        return true;
+        return Result::Success();
     }
 
 	return result;
@@ -162,14 +162,14 @@ void                    CFifoCapture::RouteChannel      ( ULONG Source, ULONG De
 
 // ***********************
 //
-Expected< bool >        CFifoCapture::InitThread        ()
+ReturnResult            CFifoCapture::InitThread        ()
 {
 	unsigned int ThreadId = 0;
 
 	if(m_hThread)
 	{
 		//cout << "Capture Thread already started" << endl;
-		return true;
+		return Result::Success();
 	}
 
 	//cout << "Starting Capture Thread..." << endl;
@@ -177,13 +177,13 @@ Expected< bool >        CFifoCapture::InitThread        ()
 	if(!m_hThread)
 	{
 		//cout << "Error starting Capture Thread" << endl;
-		return false;
+        return Result::Failure();
 	}
 
 	m_nThreadStopping = FALSE;
 	SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
 	//cout << "...done." << endl;
-	return false;
+    return Result::Failure();
 }
 
 // ***********************

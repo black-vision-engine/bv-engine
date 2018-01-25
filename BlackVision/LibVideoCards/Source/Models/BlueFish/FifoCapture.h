@@ -24,14 +24,14 @@ public:
 	CFifoCapture();
 	~CFifoCapture();
 
-    Expected< bool >                Init            ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer );
-    Expected< bool >                InitDualLink    ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer );
+    ReturnResult                    Init            ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer );
+    ReturnResult                    InitDualLink    ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer );
 
     void							RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType);
 	
     unsigned int static __stdcall	CaptureThread(void * pArg);
 
-    Expected< bool >                InitThread      ();
+    ReturnResult                    InitThread      ();
 	void							StartThread     ();
 	void							SuspendThread   ();
 	void							StopThread      ();
