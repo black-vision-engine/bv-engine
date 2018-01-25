@@ -5,6 +5,8 @@
 #include "BVTimeCode.h"
 
 
+#include "Serialization/ConversionHelper.h"
+
 #include "UseLoggerVideoModule.h"
 
 
@@ -56,7 +58,9 @@ CFifoPlayback::~CFifoPlayback()
 
 }
 
-BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped, bool EnableAudioEmbedding, bool EnableVbiVanc, BLUE_UINT32 sdiOutput)
+// ***********************
+//
+ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped, bool EnableAudioEmbedding, bool EnableVbiVanc, BLUE_UINT32 sdiOutput )
 {
     VARIANT varVal;
     //BLUE_INT32 card_type = CRD_INVALID;
@@ -69,8 +73,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
 
     if(CardNumber <= 0 || CardNumber > m_iDevices)
     {
-        //cout << "Card " << CardNumber << " not available; maximum card number is: " << m_iDevices << endl;
-        return -1;
+        return ReturnResult::fromError( "Card " + Convert::T2String( CardNumber ) + " not available; maximum card number is: " + Convert::T2String( m_iDevices ) );
     }
 
     m_pSDK->device_attach(CardNumber, 0);
@@ -90,10 +93,10 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
     unsigned int nOutputStreams = CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
     if(!nOutputStreams)
     {
-        //cout << "Card does not support output channels" << endl;
         m_pSDK->device_detach();
         m_nIsAttached = 0;
-        return -1;
+
+        return "Card does not support output channels";
     }
 
     varVal.vt = VT_UI4;
@@ -106,10 +109,9 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
     
     if(VideoMode >= m_InvalidVideoModeFlag)
     {
-        //cout << "Not a valid video mode" << endl;
         m_pSDK->device_detach();
         m_nIsAttached = 0;
-        return -1;
+        return "No valid video mode";
     }
 
     varVal.ulVal = VideoMode;
@@ -120,7 +122,7 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
         //cout << "Can't set video mode: " << gVideoModeInfo[m_nVideoMode].strVideoModeFriendlyName.c_str() << endl;
         m_pSDK->device_detach();
         m_nIsAttached = 0;
-        return -1;
+        return "Can't set video mode."; // +gVideoModeInfo[ m_nVideoMode ].strVideoModeFriendlyName.c_str()
     }
     m_nVideoMode = varVal.ulVal;
 
@@ -182,10 +184,12 @@ BLUE_INT32 CFifoPlayback::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, 
     m_pFifoBuffer = pFifoBuffer;
     m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
 
-    return 0;
+    return Result::Success();
 }
 
-void CFifoPlayback::RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType)
+// ***********************
+//
+void                CFifoPlayback::RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType)
 {
     VARIANT varVal;
     varVal.vt = VT_UI4;
@@ -194,14 +198,16 @@ void CFifoPlayback::RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType
     m_pSDK->SetCardProperty(MR2_ROUTING, varVal);
 }
 
-BLUE_INT32 CFifoPlayback::InitThread()
+// ***********************
+//
+ReturnResult        CFifoPlayback::InitThread()
 { 
     unsigned int ThreadId = 0;
 
     if(m_hThread)
     {
         //cout << "Playback Thread already started" << endl;
-        return 0;
+        return Result::Success();
     }
     
     //cout << "Starting Playback Thread..." << endl;
@@ -209,14 +215,13 @@ BLUE_INT32 CFifoPlayback::InitThread()
 
     if(!m_hThread)
     {
-        //cout << "Error starting Playback Thread" << endl;
-        return -1;
+        return "Error starting Playback Thread.";
     }
 
     m_nThreadStopping = FALSE;
     SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
     //cout << "...done." << endl;
-    return 0;
+    return Result::Success();
 }
 
 //BLUE_INT32 CFifoPlayback::InitNotSyncedThread()

@@ -183,7 +183,7 @@ ReturnResult            CFifoCapture::InitThread        ()
 	m_nThreadStopping = FALSE;
 	SetThreadPriority(m_hThread, THREAD_PRIORITY_TIME_CRITICAL);
 	//cout << "...done." << endl;
-    return Result::Failure();
+    return Result::Success();
 }
 
 // ***********************
