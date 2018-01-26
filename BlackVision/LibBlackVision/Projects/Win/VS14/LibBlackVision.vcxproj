@@ -159,6 +159,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.cpp" />
@@ -668,6 +672,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h" />

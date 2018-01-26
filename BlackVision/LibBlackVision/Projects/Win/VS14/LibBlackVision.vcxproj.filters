@@ -238,12 +238,6 @@
     <Filter Include="Engine\Events\InnerEvents">
       <UniqueIdentifier>{9f842784-55d8-48e5-8140-4e4c9ab6634a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Database">
-      <UniqueIdentifier>{b2bce708-e64f-45e0-ba74-d2b2777101b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\SQLite">
-      <UniqueIdentifier>{d87dbeec-cd9e-4bf4-b6e9-da260d8a2bfe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Font\3D">
       <UniqueIdentifier>{97c423d3-c5b4-4520-a80f-c1dfd677d4ed}</UniqueIdentifier>
     </Filter>
@@ -483,6 +477,15 @@
     </Filter>
     <Filter Include="Assets\Input\Loaders">
       <UniqueIdentifier>{aa6938b2-7979-43c6-8fac-20796f9b985d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Database">
+      <UniqueIdentifier>{b2bce708-e64f-45e0-ba74-d2b2777101b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Database\SQLite">
+      <UniqueIdentifier>{d87dbeec-cd9e-4bf4-b6e9-da260d8a2bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\InputSlots">
+      <UniqueIdentifier>{fdb238b3-d701-47f5-ab25-5da0d11a6cb5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1511,10 +1514,10 @@
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Database\DatabaseEntry.cpp">
-      <Filter>Database</Filter>
+      <Filter>Assets\Database</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp">
-      <Filter>Database\SQLite</Filter>
+      <Filter>Assets\Database\SQLite</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.cpp">
       <Filter>Assets\Font</Filter>
@@ -2151,6 +2154,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAsset.cpp">
       <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4770,13 +4785,13 @@
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
-      <Filter>Database</Filter>
+      <Filter>Assets\Database</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
-      <Filter>Database</Filter>
+      <Filter>Assets\Database</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
-      <Filter>Database\SQLite</Filter>
+      <Filter>Assets\Database\SQLite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h">
       <Filter>Assets\Font</Filter>
@@ -5509,6 +5524,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\IAudioInputAsset.h">
       <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
