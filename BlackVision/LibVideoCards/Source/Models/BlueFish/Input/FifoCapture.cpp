@@ -177,7 +177,7 @@ ReturnResult            CFifoCapture::InitThread        ()
 	if(!m_hThread)
 	{
 		//cout << "Error starting Capture Thread" << endl;
-        return Result::Failure();
+        return "Error starting Capture Thread.";
 	}
 
 	m_nThreadStopping = FALSE;
@@ -208,10 +208,16 @@ void                    CFifoCapture::StopThread()
 
 	if(m_hThread)
 	{
-		//cout << "Stopping Capture Thread..." << endl;
-		m_nThreadStopping = TRUE;
+        //cout << "Stopping Capture Thread..." << endl;
+
+        m_nThreadStopping = TRUE;
+
+        std::shared_ptr< CFrame > frame;
+        m_pFifoBuffer->TryPopFrame( frame );
+
 		dw = WaitForSingleObject(m_hThread, INFINITE);
 		CloseHandle(m_hThread);
+        m_hThread = NULL;
 	}
 	else
 	{

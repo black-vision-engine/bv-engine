@@ -37,7 +37,8 @@ extern HighResolutionTimer GTimer;
 //
 BVAppLogic::~BVAppLogic             ()
 {
-    delete m_renderLogic;
+    if( m_renderLogic )
+        delete m_renderLogic;
     
     delete m_remoteHandlers;
     delete m_kbdHandler;
@@ -251,6 +252,9 @@ void            BVAppLogic::Deinitialize    ()
         delete m_videoCardManager;
         m_videoCardManager = nullptr;
     }
+
+    delete m_renderLogic;
+    m_renderLogic = nullptr;
 }
 
 // *********************************

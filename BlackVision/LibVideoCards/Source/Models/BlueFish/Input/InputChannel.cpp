@@ -33,8 +33,6 @@ InputChannel::InputChannel( ChannelName name, ChannelInputDataUPtr & input )
 InputChannel::~InputChannel()
 {
     m_captureChannel->StopThread();
-    delete m_captureChannel;
-    m_captureChannel = nullptr;
 
     m_inputFramesThread->Kill();
     m_inputFramesThread->EnqueueEndMessage();
@@ -42,6 +40,10 @@ InputChannel::~InputChannel()
 
     delete m_inputFramesThread;
     m_inputFramesThread = nullptr;
+
+    // Note: m_inputFramesThread uses m_captureChannel
+    delete m_captureChannel;
+    m_captureChannel = nullptr;
 }
 
 // ***********************

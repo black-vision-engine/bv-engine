@@ -95,6 +95,7 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
 void				BlueFishInputThread::EnqueueEndMessage		()
 {
     m_processedFrameQueue.EnqueueEndMessage();
+    m_processedFrameQueue.Clear();
 }
 
 // ***********************
