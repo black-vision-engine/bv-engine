@@ -7,7 +7,7 @@
 
 #include "Utils/Comparators/Assets/TextureInputAssetComparator.h"
 
-#include "Assets/Input/VideoInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 
 
 using namespace bv;
@@ -17,15 +17,28 @@ using namespace bv;
 // Serialize and deserialize VideoInputAssetDesc.
 TEST( Serialization_Assets, VideoInput_SerDeser )
 {
-    InputSlotBinding binding( "slot blabla" );
-
-    auto expectedAssetDesc = VideoInputAssetDesc::Create( 2 );
+    auto expectedAssetDesc = VideoInputTextureAssetDesc::Create( 2, VideoInputTextureAssetDesc::VideoType::Key );
     Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserVideoInput.xml" );
-    auto actualAssetDesc = Deserialize< const VideoInputAssetDesc >( "Out/SerDeserVideoInput.xml", "asset" );
+    auto actualAssetDesc = DeserializeAsset< const VideoInputTextureAssetDesc >( "Out/SerDeserVideoInput.xml", "asset" );
 
     EXPECT_EQ( actualAssetDesc->GetVideoInputID(), expectedAssetDesc->GetVideoInputID() );
     EXPECT_EQ( actualAssetDesc->GetVideoInputID(), 2 );
+    EXPECT_EQ( actualAssetDesc->GetVideoType(), VideoInputTextureAssetDesc::VideoType::Key );
 }
 
+// ***********************
+// Lack of VideoInputID attribute results in nullptr descriptor.
+TEST( Serialization_Assets, VideoInput_NoVideoInputID )
+{
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/VideoInputSlot/NoVideoInputID.xml", "asset" );
+    ASSERT_EQ( actual, nullptr );
+}
 
+// ***********************
+// Lack of VideoType attribute results in nullptr descriptor.
+TEST( Serialization_Assets, VideoInput_NoVideoType )
+{
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/VideoInputSlot/NoVideoType.xml", "asset" );
+    ASSERT_EQ( actual, nullptr );
+}
 

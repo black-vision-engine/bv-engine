@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TextureInputAssetDesc.h"
+#include "Assets/Input/TextureInputAssetDesc.h"
 
 #include "VideoInput/VideoInputChannelDesc.h"
 
@@ -15,8 +15,7 @@ DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
 
 
 // ***********************
-/// Descriptor allows to load VideoInputAsset but it can be used as simple input slot texture as well.
-/// That's why it inherits from TextureInputAssetDesc, but doesn't use it's members.
+// 
 class VideoInputAssetDesc : public TextureInputAssetDesc
 {
 private:

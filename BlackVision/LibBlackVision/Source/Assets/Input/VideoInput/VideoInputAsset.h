@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "TextureInputAsset.h"
+#include "Assets/Input/TextureInputAsset.h"
 #include "VideoInputAssetDesc.h"
 
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization

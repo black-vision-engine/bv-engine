@@ -487,6 +487,9 @@
     <Filter Include="Engine\Events\InnerEvents\InputSlots">
       <UniqueIdentifier>{fdb238b3-d701-47f5-ab25-5da0d11a6cb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Input\VideoInput">
+      <UniqueIdentifier>{dba6073a-1198-4210-a1b8-3757f204f5f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2149,12 +2152,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\TexturePluginBase.cpp">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.cpp">
-      <Filter>Assets\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAsset.cpp">
-      <Filter>Assets\Input</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
     </ClCompile>
@@ -2166,6 +2163,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.cpp">
       <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4784,15 +4790,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
-      <Filter>Assets\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
-      <Filter>Assets\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
-      <Filter>Assets\Database\SQLite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
@@ -5498,12 +5495,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h">
-      <Filter>Assets\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h">
-      <Filter>Assets\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
@@ -5539,6 +5530,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.h">
       <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
+      <Filter>Assets\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
+      <Filter>Assets\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
+      <Filter>Assets\Database\SQLite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

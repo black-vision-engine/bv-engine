@@ -21,7 +21,7 @@
 
 #include "Assets/Input/Loaders/InputAssetLoader.h"
 #include "Assets/Input/TextureInputAssetDesc.h"
-#include "Assets/Input/VideoInputAssetDesc.h"
+#include "Assets/Input/Videoinput/VideoInputAssetDesc.h"
 
 
 //FIXME: remove

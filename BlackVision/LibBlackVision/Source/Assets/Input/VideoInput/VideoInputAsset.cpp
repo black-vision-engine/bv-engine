@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "TextureInputAsset.h"
+#include "Assets/Input/TextureInputAsset.h"
 
 #include "Application/ApplicationContext.h"
 #include "VideoInputAsset.h"

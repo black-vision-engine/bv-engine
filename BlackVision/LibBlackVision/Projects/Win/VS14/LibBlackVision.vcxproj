@@ -130,8 +130,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAsset.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp" />
@@ -642,8 +643,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h" />

@@ -4,8 +4,8 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
-#include "Assets/Input/VideoInputAsset.h"
-#include "Assets/Input/VideoInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAsset.h"
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 
 #include "UseLoggerLibBlackVision.h"
 

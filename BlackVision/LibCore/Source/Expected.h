@@ -7,7 +7,7 @@ namespace bv
 {
 
 // ***********************
-/// Enum used with Expected when we want only get success or failure from function without return value.
+/// Class used with Expected when we want only get success or failure from function without return value.
 class Result
 {
 public:
