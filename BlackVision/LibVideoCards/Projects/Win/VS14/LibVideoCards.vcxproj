@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\..\Source\VideoCardDescFactory.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManagerUtils.cpp" />
     <ClCompile Include="..\..\..\Source\VideoCardManager.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS14\LibBVGL.vcxproj">

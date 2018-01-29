@@ -1,8 +1,10 @@
 #pragma once
 
 
-#include "Assets/Input/TextureInputAsset.h"
+#include "Assets/Asset.h"
 #include "VideoInputAssetDesc.h"
+
+#include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
 
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
@@ -20,36 +22,39 @@ DEFINE_PTR_TYPE( VideoInputAsset )
 
 
 
-/**@brief Gets data from input slot.
+/**@brief Collection of all assets associated with single video input.
 @ingroup Assets
 @ingroup InputSlots*/
-class VideoInputAsset : public TextureInputAsset
+class VideoInputAsset : public Asset, public std::enable_shared_from_this< VideoInputAsset >
 {
-    friend VideoInputAssetConstPtr VideoInputSlots::CreateAsset( VideoInputSlotsPtr, VideoInputAssetDescConstPtr );
 private:
 
     static const std::string		uid;
 
 protected:
 
-    VideoInputSlotsPtr          m_slots;
+    VideoInputTextureAssetConstPtr      m_fill;
+    VideoInputTextureAssetConstPtr      m_key;
 
-    videocards::VideoInputID    m_videoInputIdx;
+    // FIXME: Add audio later.
 
 protected:
 
-    explicit            VideoInputAsset     ( VideoInputSlotsPtr slots, videocards::VideoInputID videoInputIdx );
-
-    virtual void        EvaluateSlot        ();
+    explicit            VideoInputAsset             ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key );
 
 public:
 
-    static VideoInputAssetPtr       Create   ( VideoInputSlotsPtr slots, videocards::VideoInputID videoInputIdx );
+    static VideoInputAssetPtr       Create          ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key );
 
+
+    VideoInputTextureAssetConstPtr  GetFillAsset    () const { return m_fill; }
+    VideoInputTextureAssetConstPtr  GetKeyAsset     () const { return m_key; }
+
+
+    virtual VoidConstPtr            QueryThis       () const override;
     virtual const std::string &	    GetUID			() const override;
 
     static const std::string &	    UID				();
-
 };
 
 

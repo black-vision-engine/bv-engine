@@ -21,16 +21,6 @@ DEFINE_CONST_PTR_TYPE( VideoInputTextureAssetDesc )
 /// That's why it inherits from TextureInputAssetDesc, but doesn't use it's members.
 class VideoInputTextureAssetDesc : public TextureInputAssetDesc
 {
-public:
-
-    enum class VideoType
-    {
-        Fill,
-        Key,
-
-        Total
-    };
-
 private:
 
     static const std::string						uid;
@@ -38,7 +28,7 @@ private:
 private:
 
     videocards::VideoInputID    m_videoInputIdx;
-    VideoType                   m_inputType;
+    videocards::VideoType       m_videoType;
 
     mutable std::string         m_key;
 
@@ -48,7 +38,7 @@ protected:
 
 private:
 
-    explicit        VideoInputTextureAssetDesc   ( videocards::VideoInputID inputIdx, VideoType type );
+    explicit        VideoInputTextureAssetDesc              ( videocards::VideoInputID inputIdx, videocards::VideoType type );
 
 
 public:
@@ -57,7 +47,7 @@ public:
     virtual void                        Deserialize         ( const IDeserializer & ser );
 
     static ISerializableConstPtr            Create              ( const IDeserializer & deser );
-    static VideoInputTextureAssetDescPtr    Create              ( videocards::VideoInputID inputIdx, VideoType type );
+    static VideoInputTextureAssetDescPtr    Create              ( videocards::VideoInputID inputIdx, videocards::VideoType type );
 
 
     virtual std::string					GetKey				() const override;
@@ -72,7 +62,7 @@ public:
 
 
     videocards::VideoInputID            GetVideoInputID     () const { return m_videoInputIdx; }
-    VideoType                           GetVideoType        () const { return m_inputType; }
+    videocards::VideoType               GetVideoType        () const { return m_videoType; }
 
 protected:
 
@@ -89,7 +79,7 @@ template<> inline const std::string &       GetAssetDescUID< VideoInputTextureAs
     return VideoInputTextureAssetDesc::UID();
 }
 
-DECLARE_ENUM_SERIALIZATION( VideoInputTextureAssetDesc::VideoType )
+
 
 
 

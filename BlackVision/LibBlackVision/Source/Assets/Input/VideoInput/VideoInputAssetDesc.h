@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 
 #include "VideoInput/VideoInputChannelDesc.h"
 
@@ -45,6 +46,7 @@ public:
     static ISerializableConstPtr        Create              ( const IDeserializer & deser );
     static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID inputIdx );
 
+    VideoInputTextureAssetDescPtr       CreateTextureDesc   ( videocards::VideoType type ) const;
 
     virtual std::string					GetKey				() const override;
     virtual std::string                 GetProposedShortKey () const override;

@@ -19,36 +19,20 @@ const std::string   VideoInputTextureAssetDesc::uid = "VIDEO_INPUT_TEXTURE_ASSET
 
 
 
-namespace Convert
-{
 
 
 // ***********************
 //
-std::pair< VideoInputTextureAssetDesc::VideoType, const char* > VideoInputTypeMapping[] =
-{
-    std::make_pair( bv::VideoInputTextureAssetDesc::VideoType::Fill, "Fill" )
-    , std::make_pair( bv::VideoInputTextureAssetDesc::VideoType::Key, "Key" )
-    , std::make_pair( bv::VideoInputTextureAssetDesc::VideoType::Total, "" )      // default
-};
-
-IMPLEMENT_ENUM_SERIALIZATION( VideoInputTextureAssetDesc::VideoType, VideoInputTypeMapping )
-
-}   // Convert
-
-
-// ***********************
-//
-VideoInputTextureAssetDesc::VideoInputTextureAssetDesc( videocards::VideoInputID inputIdx, VideoType type )
+VideoInputTextureAssetDesc::VideoInputTextureAssetDesc( videocards::VideoInputID inputIdx, videocards::VideoType type )
     : TextureInputAssetDesc( InputSlotBinding( 0 ) )
     , m_videoInputIdx( inputIdx )
-    , m_inputType( type )
+    , m_videoType( type )
 {}
 
 
 // ***********************
 //
-VideoInputTextureAssetDescPtr	VideoInputTextureAssetDesc::Create   ( videocards::VideoInputID inputIdx, VideoType type )
+VideoInputTextureAssetDescPtr	VideoInputTextureAssetDesc::Create   ( videocards::VideoInputID inputIdx, videocards::VideoType type )
 {
     return VideoInputTextureAssetDescPtr( new VideoInputTextureAssetDesc( inputIdx, type ) );
 }
@@ -62,7 +46,7 @@ void                VideoInputTextureAssetDesc::Serialize        ( ISerializer &
     ser.SetAttribute( "type", UID() );
 
     ser.SetAttribute( "VideoInputIdx", Convert::T2String( m_videoInputIdx ) );
-    ser.SetAttribute( "VideoType", Convert::T2String( m_inputType ) );
+    ser.SetAttribute( "VideoType", Convert::T2String( m_videoType ) );
 
     ser.ExitChild();
 }
@@ -88,7 +72,7 @@ void                VideoInputTextureAssetDesc::Deserialize      ( const IDeseri
 ISerializableConstPtr       VideoInputTextureAssetDesc::Create          ( const IDeserializer & deser )
 {
     auto videoInputIdx = Convert::String2T< videocards::VideoInputID >( deser.GetAttribute( "VideoInputIdx" ) );
-    auto inputType = Convert::String2T< VideoType >( deser.GetAttribute( "VideoType" ) );
+    auto inputType = Convert::String2T< videocards::VideoType >( deser.GetAttribute( "VideoType" ) );
 
     if( videoInputIdx.IsValid(), inputType.IsValid() )
         return VideoInputTextureAssetDesc::Create( videoInputIdx.GetVal(), inputType.GetVal() );

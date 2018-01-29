@@ -15,9 +15,14 @@ class RenderContext;
 class VideoInputSlots;
 class VideoInputAssetDesc;
 class VideoInputAsset;
+class VideoInputTextureAssetDesc;
+class VideoInputTextureAsset;
 DEFINE_PTR_TYPE( VideoInputSlots )
 DEFINE_CONST_PTR_TYPE( VideoInputAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
+DEFINE_PTR_TYPE( VideoInputTextureAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputTextureAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputTextureAssetDesc )
 
 
 
@@ -78,8 +83,7 @@ public:
 
     ///@name VideoInputAsset creation
     ///@{
-    VideoInputAssetConstPtr     CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputAssetDescConstPtr desc );
-
+    VideoInputTextureAssetConstPtr  CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputTextureAssetDescConstPtr desc );
     ///@}
 
 };

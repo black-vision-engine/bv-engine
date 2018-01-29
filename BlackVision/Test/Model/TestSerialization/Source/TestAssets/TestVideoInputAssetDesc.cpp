@@ -17,13 +17,13 @@ using namespace bv;
 // Serialize and deserialize VideoInputAssetDesc.
 TEST( Serialization_Assets, VideoInput_SerDeser )
 {
-    auto expectedAssetDesc = VideoInputTextureAssetDesc::Create( 2, VideoInputTextureAssetDesc::VideoType::Key );
+    auto expectedAssetDesc = VideoInputTextureAssetDesc::Create( 2, videocards::VideoType::Key );
     Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserVideoInput.xml" );
     auto actualAssetDesc = DeserializeAsset< const VideoInputTextureAssetDesc >( "Out/SerDeserVideoInput.xml", "asset" );
 
     EXPECT_EQ( actualAssetDesc->GetVideoInputID(), expectedAssetDesc->GetVideoInputID() );
     EXPECT_EQ( actualAssetDesc->GetVideoInputID(), 2 );
-    EXPECT_EQ( actualAssetDesc->GetVideoType(), VideoInputTextureAssetDesc::VideoType::Key );
+    EXPECT_EQ( actualAssetDesc->GetVideoType(), videocards::VideoType::Key );
 }
 
 // ***********************

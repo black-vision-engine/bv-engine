@@ -29,9 +29,16 @@ VideoInputAssetDesc::VideoInputAssetDesc( videocards::VideoInputID inputIdx )
 
 // ***********************
 //
-VideoInputAssetDescPtr	VideoInputAssetDesc::Create   ( videocards::VideoInputID inputIdx )
+VideoInputAssetDescPtr	        VideoInputAssetDesc::Create             ( videocards::VideoInputID inputIdx )
 {
     return VideoInputAssetDescPtr( new VideoInputAssetDesc( inputIdx ) );
+}
+
+// ***********************
+//
+VideoInputTextureAssetDescPtr   VideoInputAssetDesc::CreateTextureDesc  ( videocards::VideoType type ) const
+{
+    return VideoInputTextureAssetDesc::Create( m_videoInputIdx, type );
 }
 
 // ***********************

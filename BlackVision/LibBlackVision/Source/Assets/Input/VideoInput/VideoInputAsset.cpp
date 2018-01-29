@@ -15,21 +15,14 @@ const std::string       VideoInputAsset::uid = "VIDEO_INPUT_ASSET";
 
 // ***********************
 //
-VideoInputAsset::VideoInputAsset        ( VideoInputSlotsPtr slots, videocards::VideoInputID videoInputIdx )
-    : TextureInputAsset( slots->GetInputSlots(), InputSlotBinding( 0 ) )
-    , m_videoInputIdx( videoInputIdx )
+VideoInputAsset::VideoInputAsset        ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key )
 {}
 
 // ***********************
 //
-void                        VideoInputAsset::EvaluateSlot   ()
-{}
-
-// ***********************
-//
-VideoInputAssetPtr          VideoInputAsset::Create         ( VideoInputSlotsPtr slots, videocards::VideoInputID videoInputIdx )
+VideoInputAssetPtr          VideoInputAsset::Create         ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key )
 {
-    return VideoInputAssetPtr( new VideoInputAsset( slots, videoInputIdx ) );
+    return VideoInputAssetPtr( new VideoInputAsset( fill, key ) );
 }
 
 // ***********************
@@ -44,6 +37,13 @@ const std::string &         VideoInputAsset::GetUID         () const
 const std::string &         VideoInputAsset::UID            ()
 {
     return VideoInputAsset::uid;
+}
+
+// ***********************
+//
+VoidConstPtr                VideoInputAsset::QueryThis      () const
+{
+    return shared_from_this();
 }
 
 }   // bv

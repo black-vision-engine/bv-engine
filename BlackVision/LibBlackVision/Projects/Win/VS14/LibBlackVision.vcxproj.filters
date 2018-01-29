@@ -2173,6 +2173,12 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.cpp">
       <Filter>Assets\Input\VideoInput</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.cpp">
+      <Filter>Assets\Input\Loaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -4820,15 +4826,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\TextAtlas.h">
       <Filter>Assets\Font\2D</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
-      <Filter>Database\SQLite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
@@ -5548,6 +5545,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.h">
       <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h" />
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h" />
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.h">
+      <Filter>Assets\Input\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
