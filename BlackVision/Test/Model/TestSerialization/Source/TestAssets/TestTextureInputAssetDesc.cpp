@@ -23,7 +23,7 @@ TEST( Serialization_Assets, TextureInputSlot_SerDeserIndexed )
 
     auto expectedAssetDesc = TextureInputAssetDesc::Create( binding );
     Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserIndexed.xml" );
-    auto actualAssetDesc = Deserialize< const TextureInputAssetDesc >( "Out/SerDeserIndexed.xml", "asset" );
+    auto actualAssetDesc = DeserializeAsset< const TextureInputAssetDesc >( "Out/SerDeserIndexed.xml", "asset" );
 
     EXPECT_TRUE( model::TextureInputAssetComparator::CompareStructure( expectedAssetDesc, actualAssetDesc ) );
 }
@@ -36,7 +36,7 @@ TEST( Serialization_Assets, TextureInputSlot_SerDeserNamed )
 
     auto expectedAssetDesc = TextureInputAssetDesc::Create( binding );
     Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserNamed.xml" );
-    auto actualAssetDesc = Deserialize< const TextureInputAssetDesc >( "Out/SerDeserNamed.xml", "asset" );
+    auto actualAssetDesc = DeserializeAsset< const TextureInputAssetDesc >( "Out/SerDeserNamed.xml", "asset" );
 
     EXPECT_TRUE( model::TextureInputAssetComparator::CompareStructure( expectedAssetDesc, actualAssetDesc ) );
 }
@@ -47,7 +47,7 @@ TEST( Serialization_Assets, TextureInputSlot_SerDeserNamed )
 // Slot index should evaluate to zero no matter what was in serialized file.
 TEST( Serialization_Assets, TextureInputSlot_BindByName )
 {
-    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/BindByName.xml", "asset" );
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/BindByName.xml", "asset" );
     ASSERT_NE( actual, nullptr );
 
     auto & actualBinding = actual->BindingInfo();
@@ -62,7 +62,7 @@ TEST( Serialization_Assets, TextureInputSlot_BindByName )
 // Name should evaluate to empty string.
 TEST( Serialization_Assets, TextureInputSlot_BindByIndex )
 {
-    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/BindByIndex.xml", "asset" );
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/BindByIndex.xml", "asset" );
     ASSERT_NE( actual, nullptr );
 
     auto & actualBinding = actual->BindingInfo();
@@ -76,7 +76,7 @@ TEST( Serialization_Assets, TextureInputSlot_BindByIndex )
 // XML contains Type::ByIndex, but there's only name.
 TEST( Serialization_Assets, TextureInputSlot_NameInsteadOfIndex )
 {
-    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/NameInsteadOfIndex.xml", "asset" );
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/NameInsteadOfIndex.xml", "asset" );
     ASSERT_EQ( actual, nullptr );
 }
 
@@ -84,7 +84,7 @@ TEST( Serialization_Assets, TextureInputSlot_NameInsteadOfIndex )
 // XML contains Type::ByName, but there's only index.
 TEST( Serialization_Assets, TextureInputSlot_IndexInsteadOfName )
 {
-    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/IndexInsteadOfName.xml", "asset" );
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/IndexInsteadOfName.xml", "asset" );
     ASSERT_EQ( actual, nullptr );
 }
 
@@ -92,7 +92,7 @@ TEST( Serialization_Assets, TextureInputSlot_IndexInsteadOfName )
 // XML contains empty slotBinding marker.
 TEST( Serialization_Assets, TextureInputSlot_EmptySlotBinding )
 {
-    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/EmptySlotBinding.xml", "asset" );
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/EmptySlotBinding.xml", "asset" );
     ASSERT_EQ( actual, nullptr );
 }
 
@@ -100,6 +100,6 @@ TEST( Serialization_Assets, TextureInputSlot_EmptySlotBinding )
 // XML contains no slotBinding marker.
 TEST( Serialization_Assets, TextureInputSlot_NoSlotBindingMarker )
 {
-    auto actual = Deserialize< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/NoSlotBindingMarker.xml", "asset" );
+    auto actual = DeserializeAsset< const TextureInputAssetDesc >( "TestAssets/Serialization/Assets/TextureInputSlot/NoSlotBindingMarker.xml", "asset" );
     ASSERT_EQ( actual, nullptr );
 }

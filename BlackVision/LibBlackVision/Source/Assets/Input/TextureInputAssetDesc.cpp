@@ -39,6 +39,8 @@ void                TextureInputAssetDesc::Serialize        ( ISerializer & ser 
 {
     ser.EnterChild( "asset" );
 
+    ser.SetAttribute( "type", UID() );
+
     m_binding.Serialize( ser );
 
     ser.ExitChild();

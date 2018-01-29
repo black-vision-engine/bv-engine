@@ -60,6 +60,25 @@ std::shared_ptr< Type >     Deserialize     ( const std::string & path, const st
     return Deserialize< Type >( path, enterName, context );
 }
 
+// ***********************
+//
+template< typename Type >
+std::shared_ptr< Type >     DeserializeAsset     ( const std::string & path, const std::string & enterName )
+{
+    BVXMLDeserializer deser( path, BVDeserializeContext::CreateContextFromEmptiness() );
+
+    deser.EnterChild( enterName );
+
+    auto type = deser.GetAttribute( "type" );
+    if( type != Type::UID() )
+        return nullptr;
+
+    auto object = Type::Create( deser );
+    deser.ExitChild();
+
+    return std::static_pointer_cast< Type >( object );
+}
+
 
 
 
