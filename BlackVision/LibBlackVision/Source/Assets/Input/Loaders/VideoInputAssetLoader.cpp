@@ -57,7 +57,7 @@ AssetDescConstPtr       VideoInputAssetLoader::CreateDescriptor  ( const IDeseri
     }
     else if( type == VideoInputAssetDesc::UID() )
     {
-
+        return std::static_pointer_cast< const AssetDesc >( VideoInputAssetDesc::Create( deser ) );
     }
 
     return nullptr;
