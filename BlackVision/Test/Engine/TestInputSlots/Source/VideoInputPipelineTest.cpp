@@ -23,6 +23,7 @@ class Engine_InputSlots_VideoInputPipeline : public bv::FrameworkTest
 public:
 
     virtual void        PreEvents           () override;
+    virtual void        PreRender           () override;
     virtual void        PostRender          () override;
 
 private:
@@ -69,9 +70,12 @@ void        Engine_InputSlots_VideoInputPipeline::Initialize            ()
     GetProjectEditor()->AddScene( "FirstScene" );
 
     m_fakeVideoCard = std::static_pointer_cast< videocards::FakeVideoCard >( GetAppLogic()->GetVideoCardManager()->GetVideoCard( 1 ) );
-    m_fakeVideoCard->ResetInputFrame( 0 );
-
+    auto inputCard = std::static_pointer_cast< videocards::FakeVideoCard >( GetAppLogic()->GetVideoCardManager()->GetVideoCard( 0 ) );
+    
     ASSERT_NE( m_fakeVideoCard, nullptr );
+    ASSERT_NE( inputCard, nullptr );
+    
+    inputCard->ResetInputFrame( 0 );
 
     EndTestAfterThisFrame( false );
 }
@@ -135,6 +139,13 @@ void        Engine_InputSlots_VideoInputPipeline::PreEvents             ()
     {
         Initialize();
     }
+}
+
+// ***********************
+//
+inline void Engine_InputSlots_VideoInputPipeline::PreRender  ()
+{
+    m_fakeVideoCard->SetOutputSyncPoint();
 }
 
 // ***********************

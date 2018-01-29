@@ -7,6 +7,8 @@
 #include "Engine/Graphics/InputSlots/Logic/InputLogic.h"
 
 #include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 #include "Assets/AssetManager.h"
 
 #include "Utils/Accessors/Assets/AssetManagerAccessor.h"
@@ -24,6 +26,24 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, Initialization_RegisterLoader
     auto loader = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), TextureInputAssetDesc::UID() );
     EXPECT_NE( loader, nullptr );
 }
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_Initialization_RegisterLoader )
+{
+    auto loader = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), VideoInputAssetDesc::UID() );
+    EXPECT_NE( loader, nullptr );
+}
+
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInputTexture_Initialization_RegisterLoader )
+{
+    auto loader = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), VideoInputTextureAssetDesc::UID() );
+    EXPECT_NE( loader, nullptr );
+}
+
 
 
 // ***********************
