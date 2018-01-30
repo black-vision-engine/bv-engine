@@ -74,10 +74,18 @@ ISerializableConstPtr       VideoInputTextureAssetDesc::Create          ( const 
     auto videoInputIdx = Convert::String2T< videocards::VideoInputID >( deser.GetAttribute( "VideoInputIdx" ) );
     auto inputType = Convert::String2T< videocards::VideoType >( deser.GetAttribute( "VideoType" ) );
 
-    if( videoInputIdx.IsValid(), inputType.IsValid() )
+    if( videoInputIdx.IsValid() && inputType.IsValid() )
         return VideoInputTextureAssetDesc::Create( videoInputIdx.GetVal(), inputType.GetVal() );
     else
+    {
+        if( !videoInputIdx.IsValid() )
+            Warn< SerializationException >( deser, "VideoInputIdx is invalid or doesn't exist." );
+
+        if( !inputType.IsValid() )
+            Warn< SerializationException >( deser, "VideoType is invalid or doesn't exist." );
+
         return nullptr;
+    }
 }
 
 

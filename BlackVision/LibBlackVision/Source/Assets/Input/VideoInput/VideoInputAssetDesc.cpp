@@ -47,6 +47,7 @@ void                VideoInputAssetDesc::Serialize        ( ISerializer & ser ) 
 {
     ser.EnterChild( "asset" );
 
+    ser.SetAttribute( "type", UID() );
     ser.SetAttribute( "VideoInputIdx", Convert::T2String( m_videoInputIdx ) );
 
     ser.ExitChild();
@@ -77,7 +78,10 @@ ISerializableConstPtr       VideoInputAssetDesc::Create          ( const IDeseri
     if( videoInputIdx.IsValid() )
         return VideoInputAssetDesc::Create( videoInputIdx.GetVal() );
     else
+    {
+        Warn< SerializationException >( deser, "VideoInputIdx is invalid or doesn't exist." );
         return nullptr;
+    }
 }
 
 
