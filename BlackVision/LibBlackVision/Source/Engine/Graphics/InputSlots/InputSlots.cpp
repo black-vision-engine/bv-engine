@@ -6,6 +6,13 @@
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
+#include "Engine/Events/EventManager.h"
+
+#include "Engine/Events/InnerEvents/InputSlots/SlotRemovedEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/FirstSlotRefEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/SlotAddedEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/SlotRemovedEvent.h"
+
 
 namespace bv
 {
@@ -94,6 +101,12 @@ void                        InputSlots::ReferenceSource       ( SlotIndex slotId
         return;
 
     m_slots[ slotIdx ].References++;
+
+    // Send event on first reference to this slot.
+    if( m_slots[ slotIdx ].References == 1 )
+    {
+        GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< FirstSlotRefEvent >( slotIdx, m_slots[ slotIdx ].Descriptor.SlotName ) );
+    }
 }
 
 
