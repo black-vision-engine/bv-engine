@@ -80,6 +80,8 @@ public:
 
     void                EnqueueFrame                ( const AVFrameConstPtr & frame );
 
+    SizeType            GetNumFrameDrops            () { return m_playbackChannel->GetNumFrameDrops(); }
+
 private:
 
     void                FrameProcessed	            ( const AVFrameConstPtr & frame );

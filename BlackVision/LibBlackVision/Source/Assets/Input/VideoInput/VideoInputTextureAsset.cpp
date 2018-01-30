@@ -26,6 +26,7 @@ VideoInputTextureAsset::VideoInputTextureAsset        ( VideoInputSlotsPtr slots
 //
 void                        VideoInputTextureAsset::EvaluateSlot   ()
 {
+    // FIXME: Handle VideoType
     auto slotIdx =  m_videoSlots->GetSlotIndex( m_videoInputIdx );
     if( slotIdx.IsValid() )
     {

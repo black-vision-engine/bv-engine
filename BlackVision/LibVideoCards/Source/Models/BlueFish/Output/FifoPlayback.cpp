@@ -32,7 +32,8 @@ CFifoPlayback::CFifoPlayback() :
     m_InvalidVideoModeFlag(VID_FMT_INVALID),
     m_pFifoBuffer(NULL),
     m_hThread(0),
-    m_nThreadStopping(TRUE)
+    m_nThreadStopping(TRUE),
+    m_debugNumberFrameDrops( 0 )
 {
     m_pSDK = BlueVelvetFactory4();
     //if(!m_pSDK)
@@ -561,6 +562,8 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 			//track UnderrunChA and UnderrunChB to see if frames were dropped
 			if (UnderrunChA != LastUnderrunChA)
 			{
+                pThis->m_debugNumberFrameDrops++;
+
 				//std::cout << "Dropped a frame: ChA underruns: " << UnderrunChA << std::endl;
                 LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish channel A";
 				LastUnderrunChA = UnderrunChA;
