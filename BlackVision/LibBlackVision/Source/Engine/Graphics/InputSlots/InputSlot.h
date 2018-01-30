@@ -55,7 +55,7 @@ struct InputEntry
     InputSlot               Slot;
     InputSlotDescriptor     Descriptor;
 
-    UInt32                  References;
+    Int32                   References;
 
 // ***********************
 //

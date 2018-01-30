@@ -11,7 +11,7 @@
 #include "Engine/Events/InnerEvents/InputSlots/SlotRemovedEvent.h"
 #include "Engine/Events/InnerEvents/InputSlots/FirstSlotRefEvent.h"
 #include "Engine/Events/InnerEvents/InputSlots/SlotAddedEvent.h"
-#include "Engine/Events/InnerEvents/InputSlots/SlotRemovedEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/AllSlotRefsRemovedEvent.h"
 
 
 namespace bv
@@ -141,6 +141,17 @@ void                        InputSlots::ReleaseSource         ( SlotIndex slotId
         return ;
 
     m_slots[ slotIdx ].References--;
+
+    // Send event that slot is unused.
+    if( m_slots[ slotIdx ].References == 0 )
+    {
+        GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< AllSlotRefsRemovedEvent >( slotIdx, m_slots[ slotIdx ].Descriptor.SlotName ) );
+    }
+
+    if( m_slots[ slotIdx ].References < 0 )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Slot [" << m_slots[ slotIdx ].Descriptor.SlotName << ", index [" << Convert::T2String( slotIdx ) << "] - negative number of references.";
+    }
 }
 
 
