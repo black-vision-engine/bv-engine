@@ -17,6 +17,7 @@ const std::string       VideoInputTextureAsset::uid = "VIDEO_INPUT_TEXTURE_ASSET
 //
 VideoInputTextureAsset::VideoInputTextureAsset        ( VideoInputSlotsPtr slots, videocards::VideoInputID videoInputIdx, videocards::VideoType type )
     : TextureInputAsset( slots->GetInputSlots(), InputSlotBinding( 0 ) )
+    , m_videoSlots( slots )
     , m_videoInputIdx( videoInputIdx )
     , m_videoType( type )
 {}
@@ -24,7 +25,15 @@ VideoInputTextureAsset::VideoInputTextureAsset        ( VideoInputSlotsPtr slots
 // ***********************
 //
 void                        VideoInputTextureAsset::EvaluateSlot   ()
-{}
+{
+    auto slotIdx =  m_videoSlots->GetSlotIndex( m_videoInputIdx );
+    if( slotIdx.IsValid() )
+    {
+        m_binding = InputSlotBinding( slotIdx.GetVal() );
+    }
+
+    TextureInputAsset::EvaluateSlot();
+}
 
 // ***********************
 //

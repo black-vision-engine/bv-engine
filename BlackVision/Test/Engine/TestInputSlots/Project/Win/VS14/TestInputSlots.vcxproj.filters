@@ -23,6 +23,9 @@
     <ClCompile Include="..\..\..\Source\VideoInputPipelineTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInputAssetTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestCases">
@@ -40,6 +43,9 @@
       <Filter>TestCases\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Helpers\InputAssetHelpers.h">
+      <Filter>TestCases\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\VideoInputAssetHelpers.h">
       <Filter>TestCases\Helpers</Filter>
     </ClInclude>
   </ItemGroup>

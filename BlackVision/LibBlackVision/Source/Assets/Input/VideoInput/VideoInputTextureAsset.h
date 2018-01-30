@@ -32,7 +32,7 @@ private:
 
 protected:
 
-    VideoInputSlotsPtr          m_slots;
+    VideoInputSlotsPtr          m_videoSlots;
 
     videocards::VideoInputID    m_videoInputIdx;
     videocards::VideoType       m_videoType;
