@@ -69,6 +69,14 @@ CFifoBuffer *       InputChannel::GetCaptureBuffer      ()
 
 // ***********************
 //
+void                InputChannel::SetVideoInput         ( bool enable )
+{
+    { enable; }
+    assert( !"Implemennt me " );
+}
+
+// ***********************
+//
 IOType              InputChannel::GetInputType          () const
 {
     return CaptureData->type;;

@@ -44,6 +44,7 @@ public:
     CFifoCapture *      GetCaptureChannel   () const;
     CFifoBuffer *       GetCaptureBuffer    ();
 
+    void                SetVideoInput       ( bool enable );
 
     IOType              GetInputType                () const;
 

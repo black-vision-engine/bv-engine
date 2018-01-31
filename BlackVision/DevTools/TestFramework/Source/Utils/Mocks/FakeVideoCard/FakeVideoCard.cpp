@@ -40,6 +40,14 @@ void            FakeVideoCard::SetVideoOutput   ( bool enable )
 
 // ***********************
 //
+void            FakeVideoCard::SetVideoInput    ( VideoInputID inputId, bool enable )
+{
+    inputId;
+    enable;
+}
+
+// ***********************
+//
 VideoCardID     FakeVideoCard::GetVideoCardID   () const
 {
     return m_deviceID;

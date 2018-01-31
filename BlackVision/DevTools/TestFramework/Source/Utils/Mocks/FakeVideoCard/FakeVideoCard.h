@@ -55,6 +55,7 @@ public:
     virtual void                Stop                    () override;
 
     virtual void                SetVideoOutput          ( bool enable ) override;
+    virtual void                SetVideoInput           ( VideoInputID inputId, bool enable ) override;
 
     virtual VideoCardID         GetVideoCardID          () const override;
 

@@ -193,6 +193,21 @@ void            VideoCard::SetVideoOutput        ( bool enable )
     }
 }
 
+// ***********************
+//
+void            VideoCard::SetVideoInput        ( VideoInputID inputId, bool enable )
+{
+    for( auto channel : m_channels )
+    {
+        if( channel->IsInputChannel() )
+        {
+            auto inputChannel = static_cast< InputChannel * >( channel );
+            if( inputChannel->GetInputId() == inputId )
+                inputChannel->SetVideoInput( enable );
+        }
+    }
+}
+
 //**************************************
 //
 void            VideoCard::AddChannel               ( Channel * channel )
