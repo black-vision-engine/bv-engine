@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "TextureInputAsset.h"
 
+#include "Engine/Events/EventManager.h"
+
 #include "Application/ApplicationContext.h"
 
 
@@ -21,7 +23,18 @@ TextureInputAsset::TextureInputAsset        ( InputSlotsPtr slots, InputSlotBind
     : m_numReferences( 0 )
     , m_slots( slots )
     , m_binding( binding )
-{}
+{
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TextureInputAsset::HandleEvents ), SlotAddedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &TextureInputAsset::HandleEvents ), SlotRemovedEvent::Type() );
+}
+
+// ***********************
+//
+TextureInputAsset::~TextureInputAsset()
+{
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &TextureInputAsset::HandleEvents ), SlotAddedEvent::Type() );
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &TextureInputAsset::HandleEvents ), SlotRemovedEvent::Type() );
+}
 
 // ***********************
 //
@@ -45,6 +58,53 @@ void                            TextureInputAsset::EvaluateSlot()
     }
 
     m_updateID = ApplicationContext::Instance().GetUpdateCounter() + 1;
+}
+
+// ***********************
+//
+void                        TextureInputAsset::OnSlotAdded      ( SlotAddedEventPtr evt )
+{
+    if( ShouldReevaluate( evt.get() ) )
+    {
+        EvaluateSlot();
+    }
+}
+
+// ***********************
+//
+void                        TextureInputAsset::OnSlotRemoved    ( SlotRemovedEventPtr evt )
+{
+    if( ShouldReevaluate( evt.get() ) )
+    {
+        EvaluateSlot();
+    }
+}
+
+// ***********************
+//
+void                        TextureInputAsset::HandleEvents     ( IEventPtr evt )
+{
+    if( evt->GetEventType() == SlotAddedEvent::Type() )
+    {
+        OnSlotAdded( std::static_pointer_cast< SlotAddedEvent >( evt ) );
+    }
+    else if( evt->GetEventType() == SlotRemovedEvent::Type() )
+    {
+        OnSlotRemoved( std::static_pointer_cast< SlotRemovedEvent >( evt ) );
+    }
+}
+
+// ***********************
+//
+bool                        TextureInputAsset::ShouldReevaluate ( SlotEventBase * evt )
+{
+    if( m_binding.GetType() == InputSlotBinding::Type::ByIndex && evt->Index == m_binding.GetIndex() )
+        return true;
+
+    if( m_binding.GetType() == InputSlotBinding::Type::ByName && evt->Name == m_binding.GetName() )
+        return true;
+
+    return false;
 }
 
 

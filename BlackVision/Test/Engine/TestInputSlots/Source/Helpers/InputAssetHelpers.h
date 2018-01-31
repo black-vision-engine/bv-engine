@@ -64,17 +64,31 @@ inline Expected< SlotIndex >        CreateSlot              ( const InputsContex
 
 // ***********************
 //
-inline TextureInputAssetConstPtr    CreateSlotAndAsset      ( const InputsContext & ctx )
+inline TextureInputAssetConstPtr    LoadTextureAsset        ( const InputsContext & ctx, const std::string & name )
 {
-    Expected< SlotIndex > slot1Idx = CreateSlot( ctx, "Source1" );
-
-    auto desc = TextureInputAssetDesc::Create( InputSlotBinding( slot1Idx ) );
+    auto desc = TextureInputAssetDesc::Create( InputSlotBinding( name ) );
     auto asset = ctx.assetManager->LoadAsset( desc );
 
     return std::static_pointer_cast< const TextureInputAsset >( asset );
 }
 
+// ***********************
+//
+inline TextureInputAssetConstPtr    LoadTextureAsset        ( const InputsContext & ctx, SlotIndex slotIdx )
+{
+    auto desc = TextureInputAssetDesc::Create( InputSlotBinding( slotIdx ) );
+    auto asset = ctx.assetManager->LoadAsset( desc );
 
+    return std::static_pointer_cast< const TextureInputAsset >( asset );
+}
+
+// ***********************
+//
+inline TextureInputAssetConstPtr    CreateSlotAndAsset      ( const InputsContext & ctx )
+{
+    Expected< SlotIndex > slot1Idx = CreateSlot( ctx, "Source1" );
+    return LoadTextureAsset( ctx, slot1Idx );
+}
 
 
 

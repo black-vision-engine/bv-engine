@@ -9,6 +9,9 @@
 #include "Engine/Graphics/InputSlots/InputSlots.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
+#include "Engine/Events/InnerEvents/InputSlots/SlotAddedEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/SlotRemovedEvent.h"
+
 #include "InputSlotBinding.h"
 
 
@@ -47,7 +50,15 @@ protected:
 
     virtual void        EvaluateSlot        ();
 
+    virtual void        OnSlotAdded         ( SlotAddedEventPtr evt );
+    virtual void        OnSlotRemoved       ( SlotRemovedEventPtr evt );
+
+    void                HandleEvents        ( IEventPtr evt );
+    bool                ShouldReevaluate    ( SlotEventBase * evt );
+
 public:
+
+    virtual             ~TextureInputAsset  ();
 
     static TextureInputAssetPtr     Create   ( InputSlotsPtr slots, InputSlotBinding binding );
 

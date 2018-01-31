@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "Framework/FrameworkTest.h"
 
 #include "Engine/Graphics/InputSlots/InputSlots.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
@@ -86,4 +87,56 @@ TEST( Engine_InputSlots, TextureInputAsset_Creation_EmptySlot )
     ASSERT_EQ( typedAsset->GetTexture(), context.slots->GetFallbackSlot().Texture );
 }
 
+// ***********************
+// If slot was removed, asset should load fallback texture.
+POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotRemoved )
+{
+    static auto context = CreateInputContext();
 
+    if( GetFrameNumber() == 0 )
+    {
+        Expected< SlotIndex > slot1Idx = CreateSlot( context, "Source1" );
+        auto asset = LoadTextureAsset( context, "Source1" );                // Load asset internally. Second call will load the same asset.
+
+        // This should send event.
+        context.slots->UnregisterSource( slot1Idx );
+
+        EndTestAfterThisFrame( false );
+    }
+    else
+    {
+        auto asset = LoadTextureAsset( context, "Source1" );
+        EXPECT_EQ( asset->GetTexture(), context.slots->GetFallbackSlot().Texture );
+
+        EndTestAfterThisFrame( true );
+    }
+}
+
+// ***********************
+// Slot is removed and then new slot is added under the same index.
+// Asset should update itself and load texture from new slot.
+POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotChanged )
+{
+    static auto context = CreateInputContext();
+    static Expected< SlotIndex > slotIdx;
+    static Texture2DPtr tex = CreateFakeTexture( 20, 30 );
+
+    if( GetFrameNumber() == 0 )
+    {
+        slotIdx = CreateSlot( context, "Source1" );
+        auto asset = LoadTextureAsset( context, slotIdx );  // Load asset internally. Second call will load the same asset.
+
+        // This should 2 send event.
+        context.slots->UnregisterSource( slotIdx );
+        ASSERT_EQ( context.slots->RegisterSource( InputSlot( tex ), "Source2" ).GetVal(), slotIdx.GetVal() );   // This should register source under the same indexs.
+
+        EndTestAfterThisFrame( false );
+    }
+    else
+    {
+        auto asset = LoadTextureAsset( context, slotIdx );
+        EXPECT_EQ( asset->GetTexture(), tex );
+
+        EndTestAfterThisFrame( true );
+    }
+}
