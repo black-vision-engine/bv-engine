@@ -210,7 +210,7 @@ POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, Events_AllReferencesRemoved )
 }
 
 // ***********************
-//
+// Adding slot should send event.
 POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, Events_SlotAdded )
 {
     static auto context = CreateInputContext();
@@ -243,3 +243,41 @@ POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, Events_SlotAdded )
         EndTestAfterThisFrame( true );
     }
 }
+
+// ***********************
+// Adding slot should send event.
+POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, Events_SlotRemoved )
+{
+    static auto context = CreateInputContext();
+    static Expected< SlotIndex > slotIdx = 0;
+
+    if( GetFrameNumber() == 0 )
+    {
+        EventCaptureQueue.clear();
+        GetDefaultEventManager().AddListener( &SlotRemovedHandler, SlotRemovedEvent::Type() );
+
+        slotIdx = CreateSlot( context, "Source1" );
+        ASSERT_TRUE( slotIdx.IsValid() );
+
+        context.slots->UnregisterSource( slotIdx );
+
+        EndTestAfterThisFrame( false );
+    }
+    else
+    {
+        EXPECT_EQ( EventCaptureQueue.size(), 1 ) << "SlotRemovedEvent not sent.";
+
+        if( EventCaptureQueue.size() > 0 )
+        {
+            EXPECT_EQ( EventCaptureQueue[ 0 ].Type, SlotEventType::SlotRemoved );
+            EXPECT_EQ( EventCaptureQueue[ 0 ].Idx, slotIdx.GetVal() );
+            EXPECT_EQ( EventCaptureQueue[ 0 ].Name, "Source1" );
+        }
+
+        GetDefaultEventManager().RemoveListener( &SlotRemovedHandler, SlotRemovedEvent::Type() );
+        ClearContext( context );
+        EndTestAfterThisFrame( true );
+    }
+}
+
+

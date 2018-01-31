@@ -49,10 +49,7 @@ bool                        InputSlots::UnregisterSource      ( SlotIndex slotId
 
     if( IsValidIndex( slotIdx ) )
     {
-        if( m_slots[ slotIdx ].References > 0 )
-        {
-            // FIXME: Error handling
-        }
+        GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< SlotRemovedEvent >( slotIdx, m_slots[ slotIdx ].Descriptor.SlotName ) );
 
         m_slots[ slotIdx ].Slot.Texture = nullptr;
         m_slots[ slotIdx ].Slot.Audio = nullptr;
