@@ -154,7 +154,7 @@ Texture2DPtr                VideoInputSlots::CreateTexture  ( const videocards::
 
 // ***********************
 //
-audio::AudioEntity *        VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
+audio::AudioBufferPtr       VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
 {
     vidInputDesc;
     return nullptr;
@@ -170,13 +170,9 @@ void                        VideoInputSlots::FreeTexture    ( RenderContext * ct
 
 // ***********************
 //
-void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioEntity * audio )
+void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioBufferPtr audio )
 {
-    if( audio )
-    {
-        ctx->GetAudio()->DeletePDR( audio );
-        delete audio;
-    }
+    { ctx; audio; }
 }
 
 // ***********************

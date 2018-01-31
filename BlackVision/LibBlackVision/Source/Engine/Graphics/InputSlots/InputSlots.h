@@ -84,7 +84,7 @@ private:
 private:
 
     Texture2DPtr            CreateFallbackTexture   ();
-    audio::AudioEntity *    CreateFallbackAudio     ();
+    audio::AudioBufferPtr   CreateFallbackAudio     ();
 
     MemoryChunkPtr          GenerateFallbackTexture ( UInt32 width, UInt32 height, UInt32 bpp );
 

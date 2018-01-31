@@ -266,7 +266,7 @@ Texture2DPtr                    InputSlots::CreateFallbackTexture   ()
 
 // ***********************
 //
-audio::AudioEntity *            InputSlots::CreateFallbackAudio     ()
+audio::AudioBufferPtr           InputSlots::CreateFallbackAudio     ()
 {
     return nullptr;
 }

@@ -72,10 +72,10 @@ private:
     Expected< SlotIndex >       Register        ( const videocards::VideoInputChannelDesc & vidInputDesc );
 
     Texture2DPtr                CreateTexture   ( const videocards::VideoInputChannelDesc & vidInputDesc );
-    audio::AudioEntity *        CreateAudio     ( const videocards::VideoInputChannelDesc & vidInputDesc );
+    audio::AudioBufferPtr       CreateAudio     ( const videocards::VideoInputChannelDesc & vidInputDesc );
 
     void                        FreeTexture     ( RenderContext * ctx, Texture2DPtr texture );
-    void                        FreeAudio       ( RenderContext * ctx, audio::AudioEntity * audio );
+    void                        FreeAudio       ( RenderContext * ctx, audio::AudioBufferPtr audio );
 
     std::string                 GenerateName    ( const videocards::VideoInputChannelDesc & vidInputDesc );
 
