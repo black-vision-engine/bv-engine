@@ -191,17 +191,23 @@ SlotIndex                   InputSlots::FindEmptySlot         () const
 //
 Expected< SlotIndex >       InputSlots::AddSource             ( const InputEntry & entry )
 {
+    SlotIndex resultIndex;
+
     SlotIndex emptySlot = FindEmptySlot();
     if( emptySlot == sInvalidIdx )
     {
         m_slots.push_back( entry );
-        return m_slots.size() - 1;
+        resultIndex = m_slots.size() - 1;
     }
     else
     {
         m_slots[ emptySlot ] = entry;
-        return emptySlot;
+        resultIndex = emptySlot;
     }
+
+    GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< SlotAddedEvent >( resultIndex, m_slots[ resultIndex ].Descriptor.SlotName ) );
+
+    return resultIndex;
 }
 
 // ***********************

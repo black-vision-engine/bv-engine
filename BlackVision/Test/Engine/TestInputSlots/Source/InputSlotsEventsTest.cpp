@@ -209,4 +209,37 @@ POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, Events_AllReferencesRemoved )
     }
 }
 
+// ***********************
+//
+POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, Events_SlotAdded )
+{
+    static auto context = CreateInputContext();
+    static Expected< SlotIndex > slotIdx = 0;
 
+    if( GetFrameNumber() == 0 )
+    {
+        EventCaptureQueue.clear();
+        GetDefaultEventManager().AddListener( &SlotAddedHandler, SlotAddedEvent::Type() );
+
+        slotIdx = CreateSlot( context, "Source1" );
+
+        ASSERT_TRUE( slotIdx.IsValid() );
+
+        EndTestAfterThisFrame( false );
+    }
+    else
+    {
+        EXPECT_EQ( EventCaptureQueue.size(), 1 ) << "SlotAddedEvent not sent.";
+
+        if( EventCaptureQueue.size() > 0 )
+        {
+            EXPECT_EQ( EventCaptureQueue[ 0 ].Type, SlotEventType::SlotAdded );
+            EXPECT_EQ( EventCaptureQueue[ 0 ].Idx, slotIdx.GetVal() );
+            EXPECT_EQ( EventCaptureQueue[ 0 ].Name, "Source1" );
+        }
+
+        GetDefaultEventManager().RemoveListener( &SlotAddedHandler, SlotAddedEvent::Type() );
+        ClearContext( context );
+        EndTestAfterThisFrame( true );
+    }
+}
