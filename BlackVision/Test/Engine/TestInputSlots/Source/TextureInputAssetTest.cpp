@@ -88,15 +88,18 @@ TEST( Engine_InputSlots, TextureInputAsset_Creation_EmptySlot )
 }
 
 // ***********************
-// If slot was removed, asset should load fallback texture.
+// If slot was removed, asset should load fallback texture. UpdateID should change.
 POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotRemoved )
 {
     static auto context = CreateInputContext();
+    static UInt64 lastUpdateID = 0;
 
     if( GetFrameNumber() == 0 )
     {
         Expected< SlotIndex > slot1Idx = CreateSlot( context, "Source1" );
         auto asset = LoadTextureAsset( context, "Source1" );                // Load asset internally. Second call will load the same asset.
+
+        lastUpdateID = asset->GetUpdateID();
 
         // This should send event.
         context.slots->UnregisterSource( slot1Idx );
@@ -107,6 +110,7 @@ POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotRemoved )
     {
         auto asset = LoadTextureAsset( context, "Source1" );
         EXPECT_EQ( asset->GetTexture(), context.slots->GetFallbackSlot().Texture );
+        EXPECT_GT( asset->GetUpdateID(), lastUpdateID );
 
         EndTestAfterThisFrame( true );
     }
@@ -114,17 +118,20 @@ POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotRemoved )
 
 // ***********************
 // Slot is removed and then new slot is added under the same index.
-// Asset should update itself and load texture from new slot.
+// Asset should update itself and load texture from new slot. UpdateID should change.
 POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotChanged )
 {
     static auto context = CreateInputContext();
     static Expected< SlotIndex > slotIdx;
     static Texture2DPtr tex = CreateFakeTexture( 20, 30 );
+    static UInt64 lastUpdateID = 0;
 
     if( GetFrameNumber() == 0 )
     {
         slotIdx = CreateSlot( context, "Source1" );
         auto asset = LoadTextureAsset( context, slotIdx );  // Load asset internally. Second call will load the same asset.
+
+        lastUpdateID = asset->GetUpdateID();
 
         // This should 2 send event.
         context.slots->UnregisterSource( slotIdx );
@@ -136,6 +143,7 @@ POST_RENDER_FRAMEWORK_TEST( Engine_InputSlots, TextureInputAsset_SlotChanged )
     {
         auto asset = LoadTextureAsset( context, slotIdx );
         EXPECT_EQ( asset->GetTexture(), tex );
+        EXPECT_GT( asset->GetUpdateID(), lastUpdateID );
 
         EndTestAfterThisFrame( true );
     }
