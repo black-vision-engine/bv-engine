@@ -13,6 +13,9 @@
     <Filter Include="MemoryTest">
       <UniqueIdentifier>{6d12a7bf-3b0d-45d7-bad6-e53b1787faf1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DataTypesTest">
+      <UniqueIdentifier>{e33ae48f-b54d-4102-8460-7157209625d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
@@ -45,6 +48,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBATest.cpp">
       <Filter>MemoryTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\DataTypesTest\ReusableTest.cpp">
+      <Filter>DataTypesTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
