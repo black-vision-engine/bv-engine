@@ -33,7 +33,8 @@ CFifoPlayback::CFifoPlayback() :
     m_pFifoBuffer(NULL),
     m_hThread(0),
     m_nThreadStopping(TRUE),
-    m_debugNumberFrameDrops( 0 )
+    m_debugNumberFrameDrops( 0 ),
+    m_reusableFrames( { nullptr, nullptr } )
 {
     m_pSDK = BlueVelvetFactory4();
     //if(!m_pSDK)
@@ -185,6 +186,8 @@ ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32
     m_pFifoBuffer = pFifoBuffer;
     m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
 
+    m_reusableFrames = Reusable< CFramePtr >( { std::make_shared< CFrame >( GoldenSize, BytesPerLine ), std::make_shared< CFrame >( GoldenSize, BytesPerLine ) } );
+
     return Result::Success();
 }
 
@@ -267,10 +270,11 @@ void CFifoPlayback::StopThread()
 
     if(m_hThread)
     {
+        m_nThreadStopping = TRUE;
+
         m_pFifoBuffer->PushEmptyFrame();
         m_pFifoBuffer->PushEmptyFrame();
 
-        m_nThreadStopping = TRUE;
         dw = WaitForSingleObject(m_hThread, INFINITE);
         CloseHandle(m_hThread);
     }

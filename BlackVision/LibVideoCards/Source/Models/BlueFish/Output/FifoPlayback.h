@@ -6,10 +6,18 @@
 #include "Models/BlueFish/FifoBuffer.h"
 
 #include "Expected.h"
+#include "DataTypes/Reusable.h"
 
 
-namespace bv { namespace videocards { namespace bluefish {
 
+namespace bv {
+namespace videocards {
+namespace bluefish
+{
+
+
+// ***********************
+//
 class CFifoPlayback
 {
 public:
@@ -48,7 +56,9 @@ public:
     BLUE_UINT32     m_InvalidVideoModeFlag;
     ULONG           GoldenSize;
     ULONG           BytesPerLine;
-    CFifoBuffer*    m_pFifoBuffer;
+
+    CFifoBuffer*            m_pFifoBuffer;
+    Reusable< CFramePtr >   m_reusableFrames;
 
     HANDLE          m_hThread;
     BLUE_UINT32     m_nThreadStopping;

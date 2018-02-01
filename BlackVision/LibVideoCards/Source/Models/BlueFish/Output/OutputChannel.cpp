@@ -249,16 +249,16 @@ void                    OutputChannel::FrameProcessed               ( const AVFr
         tc.s = 33;
         tc.frame = 12;
 
-        playbackChannel->m_pFifoBuffer->PushFrame(
-            std::make_shared< CFrame >( reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ),
-                playbackChannel->GoldenSize,
-                playbackChannel->BytesPerLine,
-                !m_odd,
-                frame->m_audioData ? ( unsigned int )frame->m_audioData->Size() : 0,
-                frame->m_audioData ? reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ) : nullptr,
-                tc,
-                frame->m_desc
-                ) );
+        auto cFrame = playbackChannel->m_reusableFrames.GetNext();
+
+        cFrame->ReinitVideoBuffer( playbackChannel->GoldenSize, playbackChannel->BytesPerLine, reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ) );
+        cFrame->ReinitAudioBuffer( frame->m_audioData ? ( unsigned int )frame->m_audioData->Size() : 0, frame->m_audioData ? reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ) : nullptr );
+
+        cFrame->m_FieldOdd = !m_odd;
+        cFrame->m_desc = frame->m_desc;
+        cFrame->m_TimeCode = tc;
+
+        playbackChannel->m_pFifoBuffer->PushFrame( cFrame );
 
         m_odd = ( m_odd + 1 ) % 2;
     }

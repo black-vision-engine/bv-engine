@@ -6,6 +6,7 @@
 #include "Models/BlueFish/FifoBuffer.h"
 
 #include "Expected.h"
+#include "DataTypes/Reusable.h"
 
 
 

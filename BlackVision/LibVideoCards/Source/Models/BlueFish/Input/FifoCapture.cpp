@@ -231,52 +231,52 @@ void                    CFifoCapture::StopThread()
 //
 unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 {
-	CFifoCapture* pThis = (CFifoCapture*)pArg;
-	ULONG CurrentFieldCount = 0;
-	ULONG LastFieldCount = 0;
-	std::shared_ptr< CFrame > pFrame = nullptr;
-	struct blue_videoframe_info_ex video_capture_frame;
-	int	NotUsedCompostLater = 0;
-	unsigned int capture_fifo_size = 0;
-	BOOL bFirstFrame = TRUE;
+    CFifoCapture* pThis = ( CFifoCapture* )pArg;
+    ULONG CurrentFieldCount = 0;
+    ULONG LastFieldCount = 0;
+    struct blue_videoframe_info_ex video_capture_frame;
+    int	NotUsedCompostLater = 0;
+    unsigned int capture_fifo_size = 0;
+    BOOL bFirstFrame = TRUE;
 
-	pThis->m_pSDK->video_capture_start();
-	pThis->m_pSDK->wait_input_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
-	while(!pThis->m_nThreadStopping)
-	{
-		pFrame = std::make_shared<CFrame>(pThis->GoldenSize,pThis->BytesPerLine);
+    Reusable< CFramePtr > frames ( { std::make_shared< CFrame >( pThis->GoldenSize, pThis->BytesPerLine ), std::make_shared< CFrame >( pThis->GoldenSize, pThis->BytesPerLine ) } );
 
-		if(!pFrame)
-			continue;
 
-		GetVideo_CaptureFrameInfoEx(pThis->m_pSDK, &pThis->m_Overlap, video_capture_frame, NotUsedCompostLater, &capture_fifo_size);
-		if(video_capture_frame.nVideoSignalType < VID_FMT_INVALID && video_capture_frame.BufferId != -1)
-		{
-			pThis->m_pSDK->system_buffer_read_async((unsigned char*)pFrame->m_pBuffer,
-																	pFrame->m_nSize,
-																	NULL,
-																	BlueImage_DMABuffer(video_capture_frame.BufferId, BLUE_DATA_IMAGE));
+    pThis->m_pSDK->video_capture_start();
+    pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
 
-			CurrentFieldCount = video_capture_frame.nFrameTimeStamp;
-//			if(!bFirstFrame && LastFieldCount + 2 < CurrentFieldCount)
-//				cout << "Dropped a frame, FC expected: " << (LastFieldCount + 2) << ", current FC: " << CurrentFieldCount << endl;
-			LastFieldCount = CurrentFieldCount;
+    while( !pThis->m_nThreadStopping )
+    {
+        auto pFrame = frames.GetNext();
 
-			pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
-			pFrame->m_nCardBufferID = video_capture_frame.BufferId;
-			pThis->m_pFifoBuffer->PushFrame(pFrame);
-			bFirstFrame = FALSE;
-		}
-		else
-			pThis->m_pSDK->wait_input_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
-	}
-    
-	//cout << "Capture Thread Stopped..." << endl;
-    
+        GetVideo_CaptureFrameInfoEx( pThis->m_pSDK, &pThis->m_Overlap, video_capture_frame, NotUsedCompostLater, &capture_fifo_size );
+        if( video_capture_frame.nVideoSignalType < VID_FMT_INVALID && video_capture_frame.BufferId != -1 )
+        {
+            pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer,
+                pFrame->m_nSize,
+                NULL,
+                BlueImage_DMABuffer( video_capture_frame.BufferId, BLUE_DATA_IMAGE ) );
+
+            CurrentFieldCount = video_capture_frame.nFrameTimeStamp;
+            //			if(!bFirstFrame && LastFieldCount + 2 < CurrentFieldCount)
+            //				cout << "Dropped a frame, FC expected: " << (LastFieldCount + 2) << ", current FC: " << CurrentFieldCount << endl;
+            LastFieldCount = CurrentFieldCount;
+
+            pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
+            pFrame->m_nCardBufferID = video_capture_frame.BufferId;
+            pThis->m_pFifoBuffer->PushFrame( pFrame );
+            bFirstFrame = FALSE;
+        }
+        else
+            pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
+    }
+
+    //cout << "Capture Thread Stopped..." << endl;
+
     pThis->m_pSDK->video_capture_stop();
 
-	_endthreadex(0);
-	return 0;
+    _endthreadex( 0 );
+    return 0;
 }
 
 } //bluefish
