@@ -5528,15 +5528,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.h">
       <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
-      <Filter>Assets\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
-      <Filter>Assets\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
-      <Filter>Assets\Database\SQLite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.h">
       <Filter>Assets\Input\VideoInput</Filter>
     </ClInclude>
@@ -5554,6 +5545,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.h">
       <Filter>Assets\Input\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
+      <Filter>Assets\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
+      <Filter>Assets\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
+      <Filter>Assets\Database\SQLite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

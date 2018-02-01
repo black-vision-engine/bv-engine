@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreEnums.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Reusable.h" />
     <ClInclude Include="..\..\..\Source\Exception.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />

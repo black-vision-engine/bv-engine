@@ -246,6 +246,9 @@
     <ClInclude Include="..\..\..\Source\Memory\ColorRGBA.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Reusable.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
