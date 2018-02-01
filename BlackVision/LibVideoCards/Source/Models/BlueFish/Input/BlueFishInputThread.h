@@ -9,8 +9,8 @@
 #include "DataTypes/QueueConcurrentLimited.h"
 
 #include "Memory/AVFrame.h"
+#include "DataTypes/Reusable.h"
 
-#include <boost/circular_buffer.hpp>
 
 
 
@@ -23,6 +23,8 @@ namespace bluefish
 
 class InputChannel;
 class VideoCard;
+class CFrame;
+DEFINE_PTR_TYPE( CFrame )
 
 
 // ***********************
@@ -37,6 +39,7 @@ private:
     FrameQueue					m_processedFrameQueue;
     InputChannel *              m_inputChannel;
 
+    Reusable< MemoryChunkPtr >  m_reusableChunks;
 
 public:
 
@@ -49,9 +52,9 @@ public:
 
 protected:
 
-    MemoryChunkPtr              Deinterlace             ( MemoryChunkPtr videoChunk );
+    MemoryChunkPtr              Deinterlace             ( const CFramePtr & videoChunk );
 
-    void                        DeinterlaceLinear       ( MemoryChunkPtr inputChunk, MemoryChunkPtr outputChunk );
+    void                        DeinterlaceLinear       ( const CFramePtr & inputChunk, MemoryChunkPtr outputChunk );
 };
 
 DEFINE_UPTR_TYPE( BlueFishInputThread )

@@ -66,9 +66,28 @@ AVFrameDescriptor       Channel::CreateFrameDesc        () const
     return frameDesc;
 }
 
+// ***********************
+//
+Reusable< MemoryChunkPtr >      Channel::CreateReusableChunks   ( UInt32 numChunks ) const
+{
+    std::vector< MemoryChunkPtr > chunks;
+
+    auto desc = CreateFrameDesc();
+    auto size = desc.width * desc.height * desc.depth;
+    
+    for( UInt32 i = 0; i < numChunks; ++i )
+    {
+        // FIXME: Why we need to substract 4096. For some reason frame is to long.
+        MemoryChunkPtr chunk = MemoryChunk::Create( size );
+        chunks.push_back( chunk );
+    }
+
+    return Reusable< MemoryChunkPtr >( chunks );
+}
+
 //**************************************
 //
-Channel::ChannelOptionMap     Channel::CreateChannelOptionMap   ()
+Channel::ChannelOptionMap       Channel::CreateChannelOptionMap   ()
 {
     ChannelOptionMap channelOptionMap;
 

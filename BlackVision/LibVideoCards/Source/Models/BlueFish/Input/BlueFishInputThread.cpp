@@ -16,7 +16,10 @@ namespace bluefish
 BlueFishInputThread::BlueFishInputThread( InputChannel * vc )
     : m_processedFrameQueue( 1 )
     , m_inputChannel( vc )
-{}
+    , m_reusableChunks( { nullptr } )
+{
+    m_reusableChunks = m_inputChannel->CreateReusableChunks( 2 );
+}
 
 // ***********************
 //
@@ -24,12 +27,9 @@ void                BlueFishInputThread::Process        ()
 {
     auto cFrame = m_inputChannel->GetCaptureBuffer()->PopFrame();
 
-    MemoryChunkPtr videoChunk = MemoryChunk::Create( cFrame->m_nSize );
-    memcpy( videoChunk->GetWritable(), ( char * )cFrame->m_pBuffer, cFrame->m_nSize );
-
     MemoryChunkPtr audioChunk;// = MemoryChunk::Create( ( char * )cFrame->m_pAudioBuffer, cFrame->m_nAudioSize );
 
-    auto processed = Deinterlace( videoChunk );
+    auto processed = Deinterlace( cFrame );
     auto frame = std::make_shared< AVFrame >( processed, audioChunk, m_inputChannel->CreateFrameDesc() );
 
     m_processedFrameQueue.WaitAndPush( frame );
@@ -37,10 +37,9 @@ void                BlueFishInputThread::Process        ()
 
 // ***********************
 //
-MemoryChunkPtr      BlueFishInputThread::Deinterlace    ( MemoryChunkPtr videoChunk )
+MemoryChunkPtr      BlueFishInputThread::Deinterlace            ( const CFramePtr & videoChunk )
 {
-    // FIXME: Why we need to substract 4096. For some reason frame is to long.
-    MemoryChunkPtr deinterlacedChunk = MemoryChunk::Create( 2 * videoChunk->Size() - 4096 );
+    MemoryChunkPtr deinterlacedChunk = m_reusableChunks.GetNext();
 
     // Maybe we could choose algorithm here.
     DeinterlaceLinear( videoChunk, deinterlacedChunk );
@@ -50,7 +49,7 @@ MemoryChunkPtr      BlueFishInputThread::Deinterlace    ( MemoryChunkPtr videoCh
 
 // ***********************
 //
-void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr inputChunk, MemoryChunkPtr outputChunk )
+void                BlueFishInputThread::DeinterlaceLinear      ( const CFramePtr & inputChunk, MemoryChunkPtr outputChunk )
 {
     auto desc = m_inputChannel->CreateFrameDesc();
 
@@ -60,7 +59,7 @@ void                BlueFishInputThread::DeinterlaceLinear      ( MemoryChunkPtr
     // Copy each second line. Flip image vertically.
     for( SizeType lineNum = 0; lineNum < numLines / 2; ++lineNum )
     {
-        const char * srcLine1Ptr = inputChunk->Get() + lineNum * lineLength;
+        const char * srcLine1Ptr = reinterpret_cast< const char* >( inputChunk->m_pBuffer ) + lineNum * lineLength;
         char * targetLine1Ptr = outputChunk->GetWritable() + ( numLines - 2 * lineNum - 1 ) * lineLength;
 
         memcpy( targetLine1Ptr, srcLine1Ptr, lineLength );

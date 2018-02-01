@@ -8,6 +8,7 @@
 #include "Models/BlueFish/FifoBuffer.h"
 
 #include "CoreDEF.h"
+#include "DataTypes/Reusable.h"
 
 #include <atomic>
 
@@ -61,8 +62,8 @@ public:
     virtual UInt32  GetResolution       () const = 0;
     ChannelName     GetName             () const;
 
-    AVFrameDescriptor               CreateFrameDesc () const;
-
+    AVFrameDescriptor               CreateFrameDesc         () const;
+    Reusable< MemoryChunkPtr >      CreateReusableChunks    ( UInt32 numChunks ) const;
 
     static ChannelOptionMap CreateChannelOptionMap      ();
 

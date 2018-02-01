@@ -24,7 +24,6 @@ InputChannel::InputChannel( ChannelName name, ChannelInputDataUPtr & input )
     m_captureChannel = new CFifoCapture();
 
     m_inputFramesThread = new BlueFishInputThread( this );
-
     m_inputFramesThread->Start();
 }
 
