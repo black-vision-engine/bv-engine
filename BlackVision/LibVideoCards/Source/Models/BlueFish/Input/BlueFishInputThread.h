@@ -55,6 +55,9 @@ protected:
     MemoryChunkPtr              Deinterlace             ( const CFramePtr & videoChunk );
 
     void                        DeinterlaceLinear       ( const CFramePtr & inputChunk, MemoryChunkPtr outputChunk );
+
+
+    AVFramePtr                  GenEmptyFrame           ();
 };
 
 DEFINE_UPTR_TYPE( BlueFishInputThread )

@@ -4,6 +4,8 @@
 
 #include "LibImage.h"
 
+#include "UseLoggerVideoModule.h"
+
 
 namespace bv {
 namespace videocards {
@@ -14,11 +16,22 @@ namespace bluefish
 // ***********************
 //
 BlueFishInputThread::BlueFishInputThread( InputChannel * vc )
-    : m_processedFrameQueue( 1 )
+    : m_processedFrameQueue( 2 )
     , m_inputChannel( vc )
     , m_reusableChunks( { nullptr } )
 {
-    m_reusableChunks = m_inputChannel->CreateReusableChunks( 2 );
+    m_reusableChunks = m_inputChannel->CreateReusableChunks( 3 );
+
+    // Add one frame delay to avoid waiting for input in main thread.
+    auto emptyFrame = GenEmptyFrame();
+    bool success = m_processedFrameQueue.TryPush( emptyFrame );
+
+    // If push failed, something is horibly wrong.
+    assert( success );
+    if( !success )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "[BlueFishInputThread] Can't push first frame to video input queue";
+    }
 }
 
 // ***********************
@@ -106,6 +119,20 @@ AVFramePtr          BlueFishInputThread::PopNextFrame           ()
     return frame;
 }
 
+
+// ***********************
+//
+AVFramePtr          BlueFishInputThread::GenEmptyFrame          ()
+{
+    auto desc = m_inputChannel->CreateFrameDesc();
+
+    auto chunkSize = desc.depth * desc.height * desc.width;
+
+    auto videoChunk = MemoryChunk::Create( chunkSize );
+    MemoryChunkPtr audioChunk = nullptr;
+
+    return std::make_shared< AVFrame >( videoChunk, audioChunk, desc );
+}
 
 }   // bluefish
 }   // videocards
