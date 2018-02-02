@@ -115,7 +115,7 @@ void				BlueFishInputThread::EnqueueEndMessage		()
 AVFramePtr          BlueFishInputThread::PopNextFrame           ()
 {
     AVFramePtr frame;
-    m_processedFrameQueue.WaitAndPop( frame );
+    m_processedFrameQueue.TryPop( frame );
     return frame;
 }
 
