@@ -273,7 +273,7 @@ void CFifoPlayback::StopThread()
         m_nThreadStopping = TRUE;
 
         m_pFifoBuffer->PushEmptyFrame();
-        m_pFifoBuffer->PushEmptyFrame();
+        //m_pFifoBuffer->PushEmptyFrame();
 
         dw = WaitForSingleObject(m_hThread, INFINITE);
         CloseHandle(m_hThread);

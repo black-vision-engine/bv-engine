@@ -200,6 +200,7 @@ void                    OutputChannel::StartThreads                 ()
 //
 void                    OutputChannel::StopThreads                  ()
 {
+    m_frameProcessingThread->Stop();
     m_playbackChannel->StopThread();
 }
 
