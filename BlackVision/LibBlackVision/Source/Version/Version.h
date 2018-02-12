@@ -35,7 +35,8 @@ struct Version
 
     bool                operator!=  ( const Version & that );
 
-    //std::string         operator()
+    operator std::string            () const;
+    std::string         ToString    () const;
 };
 
 

@@ -9,11 +9,32 @@
 namespace bv
 {
 
+#ifdef _DEBUG
+    const std::string VERSION_DEBUG_STRING = " Debug";
+#else
+    const std::string VERSION_DEBUG_STRING = " Release";
+#endif
+
+#ifdef _MSC_VER
+    // Macros defined in visual compiler
+    #ifdef _M_AMD64
+        const std::string VERSION_ARCHITECTURE_STRING = " x64";
+    #elif defined( _M_IX86 )
+        const std::string VERSION_ARCHITECTURE_STRING = " x86";
+    #else
+        const std::string VERSION_ARCHITECTURE_STRING = " Unknown Architecture";
+    #endif
+#else
+    // For other compilers
+    const std::string VERSION_ARCHITECTURE_STRING = "";
+#endif
+
+
 
 namespace impl
 {
 
-Version CurrentVersion = { 0, 48, PatchVersion, 1, BuildVersion, "Windows 64bit" };
+Version CurrentVersion = { 0, 48, PatchVersion, 1, BuildVersion, std::string( "Windows" + VERSION_ARCHITECTURE_STRING + VERSION_DEBUG_STRING ) };
 
 }
 
@@ -111,6 +132,28 @@ bool                Version::operator!=  ( const Version & that )
         Platform != that.Platform;
 }
 
+// ***********************
+//
+Version::operator   std::string         () const
+{
+    return ToString();
+}
+
+// ***********************
+//
+std::string     Version::ToString() const
+{
+    std::string versionString = "Version: "
+        + Convert::T2String( MajorVersion ) + "."
+        + Convert::T2String( MinorVersion ) + "."
+        + Convert::T2String( PatchVersion ) + "."
+        + Convert::T2String( BuildVersion )
+        + " (Serializer: " + Convert::T2String( SerializerVersion )
+        + ") Platform: " + Platform;
+
+    return versionString;
+}
+
 
 // ***********************
 //
@@ -119,13 +162,6 @@ Version         Version::GetCurrentVersion   ()
     return impl::CurrentVersion;
 }
 
-// ***********************
-//
-std::ostream &  operator<<                  ( std::ostream & stream, const Version & version )
-{
-    stream << "Version: " << Convert::T2String( version.MajorVersion );
-
-    return stream;
-}
 
 }	// bv
+
