@@ -13,7 +13,7 @@ namespace bv
 namespace impl
 {
 
-Version CurrentVersion = { 0, 48, 1, BuildVersion, "Windows 64bit" };
+Version CurrentVersion = { 0, 48, 1, BuildVersion, PatchVersion, "Windows 64bit" };
 
 }
 
@@ -21,6 +21,7 @@ namespace
 {
     static const std::string    MAJOR_VERSION       = "Major";
     static const std::string    MINOR_VERSION       = "Minor";
+    static const std::string    PATCH_VERSION       = "Patch";
     static const std::string    SERIALIZER_VERSION  = "SerializerVersion";
     static const std::string    BUILD_VERSION       = "Build";
     static const std::string    PLATFORM            = "Platform";
@@ -37,6 +38,7 @@ Version         Version::Create      ( const IDeserializer & deser )
     {
         version.MajorVersion        = Convert::String2T< Int32 >( deser.GetAttribute( MAJOR_VERSION ) );
         version.MinorVersion        = Convert::String2T< Int32 >( deser.GetAttribute( MINOR_VERSION ) );
+        version.PatchVersion        = Convert::String2T< Int32 >( deser.GetAttribute( PATCH_VERSION ) );
         version.SerializerVersion   = Convert::String2T< Int32 >( deser.GetAttribute( SERIALIZER_VERSION ) );
         version.BuildVersion        = Convert::String2T< Int64 >( deser.GetAttribute( BUILD_VERSION ) );
         version.Platform            = deser.GetAttribute( PLATFORM );
@@ -60,6 +62,7 @@ void            Version::Serialize   ( ISerializer & ser )
 
     ser.SetAttribute( MAJOR_VERSION, Convert::T2String( MajorVersion ) );
     ser.SetAttribute( MINOR_VERSION, Convert::T2String( MinorVersion ) );
+    ser.SetAttribute( PATCH_VERSION, Convert::T2String( PatchVersion ) );
     ser.SetAttribute( SERIALIZER_VERSION, Convert::T2String( SerializerVersion ) );
     ser.SetAttribute( BUILD_VERSION, Convert::T2String( BuildVersion ) );
     ser.SetAttribute( PLATFORM, Platform );
@@ -83,6 +86,7 @@ bool                Version::operator!=  ( const Version & that )
 {
     return MajorVersion != that.MajorVersion ||
         MinorVersion != that.MinorVersion ||
+        PatchVersion != that.PatchVersion ||
         SerializerVersion != that.SerializerVersion ||
         BuildVersion != that.BuildVersion ||
         Platform != that.Platform;

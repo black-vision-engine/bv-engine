@@ -17,6 +17,7 @@ struct Version
 {
     Int32               MajorVersion;
     Int32               MinorVersion;
+    Int32               PatchVersion;
     Int32               SerializerVersion;
     Int64               BuildVersion;
     std::string         Platform;
