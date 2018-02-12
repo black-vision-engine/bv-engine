@@ -1,8 +1,17 @@
 #include "stdafx.h"
 #include "InputSlots.h"
 
+#include "Assets/Input/TextureInputAsset.h"
+#include "Assets/Input/TextureInputAssetDesc.h"
 
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
+#include "Engine/Events/EventManager.h"
+
+#include "Engine/Events/InnerEvents/InputSlots/SlotRemovedEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/FirstSlotRefEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/SlotAddedEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/AllSlotRefsRemovedEvent.h"
 
 
 namespace bv
@@ -14,6 +23,7 @@ const SlotIndex       InputSlots::sInvalidIdx = std::numeric_limits< SlotIndex >
 // ***********************
 //
 InputSlots::InputSlots()
+    :   m_fallbackSlot( CreateFallbackTexture(), CreateFallbackAudio() )
 {}
 
 // ***********************
@@ -39,10 +49,7 @@ bool                        InputSlots::UnregisterSource      ( SlotIndex slotId
 
     if( IsValidIndex( slotIdx ) )
     {
-        if( m_slots[ slotIdx ].References > 0 )
-        {
-            // FIXME: Error handling
-        }
+        GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< SlotRemovedEvent >( slotIdx, m_slots[ slotIdx ].Descriptor.SlotName ) );
 
         m_slots[ slotIdx ].Slot.Texture = nullptr;
         m_slots[ slotIdx ].Slot.Audio = nullptr;
@@ -74,6 +81,34 @@ Expected< InputSlot >       InputSlots::AccessSource          ( const std::strin
 
 // ***********************
 //
+void                        InputSlots::ReferenceSource       ( const std::string & name )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    ReferenceSource( FindSourceByName( name ) );
+}
+
+// ***********************
+//
+void                        InputSlots::ReferenceSource       ( SlotIndex slotIdx )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    if( !IsValidIndex( slotIdx ) )
+        return;
+
+    m_slots[ slotIdx ].References++;
+
+    // Send event on first reference to this slot.
+    if( m_slots[ slotIdx ].References == 1 )
+    {
+        GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< FirstSlotRefEvent >( slotIdx, m_slots[ slotIdx ].Descriptor.SlotName ) );
+    }
+}
+
+
+// ***********************
+//
 void                        InputSlots::ReleaseSource         ( const std::string & name )
 {
     std::lock_guard< std::recursive_mutex > guard( m_lock );
@@ -90,7 +125,6 @@ Expected< InputSlot >       InputSlots::AccessSource          ( SlotIndex slotId
     if( !IsValidIndex( slotIdx ) )
         return Expected< InputSlot >();
 
-    m_slots[ slotIdx ].References++;
     return m_slots[ slotIdx ].Slot;
 }
 
@@ -104,6 +138,17 @@ void                        InputSlots::ReleaseSource         ( SlotIndex slotId
         return ;
 
     m_slots[ slotIdx ].References--;
+
+    // Send event that slot is unused.
+    if( m_slots[ slotIdx ].References == 0 )
+    {
+        GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< AllSlotRefsRemovedEvent >( slotIdx, m_slots[ slotIdx ].Descriptor.SlotName ) );
+    }
+
+    if( m_slots[ slotIdx ].References < 0 )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Slot [" << m_slots[ slotIdx ].Descriptor.SlotName << ", index [" << Convert::T2String( slotIdx ) << "] - negative number of references.";
+    }
 }
 
 
@@ -143,17 +188,23 @@ SlotIndex                   InputSlots::FindEmptySlot         () const
 //
 Expected< SlotIndex >       InputSlots::AddSource             ( const InputEntry & entry )
 {
+    SlotIndex resultIndex;
+
     SlotIndex emptySlot = FindEmptySlot();
     if( emptySlot == sInvalidIdx )
     {
         m_slots.push_back( entry );
-        return m_slots.size() - 1;
+        resultIndex = m_slots.size() - 1;
     }
     else
     {
         m_slots[ emptySlot ] = entry;
-        return emptySlot;
+        resultIndex = emptySlot;
     }
+
+    GetDefaultEventManager().ConcurrentQueueEvent( std::make_shared< SlotAddedEvent >( resultIndex, m_slots[ resultIndex ].Descriptor.SlotName ) );
+
+    return resultIndex;
 }
 
 // ***********************
@@ -195,6 +246,54 @@ bool                InputSlots::CanAddSource          ( InputSlot inputSlot, con
         return false;
 
     return true;
+}
+
+// ***********************
+//
+Texture2DPtr                    InputSlots::CreateFallbackTexture   ()
+{
+    auto width = 8;
+    auto height = 8;
+    TextureFormat format = TextureFormat::F_A8R8G8B8;
+    DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC;
+    UInt32 levels = 1;
+
+    auto tex = std::make_shared< Texture2D >( format, width, height, semantic, levels );
+    tex->SetData( GenerateFallbackTexture( width, height, 4 ) );
+
+    return tex;
+}
+
+// ***********************
+//
+audio::AudioBufferPtr           InputSlots::CreateFallbackAudio     ()
+{
+    return nullptr;
+}
+
+// ***********************
+//
+MemoryChunkPtr                  InputSlots::GenerateFallbackTexture ( UInt32 width, UInt32 height, UInt32 bpp )
+{
+    auto chunk = MemoryChunk::Create( width * height * bpp );
+    
+    // Fully transparent and empty texture.
+    chunk->Clear();
+
+    return chunk;
+}
+
+// ***********************
+/// This function creates TextureInputAsset. We need to do this under lock, thats why this code is here.
+/// @Note: We must provide shared_ptr to InputSlots object and I don't won't to use enable_shared_from_this.
+TextureInputAssetConstPtr       InputSlots::CreateAsset     ( InputSlotsPtr thisPtr, TextureInputAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = TextureInputAsset::Create( thisPtr, desc->BindingInfo() );
+    asset->EvaluateSlot();
+
+    return asset;
 }
 
 

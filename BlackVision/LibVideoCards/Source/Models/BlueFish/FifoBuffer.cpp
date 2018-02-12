@@ -54,9 +54,9 @@ bool                        CFifoBuffer::IsEmptyFrame   ( std::shared_ptr< CFram
 
 //**************************************
 //
-void                        CFifoBuffer::PushEmptyFrame ()
+bool                        CFifoBuffer::PushEmptyFrame ()
 {
-    m_frameBuffer.Push( m_emptyFrame );
+    return m_frameBuffer.TryPush( m_emptyFrame );
 }
 
 } //bluefish

@@ -233,7 +233,15 @@ bool					VideoCard::InitKeyer			( const ChannelOutputData & ch )
 //
 void                    VideoCard::SetVideoOutput       ( bool enable )
 {
+    assert( !"Implement me" );
 	m_output.enabled = enable;
+}
+
+// ***********************
+//
+void            VideoCard::SetVideoInput        ( VideoInputID inputId, bool enable )
+{
+    { inputId; enable; }
 }
 
 //**************************************

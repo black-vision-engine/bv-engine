@@ -5,6 +5,9 @@
 #include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "Engine/Graphics/Effects/Logic/Components/Initialization/RenderLogicDesc.h"
 
+#include "Engine/Graphics/InputSlots/Logic/InputLogic.h"
+#include "Engine/Graphics/InputSlots/Logic/Handlers/VideoInputHandler.h"
+
 #include "UseLoggerBVAppModule.h"
 
 
@@ -176,6 +179,24 @@ void             RenderLogicInitializer::InitializeDefaultAVFile( OutputDesc & d
     desc.SetEnabled( false );
 
     // FIXME: nrl - append additional properties if necessary
+}
+
+// ***********************
+//
+void            RenderLogicInitializer::InitializeVideoInput    ( InputLogic * inputLogic, videocards::VideoCardManager * videoCardManager )
+{
+    VideoInputHandlerPtr videoInputHandler = std::make_shared< VideoInputHandler >( videoCardManager, inputLogic->GetInputSlots() );
+
+    inputLogic->AppendInputHandler( videoInputHandler );
+}
+
+// ***********************
+//
+void            RenderLogicInitializer::InitializeInputSlots    ( RenderLogic * renderLogic, const BVConfig &, videocards::VideoCardManager * videoCardManager )
+{
+    auto inputLogic = renderLogic->GetInputLogic();
+
+    InitializeVideoInput( inputLogic, videoCardManager );
 }
 
 

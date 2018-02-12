@@ -4,16 +4,28 @@
 #include "Engine/Graphics/Resources/DataBuffer.h"
 #include "Memory/MemoryChunk.h"
 
-namespace bv {
+namespace bv
+{
 
+
+
+// ***********************
+//
 class ITextureDescriptor : public ITextureParams
 {
 public:
 
     typedef uintptr_t   uid_t;
 
+    enum class Type
+    {
+        Memory,     ///< Descriptor contain texture data in memory
+        GPU         ///< Descriptor references texture residing in GPU.
+    };
+
 public:
 
+    virtual Type                    GetTextureType      () const { return Type::Memory; }
     virtual uid_t                   GetUID              () const = 0;
 
 	virtual UInt32				    GetNumLevels        () const = 0;

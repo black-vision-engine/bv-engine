@@ -11,6 +11,24 @@
     <ClCompile Include="..\..\..\Source\VideoInputHandlerTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TextureInputAssetTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\GPUTextureDescriptorTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\InputsInitializationTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInputPipelineTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInputAssetTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\InputSlotsEventsTest.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestCases">
@@ -22,6 +40,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Helpers\AVFrameHelpers.h">
+      <Filter>TestCases\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\TextureHelpers.h">
+      <Filter>TestCases\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\InputAssetHelpers.h">
+      <Filter>TestCases\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Helpers\VideoInputAssetHelpers.h">
       <Filter>TestCases\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
