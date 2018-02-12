@@ -126,6 +126,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.cpp" />
@@ -153,6 +162,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\Nodes\NodeCopiedEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.cpp" />
@@ -521,6 +534,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.cpp" />
@@ -597,6 +611,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultNormalMapPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultParallaxMapPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultTexturePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\TexturePluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCogWheelPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultConePlugin.cpp" />
@@ -624,10 +639,17 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\IAudioInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsseth.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\AssetsLoading\Async\AssetAsyncLoadFinishedEvent.h" />
@@ -656,6 +678,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h" />
@@ -671,6 +698,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeLogics\NodeLogicDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\TexturePluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\LinesPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h" />

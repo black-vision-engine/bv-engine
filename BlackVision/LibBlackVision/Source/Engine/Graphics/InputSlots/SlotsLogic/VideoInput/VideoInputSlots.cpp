@@ -4,6 +4,10 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
+#include "Assets/Input/VideoInput/VideoInputAsset.h"
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -150,7 +154,7 @@ Texture2DPtr                VideoInputSlots::CreateTexture  ( const videocards::
 
 // ***********************
 //
-audio::AudioEntity *        VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
+audio::AudioBufferPtr       VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
 {
     vidInputDesc;
     return nullptr;
@@ -166,13 +170,9 @@ void                        VideoInputSlots::FreeTexture    ( RenderContext * ct
 
 // ***********************
 //
-void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioEntity * audio )
+void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioBufferPtr audio )
 {
-    if( audio )
-    {
-        ctx->GetAudio()->DeletePDR( audio );
-        delete audio;
-    }
+    { ctx; audio; }
 }
 
 // ***********************
@@ -240,7 +240,17 @@ Expected< VideoInputSlots::EntryIdx >       VideoInputSlots::FindEntry  ( videoc
     return Expected< VideoInputSlots::EntryIdx >();
 }
 
+// ***********************
+//
+VideoInputTextureAssetConstPtr  VideoInputSlots::CreateAsset        ( VideoInputSlotsPtr thisPtr, VideoInputTextureAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
 
+    auto asset = VideoInputTextureAsset::Create( thisPtr, desc->GetVideoInputID(), desc->GetVideoType() );
+    asset->EvaluateSlot();
+
+    return asset;
+}
 
 }	// bv
 

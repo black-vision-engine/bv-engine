@@ -12,6 +12,18 @@ namespace bv
 {
 
 class RenderContext;
+class VideoInputSlots;
+class VideoInputAssetDesc;
+class VideoInputAsset;
+class VideoInputTextureAssetDesc;
+class VideoInputTextureAsset;
+DEFINE_PTR_TYPE( VideoInputSlots )
+DEFINE_CONST_PTR_TYPE( VideoInputAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
+DEFINE_PTR_TYPE( VideoInputTextureAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputTextureAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputTextureAssetDesc )
+
 
 
 /**@brief Wrapper for inputs slots from video cards.
@@ -50,6 +62,8 @@ public:
 
     Expected< SlotIndex >       GetSlotIndex        ( videocards::VideoInputID id ) const;
 
+    InputSlotsPtr               GetInputSlots       () const { return m_avInputSlots.GetInputSlots(); }
+
 private:
 
     Expected< EntryIdx >        FindEntry       ( const videocards::VideoInputChannelDesc & vidInputDesc ) const;
@@ -58,12 +72,20 @@ private:
     Expected< SlotIndex >       Register        ( const videocards::VideoInputChannelDesc & vidInputDesc );
 
     Texture2DPtr                CreateTexture   ( const videocards::VideoInputChannelDesc & vidInputDesc );
-    audio::AudioEntity *        CreateAudio     ( const videocards::VideoInputChannelDesc & vidInputDesc );
+    audio::AudioBufferPtr       CreateAudio     ( const videocards::VideoInputChannelDesc & vidInputDesc );
 
     void                        FreeTexture     ( RenderContext * ctx, Texture2DPtr texture );
-    void                        FreeAudio       ( RenderContext * ctx, audio::AudioEntity * audio );
+    void                        FreeAudio       ( RenderContext * ctx, audio::AudioBufferPtr audio );
 
     std::string                 GenerateName    ( const videocards::VideoInputChannelDesc & vidInputDesc );
+
+public:
+
+    ///@name VideoInputAsset creation
+    ///@{
+    VideoInputTextureAssetConstPtr  CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputTextureAssetDescConstPtr desc );
+    ///@}
+
 };
 
 

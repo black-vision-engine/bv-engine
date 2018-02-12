@@ -31,6 +31,18 @@ InputLogic::~InputLogic()
 //
 void            InputLogic::ProcessInputs       ( RenderContext * ctx )
 {
+    // Deffered initialization of inputs.
+    if( m_inputsToRegister.size() > 0 )
+    {
+        for( auto & input : m_inputsToRegister )
+        {
+            input->RegisterInputs( ctx, m_inputSlots );
+            m_inputsHandlers.push_back( input );
+        }
+
+        m_inputsToRegister.clear();
+    }
+
     for( auto inputHandler : m_inputsHandlers )
     {
         inputHandler->ProcessInputs( ctx );
@@ -39,12 +51,12 @@ void            InputLogic::ProcessInputs       ( RenderContext * ctx )
 
 // ***********************
 //
-void            InputLogic::AppendInputHandler  ( RenderContext * ctx, IInputHandlerPtr newHandler )
+void            InputLogic::AppendInputHandler  ( IInputHandlerPtr newHandler )
 {
-    if( std::find( m_inputsHandlers.begin(), m_inputsHandlers.end(), newHandler ) != m_inputsHandlers.end() )
+    if( std::find( m_inputsHandlers.begin(), m_inputsHandlers.end(), newHandler ) == m_inputsHandlers.end() &&
+        std::find( m_inputsToRegister.begin(), m_inputsToRegister.end(), newHandler ) == m_inputsToRegister.end() )
     {
-        newHandler->RegisterInputs( ctx, m_inputSlots );
-        m_inputsHandlers.push_back( newHandler );
+        m_inputsToRegister.push_back( newHandler );
     }
     else
     {

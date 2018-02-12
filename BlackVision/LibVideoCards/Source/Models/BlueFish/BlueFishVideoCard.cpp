@@ -46,9 +46,8 @@ std::set< UInt64 >	    VideoCard::GetDisplayedVideoOutputsIDs  () const
     for( auto ch : m_channels )
     {
         if( ch->IsOutputChannel() )
-            ret.insert( ch->GetOutputId() );
+            ret.insert( static_cast< OutputChannel * >( ch )->GetOutputId() );
     }
-        
 
     return ret;
 }
@@ -63,7 +62,9 @@ InputChannelsDescsVec   VideoCard::GetInputChannelsDescs        () const
     {
         if( channel->IsInputChannel() )
         {
-            VideoInputID inputID = channel->GetInputId();
+            auto typedChannel = static_cast< InputChannel * >( channel );
+
+            VideoInputID inputID = typedChannel->GetInputId();
             const std::string channelName = Convert::T2String( channel->GetName() );
             
             AVFrameDescriptor frameDesc = channel->CreateFrameDesc();
@@ -99,53 +100,81 @@ void            VideoCard::InitVideoCard            ()
 
     SetVideoOutput( false );
 
-	for( auto & channel : m_channels )
+	for( auto channelIter = m_channels.begin(); channelIter != m_channels.end(); )
 	{
-        if( channel->IsInputChannel() )
+        if( (*channelIter)->IsInputChannel() )
 		{
+            auto channel = static_cast< InputChannel * >( ( *channelIter ) );
             auto captureChannel = channel->GetCaptureChannel();
+
+            ReturnResult result;
 
             if( channel->GetInputType() != IOType::FILL_KEY )
             {
-                captureChannel->Init( m_deviceID, channel->GetInputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetCaptureBuffer() );
-				captureChannel->RouteChannel( channel->GetEpochSDIInput(), channel->GetEpochInputMemInterface(), BLUE_CONNECTOR_PROP_SINGLE_LINK );
+                result = captureChannel->Init( m_deviceID, channel->GetInputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetCaptureBuffer() );
+                
+                if( result.IsValid() )
+                    captureChannel->RouteChannel( channel->GetEpochSDIInput(), channel->GetEpochInputMemInterface(), BLUE_CONNECTOR_PROP_SINGLE_LINK );
             }
             else
             {
-                captureChannel->InitDualLink( m_deviceID, channel->GetInputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetCaptureBuffer() );
+                result = captureChannel->InitDualLink( m_deviceID, channel->GetInputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetCaptureBuffer() );
             }
 
-			captureChannel->InitThread();
-		}
+            if( result.IsValid() )
+                result = captureChannel->InitThread();
 
-        
-        if( channel->IsOutputChannel() )
+            if( !result.IsValid() )
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "Input Channel " << Convert::T2String( ( *channelIter )->GetName() ) << " couldn't be initialize. Error: " << result.GetErrorReason();
+
+                channelIter = m_channels.erase( channelIter );
+                continue;
+            }
+		}
+        else if( ( *channelIter )->IsOutputChannel() )
 		{
+            auto channel = static_cast< OutputChannel * >( ( *channelIter ) );
             auto playbackChannel = channel->GetPlaybackChannel();
 
-            playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(), 
+            ReturnResult result;
+
+            result = playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(),
             channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
 
-			if( channel->GetOutputType() == IOType::FILL )
-			{
-				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_SINGLE_LINK );
-			}
-			else if( channel->GetOutputType() == IOType::KEY )
-			{
-				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
-			}
-			else if( channel->GetOutputType() == IOType::FILL_KEY )
-			{				
-				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
-				playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIKeyOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
-			}
+            if( result.IsValid() )
+            {
+                if( channel->GetOutputType() == IOType::FILL )
+                {
+                    playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_SINGLE_LINK );
+                }
+                else if( channel->GetOutputType() == IOType::KEY )
+                {
+                    playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
+                }
+                else if( channel->GetOutputType() == IOType::FILL_KEY )
+                {
+                    playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_1 );
+                    playbackChannel->RouteChannel( channel->GetEpochOutputMemInterface(), channel->GetEpochSDIKeyOutput(), BLUE_CONNECTOR_PROP_DUALLINK_LINK_2 );
+                }
 
-            playbackChannel->InitThread();
+                result = playbackChannel->InitThread();
 
-            playbackChannel->m_AutoGeneratedTimecode = channel->AutoGeneratedTimecode();
-            playbackChannel->m_EnableTimecode = channel->TimecodePresented();
-            //FIXME: playback_counter / playbackChannel->InitThread(); 
-		}			
+                playbackChannel->m_AutoGeneratedTimecode = channel->AutoGeneratedTimecode();
+                playbackChannel->m_EnableTimecode = channel->TimecodePresented();
+                //FIXME: playback_counter / playbackChannel->InitThread(); 
+            }
+
+            if( !result.IsValid() )
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "Output Channel " << Convert::T2String( ( *channelIter )->GetName() ) << " couldn't be initialize. Error: " << result.GetErrorReason();
+
+                channelIter = m_channels.erase( channelIter );
+                continue;
+            }
+		}
+
+        channelIter++;
 	}
 
     SetVideoOutput( true );
@@ -157,7 +186,25 @@ void            VideoCard::SetVideoOutput        ( bool enable )
 {
     for( auto channel : m_channels )
     {
-        channel->SetVideoOutput( enable );
+        if( channel->IsOutputChannel() )
+        {
+            static_cast< OutputChannel * >( channel )->SetVideoOutput( enable );
+        }
+    }
+}
+
+// ***********************
+//
+void            VideoCard::SetVideoInput        ( VideoInputID inputId, bool enable )
+{
+    for( auto channel : m_channels )
+    {
+        if( channel->IsInputChannel() )
+        {
+            auto inputChannel = static_cast< InputChannel * >( channel );
+            if( inputChannel->GetInputId() == inputId )
+                inputChannel->SetVideoInput( enable );
+        }
     }
 }
 
@@ -224,11 +271,16 @@ void                            VideoCard::Stop                         ()
 //
 void                            VideoCard::ProcessFrame             ( const AVFrameConstPtr & frame, UInt64 outputId )
 {
-    for( auto channel : m_channels )
+    for( auto chn : m_channels )
     {
-        if( channel->GetOutputId() == outputId )
+        if( chn->IsOutputChannel() )
         {
-            channel->EnqueueFrame( frame );
+            auto channel = static_cast< OutputChannel * >( chn );
+
+            if( channel->GetOutputId() == outputId )
+            {
+                channel->EnqueueFrame( frame );
+            }
         }
 	}   
 }
@@ -237,21 +289,16 @@ void                            VideoCard::ProcessFrame             ( const AVFr
 //
 AVFramePtr                      VideoCard::QueryInputFrame          ( VideoInputID inputID )
 {
-    for( auto channel : m_channels )
+    for( auto chn : m_channels )
     {
-        if( channel->GetInputId() == inputID )
+        if( chn->IsInputChannel() )
         {
-            std::shared_ptr< CFrame > cFrame;
+            auto channel = static_cast< InputChannel *> ( chn );
 
-            if( channel->GetCaptureBuffer()->TryPopFrame( cFrame ) )
+            if( channel->GetInputId() == inputID )
             {
-                MemoryChunkPtr videoChunk = MemoryChunk::Create( ( char * )cFrame->m_pBuffer, cFrame->m_nSize );
-                MemoryChunkPtr audioChunk = MemoryChunk::Create( ( char * )cFrame->m_pAudioBuffer, cFrame->m_nAudioSize );
-                
-                return std::make_shared< AVFrame >( videoChunk, audioChunk, channel->CreateFrameDesc() );
+                return channel->QueryInputFrame();
             }
-
-            break;
         }
     }
 
@@ -277,12 +324,17 @@ UInt32                          VideoCard::EnumerateDevices         ()
 //
 UInt32                          VideoCard::GetRequiredFPS  () const
 {
-    UInt32 fps = 1;
+    UInt32 fps = 5000;
 
-    for( auto & ch : m_channels )
+    for( auto & chn : m_channels )
     {
-        if( ch->m_playbackData )
-            fps = mathematics::lcm( ch->m_playbackData->refresh, fps );
+        if( chn->IsOutputChannel() )
+        {
+            auto channel = static_cast< OutputChannel * >( chn );
+
+            if( channel->PlaybackData )
+                fps = mathematics::lcm( channel->PlaybackData->refresh, fps );
+        }
     }
  
     return fps / 100;

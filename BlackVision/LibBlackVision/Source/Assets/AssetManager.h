@@ -20,6 +20,7 @@ namespace bv
 @ingroup Assets*/
 class AssetManager
 {
+    FRIEND_TEST_ACCESSOR( AssetManager );
 private:
 
     std::map< std::string, AssetLoaderConstPtr >	m_loaders;
@@ -43,10 +44,12 @@ public:
 
     static AssetManager &			GetInstance		();
 
-private:
+public:
 
     explicit						AssetManager();
                                     ~AssetManager();
+
+private:
 
     void							RegisterBasicLoaders();
 

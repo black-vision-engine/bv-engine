@@ -40,11 +40,11 @@ void        AVFrameInputSlots::UpdateTexture    ( Texture2DPtr texture, AVFrameP
 
 // ***********************
 //
-void        AVFrameInputSlots::UpdateAudio      ( audio::AudioEntity * audio, AVFramePtr frame )
+void        AVFrameInputSlots::UpdateAudio      ( audio::AudioBufferPtr audio, AVFramePtr frame )
 {
     if( audio )
     {
-        audio->PushData( frame->m_audioData );
+        audio->Update( frame->m_audioData );
     }
 }
 

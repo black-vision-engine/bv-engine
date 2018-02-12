@@ -25,7 +25,7 @@ public:
     std::shared_ptr< CFrame >   PopFrame        ();
     bool                        TryPopFrame     ( std::shared_ptr< CFrame > & frame );
 
-    void                        PushEmptyFrame  ();
+    bool                        PushEmptyFrame  ();
 
 	bool                        IsEmptyFrame	( std::shared_ptr< CFrame > frm ) const;
 

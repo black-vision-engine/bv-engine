@@ -95,7 +95,10 @@ model::BasicNodePtr		TestNodesCreator::TexturedRectangle		( model::ITimeEvaluato
     SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), width );
     SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), height );
 
-    LoadTexture( node->GetPlugin( "texture" ), path );
+    if( !path.empty() )
+    {
+        LoadTexture( node->GetPlugin( "texture" ), path );
+    }
 
     if( !alphaMask.empty() )
     {

@@ -6,8 +6,24 @@
 namespace bv
 {
 
+// ***********************
+/// Class used with Expected when we want only get success or failure from function without return value.
+class Result
+{
+public:
+
+    class Success
+    {};
+
+    class Failure
+    {};
+};
+
+
 namespace impl
 {
+
+
 
 // ************************
 //
@@ -96,6 +112,48 @@ public:
 };
 
 // ========================================================================= //
+// Result specialization
+// ========================================================================= //
+
+
+
+/**@brief This specialization for functions that don't return value.
+
+Return Result::Success() or Result::Failure() to create result without exception.*/
+template<>
+class Expected< Result, bv::ExceptionPtr > : public impl::ExpectedBase< Result, bv::ExceptionPtr >
+{
+public:
+    explicit                Expected            ()
+    {}
+
+    Expected            ( Result::Success )
+        : ExpectedBase< Result, bv::ExceptionPtr >( Result() )
+    {}
+
+    Expected            ( Result::Failure )
+        : ExpectedBase< Result, bv::ExceptionPtr >()
+    {}
+
+    Expected            ( const std::string & reason )
+        : ExpectedBase( bv::ExceptionPtr( new RuntimeException( reason ) ) )
+    {}
+
+    Expected ( const Expected & that )
+        : ExpectedBase< Result, bv::ExceptionPtr >( that )
+    {}
+
+    Expected ( const ExpectedBase & that ) // conversion to let ExpectedBase::fromError work
+        : ExpectedBase( that )
+    {}
+
+    Expected< Result, bv::ExceptionPtr > &        operator=   ( const Expected< Result, bv::ExceptionPtr > & other );
+};
+
+typedef Expected< Result, bv::ExceptionPtr > ReturnResult;
+
+
+// ========================================================================= //
 // Implementation
 // ========================================================================= //
 
@@ -146,7 +204,10 @@ bool ExpectedBase< HamType, ErrorType >::IsValid()
 template< typename HamType, typename ErrorType >
 std::string             ExpectedBase< HamType, ErrorType >::GetErrorReason  () 
 { 
-    return spam->GetReason(); 
+    if( spam )
+        return spam->GetReason();
+    else
+        return std::string();
 }
 
 template< typename HamType, typename ErrorType >
@@ -210,7 +271,7 @@ ExpectedBase< HamType, ErrorType >     ExpectedBase< HamType, ErrorType >::fromE
 }
 
 // ========================================================================= //
-// Ecpected
+// Expected
 // ========================================================================= //
 
 
@@ -232,6 +293,27 @@ inline Expected< HamType, ErrorType > &         Expected< HamType, ErrorType >::
         new( &ham ) HamType( other.ham );
     else
         new( &spam ) ErrorType( other.spam );
+
+    return *this;
+}
+
+// ***********************
+//
+inline Expected< Result, bv::ExceptionPtr  > &         Expected< Result, bv::ExceptionPtr >::operator=       ( const Expected< Result, bv::ExceptionPtr > & other )
+{
+    // Release current content.
+    if( isValid )
+        ham.~Result();
+    else
+        spam.~ExceptionPtr();
+
+    isValid = other.isValid;
+
+    // Assing new content.
+    if( isValid )
+        new( &ham ) Result( other.ham );
+    else
+        new( &spam ) bv::ExceptionPtr( other.spam );
 
     return *this;
 }

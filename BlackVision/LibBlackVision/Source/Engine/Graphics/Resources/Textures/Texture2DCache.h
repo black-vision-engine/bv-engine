@@ -31,6 +31,7 @@ public:
                                     Texture2DCache      ();
     virtual                         ~Texture2DCache     ();
 
+    Texture2DPtr                    GetGPUTexture       ( const ITextureDescriptor * txParams );
     Texture2DPtr                    GetTexture          ( const ITextureDescriptor * txParams );
     Texture2DPtr                    GetSequence         ( const IAnimationDescriptor * animParams );
 

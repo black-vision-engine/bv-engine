@@ -162,3 +162,24 @@ void        GTEST_TEST_CLASS_NAME_( suite, name )::PreEvents           ()
 
 
 #define SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )
+#define SIMPLE_FRAMEWORK_TEST( suite, name )   SIMPLE_FRAMEWORK_TEST_IN_SUITE( suite, name )
+
+
+
+
+// ***********************
+//
+#define POST_RENDER_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )    \
+class GTEST_TEST_CLASS_NAME_( suite, name ) : public bv::FrameworkTest   \
+{                                       \
+    DECALRE_GTEST_INFO_WITH_CONSTRUCTOR( GTEST_TEST_CLASS_NAME_( suite, name ) )  \
+public:                                 \
+                                                                \
+    virtual void        PostRender          () override;        \
+};                                                              \
+                                                                \
+REGISTER_FRAMEWORK_GTEST_INFO( GTEST_TEST_CLASS_NAME_( suite, name ), suite, name )     \
+void        GTEST_TEST_CLASS_NAME_( suite, name )::PostRender          ()
+
+
+#define POST_RENDER_FRAMEWORK_TEST( suite, name )   POST_RENDER_FRAMEWORK_TEST_IN_SUITE_IMPL( suite, name )
