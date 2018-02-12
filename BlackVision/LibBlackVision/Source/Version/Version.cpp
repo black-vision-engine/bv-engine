@@ -30,20 +30,39 @@ namespace
 
 // ***********************
 //
+template< typename Type >
+Type                DeserializeVersion  ( const IDeserializer & deser, const std::string & name, bool & result )
+{
+    auto version = Convert::String2T< Type >( deser.GetAttribute( name ) );
+
+    if( version.IsValid() )
+        return version;
+
+    result = false;
+    return -1;
+}
+
+
+// ***********************
+//
 Version         Version::Create      ( const IDeserializer & deser )
 {
     Version version;
+    bool success = true;
 
     if( deser.EnterChild( "version" ) )
     {
-        version.MajorVersion        = Convert::String2T< Int32 >( deser.GetAttribute( MAJOR_VERSION ) );
-        version.MinorVersion        = Convert::String2T< Int32 >( deser.GetAttribute( MINOR_VERSION ) );
-        version.PatchVersion        = Convert::String2T< Int32 >( deser.GetAttribute( PATCH_VERSION ) );
-        version.SerializerVersion   = Convert::String2T< Int32 >( deser.GetAttribute( SERIALIZER_VERSION ) );
-        version.BuildVersion        = Convert::String2T< Int64 >( deser.GetAttribute( BUILD_VERSION ) );
+        version.MajorVersion        = DeserializeVersion< Int32 >( deser, MAJOR_VERSION, success );
+        version.MinorVersion        = DeserializeVersion< Int32 >( deser, MINOR_VERSION, success );
+        version.PatchVersion        = DeserializeVersion< Int32 >( deser, PATCH_VERSION, success );
+        version.SerializerVersion   = DeserializeVersion< Int32 >( deser, SERIALIZER_VERSION, success );
+        version.BuildVersion        = DeserializeVersion< Int64 >( deser, BUILD_VERSION, success );
         version.Platform            = deser.GetAttribute( PLATFORM );
 
         deser.ExitChild();
+
+        if( !success || version.Platform.empty() )
+            version.MajorVersion = -1;
 
         return version;
     }
