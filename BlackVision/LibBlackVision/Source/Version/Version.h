@@ -6,9 +6,11 @@
 #include "Serialization/IDeserializer.h"
 
 
+
+
+
 namespace bv
 {
-
 
 
 // ***********************
@@ -32,6 +34,8 @@ struct Version
     bool                IsValid     ();
 
     bool                operator!=  ( const Version & that );
+
+    //std::string         operator()
 };
 
 

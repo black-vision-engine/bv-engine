@@ -21,7 +21,7 @@ extern Version CurrentVersion;
 
 void SetupCurrentVersion()
 {
-    impl::CurrentVersion = { 0, 47, 1, 444, "Windows 64bit" };
+    impl::CurrentVersion = { 0, 47, 3, 1, 444, "Windows 64bit" };
 }
 
 // ***********************

@@ -13,7 +13,7 @@ namespace bv
 namespace impl
 {
 
-Version CurrentVersion = { 0, 48, 1, BuildVersion, PatchVersion, "Windows 64bit" };
+Version CurrentVersion = { 0, 48, PatchVersion, 1, BuildVersion, "Windows 64bit" };
 
 }
 
@@ -100,5 +100,13 @@ Version         Version::GetCurrentVersion   ()
     return impl::CurrentVersion;
 }
 
+// ***********************
+//
+std::ostream &  operator<<                  ( std::ostream & stream, const Version & version )
+{
+    stream << "Version: " << Convert::T2String( version.MajorVersion );
+
+    return stream;
+}
 
 }	// bv
