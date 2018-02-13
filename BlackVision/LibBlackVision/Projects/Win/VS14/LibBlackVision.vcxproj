@@ -632,6 +632,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\DefaultTextPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\FileNotFoundException.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\InvalidSceneVersion.cpp" />
     <ClCompile Include="..\..\..\Source\Exceptions\Serialization\SerializationException.cpp" />
@@ -853,6 +854,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\SamplerEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\State\Texture2DEntry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderableEffectFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\EngineResources.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\FileNotFoundException.h" />
     <ClInclude Include="..\..\..\Source\Exceptions\InvalidSceneVersion.h" />

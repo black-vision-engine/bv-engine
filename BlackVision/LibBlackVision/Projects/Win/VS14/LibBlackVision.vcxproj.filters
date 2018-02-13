@@ -2179,6 +2179,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.cpp">
       <Filter>Assets\Input\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5554,6 +5557,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
       <Filter>Assets\Database\SQLite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
