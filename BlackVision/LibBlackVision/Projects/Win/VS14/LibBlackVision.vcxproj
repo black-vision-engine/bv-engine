@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotsDerivedAssets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp" />

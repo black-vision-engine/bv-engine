@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 #include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -108,9 +109,9 @@ ITextureDescriptorPtr               TexturePluginBase::LoadMemoryTexture        
 ITextureDescriptorPtr               TexturePluginBase::LoadGPUTexture               ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState )
 {
     // GPU texture from input slot.
-    auto txInputAssetDesc = QueryTypedDesc< TextureInputAssetDescConstPtr >( assetDesc );
-    if( txInputAssetDesc )
+    if( IsTextureSlotAssetDesc( assetDesc->GetUID() ) )
     {
+        auto txInputAssetDesc = std::static_pointer_cast< const TextureInputAssetDesc >( assetDesc );
         auto inTexDesc = GPUTextureDescriptor::LoadTexture( txInputAssetDesc, name );
 
         if( inTexDesc )
@@ -165,7 +166,7 @@ bool                                TexturePluginBase::IsSupportedDescriptor    
     if( uid == TextureAssetDesc::UID() )
         return true;
 
-    if( uid == TextureInputAssetDesc::UID() )
+    if( IsTextureSlotAssetDesc( uid ) )
         return true;
 
     return false;

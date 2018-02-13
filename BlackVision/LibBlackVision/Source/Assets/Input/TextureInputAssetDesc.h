@@ -15,7 +15,13 @@ DEFINE_PTR_TYPE( TextureInputAssetDesc )
 
 
 // ***********************
-//
+/*@brief Descriptor for loading texture from input slots.
+
+Use this as base class for input slot specialized classes. Remember to add
+uid in IsDerivedFromTextureInputAssetDesc function.
+
+@ingroup Assets
+@ingroup InputSlots*/
 class TextureInputAssetDesc : public AssetDesc, public std::enable_shared_from_this< AssetDesc >
 {
 private:
@@ -76,6 +82,10 @@ template<> inline const std::string &       GetAssetDescUID< TextureInputAssetDe
 }
 
 
+// ***********************
+/*@brief Checks if descriptor can be treated as TextureInputAssetDesc.
+If you implement new input slot asset, remember to add uid to this function.*/
+bool                IsTextureSlotAssetDesc          ( const std::string & uid );
 
 
 }	// bv

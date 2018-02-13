@@ -2182,6 +2182,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotsDerivedAssets.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
