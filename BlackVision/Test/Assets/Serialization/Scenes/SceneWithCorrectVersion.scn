@@ -1,5 +1,5 @@
 <scene>
-	<version Major="0" Minor="47" SerializerVersion="1" Build="444" Platform="Windows 64bit"/>
+	<version Major="0" Minor="47" Patch="0" SerializerVersion="1" Build="444" Platform="Windows 64bit"/>
 	<timelines>
 		<timeline name="default" type="default" loop="clamp" />
 	</timelines>

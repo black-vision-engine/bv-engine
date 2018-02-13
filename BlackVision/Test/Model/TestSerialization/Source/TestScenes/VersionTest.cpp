@@ -6,6 +6,9 @@
 #include "Exceptions/FileNotFoundException.h"
 #include "Exceptions/InvalidSceneVersion.h"
 
+#include "Utils/Serialization/Serialize.h"
+
+
 using namespace bv;
 
 
@@ -21,7 +24,7 @@ extern Version CurrentVersion;
 
 void SetupCurrentVersion()
 {
-    impl::CurrentVersion = { 0, 47, 1, 444, "Windows 64bit" };
+    impl::CurrentVersion = { 0, 47, 3, 1, 444, "Windows 64bit" };
 }
 
 // ***********************
@@ -73,4 +76,68 @@ TEST( Serialization_Scene, LoadScene_CorrectVersion )
     ASSERT_TRUE( scene.IsValid() );
     auto warnings = scene.GetVal().GetWarnings();
     EXPECT_EQ( warnings.size(), 0 );
+}
+
+// ========================================================================= //
+// Version object
+// ========================================================================= //
+
+
+
+// ***********************
+//
+Version         DeserializeVersion      ( const std::string & path )
+{
+    BVXMLDeserializer deser( path, BVDeserializeContext::CreateContextFromEmptiness() );
+
+    return Version::Create( deser );
+}
+
+
+// ***********************
+//
+TEST( Serialization_Version, NoMajorNumber )
+{
+    auto version = DeserializeVersion( "TestAssets/Serialization/Version/Version_NoMajorNumber.xml" );
+    EXPECT_FALSE( version.IsValid() );
+}
+
+// ***********************
+//
+TEST( Serialization_Version, NoMinorNumber )
+{
+    auto version = DeserializeVersion( "TestAssets/Serialization/Version/Version_NoMinorNumber.xml" );
+    EXPECT_FALSE( version.IsValid() );
+}
+
+// ***********************
+//
+TEST( Serialization_Version, NoSerializerVersion )
+{
+    auto version = DeserializeVersion( "TestAssets/Serialization/Version/Version_NoSerializerVersion.xml" );
+    EXPECT_FALSE( version.IsValid() );
+}
+
+// ***********************
+//
+TEST( Serialization_Version, NoPatchNumber )
+{
+    auto version = DeserializeVersion( "TestAssets/Serialization/Version/Version_NoPatchNumber.xml" );
+    EXPECT_FALSE( version.IsValid() );
+}
+
+// ***********************
+//
+TEST( Serialization_Version, NoPlatform )
+{
+    auto version = DeserializeVersion( "TestAssets/Serialization/Version/Version_NoPlatform.xml" );
+    EXPECT_FALSE( version.IsValid() );
+}
+
+// ***********************
+//
+TEST( Serialization_Version, NoBuildNumber )
+{
+    auto version = DeserializeVersion( "TestAssets/Serialization/Version/Version_NoBuildNumber.xml" );
+    EXPECT_FALSE( version.IsValid() );
 }
