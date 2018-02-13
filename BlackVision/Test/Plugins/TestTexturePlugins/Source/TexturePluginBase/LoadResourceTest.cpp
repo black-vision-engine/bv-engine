@@ -6,6 +6,7 @@
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 #include "Assets/SVG/SVGAssetDescriptor.h"
 
 #include "Utils/Scenes/TestScenesCreator.h"
@@ -127,6 +128,26 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_TextureI
     auto slotDesc = std::static_pointer_cast< const TextureInputAssetDesc >( lassets[ 0 ].assetDesc );
     
     EXPECT_EQ( slotDesc->BindingInfo().GetIndex(), 0 );
+}
+
+// ***********************
+// TexturePlugin can load video input slots as textures.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_TexturePlugins, ResourceLoading_VideoInputTexture )
+{
+    auto texturePlugin = TestScenesCreator::TexturedRectangle( GetProjectEditor(), "Scene", 400, 400, imagePath_32x32 );
+    auto inputSlotDesc = VideoInputTextureAssetDesc::Create( 0, videocards::VideoType::Fill );
+
+    ASSERT_TRUE( texturePlugin->LoadResource( inputSlotDesc ) );
+
+    auto lassets = texturePlugin->GetLAssets();
+    ASSERT_TRUE( lassets.size() == 1 );
+
+    EXPECT_EQ( lassets[ 0 ].assetDesc->GetUID(), VideoInputTextureAssetDesc::UID() );
+
+    auto slotDesc = std::static_pointer_cast< const VideoInputTextureAssetDesc >( lassets[ 0 ].assetDesc );
+
+    EXPECT_EQ( slotDesc->GetVideoInputID(), 0 );
+    EXPECT_EQ( slotDesc->GetVideoType(), videocards::VideoType::Fill );
 }
 
 
