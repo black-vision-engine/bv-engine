@@ -32,12 +32,16 @@ GPUTextureDescriptor::GPUTextureDescriptor        ( ITextureInputAssetConstPtr t
     m_params.SetFormat( format );
 
     SetName( name );
+
+    m_texResource->AddReference();
 }
 
 // **************************
 //
 GPUTextureDescriptor::~GPUTextureDescriptor                     ()
-{}
+{
+    m_texResource->ReleaseReference();
+}
 
 // **************************
 //

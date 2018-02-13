@@ -8,6 +8,12 @@
 #include "Engine/Graphics/InputSlots/Logic/InputLogic.h"
 #include "Engine/Graphics/InputSlots/Logic/Handlers/VideoInputHandler.h"
 
+#include "Assets/Input/Loaders/InputAssetLoader.h"
+#include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/Loaders/VideoInputAssetLoader.h"
+#include "Assets/Input/Videoinput/VideoInputAssetDesc.h"
+#include "Assets/Input/Videoinput/VideoInputTextureAssetDesc.h"
+
 #include "UseLoggerBVAppModule.h"
 
 
@@ -188,6 +194,11 @@ void            RenderLogicInitializer::InitializeVideoInput    ( InputLogic * i
     VideoInputHandlerPtr videoInputHandler = std::make_shared< VideoInputHandler >( videoCardManager, inputLogic->GetInputSlots() );
 
     inputLogic->AppendInputHandler( videoInputHandler );
+
+    auto videoInputSlots = videoInputHandler->GetVideoInputSlots();
+
+    AssetManager::GetInstance().RegisterLoader( VideoInputTextureAssetDesc::UID(), std::make_shared< VideoInputAssetLoader >( videoInputSlots ) );
+    AssetManager::GetInstance().RegisterLoader( VideoInputAssetDesc::UID(), std::make_shared< VideoInputAssetLoader >( videoInputSlots ) );
 }
 
 // ***********************
@@ -195,6 +206,9 @@ void            RenderLogicInitializer::InitializeVideoInput    ( InputLogic * i
 void            RenderLogicInitializer::InitializeInputSlots    ( RenderLogic * renderLogic, const BVConfig &, videocards::VideoCardManager * videoCardManager )
 {
     auto inputLogic = renderLogic->GetInputLogic();
+    auto inputSlots = inputLogic->GetInputSlots();
+
+    AssetManager::GetInstance().RegisterLoader( TextureInputAssetDesc::UID(), std::make_shared< InputAssetLoader >( inputSlots ) );
 
     InitializeVideoInput( inputLogic, videoCardManager );
 }

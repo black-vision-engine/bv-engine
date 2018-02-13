@@ -19,10 +19,6 @@
 #include "Assets/DefaultAssets.h"
 #include "Assets/AssetManager.h"
 
-#include "Assets/Input/Loaders/InputAssetLoader.h"
-#include "Assets/Input/TextureInputAssetDesc.h"
-#include "Assets/Input/Videoinput/VideoInputAssetDesc.h"
-
 
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
@@ -72,12 +68,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     m_renderer = renderer;
     m_audioRenderer = audioRenderer;
 
-    // nrl - render logic replacement
-    //m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ClearColor(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput(), DefaultConfig.RenderToSharedMemory(), DefaultConfig.SharedMemoryScaleFactor());
-
-    // FIXME: nrl - pass all those arguments in a struct
-    // m_renderLogic = new RenderLogicImpl( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), 2 ); //, DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
-    // FIXME: prepare descriptor here
 
     m_renderLogic = RenderLogicInitializer::CreateInstance( DefaultConfig );
 
@@ -291,9 +281,6 @@ void                            BVAppLogic::InitializeDefaultAssets()
 void                            BVAppLogic::InitializeInputSlots()
 {
     RenderLogicInitializer::InitializeInputSlots( m_renderLogic, DefaultConfig, m_videoCardManager );
-
-    auto inputSlots = m_renderLogic->GetInputLogic()->GetInputSlots();
-    AssetManager::GetInstance().RegisterLoader( TextureInputAssetDesc::UID(), std::make_shared< InputAssetLoader >( inputSlots ) );
 }
 
 }	// bv
