@@ -239,7 +239,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
     unsigned int capture_fifo_size = 0;
     BOOL bFirstFrame = TRUE;
 
-    Reusable< CFramePtr > frames ( { std::make_shared< CFrame >( pThis->GoldenSize, pThis->BytesPerLine ), std::make_shared< CFrame >( pThis->GoldenSize, pThis->BytesPerLine ) } );
+    Reusable< CFramePtr > frames = CreateReusableChunks( pThis->GoldenSize, pThis->BytesPerLine, 3 );
 
 
     pThis->m_pSDK->video_capture_start();

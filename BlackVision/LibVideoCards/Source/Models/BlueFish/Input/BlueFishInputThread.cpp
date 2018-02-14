@@ -13,14 +13,17 @@ namespace bluefish
 {
 
 
+const int FramesQueueSize = 2;
+
+
 // ***********************
 //
 BlueFishInputThread::BlueFishInputThread( InputChannel * vc )
-    : m_processedFrameQueue( 2 )
+    : m_processedFrameQueue( FramesQueueSize )
     , m_inputChannel( vc )
     , m_reusableChunks( { nullptr } )
 {
-    m_reusableChunks = m_inputChannel->CreateReusableChunks( 3 );
+    m_reusableChunks = m_inputChannel->CreateReusableChunks( 2 * FramesQueueSize );
 
     // Add one frame delay to avoid waiting for input in main thread.
     auto emptyFrame = GenEmptyFrame();
@@ -53,6 +56,7 @@ void                BlueFishInputThread::Process        ()
 MemoryChunkPtr      BlueFishInputThread::Deinterlace            ( const CFramePtr & videoChunk )
 {
     MemoryChunkPtr deinterlacedChunk = m_reusableChunks.GetNext();
+    deinterlacedChunk->Clear();
 
     // Maybe we could choose algorithm here.
     DeinterlaceLinear( videoChunk, deinterlacedChunk );

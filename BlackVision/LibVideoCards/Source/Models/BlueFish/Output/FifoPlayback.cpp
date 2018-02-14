@@ -186,7 +186,7 @@ ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32
     m_pFifoBuffer = pFifoBuffer;
     m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
 
-    m_reusableFrames = Reusable< CFramePtr >( { std::make_shared< CFrame >( GoldenSize, BytesPerLine ), std::make_shared< CFrame >( GoldenSize, BytesPerLine ) } );
+    m_reusableFrames = CreateReusableChunks( GoldenSize, BytesPerLine, 2 );
 
     return Result::Success();
 }
