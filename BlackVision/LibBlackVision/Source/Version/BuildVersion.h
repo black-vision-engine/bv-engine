@@ -4,6 +4,5 @@
 
 
 const int BuildVersion = -1;
-const int PatchVersion = 0;
 
 

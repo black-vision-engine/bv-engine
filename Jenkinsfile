@@ -95,7 +95,7 @@ def removeDir( path ) {
 
 def generateBuildNumber()
 {
-	bat 'BlackVision/GenBuildVersion.bat ' + "${env.BUILD_NUMBER}" + " 0"
+	bat 'BlackVision/GenBuildVersion.bat ' + "${env.BUILD_NUMBER}"
 }
 
 def generateDoxygenDocs( buildDir, conf, platform )
