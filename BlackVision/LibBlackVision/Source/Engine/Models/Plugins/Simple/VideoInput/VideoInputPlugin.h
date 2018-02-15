@@ -45,6 +45,8 @@ protected:
 
     DefaultVertexShaderChannelPtr   m_vsc;
 
+    VertexAttributesChannelPtr      m_vaChannel;
+
 public:
 
     explicit                                    VideoInputPlugin   ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -60,6 +62,8 @@ public:
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
+
+    void										InitVertexAttributesChannel ();
 
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 

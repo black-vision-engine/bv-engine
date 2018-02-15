@@ -9,6 +9,7 @@
 
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
@@ -86,6 +87,21 @@ std::string             VideoInputPluginDesc::TextureName               ()
 
 
 // ************************************************************************* PLUGIN *************************************************************************
+
+// ***********************
+//
+void                    VideoInputPlugin::InitVertexAttributesChannel   ()
+{
+    if( !( GetPrevPlugin() && GetPrevPlugin()->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
+
+    m_vaChannel = InitAttributesChannelWithUVs( m_vaChannel );
+
+    GenerateDefaultUVs( m_vaChannel, GetPrevPlugin()->GetVertexAttributesChannel() );
+}
 
 // *************************************
 // 
@@ -175,6 +191,12 @@ void                                VideoInputPlugin::Update                    
 
     HelperVertexShaderChannel::InverseTextureMatrix( m_pluginParamValModel, VideoInputPlugin::PARAMS::TX_MAT );
     HelperPixelShaderChannel::PropagateUpdate( m_psc, GetPrevPlugin() );
+
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, GetPrevPlugin() );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, GetPrevPlugin() ) )
+    {
+        InitVertexAttributesChannel();
+    }
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
