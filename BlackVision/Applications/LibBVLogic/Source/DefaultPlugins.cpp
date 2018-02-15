@@ -49,6 +49,7 @@
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
 #include "Engine/Models/Plugins/Simple/SpecialPlugins/ExpertPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/LinesPlugin.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/VideoInputPlugin.h"
 
 // Gizmo plugins
 #include "Engine/Models/Gizmos/Plugins/BoundingBoxPlugin.h"
@@ -110,6 +111,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultText3DPluginDesc() );
     descriptors.push_back( new ExpertPluginDesc() );
     descriptors.push_back( new LinesPluginDesc() );
+    descriptors.push_back( new VideoInputPluginDesc() );
 
     descriptors.push_back( new CenterPluginDesc() );
     descriptors.push_back( new BoundingBoxPluginDesc() );

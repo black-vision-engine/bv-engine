@@ -16,6 +16,8 @@ const std::string       VideoInputAsset::uid = "VIDEO_INPUT_ASSET";
 // ***********************
 //
 VideoInputAsset::VideoInputAsset        ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key )
+    : m_fill( fill )
+    , m_key( key )
 {}
 
 // ***********************
