@@ -116,7 +116,7 @@ VideoInputPlugin::VideoInputPlugin         ( const std::string & name, const std
 
     SetPrevPlugin( prev );
 
-    //LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< VideoInputAssetDesc >() );
 }
 
 // *************************************

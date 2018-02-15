@@ -10,6 +10,7 @@
 #include "Assets/Font/2D/FontAssetDescriptor.h"
 #include "Assets/AVStream/AVAssetDescriptor.h"
 #include "Assets/DataArray/DataArrayAssetDescriptor.h"
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 
 #include "Engine/Types/EnumsUtils.h"
 #include "ProjectManager.h"
