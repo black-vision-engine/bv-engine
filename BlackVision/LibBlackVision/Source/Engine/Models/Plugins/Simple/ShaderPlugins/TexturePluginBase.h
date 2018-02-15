@@ -54,6 +54,13 @@ protected:
 
     static ITextureDescriptorPtr                LoadMemoryTexture           ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState, DataBuffer::Semantic semantic );
     static ITextureDescriptorPtr                LoadGPUTexture              ( const AssetDescConstPtr & assetDesc, const std::string & name, SamplerStateModelPtr samplerState );
+
+protected:
+
+    static ConnectedComponentPtr                RewriteComponent            ( IConnectedComponentConstPtr prevComponent );
+    bool                                        GenerateDefaultUVs          ( VertexAttributesChannelPtr attribsChannel, IVertexAttributesChannelConstPtr prevChannel );
+
+    VertexAttributesChannelPtr                  InitAttributesChannelWithUVs        ( VertexAttributesChannelPtr curChannel );
 };
 
 } // model
