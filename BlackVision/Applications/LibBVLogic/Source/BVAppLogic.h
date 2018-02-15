@@ -18,10 +18,6 @@
 
 //#define HIDE_PROFILE_STATS
 
-//hackvideoinput
-#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
-#include "hack_videoinput/TestVideoInput.h"
-
 
 
 namespace bv {
