@@ -252,6 +252,21 @@ VideoInputTextureAssetConstPtr  VideoInputSlots::CreateAsset        ( VideoInput
     return asset;
 }
 
+// ***********************
+//
+Expected< videocards::VideoInputChannelDesc >           VideoInputSlots::GetVideoCardFromSlot        ( SlotIndex idx )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    for( auto card : m_entries )
+    {
+        if( card.GetSlotIdx() == idx )
+            return card.GetVideoChannelDesc();
+    }
+
+    return Expected< videocards::VideoInputChannelDesc >();
+}
+
 }	// bv
 
 

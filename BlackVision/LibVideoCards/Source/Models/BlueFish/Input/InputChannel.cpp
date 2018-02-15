@@ -1,7 +1,7 @@
 #include "InputChannel.h"
 
 
-
+#include "UseLoggerVideoModule.h"
 
 
 namespace bv {
@@ -19,6 +19,7 @@ InputChannel::InputChannel( ChannelName name, ChannelInputDataUPtr & input )
     ,   m_captureChannel( nullptr )
     ,   m_captureFifoBuffer( nullptr )
     ,   m_inputFramesThread( nullptr )
+    ,   m_stopped( false )
 {
     m_captureFifoBuffer = new CFifoBuffer();
     m_captureChannel = new CFifoCapture();
@@ -70,8 +71,26 @@ CFifoBuffer *       InputChannel::GetCaptureBuffer      ()
 //
 void                InputChannel::SetVideoInput         ( bool enable )
 {
-    { enable; }
-    assert( !"Implemennt me " );
+    if( enable && m_stopped )
+    {
+        ResumeInput();
+        m_stopped = false;
+    }
+    else if( !enable && !m_stopped )
+    {
+        StopInput();
+        m_stopped = true;
+    }
+    else if( m_stopped )
+    {
+        assert( false );
+        LOG_MESSAGE( SeverityLevel::warning ) << "InputChannel already stopped. Unexpected call to SetVideoInput( false ).";
+    }
+    else if( !m_stopped )
+    {
+        assert( false );
+        LOG_MESSAGE( SeverityLevel::warning ) << "InputChannel is already running. Unexpected call to SetVideoInput( true ).";
+    }
 }
 
 // ***********************
@@ -179,6 +198,19 @@ bool            InputChannel::IsOutputChannel       () const
     return false;
 }
 
+// ***********************
+//
+void            InputChannel::StopInput             ()
+{
+    m_inputFramesThread->Stop();
+}
+
+// ***********************
+//
+void            InputChannel::ResumeInput           ()
+{
+    m_inputFramesThread->Resume();
+}
 
 
 } //bluefish

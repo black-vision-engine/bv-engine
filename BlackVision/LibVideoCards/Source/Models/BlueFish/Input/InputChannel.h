@@ -29,9 +29,13 @@ private:
 public:
 
     ChannelInputDataUPtr        CaptureData;
+    
+    bool                        m_stopped;
 
 private:
 
+    void                StopInput           ();
+    void                ResumeInput         ();
 
 public:
 

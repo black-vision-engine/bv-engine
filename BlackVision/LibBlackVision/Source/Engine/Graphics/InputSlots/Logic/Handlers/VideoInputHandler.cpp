@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "VideoInputHandler.h"
 
+#include "Engine/Events/EventManager.h"
 
+#include "Engine/Events/InnerEvents/InputSlots/FirstSlotRefEvent.h"
+#include "Engine/Events/InnerEvents/InputSlots/AllSlotRefsRemovedEvent.h"
 
 
 namespace bv
@@ -58,6 +61,9 @@ void            VideoInputHandler::RegisterInputs   ( RenderContext * ctx, Input
 
     auto inputDescs = m_videoCardManager->GetInputChannelsDescs();
     RegisterInputs( inputDescs );
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &VideoInputHandler::OnAllSlotReferencesRemoved ), AllSlotRefsRemovedEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &VideoInputHandler::OnFirstSlotReference ), FirstSlotRefEvent::Type() );
 }
 
 // ***********************
@@ -68,7 +74,13 @@ void            VideoInputHandler::RegisterInputs   ( const videocards::InputCha
     {
         // Don't check result. Error message is logged internally.
         m_inputSlots->RegisterVideoInputChannel( desc );
+
+        // Channel will be enabled on first reference to input slot.
+        DisableChannel( desc.GetCardID(), desc.GetInputID() );
     }
+
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &VideoInputHandler::OnAllSlotReferencesRemoved ), AllSlotRefsRemovedEvent::Type() );
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &VideoInputHandler::OnFirstSlotReference ), FirstSlotRefEvent::Type() );
 }
 
 // ***********************
@@ -84,6 +96,72 @@ void            VideoInputHandler::ProcessFrameData ( videocards::VideoInputFram
             m_inputSlots->UpdateVideoInput( singleFrame.InputID, singleFrame.FrameData );
         }
     }
+}
+
+
+// ========================================================================= //
+// Slot references optimization.
+// ========================================================================= //
+
+
+// ***********************
+//
+void            VideoInputHandler::OnAllSlotReferencesRemoved       ( IEventPtr evt )
+{
+    if( evt->GetEventType() == AllSlotRefsRemovedEvent::Type() )
+    {
+        auto typedEvent = std::static_pointer_cast< AllSlotRefsRemovedEvent >( evt );
+
+        auto channelDesc = m_inputSlots->GetVideoCardFromSlot( typedEvent->Index );
+
+        if( channelDesc.IsValid() )
+            DisableChannel( channelDesc.GetVal().GetCardID(), channelDesc.GetVal().GetInputID() );
+    }
+}
+
+// ***********************
+//
+void            VideoInputHandler::OnFirstSlotReference             ( IEventPtr evt )
+{
+    if( evt->GetEventType() == FirstSlotRefEvent::Type() )
+    {
+        auto typedEvent = std::static_pointer_cast< FirstSlotRefEvent >( evt );
+
+        auto channelDesc = m_inputSlots->GetVideoCardFromSlot( typedEvent->Index );
+
+        if( channelDesc.IsValid() )
+            EnableChannel( channelDesc.GetVal().GetCardID(), channelDesc.GetVal().GetInputID() );
+    }
+}
+
+// ***********************
+//
+void            VideoInputHandler::EnableChannel                    ( videocards::VideoCardID cardID, videocards::VideoInputID inputID )
+{
+    auto videoCard = FindVideoCard( cardID );
+    videoCard->SetVideoInput( inputID, true );
+}
+
+// ***********************
+//
+void            VideoInputHandler::DisableChannel                   ( videocards::VideoCardID cardID, videocards::VideoInputID inputID )
+{
+    auto videoCard = FindVideoCard( cardID );
+    videoCard->SetVideoInput( inputID, false );
+}
+
+// ***********************
+//
+videocards::IVideoCardPtr       VideoInputHandler::FindVideoCard    ( videocards::VideoCardID cardID ) const
+{
+    int cardIdx = 0;
+    while( auto videoCard = m_videoCardManager->GetVideoCard( cardIdx ) )
+    {
+        if( videoCard->GetVideoCardID() == cardID )
+            return videoCard;
+    }
+
+    return nullptr;
 }
 
 

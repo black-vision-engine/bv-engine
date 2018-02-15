@@ -64,6 +64,9 @@ public:
 
     InputSlotsPtr               GetInputSlots       () const { return m_avInputSlots.GetInputSlots(); }
 
+
+    Expected< videocards::VideoInputChannelDesc >   GetVideoCardFromSlot    ( SlotIndex idx );
+
 private:
 
     Expected< EntryIdx >        FindEntry       ( const videocards::VideoInputChannelDesc & vidInputDesc ) const;
