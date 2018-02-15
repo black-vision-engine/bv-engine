@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Plugins/Simple/ShaderPlugins/TexturePluginBase.h"
+
 
 
 namespace bv {
@@ -29,7 +31,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class VideoInputPlugin : public BasePlugin
+class VideoInputPlugin : public TexturePluginBase
 {
 public:
 
@@ -41,7 +43,6 @@ public:
 
 protected:
 
-    DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
 public:
@@ -50,18 +51,21 @@ public:
     ~VideoInputPlugin  ();
 
     virtual bool                                IsValid						() const override;
+    virtual std::string                         GetTextureName              ( UInt32 idx = 0 ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
+
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
 };
 
+DEFINE_PTR_TYPE( VideoInputPlugin )
 
 } // model
 } // bv

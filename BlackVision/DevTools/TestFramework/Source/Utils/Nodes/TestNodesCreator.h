@@ -69,6 +69,7 @@ public:
     static model::BasicNodePtr	GradientTimer						( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
 
     static model::BasicNodePtr	VideoStreamDecoder					( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask = "" );
+    static model::BasicNodePtr	VideoInputRectangle					( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, UInt32 videoInputIdx );
 
     static model::BasicNodePtr	FakeAudioPlugin                     ( model::ITimeEvaluatorPtr timeEval, const std::string & name );
 

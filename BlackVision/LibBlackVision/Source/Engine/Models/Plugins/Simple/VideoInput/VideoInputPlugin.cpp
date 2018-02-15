@@ -2,6 +2,8 @@
 
 #include "VideoInputPlugin.h"
 
+#include "Engine/Models/Plugins/Channels/PixelShader/GPUTextureDescriptor.h"
+
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Interfaces/IValue.h"
 
@@ -9,6 +11,11 @@
 #include "Engine/Models/Plugins/Channels/HelperVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAsset.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 
 #include "Assets/DefaultAssets.h"
 
@@ -90,14 +97,21 @@ bool                    VideoInputPlugin::SetPrevPlugin                 ( IPlugi
     return true;
 }
 
+// ***********************
+//
+std::string             VideoInputPlugin::GetTextureName                ( UInt32 idx ) const
+{
+    if( idx == 0 )
+        return VideoInputPluginDesc::TextureName();
+    return "";
+}
+
 // *************************************
 // 
 VideoInputPlugin::VideoInputPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin( name, uid, prev, model )
-    , m_psc( nullptr )
+    : TexturePluginBase( name, uid, prev, model )
     , m_vsc( nullptr )
 {
-    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     SetPrevPlugin( prev );
@@ -121,43 +135,30 @@ bool							VideoInputPlugin::IsValid     () const
 // 
 bool                            VideoInputPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-    // auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
+    auto videoAssetDesc = QueryTypedDesc< VideoInputAssetDescConstPtr >( assetDescr );
+    if( videoAssetDesc )
+    {
+        SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment();
 
-    // // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    // if ( txAssetDescr != nullptr )
-    // {
-        // //FIXME: use some better API to handle resources in general and textures in this specific case
-        // auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, VideoInputPluginDesc::TextureName() );
+        auto videoAsset = std::static_pointer_cast< const VideoInputAsset >( AssetManager::GetInstance().LoadAsset( videoAssetDesc ) );
+        if( videoAsset )
+        {
+            auto name = GetTextureName( 0 );
 
-        // if( txDesc != nullptr )
-        // {
-            // txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-            // txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+            auto texDesc = std::make_shared< GPUTextureDescriptor >( videoAsset->GetFillAsset(), name );
 
-            // auto txData = m_psc->GetTexturesDataImpl();
-            // txData->SetTexture( 0, txDesc );
-            // SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, txDesc->GetSamplerState() ) );
+            texDesc->SetSamplerState( newSamplerStateModel );
+            texDesc->SetName( name );
 
-            // HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+            ReplaceTexture( videoAssetDesc, texDesc, 0 );
 
-            // m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
-            // m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
+            return true;
+        }
+    }
 
-
-            // return true;
-        // }
-
-    // }
     return false;
 }
 
-
-// *************************************
-// 
-IPixelShaderChannelPtr              VideoInputPlugin::GetPixelShaderChannel       () const
-{
-    return m_psc;
-}
 
 // *************************************
 // 

@@ -22,8 +22,7 @@ const std::string   VideoInputAssetDesc::uid = "VIDEO_INPUT_ASSET_DESC";
 // ***********************
 //
 VideoInputAssetDesc::VideoInputAssetDesc( videocards::VideoInputID inputIdx )
-    : TextureInputAssetDesc( InputSlotBinding( 0 ) )
-    , m_videoInputIdx( inputIdx )
+    : m_videoInputIdx( inputIdx )
 {}
 
 

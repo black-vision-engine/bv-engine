@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Assets/Input/TextureInputAssetDesc.h"
-#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 
+#include "Assets/AssetDescriptor.h"
+
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 #include "VideoInput/VideoInputChannelDesc.h"
 
 
@@ -17,7 +18,7 @@ DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
 
 // ***********************
 // 
-class VideoInputAssetDesc : public TextureInputAssetDesc
+class VideoInputAssetDesc : public AssetDesc, public std::enable_shared_from_this< AssetDesc >
 {
 private:
 
