@@ -159,6 +159,8 @@ videocards::IVideoCardPtr       VideoInputHandler::FindVideoCard    ( videocards
     {
         if( videoCard->GetVideoCardID() == cardID )
             return videoCard;
+
+        cardIdx++;
     }
 
     return nullptr;
