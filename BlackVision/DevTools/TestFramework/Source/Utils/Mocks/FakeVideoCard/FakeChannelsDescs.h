@@ -20,6 +20,8 @@ struct FakeInputChannelData
     UInt32          Width;
     UInt32          Height;
 
+    bool            Enabled;
+
     std::string     ImagesDirectory;        ///< Images from this directory will be sent as input.
 };
 

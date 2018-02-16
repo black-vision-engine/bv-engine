@@ -49,6 +49,7 @@ void                            FakeVideoCardDesc::Deserialize          ( const 
                     input->Width = Convert::String2T< UInt32 >( deser.GetAttribute( "width" ), 1920 );
                     input->LinkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoInput" ), 0 );
                     input->ImagesDirectory = deser.GetAttribute( "imagesDirectory" );
+                    input->Enabled = true;
 
                     deser.ExitChild(); //input
                 }
