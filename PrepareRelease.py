@@ -57,7 +57,7 @@ def CleanNotNecessaryFiles( appOutDir ):
         
         print "Removing: " + toRemovePath
         
-        shutil.rmtree( toRemovePath )
+        shutil.rmtree( toRemovePath, True )
     
     
 def CopyConfig( appOutDir ):
