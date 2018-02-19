@@ -63,12 +63,15 @@ def list_test_execs( buildDir, conf, platform ) {
 	return [	testDir + "TestTestFramework\\TestTestFramework.exe"	]
 }
 
-def make_archive( buildDir, conf, platform, fEnabled ) {
-    def d = buildDir + conf + '-v140-' + platform
-    def includes_app = get_app_dir( buildDir, conf, platform ) + '/**'
-    def includes_tests = get_tests_dir( buildDir, conf, platform ) + '/**'
-    archiveArtifacts artifacts: includes_app, fingerprint: fEnabled
-    archiveArtifacts artifacts: includes_tests, fingerprint: fEnabled
+def make_archive( buildDir, conf, platform, fEnabled )
+{
+    def buildDir = get_build_dir( buildDir, conf, platform )
+    def relaseBuildDir = "BlackVision-Release/"
+
+    bat 'BlackVision/PrepareRelease.bat ' + buildDir + " " + relaseBuildDir
+    
+    def include_app = relaseBuildDir) + '/**'
+    archiveArtifacts artifacts: include_app, fingerprint: fEnabled
 }
 
 def generate_tests_report( testResPath ) {
