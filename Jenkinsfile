@@ -68,7 +68,7 @@ def make_archive( buildDir, conf, platform, fEnabled )
     def buildsPath = get_build_dir( buildDir, conf, platform )
     def relaseBuildDir = "BlackVision-Release/"
 
-    bat 'BlackVision/PrepareRelease.bat ' + buildsPath + " " + relaseBuildDir
+    bat 'PrepareRelease.bat ' + buildsPath + " " + relaseBuildDir
     
     def include_app = relaseBuildDir + '**'
     archiveArtifacts artifacts: include_app, fingerprint: fEnabled
