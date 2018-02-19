@@ -27,6 +27,7 @@ app/testFreeType.bmp
 *.pyc
 workspace.xml
 BlackVision/Reports/
+BlackVision/Releases/
 BlackVision/_TestsResults/*
 BlackVision/Assets/BasicShapes/*
 BlackVision/Applications/ProjectManagerPrototype/bv_media/*
