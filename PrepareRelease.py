@@ -57,7 +57,7 @@ def CleanNotNecessaryFiles( appOutDir ):
         
         print "Removing: " + toRemovePath
         
-        shutil.rmtree( toRemovePath )
+        shutil.rmtree( toRemovePath, True )
     
     
 def CopyConfig( appOutDir ):
@@ -67,7 +67,7 @@ def CopyConfig( appOutDir ):
     
     print "Copy default config file [" + defaultReleaseConfig + "]"
     
-    shutil.copy2( defaultConfigPath, appOutDir )
+    shutil.copy2( defaultConfigPath, os.path.join( appOutDir, "config.xml" ) )
     
     
 def PrepareRelease():
