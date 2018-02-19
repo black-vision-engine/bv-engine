@@ -9,7 +9,7 @@ set scriptDirectory=%~dp0
 
 cd %scriptDirectory%
 
-set buildsInputDir=%scriptDirectory%%buildsDir%
+set buildsInputDir=%buildsDir%
 set buildsOutputDir=%outputDir%
 
 call python PrepareRelease.py %buildsInputDir% %buildsOutputDir%
