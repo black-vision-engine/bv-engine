@@ -104,7 +104,7 @@ bool            AVEncoder::Impl::OpenOutputStream       ( const std::string & ou
         desc.channels = aOps.numChannels;
         desc.height = vOps.height;
         desc.width = vOps.width;
-        desc.sampleRate = aOps.sampleRate;
+        desc.numSamples = aOps.sampleRate;
         desc.channelDepth = ConvertAudioSampleTypeToSampleSize( aOps.sampleType );
 
 

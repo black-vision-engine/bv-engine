@@ -64,7 +64,7 @@ AVFrameDescriptor       Channel::CreateFrameDesc        () const
     frameDesc.depth = 4;
 
     frameDesc.channels = 2;                 // Stereo audio.
-    frameDesc.sampleRate = 48000 / 50;      // FIXME: Hardcoded frequency and framerate.
+    frameDesc.numSamples = 48000 / 50;      // FIXME: Hardcoded frequency and framerate.
     frameDesc.channelDepth = 2;             // 16 bits per sample.
 
     return frameDesc;
@@ -85,7 +85,7 @@ Reusable< MemoryChunkPtr >      Channel::CreateReusableVideoChunks  ( UInt32 num
 Reusable< MemoryChunkPtr >      Channel::CreateReusableAudioChunks  ( UInt32 numChunks ) const
 {
     auto desc = CreateFrameDesc();
-    auto size = desc.sampleRate * desc.channels * 2;
+    auto size = desc.numSamples * desc.channels * 2;
 
     return CreateReusableChunks( numChunks, size );
 }

@@ -523,7 +523,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 					&hanc_stream_info,
 					pFrame->m_pAudioBuffer,
 					pFrame->m_desc.channels,
-					pFrame->m_desc.sampleRate,
+					pFrame->m_desc.numSamples,
 					nSampleType, //FIXME: get bit depth from frame
 					nEmbAudioFlag);
 

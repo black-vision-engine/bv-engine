@@ -303,7 +303,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
             hanc_decoder_ex( pThis->m_iCardType, ( UINT32* )pHancBuffer, &hancInfo );
 
             nAudioChannelInfo = QueryChannelInfo( pThis->m_pSDK );
-            pFrame->m_desc.sampleRate = hancInfo.no_audio_samples; //QueryNumSamples( nAudioChannelInfo );
+            pFrame->m_desc.numSamples = hancInfo.no_audio_samples; //QueryNumSamples( nAudioChannelInfo );
             pFrame->m_desc.channels = pThis->m_numAudioChannels;
 
 
