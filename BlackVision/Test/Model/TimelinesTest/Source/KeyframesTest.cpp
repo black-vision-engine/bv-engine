@@ -184,14 +184,14 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, RestartKeyframe )
     // Simulate bv updates
     timeline->SetGlobalTime( bv::TimeType( 0.0f ) );
     timeline->SetGlobalTime( bv::TimeType( 0.5f ) );
-    timeline->SetGlobalTime( bv::TimeType( 1.2f ) );
+    timeline->SetGlobalTime( bv::TimeType( 1.0f ) );
 
     // Keyframe should restart timeline. Local time should be equal to 0.0.
 	EXPECT_NEAR( timeline->GetLocalTime(), 0.0f, epsilon );
 
     // Timeline is started after Restart.
     timeline->SetGlobalTime( bv::TimeType( 1.4f ) );
-	EXPECT_NEAR( timeline->GetLocalTime(), 0.2f, epsilon );
+	EXPECT_NEAR( timeline->GetLocalTime(), 0.4f, epsilon );
 }
 
 
@@ -306,6 +306,10 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZero )
 
 	EXPECT_NEAR( timeline->GetLocalTime(), 0, epsilon );
 
+	//timeline->Play();
+	//
+	//timeline->SetGlobalTime( 4 );
+
 	timeline->Play();
 
 	timeline->SetGlobalTime( 5 );
@@ -319,13 +323,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSerPlayOn )
 {
 	auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/StopAtZeroPlayOn.xml", "timeline" );
 
-	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon ); // this is serialized local time
 
-	timeline->SetGlobalTime( 1.f );
+	timeline->SetGlobalTime( 1.f ); // this is the time that Play() in deserialization will start counting from
 
-	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon ); // so we still haven't moved on
 
-	timeline->SetGlobalTime( 3.f );
+	timeline->SetGlobalTime( 3.f ); // now we really moved on
 
 	EXPECT_NEAR( timeline->GetLocalTime(), 3.5, epsilon );
 }
@@ -376,21 +380,21 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, GotoAtLocalTime )
 	timeline->SetGlobalTime( 1 ); // update is needed
 
 	timeline->Play();
-	timeline->SetGlobalTime( 2 );
-	EXPECT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+	timeline->SetGlobalTime( 3 );
+	EXPECT_NEAR( timeline->GetLocalTime(), 2, epsilon );
 
-	auto gotoKeyframe = TimelineEventLoop::Create( "GotoTest", 1, LoopEventAction::LEA_GOTO, 1, -1, timeline.get() );
+	auto gotoKeyframe = TimelineEventLoop::Create( "GotoTest", 2, LoopEventAction::LEA_GOTO, 1, 1, timeline.get() );
 	ASSERT_TRUE( timeline->AddKeyFrame( gotoKeyframe ) );
 
-	EXPECT_NEAR( timeline->GetLocalTime(), -1, epsilon );
+	EXPECT_NEAR( timeline->GetLocalTime(), 1, epsilon );
 
 	timeline->SetGlobalTime( 4 );
 
-	EXPECT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+	EXPECT_NEAR( timeline->GetLocalTime(), 2, epsilon ); // goto keyframe should not be fired this time
 
 	timeline->SetGlobalTime( 6 );
 
-	EXPECT_NEAR( timeline->GetLocalTime(), 3, epsilon );
+	EXPECT_NEAR( timeline->GetLocalTime(), 4, epsilon );
 }
 
 // ***********************

@@ -68,7 +68,8 @@ bool timelineEventComparator    ( const ITimelineEventPtr & e0, const ITimelineE
 DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
     : Parent( name )
     , m_timeEvalImpl( duration, TimelinePlayDirection::TPD_FORWAD, preMethod, postMethod )
-    , m_prevTime( TimeType( 0.0 ) )
+    , m_prevLocalTime( TimeType( 0.0 ) )
+    , m_prevGlobalTime( TimeType( 0.0 ) )
     , m_triggeredEvent( nullptr )
 {
 }
@@ -198,18 +199,49 @@ TimeType                            DefaultTimeline::GetDuration        () const
 }
 
 
+
+
 // *********************************
 //
 void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeType t )
 {
-    m_timeEvalImpl.UpdateGlobalTime( t );
+    auto globalTime = m_prevGlobalTime;
+    m_prevGlobalTime = t;
 
-    PostUpdateEventStep();
+    TimeType offset = t - globalTime;
 
-    auto prevTime = m_prevTime;
-    m_prevTime = m_timeEvalImpl.GetLocalTime();
+    TimeType prevLocalTime = m_prevLocalTime;
 
-    TriggerEventStep( m_prevTime, prevTime );
+    TimeType localTime = prevLocalTime;
+
+    while( true )
+    {
+        auto event = CurrentEvent( localTime, localTime + offset );
+        if( event == nullptr || !event->IsActive() )
+        {
+            globalTime += offset; // move time to the end
+            m_timeEvalImpl.UpdateGlobalTime( globalTime );
+            break;
+        }
+
+        TimeType timeToEvent = abs( localTime - event->GetEventTime() ); // abs because time can go in both directions
+        offset -= timeToEvent;
+
+        globalTime += timeToEvent;
+        m_timeEvalImpl.UpdateGlobalTime( globalTime );
+
+        TriggerEventStep( event );
+        localTime = m_timeEvalImpl.GetLocalTime();
+    };
+
+    m_prevLocalTime = m_timeEvalImpl.GetLocalTime();
+
+    //PostUpdateEventStep();
+
+    //auto prevTime = m_prevTime;
+    //m_prevTime = m_timeEvalImpl.GetLocalTime();
+
+    //TriggerEventStep( m_prevTime, prevTime );
 }
 
 // *********************************
@@ -263,13 +295,13 @@ void                                DefaultTimeline::Play               ()
 {
     m_timeEvalImpl.Start();
 
-    auto curTime = GetLocalTime();
-    auto evt = CurrentEvent( curTime, m_prevTime );
+    //auto curTime = GetLocalTime();
+    //auto evt = CurrentEvent( curTime, m_prevTime );
 
-    if( evt )
-    {
-        DeactivateEvent( evt );
-    }
+    //if( evt )
+    //{
+    //    DeactivateEvent( evt );
+    //}
 }
 
 // *********************************
@@ -283,7 +315,7 @@ void                                DefaultTimeline::Stop               ()
 //
 void                                DefaultTimeline::SetTimeAndStop     ( TimeType t )
 {
-    m_prevTime = t;
+    m_prevLocalTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
 
     PostUpdateEventStep();
@@ -295,7 +327,7 @@ void                                DefaultTimeline::SetTimeAndStop     ( TimeTy
 //
 void                                DefaultTimeline::SetTimeAndPlay     ( TimeType t )
 {
-    m_prevTime = t;
+    m_prevLocalTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
 
     PostUpdateEventStep();
@@ -344,6 +376,9 @@ bool                                DefaultTimeline::AddKeyFrame        ( const 
 
     std::sort( m_keyFrameEvents.begin(), m_keyFrameEvents.end(), timelineEventComparator );
 
+    if( abs( m_prevLocalTime - evt->GetEventTime() ) < 0.00001 ) // FIXME: use generic epsilon
+        TriggerEventStep( evt.get() ); // FIXME so effing much
+
     return true;
 }
 
@@ -381,7 +416,7 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( unsign
     assert( idx < m_keyFrameEvents.size() );
 
     auto evn = m_keyFrameEvents[ idx ];
-    if( evn.get() == m_triggeredEvent )
+    if( evn.get() == m_triggeredEvent ) 
         m_triggeredEvent = nullptr;
 
     m_keyFrameEvents.erase( m_keyFrameEvents.begin() + idx );
@@ -440,6 +475,9 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
         {
             auto eventTime = evt->GetEventTime();
 
+            if( abs( eventTime - curTime ) < 0.0001 ) // FIXME: this should be epsilon
+                continue;
+
             if( eventTime >= t0 && eventTime <= t1 )
             {
                 return evt.get();
@@ -472,18 +510,21 @@ bool                                DefaultTimeline::CanBeInserted      ( const 
 
 // *********************************
 //
-void                                DefaultTimeline::TriggerEventStep       ( TimeType curTime, TimeType prevTime )
+void                                DefaultTimeline::TriggerEventStep( ITimelineEvent * evt )
 {
-    auto evt = CurrentEvent( curTime, prevTime );
+    //    auto evt = CurrentEvent( curTime, prevTime );
 
-    if( evt == nullptr || evt == m_triggeredEvent || !evt->IsActive() )
-    {
-        return;
-    }
+    //if( evt == nullptr || evt == m_triggeredEvent || !evt->IsActive() )
+    //{
+    //    return;
+    //}
 
-    assert( m_triggeredEvent == nullptr );
+    //assert( m_triggeredEvent == nullptr );
 
-    DeactivateEvent( evt );
+    //DeactivateEvent( evt );
+
+    auto curTime = m_prevLocalTime;
+    auto prevTime = m_prevLocalTime;
 
     TimelineKeyframeEvent::KeyframeType keyframeType = TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail;
     switch( evt->GetType() )
@@ -511,10 +552,10 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
                     m_timeEvalImpl.ResetLocalTimeTo( evtImpl->GetTargetTime() );
 
-                    m_prevTime = evtImpl->GetTargetTime();
+                    m_prevLocalTime = evtImpl->GetTargetTime();
 
-                    m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
-                    m_triggeredEvent = nullptr;
+                    //m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
+                    //m_triggeredEvent = nullptr;
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
 
@@ -523,10 +564,10 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                 case LoopEventAction::LEA_RESTART:
                     m_timeEvalImpl.Reset();
 
-                    m_prevTime = TimeType( 0.0 );
+                    m_prevLocalTime = TimeType( 0.0 );
 
-                    m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
-                    m_triggeredEvent = nullptr;
+                    //m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
+                    //m_triggeredEvent = nullptr;
 
                     Play(); //FIXME: really start or should we wait for the user to trigger this timeline?
 
@@ -536,18 +577,18 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     break;
                 case LoopEventAction::LEA_REVERSE:
                     Reverse();
-                    
+
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe;
 
                     LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] reverse keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
-                    
+
                     break;
                 default:
                     assert( false );
             }
 
             evtImpl->IncLoopCount();
-                
+
             //printf( "Event LOOP %d\n", evtImpl->GetLoopCount() );
 
             break;
@@ -575,12 +616,12 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] null keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
             break;
         }
-        default:
-            assert( false );
+    default:
+        assert( false );
     }
 
     SimpleJsonSerializeObject ser;
-	ser.SetAttribute( "TriggerEvent", "KeyframeTrigger" );
+    ser.SetAttribute( "TriggerEvent", "KeyframeTrigger" );
     ser.SetAttribute( "cmd", "KeyframeEvent" );
     ser.SetAttribute( "KeyframeType", Convert::T2String( keyframeType ) );
     ser.SetAttribute( "KeyframeName", evt->GetName() );
@@ -606,7 +647,7 @@ void                                DefaultTimeline::PostUpdateEventStep    ()
         // But we must avoid situation, that the same event will be selected again. This may happen
         // for example when m_prevTime i still before event trigger time.
         if( std::abs( t - m_triggeredEvent->GetEventTime() ) > GEvtTimeSeparation * 0.5f &&
-            CurrentEvent( t, m_prevTime ) != m_triggeredEvent )
+            CurrentEvent( t, m_prevLocalTime ) != m_triggeredEvent )
         {
             LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] activating event: [" << m_triggeredEvent->GetName() << "], timeline time: [" << t << "], event time: [" << m_triggeredEvent->GetEventTime() << "]";
 

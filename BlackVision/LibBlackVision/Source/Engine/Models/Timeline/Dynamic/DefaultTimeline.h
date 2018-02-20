@@ -22,7 +22,8 @@ private:
 private:
 
     TimeSegmentEvalImpl             m_timeEvalImpl;
-    TimeType                        m_prevTime;
+    TimeType                        m_prevLocalTime;
+    TimeType                        m_prevGlobalTime;
 
     ITimelineEvent *                m_triggeredEvent;
 
@@ -82,6 +83,7 @@ private:
 
     bool                                        CanBeInserted       ( const ITimelineEvent * evt ) const;
 
+    void                                        TriggerEventStep    ( ITimelineEvent * evt );
     void                                        TriggerEventStep    ( TimeType curTime, TimeType prevTime );
     void                                        PostUpdateEventStep ();
 

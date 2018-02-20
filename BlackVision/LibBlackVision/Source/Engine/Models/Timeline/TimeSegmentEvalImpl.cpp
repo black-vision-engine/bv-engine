@@ -20,6 +20,7 @@ TimeSegmentEvalImpl::TimeSegmentEvalImpl ( TimeType duration, TimelinePlayDirect
     , m_backwardStartTime( TimeType( 0.0 ) )
     , m_started( false )
     , m_paused( false )
+    , m_startTriggered( false )
     , m_pauseDuration( TimeType( 0.0 ) )
     , m_playDirection( direction )
     , m_globalTime( TimeType( 0.0 ) )
@@ -45,6 +46,7 @@ void        TimeSegmentEvalImpl::Start               ()
     if( !m_started )
     {
         m_started = true;
+        m_startTriggered = true;
     }
 
     if( m_paused )
@@ -122,6 +124,11 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
     {
         m_startTime = t;
     }
+
+    //if( m_startTriggered )
+    //{
+    //    ResetLocalTimeTo(  )
+    //}
 
     //FIXME: this is not the best way to accumulate pause times but should suffice for the time being
     if( m_paused )

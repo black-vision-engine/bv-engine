@@ -75,5 +75,4 @@ ICloneablePtr               TimeEvaluatorBase< ITimeline >::Clone               
     return CloneTyped();
 }
 
-
 } }

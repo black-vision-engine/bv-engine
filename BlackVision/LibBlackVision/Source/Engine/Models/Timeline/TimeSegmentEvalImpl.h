@@ -24,6 +24,8 @@ private:
     bool                    m_started;
     bool                    m_paused;
 
+    bool                    m_startTriggered;
+
     TimeType                m_globalTime;
 
     TimeType                m_duration;
