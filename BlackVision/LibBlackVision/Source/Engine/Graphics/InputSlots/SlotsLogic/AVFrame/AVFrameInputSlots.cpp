@@ -32,7 +32,7 @@ void        AVFrameInputSlots::UpdateSlot       ( SlotIndex slotIdx, AVFrameCons
 //
 void        AVFrameInputSlots::UpdateTexture    ( Texture2DPtr texture, AVFrameConstPtr frame )
 {
-    if( texture )
+    if( texture && frame && frame->m_videoData )
     {
         texture->SetData( frame->m_videoData );
     }
