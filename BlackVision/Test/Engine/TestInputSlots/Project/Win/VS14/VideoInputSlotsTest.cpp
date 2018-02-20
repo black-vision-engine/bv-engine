@@ -119,3 +119,34 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterAllSourc
     EXPECT_FALSE( slots.Exists( 1 ) );
     EXPECT_FALSE( slots.Exists( channel2 ) );
 }
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateSlot )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    auto avFrameDesc = CreateDefaultAVFrame();
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", avFrameDesc );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+
+    auto videoSize = avFrameDesc.depth * avFrameDesc.height * avFrameDesc.width;
+    auto audioSize = avFrameDesc.channelDepth * avFrameDesc.channels * avFrameDesc.numSamples;
+
+    auto videoChunk = MemoryChunk::Create( videoSize );
+    auto audioChunk = MemoryChunk::Create( audioSize );
+
+    slots.UpdateVideoInput( 0, AVFrame::Create( videoChunk, audioChunk, avFrameDesc ) );
+
+    auto slot = slots.GetInputSlots()->AccessSource( slots.GetSlotIndex( 0 ) );
+    ASSERT_TRUE( slot.IsValid() );
+
+    EXPECT_EQ( slot.GetVal().Texture->GetData(), videoChunk );
+    EXPECT_EQ( slot.GetVal().Audio->GetData(), audioChunk );
+}

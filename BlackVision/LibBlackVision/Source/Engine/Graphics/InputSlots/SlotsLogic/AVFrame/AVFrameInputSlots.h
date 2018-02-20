@@ -23,7 +23,7 @@ public:
 
     explicit        AVFrameInputSlots   ( InputSlotsPtr slots );
 
-    void            UpdateSlot          ( SlotIndex slotIdx, AVFramePtr frame );
+    void            UpdateSlot          ( SlotIndex slotIdx, AVFrameConstPtr frame );
 
 public:
 
@@ -31,8 +31,8 @@ public:
 
 private:
 
-    void            UpdateTexture       ( Texture2DPtr texture, AVFramePtr frame );
-    void            UpdateAudio         ( audio::AudioBufferPtr audio, AVFramePtr frame );
+    void            UpdateTexture       ( Texture2DPtr texture, AVFrameConstPtr frame );
+    void            UpdateAudio         ( audio::AudioBufferPtr audio, AVFrameConstPtr frame );
 };
 
 

@@ -107,7 +107,7 @@ bool                        VideoInputSlots::UnregisterAllChannels          ( Re
 
 // ***********************
 //
-void                        VideoInputSlots::UpdateVideoInput   ( videocards::VideoInputID id, AVFramePtr frame )
+void                        VideoInputSlots::UpdateVideoInput   ( videocards::VideoInputID id, AVFrameConstPtr frame )
 {
     std::lock_guard< std::recursive_mutex > guard( m_lock );
 
