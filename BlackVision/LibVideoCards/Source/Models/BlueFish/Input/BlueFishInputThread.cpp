@@ -21,9 +21,11 @@ const int FramesQueueSize = 2;
 BlueFishInputThread::BlueFishInputThread( InputChannel * vc )
     : m_processedFrameQueue( FramesQueueSize )
     , m_inputChannel( vc )
-    , m_reusableChunks( { nullptr } )
+    , m_reusableVideo( { nullptr } )
+    , m_reusableAudio( { nullptr } )
 {
-    m_reusableChunks = m_inputChannel->CreateReusableChunks( 2 * FramesQueueSize );
+    m_reusableVideo = m_inputChannel->CreateReusableVideoChunks( 2 * FramesQueueSize );
+    m_reusableAudio = m_inputChannel->CreateReusableAudioChunks( 2 * FramesQueueSize );
 
     // Add one frame delay to avoid waiting for input in main thread.
     auto emptyFrame = GenEmptyFrame();
@@ -43,7 +45,7 @@ void                BlueFishInputThread::Process        ()
 {
     auto cFrame = m_inputChannel->GetCaptureBuffer()->PopFrame();
 
-    MemoryChunkPtr audioChunk;// = MemoryChunk::Create( ( char * )cFrame->m_pAudioBuffer, cFrame->m_nAudioSize );
+    MemoryChunkPtr audioChunk = ProcessAudio( cFrame );
 
     auto processed = Deinterlace( cFrame );
     auto frame = std::make_shared< AVFrame >( processed, audioChunk, m_inputChannel->CreateFrameDesc() );
@@ -53,9 +55,37 @@ void                BlueFishInputThread::Process        ()
 
 // ***********************
 //
+MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePtr & audioFrame )
+{
+    MemoryChunkPtr audioChunk = m_reusableAudio.GetNext();
+
+    if( audioFrame->m_desc.sampleRate > 0 )
+    {
+        SizeType audioSize = audioFrame->m_desc.sampleRate / 2;
+        
+        memcpy( audioChunk->GetWritable(), audioFrame->m_pAudioBuffer, audioSize );
+        m_prevAudio = audioFrame;
+    }
+    else
+    {
+        assert( m_prevAudio );
+
+        // Copy second half of the buffer.
+        SizeType audioSize = audioFrame->m_desc.sampleRate / 2;
+
+        memcpy( audioChunk->GetWritable(), audioFrame->m_pAudioBuffer + audioSize, audioSize );
+        m_prevAudio = nullptr;
+    }
+    
+
+    return audioChunk;
+}
+
+// ***********************
+//
 MemoryChunkPtr      BlueFishInputThread::Deinterlace            ( const CFramePtr & videoChunk )
 {
-    MemoryChunkPtr deinterlacedChunk = m_reusableChunks.GetNext();
+    MemoryChunkPtr deinterlacedChunk = m_reusableVideo.GetNext();
     deinterlacedChunk->Clear();
 
     // Maybe we could choose algorithm here.

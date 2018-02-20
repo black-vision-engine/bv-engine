@@ -145,6 +145,7 @@ void                  VideoOutputsPreprocessor::InitializeAVBuffers   ( RenderCo
         desc.depth = TextureUtils::Channels( vic->GetFormat() );
         desc.channels = audio->GetChannels();
         desc.sampleRate = audio->GetFrequency() / m_lcmFPS;
+        desc.channelDepth = audio->GetChannelDepth();
 
         m_avFramesBuffer[ vic ] = boost::circular_buffer< AVFramePtr >( BUFFER_SIZE );
 

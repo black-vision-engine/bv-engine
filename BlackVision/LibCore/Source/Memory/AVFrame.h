@@ -22,6 +22,7 @@ struct AVFrameDescriptor
     UInt32  depth;
     UInt32  channels;
     UInt32  sampleRate;         /// FIXME: Video cards interpret this field as number of samples. Check if other parts of code do the same and change this name.
+    UInt32  channelDepth;
 };
 
 class AVFrame;

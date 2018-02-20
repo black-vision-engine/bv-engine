@@ -13,7 +13,15 @@ CFrame::CFrame(BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine)
     : m_pAudioBuffer( nullptr )
     , m_nAudioSize( 0 )
 {
-    Init( Size, BytesPerLine,0 );
+    Init( Size, BytesPerLine, 0 );
+}
+
+// ***********************
+//
+CFrame::CFrame( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, BLUE_UINT32 audioSize )
+{
+    Init( Size, BytesPerLine, 0 );
+    InitAudioBuffer( audioSize, nullptr );
 }
 
 // ***********************

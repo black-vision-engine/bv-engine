@@ -39,7 +39,10 @@ private:
     FrameQueue					m_processedFrameQueue;
     InputChannel *              m_inputChannel;
 
-    Reusable< MemoryChunkPtr >  m_reusableChunks;
+    Reusable< MemoryChunkPtr >  m_reusableVideo;
+    Reusable< MemoryChunkPtr >  m_reusableAudio;
+
+    CFramePtr                   m_prevAudio;            ///< Audio comes each second frame. We must split buffer in two.
 
 public:
 
@@ -52,6 +55,7 @@ public:
 
 protected:
 
+    MemoryChunkPtr              ProcessAudio            ( const CFramePtr & audioFrame );
     MemoryChunkPtr              Deinterlace             ( const CFramePtr & videoChunk );
 
     void                        DeinterlaceLinear       ( const CFramePtr & inputChunk, MemoryChunkPtr outputChunk );
