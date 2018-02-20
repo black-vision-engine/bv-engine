@@ -12,6 +12,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+#include "Util/Audio/AudioUtils.h"
 
 #include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputAsset.h"
@@ -27,6 +28,7 @@ namespace model {
 
 const std::string        VideoInputPlugin::PARAMS::ALPHA    = "alpha";
 const std::string        VideoInputPlugin::PARAMS::TX_MAT   = "txMat";
+const std::string        VideoInputPlugin::PARAMS::GAIN     = "gain";
 
 
 
@@ -57,6 +59,7 @@ DefaultPluginParamValModelPtr   VideoInputPluginDesc::CreateDefaultModel( ITimeE
     auto model = helper.GetModel();
 
     helper.SetOrCreatePluginModel();
+    helper.AddSimpleParam( VideoInputPlugin::PARAMS::GAIN, 1.f );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( VideoInputPlugin::PARAMS::ALPHA, 1.f, true );
@@ -129,8 +132,11 @@ VideoInputPlugin::VideoInputPlugin         ( const std::string & name, const std
     , m_vsc( nullptr )
 {
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+    m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );       // Default video card format. It doesn't require converting.
 
     SetPrevPlugin( prev );
+
+    m_gainValue = QueryTypedValue< ValueFloatPtr >( GetValue( PARAMS::GAIN ) );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< VideoInputAssetDesc >() );
 }
@@ -154,19 +160,13 @@ bool                            VideoInputPlugin::LoadResource  ( AssetDescConst
     auto videoAssetDesc = QueryTypedDesc< VideoInputAssetDescConstPtr >( assetDescr );
     if( videoAssetDesc )
     {
-        SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment();
-
         auto videoAsset = std::static_pointer_cast< const VideoInputAsset >( AssetManager::GetInstance().LoadAsset( videoAssetDesc ) );
         if( videoAsset )
         {
-            auto name = GetTextureName( 0 );
+            m_videoInputAsset = videoAsset;
 
-            auto texDesc = std::make_shared< GPUTextureDescriptor >( videoAsset->GetFillAsset(), name );
-
-            texDesc->SetSamplerState( newSamplerStateModel );
-            texDesc->SetName( name );
-
-            ReplaceTexture( videoAssetDesc, texDesc, 0 );
+            LoadVideoInputTexture( videoAsset, videoAssetDesc );
+            LoadVideoInputAudio( videoAsset, videoAssetDesc );
 
             return true;
         }
@@ -175,12 +175,45 @@ bool                            VideoInputPlugin::LoadResource  ( AssetDescConst
     return false;
 }
 
+// ***********************
+//
+void                                VideoInputPlugin::LoadVideoInputTexture          ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr videoAssetDesc )
+{
+    SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment();
+
+    auto name = GetTextureName( 0 );
+    auto texDesc = std::make_shared< GPUTextureDescriptor >( m_videoInputAsset->GetFillAsset(), name );
+
+    texDesc->SetSamplerState( newSamplerStateModel );
+    texDesc->SetName( name );
+
+    ReplaceTexture( videoAssetDesc, texDesc, 0 );
+}
+
+// ***********************
+//
+void                                VideoInputPlugin::LoadVideoInputAudio       ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc )
+{
+    auto audioInput = videoAsset->GetAudio();
+    if( audioInput )
+    {
+        m_audioChannel->SetFrequency( audioInput->GetFrequency() );
+        m_audioChannel->SetFormat( audioInput->GetFormat() );
+    }
+}
 
 // *************************************
 // 
-IVertexShaderChannelConstPtr        VideoInputPlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr        VideoInputPlugin::GetVertexShaderChannel    () const
 {
     return m_vsc;
+}
+
+// *************************************
+// 
+IAudioChannelPtr                    VideoInputPlugin::GetAudioChannel           () const
+{
+    return m_audioChannel;
 }
 
 // *************************************
@@ -198,10 +231,35 @@ void                                VideoInputPlugin::Update                    
         InitVertexAttributesChannel();
     }
 
+    UpdateAudio();
+
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
 }
 
+// ***********************
+//
+void                                VideoInputPlugin::UpdateAudio                   ()
+{
+    auto videoInputAudio = m_videoInputAsset->GetAudio();
+    if( videoInputAudio )
+    {
+        m_audioChannel->PushPacket( ApplyGain( videoInputAudio->GetFrame() ) );
+
+    }
+}
+
+// ***********************
+//
+MemoryChunkPtr                      VideoInputPlugin::ApplyGain                     ( MemoryChunkConstPtr audioFrameData ) const
+{
+    auto size = audioFrameData->Size();
+    auto outData = MemoryChunk::Create( audioFrameData->Size() );
+
+    audio::AudioUtils::ApplyGain( outData->GetWritable(), audioFrameData->Get(), size, m_gainValue->GetValue() );
+
+    return outData;
+}
 
 
 

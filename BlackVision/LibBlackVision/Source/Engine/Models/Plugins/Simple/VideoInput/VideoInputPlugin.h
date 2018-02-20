@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Assets/Input/VideoInput/VideoInputAsset.h"
+
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/TexturePluginBase.h"
 
 
@@ -39,6 +41,7 @@ public:
     {
         static const std::string        ALPHA;
         static const std::string        TX_MAT;
+        static const std::string        GAIN;
     };
 
 protected:
@@ -46,6 +49,11 @@ protected:
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
+    DefaultAudioChannelPtr          m_audioChannel;
+
+    VideoInputAssetConstPtr         m_videoInputAsset;
+
+    ValueFloatPtr                   m_gainValue;
 
 public:
 
@@ -58,6 +66,7 @@ public:
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    virtual IAudioChannelPtr                    GetAudioChannel             () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
@@ -66,6 +75,12 @@ private:
     void										InitVertexAttributesChannel ();
 
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
+    void                                        LoadVideoInputTexture       ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc );
+    void                                        LoadVideoInputAudio         ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc );
+
+    void                                        UpdateAudio                 ();
+    MemoryChunkPtr								ApplyGain					( MemoryChunkConstPtr audioFrameData ) const;
 
 };
 
