@@ -150,3 +150,43 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateSlot )
     EXPECT_EQ( slot.GetVal().Texture->GetData(), videoChunk );
     EXPECT_EQ( slot.GetVal().Audio->GetData(), audioChunk );
 }
+
+// ***********************
+// If video input slot gets empty (nullptr) audio buffer in AVFrame it should zero it's memory.
+// Note that this behavior is different then in case of texture update.
+// Zero audio signal is more neutral for ear then repeating the same chunk multiple times.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateEmptyAudio )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    auto avFrameDesc = CreateDefaultAVFrame();
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", avFrameDesc );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+
+    auto videoSize = avFrameDesc.depth * avFrameDesc.height * avFrameDesc.width;
+
+    auto videoChunk = MemoryChunk::Create( videoSize );
+    auto audioChunk = nullptr;
+
+    slots.UpdateVideoInput( 0, AVFrame::Create( videoChunk, audioChunk, avFrameDesc ) );
+
+    auto slot = slots.GetInputSlots()->AccessSource( slots.GetSlotIndex( 0 ) );
+    ASSERT_TRUE( slot.IsValid() );
+
+    auto resultAudio = slot.GetVal().Audio->GetData();
+    bool notZero = false;
+
+    for( int i = 0; i < resultAudio->Size(); ++i )
+    {
+        if( resultAudio->Get()[ i ] != 0 )
+            notZero = true;
+    }
+
+    EXPECT_FALSE( notZero ) << "Audio buffer should be cleared.";
+}
