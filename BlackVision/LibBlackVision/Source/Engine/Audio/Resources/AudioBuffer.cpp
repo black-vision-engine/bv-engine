@@ -78,5 +78,12 @@ void                AudioBuffer::Update             ( MemoryChunkConstPtr data )
     m_data = data;
 }
 
+// ***********************
+//
+void                AudioBuffer::Clear              ()
+{
+    m_data = MemoryChunk::Create( m_data->Size() );
+}
+
 } // audio
 } //bv

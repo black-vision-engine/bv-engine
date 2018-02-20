@@ -156,8 +156,13 @@ Texture2DPtr                VideoInputSlots::CreateTexture  ( const videocards::
 //
 audio::AudioBufferPtr       VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
 {
-    vidInputDesc;
-    return nullptr;
+    auto & avDesc = vidInputDesc.GetDataDesc();
+    auto frameSize = avDesc.channelDepth * avDesc.channels * avDesc.numSamples;
+
+    auto chunk = MemoryChunk::Create( frameSize );
+
+    // FIXME: hardcoded frequency and audio format.
+    return audio::AudioBuffer::Create( chunk, 48000, AudioFormat::STEREO16, false );
 }
 
 // ***********************

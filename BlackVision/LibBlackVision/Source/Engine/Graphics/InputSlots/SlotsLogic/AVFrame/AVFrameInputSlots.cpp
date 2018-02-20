@@ -44,7 +44,10 @@ void        AVFrameInputSlots::UpdateAudio      ( audio::AudioBufferPtr audio, A
 {
     if( audio )
     {
-        audio->Update( frame->m_audioData );
+        if( frame->m_audioData )
+            audio->Update( frame->m_audioData );
+        else
+            audio->Clear();
     }
 }
 
