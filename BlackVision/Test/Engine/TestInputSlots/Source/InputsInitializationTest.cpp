@@ -7,8 +7,11 @@
 #include "Engine/Graphics/InputSlots/Logic/InputLogic.h"
 
 #include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/AudioInputAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
+
 #include "Assets/AssetManager.h"
 
 #include "Utils/Accessors/Assets/AssetManagerAccessor.h"
@@ -24,7 +27,9 @@ using namespace bv;
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, Initialization_RegisterLoader )
 {
     auto loader = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), TextureInputAssetDesc::UID() );
+    auto loaderAudio = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), AudioInputAssetDesc::UID() );
     EXPECT_NE( loader, nullptr );
+    EXPECT_NE( loaderAudio, nullptr );
 }
 
 // ***********************
@@ -41,6 +46,14 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_Initialization_Reg
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInputTexture_Initialization_RegisterLoader )
 {
     auto loader = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), VideoInputTextureAssetDesc::UID() );
+    EXPECT_NE( loader, nullptr );
+}
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInputAudio_Initialization_RegisterLoader )
+{
+    auto loader = TEST_ACCESSOR( AssetManager )::FindLoader( AssetManager::GetInstance(), VideoInputAudioAssetDesc::UID() );
     EXPECT_NE( loader, nullptr );
 }
 
