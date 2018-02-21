@@ -272,7 +272,7 @@ Texture2DPtr                    InputSlots::CreateFallbackTexture   ()
 //
 audio::AudioBufferPtr           InputSlots::CreateFallbackAudio     ()
 {
-    return nullptr;
+    return audio::AudioBuffer::Create( nullptr, 48000, AudioFormat::STEREO16, true );
 }
 
 // ***********************
