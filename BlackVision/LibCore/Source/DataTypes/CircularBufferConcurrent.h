@@ -28,6 +28,7 @@ public:
     size_t      Size                () const;
 
     void        Push                ( const T & val );
+    bool        TryPush             ( const T & val );
     T           Pop                 ();
     bool        TryPop              ( T & val );
 
@@ -79,6 +80,24 @@ void        CircularBufferConcurrent< T, N >::Push        ( const T & val )
     m_condVarPush.notify_one();
 }
 
+// ***********************
+//
+template< typename T, size_t N >
+inline bool CircularBufferConcurrent< T, N >::TryPush   ( const T & val )
+{
+    std::unique_lock< std::mutex > lock( m_mutex );
+
+    if( m_queue.size() < N )
+    {
+        m_queue.push_back( val );
+        m_condVarPush.notify_one();
+
+        return true;
+    }
+
+    return false;
+}
+
 // *************************************
 //
 template< typename T, size_t N >
@@ -109,7 +128,7 @@ inline bool     CircularBufferConcurrent< T, N >::TryPop        ( T & val )
 {
     std::unique_lock< std::mutex > lock( m_mutex );
 
-    if( IsEmpty() )
+    if( m_queue.empty() )
         return false;
 
     val = m_queue.front();

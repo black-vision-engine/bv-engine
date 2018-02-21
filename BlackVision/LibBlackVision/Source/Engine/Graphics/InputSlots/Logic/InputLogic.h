@@ -22,6 +22,8 @@ private:
     InputSlotsPtr                          m_inputSlots;
     std::vector< IInputHandlerPtr >        m_inputsHandlers;
 
+    std::vector< IInputHandlerPtr >        m_inputsToRegister;      ///< Deffered initialization.
+
 public:
 
     explicit            InputLogic      ();
@@ -32,7 +34,7 @@ public:
 
 public:
 
-    void                AppendInputHandler  ( RenderContext * ctx, IInputHandlerPtr newHandler );
+    void                AppendInputHandler  ( IInputHandlerPtr newHandler );
 
 public:
 

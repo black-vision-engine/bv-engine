@@ -188,6 +188,9 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.cpp">
       <Filter>EndUserAPI\EventHandlers\AsyncThumbs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Initialization\BVAppLogicInitialization.cpp">
+      <Filter>Initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />

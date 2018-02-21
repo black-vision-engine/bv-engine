@@ -4,7 +4,11 @@
 
 
 
-namespace bv {
+namespace bv
+{
+
+class RenderLogic;
+
 
 
 // ***********************
@@ -52,6 +56,8 @@ public:
 
     audio::AudioRenderer *              GetAudioRenderer        () { return m_audioRenderer; }
     videocards::VideoCardManager *      GetVideoCardManager     () { return m_videoCardManager; }
+
+    RenderLogic *                       GetRenderLogic          () { return m_renderLogic; }
     ///@}
 };
 

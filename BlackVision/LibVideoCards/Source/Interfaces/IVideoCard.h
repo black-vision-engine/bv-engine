@@ -37,6 +37,7 @@ public:
     virtual void                Stop                    () = 0;
 
 	virtual void                SetVideoOutput          ( bool enable ) = 0;
+    virtual void                SetVideoInput           ( VideoInputID inputId, bool enable ) = 0;
 
     virtual VideoCardID         GetVideoCardID          () const = 0;
 

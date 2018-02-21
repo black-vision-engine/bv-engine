@@ -26,6 +26,15 @@
     <ClCompile Include="..\..\..\Source\TestInterpolators\TestBezierSerialization.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp">
+      <Filter>TestNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAssets\TestTextureInputAssetDesc.cpp">
+      <Filter>TestAssets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAssets\TestVideoInputAssetDesc.cpp">
+      <Filter>TestAssets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestKeys">
@@ -39,6 +48,9 @@
     </Filter>
     <Filter Include="TestNodes">
       <UniqueIdentifier>{a0e3ce15-1f0a-4d31-98d6-f8c6d4eeb88c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestAssets">
+      <UniqueIdentifier>{8f929643-05d2-488f-a2a3-ba9da563a925}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ namespace bv
 //
 VideoInputHandler::VideoInputHandler( videocards::VideoCardManager * videoCardMan, InputSlotsPtr slots )
     :   m_videoCardManager( videoCardMan )
-    ,   m_inputSlots( slots )
+    ,   m_inputSlots( std::make_shared< VideoInputSlots >( slots ) )
     ,   m_audioRenderer( nullptr )
     ,   m_renderer( nullptr )
 {
@@ -37,7 +37,7 @@ void            VideoInputHandler::UnregisterInputs ()
         ctx.SetRenderer( m_renderer );
         ctx.SetAudio( m_audioRenderer );
 
-        m_inputSlots.UnregisterAllChannels( &ctx );
+        m_inputSlots->UnregisterAllChannels( &ctx );
     }
 }
 
@@ -67,7 +67,7 @@ void            VideoInputHandler::RegisterInputs   ( const videocards::InputCha
     for( auto & desc : channelsDesc )
     {
         // Don't check result. Error message is logged internally.
-        m_inputSlots.RegisterVideoInputChannel( desc );
+        m_inputSlots->RegisterVideoInputChannel( desc );
     }
 }
 
@@ -81,7 +81,7 @@ void            VideoInputHandler::ProcessFrameData ( videocards::VideoInputFram
         // provide any frame. In this case input slots remains with previous content.
         if( singleFrame.FrameData )
         {
-            m_inputSlots.UpdateVideoInput( singleFrame.InputID, singleFrame.FrameData );
+            m_inputSlots->UpdateVideoInput( singleFrame.InputID, singleFrame.FrameData );
         }
     }
 }

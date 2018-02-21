@@ -4,6 +4,7 @@
 #include "CoreDEF.h"
 
 #include "Memory/AVFrame.h"
+#include "Serialization/ConversionHelper.h"
 
 #include <string>
 
@@ -15,6 +16,17 @@ namespace videocards
 
 typedef UInt32 VideoInputID;
 typedef UInt32 VideoCardID;
+
+
+// ***********************
+//
+enum class VideoType
+{
+    Fill,
+    Key,
+
+    Total
+};
 
 
 /**@brief Descriptor of video input channel on video card.
@@ -86,6 +98,9 @@ inline bool             VideoInputChannelDesc::IsEquivalent     ( const VideoInp
 
 
 }   // videocards
+
+DECLARE_ENUM_SERIALIZATION( videocards::VideoType )
+
 }   // bv
 
 

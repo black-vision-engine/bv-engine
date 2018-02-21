@@ -228,6 +228,7 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Initialization\BVAppLogicInitialization.cpp" />
     <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp" />
     <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />

@@ -117,7 +117,7 @@ SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 
     if( !version.IsValid() )
         bvDeserCo->AddWarning( std::make_shared< InvalidSceneVersion >( "This file does not contain scene version. It may be corrupted and loaded incorrectly." ) );
-    else if( version != Version::GetCurrentVersion() )
+    else if( version.SerializerVersion != Version::GetCurrentVersion().SerializerVersion )
         bvDeserCo->AddWarning( std::make_shared< InvalidSceneVersion >( "Version of the scene file does not match engine version. This scene may be loaded incorrectly" ) );
 
     // Add scene name to context

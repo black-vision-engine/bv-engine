@@ -30,10 +30,12 @@
     <ClInclude Include="..\..\..\Source\Framework\TestEnvironment.h" />
     <ClInclude Include="..\..\..\Source\Framework\UseLoggerTests.h" />
     <ClInclude Include="..\..\..\Source\Framework\TestMain.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\Assets\AssetManagerAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeInterpolatorAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\CompositeTransformAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Engine\Inputs\VideoInputHandlerAccessor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Accessors\EvaluatorsAccessors.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\Assets\TextureInputAssetComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\NodeComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Comparators\ParamComparator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Events\EndOperationEvent.h" />
@@ -41,11 +43,12 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeAssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeAssets\FakeDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeChannelsDescs.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeInputFrames.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.h" />
     <ClInclude Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.h" />
     <ClInclude Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.h" />
-    <ClInclude Include="..\..\..\Source\Utils\Scenes\SceneCreator.h" />
+    <ClInclude Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeInteprolator.h" />
   </ItemGroup>
@@ -64,6 +67,7 @@
     <ClCompile Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Utils\Nodes\TestNodesCreator.cpp" />
+    <ClCompile Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Applications\LibBVLogic\Projects\Win\VS14\LibBVLogic.vcxproj">

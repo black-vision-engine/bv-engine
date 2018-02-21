@@ -148,6 +148,7 @@ private:
     void                            InitializeRemoteCommunication();
     void                            InitializeCommandsDebugLayer();
     void                            InitializeDefaultAssets();
+    void                            InitializeInputSlots();
 
     std::string                     GetEnvScene();
 

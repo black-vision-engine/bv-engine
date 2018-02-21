@@ -19,7 +19,7 @@ class VideoInputHandler : public IInputHandler
 private:
 
     videocards::VideoCardManager *      m_videoCardManager;
-    VideoInputSlots                     m_inputSlots;
+    VideoInputSlotsPtr                  m_inputSlots;
     
     // We need this to release resources. Resources need better handling :(
     Renderer *              m_renderer;
@@ -34,6 +34,8 @@ public:
     virtual void            ProcessInputs           ( RenderContext * ctx ) override;
 
     virtual void            RegisterInputs          ( RenderContext * ctx, InputSlotsPtr inputSlots ) override;
+
+    VideoInputSlotsPtr      GetVideoInputSlots      () const { return m_inputSlots; }
 
 private:
 

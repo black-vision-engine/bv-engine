@@ -37,6 +37,10 @@ public:
 
     static AudioBufferPtr   Create	    ( MemoryChunkConstPtr data, Int32 frequency, AudioFormat format, bool eof );
 
+public:
+
+    void            Update              ( MemoryChunkConstPtr data );
+
 };
 
 typedef std::vector< AudioBufferConstPtr > AudioBufferVec;
