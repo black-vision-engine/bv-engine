@@ -59,7 +59,7 @@ DefaultPluginParamValModelPtr   VideoInputPluginDesc::CreateDefaultModel( ITimeE
     auto model = helper.GetModel();
 
     helper.SetOrCreatePluginModel();
-    helper.AddSimpleParam( VideoInputPlugin::PARAMS::GAIN, 1.f );
+    helper.AddSimpleParam( VideoInputPlugin::PARAMS::GAIN, 1.f, true );
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( VideoInputPlugin::PARAMS::ALPHA, 1.f, true );
