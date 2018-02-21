@@ -43,6 +43,7 @@ private:
     Reusable< MemoryChunkPtr >  m_reusableAudio;
 
     CFramePtr                   m_prevAudio;            ///< Audio comes each second frame. We must split buffer in two.
+    bool                        m_odd;
 
 public:
 
