@@ -122,7 +122,8 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 
     if ( !m_started )
     {
-        m_startTime = t;
+        //m_startTime = t;
+        m_startTime += t - prevGlobalTime;
     }
 
     //if( m_startTriggered )

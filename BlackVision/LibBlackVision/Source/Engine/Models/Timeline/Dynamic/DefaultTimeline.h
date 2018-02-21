@@ -27,6 +27,8 @@ private:
 
     ITimelineEvent *                m_triggeredEvent;
 
+    bool                            m_triggeredPlay;
+
     std::vector< ITimelineEventPtr > m_keyFrameEvents;
 
                                                 DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );

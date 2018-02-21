@@ -71,6 +71,7 @@ DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType durati
     , m_prevLocalTime( TimeType( 0.0 ) )
     , m_prevGlobalTime( TimeType( 0.0 ) )
     , m_triggeredEvent( nullptr )
+    , m_triggeredPlay( true )
 {
 }
 
@@ -205,6 +206,14 @@ TimeType                            DefaultTimeline::GetDuration        () const
 //
 void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeType t )
 {
+    if( m_triggeredPlay )
+    {
+        m_timeEvalImpl.UpdateGlobalTime( t );
+        m_timeEvalImpl.ResetLocalTimeTo( m_prevLocalTime );
+        m_triggeredPlay = false;
+        return;
+    }
+
     auto globalTime = m_prevGlobalTime;
     m_prevGlobalTime = t;
 
@@ -216,7 +225,7 @@ void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeTy
 
     while( true )
     {
-        auto event = CurrentEvent( localTime, localTime + offset );
+        auto event = CurrentEvent( localTime, localTime + offset ); // FIXME: direction should be taken into account
         if( event == nullptr || !event->IsActive() )
         {
             globalTime += offset; // move time to the end
@@ -255,6 +264,7 @@ TimeType                            DefaultTimeline::GetLocalTime       () const
 //
 void                                DefaultTimeline::SetLocalTime       ( TimeType t )
 {
+    m_prevLocalTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
 }
 
@@ -293,6 +303,9 @@ void                                DefaultTimeline::Reverse            ()
 //
 void                                DefaultTimeline::Play               ()
 {
+    if( !m_timeEvalImpl.IsActive() || m_timeEvalImpl.IsPaused() )
+        m_triggeredPlay = true;
+
     m_timeEvalImpl.Start();
 
     //auto curTime = GetLocalTime();

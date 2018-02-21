@@ -348,7 +348,10 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopAtZeroViaSerPlayOff )
 	EXPECT_NEAR( timeline->GetLocalTime(), 1.5, epsilon );
 
 	timeline->Play();
-	timeline->SetGlobalTime( 4.f );
+	timeline->SetGlobalTime( 4.f ); // timeline starts in global time = 4
+
+    timeline->SetGlobalTime( 6.f ); // so we need to move on
+
 	EXPECT_NEAR( timeline->GetLocalTime(), 3.5, epsilon );
 }
 
