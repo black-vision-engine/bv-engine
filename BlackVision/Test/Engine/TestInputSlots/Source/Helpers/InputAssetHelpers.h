@@ -7,6 +7,7 @@
 
 #include "Assets/Input/TextureInputAsset.h"
 #include "Assets/Input/TextureInputAssetDesc.h"
+#include "Assets/Input/AudioInputAssetDesc.h"
 #include "Assets/Input/Loaders/InputAssetLoader.h"
 
 #include "Assets/AssetManager.h"
@@ -38,6 +39,7 @@ inline InputsContext                CreateInputContext   ()
     context.assetManager = std::make_shared< AssetManager >();
 
     context.assetManager->RegisterLoader( TextureInputAssetDesc::UID(), std::make_shared< InputAssetLoader >( context.slots ) );
+    context.assetManager->RegisterLoader( AudioInputAssetDesc::UID(), std::make_shared< InputAssetLoader >( context.slots ) );
 
     return context;
 }

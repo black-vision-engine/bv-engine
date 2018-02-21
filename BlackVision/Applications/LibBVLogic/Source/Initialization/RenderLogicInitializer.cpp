@@ -13,6 +13,8 @@
 #include "Assets/Input/Loaders/VideoInputAssetLoader.h"
 #include "Assets/Input/Videoinput/VideoInputAssetDesc.h"
 #include "Assets/Input/Videoinput/VideoInputTextureAssetDesc.h"
+#include "Assets/Input/Videoinput/VideoInputAudioAssetDesc.h"
+#include "Assets/Input/AudioInputAssetDesc.h"
 
 #include "UseLoggerBVAppModule.h"
 
@@ -198,6 +200,7 @@ void            RenderLogicInitializer::InitializeVideoInput    ( InputLogic * i
     auto videoInputSlots = videoInputHandler->GetVideoInputSlots();
 
     AssetManager::GetInstance().RegisterLoader( VideoInputTextureAssetDesc::UID(), std::make_shared< VideoInputAssetLoader >( videoInputSlots ) );
+    AssetManager::GetInstance().RegisterLoader( VideoInputAudioAssetDesc::UID(), std::make_shared< VideoInputAssetLoader >( videoInputSlots ) );
     AssetManager::GetInstance().RegisterLoader( VideoInputAssetDesc::UID(), std::make_shared< VideoInputAssetLoader >( videoInputSlots ) );
 }
 
@@ -209,6 +212,7 @@ void            RenderLogicInitializer::InitializeInputSlots    ( RenderLogic * 
     auto inputSlots = inputLogic->GetInputSlots();
 
     AssetManager::GetInstance().RegisterLoader( TextureInputAssetDesc::UID(), std::make_shared< InputAssetLoader >( inputSlots ) );
+    AssetManager::GetInstance().RegisterLoader( AudioInputAssetDesc::UID(), std::make_shared< InputAssetLoader >( inputSlots ) );
 
     InitializeVideoInput( inputLogic, videoCardManager );
 }

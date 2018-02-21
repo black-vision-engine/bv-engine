@@ -9,6 +9,7 @@
 #include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
 #include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
 
 #include "Assets/Input/Loaders/VideoInputAssetLoader.h"
 
@@ -39,6 +40,7 @@ inline VideoInputsContext           CreateVideoInputContext     ()
 
     context.assetManager->RegisterLoader( VideoInputAssetDesc::UID(), loader );
     context.assetManager->RegisterLoader( VideoInputTextureAssetDesc::UID(), loader );
+    context.assetManager->RegisterLoader( VideoInputAudioAssetDesc::UID(), loader );
 
     return context;
 }
