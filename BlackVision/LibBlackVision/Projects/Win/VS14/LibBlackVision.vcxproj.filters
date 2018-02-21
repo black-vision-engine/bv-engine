@@ -2179,6 +2179,18 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotsDerivedAssets.cpp">
       <Filter>Assets\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAsset.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5548,6 +5560,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

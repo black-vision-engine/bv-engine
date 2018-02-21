@@ -42,6 +42,13 @@ VideoInputTextureAssetDescPtr   VideoInputAssetDesc::CreateTextureDesc  ( videoc
 
 // ***********************
 //
+VideoInputAudioAssetDescPtr     VideoInputAssetDesc::CreateAudioDesc    () const
+{
+    return VideoInputAudioAssetDesc::Create( m_videoInputIdx );
+}
+
+// ***********************
+//
 void                VideoInputAssetDesc::Serialize        ( ISerializer & ser ) const
 {
     ser.EnterChild( "asset" );

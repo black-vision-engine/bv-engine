@@ -6,8 +6,12 @@
 
 #include "Assets/Input/VideoInput/VideoInputAsset.h"
 #include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
+
 #include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
+
+#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAsset.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -259,6 +263,18 @@ VideoInputTextureAssetConstPtr  VideoInputSlots::CreateAsset        ( VideoInput
 
 // ***********************
 //
+VideoInputAudioAssetConstPtr    VideoInputSlots::CreateAsset        ( VideoInputSlotsPtr thisPtr, VideoInputAudioAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = VideoInputAudioAsset::Create( thisPtr, desc->GetVideoInputID() );
+    asset->EvaluateSlot();
+
+    return asset;
+}
+
+// ***********************
+//
 Expected< videocards::VideoInputChannelDesc >           VideoInputSlots::GetVideoCardFromSlot        ( SlotIndex idx )
 {
     std::lock_guard< std::recursive_mutex > guard( m_lock );
@@ -271,6 +287,8 @@ Expected< videocards::VideoInputChannelDesc >           VideoInputSlots::GetVide
 
     return Expected< videocards::VideoInputChannelDesc >();
 }
+
+
 
 }	// bv
 

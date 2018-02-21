@@ -1,26 +1,25 @@
 #pragma once
 
-
 #include "Assets/AssetDescriptor.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
-#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
-#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
-#include "Assets/Input/AudioInputAssetDesc.h"
-#include "VideoInput/VideoInputChannelDesc.h"
-
+#include "InputSlotBinding.h"
 
 
 namespace bv
 {
 
-class VideoInputAssetDesc;
-DEFINE_PTR_TYPE( VideoInputAssetDesc )
-DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
+class AudioInputAssetDesc;
+DEFINE_PTR_TYPE( AudioInputAssetDesc )
 
 
 // ***********************
-// 
-class VideoInputAssetDesc : public AssetDesc, public std::enable_shared_from_this< AssetDesc >
+/*@brief Descriptor for loading audio from input slots.
+
+@ingroup Assets
+@ingroup InputSlots*/
+class AudioInputAssetDesc : public AssetDesc, public std::enable_shared_from_this< AssetDesc >
 {
 private:
 
@@ -28,7 +27,8 @@ private:
 
 private:
 
-    videocards::VideoInputID    m_videoInputIdx;
+    InputSlotBinding            m_binding;
+
 
     mutable std::string         m_key;
 
@@ -36,9 +36,9 @@ protected:
 
     virtual const std::string &			GetUID				() const override;
 
-private:
+protected:
 
-    explicit        VideoInputAssetDesc   ( videocards::VideoInputID inputIdx );
+    explicit        AudioInputAssetDesc   ( InputSlotBinding binding );
 
 
 public:
@@ -47,10 +47,8 @@ public:
     virtual void                        Deserialize         ( const IDeserializer & ser );
 
     static ISerializableConstPtr        Create              ( const IDeserializer & deser );
-    static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID inputIdx );
+    static AudioInputAssetDescPtr	    Create              ( InputSlotBinding binding );
 
-    VideoInputTextureAssetDescPtr       CreateTextureDesc   ( videocards::VideoType type ) const;
-    VideoInputAudioAssetDescPtr         CreateAudioDesc     () const;
 
     virtual std::string					GetKey				() const override;
     virtual std::string                 GetProposedShortKey () const override;
@@ -63,7 +61,7 @@ public:
     static const std::string &			UID					();
 
 
-    videocards::VideoInputID            GetVideoInputID     () const { return m_videoInputIdx; }
+    const InputSlotBinding &            BindingInfo         () const { return m_binding; }
 
 protected:
 
@@ -75,12 +73,10 @@ protected:
 // ***********************
 /// Returns AssetDescriptor UID for Asset in template parameter.
 /// @note AssetDescriptor uid and Asset uid are different strings.
-template<> inline const std::string &       GetAssetDescUID< VideoInputAssetDesc >()
+template<> inline const std::string &       GetAssetDescUID< AudioInputAssetDesc >()
 {
-    return VideoInputAssetDesc::UID();
+    return AudioInputAssetDesc::UID();
 }
-
-
 
 
 }	// bv

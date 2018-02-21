@@ -4,6 +4,10 @@
 #include "Assets/Input/TextureInputAsset.h"
 #include "Assets/Input/TextureInputAssetDesc.h"
 
+#include "Assets/Input/AudioInputAssetDesc.h"
+#include "Assets/Input/AudioInputAsset.h"
+
+
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Events/EventManager.h"
@@ -291,6 +295,18 @@ TextureInputAssetConstPtr       InputSlots::CreateAsset     ( InputSlotsPtr this
     std::lock_guard< std::recursive_mutex > guard( m_lock );
 
     auto asset = TextureInputAsset::Create( thisPtr, desc->BindingInfo() );
+    asset->EvaluateSlot();
+
+    return asset;
+}
+
+// ***********************
+//
+AudioInputAssetConstPtr         InputSlots::CreateAsset     ( InputSlotsPtr thisPtr, AudioInputAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = AudioInputAsset::Create( thisPtr, desc->BindingInfo() );
     asset->EvaluateSlot();
 
     return asset;

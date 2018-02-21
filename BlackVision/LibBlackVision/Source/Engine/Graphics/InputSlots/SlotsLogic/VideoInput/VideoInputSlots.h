@@ -17,12 +17,18 @@ class VideoInputAssetDesc;
 class VideoInputAsset;
 class VideoInputTextureAssetDesc;
 class VideoInputTextureAsset;
+class VideoInputAudioAsset;
+class VideoInputAudioAssetDesc;
 DEFINE_PTR_TYPE( VideoInputSlots )
 DEFINE_CONST_PTR_TYPE( VideoInputAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
 DEFINE_PTR_TYPE( VideoInputTextureAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputTextureAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputTextureAssetDesc )
+DEFINE_PTR_TYPE( VideoInputAudioAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputAudioAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputAudioAssetDesc )
+
 
 
 
@@ -87,6 +93,7 @@ public:
     ///@name VideoInputAsset creation
     ///@{
     VideoInputTextureAssetConstPtr  CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputTextureAssetDescConstPtr desc );
+    VideoInputAudioAssetConstPtr    CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputAudioAssetDescConstPtr desc );
     ///@}
 
 };

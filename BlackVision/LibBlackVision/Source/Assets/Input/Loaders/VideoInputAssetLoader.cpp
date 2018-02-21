@@ -36,11 +36,14 @@ AssetConstPtr           VideoInputAssetLoader::LoadAsset         ( const AssetDe
 
         auto fillDesc = typedDesc->CreateTextureDesc( videocards::VideoType::Fill );
         auto keyDesc = typedDesc->CreateTextureDesc( videocards::VideoType::Key );
+        auto audioDesc = typedDesc->CreateAudioDesc();
 
         auto fillTexture = std::static_pointer_cast< const VideoInputTextureAsset >( AssetManager::GetInstance().LoadAsset( fillDesc ) );
         auto keyTexture = std::static_pointer_cast< const VideoInputTextureAsset >( AssetManager::GetInstance().LoadAsset( keyDesc ) );
 
-        return VideoInputAsset::Create( fillTexture, keyTexture );
+        auto audio = std::static_pointer_cast< const VideoInputAudioAsset >( AssetManager::GetInstance().LoadAsset( audioDesc ) );
+
+        return VideoInputAsset::Create( fillTexture, keyTexture, audio );
     }
 
     return AssetConstPtr();

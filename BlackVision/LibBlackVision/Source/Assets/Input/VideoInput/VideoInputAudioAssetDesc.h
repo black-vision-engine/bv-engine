@@ -1,11 +1,9 @@
 #pragma once
 
+#include "Serialization/ConversionHelper.h"
 
-#include "Assets/AssetDescriptor.h"
-
-#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
-#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
 #include "Assets/Input/AudioInputAssetDesc.h"
+
 #include "VideoInput/VideoInputChannelDesc.h"
 
 
@@ -13,14 +11,15 @@
 namespace bv
 {
 
-class VideoInputAssetDesc;
-DEFINE_PTR_TYPE( VideoInputAssetDesc )
-DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
+class VideoInputAudioAssetDesc;
+DEFINE_PTR_TYPE( VideoInputAudioAssetDesc )
+DEFINE_CONST_PTR_TYPE( VideoInputAudioAssetDesc )
 
 
 // ***********************
-// 
-class VideoInputAssetDesc : public AssetDesc, public std::enable_shared_from_this< AssetDesc >
+/// Descriptor allows to load VideoInputAsset but it can be used as simple input slot texture as well.
+/// That's why it inherits from TextureInputAssetDesc, but doesn't use it's members.
+class VideoInputAudioAssetDesc : public AudioInputAssetDesc
 {
 private:
 
@@ -38,7 +37,7 @@ protected:
 
 private:
 
-    explicit        VideoInputAssetDesc   ( videocards::VideoInputID inputIdx );
+    explicit        VideoInputAudioAssetDesc              ( videocards::VideoInputID inputIdx );
 
 
 public:
@@ -47,10 +46,8 @@ public:
     virtual void                        Deserialize         ( const IDeserializer & ser );
 
     static ISerializableConstPtr        Create              ( const IDeserializer & deser );
-    static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID inputIdx );
+    static VideoInputAudioAssetDescPtr  Create              ( videocards::VideoInputID inputIdx );
 
-    VideoInputTextureAssetDescPtr       CreateTextureDesc   ( videocards::VideoType type ) const;
-    VideoInputAudioAssetDescPtr         CreateAudioDesc     () const;
 
     virtual std::string					GetKey				() const override;
     virtual std::string                 GetProposedShortKey () const override;
@@ -75,10 +72,11 @@ protected:
 // ***********************
 /// Returns AssetDescriptor UID for Asset in template parameter.
 /// @note AssetDescriptor uid and Asset uid are different strings.
-template<> inline const std::string &       GetAssetDescUID< VideoInputAssetDesc >()
+template<> inline const std::string &       GetAssetDescUID< VideoInputAudioAssetDesc >()
 {
-    return VideoInputAssetDesc::UID();
+    return VideoInputAudioAssetDesc::UID();
 }
+
 
 
 

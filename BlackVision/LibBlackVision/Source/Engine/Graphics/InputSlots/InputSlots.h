@@ -17,6 +17,11 @@ class TextureInputAssetDesc;
 DEFINE_CONST_PTR_TYPE( TextureInputAssetDesc )
 DEFINE_CONST_PTR_TYPE( TextureInputAsset )
 
+class AudioInputAsset;
+class AudioInputAssetDesc;
+DEFINE_CONST_PTR_TYPE( AudioInputAssetDesc )
+DEFINE_CONST_PTR_TYPE( AudioInputAsset )
+
 class InputSlots;
 DEFINE_PTR_TYPE( InputSlots )
 
@@ -90,9 +95,10 @@ private:
 
 public:
 
-    ///@name TextureInputAsset creation
+    ///@name InputAsset creation
     ///@{
     TextureInputAssetConstPtr       CreateAsset     ( InputSlotsPtr thisPtr, TextureInputAssetDescConstPtr desc );
+    AudioInputAssetConstPtr         CreateAsset     ( InputSlotsPtr thisPtr, AudioInputAssetDescConstPtr desc );
 
     ///@}
 
