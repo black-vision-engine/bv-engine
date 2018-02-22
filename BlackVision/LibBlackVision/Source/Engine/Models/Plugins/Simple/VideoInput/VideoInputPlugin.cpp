@@ -244,8 +244,9 @@ void                                VideoInputPlugin::UpdateAudio               
     auto videoInputAudio = m_videoInputAsset->GetAudio();
     if( videoInputAudio )
     {
-        m_audioChannel->PushPacket( ApplyGain( videoInputAudio->GetFrame() ) );
-
+        auto audioFrame = videoInputAudio->GetFrame();
+        if( audioFrame )
+            m_audioChannel->PushPacket( ApplyGain( audioFrame ) );
     }
 }
 
