@@ -544,7 +544,7 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
     {
         case TimelineEventType::TET_STOP:
         {
-            evt->SetActive( false );
+            //evt->SetActive( false );
             SetLocalTime( evt->GetEventTime() );
             m_timeEvalImpl.Stop();
 
