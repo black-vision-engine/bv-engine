@@ -613,7 +613,7 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
         case TimelineEventType::TET_TRIGGER:
         {
             auto evtImpl = static_cast< TimelineEventTrigger * >( evt );
-            evtImpl->SetActive( false );
+//            evtImpl->SetActive( false );
             m_triggeredEvent = nullptr;
 
             evtImpl->SendEvents();
@@ -625,8 +625,8 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
         }
         case TimelineEventType::TET_NULL:
         {
-            auto evtImpl = static_cast< TimelineEventNull * >( evt );
-            evtImpl->SetActive( false );
+            //auto evtImpl = static_cast< TimelineEventNull * >( evt );
+//            evtImpl->SetActive( false );
 
             keyframeType = TimelineKeyframeEvent::KeyframeType::NullKeyframe;
 
