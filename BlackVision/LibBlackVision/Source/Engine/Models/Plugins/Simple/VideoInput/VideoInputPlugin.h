@@ -82,6 +82,8 @@ private:
     void                                        LoadVideoInputTexture       ( VideoInputTextureAssetConstPtr videoAsset, AssetDescConstPtr desc, UInt32 idx );
     void                                        LoadVideoInputAudio         ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc );
 
+    void                                        ReplaceVideoTexture         ( const AssetDescConstPtr & assetDesc, ITextureDescriptorPtr texDesc, UInt32 texIdx = 0 );
+
     void                                        UpdateAudio                 ();
     MemoryChunkPtr								ApplyGain					( MemoryChunkConstPtr audioFrameData ) const;
 

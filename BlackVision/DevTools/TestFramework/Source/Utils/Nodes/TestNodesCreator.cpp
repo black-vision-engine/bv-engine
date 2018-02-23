@@ -468,7 +468,7 @@ model::BasicNodePtr     TestNodesCreator::VideoInputRectangle           ( model:
     SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), width );
     SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), height );
 
-    auto videoDesc = VideoInputAssetDesc::Create( videoInputIdx );
+    auto videoDesc = VideoInputAssetDesc::Create( videoInputIdx, videoInputIdx );
     
     success = node->GetPlugin( "video input" )->LoadResource( videoDesc );
     assert( success );

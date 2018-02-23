@@ -26,7 +26,7 @@ using namespace bv;
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_VideoInput, ResourceLoading_ValidInput )
 {
     auto videoPlugin = TestScenesCreator::VideoInputRectangle( GetProjectEditor(), "Scene", 400, 400, 0 );
-    auto desc = VideoInputAssetDesc::Create( 1 );
+    auto desc = VideoInputAssetDesc::Create( 1, 2 );
 
     ASSERT_NE( videoPlugin, nullptr );
     EXPECT_TRUE( videoPlugin->LoadResource( desc ) );

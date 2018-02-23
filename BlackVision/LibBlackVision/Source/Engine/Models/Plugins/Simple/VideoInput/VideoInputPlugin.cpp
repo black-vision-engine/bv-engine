@@ -173,8 +173,6 @@ bool                            VideoInputPlugin::LoadResource  ( AssetDescConst
         auto videoAsset = std::static_pointer_cast< const VideoInputAsset >( AssetManager::GetInstance().LoadAsset( videoAssetDesc ) );
         if( videoAsset )
         {
-            m_videoInputAsset = videoAsset;
-
             LoadVideoInputTexture( videoAsset, videoAssetDesc );
             LoadVideoInputAudio( videoAsset, videoAssetDesc );
 
@@ -189,15 +187,21 @@ bool                            VideoInputPlugin::LoadResource  ( AssetDescConst
 //
 void                                VideoInputPlugin::LoadVideoInputTexture          ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr videoAssetDesc )
 {
+    m_videoInputAsset = videoAsset;
+
     LoadVideoInputTexture( videoAsset->GetFillAsset(), videoAssetDesc, 0 );
-    LoadVideoInputTexture( videoAsset->GetKeyAsset(), videoAssetDesc, 1 );
+    //LoadVideoInputTexture( videoAsset->GetKeyAsset(), videoAssetDesc, 1 );
+
+    // We set two textures but only one asset exists. That's why we use name and sampler from first texture.
+    SetAsset( 0, LAsset( GetTextureName( 0 ), videoAssetDesc, CreateSamplerReplacment( 0 ) ) );
 }
 
 // ***********************
 //
 void                                VideoInputPlugin::LoadVideoInputTexture     ( VideoInputTextureAssetConstPtr videoAsset, AssetDescConstPtr videoAssetDesc, UInt32 idx )
 {
-    SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment( idx );
+    // Use the same sampler for both textures.
+    SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment( 0 );
 
     auto name = GetTextureName( idx );
     auto texDesc = std::make_shared< GPUTextureDescriptor >( videoAsset, name );
@@ -205,7 +209,7 @@ void                                VideoInputPlugin::LoadVideoInputTexture     
     texDesc->SetSamplerState( newSamplerStateModel );
     texDesc->SetName( name );
 
-    ReplaceTexture( videoAssetDesc, texDesc, idx );
+    ReplaceVideoTexture( videoAssetDesc, texDesc, idx );
 }
 
 // ***********************
@@ -218,6 +222,18 @@ void                                VideoInputPlugin::LoadVideoInputAudio       
         m_audioChannel->SetFrequency( audioInput->GetFrequency() );
         m_audioChannel->SetFormat( audioInput->GetFormat() );
     }
+}
+
+// ***********************
+//
+void                                VideoInputPlugin::ReplaceVideoTexture       ( const AssetDescConstPtr &, ITextureDescriptorPtr texDesc, UInt32 texIdx )
+{
+    auto txData = m_psc->GetTexturesDataImpl();
+
+    txData->SetTexture( texIdx, texDesc );
+    //SetAsset( texIdx, LAsset( texDesc->GetName(), assetDesc, texDesc->GetSamplerState() ) );
+
+    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 }
 
 // *************************************
