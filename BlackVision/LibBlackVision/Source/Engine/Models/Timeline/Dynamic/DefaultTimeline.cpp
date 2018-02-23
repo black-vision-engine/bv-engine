@@ -209,6 +209,7 @@ void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeTy
     if( m_triggeredPlay )
     {
         m_timeEvalImpl.UpdateGlobalTime( t );
+        m_prevGlobalTime = t;
         m_timeEvalImpl.ResetLocalTimeTo( m_prevLocalTime );
         m_triggeredPlay = false;
         return;
