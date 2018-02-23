@@ -218,7 +218,7 @@ void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeTy
     auto globalTime = m_prevGlobalTime;
     m_prevGlobalTime = t;
 
-    TimeType offset = t - globalTime;
+    TimeType offset = t - globalTime; // FIXME: take direction intou account
 
     TimeType prevLocalTime = m_prevLocalTime;
 
@@ -480,7 +480,7 @@ void                                DefaultTimeline::DeactivateEvent    ( ITimel
 //
 ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeType curTime, TimeType prevTime ) const
 {
-    if( m_timeEvalImpl.IsActive() )
+    if( m_timeEvalImpl.IsActive() && !m_timeEvalImpl.IsPaused() )
     {        
         auto t0 = std::min( curTime, prevTime );
         auto t1 = std::max( curTime, prevTime );
