@@ -153,8 +153,8 @@ ReturnResult            CFifoCapture::InitDualLink  ( BLUE_INT32 CardNumber, BLU
 
 	    varVal.vt = VT_UI4;
 	    varVal.ulVal = Signal_FormatType_4224;	//select format type
-	    //vr.ulVal = Signal_FormatType_444_10BitSDI;
-	    //vr.ulVal = Signal_FormatType_444_12BitSDI;
+	    //varVal.ulVal = Signal_FormatType_444_10BitSDI;
+	    //varVal.ulVal = Signal_FormatType_444_12BitSDI;
 	    m_pSDK->SetCardProperty(VIDEO_DUAL_LINK_INPUT_SIGNAL_FORMAT_TYPE, varVal);
 
         return Result::Success();
@@ -292,7 +292,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
         GetVideo_CaptureFrameInfoEx( pThis->m_pSDK, &pThis->m_Overlap, video_capture_frame, NotUsedCompostLater, &capture_fifo_size );
         if( video_capture_frame.nVideoSignalType < VID_FMT_INVALID && video_capture_frame.BufferId != -1 )
         {
-            pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_DMABuffer( video_capture_frame.BufferId, BLUE_DATA_IMAGE ) );
+            pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( video_capture_frame.BufferId, BLUE_DATA_IMAGE ) );
             pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( video_capture_frame.BufferId, BLUE_DATA_HANC ) );
 
 

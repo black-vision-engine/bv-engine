@@ -26,9 +26,10 @@ namespace bv {
 namespace model {
 
 
-const std::string        VideoInputPlugin::PARAMS::ALPHA    = "alpha";
-const std::string        VideoInputPlugin::PARAMS::TX_MAT   = "txMat";
-const std::string        VideoInputPlugin::PARAMS::GAIN     = "gain";
+const std::string        VideoInputPlugin::PARAMS::ALPHA        = "alpha";
+const std::string        VideoInputPlugin::PARAMS::TX_MAT       = "txMat";
+const std::string        VideoInputPlugin::PARAMS::GAIN         = "gain";
+const std::string        VideoInputPlugin::PARAMS::ENABLE_KEY   = "EnableKey";
 
 
 
@@ -63,6 +64,7 @@ DefaultPluginParamValModelPtr   VideoInputPluginDesc::CreateDefaultModel( ITimeE
 
     helper.SetOrCreatePSModel();
     helper.AddSimpleParam( VideoInputPlugin::PARAMS::ALPHA, 1.f, true );
+    helper.AddSimpleParam( VideoInputPlugin::PARAMS::ENABLE_KEY, false, true );
 
     helper.SetOrCreateVSModel();
     helper.AddTransformParam( VideoInputPlugin::PARAMS::TX_MAT, true );
@@ -82,11 +84,17 @@ std::string             VideoInputPluginDesc::UID                       ()
 
 // *******************************
 // 
-std::string             VideoInputPluginDesc::TextureName               ()
+std::string             VideoInputPluginDesc::FillTextureName           ()
 {
-    return "VideoInput0";
+    return "VideoInputFill";
 }
 
+// *******************************
+// 
+std::string             VideoInputPluginDesc::KeyTextureName            ()
+{
+    return "VideoInputKey";
+}
 
 
 // ************************************************************************* PLUGIN *************************************************************************
@@ -121,7 +129,9 @@ bool                    VideoInputPlugin::SetPrevPlugin                 ( IPlugi
 std::string             VideoInputPlugin::GetTextureName                ( UInt32 idx ) const
 {
     if( idx == 0 )
-        return VideoInputPluginDesc::TextureName();
+        return VideoInputPluginDesc::FillTextureName();
+    else if( idx == 1 )
+        return VideoInputPluginDesc::KeyTextureName();
     return "";
 }
 
@@ -179,15 +189,23 @@ bool                            VideoInputPlugin::LoadResource  ( AssetDescConst
 //
 void                                VideoInputPlugin::LoadVideoInputTexture          ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr videoAssetDesc )
 {
-    SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment();
+    LoadVideoInputTexture( videoAsset->GetFillAsset(), videoAssetDesc, 0 );
+    LoadVideoInputTexture( videoAsset->GetKeyAsset(), videoAssetDesc, 1 );
+}
 
-    auto name = GetTextureName( 0 );
-    auto texDesc = std::make_shared< GPUTextureDescriptor >( m_videoInputAsset->GetFillAsset(), name );
+// ***********************
+//
+void                                VideoInputPlugin::LoadVideoInputTexture     ( VideoInputTextureAssetConstPtr videoAsset, AssetDescConstPtr videoAssetDesc, UInt32 idx )
+{
+    SamplerStateModelPtr newSamplerStateModel = CreateSamplerReplacment( idx );
+
+    auto name = GetTextureName( idx );
+    auto texDesc = std::make_shared< GPUTextureDescriptor >( videoAsset, name );
 
     texDesc->SetSamplerState( newSamplerStateModel );
     texDesc->SetName( name );
 
-    ReplaceTexture( videoAssetDesc, texDesc, 0 );
+    ReplaceTexture( videoAssetDesc, texDesc, idx );
 }
 
 // ***********************

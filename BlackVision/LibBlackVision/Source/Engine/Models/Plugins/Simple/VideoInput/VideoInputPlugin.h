@@ -28,7 +28,8 @@ public:
 
     static  std::string                     UID                 ();
 
-    static  std::string                     TextureName         ();
+    static  std::string                     FillTextureName     ();
+    static  std::string                     KeyTextureName      ();
 
 };
 
@@ -40,6 +41,7 @@ public:
     struct PARAMS
     {
         static const std::string        ALPHA;
+        static const std::string        ENABLE_KEY;
         static const std::string        TX_MAT;
         static const std::string        GAIN;
     };
@@ -77,6 +79,7 @@ private:
     virtual bool								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
     void                                        LoadVideoInputTexture       ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc );
+    void                                        LoadVideoInputTexture       ( VideoInputTextureAssetConstPtr videoAsset, AssetDescConstPtr desc, UInt32 idx );
     void                                        LoadVideoInputAudio         ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc );
 
     void                                        UpdateAudio                 ();

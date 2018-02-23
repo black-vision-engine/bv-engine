@@ -28,7 +28,8 @@ private:
 
 private:
 
-    videocards::VideoInputID    m_videoInputIdx;
+    videocards::VideoInputID    m_videoFillIdx;
+    videocards::VideoInputID    m_videoKeyIdx;
 
     mutable std::string         m_key;
 
@@ -38,7 +39,7 @@ protected:
 
 private:
 
-    explicit        VideoInputAssetDesc   ( videocards::VideoInputID inputIdx );
+    explicit        VideoInputAssetDesc   ( videocards::VideoInputID fillIdx, videocards::VideoInputID keyIdx );
 
 
 public:
@@ -47,7 +48,7 @@ public:
     virtual void                        Deserialize         ( const IDeserializer & ser );
 
     static ISerializableConstPtr        Create              ( const IDeserializer & deser );
-    static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID inputIdx );
+    static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID fillIdx, videocards::VideoInputID keyIdx );
 
     VideoInputTextureAssetDescPtr       CreateTextureDesc   ( videocards::VideoType type ) const;
     VideoInputAudioAssetDescPtr         CreateAudioDesc     () const;
@@ -63,7 +64,8 @@ public:
     static const std::string &			UID					();
 
 
-    videocards::VideoInputID            GetVideoInputID     () const { return m_videoInputIdx; }
+    videocards::VideoInputID            GetVideoInputFillID () const { return m_videoFillIdx; }
+    videocards::VideoInputID            GetVideoInputKeyID  () const { return m_videoKeyIdx; }
 
 protected:
 

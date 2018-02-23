@@ -62,7 +62,7 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
 
     if( m_odd )
     {
-        SizeType audioSize = audioFrame->m_desc.numSamples / 2;
+        SizeType audioSize = audioFrame->m_desc.channels * audioFrame->m_desc.numSamples / 2;
         m_prevAudio = audioFrame;
 
         if( audioSize )

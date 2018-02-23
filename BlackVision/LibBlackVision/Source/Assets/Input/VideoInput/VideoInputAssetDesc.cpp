@@ -21,30 +21,34 @@ const std::string   VideoInputAssetDesc::uid = "VIDEO_INPUT_ASSET_DESC";
 
 // ***********************
 //
-VideoInputAssetDesc::VideoInputAssetDesc( videocards::VideoInputID inputIdx )
-    : m_videoInputIdx( inputIdx )
+VideoInputAssetDesc::VideoInputAssetDesc( videocards::VideoInputID fillIdx, videocards::VideoInputID keyIdx )
+    : m_videoFillIdx( fillIdx )
+    , m_videoKeyIdx( keyIdx )
 {}
 
 
 // ***********************
 //
-VideoInputAssetDescPtr	        VideoInputAssetDesc::Create             ( videocards::VideoInputID inputIdx )
+VideoInputAssetDescPtr	        VideoInputAssetDesc::Create             ( videocards::VideoInputID fillIdx, videocards::VideoInputID keyIdx )
 {
-    return VideoInputAssetDescPtr( new VideoInputAssetDesc( inputIdx ) );
+    return VideoInputAssetDescPtr( new VideoInputAssetDesc( fillIdx, keyIdx ) );
 }
 
 // ***********************
 //
 VideoInputTextureAssetDescPtr   VideoInputAssetDesc::CreateTextureDesc  ( videocards::VideoType type ) const
 {
-    return VideoInputTextureAssetDesc::Create( m_videoInputIdx, type );
+    if( type == videocards::VideoType::Fill )
+        return VideoInputTextureAssetDesc::Create( m_videoFillIdx, type );
+    else
+        return VideoInputTextureAssetDesc::Create( m_videoKeyIdx, type );
 }
 
 // ***********************
 //
 VideoInputAudioAssetDescPtr     VideoInputAssetDesc::CreateAudioDesc    () const
 {
-    return VideoInputAudioAssetDesc::Create( m_videoInputIdx );
+    return VideoInputAudioAssetDesc::Create( m_videoFillIdx );
 }
 
 // ***********************
@@ -54,7 +58,8 @@ void                VideoInputAssetDesc::Serialize        ( ISerializer & ser ) 
     ser.EnterChild( "asset" );
 
     ser.SetAttribute( "type", UID() );
-    ser.SetAttribute( "VideoInputIdx", Convert::T2String( m_videoInputIdx ) );
+    ser.SetAttribute( "VideoFillIdx", Convert::T2String( m_videoFillIdx ) );
+    ser.SetAttribute( "VideoKeyIdx", Convert::T2String( m_videoKeyIdx ) );
 
     ser.ExitChild();
 }
@@ -79,13 +84,19 @@ void                VideoInputAssetDesc::Deserialize      ( const IDeserializer 
 //
 ISerializableConstPtr       VideoInputAssetDesc::Create          ( const IDeserializer & deser )
 {
-    auto videoInputIdx = Convert::String2T< videocards::VideoInputID >( deser.GetAttribute( "VideoInputIdx" ) );
+    auto videoInputFillIdx = Convert::String2T< videocards::VideoInputID >( deser.GetAttribute( "VideoFillIdx" ) );
+    auto videoInputKeyIdx = Convert::String2T< videocards::VideoInputID >( deser.GetAttribute( "VideoKeyIdx" ) );
 
-    if( videoInputIdx.IsValid() )
-        return VideoInputAssetDesc::Create( videoInputIdx.GetVal() );
+    if( videoInputFillIdx.IsValid() && videoInputKeyIdx.IsValid() )
+        return VideoInputAssetDesc::Create( videoInputFillIdx.GetVal(), videoInputKeyIdx.GetVal() );
     else
     {
-        Warn< SerializationException >( deser, "VideoInputIdx is invalid or doesn't exist." );
+        if( !videoInputFillIdx.IsValid() )
+            Warn< SerializationException >( deser, "VideoFillIdx is invalid or doesn't exist." );
+
+        if( !videoInputKeyIdx.IsValid() )
+            Warn< SerializationException >( deser, "VideoKeyIdx is invalid or doesn't exist." );
+
         return nullptr;
     }
 }
@@ -137,7 +148,7 @@ std::string				VideoInputAssetDesc::GetKey		() const
 //
 std::string             VideoInputAssetDesc::ComputeKey   () const
 {
-    return "VideoInputAsset" + Convert::T2String( m_videoInputIdx );
+    return "VideoInputAsset" + Convert::T2String( m_videoFillIdx ) + Convert::T2String( m_videoKeyIdx );
 }
 
 // ***********************

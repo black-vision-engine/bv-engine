@@ -113,7 +113,7 @@ inline std::shared_ptr< const VideoInputAssetDesc >         DefaultAssets::GetDe
     static VideoInputAssetDescConstPtr daDesc;
     if( !daDesc )
     {
-        daDesc = VideoInputAssetDesc::Create( 0 );
+        daDesc = VideoInputAssetDesc::Create( 0, 0 );
     }
     return daDesc;
 }
