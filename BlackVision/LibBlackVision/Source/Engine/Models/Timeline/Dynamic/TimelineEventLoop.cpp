@@ -54,6 +54,7 @@ ser.EnterChild( "event" );
     SerializationHelper::SerializeAttribute( ser, GetEventTime(), "time" );
     SerializationHelper::SerializeAttribute( ser, GetActionType(), "action" );
     SerializationHelper::SerializeAttribute( ser, m_totalLoopCount, "loopCount" );
+    SerializationHelper::SerializeAttribute( ser, m_curLoopCount, "curLoopCount" );
     SerializationHelper::SerializeAttribute( ser, m_targetTime, "targetTime" );
 ser.ExitChild();
 }
@@ -70,12 +71,14 @@ TimelineEventLoopPtr TimelineEventLoop::Create          ( const std::string & na
 //
 TimelineEventLoopPtr TimelineEventLoop::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
-    return TimelineEventLoop::Create( deser.GetAttribute( "name" ),
+    auto keyframe = TimelineEventLoop::Create( deser.GetAttribute( "name" ),
         Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
         Convert::String2T( deser.GetAttribute( "action" ), LoopEventAction::LEA_TOTAL ),
-        Convert::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 0 ),
+        Convert::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 99999 ),
         Convert::String2T< TimeType >( deser.GetAttribute( "targetTime" ), 0.f ),
         timeline );
+    keyframe->SetLoopCount( Convert::String2T< unsigned int >( deser.GetAttribute( "curLoopCount" ), 0 ) );
+    return keyframe;
 }
 
 // *********************************
