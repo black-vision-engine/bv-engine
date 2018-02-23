@@ -567,6 +567,9 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
 
                     m_prevLocalTime = evtImpl->GetTargetTime();
 
+                    { auto event = CurrentEvent( m_prevLocalTime - 0.0001f, m_prevLocalTime + 0.0001f ); // FIXME epsilons for the fuck's sake!
+                    if( event ) TriggerEventStep( event ); }
+
                     //m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
                     //m_triggeredEvent = nullptr;
 
