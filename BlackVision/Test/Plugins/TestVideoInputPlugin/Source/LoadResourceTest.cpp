@@ -7,6 +7,7 @@
 #include "Assets/Input/VideoInput/VideoInputAsset.h"
 #include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 
+#include "Engine/Models/Plugins/Channels/PixelShader/GPUTextureDescriptor.h"
 
 #include "Utils/Scenes/TestScenesCreator.h"
 #include "Utils/Nodes/TestNodesCreator.h"
@@ -35,8 +36,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Plugins_VideoInput, ResourceLoading_ValidInput )
     ASSERT_TRUE( lassets.size() == 1 );
 
     auto videoDesc = std::static_pointer_cast< const VideoInputAssetDesc >( lassets[ 0 ].assetDesc );
-
     EXPECT_EQ( desc, videoDesc );
+
+    // Check if plugin loaded two textures from input slots.
+    auto psc = std::static_pointer_cast< model::DefaultPixelShaderChannel >( videoPlugin->GetPixelShaderChannel() );
+    auto & textures = psc->GetTexturesDataImpl()->GetTextures();
+
+    ASSERT_EQ( textures.size(), 2 );
 }
 
 
