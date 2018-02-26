@@ -21,6 +21,8 @@
 
 #include "Assets/DefaultAssets.h"
 
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/BlendHelper.h"
+
 
 namespace bv {
 namespace model {
@@ -29,7 +31,7 @@ namespace model {
 const std::string        VideoInputPlugin::PARAMS::ALPHA        = "alpha";
 const std::string        VideoInputPlugin::PARAMS::TX_MAT       = "txMat";
 const std::string        VideoInputPlugin::PARAMS::GAIN         = "gain";
-const std::string        VideoInputPlugin::PARAMS::ENABLE_KEY   = "EnableKey";
+const std::string        VideoInputPlugin::PARAMS::ENABLE_KEY   = "enableKey";
 
 
 
@@ -121,6 +123,11 @@ bool                    VideoInputPlugin::SetPrevPlugin                 ( IPlugi
     BasePlugin::SetPrevPlugin( prev );
     HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 
+    auto ctx = m_psc->GetRendererContext();
+
+    ctx->alphaCtx->blendEnabled = true;
+    BlendHelper::SetBlendColorContext( ctx, BlendHelper::BlendMode::BM_Alpha );
+
     return true;
 }
 
@@ -190,7 +197,7 @@ void                                VideoInputPlugin::LoadVideoInputTexture     
     m_videoInputAsset = videoAsset;
 
     LoadVideoInputTexture( videoAsset->GetFillAsset(), videoAssetDesc, 0 );
-    //LoadVideoInputTexture( videoAsset->GetKeyAsset(), videoAssetDesc, 1 );
+    LoadVideoInputTexture( videoAsset->GetKeyAsset(), videoAssetDesc, 1 );
 
     // We set two textures but only one asset exists. That's why we use name and sampler from first texture.
     SetAsset( 0, LAsset( GetTextureName( 0 ), videoAssetDesc, CreateSamplerReplacment( 0 ) ) );
