@@ -283,18 +283,20 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
     ULONG CapturingID = 0;
     ULONG DoneID = 0;
 
+    const int numBuffers = 4;
+
 
     pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
     pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
     CapturingID = ScheduleID;
-    ScheduleID = ( ++ScheduleID % 3 );
+    ScheduleID = ( ++ScheduleID % numBuffers );
     LastFieldCount = CurrentFieldCount;
 
     pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );	//the first buffer starts to be captured now; this is it's field count
     pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
     DoneID = CapturingID;
     CapturingID = ScheduleID;
-    ScheduleID = ( ++ScheduleID % 3 );
+    ScheduleID = ( ++ScheduleID % numBuffers );
     LastFieldCount = CurrentFieldCount;
 
 
@@ -334,7 +336,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
             DoneID = CapturingID;
             CapturingID = ScheduleID;
-            ScheduleID = ( ++ScheduleID % 4 );
+            ScheduleID = ( ++ScheduleID % numBuffers );
         }
         else
             pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
