@@ -170,7 +170,7 @@ GLuint      PdrTexture2D::Bind             ()
 {
     GLint current = 0;
 
-     //BVGL::bvglGetIntegerv( GL_TEXTURE_BINDING_2D, &current ); // FIXME: Optimization. Removing this line make rendering 2 times faster. V, check please if it can be done differently. 
+    BVGL::bvglGetIntegerv( GL_TEXTURE_BINDING_2D, &current ); // FIXME: Optimization. Removing this line make rendering 2 times faster. V, check please if it can be done differently. 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, m_textureID );
 
     return (GLuint) current;
