@@ -127,7 +127,7 @@ AVFrameConstPtr		BlueFishVCThread::InterlaceFrame( const AVFrameConstPtr & frame
         audioData = MemoryChunk::Create( frame->m_audioData->Size() + m_prevAudioData->Size() );
         memcpy( audioData->GetWritable(), m_prevAudioData->Get(), m_prevAudioData->Size() );
         memcpy( audioData->GetWritable() + m_prevAudioData->Size(), frame->m_audioData->Get(), frame->m_audioData->Size() );
-        newDesc.numSamples = 2 * frame->m_desc.numSamples;      // It's number of samples in reality.
+        newDesc.numSamples = 2 * frame->m_desc.numSamples;
         
         m_prevAudioData = nullptr;
     }

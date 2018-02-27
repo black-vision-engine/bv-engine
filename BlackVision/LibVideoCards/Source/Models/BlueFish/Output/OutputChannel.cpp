@@ -255,7 +255,7 @@ void                    OutputChannel::FrameProcessed               ( const AVFr
         cFrame->ReinitVideoBuffer( playbackChannel->GoldenSize, playbackChannel->BytesPerLine, reinterpret_cast< const unsigned char * >( frame->m_videoData->Get() ) );
         cFrame->ReinitAudioBuffer( frame->m_audioData ? ( unsigned int )frame->m_audioData->Size() : 0, frame->m_audioData ? reinterpret_cast< const unsigned char * >( frame->m_audioData->Get() ) : nullptr );
 
-        cFrame->m_FieldOdd = !m_odd;
+        cFrame->m_FieldOdd = m_odd;
         cFrame->m_desc = frame->m_desc;
         cFrame->m_TimeCode = tc;
 

@@ -91,6 +91,7 @@ void    CFrame::InitImageBuffer     ( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine
             memcpy( m_pBuffer, buffer, Size );
     }
 
+    m_nSize = Size;
     m_nBytesPerLine = BytesPerLine;
 }
 
@@ -107,6 +108,8 @@ void    CFrame::InitAudioBuffer     ( BLUE_UINT32 audioSize, const BLUE_UINT8* a
         if( audioBuffer )
             memcpy( m_pAudioBuffer, audioBuffer, audioSize );
     }
+
+    m_nAudioSize = audioSize;
 }
 
 // ***********************
@@ -158,14 +161,14 @@ void    CFrame::ReinitVideoBuffer   ( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine
 //
 void    CFrame::ReinitAudioBuffer   ( BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer )
 {
-    if( m_nSize != audioSize )
+    if( m_nAudioSize != audioSize )
     {
         ReleaseAudioBuffer();
         InitAudioBuffer( audioSize, audioBuffer );
     }
     else
     {
-        memcpy( m_pBuffer, audioBuffer, audioSize );
+        memcpy( m_pAudioBuffer, audioBuffer, audioSize );
     }
 }
 
