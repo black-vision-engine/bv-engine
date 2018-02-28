@@ -34,6 +34,11 @@ BlueFishVCThread::BlueFishVCThread							( OutputChannel * vc, SizeType frameSiz
 
 	for( SizeType i = 0; i < BUFFER_SIZE; ++i )
         m_outputFramesBuffer.push_back( MemoryChunk::Create( frameSize ) );
+
+    auto desc = vc->CreateFrameDesc();
+    auto audioSize = desc.channelDepth * desc.channels * desc.numSamples;
+
+    m_prevAudioData = MemoryChunk::Create( audioSize );
 }
 
 

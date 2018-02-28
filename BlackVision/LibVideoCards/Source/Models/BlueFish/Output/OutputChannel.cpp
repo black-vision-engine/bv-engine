@@ -19,6 +19,7 @@ OutputChannel::OutputChannel( ChannelName name, ChannelOutputDataUPtr & output )
     , m_playbackChannel( nullptr )
     , m_playbackFifoBuffer( nullptr )
     , m_frameProcessingThread( nullptr )
+    , m_odd( 0 )
 {
     m_playbackFifoBuffer = new CFifoBuffer();
     m_playbackChannel = new CFifoPlayback();
