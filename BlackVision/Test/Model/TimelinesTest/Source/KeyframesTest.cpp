@@ -406,3 +406,68 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ReverseKeyframeWithLag )
 {
 	FAIL(); // write when the behavious is specified
 }
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ComplexKeyframesTest )
+{
+    auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/ComplexKeyframes.xml", "timeline" );
+
+    timeline->SetGlobalTime( 0 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 0, epsilon );
+
+    timeline->SetGlobalTime( 1 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+    timeline->SetGlobalTime( 2 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+    timeline->Play();
+    timeline->SetGlobalTime( 3 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+    timeline->SetGlobalTime( 4 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 2, epsilon );
+
+    timeline->SetGlobalTime( 5 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 3, epsilon );
+
+    timeline->Play();
+    timeline->SetGlobalTime( 6 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 3, epsilon );
+
+    timeline->SetGlobalTime( 7 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 4, epsilon );
+
+    timeline->SetGlobalTime( 8 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+    timeline->Play();
+    timeline->SetGlobalTime( 9 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 1, epsilon );
+
+    timeline->SetGlobalTime( 10 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 2, epsilon );
+
+    timeline->SetGlobalTime( 11 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 3, epsilon );
+
+    timeline->Play();
+    timeline->SetGlobalTime( 12 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 3, epsilon );
+
+    timeline->SetGlobalTime( 13 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 4, epsilon );
+
+    timeline->SetGlobalTime( 14 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 5, epsilon );
+
+    timeline->SetGlobalTime( 15 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 6, epsilon );
+
+    timeline->SetGlobalTime( 16 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 7, epsilon );
+
+    timeline->SetGlobalTime( 17 );
+    ASSERT_NEAR( timeline->GetLocalTime(), 7, epsilon );
+}

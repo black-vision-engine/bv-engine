@@ -1,0 +1,9 @@
+<timeline name="default" type="default" local_time="0.000000" play="true" duration="340282346638528859811704183484516925440.000000" loop="clamp">
+	<events>
+		<event type="stop" name="s1" time="1.000000"/>
+		<event type="stop" name="s2" time="3.000000"/>
+		<event type="loop" name="g" time="5.000000" action="goto" loopCount="1" targetTime="1.000000"/>
+		<event type="stop" name="s3" time="7.000000"/>
+	</events>
+	<children/>
+</timeline>
