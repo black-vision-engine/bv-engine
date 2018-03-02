@@ -4,6 +4,7 @@
 #include "Interfaces/IVideoCardDescriptor.h"
 
 #include "BlueFishUtils.h"
+#include "Exceptions/ExceptionsList.h"
 
 #include "Memory/AVFrame.h"
 #include "Channel.h"
@@ -53,7 +54,7 @@ public:
 
     VideoCardDesc           ();
 
-    virtual IVideoCardPtr                   CreateVideoCard         () const override;
+    virtual Expected< IVideoCardPtr >       CreateVideoCard         () const override;
     virtual void                            Deserialize             ( const IDeserializer & deser ) override;
 
     virtual const std::string &             GetVideoCardUID         () const override;
@@ -71,6 +72,10 @@ public:
 public:
 
     static IVideoCardDescPtr            CreateDescriptor() { return std::make_shared< VideoCardDesc >(); }
+
+private:
+
+    ExceptionsListPtr                   ValidateUniqueChannelNames      () const;
 };
 
 DEFINE_PTR_TYPE( VideoCardDesc )

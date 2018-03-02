@@ -6,7 +6,7 @@
 
 #include "Mathematics/Core/MathFuncs.h"
 
-//#include "UseLoggerVideoModule.h"
+#include "UseLoggerVideoModule.h"
 
 
 namespace bv {
@@ -91,20 +91,22 @@ void                        VideoCardManager::CreateVideoCards      ( const std:
         }
 
         auto videocard = videoCardDesc->CreateVideoCard();
-        if( videocard )
+        if( videocard.IsValid() && videocard.GetVal() )
         {
             m_videoCards.push_back( videocard );
-            for( auto id : videocard->GetDisplayedVideoOutputsIDs() )
+            for( auto id : videocard.GetVal()->GetDisplayedVideoOutputsIDs() )
             {
-                m_outputsToCardsMapping.insert( std::make_pair( id, videocard ) );
+                m_outputsToCardsMapping.insert( std::make_pair( id, videocard.GetVal() ) );
             }
 
-            for( auto inputDesc : videocard->GetInputChannelsDescs() )
+            for( auto inputDesc : videocard.GetVal()->GetInputChannelsDescs() )
             {
-                m_inputsToCardMapping.insert( std::make_pair( inputDesc.GetInputID(), videocard ) );
+                m_inputsToCardMapping.insert( std::make_pair( inputDesc.GetInputID(), videocard.GetVal() ) );
             }
-
-            //videocard->SetFrameProcessingCompletedCallback( FrameProcessingCompleted );
+        }
+        else
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "Failed to create video card: [" + videoCardDesc->GetVideoCardUID() + "]. Errors:\n" << videocard.GetErrorReason();
         }
     }
 }

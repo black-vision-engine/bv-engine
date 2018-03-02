@@ -78,7 +78,7 @@ void                            FakeVideoCardDesc::Deserialize          ( const 
 
 // ***********************
 //
-IVideoCardPtr                   FakeVideoCardDesc::CreateVideoCard      () const
+Expected< IVideoCardPtr >       FakeVideoCardDesc::CreateVideoCard      () const
 {
     auto card = std::make_shared< FakeVideoCard >( m_deviceID );
 

@@ -8,8 +8,12 @@
 #include "Models/BlueFish/Input/InputChannel.h"
 #include "Models/BlueFish/Output/OutputChannel.h"
 
+#include "Exceptions/ExceptionsList.h"
+
 #include "UseLoggerVideoModule.h"
 
+
+#include <set>
 
 
 namespace bv {
@@ -29,8 +33,13 @@ VideoCardDesc::VideoCardDesc    ()
 
 //**************************************
 //
-IVideoCardPtr           VideoCardDesc::CreateVideoCard          () const
+Expected< IVideoCardPtr >   VideoCardDesc::CreateVideoCard          () const
 {
+    auto result = Validate();
+
+    if( !result.IsValid() )
+        return result.GetError();
+
     auto card = std::make_shared< VideoCard >( m_deviceID );
 
     if( card->AttachVideoCard() )
@@ -57,8 +66,8 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          () const
         card->InitVideoCard();
         return card;
     }
-
-    return nullptr;
+    else
+        return "Can't attach Bluefish device.";
 }
 
 // ***********************
@@ -135,9 +144,50 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
 //
 ReturnResult            VideoCardDesc::Validate() const
 {
-    return Result::Success();
+    ExceptionsListPtr errors = std::make_shared< ExceptionsList >();
+
+    errors->Merge( ValidateUniqueChannelNames() );
+
+    if( errors->IsEmpty() )
+        return Result::Success();
+
+    return std::static_pointer_cast< Exception >( errors );
 }
 
+//**************************************
+//
+ExceptionsListPtr       VideoCardDesc::ValidateUniqueChannelNames   () const
+{
+    ExceptionsListPtr errors = std::make_shared< ExceptionsList >();
+
+    for( int i = 0; i < m_channels.size(); ++i )
+    {
+        if( m_channels[ i ].InputChannelData )
+        {
+            for( int j = i + 1; j < m_channels.size(); ++j )
+            {
+                if( m_channels[ j ].InputChannelData &&
+                    m_channels[ i ].Name == m_channels[ j ].Name )
+                {
+                    errors->AddException( "Duplicated input channel " + Convert::T2String( m_channels[ i ].Name ) + " in config file." );
+                }
+            }
+        }
+        else if( m_channels[ i ].OutputChannelData )
+        {
+            for( int j = i + 1; j < m_channels.size(); ++j )
+            {
+                if( m_channels[ j ].OutputChannelData &&
+                    m_channels[ i ].Name == m_channels[ j ].Name )
+                {
+                    errors->AddException( "Duplicated output channel " + Convert::T2String( m_channels[ i ].Name ) + " in config file." );
+                }
+            }
+        }
+    }
+
+    return errors;
+}
 
 //**************************************
 //
