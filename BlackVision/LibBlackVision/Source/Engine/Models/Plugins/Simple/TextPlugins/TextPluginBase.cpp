@@ -95,7 +95,7 @@ DefaultPluginParamValModelPtr   TextPluginBaseDesc::CreateDefaultModel( ITimeEva
     h.AddSimpleStatedParam( TextPluginBase::PARAM::FONT_SIZE, 0.f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::TEXT_BOX, glm::vec2( 1.0f, 1.0f ) );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::USE_TEXT_BOX, false );
-    h.AddSimpleStatedParam( TextPluginBase::PARAM::NEW_LINE_SIZE, 1.0f );
+    h.AddSimpleStatedParam( TextPluginBase::PARAM::NEW_LINE_SIZE, 1.5f );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::SPACING, 0.0f );
     h.AddEnumParam( TextPluginBase::PARAM::ALIGNEMENT, TextAlignmentType::Left, true, true );
     h.AddSimpleStatedParam( TextPluginBase::PARAM::ALIGN_CHARACTER, (int)L'.' );
