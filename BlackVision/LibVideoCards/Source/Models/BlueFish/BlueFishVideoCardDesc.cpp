@@ -130,6 +130,15 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
 
 }
 
+
+// ***********************
+//
+ReturnResult            VideoCardDesc::Validate() const
+{
+    return Result::Success();
+}
+
+
 //**************************************
 //
 const std::string &     VideoCardDesc::GetVideoCardUID      () const

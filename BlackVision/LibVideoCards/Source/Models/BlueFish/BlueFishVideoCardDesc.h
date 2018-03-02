@@ -65,6 +65,9 @@ public:
     UInt32                              GetDeviceID     () const { return m_deviceID; }
     const std::vector< ChannelDesc > &  GetChannelsDescs() const { return m_channels; }
 
+
+    ReturnResult                        Validate        () const;
+
 public:
 
     static IVideoCardDescPtr            CreateDescriptor() { return std::make_shared< VideoCardDesc >(); }
