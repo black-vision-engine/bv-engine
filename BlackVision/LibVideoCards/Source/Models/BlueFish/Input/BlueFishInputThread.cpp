@@ -60,9 +60,13 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
 {
     MemoryChunkPtr audioChunk = m_reusableAudio.GetNext();
 
+    // Synchronize m_odd variable with video input fields.
+    if( m_odd && audioFrame->m_desc.numSamples == 0 )
+        m_odd = !m_odd;
+
     if( m_odd )
     {
-        SizeType audioSize = audioFrame->m_desc.channels * audioFrame->m_desc.numSamples / 2;
+        SizeType audioSize = audioFrame->m_desc.channels * audioFrame->m_desc.channelDepth * audioFrame->m_desc.numSamples / 2;
         m_prevAudio = audioFrame;
 
         if( audioSize )
@@ -73,14 +77,14 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
         assert( m_prevAudio );
 
         // Copy second half of the buffer.
-        SizeType audioSize = audioFrame->m_desc.numSamples / 2;
+        SizeType audioSize = m_prevAudio->m_desc.channels * m_prevAudio->m_desc.channelDepth * m_prevAudio->m_desc.numSamples / 2;
 
         if( audioSize )
             memcpy( audioChunk->GetWritable(), m_prevAudio->m_pAudioBuffer + audioSize, audioSize );
 
         m_prevAudio = nullptr;
     }
-    
+
     m_odd = !m_odd;
 
     return audioChunk;

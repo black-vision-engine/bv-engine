@@ -261,7 +261,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
     // Init audio
     // In field mode we get each second frame doubled audio size.
-    UInt32 audioBufferSize = GetSampleSize( pThis->m_audioFormat ) * pThis->m_numAudioChannels * 2 * pThis->m_samplesFrequency / 50;
+    UInt32 audioBufferSize = 2 * GetSampleSize( pThis->m_audioFormat ) * pThis->m_numAudioChannels * pThis->m_samplesFrequency / 50;
 
     unsigned char* pHancBuffer = ( unsigned char* )VirtualAlloc( NULL, MAX_HANC_BUFFER_SIZE, MEM_COMMIT, PAGE_READWRITE );
     VirtualLock( pHancBuffer, MAX_HANC_BUFFER_SIZE );
@@ -287,6 +287,9 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
 
     pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
+    if( ( CurrentFieldCount & 0x1 ) == 0 )
+        pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );	//we need to schedule the capture of field 0 at field 1 interrupt
+
     pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
     CapturingID = ScheduleID;
     ScheduleID = ( ++ScheduleID % numBuffers );
@@ -304,8 +307,14 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
     {
         auto pFrame = frames.GetNext();
 
+        bool odd = ScheduleID & 0x1;
+
         pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
-        pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
+
+        if( !odd  )
+            pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image_HANC( ScheduleID ), 0 );
+        else
+            pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
 
         VARIANT varVal;
         pThis->m_pSDK->QueryCardProperty( VIDEO_INPUT_SIGNAL_VIDEO_MODE, varVal );	//check if the video signal was valid for the last frame (until wait_input_video_synch() returned)
@@ -314,18 +323,29 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
         if( varVal.ulVal < pThis->m_InvalidVideoModeFlag )
         {
             pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
-            pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_HANC ) );
+            
+            if( !( DoneID & 0x1 ) )
+            {
+                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_HANC ) );
 
+                hancInfo.audio_pcm_data_ptr = pFrame->m_pAudioBuffer;
+                hancInfo.raw_custom_anc_pkt_data_ptr = nullptr;
+                hancInfo.audio_input_source = AUDIO_INPUT_SOURCE_EMB;
 
-            hancInfo.audio_pcm_data_ptr = pFrame->m_pAudioBuffer;
-            hancInfo.raw_custom_anc_pkt_data_ptr = nullptr;
-            hancInfo.audio_input_source = AUDIO_INPUT_SOURCE_EMB;
+                hanc_decoder_ex( pThis->m_iCardType, ( UINT32* )pHancBuffer, &hancInfo );
 
-            hanc_decoder_ex( pThis->m_iCardType, ( UINT32* )pHancBuffer, &hancInfo );
+                nAudioChannelInfo = QueryChannelInfo( pThis->m_pSDK );
+                pFrame->m_desc.numSamples = hancInfo.no_audio_samples / pThis->m_numAudioChannels;
+                pFrame->m_desc.channels = pThis->m_numAudioChannels;
+                pFrame->m_desc.channelDepth = GetSampleSize( pThis->m_audioFormat );
+            }
+            else
+            {
+                pFrame->m_desc.numSamples = 0;
+                pFrame->m_desc.channels = 0;
+                pFrame->m_desc.channelDepth = 0;
+            }
 
-            nAudioChannelInfo = QueryChannelInfo( pThis->m_pSDK );
-            pFrame->m_desc.numSamples = hancInfo.no_audio_samples; //QueryNumSamples( nAudioChannelInfo );
-            pFrame->m_desc.channels = pThis->m_numAudioChannels;
 
             LastFieldCount = CurrentFieldCount;
 
