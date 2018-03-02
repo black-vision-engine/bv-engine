@@ -2,6 +2,7 @@
 
 #include "Engine/Graphics/InputSlots/InputSlots.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
+#include "Engine/Audio/Resources/AudioBuffer.h"
 
 #include "Helpers/TextureHelpers.h"
 
@@ -174,3 +175,21 @@ TEST( Engine_InputSlots, UnregisterSourceInvalidIdx )
     ASSERT_NE( slots.AccessSource( "Source2" ).GetVal().Texture, nullptr );
 }
 
+
+// ***********************
+//
+TEST( Engine_InputSlots, RegisterSource_Audio )
+{
+    InputSlots slots;
+
+    Texture2DPtr tex1 = CreateFakeTexture( 20, 30 );
+    audio::AudioBufferPtr audio1 = audio::AudioBuffer::Create( MemoryChunk::Create( 3840 ), 48000, AudioFormat::STEREO16, false );
+
+    Expected< SlotIndex > slot1Idx = slots.RegisterSource( InputSlot( tex1, audio1 ), "Source1" );
+
+    ASSERT_TRUE( slot1Idx.IsValid() );
+    ASSERT_TRUE( slots.AccessSource( slot1Idx ).IsValid() );
+
+    EXPECT_EQ( tex1, slots.AccessSource( slot1Idx ).GetVal().Texture );
+    EXPECT_EQ( audio1, slots.AccessSource( slot1Idx ).GetVal().Audio );
+}

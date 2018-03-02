@@ -15,6 +15,7 @@
 
 #include "Assets/DefaultAssets.h"
 
+#include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 
 
@@ -189,6 +190,90 @@ IPixelShaderChannelPtr              TexturePluginBase::GetPixelShaderChannel    
 {
     return m_psc;
 }
+
+
+// ========================================================================= //
+// Texturing utils
+// ========================================================================= //
+
+// ***********************
+//
+ConnectedComponentPtr               TexturePluginBase::RewriteComponent             ( IConnectedComponentConstPtr prevComponent )
+{
+    auto connComp = ConnectedComponent::Create();
+
+    auto prevConnComp = std::static_pointer_cast< const ConnectedComponent >( prevComponent );
+    auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
+
+    for( auto prevCompCh : prevCompChannels )
+    {
+        connComp->AddAttributeChannel( prevCompCh );
+    }
+
+    return connComp;
+}
+
+// ***********************
+//
+bool                                TexturePluginBase::GenerateDefaultUVs           ( VertexAttributesChannelPtr attribsChannel, IVertexAttributesChannelConstPtr prevChannel )
+{
+    bool generated = false;
+    auto prevCC = prevChannel->GetComponents();
+
+    auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    for( unsigned int i = 0; i < prevCC.size(); ++i )
+    {
+        auto connComp = RewriteComponent( prevCC[ i ] );
+        auto prevConnComp = std::static_pointer_cast< const ConnectedComponent >( prevCC[ i ] );
+
+        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        {
+            //FIXME: only one texture - convex hull calculations
+            auto uvs = new model::Float2AttributeChannel( desc, GetTextureName( 0 ), true );
+            auto uvsPtr = Float2AttributeChannelPtr( uvs );
+
+            Helper::UVGenerator::GenerateUV( std::static_pointer_cast< Float3AttributeChannel >( posChannel ),
+                uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+
+            connComp->AddAttributeChannel( uvsPtr );
+            generated = true;
+        }
+
+        attribsChannel->AddConnectedComponent( connComp );
+    }
+
+    return generated;
+}
+
+// ***********************
+//
+VertexAttributesChannelPtr          TexturePluginBase::InitAttributesChannelWithUVs     ( VertexAttributesChannelPtr curChannel )
+{
+    VertexAttributesChannelPtr attributesChannel = curChannel;
+
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
+
+    //Only one texture
+    VertexAttributesChannelDescriptor vaChannelDesc( *static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
+    {
+        vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    }
+
+    if( !attributesChannel )
+    {
+        attributesChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        attributesChannel->ClearAll();
+        attributesChannel->SetDescriptor( vaChannelDesc );
+    }
+
+    return attributesChannel;
+}
+
 
 
 } // model

@@ -2,7 +2,7 @@
 
 
 #include "Assets/Asset.h"
-
+#include "CoreEnums.h"
 
 
 
@@ -25,8 +25,10 @@ public:
     virtual void        AddReference        () const = 0;
     virtual void        ReleaseReference    () const = 0;
 
-    virtual UInt64      GetUpdateID         () const = 0;
+    virtual UInt32      GetFrequency        () const = 0;
+    virtual AudioFormat GetFormat           () const = 0;
 
+    virtual MemoryChunkConstPtr     GetFrame() const = 0;
 };
 
 DEFINE_PTR_TYPE( IAudioInputAsset );

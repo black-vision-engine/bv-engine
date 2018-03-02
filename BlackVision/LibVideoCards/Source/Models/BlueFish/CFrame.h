@@ -11,9 +11,10 @@ class CFrame
 {
 public:
 
-    CFrame(BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
-    CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd);
-    CFrame(const BLUE_UINT8* videoBuffer, BLUE_UINT32 videoSize, BLUE_UINT32 BytesPerLine, int odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc );
+    CFrame( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine );
+    CFrame( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, BLUE_UINT32 audioSize );
+    CFrame( const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd );
+    CFrame( const BLUE_UINT8* videoBuffer, BLUE_UINT32 videoSize, BLUE_UINT32 BytesPerLine, int odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc );
     ~CFrame();
 
 public:

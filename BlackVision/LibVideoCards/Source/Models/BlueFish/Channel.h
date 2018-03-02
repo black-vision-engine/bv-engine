@@ -62,8 +62,10 @@ public:
     virtual UInt32  GetResolution       () const = 0;
     ChannelName     GetName             () const;
 
-    AVFrameDescriptor               CreateFrameDesc         () const;
-    Reusable< MemoryChunkPtr >      CreateReusableChunks    ( UInt32 numChunks ) const;
+    AVFrameDescriptor               CreateFrameDesc             () const;
+    Reusable< MemoryChunkPtr >      CreateReusableVideoChunks   ( UInt32 numChunks ) const;
+    Reusable< MemoryChunkPtr >      CreateReusableAudioChunks   ( UInt32 numChunks ) const;
+    Reusable< MemoryChunkPtr >      CreateReusableChunks        ( UInt32 numChunks, UInt32 size ) const;
 
     static ChannelOptionMap CreateChannelOptionMap      ();
 

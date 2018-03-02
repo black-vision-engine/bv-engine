@@ -5,6 +5,9 @@
 #include "Assets/Input/TextureInputAsset.h"
 #include "Assets/Input/TextureInputAssetDesc.h"
 
+#include "Assets/Input/AudioInputAssetDesc.h"
+#include "Assets/Input/AudioInputAsset.h"
+
 
 namespace bv
 {
@@ -24,7 +27,11 @@ AssetConstPtr           InputAssetLoader::LoadAsset         ( const AssetDescCon
         auto typedDesc = std::static_pointer_cast< const TextureInputAssetDesc >( desc );
         return m_inputSlots->CreateAsset( m_inputSlots, typedDesc );
     }
-    //else if( Audio input asset descriptor )
+    else if( desc->GetUID() == AudioInputAssetDesc::UID() )
+    {
+        auto typedDesc = std::static_pointer_cast< const AudioInputAssetDesc >( desc );
+        return m_inputSlots->CreateAsset( m_inputSlots, typedDesc );
+    }
 
     return AssetConstPtr();
 }
@@ -37,6 +44,10 @@ AssetDescConstPtr       InputAssetLoader::CreateDescriptor  ( const IDeserialize
     if( type == TextureInputAssetDesc::UID() )
     {
         return std::static_pointer_cast< const AssetDesc >( TextureInputAssetDesc::Create( deser ) );
+    }
+    else if( type == AudioInputAssetDesc::UID() )
+    {
+        return std::static_pointer_cast< const AssetDesc >( AudioInputAssetDesc::Create( deser ) );
     }
 
     return nullptr;

@@ -17,12 +17,18 @@ class VideoInputAssetDesc;
 class VideoInputAsset;
 class VideoInputTextureAssetDesc;
 class VideoInputTextureAsset;
+class VideoInputAudioAsset;
+class VideoInputAudioAssetDesc;
 DEFINE_PTR_TYPE( VideoInputSlots )
 DEFINE_CONST_PTR_TYPE( VideoInputAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
 DEFINE_PTR_TYPE( VideoInputTextureAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputTextureAsset )
 DEFINE_CONST_PTR_TYPE( VideoInputTextureAssetDesc )
+DEFINE_PTR_TYPE( VideoInputAudioAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputAudioAsset )
+DEFINE_CONST_PTR_TYPE( VideoInputAudioAssetDesc )
+
 
 
 
@@ -52,7 +58,7 @@ public:
     bool            RegisterVideoInputChannel       ( const videocards::VideoInputChannelDesc & vidInputDesc );    
     bool            UnregisterVideoInputChannel     ( RenderContext * ctx, videocards::VideoInputID id );
     bool            UnregisterAllChannels           ( RenderContext * ctx );
-    void            UpdateVideoInput                ( videocards::VideoInputID id, AVFramePtr frame );
+    void            UpdateVideoInput                ( videocards::VideoInputID id, AVFrameConstPtr frame );
 
 
 public:
@@ -63,6 +69,9 @@ public:
     Expected< SlotIndex >       GetSlotIndex        ( videocards::VideoInputID id ) const;
 
     InputSlotsPtr               GetInputSlots       () const { return m_avInputSlots.GetInputSlots(); }
+
+
+    Expected< videocards::VideoInputChannelDesc >   GetVideoCardFromSlot    ( SlotIndex idx );
 
 private:
 
@@ -84,6 +93,7 @@ public:
     ///@name VideoInputAsset creation
     ///@{
     VideoInputTextureAssetConstPtr  CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputTextureAssetDescConstPtr desc );
+    VideoInputAudioAssetConstPtr    CreateAsset     ( VideoInputSlotsPtr thisPtr, VideoInputAudioAssetDescConstPtr desc );
     ///@}
 
 };

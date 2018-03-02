@@ -83,6 +83,8 @@ public:
 
     void                        ResetInputFrame         ( VideoInputID id );
 
+    bool                        IsEnabled               ( VideoInputID inputId ) const;
+
 private:
 
     void                        LoadInputChannelFrames  ( const FakeInputChannelData & channelDesc );

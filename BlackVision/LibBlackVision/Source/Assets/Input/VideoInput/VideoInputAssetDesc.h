@@ -1,8 +1,11 @@
 #pragma once
 
-#include "Assets/Input/TextureInputAssetDesc.h"
-#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 
+#include "Assets/AssetDescriptor.h"
+
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
+#include "Assets/Input/AudioInputAssetDesc.h"
 #include "VideoInput/VideoInputChannelDesc.h"
 
 
@@ -17,7 +20,7 @@ DEFINE_CONST_PTR_TYPE( VideoInputAssetDesc )
 
 // ***********************
 // 
-class VideoInputAssetDesc : public TextureInputAssetDesc
+class VideoInputAssetDesc : public AssetDesc, public std::enable_shared_from_this< AssetDesc >
 {
 private:
 
@@ -25,7 +28,8 @@ private:
 
 private:
 
-    videocards::VideoInputID    m_videoInputIdx;
+    videocards::VideoInputID    m_videoFillIdx;
+    videocards::VideoInputID    m_videoKeyIdx;
 
     mutable std::string         m_key;
 
@@ -35,7 +39,7 @@ protected:
 
 private:
 
-    explicit        VideoInputAssetDesc   ( videocards::VideoInputID inputIdx );
+    explicit        VideoInputAssetDesc   ( videocards::VideoInputID fillIdx, videocards::VideoInputID keyIdx );
 
 
 public:
@@ -44,9 +48,10 @@ public:
     virtual void                        Deserialize         ( const IDeserializer & ser );
 
     static ISerializableConstPtr        Create              ( const IDeserializer & deser );
-    static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID inputIdx );
+    static VideoInputAssetDescPtr	    Create              ( videocards::VideoInputID fillIdx, videocards::VideoInputID keyIdx );
 
     VideoInputTextureAssetDescPtr       CreateTextureDesc   ( videocards::VideoType type ) const;
+    VideoInputAudioAssetDescPtr         CreateAudioDesc     () const;
 
     virtual std::string					GetKey				() const override;
     virtual std::string                 GetProposedShortKey () const override;
@@ -59,7 +64,8 @@ public:
     static const std::string &			UID					();
 
 
-    videocards::VideoInputID            GetVideoInputID     () const { return m_videoInputIdx; }
+    videocards::VideoInputID            GetVideoInputFillID () const { return m_videoFillIdx; }
+    videocards::VideoInputID            GetVideoInputKeyID  () const { return m_videoKeyIdx; }
 
 protected:
 

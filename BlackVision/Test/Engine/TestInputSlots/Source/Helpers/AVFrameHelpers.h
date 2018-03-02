@@ -18,7 +18,8 @@ inline AVFrameDescriptor       CreateDefaultAVFrame    ()
     desc.height = 1000;
     desc.channels = 2;
     desc.depth = 4;
-    desc.sampleRate = 44000;
+    desc.numSamples = 44000;
+    desc.channelDepth = 2;
 
     return desc;
 }

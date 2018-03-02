@@ -186,7 +186,7 @@ ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32
     m_pFifoBuffer = pFifoBuffer;
     m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
 
-    m_reusableFrames = CreateReusableChunks( GoldenSize, BytesPerLine, 2 );
+    m_reusableFrames = CreateReusableVideoChunks( GoldenSize, BytesPerLine, 2 );
 
     return Result::Success();
 }
@@ -523,7 +523,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 					&hanc_stream_info,
 					pFrame->m_pAudioBuffer,
 					pFrame->m_desc.channels,
-					pFrame->m_desc.sampleRate,
+					pFrame->m_desc.numSamples,
 					nSampleType, //FIXME: get bit depth from frame
 					nEmbAudioFlag);
 

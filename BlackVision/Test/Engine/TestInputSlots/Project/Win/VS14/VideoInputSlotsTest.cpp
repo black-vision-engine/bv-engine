@@ -119,3 +119,108 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UnregisterAllSourc
     EXPECT_FALSE( slots.Exists( 1 ) );
     EXPECT_FALSE( slots.Exists( channel2 ) );
 }
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateSlot )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    auto avFrameDesc = CreateDefaultAVFrame();
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", avFrameDesc );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+
+    auto videoSize = avFrameDesc.depth * avFrameDesc.height * avFrameDesc.width;
+    auto audioSize = avFrameDesc.channelDepth * avFrameDesc.channels * avFrameDesc.numSamples;
+
+    auto videoChunk = MemoryChunk::Create( videoSize );
+    auto audioChunk = MemoryChunk::Create( audioSize );
+
+    slots.UpdateVideoInput( 0, AVFrame::Create( videoChunk, audioChunk, avFrameDesc ) );
+
+    auto slot = slots.GetInputSlots()->AccessSource( slots.GetSlotIndex( 0 ) );
+    ASSERT_TRUE( slot.IsValid() );
+
+    EXPECT_EQ( slot.GetVal().Texture->GetData(), videoChunk );
+    EXPECT_EQ( slot.GetVal().Audio->GetData(), audioChunk );
+}
+
+// ***********************
+// If video input slot gets empty (nullptr) audio buffer in AVFrame it should zero it's memory.
+// Note that this behavior is different then in case of texture update.
+// Zero audio signal is more neutral for ear then repeating the same chunk multiple times.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateEmptyAudio )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    auto avFrameDesc = CreateDefaultAVFrame();
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", avFrameDesc );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+
+    auto videoSize = avFrameDesc.depth * avFrameDesc.height * avFrameDesc.width;
+
+    auto videoChunk = MemoryChunk::Create( videoSize );
+    auto audioChunk = nullptr;
+
+    // Update with empty audio chunk.
+    slots.UpdateVideoInput( 0, AVFrame::Create( videoChunk, audioChunk, avFrameDesc ) );
+
+    auto slot = slots.GetInputSlots()->AccessSource( slots.GetSlotIndex( 0 ) );
+    ASSERT_TRUE( slot.IsValid() );
+
+    auto resultAudio = slot.GetVal().Audio->GetData();
+    bool notZero = false;
+
+    for( int i = 0; i < resultAudio->Size(); ++i )
+    {
+        if( resultAudio->Get()[ i ] != 0 )
+            notZero = true;
+    }
+
+    EXPECT_FALSE( notZero ) << "Audio buffer should be cleared.";
+}
+
+// ***********************
+// If video input slot gets empty texture (nullptr) video buffer in AVFrame, texture should remain the same.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateEmptyVideo )
+{
+    auto inputSlots = std::make_shared< InputSlots >();
+    VideoInputSlots slots( inputSlots );
+
+    auto avFrameDesc = CreateDefaultAVFrame();
+    videocards::VideoInputChannelDesc channel1( 1, 0, "BlueFish", "A", avFrameDesc );
+
+    RenderContext renderCtx;
+    renderCtx.SetRenderer( GetAppLogic()->GetRenderer() );
+    renderCtx.SetAudio( GetAppLogic()->GetAudioRenderer() );
+
+    ASSERT_TRUE( slots.RegisterVideoInputChannel( channel1 ) );
+
+    // Add first chunk. We will compare slot content with this pointer later.
+    auto videoSize = avFrameDesc.depth * avFrameDesc.height * avFrameDesc.width;
+    auto videoChunk = MemoryChunk::Create( videoSize );
+
+    slots.UpdateVideoInput( 0, AVFrame::Create( videoChunk, nullptr, avFrameDesc ) );
+
+    // Update with empty texture.
+    slots.UpdateVideoInput( 0, AVFrame::Create( nullptr, nullptr, avFrameDesc ) );
+
+    // Get slot and compare current texture with video chunk. They should be equal.
+    auto slot = slots.GetInputSlots()->AccessSource( slots.GetSlotIndex( 0 ) );
+    ASSERT_TRUE( slot.IsValid() );
+
+    EXPECT_EQ( slot.GetVal().Texture->GetData(), videoChunk );
+}
+

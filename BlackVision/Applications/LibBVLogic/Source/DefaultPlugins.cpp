@@ -19,7 +19,6 @@
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPieChartPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultVideoInputPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultTrianglePlugin.h"
@@ -49,6 +48,7 @@
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
 #include "Engine/Models/Plugins/Simple/SpecialPlugins/ExpertPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/LinesPlugin.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/VideoInputPlugin.h"
 
 // Gizmo plugins
 #include "Engine/Models/Gizmos/Plugins/BoundingBoxPlugin.h"
@@ -80,7 +80,6 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultHeightMapPluginDesc() );
     descriptors.push_back( new DefaultPrismPluginDesc() );
     descriptors.push_back( new DefaultPieChartPluginDesc() );
-    descriptors.push_back( new DefaultVideoInputPluginDesc() );
     descriptors.push_back( new DefaultCirclePluginDesc() );
     descriptors.push_back( new DefaultEllipsePluginDesc() );
     descriptors.push_back( new DefaultTrianglePluginDesc() );
@@ -110,6 +109,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultText3DPluginDesc() );
     descriptors.push_back( new ExpertPluginDesc() );
     descriptors.push_back( new LinesPluginDesc() );
+    descriptors.push_back( new VideoInputPluginDesc() );
 
     descriptors.push_back( new CenterPluginDesc() );
     descriptors.push_back( new BoundingBoxPluginDesc() );

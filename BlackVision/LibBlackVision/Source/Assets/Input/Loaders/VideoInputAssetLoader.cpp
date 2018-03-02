@@ -6,6 +6,8 @@
 #include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
 #include "Assets/Input/VideoInput/VideoInputAsset.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAsset.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
 
 #include "Assets/AssetManager.h"
 
@@ -30,17 +32,25 @@ AssetConstPtr           VideoInputAssetLoader::LoadAsset         ( const AssetDe
         auto typedDesc = std::static_pointer_cast< const VideoInputTextureAssetDesc >( desc );
         return m_inputSlots->CreateAsset( m_inputSlots, typedDesc );
     }
+    else if( type == VideoInputAudioAssetDesc::UID() )
+    {
+        auto typedDesc = std::static_pointer_cast< const VideoInputAudioAssetDesc >( desc );
+        return m_inputSlots->CreateAsset( m_inputSlots, typedDesc );
+    }
     else if( type == VideoInputAssetDesc::UID() )
     {
         auto typedDesc = std::static_pointer_cast< const VideoInputAssetDesc >( desc );
 
         auto fillDesc = typedDesc->CreateTextureDesc( videocards::VideoType::Fill );
         auto keyDesc = typedDesc->CreateTextureDesc( videocards::VideoType::Key );
+        auto audioDesc = typedDesc->CreateAudioDesc();
 
         auto fillTexture = std::static_pointer_cast< const VideoInputTextureAsset >( AssetManager::GetInstance().LoadAsset( fillDesc ) );
         auto keyTexture = std::static_pointer_cast< const VideoInputTextureAsset >( AssetManager::GetInstance().LoadAsset( keyDesc ) );
 
-        return VideoInputAsset::Create( fillTexture, keyTexture );
+        auto audio = std::static_pointer_cast< const VideoInputAudioAsset >( AssetManager::GetInstance().LoadAsset( audioDesc ) );
+
+        return VideoInputAsset::Create( fillTexture, keyTexture, audio );
     }
 
     return AssetConstPtr();
@@ -54,6 +64,10 @@ AssetDescConstPtr       VideoInputAssetLoader::CreateDescriptor  ( const IDeseri
     if( type == VideoInputTextureAssetDesc::UID() )
     {
         return std::static_pointer_cast< const AssetDesc >( VideoInputTextureAssetDesc::Create( deser ) );
+    }
+    else if( type == VideoInputAudioAssetDesc::UID() )
+    {
+        return std::static_pointer_cast< const AssetDesc >( VideoInputAudioAssetDesc::Create( deser ) );
     }
     else if( type == VideoInputAssetDesc::UID() )
     {

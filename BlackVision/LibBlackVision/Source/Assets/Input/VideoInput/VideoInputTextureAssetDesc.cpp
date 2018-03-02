@@ -135,7 +135,7 @@ std::string				VideoInputTextureAssetDesc::GetKey		() const
 //
 std::string             VideoInputTextureAssetDesc::ComputeKey   () const
 {
-    return "VideoInputAsset" + Convert::T2String( m_videoInputIdx );
+    return "VideoInputTextureAsset" + Convert::T2String( m_videoInputIdx );
 }
 
 // ***********************
