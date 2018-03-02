@@ -200,7 +200,17 @@ TimeType                            DefaultTimeline::GetDuration        () const
 }
 
 
-
+TimeType Direction2Factor( TimelinePlayDirection direction, bool paused )
+{
+    if( paused )
+        return 0;
+    else if( direction == TimelinePlayDirection::TPD_BACKWARD )
+        return -1;
+    else if( direction == TimelinePlayDirection::TPD_FORWAD )
+        return 1;
+    assert( false );
+    return 0;
+}
 
 // *********************************
 //
@@ -220,13 +230,15 @@ void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeTy
 
     TimeType offset = t - globalTime; // FIXME: take direction intou account
 
+    TimeType directionFactor = Direction2Factor( m_timeEvalImpl.GetDirection(), m_timeEvalImpl.IsPaused() );
+
     TimeType prevLocalTime = m_prevLocalTime;
 
     TimeType localTime = prevLocalTime;
 
     while( true )
     {
-        auto event = CurrentEvent( localTime, localTime + offset ); // FIXME: direction should be taken into account
+        auto event = CurrentEvent( localTime, localTime + directionFactor * offset ); // FIXME: direction should be taken into account
         if( event == nullptr || !event->IsActive() )
         {
             globalTime += offset; // move time to the end
