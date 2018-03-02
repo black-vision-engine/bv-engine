@@ -77,9 +77,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTextPluginDesc() );
     descriptors.push_back( new DefaultAlphaMaskPluginDesc() );
     descriptors.push_back( new DefaultTimerPluginDesc() );
-    descriptors.push_back( new DefaultHeightMapPluginDesc() );
     descriptors.push_back( new DefaultPrismPluginDesc() );
-    descriptors.push_back( new DefaultPieChartPluginDesc() );
     descriptors.push_back( new DefaultCirclePluginDesc() );
     descriptors.push_back( new DefaultEllipsePluginDesc() );
     descriptors.push_back( new DefaultTrianglePluginDesc() );
@@ -89,7 +87,6 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
     descriptors.push_back( new DefaultTorus::PluginDesc() );
     descriptors.push_back( new DefaultSphere::PluginDesc() );
-    descriptors.push_back( new DefaultGeosphere::PluginDesc() );
     descriptors.push_back( new DefaultSpring::PluginDesc() );
     descriptors.push_back( new DefaultCylinder::DefaultCylinderPluginDesc() );
     descriptors.push_back( new DefaultCogWheel::PluginDesc() );
@@ -118,6 +115,20 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     {
         LOG_MESSAGE( SeverityLevel::info ) << "Registered plugin desc: " << descr->GetPluginTypeUID();
     }
+
+    return descriptors;
+}
+
+// ***********************
+/// If you remove plugin from default list, please add it to this full list of plugins.
+/// This would be usefull in future, if we want to test plugins even if they don't exist in production build.
+std::vector< IPluginDescriptor * >  FullBVPluginDescriptorsList ()
+{
+    auto descriptors = DefaultBVPluginDescriptors();
+
+    descriptors.push_back( new DefaultGeosphere::PluginDesc() );
+    descriptors.push_back( new DefaultPieChartPluginDesc() );
+    descriptors.push_back( new DefaultHeightMapPluginDesc() );
 
     return descriptors;
 }
