@@ -122,13 +122,26 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 // ***********************
 /// If you remove plugin from default list, please add it to this full list of plugins.
 /// This would be usefull in future, if we want to test plugins even if they don't exist in production build.
-std::vector< IPluginDescriptor * >  FullBVPluginDescriptorsList ()
+std::vector< IPluginDescriptor * >  RemainingBVPluginDescriptors    ()
 {
-    auto descriptors = DefaultBVPluginDescriptors();
+    std::vector< IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new DefaultGeosphere::PluginDesc() );
     descriptors.push_back( new DefaultPieChartPluginDesc() );
     descriptors.push_back( new DefaultHeightMapPluginDesc() );
+
+    return descriptors;
+}
+
+// ***********************
+//
+std::vector< IPluginDescriptor * >  FullBVPluginDescriptorsList ()
+{
+    auto descriptors = DefaultBVPluginDescriptors();
+    auto rest = RemainingBVPluginDescriptors();
+
+    for( auto desc : rest )
+        descriptors.push_back( desc );
 
     return descriptors;
 }

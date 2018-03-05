@@ -137,11 +137,17 @@ void                        NodeLogicFactory::RegisterDefaultLogics ()
 // ***********************
 /// Register all logic that exist in engine. This function should call default registration and add
 /// remaining logics.
+void                        NodeLogicFactory::RegisterRamainigLogics      ()
+{
+    RegisterLogic( nodelogic::NodeReplicator::Type(), &Create< nodelogic::NodeReplicator > );
+}
+
+// ***********************
+//
 void                        NodeLogicFactory::RegisterAllLogics     ()
 {
     RegisterDefaultLogics();
-
-    RegisterLogic( nodelogic::NodeReplicator::Type(), &Create< nodelogic::NodeReplicator > );
+    RegisterRamainigLogics();
 }
 
 } //bv
