@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Initialization\TestInputsChannelsCreation.cpp" />
+    <ClCompile Include="..\..\..\Source\Initialization\TestOutputChannelsCreation.cpp" />
     <ClCompile Include="..\..\..\Source\Initialization\TestVideoCardFactory.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\TestCardStart.cpp" />

@@ -76,6 +76,7 @@ public:
 private:
 
     ExceptionsListPtr                   ValidateUniqueChannelNames      () const;
+    ExceptionsListPtr                   ValidateVideoMode               () const;
 };
 
 DEFINE_PTR_TYPE( VideoCardDesc )

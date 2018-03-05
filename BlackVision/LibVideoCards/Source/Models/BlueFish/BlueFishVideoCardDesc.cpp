@@ -147,6 +147,7 @@ ReturnResult            VideoCardDesc::Validate() const
     ExceptionsListPtr errors = std::make_shared< ExceptionsList >();
 
     errors->Merge( ValidateUniqueChannelNames() );
+    errors->Merge( ValidateVideoMode() );
 
     if( errors->IsEmpty() )
         return Result::Success();
@@ -182,6 +183,29 @@ ExceptionsListPtr       VideoCardDesc::ValidateUniqueChannelNames   () const
                 {
                     errors->AddException( "Duplicated output channel " + Convert::T2String( m_channels[ i ].Name ) + " in config file." );
                 }
+            }
+        }
+    }
+
+    return errors;
+}
+
+// ***********************
+//
+ExceptionsListPtr       VideoCardDesc::ValidateVideoMode    () const
+{
+    ExceptionsListPtr errors = std::make_shared< ExceptionsList >();
+
+    for( int i = 0; i < m_channels.size(); ++i )
+    {
+        if( m_channels[ i ].OutputChannelData )
+        {
+            if( m_channels[ i ].OutputChannelData->videoMode == VID_FMT_INVALID )
+            {
+                errors->AddException( "Channel " + Convert::T2String( m_channels[ i ].Name ) + ": Invalid video mode. " +
+                    "Resolution: " + Convert::T2String( m_channels[ i ].OutputChannelData->resolution ) +
+                    ", refresh: " + Convert::T2String( m_channels[ i ].OutputChannelData->refresh ) +
+                    ", interlaced: " + Convert::T2String( m_channels[ i ].OutputChannelData->interlaced ) );
             }
         }
     }
