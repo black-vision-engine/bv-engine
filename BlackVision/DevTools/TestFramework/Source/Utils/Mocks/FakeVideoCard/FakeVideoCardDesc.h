@@ -47,12 +47,12 @@ private:
 
 public:
 
-    virtual const std::string &     GetVideoCardUID     () const override;
+    virtual const std::string &         GetVideoCardUID     () const override;
 
-    virtual void                    Deserialize         ( const IDeserializer & deser ) override;
-    virtual IVideoCardPtr           CreateVideoCard     () const override;
+    virtual void                        Deserialize         ( const IDeserializer & deser ) override;
+    virtual Expected< IVideoCardPtr >   CreateVideoCard     () const override;
 
-    virtual                         ~FakeVideoCardDesc  () {}
+    virtual                             ~FakeVideoCardDesc  () {}
 
 public:
 

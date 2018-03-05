@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\..\Source\CoreEnums.h" />
     <ClInclude Include="..\..\..\Source\DataTypes\Reusable.h" />
     <ClInclude Include="..\..\..\Source\Exception.h" />
+    <ClInclude Include="..\..\..\Source\Exceptions\ExceptionsList.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
@@ -93,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Exception.cpp" />
+    <ClCompile Include="..\..\..\Source\Exceptions\ExceptionsList.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Box.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Util\Transformation.cpp" />
