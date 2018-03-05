@@ -117,7 +117,6 @@ void                        NodeLogicFactory::RegisterDefaultLogics ()
 {
     RegisterLogic( nodelogic::Scroller::Type(), &Create< nodelogic::Scroller > );
     RegisterLogic( nodelogic::WidgetCounter::Type(), &Create< nodelogic::WidgetCounter > );
-    RegisterLogic( nodelogic::NodeReplicator::Type(), &Create< nodelogic::NodeReplicator > );
     RegisterLogic( nodelogic::SmoothValueSetter::Type(), &Create< nodelogic::SmoothValueSetter > );
     RegisterLogic( nodelogic::MeshLoader::Type(), &Create< nodelogic::MeshLoader > );
     RegisterLogic( nodelogic::PieChart::Type(), &Create< nodelogic::PieChart > );
@@ -133,6 +132,16 @@ void                        NodeLogicFactory::RegisterDefaultLogics ()
     RegisterGizmo( nodelogic::ShowFPS::Type(), &nodelogic::ShowFPS::Create );
     RegisterGizmo( nodelogic::BoundingBoxLogic::Type(), &nodelogic::BoundingBoxLogic::Create );
     RegisterGizmo( nodelogic::GridLines::Type(), &nodelogic::GridLines::Create );
+}
+
+// ***********************
+/// Register all logic that exist in engine. This function should call default registration and add
+/// remaining logics.
+void                        NodeLogicFactory::RegisterAllLogics     ()
+{
+    RegisterDefaultLogics();
+
+    RegisterLogic( nodelogic::NodeReplicator::Type(), &Create< nodelogic::NodeReplicator > );
 }
 
 } //bv

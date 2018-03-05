@@ -36,7 +36,8 @@ public:
 
 private:
 
-    void            RegisterDefaultLogics();
+    void            RegisterDefaultLogics       ();
+    void            RegisterAllLogics           ();
 
 };
 
