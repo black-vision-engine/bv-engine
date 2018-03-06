@@ -71,6 +71,7 @@ public:
 
     virtual std::set< UInt64 >	        GetDisplayedVideoOutputsIDs     () const override;
     virtual InputChannelsDescsVec       GetInputChannelsDescs           () const override;
+    virtual OutputChannelsDescsVec      GetOutputChannelsDescs          () const override;
 
 public:
 
@@ -91,6 +92,7 @@ private:
     MemoryChunkPtr              LoadImage               ( const Path & imagePath, UInt32 expectedWidth, UInt32 expectedHeight );
 
     AVFrameDescriptor           CreateAVFrameDesc       ( const FakeInputChannelData * channelDesc ) const;
+    AVFrameDescriptor           CreateAVFrameDesc       ( const FakeOutputChannelData * channelDesc ) const;
 };
 
 DEFINE_PTR_TYPE( FakeVideoCard )

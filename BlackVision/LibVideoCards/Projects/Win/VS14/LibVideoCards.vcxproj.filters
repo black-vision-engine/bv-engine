@@ -22,6 +22,9 @@
     <Filter Include="Models\BlueFish\Output">
       <UniqueIdentifier>{3d703831-76ac-44b5-9808-f96d22f367f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VideoOutput">
+      <UniqueIdentifier>{29d0241e-af59-45f1-8b64-f3cb4b0f9e76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoBuffer.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\FifoCapture.h">
       <Filter>Models\BlueFish\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoOutput\VideoOutputChannelDesc.h">
+      <Filter>VideoOutput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

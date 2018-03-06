@@ -103,6 +103,7 @@ public:
 
 	virtual std::set< UInt64 >	GetDisplayedVideoOutputsIDs () const override;
     InputChannelsDescsVec       GetInputChannelsDescs       () const override;
+    OutputChannelsDescsVec      GetOutputChannelsDescs      () const override;
 	
     virtual UInt32              GetRequiredFPS  () const override;
 

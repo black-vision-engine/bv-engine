@@ -307,6 +307,21 @@ InputChannelsDescsVec       VideoCardManager::GetInputChannelsDescs     () const
     return allDescs;
 }
 
+// ***********************
+//
+OutputChannelsDescsVec      VideoCardManager::GetOutputChannelsDescs    () const
+{
+    OutputChannelsDescsVec allDescs;
+
+    for( auto & card : m_videoCards )
+    {
+        auto descs = card->GetOutputChannelsDescs();
+        allDescs.insert( allDescs.end(), descs.begin(), descs.end() );
+    }
+
+    return allDescs;
+}
+
 //**************************************
 //
 IVideoCardPtr   VideoCardManager::GetVideoCard        ( UInt32 idx )

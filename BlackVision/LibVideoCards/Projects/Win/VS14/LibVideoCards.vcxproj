@@ -47,6 +47,7 @@
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\VideoInputFrameData.h" />
+    <ClInclude Include="..\..\..\Source\VideoOutput\VideoOutputChannelDesc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />

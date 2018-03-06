@@ -5,6 +5,7 @@
 #include "Memory/AVFrame.h"
 
 #include "VideoInput/VideoInputChannelDesc.h"
+#include "VideoOutput/VideoOutputChannelDesc.h"
 
 #include <functional>
 #include <set>
@@ -16,6 +17,7 @@ namespace videocards
 {
 
 typedef std::vector< VideoInputChannelDesc > InputChannelsDescsVec;
+typedef std::vector< VideoOutputChannelDesc > OutputChannelsDescsVec;
 
 
 /**@defgroup VideoCards Video Cards*/
@@ -53,6 +55,7 @@ public:
 
     virtual std::set< UInt64 >	        GetDisplayedVideoOutputsIDs     () const = 0;
     virtual InputChannelsDescsVec       GetInputChannelsDescs           () const = 0;
+    virtual OutputChannelsDescsVec      GetOutputChannelsDescs          () const = 0;
 
 	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;
 	//virtual void                EnableVideoOutput       () = 0;
