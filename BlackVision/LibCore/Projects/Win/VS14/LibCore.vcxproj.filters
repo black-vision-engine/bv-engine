@@ -243,6 +243,12 @@
     <ClInclude Include="..\..\..\Source\Serialization\ConversionHelper.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\ColorRGBA.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Reusable.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\stdafxCore.h" />
@@ -358,8 +364,10 @@
       <Filter>Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Exception.cpp" />
-    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\ConversionHelper.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeContext.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
   </ItemGroup>

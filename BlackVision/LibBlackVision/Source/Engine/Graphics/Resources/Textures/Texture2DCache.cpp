@@ -6,6 +6,8 @@
 #include <cassert>
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
+#include "Assets/Input/TextureInputAsset.h"
+
 
 #ifdef _DEBUG
 #define PRINT_TEXTURE_CACHE_STATS
@@ -35,47 +37,68 @@ Texture2DCache::~Texture2DCache()
 {
 }
 
+// ***********************
+//
+Texture2DPtr    Texture2DCache::GetGPUTexture           ( const ITextureDescriptor * txParams )
+{
+    assert( txParams );
+
+    // FIXME: This is small hack, but I don't see any other simple way to do this.
+    // UID can be safely converted to TextureInputAsset pointer.
+    auto uid = txParams->GetUID();
+    auto texInputAsset = ( TextureInputAsset * )uid;
+
+    return texInputAsset->GetTexture();
+}
+
 // *********************************
 //
 Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescriptor * txParams )
 {
-    auto semantic   = txParams->GetSemantic();
-    auto format     = txParams->GetFormat();
-    auto width      = txParams->GetWidth();
-    auto height     = txParams->GetHeight();
-
-    Texture2DPtr tx = nullptr;
-
-	if( txParams->GetBits( 0 ) &&
-		( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
+    if( txParams->GetTextureType() == ITextureDescriptor::Type::Memory )
     {
-        auto it = m_tex2DCache.find( txParams->GetUID() );
+        auto semantic = txParams->GetSemantic();
+        auto format = txParams->GetFormat();
+        auto width = txParams->GetWidth();
+        auto height = txParams->GetHeight();
 
-        if( it != m_tex2DCache.end() )
+        Texture2DPtr tx = nullptr;
+
+        if( txParams->GetBits( 0 ) &&
+            ( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
         {
+            auto it = m_tex2DCache.find( txParams->GetUID() );
+
+            if( it != m_tex2DCache.end() )
+            {
 #ifdef PRINT_TEXTURE_CACHE_STATS
-            LOG_MESSAGE( SeverityLevel::debug ) << "Reading texture [" << ( UInt32 )it->first << "] from cache.";
+                LOG_MESSAGE( SeverityLevel::debug ) << "Reading texture [" << ( UInt32 )it->first << "] from cache.";
 #endif 
-            return it->second;
+                return it->second;
+            }
         }
-    }
 
-	tx = CreateEmptyTexture( format, width, height, semantic, txParams->GetNumLevels() );
-	tx->SetData( txParams->GetBits(), txParams->GetFormat(), txParams->GetWidth(), txParams->GetHeight(), txParams->GetNumLevels() );
+        tx = CreateEmptyTexture( format, width, height, semantic, txParams->GetNumLevels() );
+        tx->SetData( txParams->GetBits(), txParams->GetFormat(), txParams->GetWidth(), txParams->GetHeight(), txParams->GetNumLevels() );
 
-	if( txParams->GetBits( 0 ) &&
-		( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
-    {
-        assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
+        if( txParams->GetBits( 0 ) &&
+            ( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
+        {
+            assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
 
 #ifdef PRINT_TEXTURE_CACHE_STATS
-        LOG_MESSAGE( SeverityLevel::info ) << "Registering texture [" << ( UInt32 )txParams->GetUID() << "] in cache.";
+            LOG_MESSAGE( SeverityLevel::info ) << "Registering texture [" << ( UInt32 )txParams->GetUID() << "] in cache.";
 #endif 
-        m_tex2DCache[ txParams->GetUID() ] = tx;
-        m_tex2DSet.insert( tx.get() );
-    }
+            m_tex2DCache[ txParams->GetUID() ] = tx;
+            m_tex2DSet.insert( tx.get() );
+        }
 
-    return tx;
+        return tx;
+    }
+    else // ITextureDescriptor::Type::GPU
+    {
+        return GetGPUTexture( txParams );
+    }
 }
 
 // *********************************

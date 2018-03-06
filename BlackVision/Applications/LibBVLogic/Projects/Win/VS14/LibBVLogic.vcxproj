@@ -226,8 +226,8 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\VideoCardEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
-    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Initialization\BVAppLogicInitialization.cpp" />
     <ClCompile Include="..\..\..\Source\Initialization\RenderLogicInitializer.cpp" />
     <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
@@ -257,7 +257,6 @@
     <ClCompile Include="..\..\..\Source\TestingScenes\ModelInteractionLayer.cpp" />
     <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestNodes.cpp" />
     <ClCompile Include="..\..\..\Source\TestingScenes\NewModelTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\Logic\RenderMode.h" />
@@ -287,7 +286,6 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
     <ClInclude Include="..\..\..\Source\Initialization\RenderLogicInitializer.h" />
-    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
     <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
@@ -312,7 +310,6 @@
     <ClInclude Include="..\..\..\Source\TestingScenes\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />

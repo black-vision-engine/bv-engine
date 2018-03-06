@@ -11,9 +11,10 @@ class CFrame
 {
 public:
 
-    CFrame(BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
-    CFrame(const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd);
-    CFrame(const BLUE_UINT8* videoBuffer, BLUE_UINT32 videoSize, BLUE_UINT32 BytesPerLine, int odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc );
+    CFrame( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine );
+    CFrame( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, BLUE_UINT32 audioSize );
+    CFrame( const BLUE_UINT8* buffer, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int odd );
+    CFrame( const BLUE_UINT8* videoBuffer, BLUE_UINT32 videoSize, BLUE_UINT32 BytesPerLine, int odd, BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer, BVTimeCode TimeCode, AVFrameDescriptor desc );
     ~CFrame();
 
 public:
@@ -31,12 +32,23 @@ public:
     BLUE_UINT32 m_nAudioSize;
     ULONG       m_lFieldCount;
     
-
 private:
 
-    void        Init        (BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd);
+    void        Init                    ( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd );
+    void        ReinitParams            ( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, int Odd );
 
+    void        InitImageBuffer         ( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, const BLUE_UINT8* buffer );
+    void        InitAudioBuffer         ( BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer );
+    void        ReleaseImageBuffer      ();
+    void        ReleaseAudioBuffer      ();
+
+public:
+
+    void        ReinitVideoBuffer       ( BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine, const BLUE_UINT8* buffer );
+    void        ReinitAudioBuffer       ( BLUE_UINT32 audioSize, const BLUE_UINT8* audioBuffer );
 };
+
+DEFINE_PTR_TYPE( CFrame );
 
 } //bluefish
 } //videocards

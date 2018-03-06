@@ -1,6 +1,9 @@
 #include "TestNodesCreator.h"
 
 
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
+
+
 
 namespace bv
 {
@@ -95,7 +98,10 @@ model::BasicNodePtr		TestNodesCreator::TexturedRectangle		( model::ITimeEvaluato
     SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), width );
     SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), height );
 
-    LoadTexture( node->GetPlugin( "texture" ), path );
+    if( !path.empty() )
+    {
+        LoadTexture( node->GetPlugin( "texture" ), path );
+    }
 
     if( !alphaMask.empty() )
     {
@@ -440,6 +446,31 @@ model::BasicNodePtr		TestNodesCreator::VideoStreamDecoder			( model::ITimeEvalua
         LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
     }
 
+    assert( success );
+
+    return node;
+}
+
+// ***********************
+//
+model::BasicNodePtr     TestNodesCreator::VideoInputRectangle           ( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, UInt32 videoInputIdx )
+{
+    auto node = model::BasicNode::Create( name, nullptr );
+
+    std::vector< std::string > plugins;
+    plugins.push_back( "DEFAULT_TRANSFORM" );
+    plugins.push_back( "DEFAULT_RECTANGLE" );
+    plugins.push_back( "VIDEO_INPUT_PLUGIN" );
+
+    auto success = node->AddPlugins( plugins, timeEval );
+    assert( success );
+
+    SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), width );
+    SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), height );
+
+    auto videoDesc = VideoInputAssetDesc::Create( videoInputIdx, videoInputIdx );
+    
+    success = node->GetPlugin( "video input" )->LoadResource( videoDesc );
     assert( success );
 
     return node;

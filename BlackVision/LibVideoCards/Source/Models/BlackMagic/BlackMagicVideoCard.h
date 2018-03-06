@@ -84,6 +84,7 @@ public:
 
 	bool                    InitVideoCard       ();
     virtual void            SetVideoOutput      ( bool enable ) override;
+    virtual void            SetVideoInput       ( VideoInputID inputId, bool enable ) override;
 
     virtual VideoCardID     GetVideoCardID      () const { return m_deviceID; }
 

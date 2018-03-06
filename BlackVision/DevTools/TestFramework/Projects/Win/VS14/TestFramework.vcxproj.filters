@@ -46,6 +46,12 @@
     <Filter Include="Utils\Events">
       <UniqueIdentifier>{1a78cf01-ddaf-4a4a-b0b3-95bafa59553b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Comparators\Assets">
+      <UniqueIdentifier>{c3f47a84-1474-4371-a87e-2646b4d62c82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Accessors\Assets">
+      <UniqueIdentifier>{c7cfa3f2-33b3-48e3-b4bd-b8138fb7b763}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Framework\bvAppTest.h">
@@ -131,9 +137,6 @@
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeChannelsDescs.h">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Utils\Scenes\SceneCreator.h">
-      <Filter>Utils\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Mocks\Plugins\Audio\FakeAudioPlayerPlugin.h">
       <Filter>Utils\Mocks\Plugins\Audio</Filter>
     </ClInclude>
@@ -145,6 +148,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Events\EndOperationEvent.h">
       <Filter>Utils\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\Assets\TextureInputAssetComparator.h">
+      <Filter>Utils\Comparators\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.h">
+      <Filter>Utils\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\Assets\AssetManagerAccessor.h">
+      <Filter>Utils\Accessors\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeInputFrames.h">
+      <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Utils\Events\EndOperationEvent.cpp">
       <Filter>Utils\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Utils\Scenes\TestScenesCreator.cpp">
+      <Filter>Utils\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

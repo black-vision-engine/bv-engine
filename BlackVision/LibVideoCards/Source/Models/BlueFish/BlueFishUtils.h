@@ -7,6 +7,10 @@
 
 #include "VideoCardManagerUtils.h"
 
+#include "Memory/MemoryChunk.h"
+#include "DataTypes/Reusable.h"
+#include "CFrame.h"
+
 #include "CoreDEF.h"
 
 
@@ -94,6 +98,36 @@ struct ChannelOption
 void BlueMemCpy(void* pDst, void* pSrc, size_t size);
 void BlueMemZero(void* pData, size_t size);
 
+
+
+// ***********************
+//
+inline Reusable< CFramePtr >            CreateReusableVideoChunks   ( UInt32 goldenSize, UInt32 bytesPerLine, UInt32 numChunks )
+{
+    std::vector< CFramePtr > chunks;
+
+    for( UInt32 i = 0; i < numChunks; ++i )
+    {
+        chunks.push_back( std::make_shared< CFrame >( goldenSize, bytesPerLine ) );
+    }
+
+    return Reusable< CFramePtr >( chunks );
+}
+
+
+// ***********************
+//
+inline Reusable< CFramePtr >            CreateReusableVideoChunks   ( UInt32 goldenSize, UInt32 bytesPerLine, UInt32 audioSize, UInt32 numChunks )
+{
+    std::vector< CFramePtr > chunks;
+
+    for( UInt32 i = 0; i < numChunks; ++i )
+    {
+        chunks.push_back( std::make_shared< CFrame >( goldenSize, bytesPerLine, audioSize ) );
+    }
+
+    return Reusable< CFramePtr >( chunks );
+}
 
 } //bluefish
 } //videocards

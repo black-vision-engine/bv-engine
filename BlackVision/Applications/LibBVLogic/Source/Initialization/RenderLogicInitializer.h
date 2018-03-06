@@ -9,6 +9,13 @@ namespace bv {
 class RenderedChannelsDataDesc;
 class OutputLogicDesc;
 class OutputDesc;
+class InputLogic;
+
+namespace videocards
+{
+    class VideoCardManager;
+}
+
 
 class RenderLogicInitializer
 {
@@ -27,6 +34,11 @@ private:
     static void             InitializeDefaultVid( OutputDesc & desc, const BVConfig & cfg );
     static void             InitializeDefaultAVFile( OutputDesc & desc, const BVConfig & cfg );
 
+    static void             InitializeVideoInput ( InputLogic * inputLogic, videocards::VideoCardManager * videoCardManager );
+
+public:
+
+    static void             InitializeInputSlots ( RenderLogic* renderLogic, const BVConfig & cfg, videocards::VideoCardManager * videoCardManager );
 };
 
 

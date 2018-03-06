@@ -3,6 +3,8 @@
 
 #include "CoreDEF.h"
 
+#include <string>
+
 
 namespace bv {
 namespace videocards
@@ -17,6 +19,10 @@ struct FakeInputChannelData
 
     UInt32          Width;
     UInt32          Height;
+
+    bool            Enabled;
+
+    std::string     ImagesDirectory;        ///< Images from this directory will be sent as input.
 };
 
 DEFINE_UPTR_TYPE( FakeInputChannelData )

@@ -4,6 +4,14 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Effects/Logic/Components/RenderContext.h"
 
+#include "Assets/Input/VideoInput/VideoInputAsset.h"
+#include "Assets/Input/VideoInput/VideoInputAssetDesc.h"
+
+#include "Assets/Input/VideoInput/VideoInputTextureAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
+
+#include "Assets/Input/VideoInput/VideoInputAudioAssetDesc.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAsset.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -103,7 +111,7 @@ bool                        VideoInputSlots::UnregisterAllChannels          ( Re
 
 // ***********************
 //
-void                        VideoInputSlots::UpdateVideoInput   ( videocards::VideoInputID id, AVFramePtr frame )
+void                        VideoInputSlots::UpdateVideoInput   ( videocards::VideoInputID id, AVFrameConstPtr frame )
 {
     std::lock_guard< std::recursive_mutex > guard( m_lock );
 
@@ -150,10 +158,15 @@ Texture2DPtr                VideoInputSlots::CreateTexture  ( const videocards::
 
 // ***********************
 //
-audio::AudioEntity *        VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
+audio::AudioBufferPtr       VideoInputSlots::CreateAudio    ( const videocards::VideoInputChannelDesc & vidInputDesc )
 {
-    vidInputDesc;
-    return nullptr;
+    auto & avDesc = vidInputDesc.GetDataDesc();
+    auto frameSize = avDesc.channelDepth * avDesc.channels * avDesc.numSamples;
+
+    auto chunk = MemoryChunk::Create( frameSize );
+
+    // FIXME: hardcoded frequency and audio format.
+    return audio::AudioBuffer::Create( chunk, 48000, AudioFormat::STEREO16, false );
 }
 
 // ***********************
@@ -166,13 +179,9 @@ void                        VideoInputSlots::FreeTexture    ( RenderContext * ct
 
 // ***********************
 //
-void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioEntity * audio )
+void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioBufferPtr audio )
 {
-    if( audio )
-    {
-        ctx->GetAudio()->DeletePDR( audio );
-        delete audio;
-    }
+    { ctx; audio; }
 }
 
 // ***********************
@@ -238,6 +247,45 @@ Expected< VideoInputSlots::EntryIdx >       VideoInputSlots::FindEntry  ( videoc
     }
 
     return Expected< VideoInputSlots::EntryIdx >();
+}
+
+// ***********************
+//
+VideoInputTextureAssetConstPtr  VideoInputSlots::CreateAsset        ( VideoInputSlotsPtr thisPtr, VideoInputTextureAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = VideoInputTextureAsset::Create( thisPtr, desc->GetVideoInputID(), desc->GetVideoType() );
+    asset->EvaluateSlot();
+
+    return asset;
+}
+
+// ***********************
+//
+VideoInputAudioAssetConstPtr    VideoInputSlots::CreateAsset        ( VideoInputSlotsPtr thisPtr, VideoInputAudioAssetDescConstPtr desc )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    auto asset = VideoInputAudioAsset::Create( thisPtr, desc->GetVideoInputID() );
+    asset->EvaluateSlot();
+
+    return asset;
+}
+
+// ***********************
+//
+Expected< videocards::VideoInputChannelDesc >           VideoInputSlots::GetVideoCardFromSlot        ( SlotIndex idx )
+{
+    std::lock_guard< std::recursive_mutex > guard( m_lock );
+
+    for( auto card : m_entries )
+    {
+        if( card.GetSlotIdx() == idx )
+            return card.GetVideoChannelDesc();
+    }
+
+    return Expected< videocards::VideoInputChannelDesc >();
 }
 
 

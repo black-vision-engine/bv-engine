@@ -17,7 +17,7 @@ AVFrameInputSlots::AVFrameInputSlots    ( InputSlotsPtr slots )
 
 // ***********************
 //
-void        AVFrameInputSlots::UpdateSlot       ( SlotIndex slotIdx, AVFramePtr frame )
+void        AVFrameInputSlots::UpdateSlot       ( SlotIndex slotIdx, AVFrameConstPtr frame )
 {
     auto inputSlot = m_inputSlots->AccessSource( slotIdx );
 
@@ -30,9 +30,9 @@ void        AVFrameInputSlots::UpdateSlot       ( SlotIndex slotIdx, AVFramePtr 
 
 // ***********************
 //
-void        AVFrameInputSlots::UpdateTexture    ( Texture2DPtr texture, AVFramePtr frame )
+void        AVFrameInputSlots::UpdateTexture    ( Texture2DPtr texture, AVFrameConstPtr frame )
 {
-    if( texture )
+    if( texture && frame && frame->m_videoData )
     {
         texture->SetData( frame->m_videoData );
     }
@@ -40,11 +40,14 @@ void        AVFrameInputSlots::UpdateTexture    ( Texture2DPtr texture, AVFrameP
 
 // ***********************
 //
-void        AVFrameInputSlots::UpdateAudio      ( audio::AudioEntity * audio, AVFramePtr frame )
+void        AVFrameInputSlots::UpdateAudio      ( audio::AudioBufferPtr audio, AVFrameConstPtr frame )
 {
     if( audio )
     {
-        audio->PushData( frame->m_audioData );
+        if( frame->m_audioData )
+            audio->Update( frame->m_audioData );
+        else
+            audio->Clear();
     }
 }
 

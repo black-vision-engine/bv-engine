@@ -17,8 +17,6 @@
 #include "PieChartNode.h"
 #include "Engine/Models/Plugins/Simple/ShaderPlugins/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
-#include "Engine/Models/Plugins/Simple/VideoInput/DefaultVideoInputResourceDescr.h"
-#include "VideoInput/ExampleVideoInput.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultTrianglePlugin.h"
@@ -491,10 +489,6 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
         //node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timeline );
         node = TestScenesFactory::CreedPrismTestScene( pluginsManager, timeline );
     }
-    else if( scene == "VIDEO_INPUT_TEST_SCENE" )
-    {
-        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timeline );
-    }
     else if( scene == "DEFAULT_TEXT" )
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
@@ -959,28 +953,6 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
-{
-    {pluginsManager;}
-
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode" );
-    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
-
-    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
-    auto plugin = root->GetPlugin( "video input" );
-    auto vi = new ExampleVideoInput( 1920, 1080, 1.f );
-    auto success = plugin->LoadResource( AssetDescConstPtr( std::make_shared< model::DefaultVideoInputResourceDescr >( vi->GetTexture(), vi ) ) );
-    assert(success);
-    { success; }
-    //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
-    //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
-    //assert(success);
-
-    model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
-
-    return root;
-}
 
 model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {

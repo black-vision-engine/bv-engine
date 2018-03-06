@@ -78,6 +78,9 @@ public:
     static void         SetBlendColorContext		( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param );
     static void         SetBlendAlphaContext		( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param );
 
+    static void         SetBlendColorContext		( RendererContextPtr & ctx, BlendHelper::BlendMode mode );
+    static void         SetBlendAlphaContext		( RendererContextPtr & ctx, BlendHelper::BlendMode mode );
+
 	static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & blendMode );
     static void			UpdateBlendState			( DefaultPixelShaderChannelPtr psc, ValueParamState< bool > & blenEnable, ValueParamState< BlendHelper::BlendMode > & colorBlendMode, ValueParamState< BlendHelper::BlendMode > & alphaBlendMode );
 

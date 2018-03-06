@@ -71,5 +71,19 @@ AudioBufferPtr      AudioBuffer::Create             ( MemoryChunkConstPtr data, 
     return std::make_shared< AudioBuffer >( data, frequency, format, eof ); 
 }
 
+// ***********************
+//
+void                AudioBuffer::Update             ( MemoryChunkConstPtr data )
+{
+    m_data = data;
+}
+
+// ***********************
+//
+void                AudioBuffer::Clear              ()
+{
+    m_data = MemoryChunk::Create( m_data->Size() );
+}
+
 } // audio
 } //bv

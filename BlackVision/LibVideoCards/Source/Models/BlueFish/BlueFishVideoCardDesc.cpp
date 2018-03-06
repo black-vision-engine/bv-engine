@@ -5,6 +5,9 @@
 
 #include "Mathematics/Core/mathfuncs.h"
 
+#include "Models/BlueFish/Input/InputChannel.h"
+#include "Models/BlueFish/Output/OutputChannel.h"
+
 #include "UseLoggerVideoModule.h"
 
 
@@ -39,12 +42,16 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard          () const
 
             // Copy input and output data from descriptor.
             if( channelDesc.InputChannelData )
+            {
                 input = std::unique_ptr< ChannelInputData >( new ChannelInputData( *( channelDesc.InputChannelData.get() ) ) );
+                card->AddChannel( new InputChannel( channelDesc.Name, input ) );
+            }
 
             if( channelDesc.OutputChannelData )
+            {
                 output = std::unique_ptr< ChannelOutputData >( new ChannelOutputData( *( channelDesc.OutputChannelData.get() ) ) );
-
-            card->AddChannel( new Channel( channelDesc.Name, input, output ) );
+                card->AddChannel( new OutputChannel( channelDesc.Name, output ) );
+            }
         }
 
         card->InitVideoCard();
@@ -78,11 +85,11 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
                     input = std::unique_ptr< ChannelInputData >( new ChannelInputData() );
                     input->type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
                     input->resolution = Convert::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                    input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), true );
-                    input->linkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
+                    input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), false );
+                    input->linkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoInput" ), 0 );
 
-                    output->updateFormat = UPD_FMT_FIELD;
-                    output->memoryFormat = MEM_FMT_BGRA;
+                    input->updateFormat = UPD_FMT_FIELD;
+                    input->memoryFormat = MEM_FMT_BGRA;
 
                     deser.ExitChild(); //input
                 }

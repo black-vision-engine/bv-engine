@@ -10,14 +10,8 @@
     <Filter Include="TestAI">
       <UniqueIdentifier>{f52b80a1-39e9-49c1-bce8-68f1ab601129}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VideoInput">
-      <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PieCharts">
       <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hack_videoinput">
-      <UniqueIdentifier>{7f69fce6-91f9-48b4-b144-634e189e9d1b}</UniqueIdentifier>
     </Filter>
     <Filter Include="EndUserAPI">
       <UniqueIdentifier>{4d25f62a-5bd7-414f-b683-53e8c1ded179}</UniqueIdentifier>
@@ -69,12 +63,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp">
       <Filter>PieCharts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp">
-      <Filter>VideoInput</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
-      <Filter>hack_videoinput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
@@ -188,6 +176,9 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AsyncThumbs\ThumbsThread.cpp">
       <Filter>EndUserAPI\EventHandlers\AsyncThumbs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Initialization\BVAppLogicInitialization.cpp">
+      <Filter>Initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -215,12 +206,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\PieChartNode.h">
       <Filter>PieCharts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
-      <Filter>VideoInput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
-      <Filter>hack_videoinput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h">
       <Filter>TestAI</Filter>

@@ -19,7 +19,7 @@ class VideoInputHandler : public IInputHandler
 private:
 
     videocards::VideoCardManager *      m_videoCardManager;
-    VideoInputSlots                     m_inputSlots;
+    VideoInputSlotsPtr                  m_inputSlots;
     
     // We need this to release resources. Resources need better handling :(
     Renderer *              m_renderer;
@@ -35,10 +35,22 @@ public:
 
     virtual void            RegisterInputs          ( RenderContext * ctx, InputSlotsPtr inputSlots ) override;
 
+    VideoInputSlotsPtr      GetVideoInputSlots      () const { return m_inputSlots; }
+
 private:
 
     void                    RegisterInputs          ( const videocards::InputChannelsDescsVec & channelsDesc );
     void                    ProcessFrameData        ( videocards::VideoInputFrameData & frameData );
+
+private:
+
+    void                    OnAllSlotReferencesRemoved      ( IEventPtr evt );
+    void                    OnFirstSlotReference            ( IEventPtr evt );
+
+    void                    EnableChannel           ( videocards::VideoCardID cardID, videocards::VideoInputID inputID );
+    void                    DisableChannel          ( videocards::VideoCardID cardID, videocards::VideoInputID inputID );
+
+    videocards::IVideoCardPtr   FindVideoCard       ( videocards::VideoCardID cardID ) const;
 };
 
 DEFINE_PTR_TYPE( VideoInputHandler )

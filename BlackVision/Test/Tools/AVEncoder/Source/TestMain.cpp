@@ -35,7 +35,7 @@ TEST( Tools_AVEncoder, WriteFrames )
 	desc.channels = 0;
 	desc.height = h;
 	desc.width = w;
-	desc.sampleRate = 0;
+	desc.numSamples = 0;
 
 	auto frame = bv::AVFrame::Create( videoData, nullptr, desc );
 	

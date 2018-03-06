@@ -3,7 +3,7 @@
 
 #include "InputSlotDescriptor.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
-#include "Engine/Audio/AudioEntity.h"
+#include "Engine/Audio/Resources/AudioBuffer.h"
 
 #include <string>
 
@@ -17,7 +17,7 @@ namespace bv
 struct InputSlot
 {
     Texture2DPtr            Texture;
-    audio::AudioEntity *    Audio;
+    audio::AudioBufferPtr   Audio;
 
 // ***********************
 //
@@ -35,14 +35,14 @@ struct InputSlot
 
 // ***********************
 //
-    InputSlot( Texture2DPtr tex, audio::AudioEntity * audio )
+    InputSlot( Texture2DPtr tex, audio::AudioBufferPtr audio )
         : Audio( audio )
         , Texture( tex )
     {}
 
 // ***********************
 //
-    InputSlot( audio::AudioEntity * audio )
+    InputSlot( audio::AudioBufferPtr audio )
         : Audio( audio )
         , Texture( nullptr )
     {}
@@ -55,7 +55,7 @@ struct InputEntry
     InputSlot               Slot;
     InputSlotDescriptor     Descriptor;
 
-    UInt32                  References;
+    Int32                   References;
 
 // ***********************
 //

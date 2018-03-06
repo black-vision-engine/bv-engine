@@ -50,12 +50,14 @@ TEST( LibCore_Expected, CreateErrorFromString )
 
 // ***********************
 //
-Expected< std::string > GetStringOrNot( bool valid ) {
+Expected< std::string > GetStringOrNot( bool valid )
+{
     if( valid )
         return "hwdp";
     else
         return Expected< std::string >::fromError( "user didn't want string :(" );
 }
+
 
 // ***********************
 //
@@ -66,8 +68,27 @@ TEST( LibCore_Expected, CreateErrorString )
     EXPECT_TRUE( ret.GetErrorReason() == "user didn't want string :(" );
 }
 
-TEST( LibCore_Expected, CreateValString ) {
+
+TEST( LibCore_Expected, CreateValString )
+{
     auto ret = GetStringOrNot( true );
     EXPECT_TRUE( ret.IsValid() );
     EXPECT_TRUE( ret == "hwdp" );
 }
+
+// ***********************
+//
+TEST( LibCore_Expected, Result_ReturnResult_Failure )
+{
+    ReturnResult result = ReturnResult( Result::Failure() );
+    EXPECT_FALSE( result.IsValid() );
+}
+
+// ***********************
+//
+TEST( LibCore_Expected, Result_ReturnResult_Success )
+{
+    ReturnResult result = ReturnResult( Result::Success() );
+    EXPECT_TRUE( result.IsValid() );
+}
+

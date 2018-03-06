@@ -19,6 +19,18 @@ in vec2 uvAlphaCoord;
 uniform sampler2D AtlasTex0;
 uniform sampler2D AlphaTex0;
 
+vec4 ApplyTreshold( vec4 result )
+{
+	if( result.a < 0.25 )
+		result.a = 0.f;
+	else if( result.a > 0.75 )
+		result.a = 1.f;
+	else
+		result.a = 2 * ( result.a - 0.5 ) + 0.5;
+	
+	return result;
+}
+
 void main()
 {		
 	vec2 v1 = gradCoord - point1;
@@ -40,6 +52,7 @@ void main()
     
 	vec4 result = alpha * ( color * col1 + outlineColorPreMult * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
 	
+	result = ApplyTreshold( result );
 	if( result.a == 0.0 )
 		discard;
 	FragColor = result;

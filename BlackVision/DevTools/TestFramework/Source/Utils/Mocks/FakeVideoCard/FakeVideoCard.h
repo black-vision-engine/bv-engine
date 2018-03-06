@@ -3,6 +3,9 @@
 
 #include "Interfaces/IVideoCard.h"
 #include "FakeVideoCardDesc.h"
+#include "FakeInputFrames.h"
+
+#include "System/Path.h"
 
 #include <map>
 #include <condition_variable>
@@ -39,6 +42,9 @@ private:
     std::mutex                      m_syncLock;
     std::condition_variable         m_waitForFrame;
 
+    // Inputs
+    std::map< VideoInputID, FakeInputFrames >       m_inputFrames;
+
 public:
 
     explicit                    FakeVideoCard           ( UInt32 deviceID );
@@ -49,6 +55,7 @@ public:
     virtual void                Stop                    () override;
 
     virtual void                SetVideoOutput          ( bool enable ) override;
+    virtual void                SetVideoInput           ( VideoInputID inputId, bool enable ) override;
 
     virtual VideoCardID         GetVideoCardID          () const override;
 
@@ -73,6 +80,17 @@ public:
 
     FrameOutput &               AccessOutputs           ();
     void                        ClearOutputs            ();
+
+    void                        ResetInputFrame         ( VideoInputID id );
+
+    bool                        IsEnabled               ( VideoInputID inputId ) const;
+
+private:
+
+    void                        LoadInputChannelFrames  ( const FakeInputChannelData & channelDesc );
+    MemoryChunkPtr              LoadImage               ( const Path & imagePath, UInt32 expectedWidth, UInt32 expectedHeight );
+
+    AVFrameDescriptor           CreateAVFrameDesc       ( const FakeInputChannelData * channelDesc ) const;
 };
 
 DEFINE_PTR_TYPE( FakeVideoCard )

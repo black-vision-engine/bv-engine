@@ -12,6 +12,19 @@ namespace bv
 
 typedef SizeType SlotIndex;
 
+class TextureInputAsset;
+class TextureInputAssetDesc;
+DEFINE_CONST_PTR_TYPE( TextureInputAssetDesc )
+DEFINE_CONST_PTR_TYPE( TextureInputAsset )
+
+class AudioInputAsset;
+class AudioInputAssetDesc;
+DEFINE_CONST_PTR_TYPE( AudioInputAssetDesc )
+DEFINE_CONST_PTR_TYPE( AudioInputAsset )
+
+class InputSlots;
+DEFINE_PTR_TYPE( InputSlots )
+
 
 
 /**@defgroup EngineInputs Inputs
@@ -30,6 +43,7 @@ supllied by other mechanism like video card inputs.
 /// @ingroup EngineInputs
 class InputSlots
 {
+    friend class InputAssetLoader;
 private:
 
     static const SlotIndex       sInvalidIdx;
@@ -38,6 +52,8 @@ private:
 
     std::vector< InputEntry >       m_slots;
     mutable std::recursive_mutex    m_lock;
+
+    InputSlot                       m_fallbackSlot;
 
 public:
 
@@ -49,10 +65,16 @@ public:
     bool                    UnregisterSource    ( const std::string & name );
 
     Expected< InputSlot >   AccessSource        ( const std::string & name );
+
+    void                    ReferenceSource     ( const std::string & name );
     void                    ReleaseSource       ( const std::string & name );
 
     Expected< InputSlot >   AccessSource        ( SlotIndex slotIdx );
+
+    void                    ReferenceSource     ( SlotIndex slotIdx );
     void                    ReleaseSource       ( SlotIndex slotIdx );
+
+    InputSlot               GetFallbackSlot     () { return m_fallbackSlot; }
 
 private:
 
@@ -63,9 +85,26 @@ private:
     bool                IsValidIndex        ( SlotIndex idx ) const;
     bool                IsEmptySlot         ( SlotIndex idx ) const;
     bool                CanAddSource        ( InputSlot inputSlot, const std::string & name ) const;
+
+private:
+
+    Texture2DPtr            CreateFallbackTexture   ();
+    audio::AudioBufferPtr   CreateFallbackAudio     ();
+
+    MemoryChunkPtr          GenerateFallbackTexture ( UInt32 width, UInt32 height, UInt32 bpp );
+
+public:
+
+    ///@name InputAsset creation
+    ///@{
+    TextureInputAssetConstPtr       CreateAsset     ( InputSlotsPtr thisPtr, TextureInputAssetDescConstPtr desc );
+    AudioInputAssetConstPtr         CreateAsset     ( InputSlotsPtr thisPtr, AudioInputAssetDescConstPtr desc );
+
+    ///@}
+
 };
 
-DEFINE_PTR_TYPE( InputSlots )
+
 
 
 }	// bv

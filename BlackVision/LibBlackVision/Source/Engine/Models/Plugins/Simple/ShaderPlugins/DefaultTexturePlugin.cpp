@@ -114,12 +114,10 @@ bool DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 // *************************************
 // 
 DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin( name, uid, prev, model )
-    , m_psc( nullptr )
+    : TexturePluginBase( name, uid, prev, model )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
 {
-    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
 	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
@@ -145,48 +143,11 @@ bool							DefaultTexturePlugin::IsValid     () const
     return ( m_vaChannel && GetPrevPlugin()->IsValid() );
 }
 
-// *************************************
-// 
-bool                            DefaultTexturePlugin::LoadResource  ( AssetDescConstPtr assetDescr )
+// ***********************
+//
+std::string                         DefaultTexturePlugin::GetTextureName              ( UInt32 ) const
 {
-    auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
-    
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txAssetDescr != nullptr )
-    {
-        bool success = true;
-
-        //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
-
-        // If texture doesn't exists, read fallback texture. 
-        if( txDesc == nullptr )
-        {
-            txAssetDescr = DefaultAssets::Instance().GetFallbackDesc< TextureAssetDesc >();
-            txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
-
-            success = false;
-        }
-
-        if( txDesc != nullptr )
-        {
-            auto txData = m_psc->GetTexturesDataImpl();
-            auto replacedTex = txData->GetTexture( 0 );
-            
-            SamplerStateModelPtr newSamplerStateModel = replacedTex != nullptr ? replacedTex->GetSamplerState() : SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() );
-
-            txDesc->SetSamplerState( newSamplerStateModel );
-            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-
-            txData->SetTexture( 0, txDesc );
-            SetAsset( 0, LAsset( txDesc->GetName(), txAssetDescr, txDesc->GetSamplerState() ) );
-
-            HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-            return success;
-        }
-
-    }
-    return false;
+    return DefaultTexturePluginDesc::TextureName();
 }
 
 // *************************************
@@ -194,13 +155,6 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 IVertexAttributesChannelConstPtr    DefaultTexturePlugin::GetVertexAttributesChannel  () const
 {
     return m_vaChannel;
-}
-
-// *************************************
-// 
-IPixelShaderChannelPtr              DefaultTexturePlugin::GetPixelShaderChannel       () const
-{
-    return m_psc;
 }
 
 // *************************************
@@ -243,54 +197,9 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
         return;
     }
 
-    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
-    auto prevCC = prevGeomChannel->GetComponents();
+    m_vaChannel = InitAttributesChannelWithUVs( m_vaChannel );
 
-    //Only one texture
-    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
-    if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
-    {
-        vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-    }
-    
-    if( !m_vaChannel )
-    {		
-        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-    }
-    else
-    {
-        m_vaChannel->ClearAll();
-        m_vaChannel->SetDescriptor( vaChannelDesc );
-    }
-
-    auto desc = std::make_shared< AttributeChannelDescriptor >( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-    for( unsigned int i = 0; i < prevCC.size(); ++i )
-    {
-        auto connComp = ConnectedComponent::Create();
-
-        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ i ] );
-        auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
-
-        for( auto prevCompCh : prevCompChannels )
-        {
-            connComp->AddAttributeChannel( prevCompCh );
-        }
-
-        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
-        {
-            //FIXME: only one texture - convex hull calculations
-            auto uvs = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
-            auto uvsPtr = Float2AttributeChannelPtr( uvs );
-            
-            Helper::UVGenerator::GenerateUV( std::static_pointer_cast< Float3AttributeChannel >( posChannel ),
-                                             uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
-
-            connComp->AddAttributeChannel( uvsPtr );
-        }
-
-        m_vaChannel->AddConnectedComponent( connComp );
-    }
+    GenerateDefaultUVs( m_vaChannel, GetPrevPlugin()->GetVertexAttributesChannel() );
 }
 
 // *************************************

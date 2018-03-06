@@ -68,7 +68,20 @@ void        BlendHelper::SetBlendRendererContext    (   DefaultPixelShaderChanne
 //
 void        BlendHelper::SetBlendColorContext       ( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param )
 {
-    BlendHelper::BlendMode blendMode = param->Evaluate();
+    SetBlendColorContext( ctx, param->Evaluate() );
+}
+
+// ***********************
+//
+void        BlendHelper::SetBlendAlphaContext       ( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param )
+{
+    SetBlendAlphaContext( ctx, param->Evaluate() );
+}
+
+// ***********************
+//
+void        BlendHelper::SetBlendColorContext       ( RendererContextPtr & ctx, BlendHelper::BlendMode blendMode )
+{
     switch( blendMode )
     {
     case bv::model::BlendHelper::BM_Multiply:
@@ -112,9 +125,8 @@ void        BlendHelper::SetBlendColorContext       ( RendererContextPtr & ctx, 
 
 // ***********************
 //
-void        BlendHelper::SetBlendAlphaContext       ( RendererContextPtr & ctx, const ParamEnum< BlendHelper::BlendMode > * param )
+void        BlendHelper::SetBlendAlphaContext       ( RendererContextPtr & ctx, BlendHelper::BlendMode blendMode )
 {
-    BlendHelper::BlendMode blendMode = param->Evaluate();
     switch( blendMode )
     {
     case bv::model::BlendHelper::BM_Multiply:

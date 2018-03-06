@@ -3,7 +3,10 @@
 #include "Interfaces/IVideoCard.h"
 #include "Interfaces/IVideoCardDescriptor.h"
 #include "Memory/AVFrame.h"
+
 #include "Channel.h"
+#include "Output/OutputChannel.h"
+#include "Input/InputChannel.h"
 
 #include "BlueFishVideoCardDesc.h"
 
@@ -59,6 +62,7 @@ public:
 	void                    InitVideoCard               ();
 
     virtual void            SetVideoOutput              ( bool enable ) override;
+    virtual void            SetVideoInput               ( VideoInputID inputId, bool enable ) override;
 
     virtual VideoCardID     GetVideoCardID              () const { return m_deviceID; }
 

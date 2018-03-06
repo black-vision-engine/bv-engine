@@ -19,7 +19,6 @@
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPieChartPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultVideoInputPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/DefaultTrianglePlugin.h"
@@ -49,6 +48,7 @@
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
 #include "Engine/Models/Plugins/Simple/SpecialPlugins/ExpertPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/LinesPlugin.h"
+#include "Engine/Models/Plugins/Simple/VideoInput/VideoInputPlugin.h"
 
 // Gizmo plugins
 #include "Engine/Models/Gizmos/Plugins/BoundingBoxPlugin.h"
@@ -77,10 +77,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTextPluginDesc() );
     descriptors.push_back( new DefaultAlphaMaskPluginDesc() );
     descriptors.push_back( new DefaultTimerPluginDesc() );
-    descriptors.push_back( new DefaultHeightMapPluginDesc() );
     descriptors.push_back( new DefaultPrismPluginDesc() );
-    descriptors.push_back( new DefaultPieChartPluginDesc() );
-    descriptors.push_back( new DefaultVideoInputPluginDesc() );
     descriptors.push_back( new DefaultCirclePluginDesc() );
     descriptors.push_back( new DefaultEllipsePluginDesc() );
     descriptors.push_back( new DefaultTrianglePluginDesc() );
@@ -90,7 +87,6 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
     descriptors.push_back( new DefaultTorus::PluginDesc() );
     descriptors.push_back( new DefaultSphere::PluginDesc() );
-    descriptors.push_back( new DefaultGeosphere::PluginDesc() );
     descriptors.push_back( new DefaultSpring::PluginDesc() );
     descriptors.push_back( new DefaultCylinder::DefaultCylinderPluginDesc() );
     descriptors.push_back( new DefaultCogWheel::PluginDesc() );
@@ -110,6 +106,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultText3DPluginDesc() );
     descriptors.push_back( new ExpertPluginDesc() );
     descriptors.push_back( new LinesPluginDesc() );
+    descriptors.push_back( new VideoInputPluginDesc() );
 
     descriptors.push_back( new CenterPluginDesc() );
     descriptors.push_back( new BoundingBoxPluginDesc() );
@@ -118,6 +115,33 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     {
         LOG_MESSAGE( SeverityLevel::info ) << "Registered plugin desc: " << descr->GetPluginTypeUID();
     }
+
+    return descriptors;
+}
+
+// ***********************
+/// If you remove plugin from default list, please add it to this full list of plugins.
+/// This would be usefull in future, if we want to test plugins even if they don't exist in production build.
+std::vector< IPluginDescriptor * >  RemainingBVPluginDescriptors    ()
+{
+    std::vector< IPluginDescriptor * > descriptors;
+
+    descriptors.push_back( new DefaultGeosphere::PluginDesc() );
+    descriptors.push_back( new DefaultPieChartPluginDesc() );
+    descriptors.push_back( new DefaultHeightMapPluginDesc() );
+
+    return descriptors;
+}
+
+// ***********************
+//
+std::vector< IPluginDescriptor * >  FullBVPluginDescriptorsList ()
+{
+    auto descriptors = DefaultBVPluginDescriptors();
+    auto rest = RemainingBVPluginDescriptors();
+
+    for( auto desc : rest )
+        descriptors.push_back( desc );
 
     return descriptors;
 }

@@ -34,9 +34,11 @@ public:
     model::NodeLogicDesc &              RegisterLogic       ( const std::string & logicType, model::LogicCreateFun creator );
     model::GizmoLogicDesc &             RegisterGizmo       ( const std::string & logicType, model::GizmoCreateFun creator );
 
-private:
+public:
 
-    void            RegisterDefaultLogics();
+    void            RegisterDefaultLogics       ();
+    void            RegisterRamainigLogics      ();
+    void            RegisterAllLogics           ();
 
 };
 

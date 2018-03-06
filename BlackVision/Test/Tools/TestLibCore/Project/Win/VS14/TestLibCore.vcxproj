@@ -122,10 +122,12 @@
     <ClCompile Include="..\..\..\Source\Conversions\String2Integer.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2TBool.cpp" />
     <ClCompile Include="..\..\..\Source\Conversions\String2Vec2.cpp" />
+    <ClCompile Include="..\..\..\Source\DataTypesTest\ReusableTest.cpp" />
     <ClCompile Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.cpp" />
     <ClCompile Include="..\..\..\Source\ExceptionsTest\TestExceptions.cpp" />
     <ClCompile Include="..\..\..\Source\ExpectedTest\ExpectedTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\MemoryTest\ColorRGBATest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\ExceptionsTest\ExceptionsHierarchy.h" />

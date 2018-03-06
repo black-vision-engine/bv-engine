@@ -65,6 +65,7 @@ public:
 
     static DefaultTextureDescriptorPtr  LoadTexture     ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name );
 
+
 private:
 
     static void                         TriggerEvent    ( AssetTrackerInternalEvent::Command command, DefaultTextureDescriptorPtr textureDesc );

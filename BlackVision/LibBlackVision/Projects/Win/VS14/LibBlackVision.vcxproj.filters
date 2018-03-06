@@ -238,12 +238,6 @@
     <Filter Include="Engine\Events\InnerEvents">
       <UniqueIdentifier>{9f842784-55d8-48e5-8140-4e4c9ab6634a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Database">
-      <UniqueIdentifier>{b2bce708-e64f-45e0-ba74-d2b2777101b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Database\SQLite">
-      <UniqueIdentifier>{d87dbeec-cd9e-4bf4-b6e9-da260d8a2bfe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Font\3D">
       <UniqueIdentifier>{97c423d3-c5b4-4520-a80f-c1dfd677d4ed}</UniqueIdentifier>
     </Filter>
@@ -480,6 +474,21 @@
     </Filter>
     <Filter Include="Assets\Input">
       <UniqueIdentifier>{e424bbe8-bd34-4fba-8b04-6f7ec2e3667e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Input\Loaders">
+      <UniqueIdentifier>{aa6938b2-7979-43c6-8fac-20796f9b985d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Database">
+      <UniqueIdentifier>{b2bce708-e64f-45e0-ba74-d2b2777101b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Database\SQLite">
+      <UniqueIdentifier>{d87dbeec-cd9e-4bf4-b6e9-da260d8a2bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Events\InnerEvents\InputSlots">
+      <UniqueIdentifier>{fdb238b3-d701-47f5-ab25-5da0d11a6cb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Input\VideoInput">
+      <UniqueIdentifier>{dba6073a-1198-4210-a1b8-3757f204f5f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1348,9 +1357,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClCompile>
@@ -1435,9 +1441,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
     </ClCompile>
@@ -1505,10 +1508,10 @@
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Database\DatabaseEntry.cpp">
-      <Filter>Database</Filter>
+      <Filter>Assets\Database</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.cpp">
-      <Filter>Database\SQLite</Filter>
+      <Filter>Assets\Database\SQLite</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.cpp">
       <Filter>Assets\Font</Filter>
@@ -2121,6 +2124,69 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.cpp">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\AVFrameInputSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAsset.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.cpp">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp">
+      <Filter>Assets\Input\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\TexturePluginBase.cpp">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.cpp">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.cpp">
+      <Filter>Assets\Input\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotsDerivedAssets.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAsset.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4550,9 +4616,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClInclude>
@@ -4636,12 +4699,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
@@ -4736,15 +4793,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
-      <Filter>Database\SQLite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h">
       <Filter>Assets\Font</Filter>
     </ClInclude>
@@ -4774,15 +4822,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\2D\TextAtlas.h">
       <Filter>Assets\Font\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
-      <Filter>Database</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
-      <Filter>Database\SQLite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\FontAtlasCacheEntry.h">
       <Filter>Assets\Font</Filter>
@@ -5447,17 +5486,86 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h">
       <Filter>Engine\Graphics\InputSlots\SlotsLogic\VideoInput</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsseth.h">
-      <Filter>Assets\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAsset.h">
+    <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h">
       <Filter>Assets\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInputAssetDesc.h">
+    <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h">
       <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\GPUTextureDescriptor.h">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.h">
+      <Filter>Assets\Input\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\TexturePluginBase.h">
+      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\IAudioInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\FirstSlotRefEvent.h">
+      <Filter>Engine\Events\InnerEvents\InputSlots</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h" />
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h" />
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\Loaders\VideoInputAssetLoader.h">
+      <Filter>Assets\Input\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\IDatabase.h">
+      <Filter>Assets\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\DatabaseEntry.h">
+      <Filter>Assets\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Database\SQLite\SQLiteDatabase.h">
+      <Filter>Assets\Database\SQLite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
