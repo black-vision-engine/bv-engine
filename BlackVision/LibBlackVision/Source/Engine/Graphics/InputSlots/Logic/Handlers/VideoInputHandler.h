@@ -41,6 +41,16 @@ private:
 
     void                    RegisterInputs          ( const videocards::InputChannelsDescsVec & channelsDesc );
     void                    ProcessFrameData        ( videocards::VideoInputFrameData & frameData );
+
+private:
+
+    void                    OnAllSlotReferencesRemoved      ( IEventPtr evt );
+    void                    OnFirstSlotReference            ( IEventPtr evt );
+
+    void                    EnableChannel           ( videocards::VideoCardID cardID, videocards::VideoInputID inputID );
+    void                    DisableChannel          ( videocards::VideoCardID cardID, videocards::VideoInputID inputID );
+
+    videocards::IVideoCardPtr   FindVideoCard       ( videocards::VideoCardID cardID ) const;
 };
 
 DEFINE_PTR_TYPE( VideoInputHandler )

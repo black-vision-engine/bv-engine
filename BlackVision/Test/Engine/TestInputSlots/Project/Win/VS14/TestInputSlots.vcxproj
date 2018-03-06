@@ -125,6 +125,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AudioInputAsset.cpp" />
     <ClCompile Include="..\..\..\Source\GPUTextureDescriptorTest.cpp" />
     <ClCompile Include="..\..\..\Source\InputsInitializationTest.cpp" />
     <ClCompile Include="..\..\..\Source\InputSlotsEventsTest.cpp" />

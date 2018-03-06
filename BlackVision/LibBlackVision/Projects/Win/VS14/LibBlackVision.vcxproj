@@ -126,6 +126,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotBinding.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotsDerivedAssets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\Loaders\InputAssetLoader.cpp" />
@@ -134,6 +136,8 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\TextureInputAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Audio\AudioRenderChannelData.cpp" />
@@ -595,7 +599,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.cpp" />
@@ -641,6 +644,8 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Version\Version.cpp" />
     <ClInclude Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\IAudioInputAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\InputSlotBinding.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\ITextureInputAsset.h" />
@@ -650,6 +655,8 @@
     <ClInclude Include="..\..\..\Source\Assets\Input\TextureInputAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAssetDesc.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputTextureAssetDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Audio\Resources\AudioMixer.h" />
@@ -724,7 +731,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
@@ -1258,7 +1264,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSVGPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultGeometryProcessorBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\TriangulatePlugin.h" />
@@ -1296,8 +1301,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\Text3DUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextArranger.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextPlugins\TextPluginBase.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />

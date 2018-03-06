@@ -59,12 +59,15 @@ TEST( Serialization_Assets, VideoInputTextureAssetDesc_NoVideoType )
 // Serialize and deserialize VideoInputAssetDesc.
 TEST( Serialization_Assets, VideoInputAssetDesc_SerDeser )
 {
-    auto expectedAssetDesc = VideoInputAssetDesc::Create( 2  );
+    auto expectedAssetDesc = VideoInputAssetDesc::Create( 2, 3 );
     Serialize( *( expectedAssetDesc.get() ), "Out/SerDeserVideoInput.xml" );
     auto actualAssetDesc = DeserializeAsset< const VideoInputAssetDesc >( "Out/SerDeserVideoInput.xml", "asset" );
 
-    EXPECT_EQ( actualAssetDesc->GetVideoInputID(), expectedAssetDesc->GetVideoInputID() );
-    EXPECT_EQ( actualAssetDesc->GetVideoInputID(), 2 );
+    EXPECT_EQ( actualAssetDesc->GetVideoInputFillID(), expectedAssetDesc->GetVideoInputFillID() );
+    EXPECT_EQ( actualAssetDesc->GetVideoInputFillID(), 2 );
+
+    EXPECT_EQ( actualAssetDesc->GetVideoInputKeyID(), expectedAssetDesc->GetVideoInputKeyID() );
+    EXPECT_EQ( actualAssetDesc->GetVideoInputKeyID(), 3 );
 }
 
 // ***********************

@@ -102,7 +102,7 @@ void BlueMemZero(void* pData, size_t size);
 
 // ***********************
 //
-inline Reusable< CFramePtr >            CreateReusableChunks   ( UInt32 goldenSize, UInt32 bytesPerLine, UInt32 numChunks )
+inline Reusable< CFramePtr >            CreateReusableVideoChunks   ( UInt32 goldenSize, UInt32 bytesPerLine, UInt32 numChunks )
 {
     std::vector< CFramePtr > chunks;
 
@@ -114,6 +114,20 @@ inline Reusable< CFramePtr >            CreateReusableChunks   ( UInt32 goldenSi
     return Reusable< CFramePtr >( chunks );
 }
 
+
+// ***********************
+//
+inline Reusable< CFramePtr >            CreateReusableVideoChunks   ( UInt32 goldenSize, UInt32 bytesPerLine, UInt32 audioSize, UInt32 numChunks )
+{
+    std::vector< CFramePtr > chunks;
+
+    for( UInt32 i = 0; i < numChunks; ++i )
+    {
+        chunks.push_back( std::make_shared< CFrame >( goldenSize, bytesPerLine, audioSize ) );
+    }
+
+    return Reusable< CFramePtr >( chunks );
+}
 
 } //bluefish
 } //videocards

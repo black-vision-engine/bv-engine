@@ -29,6 +29,9 @@
     <ClCompile Include="..\..\..\Source\InputSlotsEventsTest.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\AudioInputAsset.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestCases">

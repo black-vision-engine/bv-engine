@@ -63,18 +63,39 @@ AVFrameDescriptor       Channel::CreateFrameDesc        () const
     frameDesc.width = Resolution2Width( frameDesc.height );
     frameDesc.depth = 4;
 
+    frameDesc.channels = 2;                 // Stereo audio.
+    frameDesc.numSamples = 48000 / 50;      // FIXME: Hardcoded frequency and framerate.
+    frameDesc.channelDepth = 2;             // 16 bits per sample.
+
     return frameDesc;
 }
 
 // ***********************
 //
-Reusable< MemoryChunkPtr >      Channel::CreateReusableChunks   ( UInt32 numChunks ) const
+Reusable< MemoryChunkPtr >      Channel::CreateReusableVideoChunks  ( UInt32 numChunks ) const
 {
-    std::vector< MemoryChunkPtr > chunks;
-
     auto desc = CreateFrameDesc();
     auto size = desc.width * desc.height * desc.depth;
     
+    return CreateReusableChunks( numChunks, size );
+}
+
+// ***********************
+//
+Reusable< MemoryChunkPtr >      Channel::CreateReusableAudioChunks  ( UInt32 numChunks ) const
+{
+    auto desc = CreateFrameDesc();
+    auto size = desc.numSamples * desc.channels * 2;
+
+    return CreateReusableChunks( numChunks, size );
+}
+
+// ***********************
+//
+Reusable< MemoryChunkPtr >      Channel::CreateReusableChunks       ( UInt32 numChunks, UInt32 size ) const
+{
+    std::vector< MemoryChunkPtr > chunks;
+
     for( UInt32 i = 0; i < numChunks; ++i )
     {
         // FIXME: Why we need to substract 4096. For some reason frame is to long.
@@ -87,7 +108,7 @@ Reusable< MemoryChunkPtr >      Channel::CreateReusableChunks   ( UInt32 numChun
 
 //**************************************
 //
-Channel::ChannelOptionMap       Channel::CreateChannelOptionMap   ()
+Channel::ChannelOptionMap       Channel::CreateChannelOptionMap     ()
 {
     ChannelOptionMap channelOptionMap;
 

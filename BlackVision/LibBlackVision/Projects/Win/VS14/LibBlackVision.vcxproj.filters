@@ -1360,9 +1360,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClCompile>
@@ -1446,9 +1443,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.cpp">
-      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Audio\DefaultAudioChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Audio</Filter>
@@ -2184,6 +2178,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Input\InputSlotsDerivedAssets.cpp">
       <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\AudioInputAsset.cpp">
+      <Filter>Assets\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.cpp">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4616,9 +4622,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Shapes\DefaultCirclePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\Shapes</Filter>
     </ClInclude>
@@ -4702,12 +4705,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\ShaderPlugins\DefaultAlphaMaskPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\DefaultVideoInputResourceDescr.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\IVideoInput.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\GeometryProcessors\DefaultExtrudePlugin.h">
       <Filter>Engine\Models\Plugins\Simple\GeometryProcessors</Filter>
@@ -5563,6 +5560,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoInput\VideoInputPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAssetDesc.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\AudioInputAsset.h">
+      <Filter>Assets\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAsset.h">
+      <Filter>Assets\Input\VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.h">
+      <Filter>Assets\Input\VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

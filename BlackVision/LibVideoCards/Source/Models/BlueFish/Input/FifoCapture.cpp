@@ -1,11 +1,20 @@
 #include "FifoCapture.h"
 
+#include "BlueFish/inc/BlueHancUtils.h"
+
 #include <process.h>
 
 #include "Serialization/ConversionHelper.h"
 
 
-namespace bv { namespace videocards { namespace bluefish {
+namespace bv {
+namespace videocards {
+namespace bluefish
+{
+
+// FIXME: What does this number mean ??
+#define MAX_HANC_BUFFER_SIZE (256*1024)
+
 
 extern struct blue_videomode_info gVideoModeInfo[];
 
@@ -17,7 +26,10 @@ CFifoCapture::CFifoCapture() :
 	m_InvalidVideoModeFlag(VID_FMT_INVALID),
 	m_pFifoBuffer(NULL),
 	m_hThread(0),
-	m_nThreadStopping(TRUE)
+	m_nThreadStopping(TRUE),
+    m_numAudioChannels( 2 ),
+    m_audioFormat( AUDIO_CHANNEL_16BIT ),
+    m_samplesFrequency( 48000 )
 {
 	m_pSDK = BlueVelvetFactory4();
 	//if(!m_pSDK)
@@ -107,7 +119,7 @@ ReturnResult            CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 	varVal.ulVal = m_nMemoryFormat;
 	m_pSDK->SetCardProperty(VIDEO_INPUT_MEMORY_FORMAT, varVal);
 
-	varVal.ulVal = VIDEO_ENGINE_DUPLEX;	//do not set it to VIDEO_ENGINE_CAPTURE as this will automatically do a playthrough and this will conflict with our playback thread
+	varVal.ulVal = VIDEO_ENGINE_FRAMESTORE;	//do not set it to VIDEO_ENGINE_CAPTURE as this will automatically do a playthrough and this will conflict with our playback thread
 	m_pSDK->SetCardProperty(VIDEO_INPUT_ENGINE, varVal);
 
     varVal.ulVal = ImageOrientation_VerticalFlip;
@@ -117,6 +129,8 @@ ReturnResult            CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 	BytesPerLine = BlueVelvetLineBytes(m_nVideoMode, m_nMemoryFormat);
 	m_pFifoBuffer = pFifoBuffer;
 	m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
+
+    InitAudio();
 
 	::ZeroMemory(&m_Overlap, sizeof(m_Overlap));
 	m_Overlap.hEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
@@ -139,14 +153,25 @@ ReturnResult            CFifoCapture::InitDualLink  ( BLUE_INT32 CardNumber, BLU
 
 	    varVal.vt = VT_UI4;
 	    varVal.ulVal = Signal_FormatType_4224;	//select format type
-	    //vr.ulVal = Signal_FormatType_444_10BitSDI;
-	    //vr.ulVal = Signal_FormatType_444_12BitSDI;
+	    //varVal.ulVal = Signal_FormatType_444_10BitSDI;
+	    //varVal.ulVal = Signal_FormatType_444_12BitSDI;
 	    m_pSDK->SetCardProperty(VIDEO_DUAL_LINK_INPUT_SIGNAL_FORMAT_TYPE, varVal);
 
         return Result::Success();
     }
 
 	return result;
+}
+
+// ***********************
+//
+void                    CFifoCapture::InitAudio         ()
+{
+    VARIANT varVal;
+    varVal.vt = VT_UI4;
+
+    varVal.ulVal = BLUE_AUDIO_EMBEDDED;
+    m_pSDK->SetCardProperty( AUDIO_INPUT_PROP, varVal );
 }
 
 // ***********************
@@ -232,40 +257,106 @@ void                    CFifoCapture::StopThread()
 unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 {
     CFifoCapture* pThis = ( CFifoCapture* )pArg;
-    ULONG CurrentFieldCount = 0;
-    ULONG LastFieldCount = 0;
-    struct blue_videoframe_info_ex video_capture_frame;
-    int	NotUsedCompostLater = 0;
-    unsigned int capture_fifo_size = 0;
     BOOL bFirstFrame = TRUE;
 
-    Reusable< CFramePtr > frames = CreateReusableChunks( pThis->GoldenSize, pThis->BytesPerLine, 3 );
+    // Init audio
+    // In field mode we get each second frame doubled audio size.
+    UInt32 audioBufferSize = 2 * GetSampleSize( pThis->m_audioFormat ) * pThis->m_numAudioChannels * pThis->m_samplesFrequency / 50;
+
+    unsigned char* pHancBuffer = ( unsigned char* )VirtualAlloc( NULL, MAX_HANC_BUFFER_SIZE, MEM_COMMIT, PAGE_READWRITE );
+    VirtualLock( pHancBuffer, MAX_HANC_BUFFER_SIZE );
+
+    hanc_decode_struct hancInfo;
+    hancInfo.audio_ch_required_mask = GetAudioChannelsMask( pThis->m_numAudioChannels );
+    hancInfo.type_of_sample_required = pThis->m_audioFormat;
+    hancInfo.max_expected_audio_sample_count = 2002;        // FIXME: What is this?
+
+    unsigned int nAudioChannelInfo = 0;
+
+    // Prepare chunks for input. Chunks will be reused between frames.
+    Reusable< CFramePtr > frames = CreateReusableVideoChunks( pThis->GoldenSize, pThis->BytesPerLine, audioBufferSize, 3 );
+
+    ULONG CurrentFieldCount = 0;
+    ULONG LastFieldCount = 0;
+
+    ULONG ScheduleID = 0;
+    ULONG CapturingID = 0;
+    ULONG DoneID = 0;
+
+    const int numBuffers = 4;
 
 
-    pThis->m_pSDK->video_capture_start();
     pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
+    if( ( CurrentFieldCount & 0x1 ) == 0 )
+        pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );	//we need to schedule the capture of field 0 at field 1 interrupt
+
+    pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
+    CapturingID = ScheduleID;
+    ScheduleID = ( ++ScheduleID % numBuffers );
+    LastFieldCount = CurrentFieldCount;
+
+    pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );	//the first buffer starts to be captured now; this is it's field count
+    pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
+    DoneID = CapturingID;
+    CapturingID = ScheduleID;
+    ScheduleID = ( ++ScheduleID % numBuffers );
+    LastFieldCount = CurrentFieldCount;
+
 
     while( !pThis->m_nThreadStopping )
     {
         auto pFrame = frames.GetNext();
 
-        GetVideo_CaptureFrameInfoEx( pThis->m_pSDK, &pThis->m_Overlap, video_capture_frame, NotUsedCompostLater, &capture_fifo_size );
-        if( video_capture_frame.nVideoSignalType < VID_FMT_INVALID && video_capture_frame.BufferId != -1 )
-        {
-            pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer,
-                pFrame->m_nSize,
-                NULL,
-                BlueImage_DMABuffer( video_capture_frame.BufferId, BLUE_DATA_IMAGE ) );
+        bool odd = ScheduleID & 0x1;
 
-            CurrentFieldCount = video_capture_frame.nFrameTimeStamp;
-            //			if(!bFirstFrame && LastFieldCount + 2 < CurrentFieldCount)
-            //				cout << "Dropped a frame, FC expected: " << (LastFieldCount + 2) << ", current FC: " << CurrentFieldCount << endl;
+        pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
+
+        if( !odd  )
+            pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image_HANC( ScheduleID ), 0 );
+        else
+            pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
+
+        VARIANT varVal;
+        pThis->m_pSDK->QueryCardProperty( VIDEO_INPUT_SIGNAL_VIDEO_MODE, varVal );	//check if the video signal was valid for the last frame (until wait_input_video_synch() returned)
+
+
+        if( varVal.ulVal < pThis->m_InvalidVideoModeFlag )
+        {
+            pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
+            
+            if( !( DoneID & 0x1 ) )
+            {
+                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_HANC ) );
+
+                hancInfo.audio_pcm_data_ptr = pFrame->m_pAudioBuffer;
+                hancInfo.raw_custom_anc_pkt_data_ptr = nullptr;
+                hancInfo.audio_input_source = AUDIO_INPUT_SOURCE_EMB;
+
+                hanc_decoder_ex( pThis->m_iCardType, ( UINT32* )pHancBuffer, &hancInfo );
+
+                nAudioChannelInfo = QueryChannelInfo( pThis->m_pSDK );
+                pFrame->m_desc.numSamples = hancInfo.no_audio_samples / pThis->m_numAudioChannels;
+                pFrame->m_desc.channels = pThis->m_numAudioChannels;
+                pFrame->m_desc.channelDepth = GetSampleSize( pThis->m_audioFormat );
+            }
+            else
+            {
+                pFrame->m_desc.numSamples = 0;
+                pFrame->m_desc.channels = 0;
+                pFrame->m_desc.channelDepth = 0;
+            }
+
+
             LastFieldCount = CurrentFieldCount;
 
-            pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
-            pFrame->m_nCardBufferID = video_capture_frame.BufferId;
+            pFrame->m_lFieldCount = CurrentFieldCount;
+            pFrame->m_nCardBufferID = DoneID;
             pThis->m_pFifoBuffer->PushFrame( pFrame );
             bFirstFrame = FALSE;
+
+            DoneID = CapturingID;
+            CapturingID = ScheduleID;
+            ScheduleID = ( ++ScheduleID % numBuffers );
         }
         else
             pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
@@ -275,9 +366,72 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
     pThis->m_pSDK->video_capture_stop();
 
+    VirtualUnlock( pHancBuffer, MAX_HANC_BUFFER_SIZE );
+    VirtualFree( pHancBuffer, 0, MEM_RELEASE );
+
     _endthreadex( 0 );
     return 0;
 }
+
+// ***********************
+//
+UInt32                  CFifoCapture::GetAudioChannelsMask      ( UInt32 numChannels )
+{
+    UInt32 audioChannelsMask = 0;
+
+    if( numChannels > 0 )	audioChannelsMask |= MONO_CHANNEL_1;
+    if( numChannels > 1 )	audioChannelsMask |= MONO_CHANNEL_2;
+    if( numChannels > 2 )	audioChannelsMask |= MONO_CHANNEL_3;
+    if( numChannels > 3 )	audioChannelsMask |= MONO_CHANNEL_4;
+    if( numChannels > 4 )	audioChannelsMask |= MONO_CHANNEL_5;
+    if( numChannels > 5 )	audioChannelsMask |= MONO_CHANNEL_6;
+    if( numChannels > 6 )	audioChannelsMask |= MONO_CHANNEL_7;
+    if( numChannels > 7 )	audioChannelsMask |= MONO_CHANNEL_8;
+    if( numChannels > 8 )	audioChannelsMask |= MONO_CHANNEL_11;
+    if( numChannels > 9 )	audioChannelsMask |= MONO_CHANNEL_12;
+    if( numChannels > 10 )	audioChannelsMask |= MONO_CHANNEL_13;
+    if( numChannels > 11 )	audioChannelsMask |= MONO_CHANNEL_14;
+    if( numChannels > 12 )	audioChannelsMask |= MONO_CHANNEL_15;
+    if( numChannels > 13 )	audioChannelsMask |= MONO_CHANNEL_16;
+    if( numChannels > 14 )	audioChannelsMask |= MONO_CHANNEL_17;
+    if( numChannels > 15 )	audioChannelsMask |= MONO_CHANNEL_18;
+
+    return audioChannelsMask;
+}
+
+// ***********************
+//
+UInt32                  CFifoCapture::GetSampleSize             ( UInt32 audioFormat )
+{
+    switch( audioFormat )
+    {
+    case AUDIO_CHANNEL_16BIT:
+        return 2;
+    case AUDIO_CHANNEL_24BIT:
+        return 3;
+    }
+
+    return 0;
+}
+
+// ***********************
+//
+unsigned int            CFifoCapture::QueryChannelInfo          ( CBlueVelvet4 * sdk )
+{
+    VARIANT varVal;
+
+    sdk->QueryCardProperty( EMBEDDED_AUDIO_INPUT_INFO, varVal );
+    return varVal.ulVal;
+}
+
+// ***********************
+//
+unsigned int            CFifoCapture::QueryNumSamples           ( unsigned int channelInfo )
+{
+    return channelInfo & 0xFFFF;
+}
+
+
 
 } //bluefish
 } //videocards

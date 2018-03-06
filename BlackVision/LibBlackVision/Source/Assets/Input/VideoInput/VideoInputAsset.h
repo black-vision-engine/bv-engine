@@ -5,6 +5,8 @@
 #include "VideoInputAssetDesc.h"
 
 #include "Assets/Input/VideoInput/VideoInputTextureAsset.h"
+#include "Assets/Input/VideoInput/VideoInputAudioAsset.h"
+#include "Assets/Input/IAudioInputAsset.h"
 
 #include "Assets/AssetManager.h"		// Only for LoadTypedAsset template specialization
 
@@ -36,20 +38,21 @@ protected:
     VideoInputTextureAssetConstPtr      m_fill;
     VideoInputTextureAssetConstPtr      m_key;
 
-    // FIXME: Add audio later.
+    VideoInputAudioAssetConstPtr        m_audio;
 
 protected:
 
-    explicit            VideoInputAsset             ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key );
+    explicit            VideoInputAsset             ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key, VideoInputAudioAssetConstPtr audio );
 
 public:
 
-    static VideoInputAssetPtr       Create          ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key );
+    static VideoInputAssetPtr       Create          ( VideoInputTextureAssetConstPtr fill, VideoInputTextureAssetConstPtr key, VideoInputAudioAssetConstPtr audio );
 
 
     VideoInputTextureAssetConstPtr  GetFillAsset    () const { return m_fill; }
     VideoInputTextureAssetConstPtr  GetKeyAsset     () const { return m_key; }
 
+    IAudioInputAssetConstPtr        GetAudio        () const { return m_audio; }
 
     virtual VoidConstPtr            QueryThis       () const override;
     virtual const std::string &	    GetUID			() const override;

@@ -194,6 +194,21 @@ void                    FakeVideoCard::ResetInputFrame                  ( VideoI
 
 // ***********************
 //
+bool                    FakeVideoCard::IsEnabled                        ( VideoInputID inputId ) const
+{
+    for( auto & channel : m_channels )
+    {
+        if( channel.InputChannelData && channel.InputChannelData->LinkedVideoInput == inputId )
+        {
+            return channel.InputChannelData->Enabled;
+        }
+    }
+
+    return false;
+}
+
+// ***********************
+//
 void                    FakeVideoCard::LoadInputChannelFrames           ( const FakeInputChannelData & channelDesc )
 {
     FakeInputFrames inputFrames;

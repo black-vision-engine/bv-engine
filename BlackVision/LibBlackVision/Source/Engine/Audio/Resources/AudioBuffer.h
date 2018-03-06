@@ -40,6 +40,7 @@ public:
 public:
 
     void            Update              ( MemoryChunkConstPtr data );
+    void            Clear               ();
 
 };
 

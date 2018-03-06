@@ -105,6 +105,19 @@ inline std::shared_ptr< const DataArrayRowAssetDesc >       DefaultAssets::GetDe
     return daDesc;
 }
 
+// ***********************
+//
+template<>
+inline std::shared_ptr< const VideoInputAssetDesc >         DefaultAssets::GetDefaultDesc   ()
+{
+    static VideoInputAssetDescConstPtr daDesc;
+    if( !daDesc )
+    {
+        daDesc = VideoInputAssetDesc::Create( 0, 0 );
+    }
+    return daDesc;
+}
+
 // ========================================================================= //
 // Fallback assets descriptors
 // ========================================================================= //

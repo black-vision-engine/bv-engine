@@ -5,6 +5,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
+#include "DefaultPlugins.h"
+#include "Engine/Models/NodeLogics/NodeLogicFactory.h"
 
 #include "Utils/Mocks/FakeVideoCard/FakeVideoCardDesc.h"
 #include "Utils/Mocks/Plugins/Audio/FakeAudioPlayerPlugin.h"
@@ -60,13 +62,16 @@ void            BVTestAppLogic::RegisterMockPlugins     ()
 
     descriptors.push_back( new model::FakeAudioPlayerPluginDesc() );
 
+    m_pluginsManager->RegisterDescriptors( model::RemainingBVPluginDescriptors() );
     m_pluginsManager->RegisterDescriptors( descriptors );
 }
 
 // ***********************
 //
 void            BVTestAppLogic::RegisterMockLogics      ()
-{}
+{
+    static_cast< NodeLogicFactory * >( GetNodeLogicFactory() )->RegisterRamainigLogics();
+}
 
 
 }	// bv
