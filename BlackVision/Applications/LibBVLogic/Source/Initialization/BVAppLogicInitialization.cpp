@@ -68,6 +68,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
     m_renderer = renderer;
     m_audioRenderer = audioRenderer;
 
+    SetNodeLogicFactory( new NodeLogicFactory() );
 
     m_renderLogic = RenderLogicInitializer::CreateInstance( DefaultConfig );
 
@@ -92,8 +93,6 @@ void                    BVAppLogic::Initialize         ()
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
 
     bv::effect::InitializeLibEffect( m_renderer );
-
-    SetNodeLogicFactory( new NodeLogicFactory() );
 
     InitializeKbdHandler();
     InitializeRemoteCommunication();
