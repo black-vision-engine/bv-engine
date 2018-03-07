@@ -219,4 +219,21 @@ TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
     EXPECT_EQ( vic2->GetWidth(), 1280 );
 }
 
+// ***********************
+// VideoOutput in config has output id, that isn't linked to any output channel.
+// Output shouldn't be created.
+TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_ReferenceNotExistingChannel )
+{
+    BVConfig config( "TestConfigs/OutputsTests/ReferenceNotExistingChannel.xml" );
+
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
+
+    // In xml two channels were specified, but only one was created.
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
+}
+
 
