@@ -124,10 +124,15 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
 {
     auto name = deser.GetAttribute( "name" );
 
-    auto duration = Convert::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
+    auto duration = Convert::String2T< TimeType >( deser.GetAttribute( "duration" ) );
+    if( !duration.IsValid() )
+    {
+        Warn< SerializationException >( deser, "Cannot deserialize timeline duration. Timeline's name: " + name + ". Replacing with maximal duration." );
+        duration = std::numeric_limits< TimeType >::max(); // NOTE: perhaps infinity() would be better?
+    }
 
     auto loop = deser.GetAttribute( "loop" );
-    TimelineWrapMethod preWrap, postWrap;
+    Expected< TimelineWrapMethod > preWrap, postWrap;
     if( loop == "true" )
     {
         preWrap = Convert::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPre" ) );
@@ -136,6 +141,18 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
     else
     {
         preWrap = postWrap = Convert::String2T< TimelineWrapMethod >( loop );
+    }
+
+    if( !preWrap.IsValid() )
+    {
+        Warn< SerializationException >( deser, "Cannot desrialize timline's pre wrapping mode. Timeline's name: " + name + ". Replacing with CLAMP." );
+        preWrap = TimelineWrapMethod::TWM_CLAMP;
+    }
+
+    if( !preWrap.IsValid() )
+    {
+        Warn< SerializationException >( deser, "Cannot desrialize timline's post wrapping mode. Timeline's name: " + name + ". Replacing with CLAMP." );
+        postWrap = TimelineWrapMethod::TWM_CLAMP;
     }
 
     auto te = DefaultTimeline::Create( name, duration, preWrap, postWrap );
@@ -153,6 +170,8 @@ DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeseria
                     te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
                 else if( type == "stop" )
                     te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
+                else if( type == "trigger" )
+                    te->AddKeyFrame( TimelineEventTrigger::Create( deser, te.get() ) );
                 else
                     assert( false );
 

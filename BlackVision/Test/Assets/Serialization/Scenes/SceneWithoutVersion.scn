@@ -1,5 +1,5 @@
 <scene>
 	<timelines>
-		<timeline name="default" type="default" loop="clamp" />
+		<timeline name="default" type="default" loop="clamp" duration="777" />
 	</timelines>
 </scene>
