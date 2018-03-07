@@ -194,7 +194,9 @@ TEST( Engine_RenderChannels, RenderLogicInit_AllChannelsDisabled )
 }
 
 // ***********************
-// This test checks proper handling of bad width height VideoOutput parameter
+// This test checks proper handling of bad width height VideoOutput parameter.
+// Note: width and height isn't used anymore. These values will be queried from video card channels.
+// Thats why any entry in config containing width and height shouldn't affect anything.
 TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
 {
     BVConfig config( "TestConfigs/OutputsTests/BadOutputsWidthHeight.xml" );
@@ -208,13 +210,13 @@ TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
     ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 2 );
 
     auto vic1 = inputChannels.GetInputChannel( 0 );
-    auto vic2 = inputChannels.GetInputChannel( 1 );
+    auto vic2 = inputChannels.GetInputChannel( 2 );
 
-    EXPECT_EQ( vic1->GetHeight(), 200 );
-    EXPECT_EQ( vic1->GetWidth(), 1000 );
+    EXPECT_EQ( vic1->GetHeight(), 1080 );
+    EXPECT_EQ( vic1->GetWidth(), 1920 );
 
-    EXPECT_EQ( vic2->GetHeight(), 0 );
-    EXPECT_EQ( vic2->GetWidth(), 0 );
+    EXPECT_EQ( vic2->GetHeight(), 720 );
+    EXPECT_EQ( vic2->GetWidth(), 1280 );
 }
 
 

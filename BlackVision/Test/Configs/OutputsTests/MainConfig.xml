@@ -73,31 +73,27 @@
         <videocard name="FakeVideoCard" deviceID="1">
             <channels>
                 <channel name="A" >
-                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                    <output linkedVideoOutput="0" type="FILL_KEY" width="1920" height="1080" />
 				</channel>
                 <channel name="B" >
-                    <output linkedVideoOutput="1" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                    <output linkedVideoOutput="1" type="FILL_KEY" width="1920" height="1080" />
 				</channel>
                 <channel name="C" >
-                    <output linkedVideoOutput="2" type="FILL" resolution="720" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                    <output linkedVideoOutput="2" type="FILL" width="1280" height="720" />
 				</channel>
             </channels>
         </videocard>
     </videocards>
-
+	
+	
 	<RenderChannels>
-	
         <RenderChannel id="0" enabled="true" >
-			<VideoOutput id="0" />
-		</RenderChannel>
-		
-        <RenderChannel enabled="false" >
-			<VideoOutput id="1" />
-		</RenderChannel>
-		
-        <RenderChannel id="2" enabled="true" />
-        <RenderChannel id="3" enabled="true" />
+            <VideoOutput id="0" />
+            <VideoOutput id="2" />
+        </RenderChannel>
+        <RenderChannel id="1" enabled="false" />
+        <RenderChannel id="2" enabled="false" />
+        <RenderChannel id="3" enabled="false" />
     </RenderChannels>
-	
 </config>
 
