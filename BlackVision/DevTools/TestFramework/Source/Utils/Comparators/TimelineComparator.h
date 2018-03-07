@@ -31,8 +31,18 @@ bool                    CompareOffsetTimelines( const OffsetTimeEvaluator & expe
     return TEST_ACCESSOR( OffsetTimeEvaluator )::Compare( expected, actual );
 }
 
+bool                    CompareKeyframe( const ITimelineEvent * expected, const ITimelineEvent * actual )
+{
+    if( expected->GetType() != actual->GetType() )
+        return false;
+
+    return true;
+}
+
 bool                    CompareDefaultTimelines( const DefaultTimeline & expected, const DefaultTimeline & actual )
 {
+// basic info
+
     if( expected.GetName() != actual.GetName() )
         return false;
 
@@ -44,6 +54,15 @@ bool                    CompareDefaultTimelines( const DefaultTimeline & expecte
 
     if( expected.GetWrapBehaviorPost() != actual.GetWrapBehaviorPost() )
         return false;
+
+// check keyframes
+
+    if( expected.NumKeyFrames() != actual.NumKeyFrames() )
+        return false;
+
+    for( int i = 0; i < expected.NumKeyFrames(); i++ )
+        if( CompareKeyframe( expected.GetKeyFrameEvent( i ), actual.GetKeyFrameEvent( i ) ) == false )
+            return false;
 
     return true;
 }
