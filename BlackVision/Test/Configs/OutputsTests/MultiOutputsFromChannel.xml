@@ -89,7 +89,7 @@
 	
         <RenderChannel id="0" enabled="true" >
 			<VideoOutput id="0" />
-			<VideoOutput id="1" />
+			<VideoOutput id="2" />
 		</RenderChannel>
 		
         <RenderChannel id="1" enabled="true" >

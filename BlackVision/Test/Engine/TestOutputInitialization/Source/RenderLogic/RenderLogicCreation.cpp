@@ -152,12 +152,21 @@ TEST( Engine_RenderChannels, RenderLogicInit_MultiVideoOutputsFromChannel )
     OutputExtractor extractor( renderLogic );
     auto & inputChannels = extractor.GetInputChannels();
 
-    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 2 );
 
     auto renderChannel = renderLogic->GetRenderedChannelsData()->GetRenderChannel( ( RenderChannelType )0 );
 
-    EXPECT_EQ( inputChannels.GetInputChannel( 0 )->GetWrappedChannel(), renderChannel );
-    EXPECT_EQ( inputChannels.GetInputChannel( 1 )->GetWrappedChannel(), renderChannel );
+    auto vic1 = inputChannels.GetInputChannel( 0 );
+    auto vic2 = inputChannels.GetInputChannel( 2 );
+
+    EXPECT_EQ( vic1->GetWrappedChannel(), renderChannel );
+    EXPECT_EQ( vic2->GetWrappedChannel(), renderChannel );
+
+    EXPECT_EQ( vic1->GetWidth(), 1920 );
+    EXPECT_EQ( vic1->GetHeight(), 1080 );
+
+    EXPECT_EQ( vic2->GetWidth(), 1280 );
+    EXPECT_EQ( vic2->GetHeight(), 720 );
 }
 
 // ***********************
