@@ -49,7 +49,6 @@ private:
 
     bool            m_fullscreeMode;
     bool            m_readbackOn;
-    bool            m_displayVideoCardOutput;
     bool            m_isCameraPerspective;
 	bool			m_renderToSharedMemory;
 	int				m_sharedMemoryScaleFactor;
@@ -123,7 +122,6 @@ public:
 	inline RendererInput        GetRendererInput	    () const;
 	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
-    inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
 	inline bool                 RenderToSharedMemory    () const;
 	inline int                  SharedMemoryScaleFactor () const;
