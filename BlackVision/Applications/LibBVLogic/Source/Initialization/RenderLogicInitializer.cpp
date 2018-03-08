@@ -164,7 +164,7 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetEnabled( false );
+    desc.SetEnabled( cfg.RenderToSharedMemory() );
 
     // FIXME: nrl - append additional properties if necessary
 }
