@@ -157,13 +157,11 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     { cfg; }
     
     auto width = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Width" ), 1920 );
-    auto height = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Height" ), 1920 );
+    auto height = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Height" ), 1080 );
     auto name = cfg.PropertyValue( "SharedMemory/Name" );
 
     if( name.empty() )
-    {
         name = "BV";
-    }
 
     desc.SetWidth( width );
     desc.SetHeight( height );

@@ -11,6 +11,9 @@
     <ClCompile Include="..\..\..\Source\InitDescriptors\RenderChannels.cpp">
       <Filter>InitDescriptors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\InitDescriptors\SharedMemory.cpp">
+      <Filter>InitDescriptors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="InitDescriptors">
