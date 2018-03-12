@@ -48,7 +48,16 @@ ser.ExitChild();
 TimelineEventTriggerPtr     TimelineEventTrigger::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
     std::string     name = deser.GetAttribute( "name" );
-    TimeType        time = Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f );
+
+    auto            time = Convert::String2T< TimeType >( deser.GetAttribute( "time" ) );
+    if( !time.IsValid() )
+    {
+        Warn< SerializationException >( deser,
+            "Cannot deserialize trigger keyframe's time. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() +
+            ". Keyframe skipped." );
+        return nullptr;
+    }
+
     std::string     events = deser.GetAttribute( "events" );
 
     return std::make_shared< TimelineEventTrigger >( name, time, timeline, events );

@@ -46,9 +46,18 @@ TimelineEventStopPtr    TimelineEventStop::Create           ( const std::string 
 //
 TimelineEventStopPtr    TimelineEventStop::Create           ( const IDeserializer & deser, const ITimeline * timeline )
 {
-    return TimelineEventStop::Create( deser.GetAttribute( "name" ),
-        Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
-        timeline );
+    auto name = deser.GetAttribute( "name" );
+
+    auto time = Convert::String2T< TimeType >( deser.GetAttribute( "time" ) );
+    if( !time.IsValid() )
+    {
+        Warn< SerializationException >( deser, 
+            "Cannot deserialize stop keyframe's time. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() + 
+            ". Keyframe skipped." );
+        return nullptr;
+    }
+
+    return TimelineEventStop::Create( name, time, timeline );
 }
 
 } //model
