@@ -2,6 +2,8 @@
 
 #include "SharedMemoryBuffer.h"
 
+#include "UseLoggerLibCoreModule.h"
+
 
 namespace bv {
 
@@ -64,7 +66,7 @@ SharedMemoryBufferPtr   SharedMemoryBuffer::Create              ( const std::wst
 
         if ( pBuf == NULL )
         {
-            printf( "Could not map view of file (%d).\n", GetLastError() );
+            LOG_MESSAGE( SeverityLevel::error ) << "Could not map view of file [" << name << "], error [" << GetLastError() << "].";
 
             CloseHandle( hMapFile );
         }
@@ -75,7 +77,7 @@ SharedMemoryBufferPtr   SharedMemoryBuffer::Create              ( const std::wst
     }
     else
     {
-        printf( "Could not create file mapping object (%d).\n", GetLastError() );
+        LOG_MESSAGE( SeverityLevel::error ) << "Could not create file mapping object [" << name << "], error [" << GetLastError() << "].";
     }
 
     return res;

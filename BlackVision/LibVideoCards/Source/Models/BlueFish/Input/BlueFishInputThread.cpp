@@ -74,8 +74,6 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
     }
     else
     {
-        assert( m_prevAudio );
-
         if( m_prevAudio )
         {
             // Copy second half of the buffer.

@@ -29,7 +29,7 @@ private:
 
 public:
 
-                                                SharedMemHandler    ( unsigned int width, unsigned int height );
+                                                SharedMemHandler    ( const std::string & name, unsigned int width, unsigned int height );
                                                 ~SharedMemHandler   ();
 
     virtual void                                HandleFrameData     ( const OutputState & state, RenderContext * ctx, const RenderChannel * channel ) override;

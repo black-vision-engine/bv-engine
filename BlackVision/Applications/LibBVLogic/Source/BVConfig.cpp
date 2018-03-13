@@ -61,8 +61,6 @@ void    BVConfig::InitDefaultConfiguration()
     m_frameTimeMillis = 1000 / m_fps;
     m_timerFPS = 60;
 
-    m_displayVideoCardOutput = false;
-
     m_eventLoopUpdateMillis = 20;
 
     m_defaultFOV = 90.f;
@@ -135,8 +133,9 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_fullscreeMode = Convert::String2T< bool >( m_properties[ "FullScreen" ], true );
         m_isCameraPerspective = Convert::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
         m_readbackOn = Convert::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
-        m_renderToSharedMemory = Convert::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
+
         m_sharedMemoryScaleFactor = Convert::String2T< int >( m_properties[ "Renderer/SharedMemoryScaleFactor" ], 1 );
+        m_renderToSharedMemory = Convert::String2T< bool >( m_properties[ "SharedMemory/Enable" ], false );
 
         m_globalGain = Convert::String2T< Float32 >( m_properties[ "Audio/GlobalGain" ], 1.f );
 
@@ -197,8 +196,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_frameTimeMillis = 1000 / m_fps;
         m_timerFPS = Convert::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
 
-        m_displayVideoCardOutput = Convert::String2T< bool >( m_properties[ "Renderer/DisplayVideoCardOutput" ], false );
-
         m_eventLoopUpdateMillis = Convert::String2T< UInt32 >( m_properties[ "Application/Events/MaxLoopUpdateTime" ], m_eventLoopUpdateMillis );
 
         m_defaultFOV = 90.f;
@@ -235,7 +232,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
         m_useVideoInputFeeding = Convert::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
 
-        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
+        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/Events/EnableLockingQueue" ], false );
 
         m_onFailedTextureLoadBehavior = m_properties[ "Plugins/Textures/OnFailedLoadBehavior" ];
     }

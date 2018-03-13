@@ -94,7 +94,10 @@ OutputInstance *    CreateOutputPreview   ( const OutputDesc & desc )
 //
 OutputInstance *    CreateOutputShm     ( const OutputDesc & desc )
 {
-    auto handler    = new SharedMemHandler( desc.GetWidth(), desc.GetHeight() ); // FIXME: nrl - possibly read buffer name from dictionary parameters
+    auto & props = desc.GetOutputProperties()[ 0 ];
+    auto name = props.find( "Name" )->second;
+
+    auto handler    = new SharedMemHandler( name, desc.GetWidth(), desc.GetHeight() );
     auto output     = new OutputInstance( desc.GetWidth(), desc.GetHeight(), handler ); 
 
     InitializeDefault( output, desc );

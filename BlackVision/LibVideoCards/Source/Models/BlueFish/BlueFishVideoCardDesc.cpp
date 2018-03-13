@@ -202,7 +202,7 @@ ExceptionsListPtr       VideoCardDesc::ValidateVideoMode    () const
         {
             if( m_channels[ i ].OutputChannelData->videoMode == VID_FMT_INVALID )
             {
-                errors->AddException( "Channel " + Convert::T2String( m_channels[ i ].Name ) + ": Invalid video mode. " +
+                errors->AddException( "Output channel " + Convert::T2String( m_channels[ i ].Name ) + ": Invalid video mode. " +
                     "Resolution: " + Convert::T2String( m_channels[ i ].OutputChannelData->resolution ) +
                     ", refresh: " + Convert::T2String( m_channels[ i ].OutputChannelData->refresh ) +
                     ", interlaced: " + Convert::T2String( m_channels[ i ].OutputChannelData->interlaced ) );

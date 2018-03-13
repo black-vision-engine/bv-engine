@@ -156,15 +156,25 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     // FIXME: nrl - implement it by reading cfg instance
     { cfg; }
     
-    desc.SetWidth( 1920 );
-    desc.SetHeight( 1080 );
-    // Uncomment to make it BUG crash
-    //desc.SetWidth( 1920 / 2 );
-    //desc.SetHeight( 1080 / 2 );
+    auto width = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Width" ), 1920 );
+    auto height = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Height" ), 1080 );
+    auto name = cfg.PropertyValue( "SharedMemory/Name" );
+
+    if( name.empty() )
+        name = "BV";
+
+    desc.SetWidth( width );
+    desc.SetHeight( height );
+
+    std::hash_map< std::string, std::string > prop;
+    prop[ "Name" ] = name;
+
+    desc.AccessOutputProperties().push_back( prop );
+    
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetEnabled( false );
+    desc.SetEnabled( cfg.RenderToSharedMemory() );
 
     // FIXME: nrl - append additional properties if necessary
 }
