@@ -21,6 +21,8 @@ UInt32          Resolution2Width    ( UInt32 resolutionWidth )
         return 1920;
     case 720:
         return 1280;
+    case 576:
+        return 720;
     }
 
     return 1920;
