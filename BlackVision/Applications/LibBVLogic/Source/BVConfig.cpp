@@ -234,7 +234,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Default config file 'config.xml' reading error. Loading default configuration.";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Config file [" << filePath << "] doesn't exist. Loading default configuration.";
     }
 }
 
