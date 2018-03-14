@@ -569,7 +569,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
                 pThis->m_debugNumberFrameDrops++;
 
 				//std::cout << "Dropped a frame: ChA underruns: " << UnderrunChA << std::endl;
-                LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish channel A";
+                LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish output channel " + Convert::T2String( ( ChannelName )pThis->m_nVideoChannel );
 				LastUnderrunChA = UnderrunChA;
 			}
 
