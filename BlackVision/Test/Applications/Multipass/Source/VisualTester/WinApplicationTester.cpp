@@ -45,7 +45,7 @@
 //
 //
 //WinApplicationTester::WinApplicationTester()
-//	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(),bv::WindowMode::WINDOWED,*(new bv::RendererInput) )
+//	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultWindowWidth(), DefaultConfig.DefaultWindowHeight(),bv::WindowMode::WINDOWED,*(new bv::RendererInput) )
 //{
 //	application = this;
 //}
@@ -83,7 +83,7 @@
 //{
 //	m_renderLogic = new VisualTesterRenderLogic();
 //
-//	InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
+//	InitCamera( DefaultConfig.DefaultWindowWidth(), DefaultConfig.DefaultWindowHeight() );
 //
 //	return WindowedApplication::OnInitialize();
 //}

@@ -50,7 +50,7 @@
 	<property name="Application">
 		<property name="VSYNC" value="false" />
 		<property name="Window">
-			<property name="Mode" value="WINDOWED" />        <!-- rodzaj wyswietlanego okienka MULTIPLE_SCREENS|WINDOWED_FULLSCREEN -->
+			<property name="Mode" value="MULTIPLE_SCREENS" />
 			<property name="Size">
 				<property name="Width" value="300" />
 				<property name="Height" value="400" />

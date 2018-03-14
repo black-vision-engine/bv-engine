@@ -56,7 +56,7 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode(), DefaultConfig.GetRendererInput() )
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultWindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode(), DefaultConfig.GetRendererInput() )
     , m_app( nullptr )
 {
     ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );

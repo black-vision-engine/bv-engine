@@ -110,7 +110,7 @@ public:
 
     const IDeserializer &       GetNode                 ( const std::string & node ) const;
 
-    inline Int32                DefaultwindowWidth      () const;
+    inline Int32                DefaultWindowWidth      () const;
     inline Int32                DefaultWindowHeight     () const;
 
     inline Int32                DefaultWidth            () const;

@@ -5,7 +5,7 @@ namespace bv
 
 // *********************************
 //
-Int32           BVConfig::DefaultwindowWidth                     () const
+Int32           BVConfig::DefaultWindowWidth                     () const
 {
     return m_defaultWindowWidth;
 }
