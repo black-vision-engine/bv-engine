@@ -82,14 +82,6 @@ inline Float32  BVConfig::GlobalGain							() const
 
 // *********************************
 //
-inline int     BVConfig::SharedMemoryScaleFactor() const
-{
-	return m_sharedMemoryScaleFactor;
-}
-
-
-// *********************************
-//
 inline UInt32       BVConfig::EventLoopUpdateMillis             () const
 {
     return m_eventLoopUpdateMillis;
@@ -275,13 +267,6 @@ inline const std::string &  BVConfig::DebugFilePath             () const
 inline bool                 BVConfig::LoadSceneFromEnv          () const
 {
     return m_loadSceneFromEnv;
-}
-
-// *********************************
-//
-inline bool                 BVConfig::UseVideoInputFeeding      () const
-{
-    return m_useVideoInputFeeding;
 }
 
 // *********************************

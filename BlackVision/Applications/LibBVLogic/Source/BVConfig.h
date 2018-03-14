@@ -51,7 +51,6 @@ private:
     bool            m_readbackOn;
     bool            m_isCameraPerspective;
 	bool			m_renderToSharedMemory;
-	int				m_sharedMemoryScaleFactor;
     bool            m_vsync;
 
 	Float32         m_globalGain;
@@ -85,7 +84,6 @@ private:
     bool            m_useDebugLayer;
     std::string     m_debugFilePath;
     bool            m_loadSceneFromEnv;
-    bool            m_useVideoInputFeeding;
 
     bool            m_enableQueueLocking;
 
@@ -124,7 +122,6 @@ public:
     inline bool                 ReadbackFlag            () const;
     inline bool                 IsCameraPerspactive     () const;
 	inline bool                 RenderToSharedMemory    () const;
-	inline int                  SharedMemoryScaleFactor () const;
 
 	inline Float32				GlobalGain				() const;
 
@@ -169,7 +166,7 @@ public:
     inline bool                 UseDebugLayer           () const;
     inline const std::string &  DebugFilePath           () const;
     inline bool                 LoadSceneFromEnv        () const;
-    inline bool                 UseVideoInputFeeding    () const;
+    //inline bool                 UseVideoInputFeeding    () const;
 
     inline bool                 EnableLockingQueue      () const;
     inline const std::string &  OnFailedTexLoadBehavior () const;

@@ -36,7 +36,6 @@ void    BVConfig::InitDefaultConfiguration()
     m_isCameraPerspective = true;
     m_readbackOn = false;
     m_renderToSharedMemory = false;
-    m_sharedMemoryScaleFactor = 1;
 
     m_globalGain = 1.f;
 
@@ -88,7 +87,6 @@ void    BVConfig::InitDefaultConfiguration()
     m_sceneFromEnvName = "";
     m_loadSceneFromEnv = false;
     m_loadSceneFromProjectManager = "";
-    m_useVideoInputFeeding = false;
 
     m_enableQueueLocking = false;
 
@@ -134,7 +132,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_isCameraPerspective = Convert::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
         m_readbackOn = Convert::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
 
-        m_sharedMemoryScaleFactor = Convert::String2T< int >( m_properties[ "Renderer/SharedMemoryScaleFactor" ], 1 );
         m_renderToSharedMemory = Convert::String2T< bool >( m_properties[ "SharedMemory/Enable" ], false );
 
         m_globalGain = Convert::String2T< Float32 >( m_properties[ "Audio/GlobalGain" ], 1.f );
@@ -230,7 +227,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
         m_loadSceneFromEnv = Convert::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
         m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
-        m_useVideoInputFeeding = Convert::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
 
         m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/Events/EnableLockingQueue" ], false );
 

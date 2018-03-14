@@ -10,9 +10,8 @@
     
 	<property name="Debug">
 		<property name="LoadSceneFromEnv" value="false" />
-		<property name="LoadSolution" value="false" />
+        <property name="LoadSceneFromProjectManager" value="" />
 		<property name="SceneFromEnvName" value="TWO_TEXTURED_RECTANGLES" />
-		<property name="UseVideoInputFeeding" value="false" />  
 
         <property name="CommandsDebugLayer">
             <property name="UseDebugLayer" value="false" />
@@ -26,6 +25,10 @@
         </property>
     </property>
 	
+    <property name="Audio" >
+        <property name="GlobalGain" value="1.0" />
+    </property>
+    
 	<property name="Renderer">
 		<property name="MaxFPS" value="5000" />
 		<property name="TimerFPS" value="50" />
@@ -51,10 +54,6 @@
 			<property name="Size">
 				<property name="Width" value="1920" />
 				<property name="Height" value="1080" />
-			</property>
-			<property name="Origin">
-				<property name="X" value="0" />
-				<property name="Y" value="0" />
 			</property>
 		</property>
 		<property name="Renderer">			
