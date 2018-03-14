@@ -95,7 +95,6 @@ private:
     BVConfig    ();
 
     void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
-    void                        SaveConfig              ( ISerializer & ser, std::string path = "" ) const;
 
     void                        InitDefaultConfiguration();
     void                        InitializeFromFile      ( const std::string & filePath );
@@ -104,6 +103,8 @@ public:
 
     explicit                    BVConfig                ( const std::string & configPath );
                                 ~BVConfig               ();
+
+    void                        SaveConfig              ( std::string path = "" ) const;
 
     const std::string &         PropertyValue           ( const std::string & key ) const;
     void                        SetPropertyValue        ( const std::string & key, const std::string & value );

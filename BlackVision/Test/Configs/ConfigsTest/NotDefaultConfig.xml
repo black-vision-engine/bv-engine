@@ -32,6 +32,12 @@
 	<property name="Renderer">
 		<property name="MaxFPS" value="5000" />
 		<property name="TimerFPS" value="50" />
+        
+        <property name="FrameBufferSize">
+            <property name="Width" value="500" />
+            <property name="Height" value="600" />
+        </property>
+        
 		<property name="ClearColor" >
 			<property name="r" value="0.5" />
 			<property name="g" value="0.5" />
@@ -54,12 +60,6 @@
 			<property name="Size">
 				<property name="Width" value="300" />
 				<property name="Height" value="400" />
-			</property>
-		</property>
-		<property name="Renderer">			
-			<property name="FrameBufferSize">
-				<property name="Width" value="500" />
-				<property name="Height" value="600" />
 			</property>
 		</property>
         

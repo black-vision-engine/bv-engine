@@ -66,8 +66,6 @@ void    BVConfig::InitDefaultConfiguration()
     m_defaultNearClippingPlane = 0.1f;
     m_defaultFarClippingPlane = 100.f;
 
-    m_defaultFOV = 90.f;
-
     m_defaultCameraPosition = glm::vec3( 0.f, 0.f, 5.f );
     m_defaultCameraDirection = glm::vec3( 0.f , 0.f, 5.f );
     m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
@@ -165,8 +163,8 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             m_defaultWindowWidth = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Width" ], m_defaultWidth );
             m_defaultWindowHeight = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Height" ], m_defaultHeight );
 
-            m_defaultWidth = Convert::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Width" ], m_defaultWidth );
-            m_defaultHeight = Convert::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Height" ], m_defaultHeight );
+            m_defaultWidth = Convert::String2T< Int32 >( m_properties[ "Renderer/FrameBufferSize/Width" ], m_defaultWidth );
+            m_defaultHeight = Convert::String2T< Int32 >( m_properties[ "Renderer/FrameBufferSize/Height" ], m_defaultHeight );
         }
 
         m_vsync = Convert::String2T< bool >( m_properties[ "Application/VSYNC" ], true );
@@ -194,10 +192,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_timerFPS = Convert::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
 
         m_eventLoopUpdateMillis = Convert::String2T< UInt32 >( m_properties[ "Application/Events/MaxLoopUpdateTime" ], m_eventLoopUpdateMillis );
-
-        m_defaultFOV = 90.f;
-        m_defaultNearClippingPlane = 0.1f;
-        m_defaultFarClippingPlane = 100.f;
+        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/Events/EnableLockingQueue" ], false );
 
         m_defaultFOV = Convert::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
 
@@ -209,14 +204,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             Convert::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
         m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
 
-        m_defaultStatsMovingAverageWindowSize = 500; //500
-        m_defaultWarmupRoundsStatsMAV = 10; //10
-        m_defaultStatsRefreshMillisDelta = 1000;
-        m_defaultStatsRecalcFramesDelta = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
-        m_defaultProfilerDisplayWaitMillis = 10000; //1000
-
-        m_numRedbackBuffersPerRenderTarget = 4; //up to 200+, when 32 bit build is enabled
-
         m_defaultClearColor = glm::vec4( Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
             Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
             Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
@@ -227,8 +214,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
         m_loadSceneFromEnv = Convert::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
         m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
-
-        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/Events/EnableLockingQueue" ], false );
 
         m_onFailedTextureLoadBehavior = m_properties[ "Plugins/Textures/OnFailedLoadBehavior" ];
     }
@@ -391,7 +376,7 @@ BVConfig::~BVConfig                     ()
 
 // *********************************
 //
-void BVConfig::LoadProperties           ( const IDeserializer & deser, std::string path )
+void                    BVConfig::LoadProperties        ( const IDeserializer & deser, std::string path )
 {
     auto name = deser.GetAttribute( "name" );
     auto value = deser.GetAttribute( "value" );
@@ -422,24 +407,75 @@ void BVConfig::LoadProperties           ( const IDeserializer & deser, std::stri
 
 // ***********************
 //
-void                    BVConfig::SaveConfig            ( ISerializer & /*ser*/, std::string /*path*/ ) const
+UInt32                  FindCommonPathPart              ( StringVector & path1, StringVector & path2 )
 {
-    if( Path::Exists( CONFIG_PATH ) )
+    UInt32 eqNesting = 0;
+
+    while( path1.size() > eqNesting
+        && path2.size() > eqNesting
+        && path1[ eqNesting ] == path2[ eqNesting ] )
     {
-        //XMLSerializer ser( nullptr );
+        eqNesting++;
+    }
 
-        //if( m_deserializer.EnterChild( "config" ) )
-        //{
-        //    for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
-        //    {
+    return eqNesting;
+}
 
+// ***********************
+//
+void                    BVConfig::SaveConfig            ( std::string path ) const
+{
+    if( /*Path::Exists( path )*/ true )
+    {
+        XMLSerializer ser( nullptr );
 
-        //    }
+        ser.EnterChild( "config" );
 
-        //    m_deserializer.ExitChild();  // config
-        //}
+        UInt32 prevNesting = 0;
+        StringVector prevPath;
 
-        //ser.Save( CONFIG_PATH );
+        // We use fact, that properties are sorted in map.
+        for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
+        {
+            Path propPath = iter->first;
+            StringVector curPath = propPath.Split();
+
+            // Find common part of path.
+            UInt32 eqNesting = FindCommonPathPart( prevPath, curPath );
+
+            // In previous interation we were more nested in serializer.
+            if( prevNesting > eqNesting )
+            {
+                UInt32 numExits = prevNesting - eqNesting;
+                while( numExits > 0 )
+                {
+                    ser.ExitChild();
+                    numExits--;
+                }
+            }
+
+            // We must EnterChild beginning from eqNesting index in curPath vector.
+            UInt32 nesting = eqNesting;
+            UInt32 maxNesting = (UInt32)curPath.size() - 1;
+            while( nesting <= maxNesting )
+            {
+                ser.EnterChild( "property" );
+                ser.SetAttribute( "name", curPath[ nesting ] );
+
+                nesting++;
+            }
+
+            prevNesting = nesting;
+
+            // We are in leaf of properties tree. Set Value.
+            ser.SetAttribute( "value", iter->second );
+
+            prevPath = curPath;
+        }
+
+        ser.ExitChild();  // config
+
+        ser.Save( path );
     }
 }
 

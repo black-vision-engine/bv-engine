@@ -32,6 +32,12 @@
 	<property name="Renderer">
 		<property name="MaxFPS" value="5000" />
 		<property name="TimerFPS" value="50" />
+        
+        <property name="FrameBufferSize">
+            <property name="Width" value="500" />
+            <property name="Height" value="600" />
+        </property>
+        
 		<property name="ClearColor" >
 			<property name="r" value="0" />
 			<property name="g" value="0" />
@@ -52,12 +58,6 @@
 		<property name="Window">
 			<property name="Mode" value="WINDOWED" />        <!-- rodzaj wyswietlanego okienka MULTIPLE_SCREENS|WINDOWED_FULLSCREEN -->
 			<property name="Size">
-				<property name="Width" value="1920" />
-				<property name="Height" value="1080" />
-			</property>
-		</property>
-		<property name="Renderer">			
-			<property name="FrameBufferSize">
 				<property name="Width" value="1920" />
 				<property name="Height" value="1080" />
 			</property>

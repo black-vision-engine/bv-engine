@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\LoadingConfigsTest.cpp" />
     <ClCompile Include="..\..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\..\Source\SaveConfigTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
