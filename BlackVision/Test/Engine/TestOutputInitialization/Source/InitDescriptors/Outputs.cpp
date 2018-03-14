@@ -74,9 +74,9 @@ TEST( Engine_RenderChannels, OutputDesc_MultiOutputsFromChannel )
 
     // Check second VideoOutput key in config
     auto out2 = outProperties[ 1 ];
-    EXPECT_EQ( out2[ "outputID" ], "1" );
-    EXPECT_EQ( out2[ "width" ], "1920" );
-    EXPECT_EQ( out2[ "height" ], "1080" );
+    EXPECT_EQ( out2[ "outputID" ], "2" );
+    EXPECT_EQ( out2[ "width" ], "1280" );
+    EXPECT_EQ( out2[ "height" ], "720" );
     EXPECT_EQ( out2[ "renderChannelID" ], "0" );
 
 }

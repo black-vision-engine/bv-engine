@@ -11,24 +11,7 @@
 	
 	<property name="Debug">
 		<property name="LoadSceneFromEnv" value="false" />    <!-- czy ma wczytywać deserializator pawła czy mechanizm z defaulta -->
-        <!-- <property name="SceneFromEnvName" value="SERIALIZED_TEST" /> -->
 		<property name="SceneFromEnvName" value="BASIC_SHAPES_TEST_SCENE" />
-		<!-- <property name="SceneFromEnvName" value="ALL_BASIC_SHAPES_SHOW" /> -->
-		<!-- <property name="SceneFromEnvName" value="BLUR_EFFECT" /> -->
-		<!-- <property name="SceneFromEnvName" value="CREED_TEST_SCENE" /> -->
-		<!-- <property name="SceneFromEnvName" value="W_SERIALIZATION_TEST" /> -->
-		<!-- <property name="SceneFromEnvName" value="REMOTE_EVENTS_TEST_SCENE" /> -->
-		<!-- <property name="scenefromenvname" value="replicator_test_scene" /> -->
-		<!-- <property name="SceneFromEnvName" value="TSS_ANIMATION_RECTANGLE" /> -->
-		<!-- <property name="SceneFromEnvName" value="INTERPOLATION_TEST_SCENE" /> -->
-		<!-- <property name="SceneFromEnvName" value="GLOBAL_EFFECT_05" /> -->
-		<!-- <property name="SceneFromEnvName" value="TEXT_CACHE_TEST" />  -->
-		<!-- <property name="SceneFromEnvName" value="STARWARS_TEST_SCENE" /> -->
-		<!-- <property name="SceneFromEnvName" value="MULTI_SHADOW_EFFECT" /> -->
-		<!-- <property name="SceneFromEnvName" value="ONE_TEXTURED_RECTANGLE" /> -->
-		<!-- <property name="SceneFromEnvName" value="REPLICATOR_TEST_SCENE" /> -->
-		<!-- <property name="SceneFromEnvName" value="CRAWLER_TEST_SCENE" /> -->
-		<!-- <property name="SceneFromEnvName" value="VIDEO_STREAM_TEST_SCENE" /> -->
 		<property name="UseVideoInputFeeding" value="false" />    <!-- czy ma wczytywać deserializator pawła czy mechanizm z defaulta -->
 		<property name="CommandsDebugLayer">
 			<property name="UseDebugLayer" value="false" />
@@ -99,7 +82,7 @@
 	
 	<RenderChannels>
         <RenderChannel id="0" enabled="true" >
-            <VideoOutput id="0" width="1920" height="1080" />
+            <VideoOutput id="0" />
         </RenderChannel>
         <RenderChannel id="1" enabled="false" />
         <RenderChannel id="2" enabled="false" />

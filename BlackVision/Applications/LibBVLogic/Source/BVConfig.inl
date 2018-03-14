@@ -61,13 +61,6 @@ inline bool     BVConfig::ReadbackFlag                           () const
 
 // *********************************
 //
-inline bool     BVConfig::DisplayVideoCardOutput                () const
-{
-    return m_displayVideoCardOutput;
-}
-
-// *********************************
-//
 inline bool     BVConfig::IsCameraPerspactive                   () const
 {
     return m_isCameraPerspective;

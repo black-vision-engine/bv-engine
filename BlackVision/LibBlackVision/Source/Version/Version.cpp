@@ -34,7 +34,7 @@ namespace bv
 namespace impl
 {
 
-Version CurrentVersion = { 0, 49, 2, 1, BuildVersion, std::string( "Windows" + VERSION_ARCHITECTURE_STRING + VERSION_DEBUG_STRING ) };
+Version CurrentVersion = { 0, 49, 3, 1, BuildVersion, std::string( "Windows" + VERSION_ARCHITECTURE_STRING + VERSION_DEBUG_STRING ) };
 
 }
 

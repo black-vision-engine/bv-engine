@@ -152,12 +152,21 @@ TEST( Engine_RenderChannels, RenderLogicInit_MultiVideoOutputsFromChannel )
     OutputExtractor extractor( renderLogic );
     auto & inputChannels = extractor.GetInputChannels();
 
-    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 2 );
 
     auto renderChannel = renderLogic->GetRenderedChannelsData()->GetRenderChannel( ( RenderChannelType )0 );
 
-    EXPECT_EQ( inputChannels.GetInputChannel( 0 )->GetWrappedChannel(), renderChannel );
-    EXPECT_EQ( inputChannels.GetInputChannel( 1 )->GetWrappedChannel(), renderChannel );
+    auto vic1 = inputChannels.GetInputChannel( 0 );
+    auto vic2 = inputChannels.GetInputChannel( 2 );
+
+    EXPECT_EQ( vic1->GetWrappedChannel(), renderChannel );
+    EXPECT_EQ( vic2->GetWrappedChannel(), renderChannel );
+
+    EXPECT_EQ( vic1->GetWidth(), 1920 );
+    EXPECT_EQ( vic1->GetHeight(), 1080 );
+
+    EXPECT_EQ( vic2->GetWidth(), 1280 );
+    EXPECT_EQ( vic2->GetHeight(), 720 );
 }
 
 // ***********************
@@ -194,7 +203,9 @@ TEST( Engine_RenderChannels, RenderLogicInit_AllChannelsDisabled )
 }
 
 // ***********************
-// This test checks proper handling of bad width height VideoOutput parameter
+// This test checks proper handling of bad width height VideoOutput parameter.
+// Note: width and height isn't used anymore. These values will be queried from video card channels.
+// Thats why any entry in config containing width and height shouldn't affect anything.
 TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
 {
     BVConfig config( "TestConfigs/OutputsTests/BadOutputsWidthHeight.xml" );
@@ -208,13 +219,30 @@ TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_BadWidthHeight )
     ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 2 );
 
     auto vic1 = inputChannels.GetInputChannel( 0 );
-    auto vic2 = inputChannels.GetInputChannel( 1 );
+    auto vic2 = inputChannels.GetInputChannel( 2 );
 
-    EXPECT_EQ( vic1->GetHeight(), 200 );
-    EXPECT_EQ( vic1->GetWidth(), 1000 );
+    EXPECT_EQ( vic1->GetHeight(), 1080 );
+    EXPECT_EQ( vic1->GetWidth(), 1920 );
 
-    EXPECT_EQ( vic2->GetHeight(), 0 );
-    EXPECT_EQ( vic2->GetWidth(), 0 );
+    EXPECT_EQ( vic2->GetHeight(), 720 );
+    EXPECT_EQ( vic2->GetWidth(), 1280 );
+}
+
+// ***********************
+// VideoOutput in config has output id, that isn't linked to any output channel.
+// Output shouldn't be created.
+TEST( Engine_RenderChannels, RenderLogicInit_VideoOutput_ReferenceNotExistingChannel )
+{
+    BVConfig config( "TestConfigs/OutputsTests/ReferenceNotExistingChannel.xml" );
+
+    auto renderLogic = static_cast< RenderLogicImpl * >( RenderLogicInitializer::CreateInstance( config ) );
+    ASSERT_NE( renderLogic, nullptr );
+
+    OutputExtractor extractor( renderLogic );
+    auto & inputChannels = extractor.GetInputChannels();
+
+    // In xml two channels were specified, but only one was created.
+    ASSERT_EQ( inputChannels.GetNumVideoInputChannels(), 1 );
 }
 
 

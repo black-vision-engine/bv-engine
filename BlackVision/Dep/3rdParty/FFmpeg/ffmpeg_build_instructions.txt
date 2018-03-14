@@ -28,11 +28,14 @@ https://code.google.com/p/msinttypes/downloads/list
 
 3. Do obsługi PNG potrzebny jest zlib (http://www.zlib.net/):
 
-- skompilować źródła z wykomentowanym '#include <unistd.h>' w zconf.h
+- skompilować źródła
+    - Edit win32/Makefile.msc so that it uses -MT instead of -MD, since this is how FFmpeg is built as well. 
+    - Edit zconf.h and remove its inclusion of unistd.h. This gets erroneously included when building FFmpeg. 
+    - Run nmake -f win32/Makefile.msc (from Visual Studio Command Prompt)
 - dodać ścieżkę do zlib/include do INCLUDE (zmienna środowiskowa)
 - dodać ścieżkę do zlib/lib do LIB (zmienna środowiskowa)
 
-4. Z wiersza poleceń: uruchomić vcvarsall (z odpowiednią wersją w jakiej chce się zbudować FFmpega: x86/amd64) i msys2 shell.
+4. Z wiersza poleceń (Visual Studio Command Prompt): uruchomić vcvarsall (z odpowiednią wersją w jakiej chce się zbudować FFmpega: x86/amd64) i msys2 shell.
 
 	C:\Program Files (x86)\Microsoft Visual Studio X.0\VC\vcvarsall.bat amd64
 	C:\msys64\msys2_shell.bat

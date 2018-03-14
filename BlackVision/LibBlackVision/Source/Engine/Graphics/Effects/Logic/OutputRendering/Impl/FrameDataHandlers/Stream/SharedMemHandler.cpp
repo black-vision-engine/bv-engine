@@ -14,7 +14,7 @@ namespace bv {
    
 // **************************
 //
-SharedMemHandler::SharedMemHandler      ( unsigned int width, unsigned int height )
+SharedMemHandler::SharedMemHandler      ( const std::string & name, unsigned int width, unsigned int height )
     : m_width( width )
     , m_height( height )
     , m_mixChannelsEffect( nullptr )
@@ -23,7 +23,7 @@ SharedMemHandler::SharedMemHandler      ( unsigned int width, unsigned int heigh
     , m_shmTexture( nullptr )
     , m_shmVideoBuffer( nullptr )
 {
-    m_shmVideoBuffer = SharedMemoryVideoBuffer::Create( width, height, TextureFormat::F_A8R8G8B8 );
+    m_shmVideoBuffer = SharedMemoryVideoBuffer::Create( Convert::String2T< std::wstring >( name ), width, height, TextureFormat::F_A8R8G8B8 );
 
     m_mixChannelsEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_MIX_CHANNELS );
 }

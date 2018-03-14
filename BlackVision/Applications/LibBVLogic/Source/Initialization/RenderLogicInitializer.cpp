@@ -16,6 +16,8 @@
 #include "Assets/Input/Videoinput/VideoInputAudioAssetDesc.h"
 #include "Assets/Input/AudioInputAssetDesc.h"
 
+#include "Services/BVServiceProvider.h"
+
 #include "UseLoggerBVAppModule.h"
 
 
@@ -154,15 +156,25 @@ void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc
     // FIXME: nrl - implement it by reading cfg instance
     { cfg; }
     
-    desc.SetWidth( 1920 );
-    desc.SetHeight( 1080 );
-    // Uncomment to make it BUG crash
-    //desc.SetWidth( 1920 / 2 );
-    //desc.SetHeight( 1080 / 2 );
+    auto width = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Width" ), 1920 );
+    auto height = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Height" ), 1080 );
+    auto name = cfg.PropertyValue( "SharedMemory/Name" );
+
+    if( name.empty() )
+        name = "BV";
+
+    desc.SetWidth( width );
+    desc.SetHeight( height );
+
+    std::hash_map< std::string, std::string > prop;
+    prop[ "Name" ] = name;
+
+    desc.AccessOutputProperties().push_back( prop );
+    
     desc.SetOutputChannelMapping( OutputChannelMapping::OCM_RGBA );
     desc.SetRepresentedOutputType( CustomOutputType::COT_STREAM );
     desc.SetSelectedRenderedChannel( RenderChannelType::RCT_OUTPUT_1 );
-    desc.SetEnabled( false );
+    desc.SetEnabled( cfg.RenderToSharedMemory() );
 
     // FIXME: nrl - append additional properties if necessary
 }
@@ -217,6 +229,19 @@ void            RenderLogicInitializer::InitializeInputSlots    ( RenderLogic * 
     InitializeVideoInput( inputLogic, videoCardManager );
 }
 
+// ***********************
+//
+videocards::VideoOutputChannelDesc*         FindOutputDescriptor    ( videocards::OutputChannelsDescsVec & descs, videocards::VideoOutputID outID )
+{
+    for( int i = 0; i < descs.size(); ++i )
+    {
+        if( descs[ i ].GetOutputID() == outID )
+            return &descs[ i ];
+    }
+
+    return nullptr;
+}
+
 
 // *********************************
 //
@@ -235,6 +260,10 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
     
     auto & deser = cfg.GetNode( 2, "config", "RenderChannels" );
     
+    auto videoCardManager = BVServiceProvider::GetInstance().GetVideoCardManager();
+    auto channelsDescs = videoCardManager->GetOutputChannelsDescs();
+
+
     // We need to ingore duplicated entries.
     std::set< std::string > processedChannels;
 
@@ -257,12 +286,25 @@ void             RenderLogicInitializer::InitializeDefaultVid( OutputDesc & desc
 
                     do
                     {
-                        prop[ "outputID" ] = deser.GetAttribute( "id" );
-                        prop[ "width" ] = deser.GetAttribute( "width" );
-                        prop[ "height" ] = deser.GetAttribute( "height" );
+                        auto outputIDString = deser.GetAttribute( "id" );
+                        
+                        prop[ "outputID" ] = outputIDString;
                         prop[ "renderChannelID" ] = rdID;
 
-                        props.push_back( prop );
+                        auto outputID = Convert::String2T< videocards::VideoOutputID >( outputIDString );
+                        auto outDesc = FindOutputDescriptor( channelsDescs, outputID );
+                        if( outDesc )
+                        {
+                            prop[ "width" ] = Convert::T2String( outDesc->GetDataDesc().width );
+                            prop[ "height" ] = Convert::T2String( outDesc->GetDataDesc().height );
+
+                            props.push_back( prop );
+                        }
+                        else
+                        {
+                            LOG_MESSAGE( SeverityLevel::warning ) << "There's no video card channel linked to VideoOutput " << outputIDString;
+                        }
+
                     } while( deser.NextChild() );
 
                     deser.ExitChild(); // Output

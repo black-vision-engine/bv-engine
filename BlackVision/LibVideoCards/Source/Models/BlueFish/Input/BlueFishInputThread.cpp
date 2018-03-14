@@ -74,15 +74,16 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
     }
     else
     {
-        assert( m_prevAudio );
+        if( m_prevAudio )
+        {
+            // Copy second half of the buffer.
+            SizeType audioSize = m_prevAudio->m_desc.channels * m_prevAudio->m_desc.channelDepth * m_prevAudio->m_desc.numSamples / 2;
 
-        // Copy second half of the buffer.
-        SizeType audioSize = m_prevAudio->m_desc.channels * m_prevAudio->m_desc.channelDepth * m_prevAudio->m_desc.numSamples / 2;
+            if( audioSize )
+                memcpy( audioChunk->GetWritable(), m_prevAudio->m_pAudioBuffer + audioSize, audioSize );
 
-        if( audioSize )
-            memcpy( audioChunk->GetWritable(), m_prevAudio->m_pAudioBuffer + audioSize, audioSize );
-
-        m_prevAudio = nullptr;
+            m_prevAudio = nullptr;
+        }
     }
 
     m_odd = !m_odd;

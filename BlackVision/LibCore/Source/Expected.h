@@ -139,6 +139,10 @@ public:
         : ExpectedBase( bv::ExceptionPtr( new RuntimeException( reason ) ) )
     {}
 
+    Expected            ( bv::ExceptionPtr & error )
+        : ExpectedBase< Result, bv::ExceptionPtr >( error )
+    {}
+
     Expected ( const Expected & that )
         : ExpectedBase< Result, bv::ExceptionPtr >( that )
     {}
