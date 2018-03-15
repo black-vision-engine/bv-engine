@@ -41,7 +41,7 @@
 	</property>
 	
     <property name="SharedMemory">
-        <property name="Enable" value="false" />
+        <property name="Enable" value="true" />
         <property name="Name" value="BV" />
         <property name="Width" value="1920" />
         <property name="Height" value="1080" />
