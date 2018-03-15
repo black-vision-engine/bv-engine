@@ -11,9 +11,6 @@
 
 #include "UseLoggerBVAppModule.h"
 
-#define USE_READBACK_API
-//#define FULLSCREEN_MODE
-#define PERSPECTIVE_CAMERA
 
 
 namespace bv
@@ -26,7 +23,9 @@ namespace bv
 template< typename PropertyType >
 void            BVConfig::LoadPropertyValueOrSetDefault       ( const char * propertyPath, BVConfig::ConfigPropertyPtr< PropertyType > member, EntryType type )
 {
-    auto expPropValue = Convert::String2T< PropertyType >( m_properties[ propertyPath ] );
+    auto & propString = m_properties[ propertyPath ];
+    auto expPropValue = Convert::String2T< PropertyType >( propString );
+
     if( expPropValue.IsValid() )
     {
         this->*member = expPropValue.GetVal();
@@ -35,12 +34,34 @@ void            BVConfig::LoadPropertyValueOrSetDefault       ( const char * pro
     {
         if( type == EntryType::Required )
         {
-            LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [" << propertyPath << "], value [" << m_properties[ propertyPath ] << "]. Default value set.";
+            LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [" << propertyPath << "], value [" << propString << "]. Default value set.";
         }
 
         // If property is invalid we treat current value of field in member pointer as default.
         // Entry in m_properties mus be equal to default value.
         m_properties[ propertyPath ] = Convert::T2String( this->*member );
+    }
+}
+
+// ***********************
+//
+template<>
+void            BVConfig::LoadPropertyValueOrSetDefault< std::string >  ( const char * propertyPath, BVConfig::ConfigPropertyPtr< std::string > member, EntryType type )
+{
+    auto & propString = m_properties[ propertyPath ];
+
+    if( !propString.empty() )
+    {
+        this->*member = propString;
+    }
+    else
+    {
+        if( type == EntryType::Required )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [" << propertyPath << "], value [" << propString << "]. Default value set.";
+        }
+
+        m_properties[ propertyPath ] = this->*member;
     }
 }
 
@@ -73,11 +94,11 @@ void    BVConfig::InitDefaultConfiguration()
 
     m_windowMode = WindowMode::WINDOWED;
 
-    m_vsync = false;
-    m_rendererInput.m_DisableVerticalSync = true;
-    m_rendererInput.m_EnableGLFinish = false;
-    m_rendererInput.m_EnableGLFlush = false;
-    m_rendererInput.m_VerticalBufferFrameCount = 0;
+    m_vsync = true;
+    m_rendererInput.m_DisableVerticalSync = false;
+    m_rendererInput.m_EnableGLFinish = true;
+    m_rendererInput.m_EnableGLFlush = true;
+    m_rendererInput.m_VerticalBufferFrameCount = 1;
 
     m_rendererInput.m_WindowHandle = nullptr;
     m_rendererInput.m_PixelFormat = 0;
@@ -94,7 +115,7 @@ void    BVConfig::InitDefaultConfiguration()
     m_defaultFarClippingPlane = 100.f;
 
     m_defaultCameraPosition = glm::vec3( 0.f, 0.f, 5.f );
-    m_defaultCameraDirection = glm::vec3( 0.f , 0.f, 5.f );
+    m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 5.f );
     m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
 
     m_defaultStatsMovingAverageWindowSize = 500; //500
@@ -185,7 +206,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             }
             else
             {
-                LOG_MESSAGE( SeverityLevel::warning ) << "Invalid [Application/Window/Mode], value [" << m_properties[ "Application/Window/Mode" ] << "].";
+                LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [Application/Window/Mode], value [" << m_properties[ "Application/Window/Mode" ] << "].";
             }
 
             LoadPropertyValueOrSetDefault( "Application/Window/Size/Width", &BVConfig::m_defaultWindowWidth, EntryType::Required );

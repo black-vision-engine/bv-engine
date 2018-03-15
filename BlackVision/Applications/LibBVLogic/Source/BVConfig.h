@@ -187,7 +187,10 @@ private:
     using ConfigPropertyPtr = PropertyType ( BVConfig::* );
 
     template< typename PropertyType >
-    void            LoadPropertyValueOrSetDefault       ( const char * propertyPath, ConfigPropertyPtr< PropertyType > member, EntryType type );
+    void            LoadPropertyValueOrSetDefault                   ( const char * propertyPath, ConfigPropertyPtr< PropertyType > member, EntryType type );
+
+    template<>
+    void            LoadPropertyValueOrSetDefault< std::string >    ( const char * propertyPath, ConfigPropertyPtr< std::string > member, EntryType type );
 };
 
 #define DefaultConfig   BVConfig::Instance()
