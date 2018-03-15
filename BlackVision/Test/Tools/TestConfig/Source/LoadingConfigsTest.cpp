@@ -70,7 +70,7 @@ TEST( Tools_Config, Loading_EmptyEntries )
     EXPECT_EQ( config.SceneFromEnvName(), "" );
 
     EXPECT_EQ( config.UseDebugLayer(), false );
-    EXPECT_EQ( config.DebugFilePath(), "" );
+    EXPECT_EQ( config.DebugFilePath(), "Logs/" );
 
     EXPECT_EQ( config.OnFailedTexLoadBehavior(), "LoadChecker" );
 

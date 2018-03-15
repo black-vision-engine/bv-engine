@@ -90,7 +90,7 @@ void    BVConfig::InitDefaultConfiguration()
     m_sockerServerPort = 12345;
 
     m_useDebugLayer = false;
-    m_debugFilePath = "";
+    m_debugFilePath = "Logs/";
 
     m_windowMode = WindowMode::WINDOWED;
 
@@ -129,7 +129,7 @@ void    BVConfig::InitDefaultConfiguration()
     m_defaultClearColor = glm::vec4( 0.f, 0.f, 0.f, 0.f );
     m_defaultClearDepth = 1.0f;
 
-    m_defaultSceneEnvVarName = "";
+    m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
     m_sceneFromEnvName = "";
     m_loadSceneFromEnv = false;
     m_loadSceneFromProjectManager = "";
@@ -172,7 +172,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
 
         LoadPropertyValueOrSetDefault( "PMFolder", &BVConfig::m_pmFolder, EntryType::Required );
         LoadPropertyValueOrSetDefault( "FullScreen", &BVConfig::m_fullscreeMode, EntryType::Required );
-        LoadPropertyValueOrSetDefault( "USE_READBACK_API", &BVConfig::m_readbackOn, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "UseReadbackAPI", &BVConfig::m_readbackOn, EntryType::Required );
 
         LoadPropertyValueOrSetDefault( "SharedMemory/Enable", &BVConfig::m_renderToSharedMemory, EntryType::Required );
 
@@ -196,11 +196,11 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         }
         else
         {
-            if( m_properties[ "Application/Window/Mode" ] == "MULTIPLE_SCREENS" )
+            if( m_properties[ "Application/Window/Mode" ] == "MultipleScreens" )
             {
                 m_windowMode = WindowMode::MULTIPLE_SCREENS;
             }
-            else if( m_properties[ "Application/Window/Mode" ] == "WINDOWED" )
+            else if( m_properties[ "Application/Window/Mode" ] == "Windowed" )
             {
                 m_windowMode = WindowMode::WINDOWED;
             }
@@ -216,7 +216,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             LoadPropertyValueOrSetDefault( "Renderer/FrameBufferSize/Height", &BVConfig::m_defaultHeight, EntryType::Required );
         }
 
-        LoadPropertyValueOrSetDefault( "Application/VSYNC", &BVConfig::m_vsync, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Application/VSync", &BVConfig::m_vsync, EntryType::Required );
 
         LoadPropertyValueOrSetDefault( "Renderer/MaxFPS", &BVConfig::m_fps, EntryType::Required );
         LoadPropertyValueOrSetDefault( "Renderer/TimerFPS", &BVConfig::m_timerFPS, EntryType::Required );
@@ -231,7 +231,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
 
         LoadPropertyValueOrSetDefault( "Renderer/ClearColor", &BVConfig::m_defaultClearColor, EntryType::Required );
 
-        LoadPropertyValueOrSetDefault( "BV_DEFAULT_SCENE", &BVConfig::m_defaultSceneEnvVarName, EntryType::Required );
         LoadPropertyValueOrSetDefault( "Debug/SceneFromEnvName", &BVConfig::m_sceneFromEnvName, EntryType::Required );
         LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromEnv", &BVConfig::m_loadSceneFromEnv, EntryType::Required );
         LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromProjectManager", &BVConfig::m_loadSceneFromProjectManager, EntryType::Required );
