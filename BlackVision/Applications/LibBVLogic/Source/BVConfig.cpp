@@ -175,7 +175,6 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         }
 
         LoadPropertyValueOrSetDefault( "PMFolder", &BVConfig::m_pmFolder, EntryType::Required );
-        LoadPropertyValueOrSetDefault( "FullScreen", &BVConfig::m_fullscreeMode, EntryType::Required );
         LoadPropertyValueOrSetDefault( "UseReadbackAPI", &BVConfig::m_readbackOn, EntryType::Required );
 
         LoadPropertyValueOrSetDefault( "SharedMemory/Enable", &BVConfig::m_renderToSharedMemory, EntryType::Required );
@@ -223,6 +222,7 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             LoadPropertyValueOrSetDefault( "Renderer/FrameBufferSize/Height", &BVConfig::m_defaultHeight, EntryType::Required );
         }
 
+        LoadPropertyValueOrSetDefault( "Application/Window/FullScreen", &BVConfig::m_fullscreeMode, EntryType::Required );
         LoadPropertyValueOrSetDefault( "Application/VSync", &BVConfig::m_vsync, EntryType::Required );
 
         LoadPropertyValueOrSetDefault( "Renderer/MaxFPS", &BVConfig::m_fps, EntryType::Required );

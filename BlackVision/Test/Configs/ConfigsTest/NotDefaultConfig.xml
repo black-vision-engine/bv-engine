@@ -3,7 +3,6 @@
 	<property name="PMFolder" value="media/media/media" />
     <!-- <property name="PMFolder" value="D:\Production\Basketball\bv_media" /> -->
     
-	<property name="FullScreen" value="false" />
 	<property name="UseReadbackAPI" value="true" />
 	<property name="Resolution" value="SD" />
     
@@ -50,6 +49,7 @@
 	<property name="Application">
 		<property name="VSync" value="false" />
 		<property name="Window">
+            <property name="FullScreen" value="false" />
 			<property name="Mode" value="MultipleScreens" />
 			<property name="Size">
 				<property name="Width" value="300" />
