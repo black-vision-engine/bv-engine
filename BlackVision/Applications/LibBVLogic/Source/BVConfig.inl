@@ -283,4 +283,5 @@ inline const std::string &  BVConfig::OnFailedTexLoadBehavior   () const
     return m_onFailedTextureLoadBehavior;
 }
 
+
 } //bv

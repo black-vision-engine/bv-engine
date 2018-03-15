@@ -98,6 +98,7 @@ private:
 
     void                        InitDefaultConfiguration();
     void                        InitializeFromFile      ( const std::string & filePath );
+    void                        RecomputeDependentValues();
 
 public:
 
@@ -174,6 +175,19 @@ public:
 
     static BVConfig &           Instance  ();
 
+private:
+
+    enum class EntryType
+    {
+        Optional,
+        Required
+    };
+
+    template< typename PropertyType >
+    using ConfigPropertyPtr = PropertyType ( BVConfig::* );
+
+    template< typename PropertyType >
+    void            LoadPropertyValueOrSetDefault       ( const char * propertyPath, ConfigPropertyPtr< PropertyType > member, EntryType type );
 };
 
 #define DefaultConfig   BVConfig::Instance()

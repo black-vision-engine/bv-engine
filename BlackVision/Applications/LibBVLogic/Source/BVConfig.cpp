@@ -16,7 +16,34 @@
 #define PERSPECTIVE_CAMERA
 
 
-namespace bv {
+namespace bv
+{
+
+
+
+// ***********************
+//
+template< typename PropertyType >
+void            BVConfig::LoadPropertyValueOrSetDefault       ( const char * propertyPath, BVConfig::ConfigPropertyPtr< PropertyType > member, EntryType type )
+{
+    auto expPropValue = Convert::String2T< PropertyType >( m_properties[ propertyPath ] );
+    if( expPropValue.IsValid() )
+    {
+        this->*member = expPropValue.GetVal();
+    }
+    else
+    {
+        if( type == EntryType::Required )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [" << propertyPath << "], value [" << m_properties[ propertyPath ] << "]. Default value set.";
+        }
+
+        // If property is invalid we treat current value of field in member pointer as default.
+        // Entry in m_properties mus be equal to default value.
+        m_properties[ propertyPath ] = Convert::T2String( this->*member );
+    }
+}
+
 
 
 // *********************************
@@ -122,22 +149,19 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             m_deserializer.ExitChild();  // config
         }
 
-        m_defaultWidth = m_defaultWindowWidth = 1920;
-        m_defaultHeight = m_defaultWindowHeight = 1080;
+        LoadPropertyValueOrSetDefault( "PMFolder", &BVConfig::m_pmFolder, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "FullScreen", &BVConfig::m_fullscreeMode, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "USE_READBACK_API", &BVConfig::m_readbackOn, EntryType::Required );
 
-        m_pmFolder = m_properties[ "PMFolder" ];
-        m_fullscreeMode = Convert::String2T< bool >( m_properties[ "FullScreen" ], true );
-        m_isCameraPerspective = Convert::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
-        m_readbackOn = Convert::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Enable", &BVConfig::m_renderToSharedMemory, EntryType::Required );
 
-        m_renderToSharedMemory = Convert::String2T< bool >( m_properties[ "SharedMemory/Enable" ], false );
+        LoadPropertyValueOrSetDefault( "Audio/GlobalGain", &BVConfig::m_globalGain, EntryType::Required );
 
-        m_globalGain = Convert::String2T< Float32 >( m_properties[ "Audio/GlobalGain" ], 1.f );
+        LoadPropertyValueOrSetDefault( "Network/SocketServer/Port", &BVConfig::m_sockerServerPort, EntryType::Required );
 
-        m_sockerServerPort = Convert::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
+        LoadPropertyValueOrSetDefault( "Debug/CommandsDebugLayer/UseDebugLayer", &BVConfig::m_useDebugLayer, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "Debug/CommandsDebugLayer/FilePath", &BVConfig::m_debugFilePath, EntryType::Optional );
 
-        m_useDebugLayer = Convert::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );
-        m_debugFilePath = m_properties[ "Debug/CommandsDebugLayer/FilePath" ];
 
         if( m_properties[ "Resolution" ] == "SD" )
         {
@@ -155,72 +179,76 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             {
                 m_windowMode = WindowMode::MULTIPLE_SCREENS;
             }
-            else
+            else if( m_properties[ "Application/Window/Mode" ] == "WINDOWED" )
             {
                 m_windowMode = WindowMode::WINDOWED;
             }
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "Invalid [Application/Window/Mode], value [" << m_properties[ "Application/Window/Mode" ] << "].";
+            }
 
-            m_defaultWindowWidth = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Width" ], m_defaultWidth );
-            m_defaultWindowHeight = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Height" ], m_defaultHeight );
+            LoadPropertyValueOrSetDefault( "Application/Window/Size/Width", &BVConfig::m_defaultWindowWidth, EntryType::Required );
+            LoadPropertyValueOrSetDefault( "Application/Window/Size/Height", &BVConfig::m_defaultWindowHeight, EntryType::Required );
 
-            m_defaultWidth = Convert::String2T< Int32 >( m_properties[ "Renderer/FrameBufferSize/Width" ], m_defaultWidth );
-            m_defaultHeight = Convert::String2T< Int32 >( m_properties[ "Renderer/FrameBufferSize/Height" ], m_defaultHeight );
+            LoadPropertyValueOrSetDefault( "Renderer/FrameBufferSize/Width", &BVConfig::m_defaultWidth, EntryType::Required );
+            LoadPropertyValueOrSetDefault( "Renderer/FrameBufferSize/Height", &BVConfig::m_defaultHeight, EntryType::Required );
         }
 
-        m_vsync = Convert::String2T< bool >( m_properties[ "Application/VSYNC" ], true );
-        if( m_vsync )
-        {
-            m_rendererInput.m_DisableVerticalSync = false;
-            m_rendererInput.m_EnableGLFinish = true;
-            m_rendererInput.m_EnableGLFlush = true;
-            m_rendererInput.m_VerticalBufferFrameCount = 1;
-        }
-        else
-        {
-            m_rendererInput.m_DisableVerticalSync = true;
-            m_rendererInput.m_EnableGLFinish = false;
-            m_rendererInput.m_EnableGLFlush = false;
-            m_rendererInput.m_VerticalBufferFrameCount = 0;
-        }
+        LoadPropertyValueOrSetDefault( "Application/VSYNC", &BVConfig::m_vsync, EntryType::Required );
 
-        m_rendererInput.m_WindowHandle = nullptr;
-        m_rendererInput.m_PixelFormat = 0;
-        m_rendererInput.m_RendererDC = 0;
+        LoadPropertyValueOrSetDefault( "Renderer/MaxFPS", &BVConfig::m_fps, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Renderer/TimerFPS", &BVConfig::m_timerFPS, EntryType::Required );
 
-        m_fps = Convert::String2T< Int32 >( m_properties[ "Renderer/MaxFPS" ], 60 );
-        m_frameTimeMillis = 1000 / m_fps;
-        m_timerFPS = Convert::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
+        LoadPropertyValueOrSetDefault( "Application/Events/MaxLoopUpdateTime", &BVConfig::m_eventLoopUpdateMillis, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Application/Events/EnableLockingQueue", &BVConfig::m_enableQueueLocking, EntryType::Optional );
 
-        m_eventLoopUpdateMillis = Convert::String2T< UInt32 >( m_properties[ "Application/Events/MaxLoopUpdateTime" ], m_eventLoopUpdateMillis );
-        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/Events/EnableLockingQueue" ], false );
+        LoadPropertyValueOrSetDefault( "Camera/IsPerspective", &BVConfig::m_isCameraPerspective, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Camera/FOV", &BVConfig::m_defaultFOV, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Camera/Position", &BVConfig::m_defaultCameraPosition, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Camera/Direction", &BVConfig::m_defaultCameraDirection, EntryType::Required );
 
-        m_defaultFOV = Convert::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
+        LoadPropertyValueOrSetDefault( "Renderer/ClearColor", &BVConfig::m_defaultClearColor, EntryType::Required );
 
-        m_defaultCameraPosition = glm::vec3( Convert::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
-        m_defaultCameraDirection = glm::vec3( Convert::String2T< Float32 >( m_properties[ "camera/direction/x" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
-        m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
+        LoadPropertyValueOrSetDefault( "BV_DEFAULT_SCENE", &BVConfig::m_defaultSceneEnvVarName, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Debug/SceneFromEnvName", &BVConfig::m_sceneFromEnvName, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromEnv", &BVConfig::m_loadSceneFromEnv, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromProjectManager", &BVConfig::m_loadSceneFromProjectManager, EntryType::Required );
 
-        m_defaultClearColor = glm::vec4( Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
-        m_defaultClearDepth = 1.0f;
+        LoadPropertyValueOrSetDefault( "Plugins/Textures/OnFailedLoadBehavior", &BVConfig::m_onFailedTextureLoadBehavior, EntryType::Required );
 
-        m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
-        m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
-        m_loadSceneFromEnv = Convert::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
-        m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
-
-        m_onFailedTextureLoadBehavior = m_properties[ "Plugins/Textures/OnFailedLoadBehavior" ];
+        RecomputeDependentValues();
     }
     else
     {
         LOG_MESSAGE( SeverityLevel::warning ) << "Config file [" << filePath << "] doesn't exist. Loading default configuration.";
     }
+}
+
+// ***********************
+//
+void                    BVConfig::RecomputeDependentValues  ()
+{
+    if( m_vsync )
+    {
+        m_rendererInput.m_DisableVerticalSync = false;
+        m_rendererInput.m_EnableGLFinish = true;
+        m_rendererInput.m_EnableGLFlush = true;
+        m_rendererInput.m_VerticalBufferFrameCount = 1;
+    }
+    else
+    {
+        m_rendererInput.m_DisableVerticalSync = true;
+        m_rendererInput.m_EnableGLFinish = false;
+        m_rendererInput.m_EnableGLFlush = false;
+        m_rendererInput.m_VerticalBufferFrameCount = 0;
+    }
+
+    m_rendererInput.m_WindowHandle = nullptr;
+    m_rendererInput.m_PixelFormat = 0;
+    m_rendererInput.m_RendererDC = 0;
+
+    m_frameTimeMillis = 1000 / m_fps;
 }
 
 
