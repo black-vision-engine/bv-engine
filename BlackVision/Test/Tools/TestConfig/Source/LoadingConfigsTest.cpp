@@ -31,6 +31,9 @@ TEST( Tools_Config, Loading_NotDefaultValues )
     EXPECT_EQ( config.ClearColor(), glm::vec4( 0.5, 0.5, 0.5, 0.5 ) );
 
     EXPECT_EQ( config.RenderToSharedMemory(), true );
+    EXPECT_EQ( config.SharedMemoryHeight(), 123 );
+    EXPECT_EQ( config.SharedMemoryWidth(), 123 );
+    EXPECT_EQ( config.SharedMemoryBufferName(), "BV-bla" );
 
     EXPECT_EQ( config.GetRendererInput().m_DisableVerticalSync, true );
     EXPECT_EQ( config.GetRendererInput().m_EnableGLFinish, false );
@@ -81,6 +84,9 @@ TEST( Tools_Config, Loading_EmptyEntries )
     EXPECT_EQ( config.ClearColor(), glm::vec4( 0.0, 0.0, 0.0, 0.0 ) );
 
     EXPECT_EQ( config.RenderToSharedMemory(), false );
+    EXPECT_EQ( config.SharedMemoryHeight(), 1080 );
+    EXPECT_EQ( config.SharedMemoryWidth(), 1920 );
+    EXPECT_EQ( config.SharedMemoryBufferName(), "BV" );
 
     EXPECT_EQ( config.GetRendererInput().m_DisableVerticalSync, false );
     EXPECT_EQ( config.GetRendererInput().m_EnableGLFinish, true );

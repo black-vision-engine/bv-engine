@@ -50,8 +50,12 @@ private:
     bool            m_fullscreeMode;
     bool            m_readbackOn;
     bool            m_isCameraPerspective;
-	bool			m_renderToSharedMemory;
     bool            m_vsync;
+    bool			m_renderToSharedMemory;
+
+    std::string     m_shmName;
+    UInt32          m_shmWidth;
+    UInt32          m_shmHeight;
 
 	Float32         m_globalGain;
 
@@ -123,7 +127,11 @@ public:
 	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
     inline bool                 IsCameraPerspactive     () const;
+
 	inline bool                 RenderToSharedMemory    () const;
+    inline UInt32               SharedMemoryWidth       () const;
+    inline UInt32               SharedMemoryHeight      () const;
+    inline const std::string &  SharedMemoryBufferName  () const;
 
 	inline Float32				GlobalGain				() const;
 

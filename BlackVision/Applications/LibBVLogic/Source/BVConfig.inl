@@ -73,6 +73,27 @@ inline bool     BVConfig::RenderToSharedMemory                   () const
     return m_renderToSharedMemory;
 }
 
+// ***********************
+//
+inline UInt32   BVConfig::SharedMemoryWidth                     () const
+{
+    return m_shmWidth;
+}
+
+// ***********************
+//
+inline UInt32   BVConfig::SharedMemoryHeight                    () const
+{
+    return m_shmHeight;
+}
+
+// ***********************
+//
+inline const std::string &  BVConfig::SharedMemoryBufferName    () const
+{
+    return m_shmName;
+}
+
 // *********************************
 //
 inline Float32  BVConfig::GlobalGain							() const

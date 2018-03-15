@@ -83,7 +83,11 @@ void    BVConfig::InitDefaultConfiguration()
     m_fullscreeMode = false;
     m_isCameraPerspective = true;
     m_readbackOn = false;
+
     m_renderToSharedMemory = false;
+    m_shmName = "BV";
+    m_shmWidth = 1920;
+    m_shmHeight = 1080;
 
     m_globalGain = 1.f;
 
@@ -175,6 +179,9 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         LoadPropertyValueOrSetDefault( "UseReadbackAPI", &BVConfig::m_readbackOn, EntryType::Required );
 
         LoadPropertyValueOrSetDefault( "SharedMemory/Enable", &BVConfig::m_renderToSharedMemory, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Name", &BVConfig::m_shmName, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Width", &BVConfig::m_shmWidth, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Height", &BVConfig::m_shmHeight, EntryType::Required );
 
         LoadPropertyValueOrSetDefault( "Audio/GlobalGain", &BVConfig::m_globalGain, EntryType::Required );
 
