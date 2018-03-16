@@ -56,4 +56,13 @@ TEST( Tools_Config, Saving_SaveLoadCompare )
     EXPECT_EQ( config.CameraDirection(), loadSavedConfig.CameraDirection() );
     EXPECT_EQ( config.FOV(), loadSavedConfig.FOV() );
 
+    auto & deser = config.GetNode( 1, "config" );
+
+    bool enterRenderChannel = deser.EnterChild( "RenderChannels" );
+    EXPECT_TRUE( enterRenderChannel );
+    if( enterRenderChannel ) deser.ExitChild();
+
+    bool enterVideocards = deser.EnterChild( "videocards" );
+    EXPECT_TRUE( enterVideocards );
+    if( enterVideocards ) deser.ExitChild();
 }
