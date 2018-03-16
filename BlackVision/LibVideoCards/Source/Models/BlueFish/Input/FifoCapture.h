@@ -51,6 +51,7 @@ public:
 	BLUE_UINT32		m_nUpdateFormat;
 	BLUE_UINT32		m_nMemoryFormat;
 	BLUE_UINT32		m_InvalidVideoModeFlag;
+    BLUE_UINT32     m_videoChannel;
 	ULONG			GoldenSize;
 	ULONG			BytesPerLine;
 	CFifoBuffer*	m_pFifoBuffer;

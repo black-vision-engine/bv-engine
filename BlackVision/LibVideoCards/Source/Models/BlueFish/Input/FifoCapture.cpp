@@ -5,6 +5,7 @@
 #include <process.h>
 
 #include "Serialization/ConversionHelper.h"
+#include "UseLoggerVideoModule.h"
 
 
 namespace bv {
@@ -95,6 +96,7 @@ ReturnResult            CFifoCapture::Init      ( BLUE_INT32 CardNumber, BLUE_UI
 	m_pSDK->QueryCardProperty(INVALID_VIDEO_MODE_FLAG, varVal);
 	m_InvalidVideoModeFlag = varVal.ulVal;
 	
+    m_videoChannel = VideoChannel;
 	varVal.ulVal = VideoChannel;
 	m_pSDK->SetCardProperty(DEFAULT_VIDEO_INPUT_CHANNEL, varVal);
 
@@ -310,6 +312,11 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
         bool odd = ScheduleID & 0x1;
 
         pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
+
+        if( LastFieldCount + 1 != CurrentFieldCount )
+        {
+            LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish input channel " + Convert::T2String( (ChannelName)pThis->m_videoChannel );
+        }
 
         if( !odd  )
             pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image_HANC( ScheduleID ), 0 );
