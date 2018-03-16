@@ -110,6 +110,9 @@ public:
                                 ~BVConfig               ();
 
     void                        SaveConfig              ( std::string path = "" ) const;
+    void                        SaveProperties          ( ISerializer & ser ) const;
+    void                        SaveRenderChannels      ( ISerializer & ser ) const;
+    void                        SaveVideoCards          ( ISerializer & ser ) const;
 
     const std::string &         PropertyValue           ( const std::string & key ) const;
     void                        SetPropertyValue        ( const std::string & key, const std::string & value );

@@ -7,7 +7,7 @@ using namespace bv;
 
 
 // ***********************
-//
+// FIXME: compare render channels and videocards entries.
 TEST( Tools_Config, Saving_SaveLoadCompare )
 {
     BVConfig config( "TestConfigs/ConfigsTest/NotDefaultConfig.xml" );

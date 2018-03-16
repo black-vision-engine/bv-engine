@@ -4,6 +4,8 @@
 
 #include <functional>
 
+#include "IO/DirIO.h"
+
 #include "Serialization/XML/XMLSerializer.h"
 #include "Serialization/SerializationHelper.inl"
 
@@ -312,119 +314,6 @@ const IDeserializer &  BVConfig::GetNode                    ( int count, ... ) c
 
 // *********************************
 //
-//SizeType             BVConfig::GetNumRenderChannels    () const
-//{
-//    m_deserializer.Reset();
-//
-//    SizeType i = 0;
-//
-//    if( m_deserializer.EnterChild( "config" ) &&
-//        m_deserializer.EnterChild( "videocards" ) &&
-//        m_deserializer.EnterChild( "RenderChannels" )
-//       )
-//    {
-//        m_deserializer.EnterChild( "RenderChannel" );
-//
-//        do
-//        {
-//            if( m_deserializer.GetName() == "RenderChannel" )
-//                i++;
-//        }
-//        while( m_deserializer.NextChild() );
-//    }
-//
-//    return i;
-//}
-//
-//// *********************************
-////
-//SizeType             BVConfig::GetNumOutputs           ( const std::string & rcID ) const
-//{
-//    m_deserializer.Reset();
-//
-//    SizeType numOfOutputs = 0;
-//    SizeType i = 0;
-//
-//    if( m_deserializer.EnterChild( "config" ) && m_deserializer.EnterChild( "RenderChannels" ) )
-//    {
-//        do
-//        {
-//            if( !m_deserializer.EnterChild( "RenderChannel" ) || !m_deserializer.ExitChild() )
-//            {
-//                return 0;
-//            }
-//        }
-//        while( m_deserializer.NextChild() && i < rcIdx );
-//
-//        if( m_deserializer.EnterChild( "RenderChannel" ) )
-//        {
-//            do
-//            {
-//                if( m_deserializer.EnterChild( "Output" ) && m_deserializer.ExitChild() )
-//                {
-//                    numOfOutputs++;
-//                }
-//            }
-//            while( m_deserializer.NextChild() );
-//
-//            m_deserializer.ExitChild(); // RenderChannel
-//        }
-//
-//        m_deserializer.ExitChild(); // RenderChannels
-//        m_deserializer.ExitChild(); // config
-//    }
-//
-//    return numOfOutputs;
-//}
-//
-//// *********************************
-////
-//std::vector< BVConfig::KVMap >      BVConfig::GetOutputsProp          ( const std::string & rcID ) const
-//{
-//    m_deserializer.Reset();
-//
-//    std::vector< BVConfig::KVMap > properties;
-//
-//    if( m_deserializer.EnterChild( "config" ) &&
-//        m_deserializer.EnterChild( "videocards" ) && 
-//        m_deserializer.EnterChild( "RenderChannels" ) )
-//    {
-//        m_deserializer.EnterChild( "RenderChannel" );
-//        do
-//        {
-//            if( m_deserializer.GetName() == "RenderChannel" )
-//            {
-//                if( m_deserializer.GetAttribute( "id" ) == rcID )
-//                {
-//                    if( m_deserializer.EnterChild( "Output" ) )
-//                    {
-//                        do
-//                        {
-//                            BVConfig::KVMap p;
-//                            p[ "id" ] = m_deserializer.GetAttribute( "id" );
-//                            p[ "width" ] = m_deserializer.GetAttribute( "width" );
-//                            p[ "height" ] = m_deserializer.GetAttribute( "height" );
-//
-//                            properties.push_back( p );
-//                        }
-//                        while( m_deserializer.NextChild() );
-//
-//                        m_deserializer.ExitChild();
-//                    }
-//                }
-//            }
-//
-//        }
-//        while( m_deserializer.NextChild() );
-//        
-//        m_deserializer.ExitChild(); // RenderChannel
-//    }
-//
-//    return properties;
-//}
-
-// *********************************
-//
 BVConfig::~BVConfig                     ()
 {
 }
@@ -480,57 +369,98 @@ UInt32                  FindCommonPathPart              ( StringVector & path1, 
 //
 void                    BVConfig::SaveConfig            ( std::string path ) const
 {
-    if( /*Path::Exists( path )*/ true )
+    Path configPath( path );
+    if( Dir::CreateDir( configPath.ParentPath().Str(), true ) )
     {
         XMLSerializer ser( nullptr );
 
         ser.EnterChild( "config" );
 
-        UInt32 prevNesting = 0;
-        StringVector prevPath;
-
-        // We use fact, that properties are sorted in map.
-        for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
-        {
-            Path propPath = iter->first;
-            StringVector curPath = propPath.Split();
-
-            // Find common part of path.
-            UInt32 eqNesting = FindCommonPathPart( prevPath, curPath );
-
-            // In previous interation we were more nested in serializer.
-            if( prevNesting > eqNesting )
-            {
-                UInt32 numExits = prevNesting - eqNesting;
-                while( numExits > 0 )
-                {
-                    ser.ExitChild();
-                    numExits--;
-                }
-            }
-
-            // We must EnterChild beginning from eqNesting index in curPath vector.
-            UInt32 nesting = eqNesting;
-            UInt32 maxNesting = (UInt32)curPath.size() - 1;
-            while( nesting <= maxNesting )
-            {
-                ser.EnterChild( "property" );
-                ser.SetAttribute( "name", curPath[ nesting ] );
-
-                nesting++;
-            }
-
-            prevNesting = nesting;
-
-            // We are in leaf of properties tree. Set Value.
-            ser.SetAttribute( "value", iter->second );
-
-            prevPath = curPath;
-        }
+        SaveProperties( ser );
+        SaveRenderChannels( ser );
+        SaveVideoCards( ser );
 
         ser.ExitChild();  // config
 
         ser.Save( path );
+    }
+}
+
+// ***********************
+//
+void                    BVConfig::SaveProperties        ( ISerializer & ser ) const
+{
+    UInt32 prevNesting = 0;
+    StringVector prevPath;
+
+    // We use fact, that properties are sorted in map.
+    for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
+    {
+        Path propPath = iter->first;
+        StringVector curPath = propPath.Split();
+
+        // Find common part of path.
+        UInt32 eqNesting = FindCommonPathPart( prevPath, curPath );
+
+        // In previous interation we were more nested in serializer.
+        if( prevNesting > eqNesting )
+        {
+            UInt32 numExits = prevNesting - eqNesting;
+            while( numExits > 0 )
+            {
+                ser.ExitChild();
+                numExits--;
+            }
+        }
+
+        // We must EnterChild beginning from eqNesting index in curPath vector.
+        UInt32 nesting = eqNesting;
+        UInt32 maxNesting = ( UInt32 )curPath.size() - 1;
+        while( nesting <= maxNesting )
+        {
+            ser.EnterChild( "property" );
+            ser.SetAttribute( "name", curPath[ nesting ] );
+
+            nesting++;
+        }
+
+        prevNesting = nesting;
+
+        // We are in leaf of properties tree. Set Value.
+        ser.SetAttribute( "value", iter->second );
+
+        prevPath = curPath;
+    }
+
+    // Exit nesting.
+    while( prevNesting > 0 )
+    {
+        ser.ExitChild();
+        prevNesting--;
+    }
+}
+
+// ***********************
+//
+void                    BVConfig::SaveRenderChannels    ( ISerializer & ser ) const
+{
+    auto & rcDeser = GetNode( 1, "config" );
+    if( rcDeser.EnterChild( "RenderChannels" ) )
+    {
+        ser.AttachBranch( "RenderChannels", &rcDeser );
+        rcDeser.ExitChild();
+    }
+}
+
+// ***********************
+//
+void                    BVConfig::SaveVideoCards        ( ISerializer & ser ) const
+{
+    auto & rcDeser = GetNode( 1, "config" );
+    if( rcDeser.EnterChild( "videocards" ) )
+    {
+        ser.AttachBranch( "videocards", &rcDeser );
+        rcDeser.ExitChild();
     }
 }
 
