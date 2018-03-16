@@ -1,32 +1,32 @@
 <config>
 
-	<property name="PMFolder" value="C:/Users/Witek/Dysk Google/bv_data/bv_media/" />
+	<property name="PMFolder" value="media/media/media" />
     <!-- <property name="PMFolder" value="D:\Production\Basketball\bv_media" /> -->
     
 	<property name="UseReadbackAPI" value="true" />
-	<property name="Resolution" value="HD" />
+	<property name="Resolution" value="SD" />
     
 	<property name="Debug">
-		<property name="LoadSceneFromEnv" value="false" />
-        <property name="LoadSceneFromProjectManager" value="" />
+		<property name="LoadSceneFromEnv" value="true" />
+        <property name="LoadSceneFromProjectManager" value="PM-scene.scn" />
 		<property name="SceneFromEnvName" value="TWO_TEXTURED_RECTANGLES" />
 
         <property name="CommandsDebugLayer">
-            <property name="UseDebugLayer" value="false" />
+            <property name="UseDebugLayer" value="true" />
             <property name="FilePath" value="../../../../Logs/" />
         </property>		
 	</property>
     
     <property name="Plugins" >
         <property name="Textures" >
-            <property name="OnFailedLoadBehavior" value="LoadChecker" />
+            <property name="OnFailedLoadBehavior" value="LoadTransparent" />
         </property>
     </property>
-	
-    <property name="Audio" >
-        <property name="GlobalGain" value="1.0" />
-    </property>
     
+    <property name="Audio" >
+        <property name="GlobalGain" value="0.5" />
+    </property>
+	
 	<property name="Renderer">
 		<property name="MaxFPS" value="5000" />
 		<property name="TimerFPS" value="50" />
@@ -36,31 +36,30 @@
             <property name="Height" value="600" />
         </property>
         
-        <property name="ClearColor" value="0,0,0,0" />
-        
+		<property name="ClearColor" value="0.5,0.5,0.5,0.5" />
 	</property>
 	
     <property name="SharedMemory">
         <property name="Enable" value="true" />
-        <property name="Name" value="BV" />
-        <property name="Width" value="1920" />
-        <property name="Height" value="1080" />
+        <property name="Name" value="BV-bla" />
+        <property name="Width" value="123" />
+        <property name="Height" value="123" />
     </property>
 	
 	<property name="Application">
 		<property name="VSync" value="false" />
 		<property name="Window">
             <property name="FullScreen" value="false" />
-			<property name="Mode" value="Windowed" />        <!-- rodzaj wyswietlanego okienka MultipleScreens|Windowed -->
+			<property name="Mode" value="MultipleScreens" />
 			<property name="Size">
-				<property name="Width" value="1920" />
-				<property name="Height" value="1080" />
+				<property name="Width" value="300" />
+				<property name="Height" value="400" />
 			</property>
 		</property>
         
         <property name="Events" >
-            <property name="MaxLoopUpdateTime" value="20" />
-            <property name="EnableLockingQueue" value="false" />
+            <property name="MaxLoopUpdateTime" value="40" />
+            <property name="EnableLockingQueue" value="true" />
         </property>
 	</property>
 	
@@ -69,41 +68,36 @@
 			<property name="Port" value="11011" />
 		</property>
 	</property>
-    
+	
 	<property name="Camera">
-        <property name="IsPerspective" value="true" />
+        <property name="IsPerspective" value="false" />
 		<property name="FOV" value="60" />
-		<property name="Position" value="0,0,5" />
-		<property name="Direction" value="0,0,-1" />
+		<property name="Position" value="1,1,4" />
+		<property name="Direction" value="0.5,0.5,-1.0" />
 	</property>
-
+	
     <videocards>
-        <videocard name="FakeVideoCard" deviceID="1">
+        <videocard name="BlueFish" deviceID="1" >
             <channels>
-                <channel name="A" >
-                    <output linkedVideoOutput="0" type="FILL_KEY" width="1920" height="1080" />
-				</channel>
                 <channel name="B" >
-                    <output linkedVideoOutput="1" type="FILL_KEY" width="1920" height="1080" />
+                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="576" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
 				</channel>
-                <channel name="C" >
-                    <output linkedVideoOutput="2" type="FILL" width="1280" height="720" />
+				<channel name="A" >
+                    <input linkedVideoInput="0" type="FILL" resolution="576" />
 				</channel>
             </channels>
         </videocard>
     </videocards>
-	
-	
+
 	<RenderChannels>
+	
         <RenderChannel id="0" enabled="true" >
-            <VideoOutput id="0" />
-            <VideoOutput id="2" />
-        </RenderChannel>
+		</RenderChannel>
+		
         <RenderChannel id="1" enabled="false" />
         <RenderChannel id="2" enabled="false" />
         <RenderChannel id="3" enabled="false" />
     </RenderChannels>
 	
 </config>
-
 
