@@ -153,9 +153,6 @@ void             RenderLogicInitializer::InitializeDefaultPrv( OutputDesc & desc
 //
 void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc, const BVConfig & cfg )
 {
-    // FIXME: nrl - implement it by reading cfg instance
-    { cfg; }
-    
     auto width = cfg.SharedMemoryWidth();
     auto height = cfg.SharedMemoryHeight();
     auto name = cfg.SharedMemoryBufferName();
