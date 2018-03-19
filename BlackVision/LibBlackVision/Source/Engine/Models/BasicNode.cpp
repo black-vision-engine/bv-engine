@@ -122,6 +122,9 @@ void                            BasicNode::Serialize               ( ISerializer
     if( context->detailedInfo )
         ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
+    if( context->inludeUIDs )
+        ser.SetAttribute( "id", Convert::T2String( m_id ) );
+
     //if( context->detailedInfo )
     //{
     //    GetAssetsWithUIDs( *context->GetAssets(), this );
