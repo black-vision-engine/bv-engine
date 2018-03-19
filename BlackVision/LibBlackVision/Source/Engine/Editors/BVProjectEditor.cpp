@@ -1495,8 +1495,11 @@ bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, con
 {
     if( node )
     {
-        QueryTyped( node )->SetName( newNodeName );
-        return true;
+        if( IsValidNodeName( newNodeName ) )
+        {
+            QueryTyped( node )->SetName( newNodeName );
+            return true;
+        }
     }
 
     return false;
@@ -2415,6 +2418,21 @@ bool				    BVProjectEditor::IsTimelineEditable     ( const model::ITimeEvaluato
         return false; //editing scene timeline & default is not allowed
     }
     return true;
+}
+
+// ***********************
+/// Node name can't contain:
+/// - # used in indexed paths
+/// - @ used in uid paths
+bool                    BVProjectEditor::IsValidNodeName        ( const std::string & name )
+{
+    if( std::find( name.begin(), name.end(), '#' ) != name.end() )
+        return false;
+
+    if( std::find( name.begin(), name.end(), '@' ) != name.end() )
+        return false;
+
+    return false;
 }
 
 // ***********************

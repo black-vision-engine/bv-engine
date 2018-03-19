@@ -32,6 +32,9 @@
     <ClCompile Include="..\..\..\Source\NodesTests\TestNodeUIDs.cpp">
       <Filter>NodesTests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\NodesTests\TestNodeRename.cpp">
+      <Filter>NodesTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
