@@ -133,3 +133,37 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, UIDs_GetNode_SelfUID )
 }
 
 
+// ========================================================================= //
+// GetNode using uid in path
+// ========================================================================= //
+
+// ***********************
+//
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, UIDs_GetNode_PathWithUID )
+{
+    auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
+    CreateOneScene( editor );
+
+    auto node = editor->GetNode( "FirstScene", "root/Group1/Child2" );
+    auto searchedUID = node->GetUID();
+
+    std::string uidPath = "@" + Convert::T2String( searchedUID );
+    auto foundNode = editor->GetNode( "FirstScene", uidPath );
+
+    EXPECT_EQ( foundNode, node );
+}
+
+// ***********************
+// GetNode should return nullptr if we will pass not existing id.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, UIDs_GetNode_InvalidUID )
+{
+    auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
+    CreateOneScene( editor );
+
+    std::string uidPath = "@" + Convert::T2String( IDGenerator::Instance().GetID() );
+    auto foundNode = editor->GetNode( "FirstScene", uidPath );
+
+    EXPECT_EQ( foundNode, nullptr );
+}
+
+

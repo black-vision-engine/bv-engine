@@ -161,6 +161,13 @@ public:
     @return Returns parsed index or -1 if string didn't match the pattern. */
     static Int32                            TryParseIndex           ( std::string & str, const char escapeChar = '#' );
 
+    /**@brief Check if path string contains node uid instead of adress.*/
+    static bool                             IsPathWithUID           ( const std::string & path, const char escapeChar = '@' );
+
+
+    /**@brief Parses path to extract UID.*/
+    static Expected< UniqueID >             TryParseUID             ( const std::string & path, const char escapeChar = '@' );
+
 public:
 
     friend class ModelAccessors;

@@ -275,6 +275,16 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
         return shared_from_this();
     }
 
+    if( IsPathWithUID( childPath ) )
+    {
+        auto expUID = TryParseUID( childPath );
+        
+        if( expUID.IsValid() )
+            return GetNode( expUID.GetVal() );
+
+        return nullptr;
+    }
+
     auto childName = SplitPrefix( childPath, separator );
     auto childIdx = TryParseIndex( childName );
         
@@ -903,6 +913,32 @@ Int32                               BasicNode::TryParseIndex            ( std::s
     }
 
     return -1;
+}
+
+// ***********************
+/// @todo Maybe we should ignore whitespaces.
+bool                                BasicNode::IsPathWithUID            ( const std::string & path, const char escapeChar )
+{
+    if( !path.empty() )
+    {
+        if( path[ 0 ] == escapeChar )
+            return true;
+    }
+
+    return false;
+}
+
+// ***********************
+//
+Expected< UniqueID >                BasicNode::TryParseUID              ( const std::string & path, const char escapeChar )
+{
+    if( path.length() > 1 && path[ 0 ] == escapeChar )
+    {
+        std::string uidString( path.begin() + 1, path.end() );
+        return Convert::String2T< UniqueID >( uidString );
+    }
+
+    return Expected< UniqueID >();
 }
 
 } // model
