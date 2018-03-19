@@ -33,3 +33,13 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, Rename_UIDPrefixInName )
     EXPECT_FALSE( editor->RenameNode( node, "bla@bla" ) );
 }
 
+// ***********************
+// Can't add node with invalid name.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, AddNodeWithInvalidName )
+{
+    auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
+    CreateOneScene( editor );
+
+    EXPECT_FALSE( editor->AddChildNode( "FirstScene", "root/Group1", "bla@bla" ) );
+}
+

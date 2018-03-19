@@ -450,11 +450,16 @@ void    BVProjectEditor::DeleteSceneRootNode	    ( model::SceneModelPtr modelSce
 //
 bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName, bool enableUndo )
 {
-    auto newNode = model::BasicNode::Create( newNodeName, nullptr );
-    auto parentNode = GetNode( sceneName, parentPath );
-    auto scene = m_project->GetModelScene( sceneName );
+    if( IsValidNodeName( newNodeName ) )
+    {
+        auto newNode = model::BasicNode::Create( newNodeName, nullptr );
+        auto parentNode = GetNode( sceneName, parentPath );
+        auto scene = m_project->GetModelScene( sceneName );
 
-    return AddChildNode( scene, parentNode, newNode, enableUndo );
+        return AddChildNode( scene, parentNode, newNode, enableUndo );
+    }
+
+    return false;
 }
 
 // *******************************
@@ -2432,7 +2437,7 @@ bool                    BVProjectEditor::IsValidNodeName        ( const std::str
     if( std::find( name.begin(), name.end(), '@' ) != name.end() )
         return false;
 
-    return false;
+    return true;
 }
 
 // ***********************
