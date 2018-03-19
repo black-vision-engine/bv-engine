@@ -116,3 +116,20 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, UIDs_GetNestedChild_NotRec
     auto foundNode = root->GetNode( searchedUID, false );
     EXPECT_EQ( foundNode, nullptr );
 }
+
+// ***********************
+// Call GetNode with UID of node, which is called. Node should return pointer to itself.
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node, UIDs_GetNode_SelfUID )
+{
+    auto editor = GetAppLogic()->GetBVProject()->GetProjectEditor();
+    CreateOneScene( editor );
+
+    auto root = editor->GetNode( "FirstScene", "root" );
+
+    auto searchedUID = root->GetUID();
+
+    auto foundNode = root->GetNode( searchedUID, false );
+    EXPECT_EQ( foundNode, root );
+}
+
+

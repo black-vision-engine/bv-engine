@@ -310,6 +310,9 @@ IModelNodePtr                   BasicNode::GetChild                 ( const std:
 //
 IModelNodePtr                   BasicNode::GetNode                  ( UniqueID id, bool recursive )
 {
+    if( id == m_id )
+        return shared_from_this();
+
     for( auto & child : m_children )
     {
         if( child->GetUID() == id )
