@@ -305,6 +305,29 @@ IModelNodePtr                   BasicNode::GetChild                 ( const std:
     return FindNode( m_children, name );
 }
 
+// ***********************
+//
+IModelNodePtr                   BasicNode::GetNode                  ( UniqueID id, bool recursive )
+{
+    for( auto & child : m_children )
+    {
+        if( child->GetUID() == id )
+            return child;
+    }
+
+    if( recursive )
+    {
+        for( auto & child : m_children )
+        {
+            auto node = child->GetNode( id, recursive );
+            if( node )
+                return node;
+        }
+    }
+
+    return IModelNodePtr();
+}
+
 // ********************************
 //
 const IPluginListFinalized *    BasicNode::GetPluginList            () const
@@ -401,6 +424,13 @@ IModelNodeEffectPtr             BasicNode::GetNodeEffect            () const
 void                            BasicNode::SetNodeEffect            ( IModelNodeEffectPtr nodeEffect )
 {
     m_modelNodeEffect = nodeEffect;
+}
+
+// ***********************
+//
+UniqueID                        BasicNode::GetUID                   () const
+{
+    return m_id;
 }
 
 // ********************************

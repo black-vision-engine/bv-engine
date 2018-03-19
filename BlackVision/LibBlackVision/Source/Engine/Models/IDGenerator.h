@@ -2,19 +2,28 @@
 
 #include "CoreDEF.h"
 
+#include <atomic>
+
+
 namespace bv
 {
 
+
+typedef UInt64 UniqueID;
+
+
+// ***********************
+//
 class IDGenerator
 {
 private:
 
-	UInt32					m_id;
+	std::atomic< UInt64 >       m_id;
 
 public:
 
 	static IDGenerator &	Instance			();
-    UInt32					GetID				();
+    UniqueID                GetID				();
 
 private:
 
