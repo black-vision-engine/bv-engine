@@ -29,6 +29,9 @@
     <ClCompile Include="..\..\..\Source\ParamDescriptor\GetDecriptorTest.cpp">
       <Filter>ParamDescriptor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\NodesTests\TestNodeUIDs.cpp">
+      <Filter>NodesTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">

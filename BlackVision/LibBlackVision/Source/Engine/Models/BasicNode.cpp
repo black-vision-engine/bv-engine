@@ -70,6 +70,7 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 //
 BasicNode::BasicNode( const std::string & name, const PluginsManager * pluginsManager )
     : m_name( name )
+    , m_id( IDGenerator::Instance().GetID() )
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
     , m_visible( true )
