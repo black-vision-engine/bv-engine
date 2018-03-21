@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeNameMangler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoAddress.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoFunMapper.cpp" />
@@ -671,6 +672,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\EndUserParamsLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\ParametersDescriptors\ParameterMapping.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\EditorVariables\SceneVariables.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Editors\MainFuckingRootNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\ModelNodeEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\IRevertable.h" />
@@ -703,6 +705,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\AVFrame\AVFrameInputSlots.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlotEntryDesc.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\SlotsLogic\VideoInput\VideoInputSlots.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeNameMangler.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoRegister.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GizmoLogicBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\Logics\GridLines\GridLines.h" />

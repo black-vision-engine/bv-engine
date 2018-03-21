@@ -19,10 +19,10 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( BVProjectEditor_Node_Move, MoveNodeInScene )
     auto g1Child3 = editor->GetNode( scene1Name, "root/Group1/Child3" );
     auto g1Child4 = editor->GetNode( scene1Name, "root/Group1/Child4" );
 
-    auto g2Child1 = editor->GetNode( scene1Name, "root/Group2/Child1" );
-    auto g2Child2 = editor->GetNode( scene1Name, "root/Group2/Child2" );
-    auto g2Child3 = editor->GetNode( scene1Name, "root/Group2/Child3" );
-    auto g2Child4 = editor->GetNode( scene1Name, "root/Group2/Child4" );
+    auto g2Child1 = editor->GetNode( scene1Name, "root/Group2/Child5" );
+    auto g2Child2 = editor->GetNode( scene1Name, "root/Group2/Child6" );
+    auto g2Child3 = editor->GetNode( scene1Name, "root/Group2/Child7" );
+    auto g2Child4 = editor->GetNode( scene1Name, "root/Group2/Child8" );
 
     EXPECT_TRUE( g1Child1 != nullptr );
     EXPECT_TRUE( g1Child2 != nullptr );
