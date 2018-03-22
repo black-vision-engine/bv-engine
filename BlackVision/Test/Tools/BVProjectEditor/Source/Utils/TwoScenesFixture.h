@@ -78,10 +78,10 @@ inline void             AddHierarchy             ( bv::model::SceneModelPtr scen
     ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child3" ) );
     ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group1", "Child4" ) );
 
-    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child5" ) );
-    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child6" ) );
-    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child7" ) );
-    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child8" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child1" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child2" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child3" ) );
+    ASSERT_TRUE( editor->AddChildNode( scene->GetName(), "root/Group2", "Child4" ) );
 
     auto root = scene->GetRootNode();
     ASSERT_NE( root, nullptr );
@@ -98,10 +98,10 @@ inline void             AddHierarchy             ( bv::model::SceneModelPtr scen
 
     auto group2 = root->GetChild( "Group2" );
 
-    ASSERT_TRUE( group2->GetChild( "Child5" ) != nullptr );
-    ASSERT_TRUE( group2->GetChild( "Child6" ) != nullptr );
-    ASSERT_TRUE( group2->GetChild( "Child7" ) != nullptr );
-    ASSERT_TRUE( group2->GetChild( "Child8" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child1" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child2" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child3" ) != nullptr );
+    ASSERT_TRUE( group2->GetChild( "Child4" ) != nullptr );
 }
 
 // ***********************

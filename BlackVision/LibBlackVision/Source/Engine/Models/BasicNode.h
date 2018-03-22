@@ -102,7 +102,7 @@ public:
     unsigned int                            GetNumPlugins           () const;
 
     void                                    AddChildToModelOnly     ( BasicNodePtr n );
-    virtual void                            AddChildToModelOnly     ( BasicNodePtr n, UInt32 idx );
+    void                                    AddChildToModelOnly     ( BasicNodePtr n, UInt32 idx );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
     ModelNodeEditor *						GetModelNodeEditor		();
@@ -118,10 +118,6 @@ private:
 
     mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
     BoundingVolumeConstPtr 				    GetBoundingVolume		( const glm::mat4 & currentTransformation ) const;
-
-protected:
-
-    void                                    AddChildToModelOnlyImpl ( BasicNodePtr n, UInt32 idx );
 
 public:
 
@@ -171,15 +167,6 @@ public:
 
     /**@brief Parses path to extract UID.*/
     static Expected< UniqueID >             TryParseUID             ( const std::string & path, const char escapeChar = '@' );
-
-private:
-
-    /**@brief Check if node can be added s child.*/
-    bool                                    IsUniqueNodeName        ( const std::string & name ) const;
-
-
-    /**@brief Generates unique name if name passed in parameter is not unique.*/
-    std::string                             GenerateUniqueName      ( const std::string & name ) const;
 
 public:
 

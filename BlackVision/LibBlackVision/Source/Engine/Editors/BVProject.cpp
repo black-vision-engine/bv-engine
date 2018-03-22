@@ -8,7 +8,6 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
-#include "MainFuckingRootNode.h"
 #include "Engine/Editors/ModelSceneEditor.h"
 #include "Engine/Editors/BVProjectEditor.h"
 
@@ -65,7 +64,7 @@ BVProject::BVProject    ( Renderer * renderer, audio::AudioRenderer * audioRende
     m_timelineManager->RegisterRootTimeline( m_globalTimeline );
     model::TimelineManager::SetInstance( m_timelineManager.get() );
 
-    m_rootNode = model::MainFuckingRootNode::Create( MAIN_ROOT_NAME );
+    m_rootNode = model::BasicNode::Create( MAIN_ROOT_NAME );
 
     m_projectEditor = new BVProjectEditor( this, config );
 

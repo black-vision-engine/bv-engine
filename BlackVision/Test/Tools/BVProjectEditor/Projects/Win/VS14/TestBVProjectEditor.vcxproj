@@ -148,7 +148,6 @@
     <ClCompile Include="..\..\..\Source\NodesTests\TestMoveNode.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestNodeRename.cpp" />
     <ClCompile Include="..\..\..\Source\NodesTests\TestNodeUIDs.cpp" />
-    <ClCompile Include="..\..\..\Source\NodesTests\TestNodeUniqueName.cpp" />
     <ClCompile Include="..\..\..\Source\ParamDescriptor\EndUserParamLogicTest.cpp" />
     <ClCompile Include="..\..\..\Source\ParamDescriptor\GetDecriptorTest.cpp" />
     <ClCompile Include="..\..\..\Source\PluginsTest\TestPluginCopy.cpp" />

@@ -2191,9 +2191,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.cpp">
       <Filter>Assets\Input\VideoInput</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeNameMangler.cpp">
-      <Filter>Engine\Models\Builder</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5575,12 +5572,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.h">
       <Filter>Assets\Input\VideoInput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeNameMangler.h">
-      <Filter>Engine\Models\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Editors\MainFuckingRootNode.h">
-      <Filter>Engine\Editors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

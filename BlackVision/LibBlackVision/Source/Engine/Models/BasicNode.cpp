@@ -4,7 +4,6 @@
 
 #include <set>
 
-#include "Engine/Models/Builder/NodeNameMangler.h"
 #include "Engine/Models/Builder/NodeLogicHolder.h"
 
 //FIXME: node na INode
@@ -510,22 +509,6 @@ mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransform
     return r;
 }
 
-// ***********************
-//
-void                        BasicNode::AddChildToModelOnlyImpl      ( BasicNodePtr n, UInt32 idx )
-{
-    if( idx < m_children.size() )
-    {
-        m_children.insert( m_children.begin() + idx, n );
-    }
-    else
-    {
-        m_children.push_back( n );
-    }
-
-    ModelState::GetInstance().RegisterNode( n.get(), this );
-}
-
 //// ********************************
 ////
 //BoundingVolume 						    BasicNode::GetBoundingVolume		( const glm::mat4 & /*parentTransformation*/ ) const
@@ -570,14 +553,16 @@ void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 //
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n, UInt32 idx )
 {
-    // Children must have unique names. We need to rename new nodes with not unique names.
-    auto & nodeName = n->GetName();
-    if( !IsUniqueNodeName( nodeName ) )
+    if( idx < m_children.size() )
     {
-        n->SetName( GenerateUniqueName( nodeName ) );
+        m_children.insert( m_children.begin() + idx, n );
+    }
+    else
+    {
+        m_children.push_back( n );
     }
 
-    AddChildToModelOnlyImpl( n, idx );
+    ModelState::GetInstance().RegisterNode( n.get(), this );
 }
 
 // ********************************
@@ -957,26 +942,6 @@ Expected< UniqueID >                BasicNode::TryParseUID              ( const 
     }
 
     return Expected< UniqueID >();
-}
-
-// ***********************
-//
-bool                                BasicNode::IsUniqueNodeName         ( const std::string & name ) const
-{
-    for( auto & child : m_children )
-    {
-        if( child->GetName() == name )
-            return false;
-    }
-
-    return true;
-}
-
-// ***********************
-//
-std::string                         BasicNode::GenerateUniqueName       ( const std::string & name ) const
-{
-    return NodeNameMangler::GenerateNewName( name, m_children );
 }
 
 } // model
