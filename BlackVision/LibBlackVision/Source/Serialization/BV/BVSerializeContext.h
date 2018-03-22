@@ -26,6 +26,7 @@ public:
         pluginsInfo = true;
         extendedAssetData = false;
         sceneNameInTimeline = true;
+        inludeUIDs = false;
     }
 
     bool                                recursive;
@@ -33,6 +34,7 @@ public:
     bool                                pluginsInfo;
     bool                                extendedAssetData;
     bool                                sceneNameInTimeline;
+    bool                                inludeUIDs;
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );

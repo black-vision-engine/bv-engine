@@ -22,7 +22,6 @@ namespace bv {
 
 class Renderer;
 class Camera;
-class BasicNode;
 class BVProjectEditor;
 class BVProject;
 

@@ -353,6 +353,7 @@ private:
     void                        InitDefaultScene        ( model::SceneModelPtr scene );
     
     bool                        IsTimelineEditable      ( const model::ITimeEvaluator * timeEval ) const;
+    static bool                 IsValidNodeName         ( const std::string & name );
     
     static const std::string    DEFAULT_ROOT_NAME;
 

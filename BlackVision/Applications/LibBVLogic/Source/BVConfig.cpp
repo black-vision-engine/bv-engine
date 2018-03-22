@@ -240,9 +240,9 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
 
         LoadPropertyValueOrSetDefault( "Renderer/ClearColor", &BVConfig::m_defaultClearColor, EntryType::Required );
 
-        LoadPropertyValueOrSetDefault( "Debug/SceneFromEnvName", &BVConfig::m_sceneFromEnvName, EntryType::Required );
-        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromEnv", &BVConfig::m_loadSceneFromEnv, EntryType::Required );
-        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromProjectManager", &BVConfig::m_loadSceneFromProjectManager, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Debug/SceneFromEnvName", &BVConfig::m_sceneFromEnvName, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromEnv", &BVConfig::m_loadSceneFromEnv, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromProjectManager", &BVConfig::m_loadSceneFromProjectManager, EntryType::Optional );
 
         LoadPropertyValueOrSetDefault( "Plugins/Textures/OnFailedLoadBehavior", &BVConfig::m_onFailedTextureLoadBehavior, EntryType::Required );
 

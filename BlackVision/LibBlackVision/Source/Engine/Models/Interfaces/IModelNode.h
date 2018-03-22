@@ -3,6 +3,8 @@
 #include <iostream>
 #include <memory>
 
+#include "Engine/Models/IDGenerator.h"
+
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Interfaces/IModelNodeEffect.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
@@ -32,11 +34,13 @@ class IModelNode : public bv::IUpdatable
 public:
 
     virtual const std::string &							GetName             () const                                                            = 0;
+    virtual UniqueID                                    GetUID              () const                                                            = 0;
 
     virtual IPluginPtr									GetPlugin           ( const std::string & name ) const                                  = 0;
     virtual IFinalizePluginConstPtr						GetFinalizePlugin   () const                                                            = 0;
 
     virtual IModelNodePtr								GetNode             ( const std::string & path, const std::string & separator = "/" )   = 0;
+    virtual IModelNodePtr								GetNode             ( UniqueID id, bool recursive = true ) = 0;
     virtual IModelNodePtr								GetChild            ( const std::string & name )                                        = 0;
 
     virtual const IPluginListFinalized *				GetPluginList       () const                                                            = 0;

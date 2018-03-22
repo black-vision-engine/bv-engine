@@ -35,6 +35,7 @@ class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicN
 private:
 
     std::string                     m_name;
+    UniqueID                        m_id;
     
     const PluginsManager *          m_pluginsManager;
     bool                            m_visible;
@@ -71,6 +72,7 @@ public:
 
     /** @param[ path ] relative path */
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
+    virtual IModelNodePtr                   GetNode                 ( UniqueID id, bool recursive = true ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
     
     INodeLogicPtr							GetLogic				() const override;
@@ -84,6 +86,7 @@ public:
     virtual IModelNodeEffectPtr             GetNodeEffect           () const;
     void                                    SetNodeEffect           ( IModelNodeEffectPtr nodeEffect );
 
+    virtual UniqueID                        GetUID                  () const override;
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );
 
@@ -157,6 +160,13 @@ public:
     /**@brief Try to convert string to integer if it matches the pattern "[escapeChar][integer]" (e.g. "#0").
     @return Returns parsed index or -1 if string didn't match the pattern. */
     static Int32                            TryParseIndex           ( std::string & str, const char escapeChar = '#' );
+
+    /**@brief Check if path string contains node uid instead of adress.*/
+    static bool                             IsPathWithUID           ( const std::string & path, const char escapeChar = '@' );
+
+
+    /**@brief Parses path to extract UID.*/
+    static Expected< UniqueID >             TryParseUID             ( const std::string & path, const char escapeChar = '@' );
 
 public:
 

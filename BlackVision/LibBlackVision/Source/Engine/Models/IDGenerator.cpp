@@ -21,15 +21,15 @@ IDGenerator::IDGenerator						()
 //
 IDGenerator &			IDGenerator::Instance	()
 {
-	static auto instance = IDGenerator();
+	static IDGenerator instance;
 	return instance;
 }
 
 // ***********************
 //
-UInt32					IDGenerator::GetID		()
+UniqueID                IDGenerator::GetID		()
 {
-	return m_id++;
+	return ++m_id;
 }
 
 }

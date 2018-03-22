@@ -5,6 +5,8 @@
 #include <iostream>
 #include <memory>
 
+#include "Engine/Models/IDGenerator.h"
+
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Engine/Models/Plugins/Interfaces/ICachedParameter.h"
@@ -40,7 +42,7 @@ class IPlugin : public IUpdatable
 public:
     virtual IPluginPtr							Clone						() const = 0;
 
-    virtual UInt32				                GetID		                () const = 0;
+    virtual UniqueID			                GetID		                () const = 0;
     
     virtual const std::string &                 GetName                     () const = 0;
     virtual const std::string &                 GetTypeUid                  () const = 0;
