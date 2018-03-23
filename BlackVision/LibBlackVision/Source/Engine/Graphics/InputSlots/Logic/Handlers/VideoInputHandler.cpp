@@ -95,6 +95,10 @@ void            VideoInputHandler::ProcessFrameData ( videocards::VideoInputFram
         {
             m_inputSlots->UpdateVideoInput( singleFrame.InputID, singleFrame.FrameData );
         }
+        else
+        {
+            LOG_MESSAGE( SeverityLevel::debug ) << "No frame from video input [" << Convert::T2String( singleFrame.InputID ) << "], card [" << Convert::T2String( singleFrame.CardID ) << "].";
+        }
     }
 }
 

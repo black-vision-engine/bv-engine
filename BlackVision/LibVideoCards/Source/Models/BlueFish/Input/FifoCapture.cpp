@@ -284,8 +284,10 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
     ULONG ScheduleID = 0;
     ULONG CapturingID = 0;
     ULONG DoneID = 0;
+    ULONG ScheduleHANC = 0;
+    ULONG DoneHANC = 0;
 
-    const int numBuffers = 4;
+    const int numBuffers = 8;
 
 
     pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
@@ -318,8 +320,13 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
             LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish input channel " + Convert::T2String( (ChannelName)pThis->m_videoChannel );
         }
 
-        if( !odd  )
+        if( !odd )
+        {
             pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image_HANC( ScheduleID ), 0 );
+
+            DoneHANC = ScheduleHANC;
+            ScheduleHANC = ScheduleID;
+        }
         else
             pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
 
@@ -328,12 +335,11 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
 
         if( varVal.ulVal < pThis->m_InvalidVideoModeFlag )
-        {
-            pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
-            
-            if( !( DoneID & 0x1 ) )
+        {   
+            if( ( DoneHANC + 3 ) % numBuffers == ScheduleID )
             {
-                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_HANC ) );
+                pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
+                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( DoneHANC, BLUE_DATA_HANC ) );
 
                 hancInfo.audio_pcm_data_ptr = pFrame->m_pAudioBuffer;
                 hancInfo.raw_custom_anc_pkt_data_ptr = nullptr;
@@ -348,6 +354,8 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
             }
             else
             {
+                pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
+
                 pFrame->m_desc.numSamples = 0;
                 pFrame->m_desc.channels = 0;
                 pFrame->m_desc.channelDepth = 0;
