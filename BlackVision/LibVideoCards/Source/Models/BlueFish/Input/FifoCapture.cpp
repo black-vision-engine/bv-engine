@@ -1,6 +1,7 @@
 #include "FifoCapture.h"
 
 #include "BlueFish/inc/BlueHancUtils.h"
+#include "FrameSchedule.h"
 
 #include <process.h>
 
@@ -278,57 +279,28 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
     // Prepare chunks for input. Chunks will be reused between frames.
     Reusable< CFramePtr > frames = CreateReusableVideoChunks( pThis->GoldenSize, pThis->BytesPerLine, audioBufferSize, 3 );
 
-    ULONG CurrentFieldCount = 0;
-    ULONG LastFieldCount = 0;
-
-    ULONG ScheduleID = 0;
-    ULONG CapturingID = 0;
-    ULONG DoneID = 0;
-    ULONG ScheduleHANC = 0;
-    ULONG DoneHANC = 0;
 
     const int numBuffers = 8;
+    FrameSchedule scheduler( numBuffers );
 
+    scheduler.SyncToNextFrameInterrupt( pThis );
+    scheduler.SyncToOddFrame( pThis );
 
-    pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
-    if( ( CurrentFieldCount & 0x1 ) == 0 )
-        pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );	//we need to schedule the capture of field 0 at field 1 interrupt
+    scheduler.ScheduleNextFrame( pThis );
+    scheduler.NextFrame();
 
-    pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
-    CapturingID = ScheduleID;
-    ScheduleID = ( ++ScheduleID % numBuffers );
-    LastFieldCount = CurrentFieldCount;
-
-    pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );	//the first buffer starts to be captured now; this is it's field count
-    pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
-    DoneID = CapturingID;
-    CapturingID = ScheduleID;
-    ScheduleID = ( ++ScheduleID % numBuffers );
-    LastFieldCount = CurrentFieldCount;
+    scheduler.SyncToNextFrameInterrupt( pThis );
+    scheduler.ScheduleNextFrame( pThis );
+    scheduler.NextFrame();
 
 
     while( !pThis->m_nThreadStopping )
     {
         auto pFrame = frames.GetNext();
 
-        bool odd = ScheduleID & 0x1;
+        scheduler.SyncToNextFrameInterrupt( pThis );
+        scheduler.ScheduleNextFrame( pThis );
 
-        pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
-
-        if( LastFieldCount + 1 != CurrentFieldCount )
-        {
-            LOG_MESSAGE( SeverityLevel::info ) << "DROP FRAME: BlueFish input channel " + Convert::T2String( (ChannelName)pThis->m_videoChannel );
-        }
-
-        if( !odd )
-        {
-            pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image_HANC( ScheduleID ), 0 );
-
-            DoneHANC = ScheduleHANC;
-            ScheduleHANC = ScheduleID;
-        }
-        else
-            pThis->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
 
         VARIANT varVal;
         pThis->m_pSDK->QueryCardProperty( VIDEO_INPUT_SIGNAL_VIDEO_MODE, varVal );	//check if the video signal was valid for the last frame (until wait_input_video_synch() returned)
@@ -336,10 +308,10 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
         if( varVal.ulVal < pThis->m_InvalidVideoModeFlag )
         {   
-            if( ( DoneHANC + 3 ) % numBuffers == ScheduleID )
+            if( ( scheduler.DoneHANC + 3 ) % numBuffers == scheduler.ScheduleID )
             {
-                pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
-                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( DoneHANC, BLUE_DATA_HANC ) );
+                pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( scheduler.DoneID, BLUE_DATA_IMAGE ) );
+                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( scheduler.DoneHANC, BLUE_DATA_HANC ) );
 
                 hancInfo.audio_pcm_data_ptr = pFrame->m_pAudioBuffer;
                 hancInfo.raw_custom_anc_pkt_data_ptr = nullptr;
@@ -354,7 +326,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
             }
             else
             {
-                pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_DMABuffer( DoneID, BLUE_DATA_IMAGE ) );
+                pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_DMABuffer( scheduler.DoneID, BLUE_DATA_IMAGE ) );
 
                 pFrame->m_desc.numSamples = 0;
                 pFrame->m_desc.channels = 0;
@@ -362,19 +334,15 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
             }
 
 
-            LastFieldCount = CurrentFieldCount;
-
-            pFrame->m_lFieldCount = CurrentFieldCount;
-            pFrame->m_nCardBufferID = DoneID;
+            pFrame->m_lFieldCount = scheduler.CurrentFieldCount;
+            pFrame->m_nCardBufferID = scheduler.DoneID;
             pThis->m_pFifoBuffer->PushFrame( pFrame );
             bFirstFrame = FALSE;
 
-            DoneID = CapturingID;
-            CapturingID = ScheduleID;
-            ScheduleID = ( ++ScheduleID % numBuffers );
+            scheduler.NextFrame();
         }
         else
-            pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, CurrentFieldCount );
+            pThis->m_pSDK->wait_input_video_synch( pThis->m_nUpdateFormat, scheduler.CurrentFieldCount );
     }
 
     //cout << "Capture Thread Stopped..." << endl;
