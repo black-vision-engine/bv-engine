@@ -1618,6 +1618,10 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
         auto effect = Convert::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
+
+        if( node == nullptr )
+            return false;
+
         auto curEffect = node->GetNodeEffect();
         auto result = SetNodeEffect( node, newEffect );
 
