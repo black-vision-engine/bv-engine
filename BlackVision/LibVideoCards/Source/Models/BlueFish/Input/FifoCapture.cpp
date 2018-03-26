@@ -308,10 +308,10 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
         if( varVal.ulVal < pThis->m_InvalidVideoModeFlag )
         {   
-            if( ( scheduler.DoneHANC + 3 ) % numBuffers == scheduler.ScheduleID )
+            if( scheduler.IsAudioFrame() )
             {
                 pThis->m_pSDK->system_buffer_read_async( ( unsigned char* )pFrame->m_pBuffer, pFrame->m_nSize, NULL, BlueImage_HANC_DMABuffer( scheduler.DoneID, BLUE_DATA_IMAGE ) );
-                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( scheduler.DoneHANC, BLUE_DATA_HANC ) );
+                pThis->m_pSDK->system_buffer_read_async( pHancBuffer, MAX_HANC_BUFFER_SIZE, NULL, BlueImage_HANC_DMABuffer( scheduler.DoneID, BLUE_DATA_HANC ) );
 
                 hancInfo.audio_pcm_data_ptr = pFrame->m_pAudioBuffer;
                 hancInfo.raw_custom_anc_pkt_data_ptr = nullptr;
@@ -336,6 +336,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
             pFrame->m_lFieldCount = scheduler.CurrentFieldCount;
             pFrame->m_nCardBufferID = scheduler.DoneID;
+            pFrame->m_FieldOdd = scheduler.DoneID.Odd;
             pThis->m_pFifoBuffer->PushFrame( pFrame );
             bFirstFrame = FALSE;
 

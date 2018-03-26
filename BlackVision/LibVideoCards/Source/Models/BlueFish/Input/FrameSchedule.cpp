@@ -24,9 +24,9 @@ FrameSchedule::FrameSchedule( int numBuffers )
     , LastFieldCount( 0 )
     , ScheduleID( 0 )
     , CapturingID( 0 )
+    , DoneField1ID( 0 )
+    , DoneField2ID( 0 )
     , DoneID( 0 )
-    , DoneHANC( 0 )
-    , ScheduleHANC( 0 )
     , NumBuffers( numBuffers )
 {}
 
@@ -55,19 +55,25 @@ void            FrameSchedule::SyncToOddFrame               ( CFifoCapture * cap
 //
 void            FrameSchedule::ScheduleNextFrame            ( CFifoCapture * capture )
 {
-    bool odd = ScheduleID & 0x1;
+    bool odd = CurrentFieldCount & 0x1;
 
     if( !odd )
     {
         capture->m_pSDK->render_buffer_capture( BlueBuffer_Image_HANC( ScheduleID ), 0 );
-
-        DoneHANC = ScheduleHANC;
-        ScheduleHANC = ScheduleID;
     }
     else
     {
         capture->m_pSDK->render_buffer_capture( BlueBuffer_Image( ScheduleID ), 0 );
     }
+
+    ScheduleID.Odd = odd;
+}
+
+// ***********************
+//
+bool            FrameSchedule::IsAudioFrame                 ()
+{
+    return !DoneID.Odd;
 }
 
 // ***********************
@@ -76,9 +82,11 @@ void            FrameSchedule::NextFrame                    ()
 {
     LastFieldCount = CurrentFieldCount;
 
-    DoneID = CapturingID;
+    DoneID = DoneField2ID;
+    DoneField2ID = DoneField1ID;
+    DoneField1ID = CapturingID;
     CapturingID = ScheduleID;
-    ScheduleID = ( ++ScheduleID % NumBuffers );
+    ScheduleID.ID = ( ++ScheduleID.ID % NumBuffers );
 }
 
 

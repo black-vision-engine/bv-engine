@@ -4,11 +4,46 @@
 #include "FifoCapture.h"
 
 
+#include <queue>
+
 
 namespace bv {
 namespace videocards {
 namespace bluefish
 {
+
+
+// ***********************
+//
+struct ScheduledID
+{
+    UInt16      ID;
+    bool        Odd;
+
+public:
+
+    // ***********************
+    //
+    ScheduledID( UInt16 id )
+        : ID( id )
+        , Odd( false )
+    {}
+
+    // ***********************
+    //
+    void        operator=( ScheduledID & other )
+    {
+        ID = other.ID;
+        Odd = other.Odd;
+    }
+
+    // ***********************
+    //
+    operator unsigned long()
+    {
+        return ID;
+    }
+};
 
 
 // ***********************
@@ -20,11 +55,11 @@ struct FrameSchedule
     unsigned long       CurrentFieldCount;
     unsigned long       LastFieldCount;
 
-    unsigned long       ScheduleID;
-    unsigned long       CapturingID;
-    unsigned long       DoneID;
-    unsigned long       DoneHANC;
-    unsigned long       ScheduleHANC;
+    ScheduledID         ScheduleID;
+    ScheduledID         CapturingID;
+    ScheduledID         DoneField1ID;
+    ScheduledID         DoneField2ID;
+    ScheduledID         DoneID;
 
 
 public:
@@ -34,6 +69,8 @@ public:
     void                SyncToNextFrameInterrupt        ( CFifoCapture * capture );
     void                SyncToOddFrame                  ( CFifoCapture * capture );
     void                ScheduleNextFrame               ( CFifoCapture * capture );
+
+    bool                IsAudioFrame                    ();
 
     void                NextFrame                       ();
 };
