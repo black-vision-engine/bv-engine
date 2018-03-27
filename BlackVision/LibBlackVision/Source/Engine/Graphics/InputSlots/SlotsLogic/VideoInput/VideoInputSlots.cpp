@@ -179,7 +179,7 @@ void                        VideoInputSlots::FreeTexture    ( RenderContext * ct
 
 // ***********************
 //
-void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, audio::AudioBufferPtr audio )
+void                        VideoInputSlots::FreeAudio      ( RenderContext * ctx, AudioSlotPtr audio )
 {
     { ctx; audio; }
 }

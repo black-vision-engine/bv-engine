@@ -40,14 +40,12 @@ void        AVFrameInputSlots::UpdateTexture    ( Texture2DPtr texture, AVFrameC
 
 // ***********************
 //
-void        AVFrameInputSlots::UpdateAudio      ( audio::AudioBufferPtr audio, AVFrameConstPtr frame )
+void        AVFrameInputSlots::UpdateAudio      ( AudioSlotPtr audio, AVFrameConstPtr frame )
 {
     if( audio )
     {
         if( frame->m_audioData )
             audio->Update( frame->m_audioData );
-        else
-            audio->Clear();
     }
 }
 

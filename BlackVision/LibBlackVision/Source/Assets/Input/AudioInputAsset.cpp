@@ -129,14 +129,14 @@ const std::string &         AudioInputAsset::UID          ()
 //
 UInt32                      AudioInputAsset::GetFrequency   () const
 {
-    return m_audio->GetFrequency();
+    return m_audio->AudioBuffer->GetFrequency();
 }
 
 // ***********************
 //
 AudioFormat                 AudioInputAsset::GetFormat      () const
 {
-    return m_audio->GetFormat();
+    return m_audio->AudioBuffer->GetFormat();
 }
 
 // ***********************
@@ -144,9 +144,16 @@ AudioFormat                 AudioInputAsset::GetFormat      () const
 MemoryChunkConstPtr         AudioInputAsset::GetFrame() const
 {
     if( m_audio )
-        return m_audio->GetData();
+        return m_audio->AudioBuffer->GetData();
 
     return MemoryChunkConstPtr();
+}
+
+// ***********************
+//
+UInt64                      AudioInputAsset::LastAudioUpdate    () const
+{
+    return m_audio->UpdateID;
 }
 
 // ***********************

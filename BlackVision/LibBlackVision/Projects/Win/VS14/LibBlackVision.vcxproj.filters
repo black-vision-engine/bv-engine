@@ -5573,6 +5573,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Input\VideoInput\VideoInputAudioAssetDesc.h">
       <Filter>Assets\Input\VideoInput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\AudioSlot.h">
+      <Filter>Engine\Graphics\InputSlots</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

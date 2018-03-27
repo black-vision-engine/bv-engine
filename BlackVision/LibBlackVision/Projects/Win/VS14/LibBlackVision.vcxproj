@@ -694,6 +694,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\AudioSlot.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlotDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.h" />

@@ -3,7 +3,7 @@
 
 #include "InputSlotDescriptor.h"
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
-#include "Engine/Audio/Resources/AudioBuffer.h"
+#include "AudioSlot.h"
 
 #include <string>
 
@@ -17,7 +17,7 @@ namespace bv
 struct InputSlot
 {
     Texture2DPtr            Texture;
-    audio::AudioBufferPtr   Audio;
+    AudioSlotPtr            Audio;
 
 // ***********************
 //
@@ -36,14 +36,14 @@ struct InputSlot
 // ***********************
 //
     InputSlot( Texture2DPtr tex, audio::AudioBufferPtr audio )
-        : Audio( audio )
+        : Audio( std::make_shared< AudioSlot >( audio ) )
         , Texture( tex )
     {}
 
 // ***********************
 //
     InputSlot( audio::AudioBufferPtr audio )
-        : Audio( audio )
+        : Audio( std::make_shared< AudioSlot >( audio ) )
         , Texture( nullptr )
     {}
 };

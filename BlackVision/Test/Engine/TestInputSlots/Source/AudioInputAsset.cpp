@@ -84,6 +84,6 @@ TEST( Engine_InputSlots, AudioInputAsset_Creation_EmptySlot )
 
     auto typedAsset = std::static_pointer_cast< const AudioInputAsset >( asset );
 
-    ASSERT_EQ( typedAsset->GetFrame(), context.slots->GetFallbackSlot().Audio->GetData() );
+    ASSERT_EQ( typedAsset->GetFrame(), context.slots->GetFallbackSlot().Audio->AudioBuffer->GetData() );
 }
 
