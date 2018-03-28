@@ -148,7 +148,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateSlot )
     ASSERT_TRUE( slot.IsValid() );
 
     EXPECT_EQ( slot.GetVal().Texture->GetData(), videoChunk );
-    EXPECT_EQ( slot.GetVal().Audio->GetData(), audioChunk );
+    EXPECT_EQ( slot.GetVal().Audio->AudioBuffer->GetData(), audioChunk );
 }
 
 // ***********************
@@ -180,7 +180,7 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Engine_InputSlots, VideoInput_UpdateEmptyAudio )
     auto slot = slots.GetInputSlots()->AccessSource( slots.GetSlotIndex( 0 ) );
     ASSERT_TRUE( slot.IsValid() );
 
-    auto resultAudio = slot.GetVal().Audio->GetData();
+    auto resultAudio = slot.GetVal().Audio->AudioBuffer->GetData();
     bool notZero = false;
 
     for( int i = 0; i < resultAudio->Size(); ++i )

@@ -45,7 +45,11 @@ public:
     void                        EnterArray          ( const std::wstring& /*name*/ ) override;
 
     virtual bool                AttachBranch        ( const std::string & /*name*/, const ISerializer * /*ser*/ ) override { assert( false ); return false; };
-    virtual bool                AttachBranch        ( const std::string & /*name*/, const IDeserializer * /*ser*/ ) override { assert( false ); return false; };
+    virtual bool                AttachBranch        ( const std::string & name, const IDeserializer * ser ) override;
+
+private:
+
+    void                        RewriteTree         ( rapidxml::xml_node<> * node );
 };
 
 }

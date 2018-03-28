@@ -153,15 +153,9 @@ void             RenderLogicInitializer::InitializeDefaultPrv( OutputDesc & desc
 //
 void             RenderLogicInitializer::InitializeDefaultShm( OutputDesc & desc, const BVConfig & cfg )
 {
-    // FIXME: nrl - implement it by reading cfg instance
-    { cfg; }
-    
-    auto width = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Width" ), 1920 );
-    auto height = Convert::String2T< UInt32 >( cfg.PropertyValue( "SharedMemory/Height" ), 1080 );
-    auto name = cfg.PropertyValue( "SharedMemory/Name" );
-
-    if( name.empty() )
-        name = "BV";
+    auto width = cfg.SharedMemoryWidth();
+    auto height = cfg.SharedMemoryHeight();
+    auto name = cfg.SharedMemoryBufferName();
 
     desc.SetWidth( width );
     desc.SetHeight( height );

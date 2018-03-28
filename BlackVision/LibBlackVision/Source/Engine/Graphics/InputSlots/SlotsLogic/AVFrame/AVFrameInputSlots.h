@@ -32,7 +32,7 @@ public:
 private:
 
     void            UpdateTexture       ( Texture2DPtr texture, AVFrameConstPtr frame );
-    void            UpdateAudio         ( audio::AudioBufferPtr audio, AVFrameConstPtr frame );
+    void            UpdateAudio         ( AudioSlotPtr audio, AVFrameConstPtr frame );
 };
 
 

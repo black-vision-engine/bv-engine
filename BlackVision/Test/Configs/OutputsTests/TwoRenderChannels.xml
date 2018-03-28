@@ -1,74 +1,82 @@
 <config>
-	<property name="MediaFolder" value="C:/Users/Witek/Dysk Google/bv_data/bv_media" /> <!-- ścieżka do media folderu -->
-    <property name="PMFolder" value="C:/Users/Witek/Dysk Google/bv_data/bv_media" />
-	<property name="FullScreen" value="false" />
-	<property name="PERSPECTIVE_CAMERA" value="true" />
-	<property name="USE_READBACK_API" value="true" />
-	<property name="SuperMagic" value="false" />
+
+	<property name="PMFolder" value="C:/Users/Witek/Dysk Google/bv_data/bv_media/" />
+    <!-- <property name="PMFolder" value="D:\Production\Basketball\bv_media" /> -->
+    
+	<property name="UseReadbackAPI" value="true" />
 	<property name="Resolution" value="HD" />
-	<property name="solution" value="solucja_creeda.xml" />  <!-- nazwa solucji -->
-	<property name="TransferMode" value="RAM" />
-	
+    
 	<property name="Debug">
-		<property name="LoadSceneFromEnv" value="false" />    <!-- czy ma wczytywać deserializator pawła czy mechanizm z defaulta -->
-		<property name="SceneFromEnvName" value="BASIC_SHAPES_TEST_SCENE" />
-		<property name="UseVideoInputFeeding" value="false" />    <!-- czy ma wczytywać deserializator pawła czy mechanizm z defaulta -->
-		<property name="CommandsDebugLayer">
-			<property name="UseDebugLayer" value="false" />
-			<property name="FilePath" value="../../../../Logs/" />
-		</property>
+		<property name="LoadSceneFromEnv" value="false" />
+        <property name="LoadSceneFromProjectManager" value="" />
+		<property name="SceneFromEnvName" value="TWO_TEXTURED_RECTANGLES" />
+
+        <property name="CommandsDebugLayer">
+            <property name="UseDebugLayer" value="false" />
+            <property name="FilePath" value="../../../../Logs/" />
+        </property>		
+	</property>
+    
+    <property name="Plugins" >
+        <property name="Textures" >
+            <property name="OnFailedLoadBehavior" value="LoadChecker" />
+        </property>
+    </property>
+	
+    <property name="Audio" >
+        <property name="GlobalGain" value="1.0" />
+    </property>
+    
+	<property name="Renderer">
+		<property name="MaxFPS" value="5000" />
+		<property name="TimerFPS" value="50" />
+        
+        <property name="FrameBufferSize">
+            <property name="Width" value="500" />
+            <property name="Height" value="600" />
+        </property>
+        
+        <property name="ClearColor" value="0,0,0,0" />
+        
 	</property>
 	
-	<property name="Renderer">
-		<property name="MaxFPS" value="1520" />
-		<property name="RenderToSharedMemory" value="true" />
-	</property>
-		
+    <property name="SharedMemory">
+        <property name="Enable" value="true" />
+        <property name="Name" value="BV" />
+        <property name="Width" value="1920" />
+        <property name="Height" value="1080" />
+    </property>
+	
 	<property name="Application">
-		<property name="EnableLockingQueue" value="false" />
-		<property name="VSYNC" value="false" />
+		<property name="VSync" value="false" />
 		<property name="Window">
-			<property name="Mode" value="WINDOWED" />        <!-- rodzaj wyswietlanego okienka MULTIPLE_SCREENS|WINDOWED_FULLSCREEN -->
+            <property name="FullScreen" value="false" />
+			<property name="Mode" value="Windowed" />        <!-- rodzaj wyswietlanego okienka MultipleScreens|Windowed -->
 			<property name="Size">
 				<property name="Width" value="1920" />
 				<property name="Height" value="1080" />
 			</property>
-			<property name="Origin">
-				<property name="X" value="0" />
-				<property name="Y" value="0" />
-			</property>
 		</property>
-		<property name="Renderer">			
-			<property name="FrameBufferSize">
-				<property name="Width" value="1920" />
-				<property name="Height" value="1080" />
-			</property>
-		</property>
+        
+        <property name="Events" >
+            <property name="MaxLoopUpdateTime" value="20" />
+            <property name="EnableLockingQueue" value="false" />
+        </property>
 	</property>
-	<property name="Renderer">
-		<property name="TimerFPS" value="200" />
-	</property>
+	
 	<property name="Network">
 		<property name="SocketServer">
 			<property name="Port" value="11011" />
 		</property>
 	</property>
-	
-	<property name="camera">
-		<property name="fov" value="45" />
-		<property name="position">
-			<property name="x" value="0" />
-			<property name="y" value="0" />
-			<property name="z" value="5" />
-		</property>
-		<property name="direction">
-			<property name="x" value="0" />
-			<property name="y" value="0" />
-			<property name="z" value="5" />
-		</property>
+    
+	<property name="Camera">
+        <property name="IsPerspective" value="true" />
+		<property name="FOV" value="60" />
+		<property name="Position" value="0,0,5" />
+		<property name="Direction" value="0,0,-1" />
 	</property>
-    
-    
+
     <videocards>
         <videocard name="FakeVideoCard" deviceID="1">
             <channels>
@@ -100,3 +108,5 @@
     </RenderChannels>
 	
 </config>
+
+

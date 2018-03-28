@@ -190,6 +190,9 @@ IModelNodePtr   ModelSceneEditor::GetNode           ( const std::string & path, 
 {
     if( m_rootNode )
     {
+        if( BasicNode::IsPathWithUID( path ) )
+            return m_rootNode->GetNode( path, separator );
+
         std::string childPath = path;
         auto rootName = BasicNode::SplitPrefix( childPath, separator );
         auto rootIdx = BasicNode::TryParseIndex( rootName );

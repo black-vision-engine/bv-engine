@@ -112,6 +112,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestTexturePlugins", "..\..
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestVideoInputPlugin", "..\..\..\Test\Plugins\TestVideoInputPlugin\Project\Win\VS14\TestVideoInputPlugin.vcxproj", "{8B22AACA-5FCD-492F-B2BB-27415CF97C8A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestConfig", "..\..\..\Test\Tools\TestConfig\Project\Win\VS14\TestConfig.vcxproj", "{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -837,6 +839,20 @@ Global
 		{8B22AACA-5FCD-492F-B2BB-27415CF97C8A}.Release|Win32.Build.0 = Release|Win32
 		{8B22AACA-5FCD-492F-B2BB-27415CF97C8A}.Release|x64.ActiveCfg = Release|x64
 		{8B22AACA-5FCD-492F-B2BB-27415CF97C8A}.Release|x64.Build.0 = Release|x64
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|Win32.Build.0 = Debug|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|x64.ActiveCfg = Debug|x64
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Debug|x64.Build.0 = Debug|x64
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|Any CPU.ActiveCfg = Release|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|Win32.ActiveCfg = Release|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|Win32.Build.0 = Release|Win32
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|x64.ActiveCfg = Release|x64
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -886,6 +902,7 @@ Global
 		{83D963B8-2FAD-4B5D-A939-864F83EE557B} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{E7B51628-D300-4B4C-9E75-C97EFDAD180F} = {83D963B8-2FAD-4B5D-A939-864F83EE557B}
 		{8B22AACA-5FCD-492F-B2BB-27415CF97C8A} = {83D963B8-2FAD-4B5D-A939-864F83EE557B}
+		{489D6F0C-D79A-44EB-9420-58AE0E90AA9C} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23FC2EE1-0489-479F-B40E-61A4C92FB7D0}

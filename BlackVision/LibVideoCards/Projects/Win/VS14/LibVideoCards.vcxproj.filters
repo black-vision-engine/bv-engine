@@ -104,6 +104,9 @@
     <ClInclude Include="..\..\..\Source\VideoOutput\VideoOutputChannelDesc.h">
       <Filter>VideoOutput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\FrameSchedule.h">
+      <Filter>Models\BlueFish\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoBuffer.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.cpp">
       <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\Input\FrameSchedule.cpp">
+      <Filter>Models\BlueFish\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

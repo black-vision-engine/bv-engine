@@ -147,7 +147,18 @@ model::BasicNodePtr         GetNode     ( model::BasicNode * parent, Int32 nodeI
 //
 model::BasicNodePtr         GetNode     ( model::BasicNode * parent, const std::string& nodeName )
 {
-    return std::static_pointer_cast<model::BasicNode>( parent->GetNode( nodeName ) );
+    model::BasicNodePtr resultNode;
+
+    // Use not recursive mode to get node by UID.
+    if( model::BasicNode::IsPathWithUID( nodeName ) )
+    {
+        auto expUID = model::BasicNode::TryParseUID( nodeName );
+        if( expUID.IsValid() )
+            resultNode = std::static_pointer_cast< model::BasicNode >( parent->GetNode( expUID.GetVal(), false ) );
+    }
+
+    resultNode = std::static_pointer_cast< model::BasicNode >( parent->GetNode( nodeName ) );
+    return resultNode.get() != parent ? resultNode : nullptr;
 }
 
 // ***********************

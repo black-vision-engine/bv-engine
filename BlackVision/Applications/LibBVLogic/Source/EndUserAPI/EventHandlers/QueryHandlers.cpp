@@ -201,6 +201,7 @@ void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject &
         // Prevent srialization from serializing child nodes.
         auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
         context->recursive = false;
+        context->inludeUIDs = true;
 
         PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, eventID, true );
 
@@ -238,6 +239,7 @@ void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject &
     // Prevent srialization from serializing child nodes.
     auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
     context->detailedInfo = false;
+    context->inludeUIDs = true;
 
     scene->Serialize( ser );
     ser.SetAttribute( "preset", Convert::T2String( IsPresetScene( scene->GetName() ) ) );
@@ -357,6 +359,9 @@ void     QueryHandlers::RenderingPerformance    ( JsonSerializeObject & ser, mod
 void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, IDeserializer * /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
+
+    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
+    context->inludeUIDs = true;
 
     ser.EnterArray( "scenes" );
 
@@ -798,6 +803,7 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
     context->recursive = true;
     context->detailedInfo = false;
     context->pluginsInfo = true;
+    context->inludeUIDs = true;
     
     PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
 

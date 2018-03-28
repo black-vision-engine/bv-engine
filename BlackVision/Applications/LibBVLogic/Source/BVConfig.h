@@ -50,9 +50,12 @@ private:
     bool            m_fullscreeMode;
     bool            m_readbackOn;
     bool            m_isCameraPerspective;
-	bool			m_renderToSharedMemory;
-	int				m_sharedMemoryScaleFactor;
     bool            m_vsync;
+    bool			m_renderToSharedMemory;
+
+    std::string     m_shmName;
+    UInt32          m_shmWidth;
+    UInt32          m_shmHeight;
 
 	Float32         m_globalGain;
 
@@ -85,7 +88,6 @@ private:
     bool            m_useDebugLayer;
     std::string     m_debugFilePath;
     bool            m_loadSceneFromEnv;
-    bool            m_useVideoInputFeeding;
 
     bool            m_enableQueueLocking;
 
@@ -97,22 +99,27 @@ private:
     BVConfig    ();
 
     void                        LoadProperties          ( const IDeserializer & deser, std::string path = "" );
-    void                        SaveConfig              ( ISerializer & ser, std::string path = "" ) const;
 
     void                        InitDefaultConfiguration();
     void                        InitializeFromFile      ( const std::string & filePath );
+    void                        RecomputeDependentValues();
 
 public:
 
     explicit                    BVConfig                ( const std::string & configPath );
                                 ~BVConfig               ();
 
+    void                        SaveConfig              ( std::string path = "" ) const;
+    void                        SaveProperties          ( ISerializer & ser ) const;
+    void                        SaveRenderChannels      ( ISerializer & ser ) const;
+    void                        SaveVideoCards          ( ISerializer & ser ) const;
+
     const std::string &         PropertyValue           ( const std::string & key ) const;
     void                        SetPropertyValue        ( const std::string & key, const std::string & value );
 
     const IDeserializer &       GetNode                 ( const std::string & node ) const;
 
-    inline Int32                DefaultwindowWidth      () const;
+    inline Int32                DefaultWindowWidth      () const;
     inline Int32                DefaultWindowHeight     () const;
 
     inline Int32                DefaultWidth            () const;
@@ -123,8 +130,11 @@ public:
 	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
     inline bool                 IsCameraPerspactive     () const;
+
 	inline bool                 RenderToSharedMemory    () const;
-	inline int                  SharedMemoryScaleFactor () const;
+    inline UInt32               SharedMemoryWidth       () const;
+    inline UInt32               SharedMemoryHeight      () const;
+    inline const std::string &  SharedMemoryBufferName  () const;
 
 	inline Float32				GlobalGain				() const;
 
@@ -169,13 +179,29 @@ public:
     inline bool                 UseDebugLayer           () const;
     inline const std::string &  DebugFilePath           () const;
     inline bool                 LoadSceneFromEnv        () const;
-    inline bool                 UseVideoInputFeeding    () const;
+    //inline bool                 UseVideoInputFeeding    () const;
 
     inline bool                 EnableLockingQueue      () const;
     inline const std::string &  OnFailedTexLoadBehavior () const;
 
     static BVConfig &           Instance  ();
 
+private:
+
+    enum class EntryType
+    {
+        Optional,
+        Required
+    };
+
+    template< typename PropertyType >
+    using ConfigPropertyPtr = PropertyType ( BVConfig::* );
+
+    template< typename PropertyType >
+    void            LoadPropertyValueOrSetDefault                   ( const char * propertyPath, ConfigPropertyPtr< PropertyType > member, EntryType type );
+
+    template<>
+    void            LoadPropertyValueOrSetDefault< std::string >    ( const char * propertyPath, ConfigPropertyPtr< std::string > member, EntryType type );
 };
 
 #define DefaultConfig   BVConfig::Instance()

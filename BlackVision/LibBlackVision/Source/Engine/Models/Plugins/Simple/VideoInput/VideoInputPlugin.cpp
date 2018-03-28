@@ -147,6 +147,7 @@ std::string             VideoInputPlugin::GetTextureName                ( UInt32
 VideoInputPlugin::VideoInputPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : TexturePluginBase( name, uid, prev, model )
     , m_vsc( nullptr )
+    , m_lastAudioUpdateID( 0 )
 {
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
     m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );       // Default video card format. It doesn't require converting.
@@ -283,11 +284,13 @@ void                                VideoInputPlugin::Update                    
 void                                VideoInputPlugin::UpdateAudio                   ()
 {
     auto videoInputAudio = m_videoInputAsset->GetAudio();
-    if( videoInputAudio )
+    if( videoInputAudio && m_lastAudioUpdateID < videoInputAudio->LastAudioUpdate() )
     {
         auto audioFrame = videoInputAudio->GetFrame();
         if( audioFrame )
             m_audioChannel->PushPacket( ApplyGain( audioFrame ) );
+
+        m_lastAudioUpdateID = videoInputAudio->LastAudioUpdate();
     }
 }
 

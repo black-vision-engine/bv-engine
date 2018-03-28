@@ -30,7 +30,7 @@ private:
 
 protected:
 
-    UInt32										m_id;
+    UniqueID                                    m_id;
 
     std::string                                 m_name;
     std::string                                 m_uid;
@@ -68,7 +68,7 @@ public:
 
     virtual void                                Update                      ( TimeType t );
 
-    UInt32										GetID		                () const override   { return m_id; }
+    UniqueID                                    GetID		                () const override   { return m_id; }
 
     const std::string &                         GetName                     () const override   { return m_name; } 
     const std::string &                         GetTypeUid                  () const override   { return m_uid; } 

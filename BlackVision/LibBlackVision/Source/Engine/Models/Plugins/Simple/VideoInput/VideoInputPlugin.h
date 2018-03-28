@@ -54,6 +54,7 @@ protected:
     DefaultAudioChannelPtr          m_audioChannel;
 
     VideoInputAssetConstPtr         m_videoInputAsset;
+    UInt64                          m_lastAudioUpdateID;
 
     ValueFloatPtr                   m_gainValue;
 

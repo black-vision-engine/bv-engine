@@ -1,6 +1,7 @@
 #include "stdafxCore.h"
 
 #include "XMLSerializer.h"
+#include "XMLDeserializer.h"
 
 #include <rapidxml/RapidXml.hpp>
 #include <rapidxml/RapidXml_Print.hpp>
@@ -134,6 +135,44 @@ void                XMLSerializer::EnterChild          ( const std::wstring& /*n
 //
 void                XMLSerializer::EnterArray          ( const std::wstring& /*name*/ )
 {    assert( !"This serializer doesn't supports wstrings" );    }
+
+// ***********************
+//
+bool                XMLSerializer::AttachBranch         ( const std::string & name, const IDeserializer * ser )
+{
+    auto deser = static_cast< const XMLDeserializer * >( ser );
+    auto node = deser->GetDoc();
+
+    EnterChild( name );
+    RewriteTree( node );
+    ExitChild();
+
+    return false;
+}
+
+// ***********************
+//
+void                XMLSerializer::RewriteTree          ( rapidxml::xml_node<> * node )
+{
+    // Copy attributes
+    auto attrib = node->first_attribute();
+    while( attrib != nullptr )
+    {
+        SetValue( attrib->name(), attrib->value() );
+        attrib = attrib->next_attribute();
+    }
+
+    // Copy subtree recursive.
+    auto child = node->first_node();
+    while( child != nullptr )
+    {
+        EnterChild( node->name() );
+        RewriteTree( child );
+        ExitChild();    // node->name()
+
+        child = child->next_sibling();
+    }
+}
 
 // ***********************
 //
