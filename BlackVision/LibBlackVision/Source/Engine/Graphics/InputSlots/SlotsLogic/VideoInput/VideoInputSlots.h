@@ -84,7 +84,7 @@ private:
     audio::AudioBufferPtr       CreateAudio     ( const videocards::VideoInputChannelDesc & vidInputDesc );
 
     void                        FreeTexture     ( RenderContext * ctx, Texture2DPtr texture );
-    void                        FreeAudio       ( RenderContext * ctx, audio::AudioBufferPtr audio );
+    void                        FreeAudio       ( RenderContext * ctx, AudioSlotPtr audio );
 
     std::string                 GenerateName    ( const videocards::VideoInputChannelDesc & vidInputDesc );
 

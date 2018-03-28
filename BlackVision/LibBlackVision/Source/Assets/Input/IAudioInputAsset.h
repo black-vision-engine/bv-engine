@@ -28,6 +28,8 @@ public:
     virtual UInt32      GetFrequency        () const = 0;
     virtual AudioFormat GetFormat           () const = 0;
 
+    virtual UInt64      LastAudioUpdate     () const = 0;
+
     virtual MemoryChunkConstPtr     GetFrame() const = 0;
 };
 

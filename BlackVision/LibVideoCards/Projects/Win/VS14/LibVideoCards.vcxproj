@@ -37,6 +37,7 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\FifoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\BlueFishInputThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\FifoCapture.h" />
+    <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\FrameSchedule.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Input\InputChannel.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Output\BlueFishVCThread.h" />
     <ClInclude Include="..\..\..\Source\Models\BlueFish\Output\FifoPlayback.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\VideoInputChannelDesc.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\VideoInputFrameData.h" />
+    <ClInclude Include="..\..\..\Source\VideoOutput\VideoOutputChannelDesc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVTimeCode.cpp" />
@@ -65,6 +67,7 @@
     <ClCompile Include="..\..\..\Source\Models\BlueFish\FifoBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Input\BlueFishInputThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Input\FifoCapture.cpp" />
+    <ClCompile Include="..\..\..\Source\Models\BlueFish\Input\FrameSchedule.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Input\InputChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Output\BlueFishVCThread.cpp" />
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Output\FifoPlayback.cpp" />

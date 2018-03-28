@@ -4,6 +4,8 @@
 
 #include <functional>
 
+#include "IO/DirIO.h"
+
 #include "Serialization/XML/XMLSerializer.h"
 #include "Serialization/SerializationHelper.inl"
 
@@ -11,12 +13,60 @@
 
 #include "UseLoggerBVAppModule.h"
 
-#define USE_READBACK_API
-//#define FULLSCREEN_MODE
-#define PERSPECTIVE_CAMERA
 
 
-namespace bv {
+namespace bv
+{
+
+
+
+// ***********************
+//
+template< typename PropertyType >
+void            BVConfig::LoadPropertyValueOrSetDefault       ( const char * propertyPath, BVConfig::ConfigPropertyPtr< PropertyType > member, EntryType type )
+{
+    auto & propString = m_properties[ propertyPath ];
+    auto expPropValue = Convert::String2T< PropertyType >( propString );
+
+    if( expPropValue.IsValid() )
+    {
+        this->*member = expPropValue.GetVal();
+    }
+    else
+    {
+        if( type == EntryType::Required )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [" << propertyPath << "], value [" << propString << "]. Default value set.";
+        }
+
+        // If property is invalid we treat current value of field in member pointer as default.
+        // Entry in m_properties mus be equal to default value.
+        m_properties[ propertyPath ] = Convert::T2String( this->*member );
+    }
+}
+
+// ***********************
+//
+template<>
+void            BVConfig::LoadPropertyValueOrSetDefault< std::string >  ( const char * propertyPath, BVConfig::ConfigPropertyPtr< std::string > member, EntryType type )
+{
+    auto & propString = m_properties[ propertyPath ];
+
+    if( !propString.empty() )
+    {
+        this->*member = propString;
+    }
+    else
+    {
+        if( type == EntryType::Required )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [" << propertyPath << "], value [" << propString << "]. Default value set.";
+        }
+
+        m_properties[ propertyPath ] = this->*member;
+    }
+}
+
 
 
 // *********************************
@@ -35,23 +85,26 @@ void    BVConfig::InitDefaultConfiguration()
     m_fullscreeMode = false;
     m_isCameraPerspective = true;
     m_readbackOn = false;
+
     m_renderToSharedMemory = false;
-    m_sharedMemoryScaleFactor = 1;
+    m_shmName = "BV";
+    m_shmWidth = 1920;
+    m_shmHeight = 1080;
 
     m_globalGain = 1.f;
 
     m_sockerServerPort = 12345;
 
     m_useDebugLayer = false;
-    m_debugFilePath = "";
+    m_debugFilePath = "Logs/";
 
     m_windowMode = WindowMode::WINDOWED;
 
-    m_vsync = false;
-    m_rendererInput.m_DisableVerticalSync = true;
-    m_rendererInput.m_EnableGLFinish = false;
-    m_rendererInput.m_EnableGLFlush = false;
-    m_rendererInput.m_VerticalBufferFrameCount = 0;
+    m_vsync = true;
+    m_rendererInput.m_DisableVerticalSync = false;
+    m_rendererInput.m_EnableGLFinish = true;
+    m_rendererInput.m_EnableGLFlush = true;
+    m_rendererInput.m_VerticalBufferFrameCount = 1;
 
     m_rendererInput.m_WindowHandle = nullptr;
     m_rendererInput.m_PixelFormat = 0;
@@ -61,18 +114,14 @@ void    BVConfig::InitDefaultConfiguration()
     m_frameTimeMillis = 1000 / m_fps;
     m_timerFPS = 60;
 
-    m_displayVideoCardOutput = false;
-
     m_eventLoopUpdateMillis = 20;
 
     m_defaultFOV = 90.f;
     m_defaultNearClippingPlane = 0.1f;
     m_defaultFarClippingPlane = 100.f;
 
-    m_defaultFOV = 90.f;
-
     m_defaultCameraPosition = glm::vec3( 0.f, 0.f, 5.f );
-    m_defaultCameraDirection = glm::vec3( 0.f , 0.f, 5.f );
+    m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 5.f );
     m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
 
     m_defaultStatsMovingAverageWindowSize = 500; //500
@@ -86,11 +135,10 @@ void    BVConfig::InitDefaultConfiguration()
     m_defaultClearColor = glm::vec4( 0.f, 0.f, 0.f, 0.f );
     m_defaultClearDepth = 1.0f;
 
-    m_defaultSceneEnvVarName = "";
+    m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
     m_sceneFromEnvName = "";
     m_loadSceneFromEnv = false;
     m_loadSceneFromProjectManager = "";
-    m_useVideoInputFeeding = false;
 
     m_enableQueueLocking = false;
 
@@ -128,22 +176,21 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
             m_deserializer.ExitChild();  // config
         }
 
-        m_defaultWidth = m_defaultWindowWidth = 1920;
-        m_defaultHeight = m_defaultWindowHeight = 1080;
+        LoadPropertyValueOrSetDefault( "PMFolder", &BVConfig::m_pmFolder, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "UseReadbackAPI", &BVConfig::m_readbackOn, EntryType::Required );
 
-        m_pmFolder = m_properties[ "PMFolder" ];
-        m_fullscreeMode = Convert::String2T< bool >( m_properties[ "FullScreen" ], true );
-        m_isCameraPerspective = Convert::String2T< bool >( m_properties[ "PERSPECTIVE_CAMERA" ], true );
-        m_readbackOn = Convert::String2T< bool >( m_properties[ "USE_READBACK_API" ], false );
-        m_renderToSharedMemory = Convert::String2T< bool >( m_properties[ "Renderer/RenderToSharedMemory" ], false );
-        m_sharedMemoryScaleFactor = Convert::String2T< int >( m_properties[ "Renderer/SharedMemoryScaleFactor" ], 1 );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Enable", &BVConfig::m_renderToSharedMemory, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Name", &BVConfig::m_shmName, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Width", &BVConfig::m_shmWidth, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "SharedMemory/Height", &BVConfig::m_shmHeight, EntryType::Required );
 
-        m_globalGain = Convert::String2T< Float32 >( m_properties[ "Audio/GlobalGain" ], 1.f );
+        LoadPropertyValueOrSetDefault( "Audio/GlobalGain", &BVConfig::m_globalGain, EntryType::Required );
 
-        m_sockerServerPort = Convert::String2T< Int32 >( m_properties[ "Network/SocketServer/Port" ], 12345 );
+        LoadPropertyValueOrSetDefault( "Network/SocketServer/Port", &BVConfig::m_sockerServerPort, EntryType::Required );
 
-        m_useDebugLayer = Convert::String2T< bool >( m_properties[ "Debug/CommandsDebugLayer/UseDebugLayer" ], false );
-        m_debugFilePath = m_properties[ "Debug/CommandsDebugLayer/FilePath" ];
+        LoadPropertyValueOrSetDefault( "Debug/CommandsDebugLayer/UseDebugLayer", &BVConfig::m_useDebugLayer, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "Debug/CommandsDebugLayer/FilePath", &BVConfig::m_debugFilePath, EntryType::Optional );
+
 
         if( m_properties[ "Resolution" ] == "SD" )
         {
@@ -157,92 +204,80 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
         }
         else
         {
-            if( m_properties[ "Application/Window/Mode" ] == "MULTIPLE_SCREENS" )
+            if( m_properties[ "Application/Window/Mode" ] == "MultipleScreens" )
             {
                 m_windowMode = WindowMode::MULTIPLE_SCREENS;
             }
-            else
+            else if( m_properties[ "Application/Window/Mode" ] == "Windowed" )
             {
                 m_windowMode = WindowMode::WINDOWED;
             }
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::warning ) << "Invalid config entry. Property [Application/Window/Mode], value [" << m_properties[ "Application/Window/Mode" ] << "].";
+            }
 
-            m_defaultWindowWidth = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Width" ], m_defaultWidth );
-            m_defaultWindowHeight = Convert::String2T< Int32 >( m_properties[ "Application/Window/Size/Height" ], m_defaultHeight );
+            LoadPropertyValueOrSetDefault( "Application/Window/Size/Width", &BVConfig::m_defaultWindowWidth, EntryType::Required );
+            LoadPropertyValueOrSetDefault( "Application/Window/Size/Height", &BVConfig::m_defaultWindowHeight, EntryType::Required );
 
-            m_defaultWidth = Convert::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Width" ], m_defaultWidth );
-            m_defaultHeight = Convert::String2T< Int32 >( m_properties[ "Application/Renderer/FrameBufferSize/Height" ], m_defaultHeight );
+            LoadPropertyValueOrSetDefault( "Renderer/FrameBufferSize/Width", &BVConfig::m_defaultWidth, EntryType::Required );
+            LoadPropertyValueOrSetDefault( "Renderer/FrameBufferSize/Height", &BVConfig::m_defaultHeight, EntryType::Required );
         }
 
-        m_vsync = Convert::String2T< bool >( m_properties[ "Application/VSYNC" ], true );
-        if( m_vsync )
-        {
-            m_rendererInput.m_DisableVerticalSync = false;
-            m_rendererInput.m_EnableGLFinish = true;
-            m_rendererInput.m_EnableGLFlush = true;
-            m_rendererInput.m_VerticalBufferFrameCount = 1;
-        }
-        else
-        {
-            m_rendererInput.m_DisableVerticalSync = true;
-            m_rendererInput.m_EnableGLFinish = false;
-            m_rendererInput.m_EnableGLFlush = false;
-            m_rendererInput.m_VerticalBufferFrameCount = 0;
-        }
+        LoadPropertyValueOrSetDefault( "Application/Window/FullScreen", &BVConfig::m_fullscreeMode, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Application/VSync", &BVConfig::m_vsync, EntryType::Required );
 
-        m_rendererInput.m_WindowHandle = nullptr;
-        m_rendererInput.m_PixelFormat = 0;
-        m_rendererInput.m_RendererDC = 0;
+        LoadPropertyValueOrSetDefault( "Renderer/MaxFPS", &BVConfig::m_fps, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Renderer/TimerFPS", &BVConfig::m_timerFPS, EntryType::Required );
 
-        m_fps = Convert::String2T< Int32 >( m_properties[ "Renderer/MaxFPS" ], 60 );
-        m_frameTimeMillis = 1000 / m_fps;
-        m_timerFPS = Convert::String2T< Int32 >( m_properties[ "Renderer/TimerFPS" ], 60 );
+        LoadPropertyValueOrSetDefault( "Application/Events/MaxLoopUpdateTime", &BVConfig::m_eventLoopUpdateMillis, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Application/Events/EnableLockingQueue", &BVConfig::m_enableQueueLocking, EntryType::Optional );
 
-        m_displayVideoCardOutput = Convert::String2T< bool >( m_properties[ "Renderer/DisplayVideoCardOutput" ], false );
+        LoadPropertyValueOrSetDefault( "Camera/IsPerspective", &BVConfig::m_isCameraPerspective, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Camera/FOV", &BVConfig::m_defaultFOV, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Camera/Position", &BVConfig::m_defaultCameraPosition, EntryType::Required );
+        LoadPropertyValueOrSetDefault( "Camera/Direction", &BVConfig::m_defaultCameraDirection, EntryType::Required );
 
-        m_eventLoopUpdateMillis = Convert::String2T< UInt32 >( m_properties[ "Application/Events/MaxLoopUpdateTime" ], m_eventLoopUpdateMillis );
+        LoadPropertyValueOrSetDefault( "Renderer/ClearColor", &BVConfig::m_defaultClearColor, EntryType::Required );
 
-        m_defaultFOV = 90.f;
-        m_defaultNearClippingPlane = 0.1f;
-        m_defaultFarClippingPlane = 100.f;
+        LoadPropertyValueOrSetDefault( "Debug/SceneFromEnvName", &BVConfig::m_sceneFromEnvName, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromEnv", &BVConfig::m_loadSceneFromEnv, EntryType::Optional );
+        LoadPropertyValueOrSetDefault( "Debug/LoadSceneFromProjectManager", &BVConfig::m_loadSceneFromProjectManager, EntryType::Optional );
 
-        m_defaultFOV = Convert::String2T< Float32 >( m_properties[ "camera/fov" ], 90.f );
+        LoadPropertyValueOrSetDefault( "Plugins/Textures/OnFailedLoadBehavior", &BVConfig::m_onFailedTextureLoadBehavior, EntryType::Required );
 
-        m_defaultCameraPosition = glm::vec3( Convert::String2T< Float32 >( m_properties[ "camera/position/x" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/position/y" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/position/z" ], 0.f ) );
-        m_defaultCameraDirection = glm::vec3( Convert::String2T< Float32 >( m_properties[ "camera/direction/x" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/direction/y" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "camera/direction/z" ], 0.f ) );
-        m_defaultCameraUp = glm::vec3( 0.f, 1.f, 0.f );
-
-        m_defaultStatsMovingAverageWindowSize = 500; //500
-        m_defaultWarmupRoundsStatsMAV = 10; //10
-        m_defaultStatsRefreshMillisDelta = 1000;
-        m_defaultStatsRecalcFramesDelta = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
-        m_defaultProfilerDisplayWaitMillis = 10000; //1000
-
-        m_numRedbackBuffersPerRenderTarget = 4; //up to 200+, when 32 bit build is enabled
-
-        m_defaultClearColor = glm::vec4( Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/r" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/g" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/b" ], 0.f ),
-            Convert::String2T< Float32 >( m_properties[ "Renderer/ClearColor/a" ], 0.f ) );
-        m_defaultClearDepth = 1.0f;
-
-        m_defaultSceneEnvVarName = "BV_DEFAULT_SCENE";
-        m_sceneFromEnvName = m_properties[ "Debug/SceneFromEnvName" ];
-        m_loadSceneFromEnv = Convert::String2T< bool >( m_properties[ "Debug/LoadSceneFromEnv" ], false );
-        m_loadSceneFromProjectManager = m_properties[ "Debug/LoadSceneFromProjectManager" ];
-        m_useVideoInputFeeding = Convert::String2T< bool >( m_properties[ "Debug/UseVideoInputFeeding" ], false );
-
-        m_enableQueueLocking = Convert::String2T< bool >( m_properties[ "Application/EnableLockingQueue" ], false );
-
-        m_onFailedTextureLoadBehavior = m_properties[ "Plugins/Textures/OnFailedLoadBehavior" ];
+        RecomputeDependentValues();
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Default config file 'config.xml' reading error. Loading default configuration.";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Config file [" << filePath << "] doesn't exist. Loading default configuration.";
     }
+}
+
+// ***********************
+//
+void                    BVConfig::RecomputeDependentValues  ()
+{
+    if( m_vsync )
+    {
+        m_rendererInput.m_DisableVerticalSync = false;
+        m_rendererInput.m_EnableGLFinish = true;
+        m_rendererInput.m_EnableGLFlush = true;
+        m_rendererInput.m_VerticalBufferFrameCount = 1;
+    }
+    else
+    {
+        m_rendererInput.m_DisableVerticalSync = true;
+        m_rendererInput.m_EnableGLFinish = false;
+        m_rendererInput.m_EnableGLFlush = false;
+        m_rendererInput.m_VerticalBufferFrameCount = 0;
+    }
+
+    m_rendererInput.m_WindowHandle = nullptr;
+    m_rendererInput.m_PixelFormat = 0;
+    m_rendererInput.m_RendererDC = 0;
+
+    m_frameTimeMillis = 1000 / m_fps;
 }
 
 
@@ -279,126 +314,13 @@ const IDeserializer &  BVConfig::GetNode                    ( int count, ... ) c
 
 // *********************************
 //
-//SizeType             BVConfig::GetNumRenderChannels    () const
-//{
-//    m_deserializer.Reset();
-//
-//    SizeType i = 0;
-//
-//    if( m_deserializer.EnterChild( "config" ) &&
-//        m_deserializer.EnterChild( "videocards" ) &&
-//        m_deserializer.EnterChild( "RenderChannels" )
-//       )
-//    {
-//        m_deserializer.EnterChild( "RenderChannel" );
-//
-//        do
-//        {
-//            if( m_deserializer.GetName() == "RenderChannel" )
-//                i++;
-//        }
-//        while( m_deserializer.NextChild() );
-//    }
-//
-//    return i;
-//}
-//
-//// *********************************
-////
-//SizeType             BVConfig::GetNumOutputs           ( const std::string & rcID ) const
-//{
-//    m_deserializer.Reset();
-//
-//    SizeType numOfOutputs = 0;
-//    SizeType i = 0;
-//
-//    if( m_deserializer.EnterChild( "config" ) && m_deserializer.EnterChild( "RenderChannels" ) )
-//    {
-//        do
-//        {
-//            if( !m_deserializer.EnterChild( "RenderChannel" ) || !m_deserializer.ExitChild() )
-//            {
-//                return 0;
-//            }
-//        }
-//        while( m_deserializer.NextChild() && i < rcIdx );
-//
-//        if( m_deserializer.EnterChild( "RenderChannel" ) )
-//        {
-//            do
-//            {
-//                if( m_deserializer.EnterChild( "Output" ) && m_deserializer.ExitChild() )
-//                {
-//                    numOfOutputs++;
-//                }
-//            }
-//            while( m_deserializer.NextChild() );
-//
-//            m_deserializer.ExitChild(); // RenderChannel
-//        }
-//
-//        m_deserializer.ExitChild(); // RenderChannels
-//        m_deserializer.ExitChild(); // config
-//    }
-//
-//    return numOfOutputs;
-//}
-//
-//// *********************************
-////
-//std::vector< BVConfig::KVMap >      BVConfig::GetOutputsProp          ( const std::string & rcID ) const
-//{
-//    m_deserializer.Reset();
-//
-//    std::vector< BVConfig::KVMap > properties;
-//
-//    if( m_deserializer.EnterChild( "config" ) &&
-//        m_deserializer.EnterChild( "videocards" ) && 
-//        m_deserializer.EnterChild( "RenderChannels" ) )
-//    {
-//        m_deserializer.EnterChild( "RenderChannel" );
-//        do
-//        {
-//            if( m_deserializer.GetName() == "RenderChannel" )
-//            {
-//                if( m_deserializer.GetAttribute( "id" ) == rcID )
-//                {
-//                    if( m_deserializer.EnterChild( "Output" ) )
-//                    {
-//                        do
-//                        {
-//                            BVConfig::KVMap p;
-//                            p[ "id" ] = m_deserializer.GetAttribute( "id" );
-//                            p[ "width" ] = m_deserializer.GetAttribute( "width" );
-//                            p[ "height" ] = m_deserializer.GetAttribute( "height" );
-//
-//                            properties.push_back( p );
-//                        }
-//                        while( m_deserializer.NextChild() );
-//
-//                        m_deserializer.ExitChild();
-//                    }
-//                }
-//            }
-//
-//        }
-//        while( m_deserializer.NextChild() );
-//        
-//        m_deserializer.ExitChild(); // RenderChannel
-//    }
-//
-//    return properties;
-//}
-
-// *********************************
-//
 BVConfig::~BVConfig                     ()
 {
 }
 
 // *********************************
 //
-void BVConfig::LoadProperties           ( const IDeserializer & deser, std::string path )
+void                    BVConfig::LoadProperties        ( const IDeserializer & deser, std::string path )
 {
     auto name = deser.GetAttribute( "name" );
     auto value = deser.GetAttribute( "value" );
@@ -429,24 +351,116 @@ void BVConfig::LoadProperties           ( const IDeserializer & deser, std::stri
 
 // ***********************
 //
-void                    BVConfig::SaveConfig            ( ISerializer & /*ser*/, std::string /*path*/ ) const
+UInt32                  FindCommonPathPart              ( StringVector & path1, StringVector & path2 )
 {
-    if( Path::Exists( CONFIG_PATH ) )
+    UInt32 eqNesting = 0;
+
+    while( path1.size() > eqNesting
+        && path2.size() > eqNesting
+        && path1[ eqNesting ] == path2[ eqNesting ] )
     {
-        //XMLSerializer ser( nullptr );
+        eqNesting++;
+    }
 
-        //if( m_deserializer.EnterChild( "config" ) )
-        //{
-        //    for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
-        //    {
+    return eqNesting;
+}
 
+// ***********************
+//
+void                    BVConfig::SaveConfig            ( std::string path ) const
+{
+    Path configPath( path );
+    if( Dir::CreateDir( configPath.ParentPath().Str(), true ) )
+    {
+        XMLSerializer ser( nullptr );
 
-        //    }
+        ser.EnterChild( "config" );
 
-        //    m_deserializer.ExitChild();  // config
-        //}
+        SaveProperties( ser );
+        SaveRenderChannels( ser );
+        SaveVideoCards( ser );
 
-        //ser.Save( CONFIG_PATH );
+        ser.ExitChild();  // config
+
+        ser.Save( path );
+    }
+}
+
+// ***********************
+//
+void                    BVConfig::SaveProperties        ( ISerializer & ser ) const
+{
+    UInt32 prevNesting = 0;
+    StringVector prevPath;
+
+    // We use fact, that properties are sorted in map.
+    for( auto iter = m_properties.begin(); iter != m_properties.end(); ++iter )
+    {
+        Path propPath = iter->first;
+        StringVector curPath = propPath.Split();
+
+        // Find common part of path.
+        UInt32 eqNesting = FindCommonPathPart( prevPath, curPath );
+
+        // In previous interation we were more nested in serializer.
+        if( prevNesting > eqNesting )
+        {
+            UInt32 numExits = prevNesting - eqNesting;
+            while( numExits > 0 )
+            {
+                ser.ExitChild();
+                numExits--;
+            }
+        }
+
+        // We must EnterChild beginning from eqNesting index in curPath vector.
+        UInt32 nesting = eqNesting;
+        UInt32 maxNesting = ( UInt32 )curPath.size() - 1;
+        while( nesting <= maxNesting )
+        {
+            ser.EnterChild( "property" );
+            ser.SetAttribute( "name", curPath[ nesting ] );
+
+            nesting++;
+        }
+
+        prevNesting = nesting;
+
+        // We are in leaf of properties tree. Set Value.
+        ser.SetAttribute( "value", iter->second );
+
+        prevPath = curPath;
+    }
+
+    // Exit nesting.
+    while( prevNesting > 0 )
+    {
+        ser.ExitChild();
+        prevNesting--;
+    }
+}
+
+// ***********************
+//
+void                    BVConfig::SaveRenderChannels    ( ISerializer & ser ) const
+{
+    auto & rcDeser = GetNode( 1, "config" );
+    if( rcDeser.EnterChild( "RenderChannels" ) )
+    {
+        ser.AttachBranch( "RenderChannels", &rcDeser );
+        rcDeser.ExitChild();
+    }
+}
+
+// ***********************
+//
+void                    BVConfig::SaveVideoCards        ( ISerializer & ser ) const
+{
+    auto & rcDeser = GetNode( 1, "config" );
+    if( rcDeser.EnterChild( "videocards" ) )
+    {
+        ser.AttachBranch( "videocards", &rcDeser );
+        rcDeser.ExitChild();
     }
 }
 

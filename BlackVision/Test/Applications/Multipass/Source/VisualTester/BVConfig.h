@@ -55,7 +55,7 @@ private:
 
 public:
 
-    inline int                  DefaultwindowWidth      () const;
+    inline int                  DefaultWindowWidth      () const;
     inline int                  DefaultWindowHeight     () const;
 
     inline int                  DefaultWidth            () const;

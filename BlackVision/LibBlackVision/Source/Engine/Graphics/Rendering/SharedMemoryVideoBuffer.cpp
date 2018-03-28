@@ -32,11 +32,18 @@ void                        SharedMemoryVideoBuffer::PushFrame  ( Texture2DConst
 //
 SharedMemoryVideoBufferPtr  SharedMemoryVideoBuffer::Create     ( UInt32 width, UInt32 height, TextureFormat format )
 {
+    return Create( MAPPING_OBJECT_NAME, width, height, format );
+}
+
+// ***********************
+//
+SharedMemoryVideoBufferPtr  SharedMemoryVideoBuffer::Create     ( const std::wstring & name, UInt32 width, UInt32 height, TextureFormat format )
+{
     SharedMemoryVideoBufferPtr result = nullptr;
 
-    auto buffSize = width * height * ( UInt32 ) Texture::GetPixelSize( format );
+    auto buffSize = width * height * ( UInt32 )Texture::GetPixelSize( format );
 
-    auto buf = SharedMemoryBuffer::Create( MAPPING_OBJECT_NAME, buffSize );
+    auto buf = SharedMemoryBuffer::Create( name, buffSize );
 
     if( buf )
     {

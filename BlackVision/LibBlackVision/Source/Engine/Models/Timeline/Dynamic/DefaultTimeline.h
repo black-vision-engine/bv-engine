@@ -90,7 +90,7 @@ private:
     void                                        PostUpdateEventStep ();
 
 public:
-    virtual const std::string &                 GetType             () override;
+    virtual const std::string &                 GetType             () const override;
     static const std::string &                  Type                ();
 };
 

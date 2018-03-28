@@ -22,7 +22,7 @@ VideoCardDesc::VideoCardDesc()
 
 //**************************************
 //
-IVideoCardPtr           VideoCardDesc::CreateVideoCard  () const
+Expected< IVideoCardPtr >   VideoCardDesc::CreateVideoCard  () const
 {
     if( VideoCard::AvailableVideoCards > 0 )
     {
@@ -43,7 +43,7 @@ IVideoCardPtr           VideoCardDesc::CreateVideoCard  () const
         return card;
     }
 
-    return nullptr;
+    return Expected< IVideoCardPtr >();
 }
 
 // ***********************

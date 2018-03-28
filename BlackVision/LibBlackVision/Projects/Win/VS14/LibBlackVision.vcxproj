@@ -694,6 +694,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\AllSlotRefsRemovedEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\DepthRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\GizmoRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\AudioSlot.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlot.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlotDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\InputSlots\InputSlots.h" />
@@ -737,7 +738,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventTrigger.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
@@ -1308,7 +1308,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventTrigger.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\GlobalTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\SimpleIParamSet.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />

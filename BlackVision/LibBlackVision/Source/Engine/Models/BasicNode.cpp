@@ -70,6 +70,7 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 //
 BasicNode::BasicNode( const std::string & name, const PluginsManager * pluginsManager )
     : m_name( name )
+    , m_id( IDGenerator::Instance().GetID() )
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
     , m_visible( true )
@@ -120,6 +121,9 @@ void                            BasicNode::Serialize               ( ISerializer
 
     if( context->detailedInfo )
         ser.SetAttribute( "visible", m_visible ? "true" : "false" );
+
+    if( context->inludeUIDs )
+        ser.SetAttribute( "id", Convert::T2String( m_id ) );
 
     //if( context->detailedInfo )
     //{
@@ -274,6 +278,16 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
         return shared_from_this();
     }
 
+    if( IsPathWithUID( childPath ) )
+    {
+        auto expUID = TryParseUID( childPath );
+        
+        if( expUID.IsValid() )
+            return GetNode( expUID.GetVal() );
+
+        return nullptr;
+    }
+
     auto childName = SplitPrefix( childPath, separator );
     auto childIdx = TryParseIndex( childName );
         
@@ -303,6 +317,32 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
 IModelNodePtr                   BasicNode::GetChild                 ( const std::string & name )
 {
     return FindNode( m_children, name );
+}
+
+// ***********************
+//
+IModelNodePtr                   BasicNode::GetNode                  ( UniqueID id, bool recursive )
+{
+    if( id == m_id )
+        return shared_from_this();
+
+    for( auto & child : m_children )
+    {
+        if( child->GetUID() == id )
+            return child;
+    }
+
+    if( recursive )
+    {
+        for( auto & child : m_children )
+        {
+            auto node = child->GetNode( id, recursive );
+            if( node )
+                return node;
+        }
+    }
+
+    return IModelNodePtr();
 }
 
 // ********************************
@@ -401,6 +441,13 @@ IModelNodeEffectPtr             BasicNode::GetNodeEffect            () const
 void                            BasicNode::SetNodeEffect            ( IModelNodeEffectPtr nodeEffect )
 {
     m_modelNodeEffect = nodeEffect;
+}
+
+// ***********************
+//
+UniqueID                        BasicNode::GetUID                   () const
+{
+    return m_id;
 }
 
 // ********************************
@@ -869,6 +916,32 @@ Int32                               BasicNode::TryParseIndex            ( std::s
     }
 
     return -1;
+}
+
+// ***********************
+/// @todo Maybe we should ignore whitespaces.
+bool                                BasicNode::IsPathWithUID            ( const std::string & path, const char escapeChar )
+{
+    if( !path.empty() )
+    {
+        if( path[ 0 ] == escapeChar )
+            return true;
+    }
+
+    return false;
+}
+
+// ***********************
+//
+Expected< UniqueID >                BasicNode::TryParseUID              ( const std::string & path, const char escapeChar )
+{
+    if( path.length() > 1 && path[ 0 ] == escapeChar )
+    {
+        std::string uidString( path.begin() + 1, path.end() );
+        return Convert::String2T< UniqueID >( uidString );
+    }
+
+    return Expected< UniqueID >();
 }
 
 } // model

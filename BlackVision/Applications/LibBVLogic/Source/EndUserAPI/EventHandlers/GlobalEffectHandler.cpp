@@ -43,7 +43,7 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
         {
             result = editor->SetNodeEffect( sceneName, nodePath, timelinePath, effectName, true );
         }
-        if( command == GlobalEffectEvent::Command::LoadGlobalEffectAsset )
+        else if( command == GlobalEffectEvent::Command::LoadGlobalEffectAsset )
         {
             auto assetData = effectEvent->AssetData;
 

@@ -42,6 +42,9 @@ Texture2DPtr    VideoResizedInputChannel::ReadColorTexture          ( RenderCont
 
         auto inputRenderTarget = m_wrappedRenderChannel->GetActiveRenderTarget();
 
+        ctx->Enable( m_videoRT );
+        ctx->ClearBoundRT( glm::vec4( 0.0, 0.0, 0.0, 0.0 ) );
+
         m_activeRenderOutput.SetEntry( 0, inputRenderTarget );
         m_blitEffect->Render( ctx, m_videoRT, m_activeRenderOutput );
 

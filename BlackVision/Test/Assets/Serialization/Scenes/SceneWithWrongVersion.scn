@@ -1,6 +1,6 @@
 <scene>
 	<version Major="0" Minor="47" Patch="0" SerializerVersion="0" Build="-1" Platform="Windows 64bit"/>
 	<timelines>
-		<timeline name="default" type="default" loop="clamp" />
+		<timeline name="default" type="default" loop="clamp" duration="777" />
 	</timelines>
 </scene>

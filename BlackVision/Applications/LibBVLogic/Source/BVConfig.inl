@@ -5,7 +5,7 @@ namespace bv
 
 // *********************************
 //
-Int32           BVConfig::DefaultwindowWidth                     () const
+Int32           BVConfig::DefaultWindowWidth                     () const
 {
     return m_defaultWindowWidth;
 }
@@ -61,13 +61,6 @@ inline bool     BVConfig::ReadbackFlag                           () const
 
 // *********************************
 //
-inline bool     BVConfig::DisplayVideoCardOutput                () const
-{
-    return m_displayVideoCardOutput;
-}
-
-// *********************************
-//
 inline bool     BVConfig::IsCameraPerspactive                   () const
 {
     return m_isCameraPerspective;
@@ -80,20 +73,33 @@ inline bool     BVConfig::RenderToSharedMemory                   () const
     return m_renderToSharedMemory;
 }
 
+// ***********************
+//
+inline UInt32   BVConfig::SharedMemoryWidth                     () const
+{
+    return m_shmWidth;
+}
+
+// ***********************
+//
+inline UInt32   BVConfig::SharedMemoryHeight                    () const
+{
+    return m_shmHeight;
+}
+
+// ***********************
+//
+inline const std::string &  BVConfig::SharedMemoryBufferName    () const
+{
+    return m_shmName;
+}
+
 // *********************************
 //
 inline Float32  BVConfig::GlobalGain							() const
 {
 	return m_globalGain;
 }
-
-// *********************************
-//
-inline int     BVConfig::SharedMemoryScaleFactor() const
-{
-	return m_sharedMemoryScaleFactor;
-}
-
 
 // *********************************
 //
@@ -286,13 +292,6 @@ inline bool                 BVConfig::LoadSceneFromEnv          () const
 
 // *********************************
 //
-inline bool                 BVConfig::UseVideoInputFeeding      () const
-{
-    return m_useVideoInputFeeding;
-}
-
-// *********************************
-//
 inline bool                 BVConfig::EnableLockingQueue        () const
 {
     return m_enableQueueLocking;
@@ -304,5 +303,6 @@ inline const std::string &  BVConfig::OnFailedTexLoadBehavior   () const
 {
     return m_onFailedTextureLoadBehavior;
 }
+
 
 } //bv

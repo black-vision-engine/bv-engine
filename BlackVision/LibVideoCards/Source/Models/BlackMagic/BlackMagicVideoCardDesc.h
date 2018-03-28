@@ -30,7 +30,7 @@ public:
 
     VideoCardDesc       ();
 
-    virtual IVideoCardPtr                   CreateVideoCard     () const override;
+    virtual Expected< IVideoCardPtr >       CreateVideoCard     () const override;
     virtual void                            Deserialize         ( const IDeserializer & deser ) override;
 
     virtual const std::string &             GetVideoCardUID     () const override;

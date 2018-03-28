@@ -69,7 +69,7 @@ TEST( Engine_InputSlots, VideoInputAudioAsset_Creation )
     auto slot = context.slots->AccessSource( context.videoSlots->GetSlotIndex( 0 ) );
     ASSERT_TRUE( slot.IsValid() );
 
-    EXPECT_EQ( typedAsset->GetFrame(), slot.GetVal().Audio->GetData() );
+    EXPECT_EQ( typedAsset->GetFrame(), slot.GetVal().Audio->AudioBuffer->GetData() );
 }
 
 

@@ -51,7 +51,7 @@ IPluginPtr							DefaultFinalizePlugin::Clone						() const
 
 // *******************************
 //
-UInt32								DefaultFinalizePlugin::GetID						() const
+UniqueID                            DefaultFinalizePlugin::GetID						() const
 {
     assert( false );
     return 0; //FIXME: id not needed?

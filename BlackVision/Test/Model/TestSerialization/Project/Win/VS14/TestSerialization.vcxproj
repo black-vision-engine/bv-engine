@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\..\Source\TestKeys\TestKeysSerializationDeserialization.cpp" />
     <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp" />
     <ClCompile Include="..\..\..\Source\TestScenes\VersionTest.cpp" />
+    <ClCompile Include="..\..\..\Source\TestTimelines\TimelinesTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

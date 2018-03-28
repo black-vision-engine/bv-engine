@@ -40,7 +40,7 @@ public:
 
     virtual IPluginPtr							Clone						() const override;
 
-    virtual UInt32				                GetID		                () const override;
+    virtual UniqueID			                GetID		                () const override;
     virtual const std::string &                 GetName                     () const override;
     virtual const std::string &                 GetTypeUid                  () const override;
                                                                                      

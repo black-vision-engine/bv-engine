@@ -48,7 +48,7 @@ JsonDeserializeObject::JsonDeserializeObject    ( JsonSerializeObject && seriali
 JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
     :   m_root( initValue )
     ,   m_currentNode( nullptr )
-    ,   m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr, &model::PluginsManager::DefaultInstanceRef(), model::TimelineManager::GetInstance() ) ) )
+    ,   m_context( std::unique_ptr< DeserializeContext >( BVDeserializeContext::CreateContextFromEmptiness() ) )
 {
     OnRootInit();
 }

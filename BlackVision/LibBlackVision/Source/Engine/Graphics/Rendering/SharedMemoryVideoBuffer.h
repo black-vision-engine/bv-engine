@@ -31,6 +31,7 @@ public:
     void                                PushFrame                   ( Texture2DConstPtr frame );
 
     static  SharedMemoryVideoBufferPtr  Create                      ( UInt32 width, UInt32 height, TextureFormat format );
+    static  SharedMemoryVideoBufferPtr  Create                      ( const std::wstring & name, UInt32 width, UInt32 height, TextureFormat format );
 
 };
 

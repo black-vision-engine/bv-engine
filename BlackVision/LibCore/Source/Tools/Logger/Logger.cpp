@@ -32,6 +32,8 @@
 #include <boost/log/sinks/sync_frontend.hpp>
 
 #include "DataTypes/QueueConcurrent.h"
+#include "Serialization/ConversionHelper.h"
+
 
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_file_backend > ASyncFileSink;
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_ostream_backend > ASyncStreamSink;
@@ -76,24 +78,37 @@ ModuleMapping &     ModuleString()
     return moduleString;
 }
 
-
-
-// *********************************
-//
-void InitializeModuleMapping()
+namespace bv
 {
-    ModuleString()[bv::ModuleEnum::ME_LibBlackVision]		= "LibBlackVision";
-    ModuleString()[bv::ModuleEnum::ME_LibCore]			= "LibCore";
-    ModuleString()[bv::ModuleEnum::ME_LibImage]			= "LibImage";
-    ModuleString()[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
-    ModuleString()[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
-    ModuleString()[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
-    ModuleString()[bv::ModuleEnum::ME_TCPServer]          = "LibTCPServer";
-    ModuleString()[bv::ModuleEnum::ME_LibVideoCards]      = "LibVideoCards";
-    ModuleString()[bv::ModuleEnum::ME_XMLScenParser]      = "LibXMLSceneParser";
 
-	modulesStringAlignment = 17;
+DECLARE_ENUM_SERIALIZATION( ModuleEnum );
+
+namespace Convert
+{
+
+// ***********************
+//
+std::pair< ModuleEnum, const char* > ModuleMapping[] =
+{ std::make_pair( ModuleEnum::ME_LibCore, "LibCore" )
+, std::make_pair( ModuleEnum::ME_LibBlackVision, "LibBlackVision" )
+, std::make_pair( ModuleEnum::ME_LibImage, "LibImage" )
+, std::make_pair( ModuleEnum::ME_Prototyper, "Prototyper" )
+, std::make_pair( ModuleEnum::ME_BlackVisionApp, "BlackVisionApp" )
+, std::make_pair( ModuleEnum::ME_LibProjectManager, "LibProjectManager" )
+, std::make_pair( ModuleEnum::ME_TCPServer, "LibTCPServer" )
+, std::make_pair( ModuleEnum::ME_LibVideoCards, "LibVideoCards" )
+, std::make_pair( ModuleEnum::ME_XMLScenParser, "LibXMLSceneParser" )
+, std::make_pair( ModuleEnum::ME_LibEffect, "LibEffect" )
+, std::make_pair( ModuleEnum::ME_Tests, "Tests" )
+, std::make_pair( ModuleEnum::ME_TOTAL, "Unknown module" )      // default
+};
+
+IMPLEMENT_ENUM_SERIALIZATION( ModuleEnum, ModuleMapping );
+
 }
+}
+
+
 
 // *********************************
 // Template specializaion is used to supress warning
@@ -127,11 +142,7 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream & st
 //
 std::string toString( bv::ModuleEnum moduleEnum )
 {
-	auto module = ModuleString().find( moduleEnum );
-	if( module != ModuleString().end() )
-		return module->second;
-	else
-		return"Unknown Module";
+    return bv::Convert::T2String( moduleEnum );
 }
 
 // *********************************
@@ -174,8 +185,6 @@ Logger& Logger::GetLogger()
 
 Logger::Logger()
 {
-	InitializeModuleMapping();
-
 	InitForamatter();
 	boost::log::add_common_attributes();
 

@@ -140,11 +140,12 @@ protected:
 
 private:
 
-    void                            InitializeKbdHandler();
-    void                            InitializeRemoteCommunication();
-    void                            InitializeCommandsDebugLayer();
-    void                            InitializeDefaultAssets();
-    void                            InitializeInputSlots();
+    void                            InitializeKbdHandler            ();
+    void                            InitializeRemoteCommunication   ();
+    void                            InitializeCommandsDebugLayer    ();
+    void                            InitializeDefaultAssets         ();
+    void                            InitializeInputSlots            ();
+    void                            InitializeRenderLogic           ();
 
     std::string                     GetEnvScene();
 

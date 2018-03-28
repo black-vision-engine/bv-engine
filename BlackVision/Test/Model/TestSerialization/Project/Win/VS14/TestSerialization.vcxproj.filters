@@ -26,6 +26,12 @@
     <ClCompile Include="..\..\..\Source\TestInterpolators\TestBezierSerialization.cpp">
       <Filter>TestInterpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestTimelines\TimelinesTest.cpp">
+      <Filter>TestTimelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp">
+      <Filter>TestNodes</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestNodes\NodeTest.cpp">
       <Filter>TestNodes</Filter>
     </ClCompile>
@@ -48,6 +54,9 @@
     </Filter>
     <Filter Include="TestNodes">
       <UniqueIdentifier>{a0e3ce15-1f0a-4d31-98d6-f8c6d4eeb88c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestTimelines">
+      <UniqueIdentifier>{9dd7df84-cdfe-4c1f-a508-66d6216ca66c}</UniqueIdentifier>
     </Filter>
     <Filter Include="TestAssets">
       <UniqueIdentifier>{8f929643-05d2-488f-a2a3-ba9da563a925}</UniqueIdentifier>

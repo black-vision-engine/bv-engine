@@ -70,13 +70,10 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 
     SetNodeLogicFactory( new NodeLogicFactory() );
 
-    m_renderLogic = RenderLogicInitializer::CreateInstance( DefaultConfig );
-
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
 
     model::ModelState::GetInstance().RegisterBVProject( m_bvProject.get() );
-    //BVServiceProvider::GetInstance().RegisterBVProject( m_bvProject.get() );
 }
 
 
@@ -88,8 +85,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer, audio::AudioRenderer 
 //
 void                    BVAppLogic::Initialize         ()
 {
-    m_renderMode.Init( m_renderLogic, m_renderer );
-
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
 
     bv::effect::InitializeLibEffect( m_renderer );
@@ -119,7 +114,10 @@ void                    BVAppLogic::Initialize         ()
 
     BVServiceProvider::GetInstance().RegisterVideoCardManager( m_videoCardManager );
 
+    InitializeRenderLogic();
     InitializeInputSlots();
+
+    m_renderMode.Init( m_renderLogic, m_renderer );
 }
 
 
@@ -280,6 +278,13 @@ void                            BVAppLogic::InitializeDefaultAssets()
 void                            BVAppLogic::InitializeInputSlots()
 {
     RenderLogicInitializer::InitializeInputSlots( m_renderLogic, DefaultConfig, m_videoCardManager );
+}
+
+// ***********************
+//
+void                            BVAppLogic::InitializeRenderLogic   ()
+{
+    m_renderLogic = RenderLogicInitializer::CreateInstance( DefaultConfig );
 }
 
 }	// bv

@@ -830,7 +830,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::ITi
     model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
 
-    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ), 1.f );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -871,8 +871,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::ITi
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-    auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-    auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+    auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ), 1 ); 
+    auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ), 1 );
     timeEvaluator->AddChild(offset5Timeline);
     timeEvaluator->AddChild(offset3Timeline);
 

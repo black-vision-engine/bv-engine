@@ -25,12 +25,7 @@ OutputChannel::OutputChannel( ChannelName name, ChannelOutputDataUPtr & output )
     m_playbackChannel = new CFifoPlayback();
 
     m_frameProcessingThread = new BlueFishVCThread( this, 1920 * 1080 * 4 ); // FIXME: Set frame size properly.
-
-    if( PlaybackData->interlaced )
-    {
-        m_frameProcessingThread->EnableInterlacing( true );
-        //m_frameProcessingThread->SetFrameDuration( UInt64( 1000 / ( float(output->refresh) / 100.f ) ) );
-    }
+    m_frameProcessingThread->EnableInterlacing( PlaybackData->interlaced );
 
     m_frameProcessingThread->Start();
 }

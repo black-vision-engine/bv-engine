@@ -426,6 +426,13 @@ InputChannelsDescsVec           VideoCard::GetInputChannelsDescs        () const
     return InputChannelsDescsVec();
 }
 
+// ***********************
+//
+OutputChannelsDescsVec           VideoCard::GetOutputChannelsDescs      () const
+{
+    return OutputChannelsDescsVec();
+}
+
 //**************************************
 //
 void                            VideoCard::DisplayNextFrame     ( IDeckLinkVideoFrame * completedFrame )

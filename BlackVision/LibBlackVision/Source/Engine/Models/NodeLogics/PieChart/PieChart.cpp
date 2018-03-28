@@ -159,12 +159,13 @@ PieChartPtr             PieChart::Create          ( const IDeserializer & deser,
         auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
         if( deserContext )
         {
-            model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
-            if( !sceneTimeline )
-            {
-                sceneTimeline = deserContext->GetTimelineManager()->GetRootTimeline();
-            }
-            auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
+            //model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
+            //if( !sceneTimeline )
+            //{
+            //    sceneTimeline = deserContext->GetRootTimeline();
+            //}
+            //auto timeEval = bv::model::TimelineHelper::GetTimeEvaluator( timelinePath, sceneTimeline );
+			auto timeEval = deserContext->GetTimeline( timelinePath );
         
             auto chartType = Convert::String2T< PieChartType >( deser.GetAttribute( "pieChartType" ), PieChartType::PST_COLOR );
             auto textEnabled = Convert::String2T< bool >( deser.GetAttribute( "textEnabled" ), true );

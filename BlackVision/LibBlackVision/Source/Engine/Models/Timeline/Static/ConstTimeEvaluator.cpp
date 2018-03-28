@@ -28,12 +28,14 @@ ConstTimeEvaluator::~ConstTimeEvaluator                     ()
 
 // *******************************
 //
-void                ConstTimeEvaluator::Serialize           ( ISerializer & sob ) const
+void                ConstTimeEvaluator::Serialize           ( ISerializer & ser ) const
 {
-    sob.EnterChild( "timeline" );
-    sob.SetAttribute( "name", GetName() );
-    sob.SetAttribute( "type", "const" );
-    sob.ExitChild();
+    ser.EnterChild( "timeline" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "const" );
+    ser.SetAttribute( "value", Convert::T2String< TimeType >( m_timeVal ) );
+//    SerializeChildren( ser );
+    ser.ExitChild();
 }
 
 // *******************************
@@ -45,10 +47,15 @@ ConstTimeEvaluatorPtr    ConstTimeEvaluator::Create         ( const std::string 
 
 // *******************************
 //
-ConstTimeEvaluatorPtr     ConstTimeEvaluator::Create         ( const IDeserializer & dob )
+ConstTimeEvaluatorPtr     ConstTimeEvaluator::Create         ( const IDeserializer & deser )
 {
-    assert( false );
-    dob; return nullptr;
+    auto name = deser.GetAttribute( "name" );
+    auto value = Convert::String2T< TimeType >( deser.GetAttribute( "value" ) );
+
+    auto te = Create( name, value );
+    te->DeserializeChildren( deser );
+
+    return te;
 }
 
 // *******************************
@@ -74,7 +81,7 @@ TimeType            ConstTimeEvaluator::GetLocalTime        () const
 
 // ***********************
 //
-const std::string&        ConstTimeEvaluator::GetType             ()
+const std::string&        ConstTimeEvaluator::GetType             () const
 {
     return Type();
 }

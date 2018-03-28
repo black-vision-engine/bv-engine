@@ -9,6 +9,12 @@ namespace bv {
 
 namespace model { class TimelineManager; }
 
+class BVSerializeContext;
+
+BVSerializeContext *      Context             ( const ISerializer & deser );
+
+// ***********************
+//
 class BVSerializeContext : public SerializeContext
 {
 private:
@@ -26,6 +32,7 @@ public:
         pluginsInfo = true;
         extendedAssetData = false;
         sceneNameInTimeline = true;
+        inludeUIDs = false;
     }
 
     bool                                recursive;
@@ -33,6 +40,7 @@ public:
     bool                                pluginsInfo;
     bool                                extendedAssetData;
     bool                                sceneNameInTimeline;
+    bool                                inludeUIDs;
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );

@@ -40,7 +40,7 @@ protected:
     InputSlotsPtr           m_slots;
     InputSlotBinding        m_binding;
 
-    audio::AudioBufferPtr   m_audio;
+    AudioSlotPtr            m_audio;
 
     mutable std::atomic< UInt32 >   m_numReferences;    ///< Remembers number of references to update it in new asset when texture under slot changes.
 
@@ -80,6 +80,7 @@ public:
     virtual AudioFormat             GetFormat           () const override;
     virtual MemoryChunkConstPtr     GetFrame            () const override;
 
+    virtual UInt64                  LastAudioUpdate     () const override;
     ///@}
 
 

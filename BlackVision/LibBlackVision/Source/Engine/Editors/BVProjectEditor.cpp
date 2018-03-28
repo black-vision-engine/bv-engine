@@ -450,11 +450,16 @@ void    BVProjectEditor::DeleteSceneRootNode	    ( model::SceneModelPtr modelSce
 //
 bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName, bool enableUndo )
 {
-    auto newNode = model::BasicNode::Create( newNodeName, nullptr );
-    auto parentNode = GetNode( sceneName, parentPath );
-    auto scene = m_project->GetModelScene( sceneName );
+    if( IsValidNodeName( newNodeName ) )
+    {
+        auto newNode = model::BasicNode::Create( newNodeName, nullptr );
+        auto parentNode = GetNode( sceneName, parentPath );
+        auto scene = m_project->GetModelScene( sceneName );
 
-    return AddChildNode( scene, parentNode, newNode, enableUndo );
+        return AddChildNode( scene, parentNode, newNode, enableUndo );
+    }
+
+    return false;
 }
 
 // *******************************
@@ -1495,8 +1500,11 @@ bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, con
 {
     if( node )
     {
-        QueryTyped( node )->SetName( newNodeName );
-        return true;
+        if( IsValidNodeName( newNodeName ) )
+        {
+            QueryTyped( node )->SetName( newNodeName );
+            return true;
+        }
     }
 
     return false;
@@ -1610,6 +1618,10 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
         auto effect = Convert::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
+
+        if( node == nullptr )
+            return false;
+
         auto curEffect = node->GetNodeEffect();
         auto result = SetNodeEffect( node, newEffect );
 
@@ -2414,6 +2426,21 @@ bool				    BVProjectEditor::IsTimelineEditable     ( const model::ITimeEvaluato
     {
         return false; //editing scene timeline & default is not allowed
     }
+    return true;
+}
+
+// ***********************
+/// Node name can't contain:
+/// - # used in indexed paths
+/// - @ used in uid paths
+bool                    BVProjectEditor::IsValidNodeName        ( const std::string & name )
+{
+    if( std::find( name.begin(), name.end(), '#' ) != name.end() )
+        return false;
+
+    if( std::find( name.begin(), name.end(), '@' ) != name.end() )
+        return false;
+
     return true;
 }
 

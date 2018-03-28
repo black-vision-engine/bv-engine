@@ -148,6 +148,29 @@ InputChannelsDescsVec   FakeVideoCard::GetInputChannelsDescs            () const
 
 // ***********************
 //
+OutputChannelsDescsVec  FakeVideoCard::GetOutputChannelsDescs           () const
+{
+    OutputChannelsDescsVec descs;
+
+    for( auto & channel : m_channels )
+    {
+        if( channel.OutputChannelData != nullptr )
+        {
+            VideoOutputID outputID = channel.OutputChannelData->LinkedVideoOutput;
+            const std::string channelName = channel.Name;
+
+            AVFrameDescriptor frameDesc = CreateAVFrameDesc( channel.OutputChannelData.get() );
+
+            VideoOutputChannelDesc newDesc( m_deviceID, outputID, FakeVideoCardDesc::UID(), channelName, frameDesc );
+            descs.push_back( newDesc );
+        }
+    }
+
+    return descs;
+}
+
+// ***********************
+//
 void                    FakeVideoCard::AddChannel                       ( FakeChannelDesc & channelDesc )
 {
     if( channelDesc.InputChannelData )
@@ -265,7 +288,18 @@ AVFrameDescriptor       FakeVideoCard::CreateAVFrameDesc        ( const FakeInpu
     return frameDesc;
 }
 
+// ***********************
+//
+AVFrameDescriptor       FakeVideoCard::CreateAVFrameDesc        ( const FakeOutputChannelData * channelDesc ) const
+{
+    AVFrameDescriptor frameDesc;
 
+    frameDesc.height = channelDesc->Height;
+    frameDesc.width = channelDesc->Width;
+    frameDesc.depth = 4;
+
+    return frameDesc;
+}
 
 
 }   // videocards

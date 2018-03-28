@@ -9,6 +9,7 @@
 
 #include "VideoCardDescFactory.h"
 #include "VideoInput/VideoInputFrameData.h"
+#include "VideoOutput/VideoOutputChannelDesc.h"
 
 #include "Memory/MemoryChunk.h"
 #include "DataTypes/CircularBufferConcurrent.h"
@@ -164,6 +165,7 @@ public:
     bool                                ProcessOutputsData      ();
    
     InputChannelsDescsVec               GetInputChannelsDescs   () const;
+    OutputChannelsDescsVec              GetOutputChannelsDescs  () const;
     IVideoCardPtr                       GetVideoCard            ( UInt32 idx );
 
     UInt32                              GetRequiredFPS          () const;

@@ -191,5 +191,5 @@ TEST( Engine_InputSlots, RegisterSource_Audio )
     ASSERT_TRUE( slots.AccessSource( slot1Idx ).IsValid() );
 
     EXPECT_EQ( tex1, slots.AccessSource( slot1Idx ).GetVal().Texture );
-    EXPECT_EQ( audio1, slots.AccessSource( slot1Idx ).GetVal().Audio );
+    EXPECT_EQ( audio1, slots.AccessSource( slot1Idx ).GetVal().Audio->AudioBuffer );
 }

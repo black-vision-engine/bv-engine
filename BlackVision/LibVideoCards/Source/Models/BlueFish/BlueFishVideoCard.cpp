@@ -77,6 +77,31 @@ InputChannelsDescsVec   VideoCard::GetInputChannelsDescs        () const
     return descs;
 }
 
+// ***********************
+//
+OutputChannelsDescsVec  VideoCard::GetOutputChannelsDescs       () const
+{
+    OutputChannelsDescsVec descs;
+
+    for( auto channel : m_channels )
+    {
+        if( channel->IsOutputChannel() )
+        {
+            auto typedChannel = static_cast< OutputChannel * >( channel );
+
+            VideoOutputID outputID = typedChannel->GetOutputId();
+            const std::string channelName = Convert::T2String( channel->GetName() );
+
+            AVFrameDescriptor frameDesc = channel->CreateFrameDesc();
+
+            VideoOutputChannelDesc newDesc( m_deviceID, outputID, VideoCardDesc::UID(), channelName, frameDesc );
+            descs.push_back( newDesc );
+        }
+    }
+
+    return descs;
+}
+
 //**************************************
 //
 bool            VideoCard::DetachVideoCard          ()

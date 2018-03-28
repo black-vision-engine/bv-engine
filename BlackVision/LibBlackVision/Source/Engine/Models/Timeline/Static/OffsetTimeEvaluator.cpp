@@ -38,11 +38,9 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& ser 
     ser.SetAttribute( "name", GetName() );
     ser.SetAttribute( "type", "offset" );
     SerializationHelper::SerializeAttribute( ser, m_timeOffset, "offset" );
+    SerializationHelper::SerializeAttribute( ser, m_timeScale, "scale" );
 
-    ser.EnterArray( "children" );
-    for( auto child : m_children )
-        child->Serialize( ser );
-    ser.ExitChild(); // children
+//    SerializeChildren( ser );
 
     ser.ExitChild();
 }
@@ -56,19 +54,16 @@ OffsetTimeEvaluatorPtr     OffsetTimeEvaluator::Create             ( const std::
 
 // *******************************
 //
-OffsetTimeEvaluatorPtr     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
+OffsetTimeEvaluatorPtr     OffsetTimeEvaluator::Create              ( const IDeserializer& deser )
 {
-    auto name = dob.GetAttribute( "name" );
+    auto name = deser.GetAttribute( "name" );
 
-    auto offset = Convert::String2T< float >( dob.GetAttribute( "offset" ), 0.f );
-    auto scale = Convert::String2T< float >( dob.GetAttribute( "scale" ), 1.f );
+    auto offset = Convert::String2T< float >( deser.GetAttribute( "offset" ), 0.f );
+    auto scale = Convert::String2T< float >( deser.GetAttribute( "scale" ), 1.f );
 
     auto te = OffsetTimeEvaluator::Create( name, offset, scale );
 
-    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
-
-    for( auto child : children )
-        te->AddChild( child );
+//    te->DeserializeChildren( deser );
 
     return te;
 }
@@ -96,7 +91,7 @@ TimeType            OffsetTimeEvaluator::GetLocalTime       () const
 
 // ***********************
 //
-const std::string&        OffsetTimeEvaluator::GetType             ()
+const std::string&        OffsetTimeEvaluator::GetType             () const
 {
     return Type();
 }
