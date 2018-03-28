@@ -74,7 +74,6 @@ TimelineEventLoopPtr TimelineEventLoop::Create          ( const IDeserializer & 
     auto name = deser.GetAttribute( "name" );
 
     auto time = Convert::String2T< TimeType >( deser.GetAttribute( "time" ) );
-        Convert::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 99999 ),
     if( !time.IsValid() )
     {
         Warn< SerializationException >( deser,
