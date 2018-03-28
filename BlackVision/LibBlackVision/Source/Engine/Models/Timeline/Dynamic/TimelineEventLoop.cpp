@@ -70,12 +70,54 @@ TimelineEventLoopPtr TimelineEventLoop::Create          ( const std::string & na
 //
 TimelineEventLoopPtr TimelineEventLoop::Create          ( const IDeserializer & deser, const ITimeline * timeline )
 {
-    return TimelineEventLoop::Create( deser.GetAttribute( "name" ),
-        Convert::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
-        Convert::String2T( deser.GetAttribute( "action" ), LoopEventAction::LEA_TOTAL ),
-        Convert::String2T< unsigned int >( deser.GetAttribute( "loopCount" ), 0 ),
-        Convert::String2T< TimeType >( deser.GetAttribute( "targetTime" ), 0.f ),
-        timeline );
+    auto name = deser.GetAttribute( "name" );
+
+    auto time = Convert::String2T< TimeType >( deser.GetAttribute( "time" ) );
+    if( !time.IsValid() )
+    {
+        Warn< SerializationException >( deser,
+            "Cannot deserialize loop keyframe's time. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() +
+            ". Keyframe skipped." );
+        return nullptr;
+    }
+
+    auto action = Convert::String2T< LoopEventAction >( deser.GetAttribute( "action" ) );
+    if( !action.IsValid() )
+    {
+        Warn< SerializationException >( deser,
+            "Cannot deserialize loop keyframe's action. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() +
+            ". Keyframe skipped." );
+        return nullptr;
+    }
+
+    auto loopCount = Convert::String2T< unsigned int >( deser.GetAttribute( "loopCount" ) );
+    if( !action.IsValid() )
+    {
+        Warn< SerializationException >( deser,
+            "Cannot deserialize loop keyframe's loop count. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() +
+            ". Loop count set to max." );
+        loopCount = std::numeric_limits< unsigned int >::max();
+    }
+
+    auto targetTime = Convert::String2T< TimeType >( deser.GetAttribute( "targetTime" ) );
+    if( !targetTime.IsValid() )
+        if( action == LoopEventAction::LEA_GOTO )
+        {
+            Warn< SerializationException >( deser,
+                "Cannot deserialize goto keyframe's target time. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() +
+                ". Keyframe skipped." );
+            return nullptr;
+        }
+        else
+        {
+            Warn< SerializationException >( deser,
+                "Cannot deserialize loop keyframe's target time. Keyframe's name: " + name + ", timeline's name: " + timeline->GetName() +
+                ". Target time set to 0." );
+            targetTime = 0;
+        }
+
+
+    return TimelineEventLoop::Create( name, time, action, loopCount, targetTime, timeline );
 }
 
 // *********************************

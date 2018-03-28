@@ -19,7 +19,7 @@ public:
 
     static ITimeEvaluatorPtr        CreateTimeEvaluator             ( const std::string & name, TimelineType type );
 
-    static OffsetTimeEvaluatorPtr	CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
+    static OffsetTimeEvaluatorPtr	CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime, TimeType scale = 1.f );
     static ConstTimeEvaluatorPtr	CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
     static DefaultTimelinePtr		CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
     

@@ -107,14 +107,26 @@
     <ClInclude Include="..\..\..\Source\Framework\TestMain.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\TimelineComparator.h">
+      <Filter>Utils\Comparators</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Accessors\Engine\Inputs\VideoInputHandlerAccessor.h">
       <Filter>Utils\Accessors\Engine\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Comparators\PrimitiveComparator.h">
+      <Filter>Utils\Comparators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCard.h">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Accessors\TimelinesAccessors.h">
+      <Filter>Utils\Accessors</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Framework\BenchmarkMain.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Utils\Serialization\SerializeTimeline.h">
+      <Filter>Utils\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Utils\Mocks\FakeVideoCard\FakeVideoCardDesc.h">
       <Filter>Utils\Mocks\FakeVideoCard</Filter>

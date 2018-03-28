@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Timeline/TimeEvaluatorBase.h"
 
+#include "CoreDEF.h"
+
 
 namespace bv { namespace model {
 
@@ -13,6 +15,7 @@ DEFINE_PTR_TYPE(OffsetTimeEvaluator)
 
 class OffsetTimeEvaluator : public TimeEvaluatorBase< ITimeEvaluator >
 {
+    FRIEND_TEST_ACCESSOR( OffsetTimeEvaluator );
 private:
 
     typedef TimeEvaluatorBase< ITimeEvaluator > Parent;
@@ -38,7 +41,7 @@ public:
     virtual void                                    SetGlobalTimeImpl                       ( TimeType t ) override;
     virtual TimeType                                GetLocalTime                            () const override;
 
-    virtual const std::string&                      GetType                                 () override;
+    virtual const std::string&                      GetType                                 () const override;
     static const std::string&                       Type                                    ();
 };
 

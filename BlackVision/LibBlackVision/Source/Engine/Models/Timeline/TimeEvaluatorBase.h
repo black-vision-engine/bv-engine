@@ -41,6 +41,9 @@ public:
 
 protected:
 
+    void                                                SerializeChildren   ( ISerializer & ) const;
+    void                                                DeserializeChildren ( const IDeserializer & );
+
     virtual void                                        SetGlobalTimeImpl   ( TimeType t ) = 0;
 
 };
