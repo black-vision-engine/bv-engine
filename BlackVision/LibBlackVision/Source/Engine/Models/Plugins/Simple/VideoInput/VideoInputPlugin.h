@@ -58,6 +58,8 @@ protected:
 
     ValueFloatPtr                   m_gainValue;
 
+    bool                            m_deferredPlay;
+
 public:
 
     explicit                                    VideoInputPlugin   ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

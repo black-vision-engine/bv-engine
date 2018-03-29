@@ -148,6 +148,7 @@ VideoInputPlugin::VideoInputPlugin         ( const std::string & name, const std
     : TexturePluginBase( name, uid, prev, model )
     , m_vsc( nullptr )
     , m_lastAudioUpdateID( 0 )
+    , m_deferredPlay( false )
 {
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
     m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );       // Default video card format. It doesn't require converting.
@@ -230,11 +231,7 @@ void                                VideoInputPlugin::LoadVideoInputAudio       
         m_audioChannel->SetFrequency( audioInput->GetFrequency() );
         m_audioChannel->SetFormat( audioInput->GetFormat() );
 
-        TriggerAudioEvent( AssetTrackerInternalEvent::Command::PlayAudio );
-    }
-    else
-    {
-        TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
+        m_deferredPlay = true;
     }
 }
 
@@ -289,6 +286,15 @@ void                                VideoInputPlugin::Update                    
 //
 void                                VideoInputPlugin::UpdateAudio                   ()
 {
+    if( m_deferredPlay )
+    {
+        // FIXME: We must do it in Update to be sure that owner node is plugged into scene. Check AssetTracker implementation.
+        TriggerAudioEvent( AssetTrackerInternalEvent::Command::PlayAudio );
+
+        m_deferredPlay = false;
+    }
+
+
     auto videoInputAudio = m_videoInputAsset->GetAudio();
     if( videoInputAudio && m_lastAudioUpdateID < videoInputAudio->LastAudioUpdate() )
     {
