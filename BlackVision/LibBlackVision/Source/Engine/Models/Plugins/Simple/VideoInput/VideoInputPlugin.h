@@ -88,6 +88,7 @@ private:
     void                                        UpdateAudio                 ();
     MemoryChunkPtr								ApplyGain					( MemoryChunkConstPtr audioFrameData ) const;
 
+    void                                        TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command );
 };
 
 DEFINE_PTR_TYPE( VideoInputPlugin )

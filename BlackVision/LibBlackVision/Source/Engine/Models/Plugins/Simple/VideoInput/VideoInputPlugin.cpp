@@ -229,6 +229,12 @@ void                                VideoInputPlugin::LoadVideoInputAudio       
     {
         m_audioChannel->SetFrequency( audioInput->GetFrequency() );
         m_audioChannel->SetFormat( audioInput->GetFormat() );
+
+        TriggerAudioEvent( AssetTrackerInternalEvent::Command::PlayAudio );
+    }
+    else
+    {
+        TriggerAudioEvent( AssetTrackerInternalEvent::Command::StopAudio );
     }
 }
 
@@ -306,6 +312,14 @@ MemoryChunkPtr                      VideoInputPlugin::ApplyGain                 
     return outData;
 }
 
+// *************************************
+//
+void                                VideoInputPlugin::TriggerAudioEvent            ( AssetTrackerInternalEvent::Command command )
+{
+    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
+    evt->PluginOwner = this;
+    GetDefaultEventManager().TriggerEvent( evt );
+}
 
 
 } // model
