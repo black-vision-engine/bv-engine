@@ -1,0 +1,9 @@
+Release 0.50.0
+- Rendering to shared memory enabled.
+- ffmpeg library recompiled.
+- Added SD resolution for Blufish video card.
+- Saving config.
+- Many small changes in config entries. Test and example configs updated.
+- Added UIDs for nodes.
+- Video input audio works.
+- Changes in timelines keyframes.
