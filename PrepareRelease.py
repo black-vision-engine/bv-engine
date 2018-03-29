@@ -69,6 +69,12 @@ def CopyConfig( appOutDir ):
     
     shutil.copy2( defaultConfigPath, os.path.join( appOutDir, "config.xml" ) )
     
+def CopyChangeLog( releaseDir ):
+    
+    print "Copy ChangeLog.txt file to release directory."
+    
+    shutil.copy2( "ChangeLog.txt", os.path.join( releaseDir, "ChangeLog.txt" ) )
+    
     
 def PrepareRelease():
     
@@ -86,6 +92,7 @@ def PrepareRelease():
         
         CopyBuild( appDir, outputsDir )
         CopyConfig( outputsDir )
+        CopyChangeLog( outputsDir )
         CleanNotNecessaryFiles( outputsDir )
         
         
