@@ -124,6 +124,9 @@ void    RenderLogicCore::RenderScenes       ( const SceneVec & scenes, RenderedC
 
         audio::AudioRenderChannelData & arcd = const_cast< RenderChannel * >( result->GetRenderChannel( outputType ) )->GetAudioRenderChannelData();
 
+        // FIXME: Hack. We should render audio to preview in outputs logic.
+        arcd.SendToPreview( outIdx == ( unsigned int )RenderChannelType::RCT_OUTPUT_1 );
+
         NodeRenderLogic::RenderQueued( scene, outputRT, ctx );
         NodeRenderLogic::RenderAudio( scene, ctx, arcd );
 

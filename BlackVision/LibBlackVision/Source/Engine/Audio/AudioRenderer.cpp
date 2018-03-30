@@ -78,15 +78,17 @@ void    AudioRenderer::Proccess         ( AudioEntity * audio, AudioRenderChanne
         if( !audio->IsEmpty() )
         {
             auto audioData = audio->PopData();
-            queue->PushData( audioData );
             arcd.PushData( audioData );
+
+            if( arcd.SendToPreview() )
+                queue->PushData( audioData );
         }
         else
         {
             arcd.PushData( AudioBufferVec() );
         }
 
-        if( audio->IsPlaying() && queue->BufferData() )
+        if( arcd.SendToPreview() && audio->IsPlaying() && queue->BufferData() )
         {
             source->Play();
         }
