@@ -280,7 +280,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
     Reusable< CFramePtr > frames = CreateReusableVideoChunks( pThis->GoldenSize, pThis->BytesPerLine, audioBufferSize, 3 );
 
 
-    const int numBuffers = 8;
+    const int numBuffers = 5;
     FrameSchedule scheduler( numBuffers );
 
     scheduler.SyncToNextFrameInterrupt( pThis );

@@ -86,19 +86,21 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
         }
     }
 
-    if( srcFrame )
+    if( audioSize > audioChunk->Size() )
     {
-        assert( audioSize <= audioChunk->Size() );
+        LOG_MESSAGE( SeverityLevel::warning ) << "Video input audio: Audio size [" << Convert::T2String( audioSize ) << "] is greater then buffer size [" + Convert::T2String( audioChunk->Size() ) + "].";
 
-        if( audioSize > audioChunk->Size() )
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "Video input audio: Audio size [" << Convert::T2String( audioSize ) << "] is greater then buffer size [" + Convert::T2String( audioChunk->Size() ) + "].";
-        }
-        else if( audioSize > 0 )
-        {
-            memcpy( audioChunk->GetWritable(), srcFrame->m_pAudioBuffer + srcAudioOffset, audioSize );
-        }
+        audioSize = audioChunk->Size();
     }
+
+    SizeType rest = audioChunk->Size() - audioSize;
+
+    if( srcFrame )
+        memcpy( audioChunk->GetWritable(), srcFrame->m_pAudioBuffer + srcAudioOffset, audioSize );
+
+    // Fill unused part of buffer. Otherwise it would contain previous data.
+    if( rest > 0  )
+        memset( audioChunk->GetWritable() + audioSize, 0, rest );
 
     return audioChunk;
 }
@@ -195,6 +197,8 @@ void                BlueFishInputThread::IgnoreFirstFrames      ()
     UInt32 inputCaptureDelay = 5;       // As many old frames are waiting to be read.
 
     m_ignoreFrames = numQueued + inputCaptureDelay;
+
+    m_prevAudio = nullptr;
 }
 
 
