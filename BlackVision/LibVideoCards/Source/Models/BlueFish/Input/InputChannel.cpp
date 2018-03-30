@@ -209,6 +209,7 @@ void            InputChannel::StopInput             ()
 //
 void            InputChannel::ResumeInput           ()
 {
+    m_inputFramesThread->IgnoreFirstFrames();
     m_inputFramesThread->Resume();
 }
 

@@ -42,6 +42,7 @@ private:
     Reusable< MemoryChunkPtr >  m_reusableVideo;
     Reusable< MemoryChunkPtr >  m_reusableAudio;
 
+    UInt32                      m_ignoreFrames;
     CFramePtr                   m_prevAudio;            ///< Audio comes each second frame. We must split buffer in two.
 
 public:
@@ -52,6 +53,8 @@ public:
 
     void						EnqueueEndMessage		();
     AVFramePtr                  PopNextFrame            ();
+
+    void                        IgnoreFirstFrames       ();
 
 protected:
 

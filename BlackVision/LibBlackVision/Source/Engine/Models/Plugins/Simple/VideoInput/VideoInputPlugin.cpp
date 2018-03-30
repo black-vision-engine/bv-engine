@@ -225,6 +225,8 @@ void                                VideoInputPlugin::LoadVideoInputTexture     
 //
 void                                VideoInputPlugin::LoadVideoInputAudio       ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc )
 {
+    m_lastAudioUpdateID = ApplicationContext::Instance().GetUpdateCounter();
+
     auto audioInput = videoAsset->GetAudio();
     if( audioInput )
     {

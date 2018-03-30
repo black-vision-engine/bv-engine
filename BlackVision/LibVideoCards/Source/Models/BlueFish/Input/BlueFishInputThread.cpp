@@ -23,6 +23,7 @@ BlueFishInputThread::BlueFishInputThread( InputChannel * vc )
     , m_inputChannel( vc )
     , m_reusableVideo( { nullptr } )
     , m_reusableAudio( { nullptr } )
+    , m_ignoreFrames( 0 )
 {
     m_reusableVideo = m_inputChannel->CreateReusableVideoChunks( 2 * FramesQueueSize );
     m_reusableAudio = m_inputChannel->CreateReusableAudioChunks( 2 * FramesQueueSize );
@@ -59,30 +60,43 @@ MemoryChunkPtr      BlueFishInputThread::ProcessAudio           ( const CFramePt
 {
     MemoryChunkPtr audioChunk = m_reusableAudio.GetNext();
 
+    SizeType srcAudioOffset = 0;
+    SizeType audioSize = 0;
+    CFramePtr srcFrame;
+
     // Only each second frame contains audio data.
     if( !audioFrame->m_FieldOdd )
     {
-        SizeType audioSize = audioFrame->m_desc.channels * audioFrame->m_desc.channelDepth * audioFrame->m_desc.numSamples / 2;
+        audioSize = audioFrame->m_desc.channels * audioFrame->m_desc.channelDepth * audioFrame->m_desc.numSamples / 2;
+
+        srcAudioOffset = 0;
+        srcFrame = audioFrame;
         m_prevAudio = audioFrame;
-
-        assert( audioSize <= audioChunk->Size() );
-
-        if( audioSize )
-            memcpy( audioChunk->GetWritable(), audioFrame->m_pAudioBuffer, audioSize );
     }
     else
     {
         if( m_prevAudio )
         {
             // Copy second half of the buffer.
-            SizeType audioSize = m_prevAudio->m_desc.channels * m_prevAudio->m_desc.channelDepth * m_prevAudio->m_desc.numSamples / 2;
-
-            assert( audioSize <= audioChunk->Size() );
-
-            if( audioSize )
-                memcpy( audioChunk->GetWritable(), m_prevAudio->m_pAudioBuffer + audioSize, audioSize );
+            audioSize = m_prevAudio->m_desc.channels * m_prevAudio->m_desc.channelDepth * m_prevAudio->m_desc.numSamples / 2;
+            srcAudioOffset = audioSize;
+            srcFrame = m_prevAudio;
 
             m_prevAudio = nullptr;
+        }
+    }
+
+    if( srcFrame )
+    {
+        assert( audioSize <= audioChunk->Size() );
+
+        if( audioSize > audioChunk->Size() )
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "Video input audio: Audio size [" << Convert::T2String( audioSize ) << "] is greater then buffer size [" + Convert::T2String( audioChunk->Size() ) + "].";
+        }
+        else if( audioSize > 0 )
+        {
+            memcpy( audioChunk->GetWritable(), srcFrame->m_pAudioBuffer + srcAudioOffset, audioSize );
         }
     }
 
@@ -157,8 +171,30 @@ void				BlueFishInputThread::EnqueueEndMessage		()
 AVFramePtr          BlueFishInputThread::PopNextFrame           ()
 {
     AVFramePtr frame;
+
+    // We need ignore first frames after thread were stopped. Otherwise we send garbage.
+    if( m_ignoreFrames > 0 )
+    {
+        AVFramePtr frameToIgnore;
+
+        if( m_processedFrameQueue.TryPop( frameToIgnore ) )
+            m_ignoreFrames--;
+
+        return frame;
+    }
+
     m_processedFrameQueue.TryPop( frame );
     return frame;
+}
+
+// ***********************
+//
+void                BlueFishInputThread::IgnoreFirstFrames      ()
+{
+    auto numQueued = (UInt32)m_processedFrameQueue.Size();
+    UInt32 inputCaptureDelay = 5;       // As many old frames are waiting to be read.
+
+    m_ignoreFrames = numQueued + inputCaptureDelay;
 }
 
 
