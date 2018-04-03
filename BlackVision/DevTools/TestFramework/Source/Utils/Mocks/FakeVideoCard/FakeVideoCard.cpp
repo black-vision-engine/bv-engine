@@ -236,9 +236,19 @@ void                    FakeVideoCard::LoadInputChannelFrames           ( const 
 {
     FakeInputFrames inputFrames;
     Path imagesPath = channelDesc.ImagesDirectory;
+    Path audioPath = channelDesc.AudioFile;
+
+    MemoryChunkVector audioFrames;
+
+    if( Path::Exists( audioPath ) )
+    {
+        audioFrames = LoadAudio( audioPath );
+    }
 
     if( Path::Exists( imagesPath ) )
     {
+        SizeType frameIdx = 0;
+
         auto fileList = Path::List( imagesPath, false );
         for( auto & file : fileList )
         {
@@ -246,11 +256,13 @@ void                    FakeVideoCard::LoadInputChannelFrames           ( const 
             if( imageChunk )
             {
                 auto frame = AVFrame::Create();
-                frame->m_audioData = nullptr;
+                frame->m_audioData = audioFrames.size() > frameIdx ? audioFrames[ frameIdx ] : nullptr;
                 frame->m_videoData = imageChunk;
                 frame->m_desc = CreateAVFrameDesc( &channelDesc );
 
                 inputFrames.m_frames.push_back( frame );
+
+                frameIdx++;
             }
         }
     }
@@ -273,6 +285,39 @@ MemoryChunkPtr          FakeVideoCard::LoadImage        ( const Path & imagePath
     delete[] data;
 
     return MemoryChunk::Create( resized, expectedWidth * expectedHeight * bpp / 8 );
+}
+
+// ***********************
+//
+MemoryChunkVector       FakeVideoCard::LoadAudio                ( const Path & audioPath )
+{
+    MemoryChunkVector audioFrames;
+
+    auto sampleSize = sizeof( UInt16 );
+    auto numChannels = 2;
+    auto frequency = 48000;
+    auto fps = 50;
+    
+    auto samplesPerFrame = numChannels * frequency / fps;
+    auto frameSize = samplesPerFrame * sampleSize;
+
+    auto file = fopen( audioPath.Str().c_str(), "rb" );
+    if( file )
+    {
+        SizeType readBytes = 0;
+        do
+        {
+            auto frameChunk = MemoryChunk::Create( frameSize );
+            readBytes = fread( frameChunk->GetWritable(), 1, frameSize, file );
+
+            audioFrames.push_back( frameChunk );
+
+        } while( readBytes == frameSize );
+
+        fclose( file );
+    }
+
+    return audioFrames;
 }
 
 // ***********************

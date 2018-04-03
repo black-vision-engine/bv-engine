@@ -1,4 +1,5 @@
 Release 0.5x.x
+- Send audio to preview only for render channels are displayed on preview.
 - Audio artifacts after enabling video input fixed.
 - Problem with silent VideoInputPlugin audio on preview fixed.
 

@@ -90,6 +90,7 @@ private:
 
     void                        LoadInputChannelFrames  ( const FakeInputChannelData & channelDesc );
     MemoryChunkPtr              LoadImage               ( const Path & imagePath, UInt32 expectedWidth, UInt32 expectedHeight );
+    MemoryChunkVector           LoadAudio               ( const Path & audioPath );
 
     AVFrameDescriptor           CreateAVFrameDesc       ( const FakeInputChannelData * channelDesc ) const;
     AVFrameDescriptor           CreateAVFrameDesc       ( const FakeOutputChannelData * channelDesc ) const;
