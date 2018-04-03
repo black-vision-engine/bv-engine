@@ -167,7 +167,11 @@ void                    BVConfig::InitializeFromFile        ( const std::string 
 
     if( Path::Exists( filePath ) )
     {
-        m_deserializer.LoadFile( filePath );
+        if( !m_deserializer.LoadFile( filePath ) )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Config file [" << filePath << "] isn't valid xml. Loading default configuration.";
+            return;
+        }
 
         if( m_deserializer.EnterChild( "config" ) )
         {
