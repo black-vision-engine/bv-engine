@@ -1,4 +1,6 @@
 Release 0.5x.x
+- Audio input delay relative to video fixed.
+- Invalid config (not parsing xml) doesn't crash engine on startup.
 - Send audio to preview only for render channels are displayed on preview.
 - Audio artifacts after enabling video input fixed.
 - Problem with silent VideoInputPlugin audio on preview fixed.
