@@ -35,19 +35,16 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
         m_state.Initialize( renderer, audio );
     }
 
-    // 1. Process all input sources
-    m_inputLogic->ProcessInputs( context( m_state ) );
-
-    // 2. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
+    // 1. Access RenderedChannelsData associated with this RenderLogic instance and update (per frame) output buffers
     m_renderedChannelsData->UpdateRenderChannels();
 
-    // 3. Low level renderer per frame initialization
+    // 2. Low level renderer per frame initialization
     renderer->PreDraw();
 
-    // 4. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
+    // 3. FIXME: nrl - RenderQueued is only one possible way of rendering - this one needs additional inspection
     RenderQueued( scenes );
 
-    // 5. In edit mode render depth buffer from current scene and gizmos after it.
+    // 4. In edit mode render depth buffer from current scene and gizmos after it.
     if( m_state.IsEditMode() )
     {
         RenderDepth( scenes );
@@ -55,11 +52,14 @@ void            RenderLogicImpl::HandleFrame       ( Renderer * renderer, audio:
         BlitGizmoTargets();
     }
 
-    // 6. Low level rendere per frame cleanup
+    // 5. Low level rendere per frame cleanup
     renderer->PostDraw();
 
-    // 7. Handle frame data rendered during this call and all logic associated with custom outputs
+    // 6. Handle frame data rendered during this call and all logic associated with custom outputs
     m_outputLogic->ProcessFrameData( context( m_state ), m_renderedChannelsData );
+
+    // 7. Process all input sources. Inputs are processed on the end, because audio should be updated before model update.
+    m_inputLogic->ProcessInputs( context( m_state ) );
 }
 
 // **************************

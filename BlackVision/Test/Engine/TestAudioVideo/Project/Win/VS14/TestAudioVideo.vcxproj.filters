@@ -11,10 +11,16 @@
     <ClCompile Include="..\..\..\Source\AudioCardOut\TestCardsOutputFromMultiScenes.cpp">
       <Filter>AudioCardOut</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\AudioVideoSync\TestAudioVideoInputSync.cpp">
+      <Filter>AudioVideoSync</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AudioCardOut">
       <UniqueIdentifier>{356d1eef-a375-44f5-a185-44af8fd5babe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AudioVideoSync">
+      <UniqueIdentifier>{41fb5659-f88e-49c4-bb8d-3d029e4da883}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

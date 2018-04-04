@@ -23,6 +23,7 @@ struct FakeInputChannelData
     bool            Enabled;
 
     std::string     ImagesDirectory;        ///< Images from this directory will be sent as input.
+    std::string     AudioFile;
 };
 
 DEFINE_UPTR_TYPE( FakeInputChannelData )

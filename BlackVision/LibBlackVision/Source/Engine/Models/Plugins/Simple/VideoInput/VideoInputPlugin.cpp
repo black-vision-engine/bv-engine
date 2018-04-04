@@ -148,6 +148,7 @@ VideoInputPlugin::VideoInputPlugin         ( const std::string & name, const std
     : TexturePluginBase( name, uid, prev, model )
     , m_vsc( nullptr )
     , m_lastAudioUpdateID( 0 )
+    , m_deferredPlay( false )
 {
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
     m_audioChannel = DefaultAudioChannel::Create( 48000, AudioFormat::STEREO16 );       // Default video card format. It doesn't require converting.
@@ -224,11 +225,15 @@ void                                VideoInputPlugin::LoadVideoInputTexture     
 //
 void                                VideoInputPlugin::LoadVideoInputAudio       ( VideoInputAssetConstPtr videoAsset, AssetDescConstPtr desc )
 {
+    m_lastAudioUpdateID = ApplicationContext::Instance().GetUpdateCounter();
+
     auto audioInput = videoAsset->GetAudio();
     if( audioInput )
     {
         m_audioChannel->SetFrequency( audioInput->GetFrequency() );
         m_audioChannel->SetFormat( audioInput->GetFormat() );
+
+        m_deferredPlay = true;
     }
 }
 
@@ -283,6 +288,15 @@ void                                VideoInputPlugin::Update                    
 //
 void                                VideoInputPlugin::UpdateAudio                   ()
 {
+    if( m_deferredPlay )
+    {
+        // FIXME: We must do it in Update to be sure that owner node is plugged into scene. Check AssetTracker implementation.
+        TriggerAudioEvent( AssetTrackerInternalEvent::Command::PlayAudio );
+
+        m_deferredPlay = false;
+    }
+
+
     auto videoInputAudio = m_videoInputAsset->GetAudio();
     if( videoInputAudio && m_lastAudioUpdateID < videoInputAudio->LastAudioUpdate() )
     {
@@ -306,6 +320,14 @@ MemoryChunkPtr                      VideoInputPlugin::ApplyGain                 
     return outData;
 }
 
+// *************************************
+//
+void                                VideoInputPlugin::TriggerAudioEvent            ( AssetTrackerInternalEvent::Command command )
+{
+    auto evt = std::make_shared< AssetTrackerInternalEvent >( command );
+    evt->PluginOwner = this;
+    GetDefaultEventManager().TriggerEvent( evt );
+}
 
 
 } // model

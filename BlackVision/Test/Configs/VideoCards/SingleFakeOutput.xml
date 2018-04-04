@@ -79,8 +79,11 @@
     <videocards>
         <videocard name="FakeVideoCard" deviceID="1">
             <channels>
-                <channel name="A" renderer="1" >
-                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                <channel name="A" >
+                    <output linkedVideoOutput="0" width="1920" height="1080" />
+				</channel>
+                <channel name="A" >
+                    <input linkedVideoInput="0" width="1920" height="1080" imagesDirectory="TestAssets\AudioVideoSync\VideoSync\" audioSource="TestAssets\AudioVideoSync\AudioSync.raw" />
 				</channel>
             </channels>
         </videocard>

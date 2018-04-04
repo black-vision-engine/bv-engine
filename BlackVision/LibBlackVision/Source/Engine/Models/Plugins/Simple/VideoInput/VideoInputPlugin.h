@@ -58,6 +58,8 @@ protected:
 
     ValueFloatPtr                   m_gainValue;
 
+    bool                            m_deferredPlay;
+
 public:
 
     explicit                                    VideoInputPlugin   ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -88,6 +90,7 @@ private:
     void                                        UpdateAudio                 ();
     MemoryChunkPtr								ApplyGain					( MemoryChunkConstPtr audioFrameData ) const;
 
+    void                                        TriggerAudioEvent           ( AssetTrackerInternalEvent::Command command );
 };
 
 DEFINE_PTR_TYPE( VideoInputPlugin )
