@@ -101,7 +101,7 @@ void        Engine_InputSlots_VideoInputPipeline::CheckOutput           ( SizeTy
     auto videoChunk = avFrame->m_videoData;
     auto mem = videoChunk->Get();
 
-    glm::vec4 expectedColor = expectedColors[ frame % numColors ];
+    glm::vec4 expectedColor = expectedColors[ ( ( Int64 )frame - 1 ) % numColors ];
 
     auto numErrors = 0;
 
@@ -152,11 +152,11 @@ inline void Engine_InputSlots_VideoInputPipeline::PreRender  ()
 //
 void        Engine_InputSlots_VideoInputPipeline::PostRender            ()
 {
-    if( GetFrameNumber() == 10 )
+    if( GetFrameNumber() == 11 )
     {
         EndTestAfterThisFrame( true );
     }
-    else
+    else if( GetFrameNumber() > 1 )
     {
         CheckOutput( GetFrameNumber() );
     }
