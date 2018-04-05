@@ -40,7 +40,7 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& ser 
     SerializationHelper::SerializeAttribute( ser, m_timeOffset, "offset" );
     SerializationHelper::SerializeAttribute( ser, m_timeScale, "scale" );
 
-//    SerializeChildren( ser );
+    SerializeChildren( ser ); // this is needed since this is scene timeline and it has children
 
     ser.ExitChild();
 }
