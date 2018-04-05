@@ -365,6 +365,72 @@ UInt32                          VideoCard::GetRequiredFPS  () const
     return fps / 100;
 }
 
+// ***********************
+//
+ReturnResult        VideoCard::SetReferenceMode     ( ReferenceMode mode )
+{
+    if( mode < ReferenceMode::FailMode )
+    {
+        for( auto & chn : m_channels )
+        {
+            if( chn->IsOutputChannel() )
+            {
+                auto channel = static_cast< OutputChannel * >( chn );
+                auto result = channel->SetReferenceMode( mode );
+
+                if( !result.IsValid() )
+                    return result.GetError();
+            }
+        }
+    }
+
+    return "Invalid reference mode";
+}
+
+// ***********************
+//
+ReturnResult        VideoCard::SetReferenceH        ( VideoOutputID outID, Int32 offsetH )
+{
+    auto channel = GetOutputChannel( outID );
+    if( channel.IsValid() )
+    {
+        return channel.GetVal()->SetReferenceH( offsetH );
+    }
+        
+    return channel.GetError();
+}
+
+// ***********************
+//
+ReturnResult        VideoCard::SetReferenceV        ( VideoOutputID outID, Int32 offsetV )
+{
+    auto channel = GetOutputChannel( outID );
+    if( channel.IsValid() )
+    {
+        return channel.GetVal()->SetReferenceV( offsetV );
+    }
+
+    return channel.GetError();
+}
+
+// ***********************
+//
+Expected< OutputChannel * >     VideoCard::GetOutputChannel     ( VideoOutputID outID )
+{
+    for( auto & chn : m_channels )
+    {
+        if( chn->IsOutputChannel() )
+        {
+            auto channel = static_cast< OutputChannel * >( chn );
+            
+            if( channel->GetOutputId() == outID )
+                return channel;
+        }
+    }
+
+    return "VideoOutput [" + Convert::T2String( outID ) + "] doesn't exist.";
+}
+
 } //bluefish
 } //videovcards
 } //bv

@@ -235,6 +235,38 @@ void                    OutputChannel::EnqueueFrame                 ( const AVFr
 
 // ***********************
 //
+ReturnResult            OutputChannel::SetReferenceMode             ( ReferenceMode mode )
+{
+    PlaybackData->referenceMode = ReferenceModeMap[ mode ];
+    return m_playbackChannel->UpdateReferenceMode( PlaybackData->referenceMode );
+}
+
+// ***********************
+//
+ReturnResult            OutputChannel::SetReferenceH                ( Int32 offsetH )
+{
+    auto result = m_playbackChannel->UpdateReferenceOffset( offsetH, PlaybackData->referenceV );
+
+    if( result.IsValid() )
+        PlaybackData->referenceH = offsetH;
+
+    return result;
+}
+
+// ***********************
+//
+ReturnResult            OutputChannel::SetReferenceV                ( Int32 offsetV )
+{
+    auto result = m_playbackChannel->UpdateReferenceOffset( PlaybackData->referenceH, offsetV );
+
+    if( result.IsValid() )
+        PlaybackData->referenceV = offsetV;
+
+    return result;
+}
+
+// ***********************
+//
 void                    OutputChannel::FrameProcessed               ( const AVFrameConstPtr & frame )
 {
     auto playbackChannel = GetPlaybackChannel();

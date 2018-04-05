@@ -5,6 +5,8 @@
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Serialization/SerializationHelper.inl"
 
+#include "VideoCardManagerUtils.h"
+
 #include  "Mathematics/glm_inc.h"
 
 #include "Engine/Events/ParamAddress.h"
@@ -879,31 +881,30 @@ public:
         DisableOutput,
         EnableKey,
         DisableKey,
-        ReferenceMode,
-        ReferenceOffsetH,
-        ReferenceOffsetV,
+        SetReferenceMode,
+        SetReferenceOffsetH,
+        SetReferenceOffsetV,
         EnableInput,
         DisableInput,
         Fail            ///< Wrong command
     } Command;
 
-    typedef enum
-    {
-        FreeRun,
-        AnalogBlackBurst,
-        AnalogTriLevel,
-        DigitalInput1,
-        DigitalInput2,
-        FailMode            ///< Wrong ReferenceMode
-    } VideoReferenceMode;
 private:
+
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
+
 public:
+
     Command                     VideoCommand;
+
+    UInt32                      VideoCardID;
+    UInt32                      ChannelID;
+
     int                         Number;
     float                       Value;
-    VideoReferenceMode          Mode;
+    videocards::ReferenceMode   Mode;
+
 public:
 
     explicit                        VideoCardEvent   () {};
@@ -919,9 +920,10 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> std::string              Convert::T2String   ( const VideoCardEvent::Command & t );
-
+DECLARE_ENUM_SERIALIZATION( VideoCardEvent::Command )
 DEFINE_PTR_TYPE( VideoCardEvent )
+
+
 
 // ************************************* EngineStateEvent *************************************
 class EngineStateEvent : public RemoteEvent

@@ -4,7 +4,32 @@
 #include "Serialization/SerializationHelper.inl"
 
 
-namespace bv { namespace videocards {
+namespace bv {
+namespace Convert
+{
+
+
+// ***********************
+//
+std::pair< videocards::ReferenceMode, const char* > VideoCardVideoReferenceModeMapping[] =
+{
+    std::make_pair( videocards::ReferenceMode::FreeRun, "FreeRun" )
+    , std::make_pair( videocards::ReferenceMode::AnalogBlackBurst, "AnalogBlackBurst" )
+    , std::make_pair( videocards::ReferenceMode::AnalogTriLevel, "AnalogTriLevel" )
+    , std::make_pair( videocards::ReferenceMode::DigitalInput1, "DigitalInput1" )
+    , std::make_pair( videocards::ReferenceMode::DigitalInput2, "DigitalInput2" )
+    , std::make_pair( videocards::ReferenceMode::Interlock, "Interlock" )
+    , std::make_pair( videocards::ReferenceMode::AnalogBlackBurstAux, "AnalogBlackBurstAux" )
+    , std::make_pair( videocards::ReferenceMode::AnalogTriLevelAux, "AnalogTriLevelAux" )
+    , std::make_pair( videocards::ReferenceMode::FailMode, "" )      // default
+};
+
+IMPLEMENT_ENUM_SERIALIZATION( videocards::ReferenceMode, VideoCardVideoReferenceModeMapping );
+
+}   // Convert
+
+
+namespace videocards {
   
 //**************************************
 //
@@ -14,15 +39,6 @@ std::pair< IOType, const char * > IOTypeMapping[] =
     , std::make_pair( IOType::KEY, "KEY" )
 };
 
-//**************************************
-//
-std::pair< ReferenceMode, const char * > ReferenceModeMapping[] = 
-{   std::make_pair( ReferenceMode::FREERUN, "FREERUN" )
-    , std::make_pair( ReferenceMode::IN_A, "IN_A" )
-    , std::make_pair( ReferenceMode::IN_B, "IN_B" )
-    , std::make_pair( ReferenceMode::ANALOG, "ANALOG" )
-    , std::make_pair( ReferenceMode::GENLOCK, "GENLOCK" )
-};
 
 namespace
 {
@@ -162,20 +178,6 @@ template<> Expected< videocards::IOType >           String2T        ( const std:
 template<> std::string                              T2String        ( const videocards::IOType & t )
 {
     return Enum2String( videocards::IOTypeMapping, t );
-}
-
-//**************************************
-//
-template<> Expected< videocards::ReferenceMode >    String2T        ( const std::string & s )
-{
-    return String2Enum( videocards::ReferenceModeMapping, s );
-}
-
-//**************************************
-//
-template<> std::string                              T2String        ( const videocards::ReferenceMode & t )
-{
-    return Enum2String( videocards::ReferenceModeMapping, t );
 }
 
 } //SerializationHelper

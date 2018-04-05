@@ -609,29 +609,15 @@ std::pair< VideoCardEvent::Command, const char* > VideoCardEventCommandMapping[]
     , std::make_pair( VideoCardEvent::Command::DisableOutput, "DisableOutput" )
     , std::make_pair( VideoCardEvent::Command::EnableKey, "EnableKey" )
     , std::make_pair( VideoCardEvent::Command::DisableKey, "DisableKey" )
-    , std::make_pair( VideoCardEvent::Command::ReferenceMode, "ReferenceMode" )
-    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetH, "ReferenceOffsetH" )
-    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetV, "ReferenceOffsetV" )
+    , std::make_pair( VideoCardEvent::Command::SetReferenceMode, "SetReferenceMode" )
+    , std::make_pair( VideoCardEvent::Command::SetReferenceOffsetH, "SetReferenceOffsetH" )
+    , std::make_pair( VideoCardEvent::Command::SetReferenceOffsetV, "SetReferenceOffsetV" )
     , std::make_pair( VideoCardEvent::Command::EnableInput, "EnableInput" )
     , std::make_pair( VideoCardEvent::Command::DisableInput, "DisableInput" )
     , std::make_pair( VideoCardEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::Command, VideoCardEventCommandMapping );
 
-
-// ***********************
-//
-std::pair< VideoCardEvent::VideoReferenceMode, const char* > VideoCardVideoReferenceModeMapping[] =
-{
-    std::make_pair( VideoCardEvent::VideoReferenceMode::FreeRun, "FreeRun" )
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogBlackBurst, "AnalogBlackBurst" )
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogTriLevel, "AnalogTriLevel" )
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::DigitalInput1, "DigitalInput1" )
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::DigitalInput2, "DigitalInput2" )
-    , std::make_pair( VideoCardEvent::VideoReferenceMode::FailMode, SerializationHelper::EMPTY_STRING )      // default
-};
-
-IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::VideoReferenceMode, VideoCardVideoReferenceModeMapping );
 
 }   // Convert
 
@@ -2143,11 +2129,12 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
-        VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
-        newEvent->VideoCommand          = Convert::String2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoCardEvent::Command::Fail );
-        newEvent->Mode                  = Convert::String2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING ), VideoCardEvent::VideoReferenceMode::FailMode );
-        newEvent->Value                 = Convert::String2T<float>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING ), 0.0f );
-        newEvent->Number                = Convert::String2T<int>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );
+        VideoCardEventPtr newEvent      = std::make_shared< VideoCardEvent >();
+        newEvent->VideoCommand          = Convert::String2T< VideoCardEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoCardEvent::Command::Fail );
+        newEvent->VideoCardID           = Convert::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );
+        newEvent->Mode                  = Convert::String2T< videocards::ReferenceMode >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING ), videocards::ReferenceMode::FailMode );
+        newEvent->Value                 = Convert::String2T< float >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING ), 0.0f );
+        newEvent->Number                = Convert::String2T< int >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );
 
         return newEvent;
     }

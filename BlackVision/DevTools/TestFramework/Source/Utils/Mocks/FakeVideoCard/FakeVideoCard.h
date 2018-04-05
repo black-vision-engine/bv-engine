@@ -73,6 +73,11 @@ public:
     virtual InputChannelsDescsVec       GetInputChannelsDescs           () const override;
     virtual OutputChannelsDescsVec      GetOutputChannelsDescs          () const override;
 
+    virtual ReturnResult        SetReferenceMode        ( ReferenceMode mode ) override;
+
+    virtual ReturnResult        SetReferenceH           ( VideoOutputID outID, Int32 offsetH ) override;
+    virtual ReturnResult        SetReferenceV           ( VideoOutputID outID, Int32 offsetV ) override;
+
 public:
 
     void                        AddChannel              ( FakeChannelDesc & channelDesc );

@@ -716,40 +716,49 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 
 //**************************************
 //
-bool CFifoPlayback::UpdateReferenceOffset(int refH, int refV)
+ReturnResult        CFifoPlayback::UpdateReferenceOffset            ( int refH, int refV )
 {
-    if(m_pSDK)
+    if( m_pSDK )
     {
-        VARIANT varVal;       
+        unsigned int HPhase = 0, VPhase = 0, MaxHPhase = 0, MaxVPhase = 0;
+        m_pSDK->get_timing_adjust( HPhase, VPhase, MaxHPhase, MaxVPhase );
+
+        if( refH > (int)MaxHPhase )
+            return "Reference offset V [" + Convert::T2String( refH ) + "] exceeds max value [" + Convert::T2String( MaxHPhase ) + "].";
+
+        if( refV > (int)MaxVPhase )
+            return "Reference offset H [" + Convert::T2String( refV ) + "] exceeds max value [" + Convert::T2String( MaxVPhase ) + "].";
+
+        VARIANT varVal;
         varVal.vt = VT_UI4;
         varVal.ulVal = refH;
-        varVal.ulVal |= ((refV & 0xFFFF) << 16);
-        m_pSDK->SetCardProperty(GENLOCK_TIMING, varVal);
-        return true;
+        varVal.ulVal |= ( ( refV & 0xFFFF ) << 16 );
+        m_pSDK->SetCardProperty( GENLOCK_TIMING, varVal );
+
+        return Result::Success();
     }
     else
     {
-        //cout << "BlueFish SDK not INITIALISED (UpdateReferenceOffset in CFifoPlayback)" << endl;
-        return false;
+        return "BlueFish SDK not INITIALISED (UpdateReferenceOffset in CFifoPlayback).";
     }
 }
 
 //**************************************
 //
-bool CFifoPlayback::UpdateReferenceMode(long referenceMode)
+ReturnResult        CFifoPlayback::UpdateReferenceMode              ( long referenceMode )
 {
-    if(m_pSDK)
+    if( m_pSDK )
     {
-        VARIANT varVal;       
+        VARIANT varVal;
         varVal.vt = VT_UI4;
         varVal.ulVal = referenceMode;
-        m_pSDK->SetCardProperty(VIDEO_GENLOCK_SIGNAL, varVal);
-        return true;
+        m_pSDK->SetCardProperty( VIDEO_GENLOCK_SIGNAL, varVal );
+
+        return Result::Success();
     }
     else
     {
-        //cout << "BlueFish SDK not INITIALISED (UpdateReferenceMode in CFifoPlayback)" << endl;
-        return false;
+        return "BlueFish SDK not INITIALISED (UpdateReferenceMode in CFifoPlayback).";
     }
 }
 

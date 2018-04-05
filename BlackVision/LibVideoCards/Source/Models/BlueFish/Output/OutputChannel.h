@@ -82,6 +82,13 @@ public:
 
     SizeType            GetNumFrameDrops            () { return m_playbackChannel->GetNumFrameDrops(); }
 
+public:
+
+    ReturnResult        SetReferenceMode            ( ReferenceMode mode );
+
+    ReturnResult        SetReferenceH               ( Int32 offsetH );
+    ReturnResult        SetReferenceV               ( Int32 offsetV );
+
 private:
 
     void                FrameProcessed	            ( const AVFrameConstPtr & frame );

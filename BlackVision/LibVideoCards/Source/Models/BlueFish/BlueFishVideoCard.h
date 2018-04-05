@@ -83,11 +83,22 @@ public:
 
     virtual void            SetFrameProcessingCompletedCallback( FrameProcessingCompletedCallbackType ) override {}
 
-    virtual void            EnableAudioChannel      ( AudioSampleType , UInt32 , UInt32 ) override {};
+    virtual void            EnableAudioChannel          ( AudioSampleType , UInt32 , UInt32 ) override {};
 
     static UInt32           EnumerateDevices            ();
 
     UInt32                  GetRequiredFPS              () const override;
+
+public:
+
+    virtual ReturnResult    SetReferenceMode            ( ReferenceMode mode ) override;
+
+    virtual ReturnResult    SetReferenceH               ( VideoOutputID outID, Int32 offsetH ) override;
+    virtual ReturnResult    SetReferenceV               ( VideoOutputID outID, Int32 offsetV ) override;
+
+private:
+
+    Expected< OutputChannel * >     GetOutputChannel    ( VideoOutputID outID );
 };
 
 DEFINE_PTR_TYPE( VideoCard )

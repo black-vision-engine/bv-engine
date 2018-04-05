@@ -29,9 +29,12 @@ void		VideoCardEventsHandlers::EventHandler   ( IEventPtr evt )
     if( evt->GetEventType() == VideoCardEvent::Type() )
     {
 		auto videoEvent = std::static_pointer_cast< VideoCardEvent >( evt );
+        auto videocardID = videoEvent->VideoCardID;
         auto command = videoEvent->VideoCommand;
 
         auto videoCardManager = BVServiceProvider::GetInstance().GetVideoCardManager();
+
+        ReturnResult result = Result::Success();
 
         if( command == VideoCardEvent::Command::EnableOutput )
         {
@@ -49,6 +52,31 @@ void		VideoCardEventsHandlers::EventHandler   ( IEventPtr evt )
         {
             videoCardManager->SetKey( false );
         }
+        else if( command == VideoCardEvent::Command::SetReferenceMode )
+        {
+            auto card = videoCardManager->GetVideoCard( videocardID );
+            result = card->SetReferenceMode( videoEvent->Mode );
+        }
+        else if( command == VideoCardEvent::Command::SetReferenceOffsetH )
+        {
+            auto card = videoCardManager->GetVideoCard( videocardID );
+            result = card->SetReferenceH( videoEvent->ChannelID, videoEvent->Number );
+        }
+        else if( command == VideoCardEvent::Command::SetReferenceOffsetV )
+        {
+            auto card = videoCardManager->GetVideoCard( videocardID );
+            result = card->SetReferenceV( videoEvent->ChannelID, videoEvent->Number );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, videoEvent->EventID, videoEvent->SocketID, "Unknown command" );
+            return;
+        }
+
+        if( result.IsValid() )
+            SendSimpleResponse( command, videoEvent->EventID, videoEvent->SocketID, true );
+        else
+            SendSimpleErrorResponse( command, videoEvent->EventID, videoEvent->SocketID, result.GetErrorReason().c_str() );
     }
 }
 

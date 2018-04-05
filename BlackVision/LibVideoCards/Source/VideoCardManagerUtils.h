@@ -1,13 +1,18 @@
 #pragma once
 
+#include "Serialization/ConversionHelper.h"
+
 
 #define FRAME_BUFFER_SIZE 1
 
-namespace bv { namespace videocards {
+namespace bv {
+namespace videocards
+{
+
 
 //**************************************
 //
-enum class IOType: int
+enum class IOType : int
 {
     FILL_KEY,
     FILL,
@@ -15,15 +20,27 @@ enum class IOType: int
     INVALID
 };
 
+// ***********************
+//
 enum class ReferenceMode : int 
 {
-    FREERUN = 0,
-    IN_A,
-    IN_B,
-    ANALOG,
-    GENLOCK
+    FreeRun,
+    AnalogBlackBurst,
+    AnalogTriLevel,
+    DigitalInput1,
+    DigitalInput2,
+    Interlock,
+    AnalogBlackBurstAux,
+    AnalogTriLevelAux,
+
+    FailMode            ///< Wrong ReferenceMode
 };
 
+
 } //videocards
+
+DECLARE_ENUM_SERIALIZATION( videocards::ReferenceMode )
+
+
 } //bv
 

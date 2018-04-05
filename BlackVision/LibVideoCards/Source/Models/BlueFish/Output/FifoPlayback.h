@@ -34,8 +34,8 @@ public:
     void                            StartThread             ();
     void                            SuspendThread           ();
     void                            StopThread              ();
-    bool                            UpdateReferenceOffset   ( int refH, int refV );
-    bool                            UpdateReferenceMode     ( long referenceMode );
+    ReturnResult                    UpdateReferenceOffset   ( int refH, int refV );
+    ReturnResult                    UpdateReferenceMode     ( long referenceMode );
 
     SizeType                        GetNumFrameDrops        () { return m_debugNumberFrameDrops; }
 

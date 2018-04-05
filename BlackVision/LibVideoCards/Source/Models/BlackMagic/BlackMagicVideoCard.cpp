@@ -480,6 +480,27 @@ UInt32              VideoCard::GetRequiredFPS       () const
     return ( UInt32 )( ( m_output.interlaced ? 2 : 1 ) * m_frameTimescale / m_frameDuration );
 }
 
+// ***********************
+//
+ReturnResult        VideoCard::SetReferenceMode     ( ReferenceMode /*mode*/ )
+{
+    return Result::Failure();
+}
+
+// ***********************
+//
+ReturnResult        VideoCard::SetReferenceH        ( VideoOutputID /*outID*/, Int32 /*offsetH*/ )
+{
+    return Result::Failure();
+}
+
+// ***********************
+//
+ReturnResult        VideoCard::SetReferenceV        ( VideoOutputID /*outID*/, Int32 /*offsetV */)
+{
+    return Result::Failure();
+}
+
 //**************************************
 //
 UInt32              VideoCard::AudioFrameSizeInBytes() const

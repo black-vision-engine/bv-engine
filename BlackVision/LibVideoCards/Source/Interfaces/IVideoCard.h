@@ -7,6 +7,8 @@
 #include "VideoInput/VideoInputChannelDesc.h"
 #include "VideoOutput/VideoOutputChannelDesc.h"
 
+#include "VideoCardManagerUtils.h"
+
 #include <functional>
 #include <set>
 
@@ -43,6 +45,20 @@ public:
 
     virtual VideoCardID         GetVideoCardID          () const = 0;
 
+public:
+
+    ///@name API for editor
+    ///@{
+
+    virtual ReturnResult        SetReferenceMode        ( ReferenceMode mode ) = 0;
+
+    virtual ReturnResult        SetReferenceH           ( VideoOutputID outID, Int32 offsetH ) = 0;
+    virtual ReturnResult        SetReferenceV           ( VideoOutputID outID, Int32 offsetV ) = 0;
+
+    ///@}
+
+
+public:
     //TODO: handle frames from GPU
     virtual void                ProcessFrame            ( const AVFrameConstPtr & data, UInt64 avOutputID )     = 0;
     virtual AVFramePtr          QueryInputFrame         ( VideoInputID inputID )                                = 0;
@@ -57,17 +73,6 @@ public:
     virtual InputChannelsDescsVec       GetInputChannelsDescs           () const = 0;
     virtual OutputChannelsDescsVec      GetOutputChannelsDescs          () const = 0;
 
-	//virtual IPlaybackControl*   GetPlaybackControl      () const = 0;
-	//virtual void                EnableVideoOutput       () = 0;
-	//virtual void                DisableVideoOutput      () = 0;
-	//virtual bool                SetupDevice             (unsigned int deviceIndex) = 0;
-	//virtual bool                ReleaseDevice           () = 0;
-	//virtual const TCHAR*        GetFormatDescription    () const = 0;
-	//virtual bool                SetVideoFormat          (const tstring& strDesiredFrameFormat)
-	//{
-	//	LOG << TEXT("SetVideoFormat is no supported");
-	//	return false; 
- //   }
 };
 
 DEFINE_PTR_TYPE( IVideoCard )

@@ -89,11 +89,15 @@ std::map< ReferenceMode, _EBlueGenlockSource >    CreateReferenceModeMap  ()
 {
     std::map< ReferenceMode, _EBlueGenlockSource > referenceModeMap;
 
-    referenceModeMap[ ReferenceMode::FREERUN ] = BlueFreeRunning;
-    referenceModeMap[ ReferenceMode::IN_A ] = BlueSDI_A_BNC;
-    referenceModeMap[ ReferenceMode::IN_B ] = BlueSDI_B_BNC;
-    referenceModeMap[ ReferenceMode::ANALOG ] = BlueAnalog_BNC;
-    referenceModeMap[ ReferenceMode::GENLOCK ] = BlueGenlockBNC;
+    referenceModeMap[ ReferenceMode::FreeRun ] = BlueFreeRunning;
+    referenceModeMap[ ReferenceMode::DigitalInput1 ] = BlueSDI_A_BNC;
+    referenceModeMap[ ReferenceMode::DigitalInput2 ] = BlueSDI_B_BNC;
+    referenceModeMap[ ReferenceMode::AnalogBlackBurst ] = BlueGenlockBNC;
+    referenceModeMap[ ReferenceMode::AnalogTriLevel ] = BlueGenlockBNC;
+    referenceModeMap[ ReferenceMode::AnalogTriLevel ] = BlueGenlockBNC;
+    referenceModeMap[ ReferenceMode::Interlock ] = BlueInterlock;
+    referenceModeMap[ ReferenceMode::AnalogBlackBurstAux ] = BlueGenlockAux;
+    referenceModeMap[ ReferenceMode::AnalogTriLevelAux ] = BlueGenlockAux;
     
     return referenceModeMap;
 }

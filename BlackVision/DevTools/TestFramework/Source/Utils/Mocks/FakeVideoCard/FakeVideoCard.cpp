@@ -171,6 +171,27 @@ OutputChannelsDescsVec  FakeVideoCard::GetOutputChannelsDescs           () const
 
 // ***********************
 //
+ReturnResult            FakeVideoCard::SetReferenceMode                 ( ReferenceMode /*mode*/ )
+{
+    return Result::Failure();
+}
+
+// ***********************
+//
+ReturnResult            FakeVideoCard::SetReferenceH                    ( VideoOutputID /*outID*/, Int32 /*offsetH*/ )
+{
+    return Result::Failure();
+}
+
+// ***********************
+//
+ReturnResult            FakeVideoCard::SetReferenceV                    ( VideoOutputID /*outID*/, Int32 /*offsetV*/ )
+{
+    return Result::Failure();
+}
+
+// ***********************
+//
 void                    FakeVideoCard::AddChannel                       ( FakeChannelDesc & channelDesc )
 {
     if( channelDesc.InputChannelData )
