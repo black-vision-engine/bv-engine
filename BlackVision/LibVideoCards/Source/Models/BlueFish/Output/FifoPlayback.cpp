@@ -62,7 +62,7 @@ CFifoPlayback::~CFifoPlayback()
 
 // ***********************
 //
-ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, long referenceMode, int refH, int refV, bool flipped, bool EnableAudioEmbedding, bool EnableVbiVanc, BLUE_UINT32 sdiOutput )
+ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, BLUE_UINT32 VideoMode, CFifoBuffer* pFifoBuffer, bool flipped, bool EnableAudioEmbedding, bool EnableVbiVanc, BLUE_UINT32 sdiOutput )
 {
     VARIANT varVal;
     //BLUE_INT32 card_type = CRD_INVALID;
@@ -127,18 +127,6 @@ ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32
         return "Can't set video mode."; // +gVideoModeInfo[ m_nVideoMode ].strVideoModeFriendlyName.c_str()
     }
     m_nVideoMode = varVal.ulVal;
-
-    varVal.ulVal = referenceMode;
-    m_pSDK->SetCardProperty(VIDEO_GENLOCK_SIGNAL, varVal);
-
-    if( referenceMode == BlueFreeRunning && refV >= 0 && refH >= 0 )
-    {
-        unsigned int HPhase=refH, VPhase=refV; 
-        varVal.ulVal = HPhase;
-        varVal.ulVal |= ((VPhase & 0xFFFF) << 16);
-        m_pSDK->SetCardProperty(GENLOCK_TIMING, varVal);
-        //NOTE: when using BlueSoftware mode the accepted value is a 20bit value coded as 2’s complement
-    }
 
     m_nUpdateFormat = UpdateFormat;
     varVal.ulVal = m_nUpdateFormat;

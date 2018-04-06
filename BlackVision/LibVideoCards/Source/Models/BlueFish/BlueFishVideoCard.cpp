@@ -127,7 +127,7 @@ void            VideoCard::InitVideoCard            ()
     m_SDK->SetCardProperty( VIDEO_OUTPUT_ENGINE, varVal );
 
     SetReferenceMode( m_referenceMode );
-    //SetReferenceV( m_refe)
+    SetReference( m_referenceH, m_referenceV );
 
     SetVideoOutput( false );
 
@@ -171,7 +171,7 @@ void            VideoCard::InitVideoCard            ()
             ReturnResult result;
 
             result = playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(),
-            channel->GetPlaybackBuffer(), ReferenceModeMap[ m_referenceMode ], m_referenceH, m_referenceV, channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
+            channel->GetPlaybackBuffer(), channel->GetFlipped(), true, true, EPOCH_DEST_SDI_OUTPUT_A);
 
             if( result.IsValid() )
             {
