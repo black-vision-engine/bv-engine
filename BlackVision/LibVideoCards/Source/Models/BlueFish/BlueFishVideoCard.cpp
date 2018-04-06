@@ -16,9 +16,10 @@ namespace bluefish
 
 //**************************************
 //
-VideoCard::VideoCard                ( UInt32 deviceID )
+VideoCard::VideoCard                ( UInt32 deviceID, ReferenceMode mode )
     : m_deviceID( deviceID )
     , m_engineMode( VIDEO_ENGINE_DUPLEX )
+    , m_referenceMode( mode )
 {
     m_SDK = CBlueVelvet4Ptr( BlueVelvetFactory4() );
 }
@@ -165,7 +166,7 @@ void            VideoCard::InitVideoCard            ()
             ReturnResult result;
 
             result = playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(),
-            channel->GetPlaybackBuffer(), channel->GetReferenceMode(), channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
+            channel->GetPlaybackBuffer(), ReferenceModeMap[ m_referenceMode ], channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
 
             if( result.IsValid() )
             {
@@ -371,17 +372,8 @@ ReturnResult        VideoCard::SetReferenceMode     ( ReferenceMode mode )
 {
     if( mode < ReferenceMode::FailMode )
     {
-        for( auto & chn : m_channels )
-        {
-            if( chn->IsOutputChannel() )
-            {
-                auto channel = static_cast< OutputChannel * >( chn );
-                auto result = channel->SetReferenceMode( mode );
-
-                if( !result.IsValid() )
-                    return result.GetError();
-            }
-        }
+        auto bluefishMode = ReferenceModeMap[ mode ];
+        return CFifoPlayback::UpdateReferenceMode( m_SDK.get(), bluefishMode );
     }
 
     return "Invalid reference mode";

@@ -745,14 +745,14 @@ ReturnResult        CFifoPlayback::UpdateReferenceOffset            ( int refH, 
 
 //**************************************
 //
-ReturnResult        CFifoPlayback::UpdateReferenceMode              ( long referenceMode )
+ReturnResult        CFifoPlayback::UpdateReferenceMode              ( CBlueVelvet4 * pSDK, long referenceMode )
 {
-    if( m_pSDK )
+    if( pSDK )
     {
         VARIANT varVal;
         varVal.vt = VT_UI4;
         varVal.ulVal = referenceMode;
-        m_pSDK->SetCardProperty( VIDEO_GENLOCK_SIGNAL, varVal );
+        pSDK->SetCardProperty( VIDEO_GENLOCK_SIGNAL, varVal );
 
         return Result::Success();
     }

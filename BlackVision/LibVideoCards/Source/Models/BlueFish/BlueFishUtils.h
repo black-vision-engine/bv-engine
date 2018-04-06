@@ -43,7 +43,6 @@ struct ChannelDataBase
 //
 struct ChannelInputData : public ChannelDataBase
 {
-    bool                    playthrough;
     UInt32                  linkedVideoInput;
 };
 
@@ -59,7 +58,6 @@ struct ChannelOutputData : public ChannelDataBase
     bool                    interlaced;
     bool                    flipped;
     _EVideoMode             videoMode;
-    _EBlueGenlockSource     referenceMode;
     Int32                   referenceH;
     Int32                   referenceV;
     UInt64                  linkedVideoOutput;

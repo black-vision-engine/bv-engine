@@ -48,6 +48,7 @@ private:
 private:
 
     UInt32                          m_deviceID;
+    ReferenceMode                   m_referenceMode;
     std::vector< ChannelDesc >      m_channels;
 
 public:
@@ -77,6 +78,7 @@ private:
 
     ExceptionsListPtr                   ValidateUniqueChannelNames      () const;
     ExceptionsListPtr                   ValidateVideoMode               () const;
+    ExceptionsListPtr                   ValidateReferenceMode           () const;
 };
 
 DEFINE_PTR_TYPE( VideoCardDesc )

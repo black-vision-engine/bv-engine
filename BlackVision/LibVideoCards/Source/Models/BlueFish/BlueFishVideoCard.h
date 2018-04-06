@@ -33,28 +33,15 @@ private:
 
 	CBlueVelvet4Ptr         m_SDK;
 	UInt32                  m_deviceID;
-
-	UInt32                  m_updFmt;
-	UInt32                  m_memFmt;
 	UInt32                  m_engineMode;
-
-
-	UInt32                  m_resolution;
-	UInt32                  m_refresh;
-    bool                    m_interlaced;
-    bool                    m_flipped;
-
+    ReferenceMode           m_referenceMode;
 
 	VARIANT                 varVal;
-    ULONG                   GoldenSize;
-	ULONG					PixelsPerLine;
-	ULONG					VideoLines;
-    ULONG                   FieldCount;
 
 	std::vector< Channel * > m_channels;
 
 public:
-	                        VideoCard                   ( UInt32 deviceID );
+	                        VideoCard                   ( UInt32 deviceID, ReferenceMode mode );
 	virtual                 ~VideoCard                  () override; 
 
     bool                    AttachVideoCard             ();

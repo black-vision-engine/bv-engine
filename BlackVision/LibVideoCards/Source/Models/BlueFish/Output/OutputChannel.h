@@ -59,7 +59,6 @@ public:
     UInt32              GetUpdateFormat             () const;
     UInt32              GetMemoryFormat             () const;
 
-    UInt32              GetReferenceMode            () const;
     UInt32              GetReferenceH               () const;
     UInt32              GetReferenceV               () const;
     bool                GetFlipped                  () const;
@@ -83,8 +82,6 @@ public:
     SizeType            GetNumFrameDrops            () { return m_playbackChannel->GetNumFrameDrops(); }
 
 public:
-
-    ReturnResult        SetReferenceMode            ( ReferenceMode mode );
 
     ReturnResult        SetReferenceH               ( Int32 offsetH );
     ReturnResult        SetReferenceV               ( Int32 offsetV );

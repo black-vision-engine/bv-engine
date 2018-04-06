@@ -103,13 +103,6 @@ UInt32                  OutputChannel::GetEpochSDIKeyOutput         () const
 
 //**************************************
 //
-UInt32                  OutputChannel::GetReferenceMode             () const
-{
-    return ( UInt32 )PlaybackData->referenceMode;
-}
-
-//**************************************
-//
 UInt32                  OutputChannel::GetReferenceH                () const
 {
     return ( UInt32 )PlaybackData->referenceH;
@@ -231,14 +224,6 @@ bool                    OutputChannel::IsOutputChannel              () const
 void                    OutputChannel::EnqueueFrame                 ( const AVFrameConstPtr & frame )
 {
     m_frameProcessingThread->EnqueueFrame( frame );
-}
-
-// ***********************
-//
-ReturnResult            OutputChannel::SetReferenceMode             ( ReferenceMode mode )
-{
-    PlaybackData->referenceMode = ReferenceModeMap[ mode ];
-    return m_playbackChannel->UpdateReferenceMode( PlaybackData->referenceMode );
 }
 
 // ***********************

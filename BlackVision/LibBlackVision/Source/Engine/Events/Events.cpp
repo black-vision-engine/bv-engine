@@ -592,6 +592,7 @@ IMPLEMENT_ENUM_SERIALIZATION( NodeLogicEvent::Command, NodeLogicEventCommandMapp
 
 namespace SerializationHelper
 {
+    const std::string VIDEO_CARD_ID_STRING = "VideoCardID";
     const std::string VIDEO_CARD_NUMBER_STRING = "Number";
     const std::string VIDEO_CARD_VALUE_STRING = "Value";
     const std::string VIDEO_CARD_REFERENCE_MODE_STRING = "ReferenceMode";
@@ -2119,6 +2120,7 @@ void                VideoCardEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, Convert::T2String( VideoCommand ) );
     ser.SetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING, Convert::T2String( Number ) );
+    ser.SetAttribute( SerializationHelper::VIDEO_CARD_ID_STRING, Convert::T2String( VideoCardID ) );
     ser.SetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING, Convert::T2String( Value ) );
     ser.SetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING, Convert::T2String( Mode ) );
 }
@@ -2131,7 +2133,7 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
     {
         VideoCardEventPtr newEvent      = std::make_shared< VideoCardEvent >();
         newEvent->VideoCommand          = Convert::String2T< VideoCardEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), VideoCardEvent::Command::Fail );
-        newEvent->VideoCardID           = Convert::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );
+        newEvent->VideoCardID           = Convert::String2T< UInt32 >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_ID_STRING ), 0 );
         newEvent->Mode                  = Convert::String2T< videocards::ReferenceMode >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_STRING ), videocards::ReferenceMode::FailMode );
         newEvent->Value                 = Convert::String2T< float >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_STRING ), 0.0f );
         newEvent->Number                = Convert::String2T< int >( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_STRING ), 0 );

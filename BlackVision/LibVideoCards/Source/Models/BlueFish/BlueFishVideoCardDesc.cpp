@@ -40,7 +40,7 @@ Expected< IVideoCardPtr >   VideoCardDesc::CreateVideoCard          () const
     if( !result.IsValid() )
         return result.GetError();
 
-    auto card = std::make_shared< VideoCard >( m_deviceID );
+    auto card = std::make_shared< VideoCard >( m_deviceID, m_referenceMode );
 
     if( card->AttachVideoCard() )
     {
@@ -75,6 +75,7 @@ Expected< IVideoCardPtr >   VideoCardDesc::CreateVideoCard          () const
 void                    VideoCardDesc::Deserialize          ( const IDeserializer & deser )
 {
     m_deviceID = Convert::String2T< UInt32 >( deser.GetAttribute( "deviceID" ), 0 );
+    m_referenceMode = Convert::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ), ReferenceMode::FailMode );
 
 
     //check input / output count
@@ -94,7 +95,6 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
                     input = std::unique_ptr< ChannelInputData >( new ChannelInputData() );
                     input->type = Convert::String2T< IOType >( deser.GetAttribute( "type" ) );
                     input->resolution = Convert::String2T< UInt32 >( deser.GetAttribute( "resolution" ), 1080 );
-                    input->playthrough = Convert::String2T< bool >( deser.GetAttribute( "playthrough" ), false );
                     input->linkedVideoInput = Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoInput" ), 0 );
 
                     input->updateFormat = UPD_FMT_FIELD;
@@ -111,7 +111,6 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
                     output->refresh = Convert::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
                     output->interlaced = Convert::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
                     output->flipped = Convert::String2T< bool >( deser.GetAttribute( "flipped" ), false );
-                    output->referenceMode = ReferenceModeMap[ Convert::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ) ) ];
                     output->referenceH = Convert::String2T< Int32 >( deser.GetAttribute( "referenceH" ), 0 );
                     output->referenceV = Convert::String2T< Int32 >( deser.GetAttribute( "referenceV" ), 0 );
                     output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
@@ -148,6 +147,7 @@ ReturnResult            VideoCardDesc::Validate() const
 
     errors->Merge( ValidateUniqueChannelNames() );
     errors->Merge( ValidateVideoMode() );
+    errors->Merge( ValidateReferenceMode() );
 
     if( errors->IsEmpty() )
         return Result::Success();
@@ -211,6 +211,21 @@ ExceptionsListPtr       VideoCardDesc::ValidateVideoMode    () const
     }
 
     return errors;
+}
+
+// ***********************
+//
+ExceptionsListPtr       VideoCardDesc::ValidateReferenceMode    () const
+{
+    if( m_referenceMode >= ReferenceMode::FailMode )
+    {
+        ExceptionsListPtr errors = std::make_shared< ExceptionsList >();
+        errors->AddException( "Invalid reference mode." );
+        
+        return errors;
+    }
+
+    return ExceptionsListPtr();
 }
 
 //**************************************
