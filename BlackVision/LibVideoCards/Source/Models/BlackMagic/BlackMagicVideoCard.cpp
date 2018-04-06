@@ -489,14 +489,14 @@ ReturnResult        VideoCard::SetReferenceMode     ( ReferenceMode /*mode*/ )
 
 // ***********************
 //
-ReturnResult        VideoCard::SetReferenceH        ( VideoOutputID /*outID*/, Int32 /*offsetH*/ )
+ReturnResult        VideoCard::SetReferenceH        ( UInt32 /*offsetH*/ )
 {
     return Result::Failure();
 }
 
 // ***********************
 //
-ReturnResult        VideoCard::SetReferenceV        ( VideoOutputID /*outID*/, Int32 /*offsetV */)
+ReturnResult        VideoCard::SetReferenceV        ( UInt32 /*offsetV */)
 {
     return Result::Failure();
 }

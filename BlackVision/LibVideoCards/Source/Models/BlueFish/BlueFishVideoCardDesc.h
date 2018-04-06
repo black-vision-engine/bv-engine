@@ -48,7 +48,11 @@ private:
 private:
 
     UInt32                          m_deviceID;
+
     ReferenceMode                   m_referenceMode;
+    UInt32                          m_referenceH;
+    UInt32                          m_referenceV;
+
     std::vector< ChannelDesc >      m_channels;
 
 public:

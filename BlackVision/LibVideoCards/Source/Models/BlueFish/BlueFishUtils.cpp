@@ -102,6 +102,8 @@ std::map< ReferenceMode, _EBlueGenlockSource >    CreateReferenceModeMap  ()
     return referenceModeMap;
 }
 
+// ***********************
+//
 void BlueMemCpy(void* pDst, void* pSrc, size_t size)
 {
 	size_t tmpsize = 0;
@@ -128,6 +130,8 @@ void BlueMemCpy(void* pDst, void* pSrc, size_t size)
 	}
 }
 
+// ***********************
+//
 void BlueMemZero(void* pData, size_t size)
 {
 	size_t tmpsize = 0;
@@ -150,6 +154,55 @@ void BlueMemZero(void* pData, size_t size)
 	{
 		memset(pData, 0, size);
 	}
+}
+
+
+//**************************************
+//
+ReturnResult        UpdateReferenceOffset            ( CBlueVelvet4 * pSDK, int refH, int refV )
+{
+    if( pSDK )
+    {
+        unsigned int HPhase = 0, VPhase = 0, MaxHPhase = 0, MaxVPhase = 0;
+        pSDK->get_timing_adjust( HPhase, VPhase, MaxHPhase, MaxVPhase );
+
+        if( refH > ( int )MaxHPhase )
+            return "Reference offset V [" + Convert::T2String( refH ) + "] exceeds max value [" + Convert::T2String( MaxHPhase ) + "].";
+
+        if( refV > ( int )MaxVPhase )
+            return "Reference offset H [" + Convert::T2String( refV ) + "] exceeds max value [" + Convert::T2String( MaxVPhase ) + "].";
+
+        VARIANT varVal;
+        varVal.vt = VT_UI4;
+        varVal.ulVal = refH;
+        varVal.ulVal |= ( ( refV & 0xFFFF ) << 16 );
+        pSDK->SetCardProperty( GENLOCK_TIMING, varVal );
+
+        return Result::Success();
+    }
+    else
+    {
+        return "BlueFish SDK not INITIALISED (UpdateReferenceOffset in CFifoPlayback).";
+    }
+}
+
+//**************************************
+//
+ReturnResult        UpdateReferenceMode              ( CBlueVelvet4 * pSDK, long referenceMode )
+{
+    if( pSDK )
+    {
+        VARIANT varVal;
+        varVal.vt = VT_UI4;
+        varVal.ulVal = referenceMode;
+        pSDK->SetCardProperty( VIDEO_GENLOCK_SIGNAL, varVal );
+
+        return Result::Success();
+    }
+    else
+    {
+        return "BlueFish SDK not INITIALISED (UpdateReferenceMode in CFifoPlayback).";
+    }
 }
 
 } //bluefish

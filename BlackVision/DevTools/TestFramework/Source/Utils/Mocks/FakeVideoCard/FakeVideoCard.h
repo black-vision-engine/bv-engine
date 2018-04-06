@@ -75,8 +75,8 @@ public:
 
     virtual ReturnResult        SetReferenceMode        ( ReferenceMode mode ) override;
 
-    virtual ReturnResult        SetReferenceH           ( VideoOutputID outID, Int32 offsetH ) override;
-    virtual ReturnResult        SetReferenceV           ( VideoOutputID outID, Int32 offsetV ) override;
+    virtual ReturnResult        SetReferenceH           ( UInt32 offsetH ) override;
+    virtual ReturnResult        SetReferenceV           ( UInt32 offsetV ) override;
 
 public:
 

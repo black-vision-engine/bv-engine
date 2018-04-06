@@ -103,20 +103,6 @@ UInt32                  OutputChannel::GetEpochSDIKeyOutput         () const
 
 //**************************************
 //
-UInt32                  OutputChannel::GetReferenceH                () const
-{
-    return ( UInt32 )PlaybackData->referenceH;
-}
-
-//**************************************
-//
-UInt32                  OutputChannel::GetReferenceV                () const
-{
-    return ( UInt32 )PlaybackData->referenceV;
-}
-
-//**************************************
-//
 bool                    OutputChannel::GetFlipped                   () const
 {
     return PlaybackData->flipped;
@@ -224,30 +210,6 @@ bool                    OutputChannel::IsOutputChannel              () const
 void                    OutputChannel::EnqueueFrame                 ( const AVFrameConstPtr & frame )
 {
     m_frameProcessingThread->EnqueueFrame( frame );
-}
-
-// ***********************
-//
-ReturnResult            OutputChannel::SetReferenceH                ( Int32 offsetH )
-{
-    auto result = m_playbackChannel->UpdateReferenceOffset( offsetH, PlaybackData->referenceV );
-
-    if( result.IsValid() )
-        PlaybackData->referenceH = offsetH;
-
-    return result;
-}
-
-// ***********************
-//
-ReturnResult            OutputChannel::SetReferenceV                ( Int32 offsetV )
-{
-    auto result = m_playbackChannel->UpdateReferenceOffset( PlaybackData->referenceH, offsetV );
-
-    if( result.IsValid() )
-        PlaybackData->referenceV = offsetV;
-
-    return result;
 }
 
 // ***********************

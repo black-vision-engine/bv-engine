@@ -714,53 +714,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 //  return 0;
 //}
 
-//**************************************
-//
-ReturnResult        CFifoPlayback::UpdateReferenceOffset            ( int refH, int refV )
-{
-    if( m_pSDK )
-    {
-        unsigned int HPhase = 0, VPhase = 0, MaxHPhase = 0, MaxVPhase = 0;
-        m_pSDK->get_timing_adjust( HPhase, VPhase, MaxHPhase, MaxVPhase );
 
-        if( refH > (int)MaxHPhase )
-            return "Reference offset V [" + Convert::T2String( refH ) + "] exceeds max value [" + Convert::T2String( MaxHPhase ) + "].";
-
-        if( refV > (int)MaxVPhase )
-            return "Reference offset H [" + Convert::T2String( refV ) + "] exceeds max value [" + Convert::T2String( MaxVPhase ) + "].";
-
-        VARIANT varVal;
-        varVal.vt = VT_UI4;
-        varVal.ulVal = refH;
-        varVal.ulVal |= ( ( refV & 0xFFFF ) << 16 );
-        m_pSDK->SetCardProperty( GENLOCK_TIMING, varVal );
-
-        return Result::Success();
-    }
-    else
-    {
-        return "BlueFish SDK not INITIALISED (UpdateReferenceOffset in CFifoPlayback).";
-    }
-}
-
-//**************************************
-//
-ReturnResult        CFifoPlayback::UpdateReferenceMode              ( CBlueVelvet4 * pSDK, long referenceMode )
-{
-    if( pSDK )
-    {
-        VARIANT varVal;
-        varVal.vt = VT_UI4;
-        varVal.ulVal = referenceMode;
-        pSDK->SetCardProperty( VIDEO_GENLOCK_SIGNAL, varVal );
-
-        return Result::Success();
-    }
-    else
-    {
-        return "BlueFish SDK not INITIALISED (UpdateReferenceMode in CFifoPlayback).";
-    }
-}
 
 } //bluefish
 } //videocards

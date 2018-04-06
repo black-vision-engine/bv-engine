@@ -68,14 +68,14 @@ void		VideoCardEventsHandlers::EventHandler   ( IEventPtr evt )
             case VideoCardEvent::Command::SetReferenceOffsetH:
             {
                 auto card = videoCardManager->GetVideoCard( videocardID );
-                result = card->SetReferenceH( videoEvent->ChannelID, videoEvent->Number );
+                result = card->SetReferenceH( videoEvent->Number );
 
                 break;
             }
             case VideoCardEvent::Command::SetReferenceOffsetV:
             {
                 auto card = videoCardManager->GetVideoCard( videocardID );
-                result = card->SetReferenceV( videoEvent->ChannelID, videoEvent->Number );
+                result = card->SetReferenceV( videoEvent->Number );
 
                 break;
             }

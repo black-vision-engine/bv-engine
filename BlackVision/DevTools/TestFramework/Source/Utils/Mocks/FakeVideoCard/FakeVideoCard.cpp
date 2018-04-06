@@ -178,14 +178,14 @@ ReturnResult            FakeVideoCard::SetReferenceMode                 ( Refere
 
 // ***********************
 //
-ReturnResult            FakeVideoCard::SetReferenceH                    ( VideoOutputID /*outID*/, Int32 /*offsetH*/ )
+ReturnResult            FakeVideoCard::SetReferenceH                    ( UInt32 /*offsetH*/ )
 {
     return Result::Failure();
 }
 
 // ***********************
 //
-ReturnResult            FakeVideoCard::SetReferenceV                    ( VideoOutputID /*outID*/, Int32 /*offsetV*/ )
+ReturnResult            FakeVideoCard::SetReferenceV                    ( UInt32 /*offsetV*/ )
 {
     return Result::Failure();
 }

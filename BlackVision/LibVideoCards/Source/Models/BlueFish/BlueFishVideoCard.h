@@ -34,14 +34,17 @@ private:
 	CBlueVelvet4Ptr         m_SDK;
 	UInt32                  m_deviceID;
 	UInt32                  m_engineMode;
+
     ReferenceMode           m_referenceMode;
+    UInt32                  m_referenceH;
+    UInt32                  m_referenceV;
 
 	VARIANT                 varVal;
 
 	std::vector< Channel * > m_channels;
 
 public:
-	                        VideoCard                   ( UInt32 deviceID, ReferenceMode mode );
+	                        VideoCard                   ( UInt32 deviceID, ReferenceMode mode, UInt32 referenceH, UInt32 referenceV );
 	virtual                 ~VideoCard                  () override; 
 
     bool                    AttachVideoCard             ();
@@ -80,10 +83,12 @@ public:
 
     virtual ReturnResult    SetReferenceMode            ( ReferenceMode mode ) override;
 
-    virtual ReturnResult    SetReferenceH               ( VideoOutputID outID, Int32 offsetH ) override;
-    virtual ReturnResult    SetReferenceV               ( VideoOutputID outID, Int32 offsetV ) override;
+    virtual ReturnResult    SetReferenceH               ( UInt32 offsetH ) override;
+    virtual ReturnResult    SetReferenceV               ( UInt32 offsetV ) override;
 
 private:
+
+    ReturnResult            SetReference                ( UInt32 offsetH, UInt32 offsetV );
 
     Expected< OutputChannel * >     GetOutputChannel    ( VideoOutputID outID );
 };

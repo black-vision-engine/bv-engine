@@ -16,10 +16,12 @@ namespace bluefish
 
 //**************************************
 //
-VideoCard::VideoCard                ( UInt32 deviceID, ReferenceMode mode )
+VideoCard::VideoCard                ( UInt32 deviceID, ReferenceMode mode, UInt32 referenceH, UInt32 referenceV )
     : m_deviceID( deviceID )
     , m_engineMode( VIDEO_ENGINE_DUPLEX )
     , m_referenceMode( mode )
+    , m_referenceH( referenceH )
+    , m_referenceV( referenceV )
 {
     m_SDK = CBlueVelvet4Ptr( BlueVelvetFactory4() );
 }
@@ -124,6 +126,9 @@ void            VideoCard::InitVideoCard            ()
     varVal.ulVal = m_engineMode;
     m_SDK->SetCardProperty( VIDEO_OUTPUT_ENGINE, varVal );
 
+    SetReferenceMode( m_referenceMode );
+    //SetReferenceV( m_refe)
+
     SetVideoOutput( false );
 
 	for( auto channelIter = m_channels.begin(); channelIter != m_channels.end(); )
@@ -166,7 +171,7 @@ void            VideoCard::InitVideoCard            ()
             ReturnResult result;
 
             result = playbackChannel->Init( m_deviceID, channel->GetOutputChannel(), channel->GetUpdateFormat(), channel->GetMemoryFormat(), channel->GetVideoMode(),
-            channel->GetPlaybackBuffer(), ReferenceModeMap[ m_referenceMode ], channel->GetReferenceH(), channel->GetReferenceV(), channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
+            channel->GetPlaybackBuffer(), ReferenceModeMap[ m_referenceMode ], m_referenceH, m_referenceV, channel->GetFlipped(),true,true, EPOCH_DEST_SDI_OUTPUT_A);
 
             if( result.IsValid() )
             {
@@ -373,7 +378,7 @@ ReturnResult        VideoCard::SetReferenceMode     ( ReferenceMode mode )
     if( mode < ReferenceMode::FailMode )
     {
         auto bluefishMode = ReferenceModeMap[ mode ];
-        return CFifoPlayback::UpdateReferenceMode( m_SDK.get(), bluefishMode );
+        return UpdateReferenceMode( m_SDK.get(), bluefishMode );
     }
 
     return "Invalid reference mode";
@@ -381,28 +386,33 @@ ReturnResult        VideoCard::SetReferenceMode     ( ReferenceMode mode )
 
 // ***********************
 //
-ReturnResult        VideoCard::SetReferenceH        ( VideoOutputID outID, Int32 offsetH )
+ReturnResult        VideoCard::SetReferenceH        ( UInt32 offsetH )
 {
-    auto channel = GetOutputChannel( outID );
-    if( channel.IsValid() )
-    {
-        return channel.GetVal()->SetReferenceH( offsetH );
-    }
-        
-    return channel.GetError();
+    auto result = SetReference( offsetH, m_referenceV );
+    
+    if( result.IsValid() )
+        m_referenceH = offsetH;
+
+    return result;
 }
 
 // ***********************
 //
-ReturnResult        VideoCard::SetReferenceV        ( VideoOutputID outID, Int32 offsetV )
+ReturnResult        VideoCard::SetReferenceV        ( UInt32 offsetV )
 {
-    auto channel = GetOutputChannel( outID );
-    if( channel.IsValid() )
-    {
-        return channel.GetVal()->SetReferenceV( offsetV );
-    }
+    auto result = SetReference( offsetV, m_referenceV );
 
-    return channel.GetError();
+    if( result.IsValid() )
+        m_referenceV = offsetV;
+
+    return result;
+}
+
+// ***********************
+//
+ReturnResult        VideoCard::SetReference         ( UInt32 offsetH, UInt32 offsetV )
+{
+    return UpdateReferenceOffset( m_SDK.get(), offsetH, offsetV );
 }
 
 // ***********************

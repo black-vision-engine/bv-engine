@@ -34,8 +34,6 @@ public:
     void                            StartThread             ();
     void                            SuspendThread           ();
     void                            StopThread              ();
-    ReturnResult                    UpdateReferenceOffset   ( int refH, int refV );
-    static ReturnResult             UpdateReferenceMode     ( CBlueVelvet4 * pSDK, long referenceMode );
 
     SizeType                        GetNumFrameDrops        () { return m_debugNumberFrameDrops; }
 

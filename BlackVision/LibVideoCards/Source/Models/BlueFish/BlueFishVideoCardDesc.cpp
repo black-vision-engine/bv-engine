@@ -40,7 +40,7 @@ Expected< IVideoCardPtr >   VideoCardDesc::CreateVideoCard          () const
     if( !result.IsValid() )
         return result.GetError();
 
-    auto card = std::make_shared< VideoCard >( m_deviceID, m_referenceMode );
+    auto card = std::make_shared< VideoCard >( m_deviceID, m_referenceMode, m_referenceH, m_referenceV );
 
     if( card->AttachVideoCard() )
     {
@@ -76,7 +76,8 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
 {
     m_deviceID = Convert::String2T< UInt32 >( deser.GetAttribute( "deviceID" ), 0 );
     m_referenceMode = Convert::String2T< ReferenceMode >( deser.GetAttribute( "referenceMode" ), ReferenceMode::FailMode );
-
+    m_referenceH = Convert::String2T< UInt32 >( deser.GetAttribute( "referenceH" ), 0 );
+    m_referenceV = Convert::String2T< UInt32 >( deser.GetAttribute( "referenceV" ), 0 );
 
     //check input / output count
     if( deser.EnterChild( "channels" ) )
@@ -111,8 +112,6 @@ void                    VideoCardDesc::Deserialize          ( const IDeserialize
                     output->refresh = Convert::String2T< UInt32 >( deser.GetAttribute( "refresh" ), 5000 );
                     output->interlaced = Convert::String2T< bool >( deser.GetAttribute( "interlaced" ), false );
                     output->flipped = Convert::String2T< bool >( deser.GetAttribute( "flipped" ), false );
-                    output->referenceH = Convert::String2T< Int32 >( deser.GetAttribute( "referenceH" ), 0 );
-                    output->referenceV = Convert::String2T< Int32 >( deser.GetAttribute( "referenceV" ), 0 );
                     output->videoMode = ConvertVideoMode( output->resolution, output->refresh, output->interlaced );
                     output->linkedVideoOutput = ( UInt32 )Convert::String2T< UInt32 >( deser.GetAttribute( "linkedVideoOutput" ), 0 );
 
