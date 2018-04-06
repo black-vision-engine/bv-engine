@@ -36,41 +36,54 @@ void		VideoCardEventsHandlers::EventHandler   ( IEventPtr evt )
 
         ReturnResult result = Result::Success();
 
-        if( command == VideoCardEvent::Command::EnableOutput )
+        switch( command )
         {
-            videoCardManager->SetVideoOutput( true );
-        }
-        else if( command == VideoCardEvent::Command::DisableOutput )
-        {
-            videoCardManager->SetVideoOutput( false );
-        }
-        else if( command == VideoCardEvent::Command::EnableKey )
-        {
-            videoCardManager->SetKey( true );
-        }
-        else if( command == VideoCardEvent::Command::DisableKey )
-        {
-            videoCardManager->SetKey( false );
-        }
-        else if( command == VideoCardEvent::Command::SetReferenceMode )
-        {
-            auto card = videoCardManager->GetVideoCard( videocardID );
-            result = card->SetReferenceMode( videoEvent->Mode );
-        }
-        else if( command == VideoCardEvent::Command::SetReferenceOffsetH )
-        {
-            auto card = videoCardManager->GetVideoCard( videocardID );
-            result = card->SetReferenceH( videoEvent->ChannelID, videoEvent->Number );
-        }
-        else if( command == VideoCardEvent::Command::SetReferenceOffsetV )
-        {
-            auto card = videoCardManager->GetVideoCard( videocardID );
-            result = card->SetReferenceV( videoEvent->ChannelID, videoEvent->Number );
-        }
-        else
-        {
-            SendSimpleErrorResponse( command, videoEvent->EventID, videoEvent->SocketID, "Unknown command" );
-            return;
+            case VideoCardEvent::Command::EnableOutput:
+            {
+                videoCardManager->SetVideoOutput( true );
+                break;
+            }
+            case VideoCardEvent::Command::DisableOutput:
+            {
+                videoCardManager->SetVideoOutput( false );
+                break;
+            }
+            case VideoCardEvent::Command::EnableKey:
+            {
+                videoCardManager->SetKey( true );
+                break;
+            }
+            case VideoCardEvent::Command::DisableKey:
+            {
+                videoCardManager->SetKey( false );
+                break;
+            }
+            case VideoCardEvent::Command::SetReferenceMode:
+            {
+                auto card = videoCardManager->GetVideoCard( videocardID );
+                result = card->SetReferenceMode( videoEvent->Mode );
+
+                break;
+            }
+            case VideoCardEvent::Command::SetReferenceOffsetH:
+            {
+                auto card = videoCardManager->GetVideoCard( videocardID );
+                result = card->SetReferenceH( videoEvent->ChannelID, videoEvent->Number );
+
+                break;
+            }
+            case VideoCardEvent::Command::SetReferenceOffsetV:
+            {
+                auto card = videoCardManager->GetVideoCard( videocardID );
+                result = card->SetReferenceV( videoEvent->ChannelID, videoEvent->Number );
+
+                break;
+            }
+            default:
+            {
+                SendSimpleErrorResponse( command, videoEvent->EventID, videoEvent->SocketID, "Unknown command" );
+                return;
+            }
         }
 
         if( result.IsValid() )
