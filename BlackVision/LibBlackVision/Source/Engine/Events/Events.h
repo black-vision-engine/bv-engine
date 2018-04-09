@@ -886,6 +886,8 @@ public:
         SetReferenceOffsetV,
         EnableInput,
         DisableInput,
+        GetReferenceSignalInfo,
+        IsLocked,
         Fail            ///< Wrong command
     } Command;
 

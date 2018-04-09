@@ -410,6 +410,20 @@ ReturnResult        VideoCard::SetReferenceV        ( UInt32 offsetV )
 
 // ***********************
 //
+ReferenceInfo       VideoCard::GetReferenceInfo     () const
+{
+    return GetReferenceInfoImpl( m_SDK.get() );
+}
+
+// ***********************
+//
+bool                VideoCard::IsLocked             () const
+{
+    return IsReferenceSignalLocked( m_SDK.get() );
+}
+
+// ***********************
+//
 ReturnResult        VideoCard::SetReference         ( UInt32 offsetH, UInt32 offsetV )
 {
     return UpdateReferenceOffset( m_SDK.get(), offsetH, offsetV );

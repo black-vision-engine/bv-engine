@@ -501,6 +501,20 @@ ReturnResult        VideoCard::SetReferenceV        ( UInt32 /*offsetV */)
     return Result::Failure();
 }
 
+// ***********************
+//
+ReferenceInfo       VideoCard::GetReferenceInfo     () const
+{
+    return ReferenceInfo();
+}
+
+// ***********************
+//
+bool                VideoCard::IsLocked             () const
+{
+    return false;
+}
+
 //**************************************
 //
 UInt32              VideoCard::AudioFrameSizeInBytes() const

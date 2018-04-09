@@ -97,6 +97,10 @@ void BlueMemZero(void* pData, size_t size);
 
 ReturnResult             UpdateReferenceOffset   ( CBlueVelvet4 * pSDK, int refH, int refV );
 ReturnResult             UpdateReferenceMode     ( CBlueVelvet4 * pSDK, long referenceMode );
+bool                     IsReferenceSignalLocked ( CBlueVelvet4 * pSDK );
+
+ReferenceInfo            GetReferenceInfoImpl    ( CBlueVelvet4 * pSDK );
+ReferenceMode            GetReferenceModeImpl    ( CBlueVelvet4 * pSDK );
 
 
 // ***********************

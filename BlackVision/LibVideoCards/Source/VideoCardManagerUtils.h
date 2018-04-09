@@ -36,6 +36,14 @@ enum class ReferenceMode : int
     FailMode            ///< Wrong ReferenceMode
 };
 
+// ***********************
+//
+struct ReferenceInfo
+{
+    ReferenceMode       Mode;
+    UInt32              ReferenceH;
+    UInt32              ReferenceV;
+};
 
 } //videocards
 

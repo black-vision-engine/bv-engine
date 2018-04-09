@@ -205,6 +205,66 @@ ReturnResult        UpdateReferenceMode              ( CBlueVelvet4 * pSDK, long
     }
 }
 
+// ***********************
+//
+bool                IsReferenceSignalLocked         ( CBlueVelvet4 * pSDK )
+{
+    if( pSDK )
+    {
+        VARIANT varVal;
+        varVal.vt = VT_UI4;
+        pSDK->QueryCardProperty( EPOCH_GENLOCK_IS_LOCKED, varVal );
+
+        if( varVal.ulVal ) return true;
+        return false;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ***********************
+//
+ReferenceInfo       GetReferenceInfoImpl            ( CBlueVelvet4 * pSDK )
+{
+    if( pSDK )
+    {
+        ReferenceInfo info;
+
+        unsigned int HPhase = 0, VPhase = 0, MaxHPhase = 0, MaxVPhase = 0;
+        pSDK->get_timing_adjust( HPhase, VPhase, MaxHPhase, MaxVPhase );
+
+        info.ReferenceH = HPhase;
+        info.ReferenceV = VPhase;
+        info.Mode = GetReferenceModeImpl( pSDK );
+
+        return info;
+    }
+
+    return ReferenceInfo();
+}
+
+// ***********************
+//
+ReferenceMode       GetReferenceModeImpl            ( CBlueVelvet4 * pSDK )
+{
+    VARIANT varVal;
+    varVal.vt = VT_UI4;
+    pSDK->QueryCardProperty( EPOCH_GENLOCK_IS_LOCKED, varVal );
+
+    //auto nGenlockSignal = varVal.ulVal & 0xFFFF; //reference source signal (lower 16 bits)
+    _EBlueGenlockSource nGenlockSource = _EBlueGenlockSource( varVal.ulVal & 0xFFFF0000 ); //reference source (higher 16 bits); type EBlueGenlockSource
+
+    for( auto & element : ReferenceModeMap )
+    {
+        if( element.second == nGenlockSource )
+            return element.first;
+    }
+
+    return ReferenceMode::FailMode;
+}
+
 } //bluefish
 } //videocards
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
+#include "Interfaces/IVideoCard.h"
 
 
 namespace bv {
@@ -19,6 +20,15 @@ public:
 				    ~VideoCardEventsHandlers    ();
 
     void            EventHandler			    ( IEventPtr evt );
+
+private:
+
+    void            GetReferenceSignalInfoHandler   ( videocards::VideoCardManager * videoCardManager, VideoCardEventPtr videocardEvent );
+    void            IsLockedHandler                 ( videocards::VideoCardManager * videoCardManager, VideoCardEventPtr videocardEvent );
+
+private:
+
+    Expected< videocards::IVideoCardPtr >       GetVideoCard        ( videocards::VideoCardManager * videoCardManager, UInt32 videoCardID );
 
 };
 

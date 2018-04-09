@@ -55,6 +55,9 @@ public:
     virtual ReturnResult        SetReferenceH           ( UInt32 offsetH ) = 0;
     virtual ReturnResult        SetReferenceV           ( UInt32 offsetV ) = 0;
 
+    virtual ReferenceInfo       GetReferenceInfo        () const = 0;
+    virtual bool                IsLocked                () const = 0;
+
     ///@}
 
 

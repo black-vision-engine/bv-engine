@@ -192,6 +192,20 @@ ReturnResult            FakeVideoCard::SetReferenceV                    ( UInt32
 
 // ***********************
 //
+ReferenceInfo           FakeVideoCard::GetReferenceInfo                 () const
+{
+    return ReferenceInfo();
+}
+
+// ***********************
+//
+bool                    FakeVideoCard::IsLocked                         () const
+{
+    return false;
+}
+
+// ***********************
+//
 void                    FakeVideoCard::AddChannel                       ( FakeChannelDesc & channelDesc )
 {
     if( channelDesc.InputChannelData )

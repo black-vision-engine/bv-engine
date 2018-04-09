@@ -616,6 +616,8 @@ std::pair< VideoCardEvent::Command, const char* > VideoCardEventCommandMapping[]
     , std::make_pair( VideoCardEvent::Command::SetReferenceOffsetV, "SetReferenceOffsetV" )
     , std::make_pair( VideoCardEvent::Command::EnableInput, "EnableInput" )
     , std::make_pair( VideoCardEvent::Command::DisableInput, "DisableInput" )
+    , std::make_pair( VideoCardEvent::Command::GetReferenceSignalInfo, "GetReferenceSignalInfo" )
+    , std::make_pair( VideoCardEvent::Command::IsLocked, "IsLocked" )
     , std::make_pair( VideoCardEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
 };
 IMPLEMENT_ENUM_SERIALIZATION( VideoCardEvent::Command, VideoCardEventCommandMapping );

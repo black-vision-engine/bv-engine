@@ -114,6 +114,9 @@ public:
     virtual ReturnResult    SetReferenceH           ( UInt32 offsetH ) override;
     virtual ReturnResult    SetReferenceV           ( UInt32 offsetV ) override;
 
+    virtual ReferenceInfo   GetReferenceInfo        () const override;
+    virtual bool            IsLocked                () const override;
+
 private:
 
 	bool                    InitDevice          ();
