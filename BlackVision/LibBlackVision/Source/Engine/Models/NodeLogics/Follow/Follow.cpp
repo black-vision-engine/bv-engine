@@ -43,6 +43,10 @@ const std::string       Follow::PARAMETERS::ALIGN_X = "AlignX";
 const std::string       Follow::PARAMETERS::ALIGN_Y = "AlignY";
 const std::string       Follow::PARAMETERS::ALIGN_Z = "AlignZ";
 
+const std::string       Follow::PARAMETERS::FOLLOW_X = "FollowX";
+const std::string       Follow::PARAMETERS::FOLLOW_Y = "FollowY";
+const std::string       Follow::PARAMETERS::FOLLOW_Z = "FollowZ";
+
 const std::string       Follow::PARAMETERS::FOLLOWING_MODE = "FollowingMode";
 const std::string       Follow::PARAMETERS::FOLLOWING_NODE_PATH = "FollowingNodePath";
 
@@ -79,11 +83,19 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddEnumParam( PARAMETERS::ALIGN_Y, BBAlignementY::CenterY, false, false );
     h.AddEnumParam( PARAMETERS::ALIGN_Z, BBAlignementZ::CenterZ, false, false );
 
+    h.AddSimpleParam( PARAMETERS::FOLLOW_X, false, true, false );
+    h.AddSimpleParam( PARAMETERS::FOLLOW_Y, true, true, false );
+    h.AddSimpleParam( PARAMETERS::FOLLOW_Z, true, true, false );
+
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 
     m_offsetX = QueryTypedValue< ValueFloatPtr >( m_paramValModel->GetValue( PARAMETERS::OFFSET_X ) );
     m_offsetY = QueryTypedValue< ValueFloatPtr >( m_paramValModel->GetValue( PARAMETERS::OFFSET_Y ) );
     m_offsetZ = QueryTypedValue< ValueFloatPtr >( m_paramValModel->GetValue( PARAMETERS::OFFSET_Z ) );
+
+    m_followX = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::FOLLOW_X ) );
+    m_followY = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::FOLLOW_Y ) );
+    m_followZ = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::FOLLOW_Z ) );
 
     m_alignX = QueryTypedEnum< BBAlignementX >( PARAMETERS::ALIGN_X );
     m_alignY = QueryTypedEnum< BBAlignementY >( PARAMETERS::ALIGN_Y );
@@ -317,6 +329,12 @@ void                        Follow::ApplyTranslation    ( glm::vec3 & transform 
         transform.z += m_offsetZ->GetValue();
 
         auto transformParam = node->GetFinalizePlugin()->GetParamTransform();
+        glm::vec3 curTranslation = transformParam->GetTransform().GetTranslation( 0.0 );
+
+        transform.x = m_followX->GetValue() ? transform.x : curTranslation.x;
+        transform.y = m_followY->GetValue() ? transform.y : curTranslation.y;
+        transform.z = m_followZ->GetValue() ? transform.z : curTranslation.z;
+
         model::SetParameterTranslation( transformParam, 0.0, transform );
     }
 }

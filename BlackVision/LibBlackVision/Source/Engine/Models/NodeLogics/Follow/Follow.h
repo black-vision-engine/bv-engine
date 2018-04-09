@@ -84,6 +84,10 @@ private:
         static const std::string    ALIGN_Y;
         static const std::string    ALIGN_Z;
 
+        static const std::string    FOLLOW_X;
+        static const std::string    FOLLOW_Y;
+        static const std::string    FOLLOW_Z;
+
         static const std::string    FOLLOWING_MODE;
         static const std::string    FOLLOWING_NODE_PATH;
     };
@@ -94,6 +98,10 @@ private:
     ValueFloatPtr           m_offsetX;
     ValueFloatPtr           m_offsetY;
     ValueFloatPtr           m_offsetZ;
+
+    ValueBoolPtr            m_followX;
+    ValueBoolPtr            m_followY;
+    ValueBoolPtr            m_followZ;
 
     BBAlignementXparamPtr   m_alignX;
     BBAlignementYParamPtr   m_alignY;
