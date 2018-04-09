@@ -1,5 +1,7 @@
-<channels>
-    <channel name="A" renderer="1" >
-        <output linkedVideoOutput="0" type="FILL" resolution="1080" refresh="5000" interlaced="false" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
-    </channel>
-</channels>
+<videocard name="BlueFish" deviceID="1" referenceMode="FreeRun" >
+    <channels>
+        <channel name="A" renderer="1" >
+            <output linkedVideoOutput="0" type="FILL" resolution="1080" refresh="5000" interlaced="false" flipped="true" />
+        </channel>
+    </channels>
+</videocard>

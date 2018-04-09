@@ -20,6 +20,8 @@ TEST( Tools_VideoCards, Bluefish_2ChannelsTheSameName )
 {
     BVXMLDeserializer deser( "TestAssets/VideoCards/Bluefish/2Channels-TheSameName.xml", BVDeserializeContext::CreateContextFromEmptiness() );
 
+    deser.EnterChild( "videocard" );
+
     bluefish::VideoCardDesc desc;
     desc.Deserialize( deser );
 
@@ -28,10 +30,12 @@ TEST( Tools_VideoCards, Bluefish_2ChannelsTheSameName )
 }
 
 // ***********************
-// If to channels of different types (input/output) have the same name, this is copletly valid situation.
+// If to channels of different types (input/output) have the same name, this is completly valid situation.
 TEST( Tools_VideoCards, Bluefish_2InOutChannelsTheSameName )
 {
     BVXMLDeserializer deser( "TestAssets/VideoCards/Bluefish/2Channels-TheSameName-InOut.xml", BVDeserializeContext::CreateContextFromEmptiness() );
+
+    deser.EnterChild( "videocard" );
 
     bluefish::VideoCardDesc desc;
     desc.Deserialize( deser );

@@ -18,6 +18,7 @@ using namespace bv::videocards;
 TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_50_Interlaced )
 {
     BVXMLDeserializer deser( "TestAssets/VideoCards/Bluefish/OutputVideoMode_1080_50_Interlaced.xml", BVDeserializeContext::CreateContextFromEmptiness() );
+    deser.EnterChild( "videocard" );
 
     bluefish::VideoCardDesc desc;
     desc.Deserialize( deser );
@@ -31,6 +32,7 @@ TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_50_Interlaced )
 TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_60_Interlaced )
 {
     BVXMLDeserializer deser( "TestAssets/VideoCards/Bluefish/OutputVideoMode_1080_60_Interlaced.xml", BVDeserializeContext::CreateContextFromEmptiness() );
+    deser.EnterChild( "videocard" );
 
     bluefish::VideoCardDesc desc;
     desc.Deserialize( deser );
@@ -44,6 +46,7 @@ TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_60_Interlaced )
 TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_60 )
 {
     BVXMLDeserializer deser( "TestAssets/VideoCards/Bluefish/OutputVideoMode_1080_60.xml", BVDeserializeContext::CreateContextFromEmptiness() );
+    deser.EnterChild( "videocard" );
 
     bluefish::VideoCardDesc desc;
     desc.Deserialize( deser );
@@ -57,6 +60,7 @@ TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_60 )
 TEST( Tools_VideoCards, Bluefish_OutputVideoMode_1080_50 )
 {
     BVXMLDeserializer deser( "TestAssets/VideoCards/Bluefish/OutputVideoMode_1080_50.xml", BVDeserializeContext::CreateContextFromEmptiness() );
+    deser.EnterChild( "videocard" );
 
     bluefish::VideoCardDesc desc;
     desc.Deserialize( deser );

@@ -81,13 +81,13 @@
         <videocard name="FakeVideoCard" deviceID="1">
             <channels>
                 <channel name="A" >
-                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" />
 				</channel>
                 <channel name="B" >
-                    <output linkedVideoOutput="1" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                    <output linkedVideoOutput="1" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" />
 				</channel>
                 <channel name="C" >
-                    <output linkedVideoOutput="2" type="FILL" resolution="720" refresh="5000" interlaced="true" flipped="true" referenceMode="GENLOCK" referenceH="0" referenceV="0" />
+                    <output linkedVideoOutput="2" type="FILL" resolution="720" refresh="5000" interlaced="true" flipped="true" />
 				</channel>
             </channels>
         </videocard>
