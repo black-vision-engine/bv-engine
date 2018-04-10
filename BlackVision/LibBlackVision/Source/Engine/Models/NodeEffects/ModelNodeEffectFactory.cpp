@@ -53,6 +53,18 @@ IModelNodeEffectPtr         CreateNodeMaskModelNodeEffect          ( const std::
 
 // **************************
 //
+IModelNodeEffectPtr         CreateColorCorrectionModelNodeEffect( const std::string &, ITimeEvaluatorPtr timeEvaluator )
+{
+    ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( "color", glm::vec4( 0, 0, 0, 0 ), true );
+
+    return ModelNodeEffect::Create( NodeEffectType::NET_COLOR_CORRECTION, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
+}
+
+// **************************
+//
 IModelNodeEffectPtr         CreateWireframeModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
     return ModelNodeEffect::Create( NodeEffectType::NET_WIREFRAME );
@@ -334,6 +346,9 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
         //    return CreateImageMaskModelNodeEffect( name, timeEvaluator );
         case NodeEffectType::NET_Z_SORT:
             ret = CreateZSortModelNodeEffect( name, timeEvaluator );
+            break;
+        case NodeEffectType::NET_COLOR_CORRECTION:
+            ret = CreateColorCorrectionModelNodeEffect( name, timeEvaluator );
             break;
         default:
             assert( false );

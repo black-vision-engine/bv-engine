@@ -23,6 +23,8 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NodeMaskFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NodeMaskFinalizeStep.h"
 
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/ColorCorrectionFSEStep.h"
+
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/BlurPreFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/BlurFSEStep.h"
 
@@ -142,6 +144,46 @@ NodeEffectPtr       CreateNodeMaskNodeEffect   ()
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
     return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_NODE_MASK );
+}
+
+// **************************
+//
+NodeEffectPtr   CreateColorCorrectionEffect() // FIXME this code is intentionally left as shit to be double-checked
+{
+    //RenderLogic - default
+    //Passes
+    // - fse - default pre
+    //    - pre step - color grade
+    //    - fse step - color grade
+    // - fin - default rendering
+    //    - finalize step with default rendering
+    // Create STEPS
+
+    float minAlphaThreshold = 0.01f;
+    //float maxAlphaThreshold = 1.f;
+
+    //auto fseStep        = new AlphaMaskFSEStep( minAlphaThreshold, maxAlphaThreshold );
+    auto fseStep        = new ColorCorrectionFSEStep( minAlphaThreshold ); 
+
+    auto alphaVal       = get_value( fseStep->GetState(), "alpha" );
+//    auto maskPreview    = get_value( fseStep->GetState(), "maskPreview" );
+
+//    auto preFSEStep     = new AlphaMaskPreFSEStep( fseStep->GetState(), minAlphaThreshold, maxAlphaThreshold );
+    auto preFSEStep     = new GlowPreFSEStep( alphaVal, alphaVal, alphaVal ); // FIXME this is evident shit
+
+    auto fsePass        = new FullscreenEffectPass( preFSEStep, fseStep );
+
+    //auto finalizeStep	= new DefaultFinalizeStep(); //new NodeMaskFinalizeStep();
+    //auto finPass		= new FinalizePass( finalizeStep );
+
+    std::vector< NodeEffectRenderPass * > passes( 1 );
+
+    passes[ 0 ] = fsePass;
+    //passes[ 1 ] = finPass;
+
+    auto nnerl = new NodeEffectRenderLogic( passes );
+
+    return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_COLOR_CORRECTION );
 }
 
 // **************************
@@ -375,8 +417,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
 			//Interlace and so on
             assert( false );
             break;
-        case NodeEffectType::NET_COLOR_GRADE:
-            return CreateColorGradeEffect();
+        case NodeEffectType::NET_COLOR_CORRECTION:
+            return CreateColorCorrectionEffect();
         default:
             assert( false );
     }

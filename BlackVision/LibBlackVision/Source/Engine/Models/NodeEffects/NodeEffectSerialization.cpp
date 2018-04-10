@@ -27,6 +27,7 @@ std::pair< NodeEffectType, const char* > ne2s[] =
 	, std::make_pair( NodeEffectType::NET_SOFT_MASK, "soft mask" )
 //    , std::make_pair( NodeEffectType::NET_IMAGE_MASK, "image mask" )
     , std::make_pair( NodeEffectType::NET_Z_SORT, "z sort" )
+    , std::make_pair( NodeEffectType::NET_COLOR_CORRECTION, "color_correction" )
     , std::make_pair( NodeEffectType::NET_TOTAL, "" )
 };
 
