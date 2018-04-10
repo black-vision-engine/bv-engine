@@ -71,9 +71,13 @@ nodelogic::FollowPtr                    TestScenesCreator::RectFollowsRect      
     model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::OFFSET_Y ), 0.0f, 1.0f );
     model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::OFFSET_Z ), 0.0f, 1.0f );
 
-    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::ALIGN_X ), 0.0f, nodelogic::Follow::BBAlignementX::CenterX );
-    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::ALIGN_Y ), 0.0f, nodelogic::Follow::BBAlignementY::CenterY );
-    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::ALIGN_Z ), 0.0f, nodelogic::Follow::BBAlignementZ::CenterZ );
+    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::TARGET_ALIGN_X ), 0.0f, nodelogic::Follow::BBAlignementX::CenterX );
+    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::TARGET_ALIGN_Y ), 0.0f, nodelogic::Follow::BBAlignementY::CenterY );
+    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::TARGET_ALIGN_Z ), 0.0f, nodelogic::Follow::BBAlignementZ::CenterZ );
+
+    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::FOLLOWER_ALIGN_X ), 0.0f, nodelogic::Follow::BBAlignementX::CenterX );
+    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::FOLLOWER_ALIGN_Y ), 0.0f, nodelogic::Follow::BBAlignementY::CenterY );
+    model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::FOLLOWER_ALIGN_Z ), 0.0f, nodelogic::Follow::BBAlignementZ::CenterZ );
 
     model::SetParameter( newLogic->GetParameter( nodelogic::Follow::PARAMETERS::FOLLOWING_MODE ), 0.0f, nodelogic::Follow::FollowingMode::Previous );
 

@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\main.cpp" />
     <ClCompile Include="..\..\..\Source\TestDisablingAxis.cpp" />
+    <ClCompile Include="..\..\..\Source\TestFollowerAlignment.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

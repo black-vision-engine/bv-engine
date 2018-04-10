@@ -10,5 +10,8 @@
     <ClCompile Include="..\..\..\Source\TestDisablingAxis.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestFollowerAlignment.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
