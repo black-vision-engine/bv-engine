@@ -69,6 +69,9 @@ public:
 private:
     static const std::string            m_type;
 
+
+public:
+
     struct ACTION
     {
         //static const std::string    ACTION_NAME;
@@ -143,4 +146,10 @@ private:
 
 
 }   // nodelogic
+
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::FollowingMode );
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::BBAlignementX );
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::BBAlignementY );
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::BBAlignementZ );
+
 }	// bv

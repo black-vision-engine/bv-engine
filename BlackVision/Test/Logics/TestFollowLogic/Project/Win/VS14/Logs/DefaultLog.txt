@@ -1,0 +1,47 @@
+[BlackVisionApp] 2018-04-10 10:02:25     info: BlackVision initialized, Version: 0.50.0.-1 (Serializer: 1) Platform: Windows x64 Debug
+[BlackVisionApp] 2018-04-10 10:02:26 critical: License is not valid. Please contact your administrator or sales representative
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TRANSFORM
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_RECTANGLE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_COLOR
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_LINEAR_GRADIENT
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TEXTURE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_NO_PERSPECTIVE_TEXTURE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_ANIMATION
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_VIDEO_DECODER
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_AUDIO_DECODER
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TEXT
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_ALPHA_MASK
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TIMER
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_PRISM
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_CIRCLE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_ELLIPSE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TRIANGLE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_ROUNDEDRECT
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_CONE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_CUBE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_SIMPLE_CUBE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TORUS
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_SPHERE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_SPRING
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_CYLINDER
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_COGWHEEL
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_MATERIAL
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_WALL
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_MESH
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_SVG
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_NORMAL_MAP
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_PARALLAX_MAP
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_ENVIRONMENTAL_TEXTURE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_ENV_REFLECTIVITY_MAP
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_BLEND_TEXTURE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_FADE_PLUGIN
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_EXTRUDE_PLUGIN
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_LINE_CHART
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: TRIANGULATE
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: DEFAULT_TEXT3D
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: EXPERT
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: LINES_PLUGIN
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: VIDEO_INPUT_PLUGIN
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: CENTER_PLUGIN
+[BlackVisionApp] 2018-04-10 10:02:26     info: Registered plugin desc: BOUNDING_BOX_PLUGIN
+[BlackVisionApp] 2018-04-10 10:02:26    error: Config path '' doesn't exist.

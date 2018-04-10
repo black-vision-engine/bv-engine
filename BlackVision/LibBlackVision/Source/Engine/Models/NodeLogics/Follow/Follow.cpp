@@ -16,10 +16,10 @@
 #include "Engine/Events/InnerEvents/Nodes/NodeRemovedEvent.h"
 
 
-DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::FollowingMode );
-DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::BBAlignementX );
-DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::BBAlignementY );
-DEFINE_ENUM_PARAMETER_FUNCTIONS( bv::nodelogic::Follow::BBAlignementZ );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::nodelogic::Follow::FollowingMode );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::nodelogic::Follow::BBAlignementX );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::nodelogic::Follow::BBAlignementY );
+DEFINE_ENUM_PARAMETER_CREATOR( bv::nodelogic::Follow::BBAlignementZ );
 
 
 
