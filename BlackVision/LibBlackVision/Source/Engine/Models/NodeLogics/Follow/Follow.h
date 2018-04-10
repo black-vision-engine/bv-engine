@@ -62,12 +62,15 @@ public:
     };
 
     typedef std::shared_ptr< bv::model::ParamEnum< FollowingMode > > FollowingModeParamPtr;
-    typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementX > > BBAlignementXparamPtr;
+    typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementX > > BBAlignementXParamPtr;
     typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementY > > BBAlignementYParamPtr;
     typedef std::shared_ptr< bv::model::ParamEnum< BBAlignementZ > > BBAlignementZParamPtr;
 
 private:
     static const std::string            m_type;
+
+
+public:
 
     struct ACTION
     {
@@ -80,9 +83,17 @@ private:
         static const std::string    OFFSET_Y;
         static const std::string    OFFSET_Z;
 
-        static const std::string    ALIGN_X;
-        static const std::string    ALIGN_Y;
-        static const std::string    ALIGN_Z;
+        static const std::string    TARGET_ALIGN_X;
+        static const std::string    TARGET_ALIGN_Y;
+        static const std::string    TARGET_ALIGN_Z;
+
+        static const std::string    FOLLOWER_ALIGN_X;
+        static const std::string    FOLLOWER_ALIGN_Y;
+        static const std::string    FOLLOWER_ALIGN_Z;
+
+        static const std::string    FOLLOW_X;
+        static const std::string    FOLLOW_Y;
+        static const std::string    FOLLOW_Z;
 
         static const std::string    FOLLOWING_MODE;
         static const std::string    FOLLOWING_NODE_PATH;
@@ -95,10 +106,18 @@ private:
     ValueFloatPtr           m_offsetY;
     ValueFloatPtr           m_offsetZ;
 
-    BBAlignementXparamPtr   m_alignX;
+    ValueBoolPtr            m_followX;
+    ValueBoolPtr            m_followY;
+    ValueBoolPtr            m_followZ;
+
+    BBAlignementXParamPtr   m_alignX;
     BBAlignementYParamPtr   m_alignY;
     BBAlignementZParamPtr   m_alignZ;
-    
+
+    BBAlignementXParamPtr   m_followerAlignX;
+    BBAlignementYParamPtr   m_followerAlignY;
+    BBAlignementZParamPtr   m_followerAlignZ;
+
     FollowingModeParamPtr   m_followingMode;
     ValueStringPtr          m_nodePath;
 
@@ -126,7 +145,7 @@ private:
 
 
     model::BasicNodeConstPtr    GetObservedNode     ();
-    glm::vec3                   GetBBPoint          ( model::BasicNodeConstPtr & node );
+    glm::vec3                   GetBBPoint          ( model::BasicNodeConstPtr & node, const BBAlignementXParamPtr & alignX, const BBAlignementYParamPtr & alignY, const BBAlignementZParamPtr & alignZ );
     glm::mat4                   GetBBTransform      ( model::BasicNodeConstPtr & node );
     void                        ApplyTranslation    ( glm::vec3 & transform );
 };
@@ -135,4 +154,10 @@ private:
 
 
 }   // nodelogic
+
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::FollowingMode );
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::BBAlignementX );
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::BBAlignementY );
+DEFINE_ENUM_SET_PARAMETER( bv::nodelogic::Follow::BBAlignementZ );
+
 }	// bv
