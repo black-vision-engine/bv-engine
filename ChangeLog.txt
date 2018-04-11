@@ -1,4 +1,5 @@
 Release 0.5x.x
+- Follow logic can align to recursive node BB.
 - Changes in config - referenceV, referenceH and referenceMode are set once per video card.
 - Video Cards - Setting H and V phase and synchronization signal reference mode. Quering these informations through API (+IsLocked command).
 - Audio input delay relative to video fixed.

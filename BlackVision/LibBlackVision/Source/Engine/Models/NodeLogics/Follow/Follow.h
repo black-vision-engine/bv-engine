@@ -87,6 +87,9 @@ public:
         static const std::string    TARGET_ALIGN_Y;
         static const std::string    TARGET_ALIGN_Z;
 
+        static const std::string    FOLLOWER_BOX_RECURSIVE;
+        static const std::string    TARGET_BOX_RECURSIVE;
+
         static const std::string    FOLLOWER_ALIGN_X;
         static const std::string    FOLLOWER_ALIGN_Y;
         static const std::string    FOLLOWER_ALIGN_Z;
@@ -109,6 +112,9 @@ private:
     ValueBoolPtr            m_followX;
     ValueBoolPtr            m_followY;
     ValueBoolPtr            m_followZ;
+
+    ValueBoolPtr            m_targetBoxRecursive;
+    ValueBoolPtr            m_followerBoxRecursive;
 
     BBAlignementXParamPtr   m_alignX;
     BBAlignementYParamPtr   m_alignY;
@@ -145,7 +151,7 @@ private:
 
 
     model::BasicNodeConstPtr    GetObservedNode     ();
-    glm::vec3                   GetBBPoint          ( model::BasicNodeConstPtr & node, const BBAlignementXParamPtr & alignX, const BBAlignementYParamPtr & alignY, const BBAlignementZParamPtr & alignZ );
+    glm::vec3                   GetBBPoint          ( model::BasicNodeConstPtr & node, const BBAlignementXParamPtr & alignX, const BBAlignementYParamPtr & alignY, const BBAlignementZParamPtr & alignZ, bool recursiveBox );
     glm::mat4                   GetBBTransform      ( model::BasicNodeConstPtr & node );
     void                        ApplyTranslation    ( glm::vec3 & transform );
 };

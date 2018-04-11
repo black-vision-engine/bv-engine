@@ -54,6 +54,9 @@ const std::string       Follow::PARAMETERS::FOLLOW_Z = "FollowZ";
 const std::string       Follow::PARAMETERS::FOLLOWING_MODE = "FollowingMode";
 const std::string       Follow::PARAMETERS::FOLLOWING_NODE_PATH = "FollowingNodePath";
 
+const std::string       Follow::PARAMETERS::TARGET_BOX_RECURSIVE = "TargetBoxRecursive";
+const std::string       Follow::PARAMETERS::FOLLOWER_BOX_RECURSIVE = "FollowerBoxRecursive";
+
 
 
 // ***********************
@@ -89,13 +92,16 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
     h.AddEnumParam( PARAMETERS::TARGET_ALIGN_Y, BBAlignementY::CenterY, false, false );
     h.AddEnumParam( PARAMETERS::TARGET_ALIGN_Z, BBAlignementZ::CenterZ, false, false );
 
-    h.AddEnumParam( PARAMETERS::FOLLOWER_ALIGN_X, BBAlignementX::Right, false, false );
+    h.AddEnumParam( PARAMETERS::FOLLOWER_ALIGN_X, BBAlignementX::CenterX, false, false );
     h.AddEnumParam( PARAMETERS::FOLLOWER_ALIGN_Y, BBAlignementY::CenterY, false, false );
     h.AddEnumParam( PARAMETERS::FOLLOWER_ALIGN_Z, BBAlignementZ::CenterZ, false, false );
 
     h.AddSimpleParam( PARAMETERS::FOLLOW_X, true, true, false );
     h.AddSimpleParam( PARAMETERS::FOLLOW_Y, true, true, false );
     h.AddSimpleParam( PARAMETERS::FOLLOW_Z, true, true, false );
+
+    h.AddSimpleParam( PARAMETERS::TARGET_BOX_RECURSIVE, true, true, false );
+    h.AddSimpleParam( PARAMETERS::FOLLOWER_BOX_RECURSIVE, true, true, false );
 
     m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
 
@@ -117,6 +123,9 @@ Follow::Follow             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
 
     m_followingMode = QueryTypedEnum< FollowingMode >( PARAMETERS::FOLLOWING_MODE );
     m_nodePath = QueryTypedValue< ValueStringPtr >( m_paramValModel->GetValue( PARAMETERS::FOLLOWING_NODE_PATH ) );
+
+    m_targetBoxRecursive = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::TARGET_BOX_RECURSIVE ) );
+    m_followerBoxRecursive = QueryTypedValue< ValueBoolPtr >( m_paramValModel->GetValue( PARAMETERS::FOLLOWER_BOX_RECURSIVE ) );
 }
 
 // ***********************
@@ -147,11 +156,11 @@ void                        Follow::PreNodeUpdate   ( TimeType t )
     auto node = GetObservedNode();
     auto followingNode = std::static_pointer_cast< const model::BasicNode >( m_parentNode.lock() );
     
-    glm::vec3 followedPoint = GetBBPoint( node, m_alignX, m_alignY, m_alignZ );
+    glm::vec3 followedPoint = GetBBPoint( node, m_alignX, m_alignY, m_alignZ, m_targetBoxRecursive->GetValue() );
     glm::mat4 transformBox = GetBBTransform( node );
     followedPoint = glm::vec3( transformBox * glm::vec4( followedPoint, 1.0f ) );
 
-    glm::vec3 followingPoint = GetBBPoint( followingNode, m_followerAlignX, m_followerAlignY, m_followerAlignZ );
+    glm::vec3 followingPoint = GetBBPoint( followingNode, m_followerAlignX, m_followerAlignY, m_followerAlignZ, m_followerBoxRecursive->GetValue() );
     glm::mat4 followerTransform = GetBBTransform( followingNode );
     followingPoint = glm::vec3( followerTransform * glm::vec4( followingPoint, 1.0f ) );
     
@@ -277,12 +286,21 @@ model::BasicNodeConstPtr    Follow::GetObservedNode     ()
 
 // ***********************
 //
-glm::vec3                   Follow::GetBBPoint          ( model::BasicNodeConstPtr & node, const BBAlignementXParamPtr & alignXParam, const BBAlignementYParamPtr & alignYParam, const BBAlignementZParamPtr & alignZParam )
+glm::vec3                   Follow::GetBBPoint          ( model::BasicNodeConstPtr & node, const BBAlignementXParamPtr & alignXParam, const BBAlignementYParamPtr & alignYParam, const BBAlignementZParamPtr & alignZParam, bool recursiveBox )
 {
     if( node != nullptr )
     {
-        auto boundingVolume = node->GetBoundingVolume();
-        auto bb = boundingVolume->GetBoundingBox();
+        mathematics::Box bb;
+
+        if( recursiveBox )
+        {
+            bb = node->GetBoundingBoxRecursive();
+        }
+        else
+        {
+            auto boundingVolume = node->GetBoundingVolume();
+            bb = *boundingVolume->GetBoundingBox();
+        }
 
         BBAlignementX alignX = static_cast< BBAlignementX >( alignXParam->Evaluate() );
         BBAlignementY alignY = static_cast< BBAlignementY >( alignYParam->Evaluate() );
@@ -293,39 +311,39 @@ glm::vec3                   Follow::GetBBPoint          ( model::BasicNodeConstP
         switch( alignX )
         {
             case BBAlignementX::Left:
-                BBPoint.x = bb->xmin;
+                BBPoint.x = bb.xmin;
                 break;
             case BBAlignementX::Right:
-                BBPoint.x = bb->xmax;
+                BBPoint.x = bb.xmax;
                 break;
             case BBAlignementX::CenterX:
-                BBPoint.x = ( bb->xmax + bb->xmin ) / 2;
+                BBPoint.x = ( bb.xmax + bb.xmin ) / 2;
                 break;
         }
 
         switch( alignY )
         {
             case BBAlignementY::Bottom:
-                BBPoint.y = bb->ymin;
+                BBPoint.y = bb.ymin;
                 break;
             case BBAlignementY::Top:
-                BBPoint.y = bb->ymax;
+                BBPoint.y = bb.ymax;
                 break;
             case BBAlignementY::CenterY:
-                BBPoint.y = ( bb->ymax + bb->ymin ) / 2;
+                BBPoint.y = ( bb.ymax + bb.ymin ) / 2;
                 break;
         }
 
         switch( alignZ )
         {
             case BBAlignementZ::Back:
-                BBPoint.z = bb->zmin;
+                BBPoint.z = bb.zmin;
                 break;
             case BBAlignementZ::Front:
-                BBPoint.z = bb->zmax;
+                BBPoint.z = bb.zmax;
                 break;
             case BBAlignementZ::CenterZ:
-                BBPoint.z = ( bb->zmax + bb->zmin ) / 2;
+                BBPoint.z = ( bb.zmax + bb.zmin ) / 2;
                 break;
         }
 
