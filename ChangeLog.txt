@@ -1,4 +1,4 @@
-Release 0.5x.x
+Release 0.51.0
 - Follow logic changes
     - Enable/disable following along chosen axis.
     - Parameters for choosing point on BB which is aligned to target node.
