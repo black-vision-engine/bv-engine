@@ -63,6 +63,22 @@ IModelNodeEffectPtr         CreateColorCorrectionModelNodeEffect( const std::str
     return ModelNodeEffect::Create( NodeEffectType::NET_COLOR_CORRECTION, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
 }
 
+
+// **************************
+//
+IModelNodeEffectPtr         CreateColorBalanceModelNodeEffect( const std::string &, ITimeEvaluatorPtr timeEvaluator )
+{
+    ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( "brightness", 1.f, true ); // [0,10](?)
+    h.AddSimpleParam( "contrast", 0.f, true ); // [-1,1]
+    h.AddSimpleParam( "saturation", 0.f, true ); // [-1,1]
+    h.AddSimpleParam( "hue", 0.f, true ); // [0;360]
+
+    return ModelNodeEffect::Create( NodeEffectType::NET_COLOR_BALANCE, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
+}
+
 // **************************
 //
 IModelNodeEffectPtr         CreateWireframeModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
@@ -349,6 +365,9 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             break;
         case NodeEffectType::NET_COLOR_CORRECTION:
             ret = CreateColorCorrectionModelNodeEffect( name, timeEvaluator );
+            break;
+        case NodeEffectType::NET_COLOR_BALANCE:
+            ret = CreateColorBalanceModelNodeEffect( name, timeEvaluator );
             break;
         default:
             assert( false );

@@ -148,7 +148,7 @@ NodeEffectPtr       CreateNodeMaskNodeEffect   ()
 
 // **************************
 //
-NodeEffectPtr   CreateColorCorrectionEffect() // FIXME this code is intentionally left as shit to be double-checked
+NodeEffectPtr   CreateColorCorrectionEffect( FullscreenEffectType nnodeEffectType ) // FIXME this code is intentionally left as shit to be double-checked
 {
     //RenderLogic - default
     //Passes
@@ -159,13 +159,13 @@ NodeEffectPtr   CreateColorCorrectionEffect() // FIXME this code is intentionall
     //    - finalize step with default rendering
     // Create STEPS
 
-    float minAlphaThreshold = 0.01f;
+    //float minAlphaThreshold = 0.01f;
     //float maxAlphaThreshold = 1.f;
 
     //auto fseStep        = new AlphaMaskFSEStep( minAlphaThreshold, maxAlphaThreshold );
-    auto fseStep        = new ColorCorrectionFSEStep( minAlphaThreshold ); 
+    auto fseStep        = new ColorCorrectionFSEStep( nnodeEffectType );
 
-    auto alphaVal       = get_value( fseStep->GetState(), "alpha" );
+    auto alphaVal       = ValuesFactory::CreateValueFloat( "alpha" ); //get_value( fseStep->GetState(), "alpha" );
 //    auto maskPreview    = get_value( fseStep->GetState(), "maskPreview" );
 
 //    auto preFSEStep     = new AlphaMaskPreFSEStep( fseStep->GetState(), minAlphaThreshold, maxAlphaThreshold );
@@ -418,7 +418,9 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
             assert( false );
             break;
         case NodeEffectType::NET_COLOR_CORRECTION:
-            return CreateColorCorrectionEffect();
+            return CreateColorCorrectionEffect( FullscreenEffectType::NFET_COLOR_CORRECTION );
+        case NodeEffectType::NET_COLOR_BALANCE:
+            return CreateColorCorrectionEffect( FullscreenEffectType::NFET_COLOR_BALANCE );
         default:
             assert( false );
     }

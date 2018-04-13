@@ -17,15 +17,15 @@ namespace bv {
 
 // **************************
 //
-ColorCorrectionFSEStep::ColorCorrectionFSEStep          ( float minAlphaThreshold )
+ColorCorrectionFSEStep::ColorCorrectionFSEStep          ( FullscreenEffectType nnodeEffectType )
     : Parent( nullptr )
     , m_colorCorrectionEffect( nullptr )
-    , m_minThreshold( minAlphaThreshold )
+    //, m_minThreshold( minAlphaThreshold )
     , m_alpha( 0.f )
 
 {
     // FIXME: maybe one class is enough as we only use FullscreenEffectType type here and always set FSE state as current state
-    m_colorCorrectionEffect = CreateFullscreenEffect( FullscreenEffectType::NFET_COLOR_CORRECTION );
+    m_colorCorrectionEffect = CreateFullscreenEffect( nnodeEffectType );
 
     Parent::SetState( m_colorCorrectionEffect->GetState() );
 }

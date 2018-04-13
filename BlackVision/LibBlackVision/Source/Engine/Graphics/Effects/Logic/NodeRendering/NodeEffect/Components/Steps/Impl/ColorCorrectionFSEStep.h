@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FullscreenEffectStep.h"
+#include "Engine/Graphics/Effects/Logic/FullscreenRendering/FullscreenEffect.h"
 
 
 namespace bv { 
@@ -23,7 +24,7 @@ private:
 
 public:
 
-                                    ColorCorrectionFSEStep  ( float minAlphaThreshold );
+                                    ColorCorrectionFSEStep  ( FullscreenEffectType nnodeEffectType );
 				                    ~ColorCorrectionFSEStep ();
 
         virtual unsigned int        GetNumRequiredInputs    () const override;
