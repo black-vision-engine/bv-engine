@@ -81,6 +81,23 @@ IModelNodeEffectPtr         CreateColorBalanceModelNodeEffect( const std::string
 
 // **************************
 //
+IModelNodeEffectPtr         CreateSepiaModelNodeEffect( const std::string &, ITimeEvaluatorPtr timeEvaluator )
+{
+    ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( "color1", glm::vec4( 0, 0, 0, 1 ), true );
+    h.AddSimpleParam( "color2", glm::vec4( 1, 1, 1, 1 ), true );
+    h.AddSimpleParam( "strength1", 1.f, true ); // [0,1]
+    h.AddSimpleParam( "strength2", 1.f, true ); // [0,1]
+    h.AddSimpleParam( "desaturation", 0.f, true ); // [-1,1]
+    h.AddSimpleParam( "tone", 0.f, true ); // [0;360]
+
+    return ModelNodeEffect::Create( NodeEffectType::NET_SEPIA, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
+}
+
+// **************************
+//
 IModelNodeEffectPtr         CreateWireframeModelNodeEffect          ( const std::string &, ITimeEvaluatorPtr timeEvaluator )
 {
     return ModelNodeEffect::Create( NodeEffectType::NET_WIREFRAME );
@@ -368,6 +385,9 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             break;
         case NodeEffectType::NET_COLOR_BALANCE:
             ret = CreateColorBalanceModelNodeEffect( name, timeEvaluator );
+            break;
+        case NodeEffectType::NET_SEPIA:
+            ret = CreateSepiaModelNodeEffect( name, timeEvaluator );
             break;
         default:
             assert( false );

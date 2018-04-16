@@ -421,6 +421,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
             return CreateColorCorrectionEffect( FullscreenEffectType::NFET_COLOR_CORRECTION );
         case NodeEffectType::NET_COLOR_BALANCE:
             return CreateColorCorrectionEffect( FullscreenEffectType::NFET_COLOR_BALANCE );
+        case NodeEffectType::NET_SEPIA:
+            return CreateColorCorrectionEffect( FullscreenEffectType::NFET_SEPIA );
         default:
             assert( false );
     }

@@ -31,6 +31,7 @@ enum class FullscreenEffectType : int
     NFET_SOFT_MASK,
     NFET_COLOR_CORRECTION,
     NFET_COLOR_BALANCE,
+    NFET_SEPIA,
     //NFET_OUTLINE
     //TODO: and so on
 
@@ -51,7 +52,8 @@ const std::string GFetFile[] = {
                                 "glow.frag",
                                 "soft_mask.frag",
                                 "color_correction.frag",
-                                "color_balance.frag"
+                                "color_balance.frag",
+                                "sepia.frag"
                                };
 
 class FullscreenEffectInstance;

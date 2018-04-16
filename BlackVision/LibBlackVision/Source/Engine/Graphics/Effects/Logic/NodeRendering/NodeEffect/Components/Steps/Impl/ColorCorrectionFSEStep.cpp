@@ -101,11 +101,12 @@ void                ColorCorrectionFSEStep::AppendRenderPasses_DIRTY_HACK   ( st
 //
 float                   ColorCorrectionFSEStep::GetAlpha                     () const
 {
-    auto val = GetState()->GetValueAt( 0 );
+    return 1.f;
+    //auto val = GetState()->GetValueAt( 0 );
 
-    assert( val->GetName() == "alpha" );
+    //assert( val->GetName() == "alpha" );
 
-    return QueryTypedValue< ValueFloatPtr >( val )->GetValue();
+    //return QueryTypedValue< ValueFloatPtr >( val )->GetValue();
 }
 
 // ***********************

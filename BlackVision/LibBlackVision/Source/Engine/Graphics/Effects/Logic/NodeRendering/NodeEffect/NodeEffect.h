@@ -33,6 +33,7 @@ enum class NodeEffectType : int
 	NET_SOFT_MASK,
     NET_COLOR_CORRECTION,
     NET_COLOR_BALANCE,
+    NET_SEPIA,
 
     NET_TOTAL
 };

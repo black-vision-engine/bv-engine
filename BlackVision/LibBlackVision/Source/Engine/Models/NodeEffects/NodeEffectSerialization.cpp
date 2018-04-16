@@ -29,6 +29,7 @@ std::pair< NodeEffectType, const char* > ne2s[] =
     , std::make_pair( NodeEffectType::NET_Z_SORT, "z sort" )
     , std::make_pair( NodeEffectType::NET_COLOR_CORRECTION, "color_correction" )
     , std::make_pair( NodeEffectType::NET_COLOR_BALANCE, "color_balance" )
+    , std::make_pair( NodeEffectType::NET_SEPIA, "sepia" )
     , std::make_pair( NodeEffectType::NET_TOTAL, "" )
 };
 
