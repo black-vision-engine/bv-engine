@@ -19,6 +19,37 @@ vec3 	HSLToRGB		(vec3 hsl);
 
 #define M_PI 3.1415926535897932384626433832795
 
+#define epsilon 0.00001
+
+float sigmoidal( float alpha, float beta, float x )
+{
+	if( alpha == 0 )
+		alpha = epsilon;
+	
+	if( beta == 0 )
+		return x;
+	
+	if( beta > 0 )
+	{
+		float numerator = 1 / (1 + exp(beta * (alpha - x))) - 1 / (1 + exp(beta * alpha));
+        float denominator = 1 / (1 + exp(beta * (alpha - 1))) - 1 / (1 + exp(beta * alpha));
+        return numerator / denominator;
+	}
+	else
+	{
+		return (
+            (beta * alpha) - log(
+                (
+                    1 / (
+                        (x / (1 + exp(beta * alpha - beta))) -
+                        (x / (1 + exp(beta * alpha))) +
+                        (1 / (1 + exp(beta * alpha)))
+                    )
+                ) - 1)
+            ) / beta;
+	}
+}
+
 void main()
 {
 	vec4 col = texture( Texture, uvCoord );
@@ -29,8 +60,16 @@ void main()
 	// hsl.x = clamp( hsl.x + hue_rad, 0.f, 2 * M_PI );
 	
 	float hue_rad = hue / 360;	
+// apply hue rotation	
 	hsl.x = mod( hsl.x + hue_rad, 1.f );
+// apply saturation translate
 	hsl.y = clamp( hsl.y + saturation, 0.f, 1.f );
+// apply brightness factor	
+	hsl.z = clamp( hsl.z * brightness, 0.f, 1.f );
+// apply contrast
+//	hsl.y = sigmoidal( 0.5, contrast, hsl.y );
+	hsl.z = sigmoidal( 0.5, contrast, hsl.z );
+	hsl.z = clamp( hsl.z, 0.f, 1.f );
 	
 	vec3 rgb = HSLToRGB( hsl );
 
