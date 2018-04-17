@@ -7,6 +7,15 @@
 
 #include <vector>
 
+
+
+
+/**@page NodeLogics Logics
+
+
+*/
+
+
 namespace bv
 {
 
@@ -15,6 +24,10 @@ class BVProjectEditor;
 namespace model
 {
 
+
+
+/**@brief Node logic interface.
+@ingroup Model*/
 class INodeLogic : public IUpdatable, public ISerializable
 {
 public:

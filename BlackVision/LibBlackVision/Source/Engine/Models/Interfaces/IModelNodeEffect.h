@@ -12,8 +12,21 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 
+
+
+/**@page NodeEffect Effects
+
+
+*/
+
+
+
 namespace bv { namespace model {
 
+
+
+/**@brief Node effect interface.
+@ingroup Model*/
 class IModelNodeEffect : public IUpdatable, public ISerializable
 {
 public:
