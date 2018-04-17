@@ -4,12 +4,12 @@
 @section MainPage_UserDocumentation User Documentation
 
 - General Engine concepts
-    - Scenes
-    - Nodes
+    - @ref Scenes "Scenes"
+    - @ref Nodes "Nodes"
     - Parameters
-    - Plugins
-    - Logics
-    - Effects
+    - @ref Plugins "Plugins"
+    - @ref NodeLogics "Logics"
+    - @ref Effects "Effects"
 - Engine outputs
     - Render Channels
     - Outputs

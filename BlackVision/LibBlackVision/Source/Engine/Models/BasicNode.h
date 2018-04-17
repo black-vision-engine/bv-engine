@@ -14,6 +14,23 @@
 
 
 
+/**@defgroup Model*/
+
+
+
+/**@page Nodes Nodes
+
+@ref Scenes "Scene" consists of hierarchical structure of nodes. Each node inherits transformation from parent and
+can have it's own tranformation if it posses TransformPlugin.
+
+Nodes are containers for @ref Plugins, @ref NodeLogics and @ref NodeEffects. Single node can contain multiple plugins
+and only one effect and one logic.
+
+
+@see bv::model::BasicNode
+*/
+
+
 
 namespace bv { namespace model {
 
@@ -29,6 +46,12 @@ typedef std::vector< BasicNodePtr > TNodeVec;
 class ModelNodeEditor;
 
 
+
+/**@brief Model representation of Node.
+
+@copydoc Nodes
+
+@ingroup Model*/
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
 
