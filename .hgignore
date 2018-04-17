@@ -26,6 +26,7 @@ app/test.bmp
 app/testFreeType.bmp
 *.pyc
 workspace.xml
+Doxyfile_roboczy
 BlackVision/Reports/
 BlackVision/Releases/
 BlackVision/_TestsResults/*

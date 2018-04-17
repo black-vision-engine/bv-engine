@@ -1,0 +1,34 @@
+/**
+@mainpage
+
+@section MainPage_UserDocumentation User Documentation
+
+- General Engine concepts
+    - Scenes
+    - Nodes
+    - Parameters
+    - Plugins
+    - Logics
+    - Effects
+- Engine outputs
+    - Render Channels
+    - Outputs
+- Engine inputs
+- Plugins/Logics/Effects reference
+- Undo/Redo operations
+- API documentation
+- Config documentation
+
+@section MainPage_DeveloperDocumentation Developer Documentation
+
+- Building Instruction
+- Project structure
+- Extending engine
+    - Creating Plugins
+    - Creating Logics
+    - Creating Effects
+- Regression testing
+- Benchmarks
+
+*/
+
