@@ -24,6 +24,16 @@
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Mathematics/Rect.h"
 
+
+
+
+/**@page Plugins Plugins
+
+
+*/
+
+
+
 namespace bv { namespace model {
 
 class IDefaultTransformChannel;
@@ -37,6 +47,11 @@ class IPlugin;
 DEFINE_PTR_TYPE(IPlugin)
 DEFINE_CONST_PTR_TYPE(IPlugin)
 
+
+
+
+/**@brief Plugin interface.
+@ingroup Model*/
 class IPlugin : public IUpdatable
 {
 public:

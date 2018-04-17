@@ -22,6 +22,9 @@ namespace bv { namespace model {
 
 
 
+
+/**@brief Bas implementation of IPlugin interface.
+@ingroup Model*/
 class BasePlugin : public IPlugin, public ISerializable
 {
 private:

@@ -14,7 +14,7 @@
 
 
 
-/**@page NodeEffect Effects
+/**@page NodeEffects Effects
 
 
 */

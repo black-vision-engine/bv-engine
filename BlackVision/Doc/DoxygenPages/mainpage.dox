@@ -9,7 +9,7 @@
     - Parameters
     - @ref Plugins "Plugins"
     - @ref NodeLogics "Logics"
-    - @ref Effects "Effects"
+    - @ref NodeEffects "Effects"
 - Engine outputs
     - Render Channels
     - Outputs
