@@ -16,7 +16,7 @@
 - Engine inputs
 - Plugins/Logics/Effects reference
 - Undo/Redo operations
-- API documentation
+- @ref API_Documentation "API documentation"
 - Config documentation
 
 @section MainPage_DeveloperDocumentation Developer Documentation
