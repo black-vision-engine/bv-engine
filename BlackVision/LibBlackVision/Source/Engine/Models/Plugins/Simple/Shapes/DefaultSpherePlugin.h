@@ -29,7 +29,8 @@ struct PN
 };
 
 
-
+/**@brief Sphere generator plugin.
+@ingroup PluginsList*/
 class Plugin : public DefaultGeometryPluginBase
 {
 public:

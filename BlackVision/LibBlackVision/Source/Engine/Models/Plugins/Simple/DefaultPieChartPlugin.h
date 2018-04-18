@@ -18,8 +18,11 @@ public:
     static  std::string                     UID                 ();
 };
 
-class DefaultPieChartPlugin :
-    public BasePlugin
+
+
+/**@brief Dipslays PieChart
+@ingroup PluginsList*/
+class DefaultPieChartPlugin : public BasePlugin
 {
     VertexAttributesChannelPtr          m_vaChannel;
 

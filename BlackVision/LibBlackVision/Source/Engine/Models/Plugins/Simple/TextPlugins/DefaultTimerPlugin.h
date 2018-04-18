@@ -76,6 +76,7 @@ bool            SetTimePaternTimerPlugin( IPluginPtr timerPlugin, const std::wst
 
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultTimerPlugin : public TextPluginBase
 {
 public:

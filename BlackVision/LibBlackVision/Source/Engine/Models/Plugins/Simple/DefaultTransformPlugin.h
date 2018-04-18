@@ -24,6 +24,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultTransformPlugin : public BasePlugin
 {
 

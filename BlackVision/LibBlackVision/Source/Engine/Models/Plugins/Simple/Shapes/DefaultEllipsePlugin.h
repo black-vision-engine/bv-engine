@@ -20,6 +20,10 @@ public:
     static  std::string                     UID                 ();
 };
 
+
+
+/**@brief Plugins generates ellipse.
+@ingroup PluginsList*/
 class DefaultEllipsePlugin : public DefaultGeometryPluginBase
 {
 public:

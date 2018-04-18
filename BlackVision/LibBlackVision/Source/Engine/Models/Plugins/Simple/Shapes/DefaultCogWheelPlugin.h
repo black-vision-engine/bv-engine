@@ -36,12 +36,8 @@ struct PN
 	static const std::string WEIGHTCENTERZ;
 };
 
-/**@brief Plugin containing cube built as two triangle strips.
-
-UVs cooridiantes are made as follows:
-- top triangle strip will be mapped to rectangle (0.0, 0.0) (0.0, 0.5) (1.0, 0.0) (1.0, 0.5)
-- bottom triangle strip will be mapped to rectangle (0.0, 0.5) (1.0, 0.5) (1.0, 1.0) (0.0, 1.0)
-*/
+/**@brief Plugin generating cogwheel.
+@ingroup PluginsList*/
 class Plugin : public DefaultGeometryPluginBase
 {
 public:

@@ -33,6 +33,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+///@ingroup PluginsList
 class DefaultTexturePlugin : public TexturePluginBase
 {
 public:

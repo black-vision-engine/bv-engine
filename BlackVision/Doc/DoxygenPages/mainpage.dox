@@ -21,7 +21,8 @@
         - Render Channels
         - Outputs
     <li> Engine inputs
-    <li> Plugins/Logics/Effects reference
+    <li> @ref PluginsLogicsEffectsReferece "Plugins/Logics/Effects reference"
+        @copydoc PluginsLogicsEffectsReferece
     <li> Undo/Redo operations
     <li> @ref API_Documentation "API documentation"
         @copydoc API_Documentation
@@ -54,6 +55,14 @@
 - Regression testing
 - Benchmarks
 
+*/
+
+/**@page PluginsLogicsEffectsReferece Plugins/Logics/Effects reference
+<ul>
+    <li> @ref PluginsList "Plugins list"
+    <li> @ref EffectsList "Effects list"
+    <li> @ref LogicsList "Logics list"
+</ul>
 */
 
 

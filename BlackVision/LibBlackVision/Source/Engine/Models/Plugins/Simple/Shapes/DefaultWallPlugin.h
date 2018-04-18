@@ -32,6 +32,8 @@ struct PN
 
 
 
+/**@brief 
+@ingroup PluginsList*/
 class DefaultPlugin : public DefaultGeometryPluginBase
 {
 public:

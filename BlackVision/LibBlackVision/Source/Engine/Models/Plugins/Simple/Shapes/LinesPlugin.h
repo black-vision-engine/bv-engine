@@ -25,6 +25,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
+///@ingroup PluginsList
 class LinesPlugin : public DefaultGeometryPluginBase
 {
 public:

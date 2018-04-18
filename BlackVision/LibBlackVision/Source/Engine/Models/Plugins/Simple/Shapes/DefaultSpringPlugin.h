@@ -38,6 +38,9 @@ public:
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
 };
 
+
+/**@brief Spring generator plugin.
+@ingroup PluginsList*/
 class Plugin : public DefaultGeometryPluginBase
 {
 public:

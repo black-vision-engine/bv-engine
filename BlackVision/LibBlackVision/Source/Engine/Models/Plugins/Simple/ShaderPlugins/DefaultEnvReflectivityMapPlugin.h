@@ -25,9 +25,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-
-
-
+/// @ingroup PluginsList
 class DefaultEnvReflectivityMapPlugin : public BasePlugin
 {
 private:

@@ -1,0 +1,70 @@
+/**@page PluginsList Plugins List
+
+@section PluginsList_GeometricShapesPlugins Geometric Shapes Plugins
+
+- @ref bv::model::LinesPlugin "LinesPlugin"
+- @ref bv::model::DefaultWallPlugin::DefaultPlugin "WallPlugin"
+- @ref bv::model::DefaultTrianglePlugin "TrianglePlugin"
+- @ref bv::model::DefaultTorus::Plugin "TorusPlugin"
+- @ref bv::model::DefaultSpring::Plugin "SpringPlugin"
+- @ref bv::model::DefaultSphere::Plugin "SpherePlugin"
+- @ref bv::model::DefaultSimpleCube::Plugin "SimpleCube"
+- @ref bv::model::DefaultRoundedRectPlugin "RoundedRect"
+- @ref bv::model::DefaultRect::Plugin "RectPlugin"
+- @ref bv::model::DefaultGeosphere::Plugin "GeospherePlugin"
+- @ref bv::model::DefaultEllipsePlugin "EllipsePlugin"
+- @ref bv::model::DefaultCylinder::DefaultPlugin "CylinderPlugin"
+- @ref bv::model::DefaultCone::DefaultConePlugin "ConePlugin"
+- @ref bv::model::DefaultCubePlugin "CubePlugin"
+- @ref bv::model::DefaultCogWheel::Plugin "CogwheelPlugin"
+- @ref bv::model::DefaultCirclePlugin "CirclePlugin"
+
+@section PluginsList_ShaderPlugins Shader Plugins
+
+- @ref bv::model::DefaultTexturePlugin "TexturePlugin"
+- @ref bv::model::DefaultParallaxMapPlugin "ParallaxMapPlugin"
+- @ref bv::model::DefaultNormalMapPlugin "NormalMapPlugin"
+- @ref bv::model::DefaultMaterialPlugin "MaterialPlugin"
+- @ref bv::model::DefaultGradientPlugin "LinearGradientPlugin"
+- @ref bv::model::DefaultFadePlugin "FadeRectPlugin"
+- @ref bv::model::DefaultEnvReflectivityMapPlugin "EnvReflectivityMapPlugin"
+- @ref bv::model::DefaultEnvironmentTexturePlugin "EnvironmentTexturePlugin"
+- @ref bv::model::DefaultColorPlugin "ColorPlugin"
+- @ref bv::model::DefaultBlendTexturePlugin "BlendTexturePlugin"
+- @ref bv::model::DefaultAnimationPlugin "AnimationPlugin"
+- @ref bv::model::DefaultAlphaMaskPlugin "AlphaMaskPlugin"
+- @ref bv::model::DefaultNoPerspectiveTexturePlugin "NoPerspectiveTexturePlugin"
+
+@section PluginsList_AssetPlugins Asset Plugins
+
+- @ref bv::model::DefaultSVGPlugin "SVGPlugin"
+- @ref bv::model::DefaultMeshPlugin "MeshPlugin"
+- @ref bv::model::VideoInputPlugin "VideoInputPlugin"
+- @ref bv::model::DefaultAVDecoderPlugin "AudioVideoDecoderPlugin"
+- @ref bv::model::DefaultAudioDecoderPlugin "AudioDecoderPlugin"
+
+@section PluginsList_GeometryProcessorsPlugins Geometry processing Plugins
+
+- @ref bv::model::TriangulatePlugin "TriangulatePlugin"
+- @ref bv::model::DefaultExtrudePlugin "ExtrudePlugin"
+
+@section PluginsList_DataPresentationPlugins Data presentation Plugins
+
+- @ref bv::model::DefaultLineChartPlugin "LineChartPlugin"
+- @ref bv::model::DefaultPieChartPlugin "PieChartPlugin"
+
+@section PluginsList_TextPlugins Text Plugins
+
+- @ref bv::model::DefaultTextPlugin "TextPlugin"
+- @ref bv::model::DefaultText3DPlugin "Text3DPlugin"
+- @ref bv::model::DefaultTimerPlugin "TimerPlugin"
+
+@section PluginsList_TransformationPlugins TransformationPlugins
+
+- @ref bv::model::DefaultTransformPlugin "TransformPlugin"
+
+@section PluginsList_SpecialPlugins Special Plugins
+
+- @ref bv::model::ExpertPlugin "ExpertPlugin" <- Change this name
+
+*/

@@ -27,6 +27,10 @@
 
 
 
+/**@defgroup PluginsList
+@ingroup Model*/
+
+
 /**@page Plugins Plugins
 
 

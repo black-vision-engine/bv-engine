@@ -32,6 +32,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultSVGPlugin : public BasePlugin
 {
 protected:

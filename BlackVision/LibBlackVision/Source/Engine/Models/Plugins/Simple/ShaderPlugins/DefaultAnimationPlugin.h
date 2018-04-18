@@ -30,6 +30,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultAnimationPlugin : public BasePlugin
 {
 public:
