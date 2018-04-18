@@ -38,10 +38,15 @@
 Plugins are entities that provide engine with data needed for rendering.
 Main functionalities of plugins are:
 - Generating geometry. Examples: @ref PluginsList_GeometricShapesPlugins "Geometric Shapes"
-- Processing geometry coming from plugins staying before them in node's plugins list. Examples: @ref PluginsList_GeometryProcessorsPlugins "Geometry Processors"
+- Processing geometry coming from plugins standing before them in node's plugins list. Examples: @ref PluginsList_GeometryProcessorsPlugins "Geometry Processors"
 - Providing  shaders and all data necessary for rendering process, like textures or uniform variables. Examples: @ref PluginsList_ShaderPlugins "Shader Plugins"
 - Loading audio or video data from external source (assets or video input) and passing it to engine. Examples: @ref PluginsList_AssetPlugins "Audio video Plugins"
 - Controlling state of rendering pipeline (blending modes, rasterization and so on). Examples: @ref PluginsList_SpecialPlugins "Special Plugins"
+
+Each @ref Nodes "Node" contains ordered list of different plugins. Each plugin can process data from previous plugins or it can generate
+new data.
+
+From user point of view plugins' state can be controlled by using @ref Parameters or by loading Assets.
 
 @section Plugins_Parameters Plugins Parameters
 
@@ -49,6 +54,8 @@ Main functionalities of plugins are:
 
 @section Plugins_Resources Resources
 
+
+@see bv::model::IPlugin, bv::model::BasePlugin, PluginsList
 */
 
 
