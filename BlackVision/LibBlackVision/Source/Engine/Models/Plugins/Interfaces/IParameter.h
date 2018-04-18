@@ -9,6 +9,12 @@
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 
+
+/**@page Parameter
+
+*/
+
+
 namespace bv { namespace model {
 
     class IParameter;
@@ -17,6 +23,11 @@ namespace bv { namespace model {
     class IParameter;
     typedef std::shared_ptr< const IParameter > IParameterConstPtr;
 
+
+
+
+    /**@brief Parameter interface.
+    @ingroup Model*/
     class IParameter : public ISerializable
     {
     public:

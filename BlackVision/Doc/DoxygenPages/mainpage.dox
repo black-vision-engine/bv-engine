@@ -14,23 +14,33 @@
 /**
 @page UserDocumentation User Documentation
 
-- General Engine concepts
-    - @ref Scenes "Scenes"
-    - @ref Nodes "Nodes"
-    - Parameters
-    - @ref Plugins "Plugins"
-    - @ref NodeLogics "Logics"
-    - @ref NodeEffects "Effects"
-- Engine outputs
-    - Render Channels
-    - Outputs
-- Engine inputs
-- Plugins/Logics/Effects reference
-- Undo/Redo operations
-- @ref API_Documentation "API documentation"
-- Config documentation
+<ul>
+    <li> @ref MainPage_GeneralConcepts "General Engine concepts"
+        @copydoc MainPage_GeneralConcepts
+    <li> Engine outputs
+        - Render Channels
+        - Outputs
+    <li> Engine inputs
+    <li> Plugins/Logics/Effects reference
+    <li> Undo/Redo operations
+    <li> @ref API_Documentation "API documentation"
+        @copydoc API_Documentation
+    <li> Config documentation
+</ul>
 
 */
+
+/**@page MainPage_GeneralConcepts
+<ul>
+    <li> @ref Scenes "Scenes"
+    <li> @ref Nodes "Nodes"
+    <li> @ref Parameter "Parameter"
+    <li> @ref Plugins "Plugins"
+    <li> @ref NodeLogics "Logics"
+    <li> @ref NodeEffects "Effects"
+</ul>
+*/
+
 
 /**
 @page DeveloperDocumentation Developer Documentation

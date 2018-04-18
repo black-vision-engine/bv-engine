@@ -1,25 +1,24 @@
 /**@page API_Documentation
-
-- @ref API_ScenesManipulation "Scenes manipulation"
-- @ref API_NodesManipulation "Nodes manipulation"
-- @ref API_PluginsManipulation "Plugins manipulation"
-- @ref API_LogicsManipulation "Logics manipulation"
-- @ref API_EffectsManipulation "Effects manipulation"
-- @ref API_LightsManagment "Lights managment"
-- @ref API_CamerasManagment "Cameras managment"
-- @ref API_Timelines "Timelines"
-- @ref API_Parameters "Parameters"
-- @ref API_Gizmos "Gizmo"
-- @ref API_UndoRedo "Undo/Redo operations"
-- @ref API_ConfigManagment "Config manipulation"
-- @ref API_VideoCards "Video cards"
-
-- @ref API_SceneVariables "Scene variables"
-- @ref API_GridLines "Grid lines"
-- @ref API_ParameterDescriptors "Parameter Descriptors"
-- @ref API_AdditionalCommands "Additional Commands"
-
-- @ref API_Timer "Timer events"
+<ul>
+    <li> @ref API_ScenesManipulation "Scenes manipulation"
+    <li> @ref API_NodesManipulation "Nodes manipulation"
+    <li> @ref API_PluginsManipulation "Plugins manipulation"
+    <li> @ref API_LogicsManipulation "Logics manipulation"
+    <li> @ref API_EffectsManipulation "Effects manipulation"
+    <li> @ref API_LightsManagment "Lights managment"
+    <li> @ref API_CamerasManagment "Cameras managment"
+    <li> @ref API_Timelines "Timelines"
+    <li> @ref API_Parameters "Parameters"
+    <li> @ref API_Gizmos "Gizmo"
+    <li> @ref API_UndoRedo "Undo/Redo operations"
+    <li> @ref API_ConfigManagment "Config manipulation"
+    <li> @ref API_VideoCards "Video cards"
+    <li> @ref API_SceneVariables "Scene variables"
+    <li> @ref API_GridLines "Grid lines"
+    <li> @ref API_ParameterDescriptors "Parameter Descriptors"
+    <li> @ref API_AdditionalCommands "Additional Commands"
+    <li> @ref API_Timer "Timer events"
+</ul>
 
 */
 
