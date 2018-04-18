@@ -7,6 +7,7 @@
     <li> @ref API_EffectsManipulation "Effects manipulation"
     <li> @ref API_LightsManagment "Lights managment"
     <li> @ref API_CamerasManagment "Cameras managment"
+    <li> @ref API_ProjectManagment "Project managment"
     <li> @ref API_Timelines "Timelines"
     <li> @ref API_Parameters "Parameters"
     <li> @ref API_Gizmos "Gizmo"
@@ -19,12 +20,6 @@
     <li> @ref API_AdditionalCommands "Additional Commands"
     <li> @ref API_Timer "Timer events"
 </ul>
-
-*/
-
-/**@page API_ScenesManipulation
-
-
 
 */
 
