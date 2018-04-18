@@ -1,6 +1,6 @@
 /**@page API_NodesManipulation
 
-@section API_NodesManipulation_NodesFunctionalitiesList Nodes functionalities list
+@section API_NodesManipulation_NodesFunctionalitiesList Nodes API functionalities list
 
 - @ref API_AddNode "Adding Nodes"
 - @ref API_RemoveNode "Removing Nodes"

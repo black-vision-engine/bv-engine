@@ -69,6 +69,7 @@ prefixed by # and separated by slash. For example to access node <b>"circle3"</b
 Each node has unique id generated at creation time. We can access node using it's id prefixed with @.
 For example to access node <b>"child3"</b> we can write: <b>"@26"</b>.
 
+@copydoc API_NodesManipulation
 
 @see bv::model::BasicNode
 */
