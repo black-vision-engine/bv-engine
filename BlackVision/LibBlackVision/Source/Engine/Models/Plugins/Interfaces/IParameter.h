@@ -10,7 +10,7 @@
 
 
 
-/**@page Parameter
+/**@page Parameters
 
 */
 

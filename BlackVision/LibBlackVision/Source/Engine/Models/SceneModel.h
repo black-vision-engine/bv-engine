@@ -12,6 +12,25 @@
 #include "Engine/Editors/UndoRedo/OperationHistory.h"
 
 
+/**@defgroup Model*/
+
+
+
+/**@page Scenes
+
+A scene is a fundamental entity that can be rendered onto a screen or any other @ref RenderChannels.
+
+It is container of 
+    - @ref Nodes "Nodes", ordered in a tree fashion,
+    - @ref Timelines "Timelines", stored as children of the scene timline,
+    - @ref Cameras "Cameras",
+    - @ref Lights "Lights".
+
+
+@see bv::model::SceneModel
+*/
+
+
 namespace bv { 
 
 class EndUserParamsLogic;
@@ -24,6 +43,11 @@ class SceneModel;
 DEFINE_PTR_TYPE( SceneModel );
 DEFINE_CONST_PTR_TYPE( SceneModel );
 
+/**@brief Model representation of Scene.
+
+@copydoc Scenes
+
+@ingroup Model*/
 class SceneModel : public IUpdatable, public ISerializable
 {
 	static const UInt32				MAX_LIGTHS;

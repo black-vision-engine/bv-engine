@@ -34,7 +34,7 @@
 <ul>
     <li> @ref Scenes "Scenes"
     <li> @ref Nodes "Nodes"
-    <li> @ref Parameter "Parameter"
+    <li> @ref Parameters "Parameters"
     <li> @ref Plugins "Plugins"
     <li> @ref NodeLogics "Logics"
     <li> @ref NodeEffects "Effects"

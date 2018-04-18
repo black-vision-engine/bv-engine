@@ -5,9 +5,16 @@
 
 #include <vector>
 
+/**@page Cameras Cameras
+@see bv::model::CamerasLogic
+*/
 
 namespace bv { namespace model {
 
+
+/**@brief Camera model
+@ingroup Model
+*/
 class CamerasLogic : public IUpdatable
 {
 private:
