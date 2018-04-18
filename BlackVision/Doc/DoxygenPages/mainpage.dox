@@ -3,6 +3,17 @@
 
 @section MainPage_UserDocumentation User Documentation
 
+@copydoc UserDocumentation
+
+@section MainPage_DeveloperDocumentation Developer Documentation
+
+@copydoc DeveloperDocumentation
+
+*/
+
+/**
+@page UserDocumentation User Documentation
+
 - General Engine concepts
     - @ref Scenes "Scenes"
     - @ref Nodes "Nodes"
@@ -19,7 +30,10 @@
 - @ref API_Documentation "API documentation"
 - Config documentation
 
-@section MainPage_DeveloperDocumentation Developer Documentation
+*/
+
+/**
+@page DeveloperDocumentation Developer Documentation
 
 - Building Instruction
 - Project structure
@@ -31,4 +45,9 @@
 - Benchmarks
 
 */
+
+
+
+
+
 
