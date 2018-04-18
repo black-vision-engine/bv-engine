@@ -35,6 +35,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultGradientPlugin : public BasePlugin
 {
 public:

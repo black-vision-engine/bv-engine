@@ -23,7 +23,7 @@
 @section Nodes_General General
 
 @ref Scenes "Scene" consists of hierarchical structure of nodes. Each node inherits transformation from parent and
-can have it's own tranformation if it posseses TransformPlugin.
+can have it's own tranformation if it posseses @ref bv::model::DefaultTransformPlugins "TransformPlugin".
 
 Example nodes hierarchy:
 - root (id: 12)

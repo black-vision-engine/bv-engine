@@ -33,6 +33,21 @@
 
 /**@page Plugins Plugins
 
+@section Plugins_General General
+
+Plugins are entities that provide engine with data needed for rendering.
+Main functionalities of plugins are:
+- Generating geometry. Examples: @ref PluginsList_GeometricShapesPlugins "Geometric Shapes"
+- Processing geometry coming from plugins staying before them in node's plugins list. Examples: @ref PluginsList_GeometryProcessorsPlugins "Geometry Processors"
+- Providing  shaders and all data necessary for rendering process, like textures or uniform variables. Examples: @ref PluginsList_ShaderPlugins "Shader Plugins"
+- Loading audio or video data from external source (assets or video input) and passing it to engine. Examples: @ref PluginsList_AssetPlugins "Audio video Plugins"
+- Controlling state of rendering pipeline (blending modes, rasterization and so on). Examples: @ref PluginsList_SpecialPlugins "Special Plugins"
+
+@section Plugins_Parameters Plugins Parameters
+
+
+
+@section Plugins_Resources Resources
 
 */
 
