@@ -6,10 +6,15 @@
 #include "Engine/Interfaces/IValueSet.h"
 #include "Serialization/ISerializable.h"
 
+/**@page Lights Lights
+@see bv::model::IModelLight
+*/
 
 namespace bv { namespace model {
 
 
+/**@brief Light model interface
+@ingroup Model */
 class IModelLight : public IUpdatable, public ISerializable, public IParamSet, public IValueSet
 {
 public:
