@@ -1,6 +1,6 @@
 /**@page API_ScenesManipulation
 
-@section API_ScenesManipulation_SceneFunctionalitiesList Scene functionalities list
+@section API_ScenesManipulation_SceneFunctionalitiesList Scenes functionalities list
 
 - @ref API_AddingScene "Adding Scene"
 - @ref API_RemovingScene "Removing Scene"

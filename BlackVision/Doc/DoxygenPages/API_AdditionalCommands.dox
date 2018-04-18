@@ -1,0 +1,8 @@
+/**@page API_AdditionalCommands
+
+@section API_API_AdditionalCommands_FunctionalitiesList Functionalities list
+
+- @ref API_SelectNode "Selecting Nodes"
+- @ref API_UnselectNodes "Removing Nodes selection"
+
+*/

@@ -24,12 +24,6 @@
 */
 
 
-/**@page API_NodesManipulation
-
-
-
-*/
-
 /**@page API_PluginsManipulation
 
 
@@ -114,11 +108,6 @@
 
 */
 
-/**@page API_AdditionalCommands
-
-
-
-*/
 
 /**@page API_Timer
 
