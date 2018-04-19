@@ -16,20 +16,24 @@
 
 
 
-/**@page Scenes
+/**@page Scenes Scenes
 
-A scene is a fundamental entity that can be rendered onto a screen or any other @ref RenderChannels.
+A scene is a fundamental entity that can be rendered onto a screen or any other @ref RenderChannels "RenderChannel".
 
 It is container of 
     - @ref Nodes "Nodes", ordered in a tree fashion,
-    - @ref Timelines "Timelines", stored as children of the scene timline,
+    - @ref Timelines "Timelines", stored as children of the scene timeline,
     - @ref Cameras "Cameras",
     - @ref Lights "Lights".
 
+@copydoc API_ScenesManipulation
 
 @see bv::model::SceneModel
 */
 
+
+/**@page Presets Presets
+*/
 
 namespace bv { 
 

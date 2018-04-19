@@ -14,10 +14,6 @@
 
 
 
-/**@defgroup Model*/
-
-
-
 /**@page Nodes Nodes
 
 @section Nodes_General General
