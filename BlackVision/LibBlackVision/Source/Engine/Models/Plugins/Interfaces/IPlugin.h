@@ -50,12 +50,24 @@ From user point of view plugins' state can be controlled by using @ref Parameter
 
 @section Plugins_Parameters Plugins Parameters
 
+Plugins have multiple parameter models:
+- Main model contains all plugin's parameters that influence output data generation or are passed to shaders.
+- Each texture resource has it's own model. Such a model allows user to set openGL sampler parameters like
+wrapping modes, filtering or border color.
 
+Parameters are identified and accessed in API by their names. To access resource parameter, user must provide moreover
+resource name, which is defined by each plugin separatly.
+
+Check how to set parameters through API @ref API_Parameters "here".
 
 @section Plugins_Resources Resources
 
+Some plugins can load assets to display textures, generate geometry based on asset content or process assets in different manner.
+In current version API supports only one asset loaded at the same time.
 
-@see bv::model::IPlugin, bv::model::BasePlugin, PluginsList
+Check how to load assets through API @ref API_Assets "here".
+
+@see bv::model::IPlugin, bv::model::BasePlugin, PluginsList, bv::model::DefaultPluginParamValModel
 */
 
 

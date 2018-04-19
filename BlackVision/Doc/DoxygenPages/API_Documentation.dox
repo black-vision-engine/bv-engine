@@ -10,6 +10,7 @@
     <li> @ref API_ProjectManagment "Project managment"
     <li> @ref API_Timelines "Timelines"
     <li> @ref API_Parameters "Parameters"
+    <li> @ref API_Assets "Assets"
     <li> @ref API_Gizmos "Gizmo"
     <li> @ref API_UndoRedo "Undo/Redo operations"
     <li> @ref API_ConfigManagment "Config manipulation"
@@ -61,6 +62,12 @@
 */
 
 /**@page API_Parameters
+
+
+
+*/
+
+/**@page API_Assets
 
 
 
