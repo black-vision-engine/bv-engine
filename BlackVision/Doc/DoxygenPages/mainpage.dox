@@ -17,10 +17,8 @@
 <ul>
     <li> @ref MainPage_GeneralConcepts "General Engine concepts"
         @copydoc MainPage_GeneralConcepts
-    <li> Engine outputs
-        - Render Channels
-        - Outputs
-    <li> Engine inputs
+    <li> @ref EngineOutputs "Engine outputs"
+    <li> @ref EngineInputs "Engine inputs"
     <li> @ref PluginsLogicsEffectsReferece "Plugins/Logics/Effects reference"
         @copydoc PluginsLogicsEffectsReferece
     <li> Undo/Redo operations

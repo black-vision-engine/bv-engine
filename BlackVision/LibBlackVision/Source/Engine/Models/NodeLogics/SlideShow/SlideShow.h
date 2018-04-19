@@ -30,7 +30,7 @@ DEFINE_CONST_PTR_TYPE( SlideShow );
 
 
 /**@brief Shows child nodes like on windows slide show.
-@ignroup LogicsList*/
+@ingroup LogicsList*/
 class SlideShow : public model::NodeLogicBase, public std::enable_shared_from_this< SlideShow >
 {
 public:

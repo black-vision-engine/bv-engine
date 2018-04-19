@@ -1,0 +1,44 @@
+/**@page EngineOutputs Outputs
+
+@section EngineOutputs_RenderChannels Render Channels
+
+Render Channels are first layer of outputs. Each Render Channel owns render target and audio buffer.
+Each @ref Scenes "Scene" is assigned to one Render Channel. Multiple scenes can be renderered
+to one Render Channel in the same order as they are placed in model.
+
+@section EngineOutputs_Outputs Outputs
+
+Output takes rendered data from Render Channels and presents it.
+There're many types of built in outputs:
+- Preview
+- Shared memory
+- Video Card output
+- Screenshot
+- Video file
+
+@subsection EngineOutputs_Preview Preview
+
+Preview output presents one Render Channel on screen in application window.
+
+@subsection EngineOutputs_SharedMemory Shared memory
+
+This output copies content of Render Channel to shared memory buffer. Other processes in systems
+can access this buffer and display it. This option is useful while connecting editor and engine.
+Editor can display content of shared memory buffer in it's own window.
+
+@subsection EngineOutputs_VideoCardOutput Video Card output
+
+Main purpose of this engine is to send rendered frames to video cards. This output
+takes render target and audio buffer from chosen Render Channels and sends it to
+specified video card output channel. Mapping between Render Channels and video cards output channels
+can be configured from config.
+
+@subsection EngineOutputs_Screenshot Screenshot
+
+Engine can make screenshot of current rendered frame.
+
+@subsection EngineOutputs_VideoFile Video file
+
+This outputs sends rendered content to video file. @attention This output is not finished and videos have low quality. Needs fix.
+
+*/
