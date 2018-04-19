@@ -6,6 +6,10 @@
 #include <vector>
 
 /**@page Cameras Cameras
+
+@copydetails bv::model::CameraModel
+
+
 @see bv::model::CamerasLogic
 */
 
