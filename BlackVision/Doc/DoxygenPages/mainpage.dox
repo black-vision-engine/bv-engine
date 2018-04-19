@@ -24,7 +24,7 @@
     <li> Undo/Redo operations
     <li> @ref API_Documentation "API documentation"
         @copydoc API_Documentation
-    <li> Config documentation
+    <li> @ref Config "Config documentation"
 </ul>
 
 */
