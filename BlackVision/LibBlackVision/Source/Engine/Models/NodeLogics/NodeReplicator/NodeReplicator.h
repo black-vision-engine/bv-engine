@@ -12,6 +12,11 @@ class NodeReplicator;
 DEFINE_PTR_TYPE( NodeReplicator )
 DEFINE_CONST_PTR_TYPE( NodeReplicator )
 
+
+
+
+/**@brief Replicates node and it's parameters. Allows to add value and time offset to chosen params.
+@ingroup LogicsList*/
 class NodeReplicator : public model::INodeLogic, public std::enable_shared_from_this< NodeReplicator >
 {
 private:

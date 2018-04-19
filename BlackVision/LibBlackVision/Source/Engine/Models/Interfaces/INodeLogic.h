@@ -8,6 +8,8 @@
 #include <vector>
 
 
+/**@defgroup LogicsList
+@ingroup Model*/
 
 
 /**@page NodeLogics Logics

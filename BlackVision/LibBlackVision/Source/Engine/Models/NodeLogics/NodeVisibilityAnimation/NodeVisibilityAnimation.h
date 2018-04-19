@@ -31,6 +31,8 @@ DEFINE_CONST_PTR_TYPE( NodeVisibilityAnimation );
 
 
 
+/**@brief Allows to animate nodes visibility.
+@ingroup LogicsList*/
 class NodeVisibilityAnimation : public model::NodeLogicBase, public std::enable_shared_from_this< NodeVisibilityAnimation >
 {
 private:

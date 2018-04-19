@@ -1,4 +1,20 @@
 /**@page LogicsList Logics List
 
+@section LogicsList_List Logics List
+
+- @ref bv::nodelogic::AnalogWatch "AnalogWatch"
+- @ref bv::nodelogic::Arrange "Arrange"
+- @ref bv::nodelogic::Cloner "Cloner"
+- @ref bv::nodelogic::WidgetCounter "Counter"
+- @ref bv::nodelogic::Follow "Follow"
+- @ref bv::nodelogic::MaxSize "MaxSize"
+- @ref bv::nodelogic::MeshLoader "MeshLoader"
+- @ref bv::nodelogic::NodeReplicator "Replicator"
+- @ref bv::nodelogic::NodeVisibilityAnimation "NodeVisibilityAnimation"
+- @ref bv::nodelogic::PieChart "PieChart"
+- @ref bv::nodelogic::Scroller "Scroller"
+- @ref bv::nodelogic::SlideShow "SlideShow"
+- @ref bv::nodelogic::SmoothValueSetter "SmoothValueSetter"
+
 
 */

@@ -30,6 +30,12 @@ class Scroller;
 DEFINE_PTR_TYPE( Scroller )
 DEFINE_CONST_PTR_TYPE( Scroller )
 
+
+
+
+
+/**@brief Scrolls text across the screen.
+@ingroup LogicsList*/
 class Scroller : public model::NodeLogicBase, public std::enable_shared_from_this< Scroller >
 {
 public:
