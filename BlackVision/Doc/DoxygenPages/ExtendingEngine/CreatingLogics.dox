@@ -1,0 +1,13 @@
+/**@page ExtendingEngine_CreatingLogics Creating Logics
+
+@section ExtendingEngine_CreatingLogics_Factory Creating using factory
+
+
+@section ExtendingEngine_CreatingLogics_HandleEvent Implement HandleEvent
+
+@section ExtendingEngine_CreatingLogics_UpdateHooks Implement update hooks
+
+
+
+
+*/

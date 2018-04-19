@@ -46,16 +46,14 @@
 
 /**
 @page DeveloperDocumentation Developer Documentation
-
-- Building Instruction
-- Project structure
-- Extending engine
-    - Creating Plugins
-    - Creating Logics
-    - Creating Effects
-- Regression testing
-- Benchmarks
-
+<ul>
+    <li> Building Instruction
+    <li> Project structure
+    <li> @ref ExtendingEngine "Extending engine"
+        @copydoc ExtendingEngine
+    <li> Regression testing
+    <li>Benchmarks
+</ul>
 */
 
 /**@page PluginsLogicsEffectsReferece Plugins/Logics/Effects reference
@@ -67,7 +65,13 @@
 */
 
 
-
+/**@page ExtendingEngine Extending Engine
+<ul>
+    <li> @ref ExtendingEngine_CreatingPlugins "Creating Plugins"
+    <li> @ref ExtendingEngine_CreatingLogics "Creating Logics"
+    <li> @ref ExtendingEngine_CreatingEffects "Creating Effects"
+</ul>
+*/
 
 
 

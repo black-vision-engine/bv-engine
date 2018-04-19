@@ -67,6 +67,8 @@ In current version API supports only one asset loaded at the same time.
 
 Check how to load assets through API @ref API_Assets "here".
 
+@copydoc API_PluginsManipulation
+
 @see bv::model::IPlugin, bv::model::BasePlugin, PluginsList, bv::model::DefaultPluginParamValModel
 */
 
