@@ -1,6 +1,7 @@
 /**@page API_Documentation
 <ul>
     <li> @ref API_ScenesManipulation "Scenes manipulation"
+    <li> @ref API_PresetsManipulation "Presets manipulation"
     <li> @ref API_NodesManipulation "Nodes manipulation"
     <li> @ref API_PluginsManipulation "Plugins manipulation"
     <li> @ref API_LogicsManipulation "Logics manipulation"
