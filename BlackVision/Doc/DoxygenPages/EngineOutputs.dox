@@ -6,6 +6,8 @@ Render Channels are first layer of outputs. Each Render Channel owns render targ
 Each @ref Scenes "Scene" is assigned to one Render Channel. Multiple scenes can be renderered
 to one Render Channel in the same order as they are placed in model.
 
+Check @ref Config_RenderChannels "Enabling Render Channels" in config.
+
 @section EngineOutputs_Outputs Outputs
 
 Output takes rendered data from Render Channels and presents it.
@@ -26,12 +28,18 @@ This output copies content of Render Channel to shared memory buffer. Other proc
 can access this buffer and display it. This option is useful while connecting editor and engine.
 Editor can display content of shared memory buffer in it's own window.
 
+Check @ref Config_SharedMemory "Enable shared memory" from config.
+
 @subsection EngineOutputs_VideoCardOutput Video Card output
 
 Main purpose of this engine is to send rendered frames to video cards. This output
 takes render target and audio buffer from chosen Render Channels and sends it to
 specified video card output channel. Mapping between Render Channels and video cards output channels
 can be configured from config.
+
+Check @ref Config_RenderChannels "Map Render Channesl to VideoOutputs" in config.
+
+Check @ref Config_VideoCards "Define Video Card output channels" in config.
 
 @subsection EngineOutputs_Screenshot Screenshot
 
