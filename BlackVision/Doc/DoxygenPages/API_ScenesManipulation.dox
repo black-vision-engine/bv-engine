@@ -2,12 +2,12 @@
 
 @section API_ScenesManipulation_SceneFunctionalitiesList Scenes functionalities list
 
-- @ref SceneEvent_Commands "Adding Scene"
-- @ref API_RemovingScene "Removing Scene"
-- @ref API_RemovingAllScenes "Removing all Scenes"
-- @ref API_SetSceneVisible "Make Scene visible"
-- @ref API_SetSceneInvisible "Make Scene invisible"
-- @ref API_RenameScene "Rename Scene"
+- @ref SceneEvent_Commands_AddScene "Adding Scene"
+- @ref SceneEvent_Commands_RemoveScene "Removing Scene"
+- @ref SceneEvent_Commands_RemoveAllScenes "Removing all Scenes"
+- @ref SceneEvent_Commands_SceneVisiblitity "Make Scene visible"
+- @ref SceneEvent_Commands_SceneVisiblitity "Make Scene invisible"
+- @ref SceneEvent_Commands_RenameScene "Rename Scene"
 - @ref API_AttachScene "Attach Scene"
 - @ref API_DetachScene "Detach Scene"
 - @ref API_MoveScene "Move Scene"
