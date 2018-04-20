@@ -50,7 +50,7 @@
     <li> @ref ExtendingEngine "Extending engine"
         @copydoc ExtendingEngine
     <li> Regression testing
-    <li>Benchmarks
+    <li> Benchmarks
 </ul>
 */
 
