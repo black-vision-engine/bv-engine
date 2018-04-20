@@ -22,11 +22,11 @@ This event supports following commands:
 - @ref SceneEvent_Commands_SceneVisiblitity "SetSceneVisible"
 - @ref SceneEvent_Commands_SceneVisiblitity "SetSceneInvisible"
 - @ref SceneEvent_Commands_RenameScene "RenameScene"
-- AttachScene
-- DetachScene
-- MoveScene
-- CopyScene
-- SetOutputChannel
+- @ref SceneEvent_Commands_AttachDetach "AttachScene"
+- @ref SceneEvent_Commands_AttachDetach "DetachScene"
+- @ref SceneEvent_Commands_AttachDetach "MoveScene"
+- @ref SceneEvent_Commands_CopyScene "CopyScene"
+- @ref SceneEvent_Commands_SetOutputChannel "SetOutputChannel"
 
 @subsection SceneEvent_Commands_AddScene Adding Scene
 
@@ -99,6 +99,68 @@ Unloads scene from engine.
     "Command" : "RenameScene",
     "SceneName" : "Shapes2D_Examples.scn",
     "NewSceneName" : "Shapes.scn"
+}
+@endcode
+
+@subsection SceneEvent_Commands_AttachDetach Attaching/Detaching Scene
+
+DetachScene removes @ref Scenes "Scene" from list but doesn't deletes engine objects.
+Detached Scene can be then attached again. This way user can change order of scenes and
+what results in changing rendering order.
+
+@code{.json}
+{
+    "Event" : "SceneEvent",
+    "EventID" : "0",
+    "Command" : "DetachScene",
+    "SceneName" : "Shapes2D_Examples.scn"
+}
+@endcode
+
+@code{.json}
+{
+    "Event" : "SceneEvent",
+    "EventID" : "0",
+    "Command" : "AttachScene",
+    "SceneName" : "Shapes2D_Examples.scn",
+    "AttachIndex" : "0"
+}
+@endcode
+
+The same effect can be achived using MoveScene:
+@code{.json}
+{
+    "Event" : "SceneEvent",
+    "EventID" : "0",
+    "Command" : "MoveScene",
+    "SceneName" : "Shapes2D_Examples.scn",
+    "AttachIndex" : "0"
+}
+@endcode
+
+@subsection SceneEvent_Commands_CopyScene Coping Scene
+
+Creates new scene with the same content. Scene name consist of prefix <b>Copy_</b> and copied scene name.
+@code{.json}
+{
+    "Event" : "SceneEvent",
+    "EventID" : "0",
+    "Command" : "CopyScene",
+    "SceneName" : "Shapes2D_Examples.scn"
+}
+@endcode
+
+@subsection SceneEvent_Commands_SetOutputChannel Setting Scene Output Channel
+
+Assigns @ref Scenes "Scene" to one of 4 RenderChannels.
+
+@code{.json}
+{
+    "Event" : "SceneEvent",
+    "EventID" : "0",
+    "Command" : "SetOutputChannel",
+    "SceneName" : "Shapes2D_Examples.scn",
+    "AttachIndex" : "7"
 }
 @endcode
 
