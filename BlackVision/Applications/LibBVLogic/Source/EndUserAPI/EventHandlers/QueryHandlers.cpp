@@ -805,7 +805,7 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
     context->pluginsInfo = true;
     context->inludeUIDs = true;
     
-    PrepareResponseTemplate( ser, InfoEvent::Command::MinimalTreeStructure, eventID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
 
     ser.EnterArray( "scenes" );
 
