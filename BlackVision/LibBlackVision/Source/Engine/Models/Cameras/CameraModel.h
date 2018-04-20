@@ -15,7 +15,7 @@ namespace bv { namespace model {
 
 /**@brief Camera model.
 
-Cameras parameters:
+@section Camera_Parameters Cameras parameters
 
 Key                                     | Values        | Default Value         | Description
 --------------------------------------- | ------------- | --------------------- | -----------
