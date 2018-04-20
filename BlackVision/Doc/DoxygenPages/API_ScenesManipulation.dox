@@ -2,7 +2,7 @@
 
 @section API_ScenesManipulation_SceneFunctionalitiesList Scenes functionalities list
 
-- @ref API_AddingScene "Adding Scene"
+- @ref SceneEvent_Commands "Adding Scene"
 - @ref API_RemovingScene "Removing Scene"
 - @ref API_RemovingAllScenes "Removing all Scenes"
 - @ref API_SetSceneVisible "Make Scene visible"

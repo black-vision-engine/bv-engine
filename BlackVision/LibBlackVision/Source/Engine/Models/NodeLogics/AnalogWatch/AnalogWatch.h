@@ -24,6 +24,10 @@ DEFINE_PTR_TYPE( AnalogWatch )
 DEFINE_CONST_PTR_TYPE( AnalogWatch )
 
 
+
+
+/**@brief 
+@ingroup LogicsList*/
 class AnalogWatch : public model::NodeLogicBase, public std::enable_shared_from_this< AnalogWatch >
 {
 private:

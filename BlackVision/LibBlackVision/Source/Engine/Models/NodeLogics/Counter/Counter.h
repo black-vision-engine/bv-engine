@@ -23,6 +23,9 @@ DEFINE_PTR_TYPE( WidgetCounter )
 DEFINE_CONST_PTR_TYPE( WidgetCounter )
 
 
+
+/**@brief 
+@ingroup LogicsList*/
 class WidgetCounter:  public model::NodeLogicBase, public std::enable_shared_from_this< WidgetCounter >
 {
 private:

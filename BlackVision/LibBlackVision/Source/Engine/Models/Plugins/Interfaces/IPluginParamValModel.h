@@ -10,6 +10,10 @@ namespace bv { namespace model {
 class IPluginParamValModel;
 DEFINE_PTR_TYPE(IPluginParamValModel)
 
+
+
+/**@brief 
+@ingroup Model*/
 class IPluginParamValModel
 {
 public:

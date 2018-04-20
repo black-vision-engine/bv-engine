@@ -35,6 +35,11 @@ Scene is container of:
 
 
 /**@page Presets Presets
+
+Presets allow to create and save reusable parts of @ref Scenes "Scenes". To create preset, user chooses
+node's subtree which will be saved to file. Then preset can be loaded and pinned to any other node as subtree.
+
+@copydoc API_PresetsManipulation
 */
 
 namespace bv { 

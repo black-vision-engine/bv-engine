@@ -13,6 +13,9 @@ DEFINE_PTR_TYPE( MeshLoader )
 DEFINE_CONST_PTR_TYPE( MeshLoader )
 
 
+
+/**@brief Loads mesh with materials and textures. Logics extracts mesh segments from file and creates subtree.
+@ingroup LogicsList*/
 class MeshLoader:  public model::NodeLogicBase, public std::enable_shared_from_this< MeshLoader >
 {
 private:
