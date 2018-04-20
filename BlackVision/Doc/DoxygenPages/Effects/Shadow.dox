@@ -1,0 +1,22 @@
+/**@page EffectShadow Shadow Effect
+
+@section Description
+
+Applies shadow/glow/outline to node's subtree.
+
+@section Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+blurSize             	| float         | 0                 | Size of blur in pixels. It may be subpixel.
+normalize             	| int (0 or 1)	| 1                 | Decides if we normalize after blur.
+blurKernelType			| int      		| 0               	| 0 - box, 1 - triangle, 2 - gaussian, 3 - more gauss
+color					| vec4			| (0,0,0,0)			| effect color
+inner					| int (0-2)		| 0					| 0 - outer, 1 - inner, 2 - inner and outer
+shift					| vec2			| (0,0)				| effect translation in screen coordinates
+
+@section API control
+
+You can manipulate the blur by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

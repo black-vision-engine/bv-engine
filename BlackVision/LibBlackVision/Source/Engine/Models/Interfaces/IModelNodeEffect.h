@@ -16,7 +16,11 @@
 
 /**@page NodeEffects Effects
 
+You may think of effect as a way to change the normal rendering procedure.
 
+@copydoc Effect
+
+@see bv::model::IModelNodeEffect
 */
 
 
@@ -26,6 +30,7 @@ namespace bv { namespace model {
 
 
 /**@brief Node effect interface.
+@copydoc NodeEffects
 @ingroup Model*/
 class IModelNodeEffect : public IUpdatable, public ISerializable
 {

@@ -20,7 +20,9 @@
 
 A scene is a fundamental entity that can be rendered onto a screen or any other @ref RenderChannels "RenderChannel".
 
-It is container of 
+Every other entity (node, plugin etc.) is a part of some scene and you need a scene name to access them.
+
+Scene is container of:
     - @ref Nodes "Nodes", ordered in a tree fashion,
     - @ref Timelines "Timelines", stored as children of the scene timeline,
     - @ref Cameras "Cameras",

@@ -1,4 +1,10 @@
 /**@page EffectsList Effects List
 
+- @ref EffectBlur "Blur Effect"
+- @ref EffectShadow "Shadow Effect"
+<!--
+- @ref EffectImageMask "Image Mask"
+-->
+- @ref EffectZSort "ZSort Effect"
 
 */
