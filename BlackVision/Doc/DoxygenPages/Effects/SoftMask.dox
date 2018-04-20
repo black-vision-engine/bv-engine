@@ -1,0 +1,24 @@
+/**@page EffectSoftMask Soft Mask Effect
+
+@section Description
+
+Applies soft mask to node's subtree.
+
+@section Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+width					| float			| 0.01				| 
+progress				| float			| 0.01				| 
+blackWidth				| float			| 0.01				|
+invert					| bool			| false				| 
+alphaOnly				| bool			| false				| 
+objectOnly				| bool	        | false             | 
+mirrorEnabled			| bool			| false				|
+polyDegree				| int			| 4
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

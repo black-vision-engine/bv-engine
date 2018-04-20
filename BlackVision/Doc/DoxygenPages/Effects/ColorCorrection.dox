@@ -1,0 +1,17 @@
+/**@page EffectColorCorrection Color Correction Effect
+
+@section Description
+
+Applies color correction to node's subtree.
+
+@section Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+color					| vec4			| (0,0,0,0)			| color that is added to the original color (may be negative)
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

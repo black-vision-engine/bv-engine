@@ -15,8 +15,8 @@ color					| vec4			| (0,0,0,0)			| effect color
 inner					| int (0-2)		| 0					| 0 - outer, 1 - inner, 2 - inner and outer
 shift					| vec2			| (0,0)				| effect translation in screen coordinates
 
-@section API control
+@section APIControl API control
 
-You can manipulate the blur by changing parameters with @ref API_Parameters "Parameters API".
+You can manipulate this Effect by changing parameters with @ref API_Parameters "Parameters API".
 
 */

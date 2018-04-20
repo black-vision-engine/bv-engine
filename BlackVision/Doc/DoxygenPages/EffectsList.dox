@@ -7,4 +7,15 @@
 -->
 - @ref EffectZSort "ZSort Effect"
 
+- @ref EffectAlphaMask "Alpha Mask Effect"
+- @ref EffectNodeMask "Node Mask Effect"
+- @ref EffectLightScattering "Light Scattering Effect"
+- @ref EffectGlow "Glow Effect"
+- @ref EffectSoftMask "Soft Mask Effect"
+- @ref EffectColorCorrection "Color Correction Effect"
+- @ref EffectColorBalance "Color Balance Effect"
+- @ref EffectSepia "Sepia Effect"
+- @ref EffectDefault "Default Effect"
+
+
 */

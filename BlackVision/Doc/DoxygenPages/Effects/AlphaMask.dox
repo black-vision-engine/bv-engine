@@ -1,0 +1,17 @@
+/**@page EffectAlphaMask Alpha Mask Effect
+
+@section Description
+
+Applies (constant) alpha mask to node's subtree.
+
+@section Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+alpha	             	| float         | 1                 | applied alpha value
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

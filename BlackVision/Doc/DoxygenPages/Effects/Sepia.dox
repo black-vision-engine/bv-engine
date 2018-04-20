@@ -1,0 +1,17 @@
+/**@page EffectSepia Sepia Effect
+
+@section Description
+
+Applies sepia to node's subtree.
+
+@section Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+tone					| float			| 0					| sepia's strength
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

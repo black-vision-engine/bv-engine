@@ -1,0 +1,21 @@
+/**@page EffectNodeMask Node Mask Effect
+
+@section Description
+
+Masks one node's child with another.
+
+@section Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+maskIdx					| int			| 0					| index of node, which will be used as a mask
+fgIdx					| int 			| 1					| index of masked node
+maskChannelIdx			| int			| 1					| pixel's component used for masking
+maskPreview				| bool			| false				| show mask
+alpha	             	| float         | 1                 | applied alpha value
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/
