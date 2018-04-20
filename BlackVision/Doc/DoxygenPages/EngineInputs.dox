@@ -1,0 +1,8 @@
+/**@page EngineInputs Inputs
+
+@section VideoInput
+
+Engine can capture video and audio from video card. Check @ref Config_VideoCards "here" how to
+configure video card input channel.
+
+*/

@@ -29,6 +29,8 @@ DEFINE_CONST_PTR_TYPE( Follow );
 
 
 
+/**@brief Follows other node.
+@ingroup LogicsList*/
 class Follow : public model::NodeLogicBase, public std::enable_shared_from_this< Follow >
 {
 public:

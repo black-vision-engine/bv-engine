@@ -15,6 +15,9 @@ DEFINE_PTR_TYPE( PieChart )
 DEFINE_CONST_PTR_TYPE( PieChart )
 
 
+
+/**@brief Creates pie chart.
+@ingroup LogicsList*/
 class PieChart :  public model::NodeLogicBase, public std::enable_shared_from_this< PieChart >
 {
 public:

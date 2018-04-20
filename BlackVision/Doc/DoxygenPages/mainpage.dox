@@ -17,16 +17,14 @@
 <ul>
     <li> @ref MainPage_GeneralConcepts "General Engine concepts"
         @copydoc MainPage_GeneralConcepts
-    <li> Engine outputs
-        - Render Channels
-        - Outputs
-    <li> Engine inputs
+    <li> @ref EngineOutputs "Engine outputs"
+    <li> @ref EngineInputs "Engine inputs"
     <li> @ref PluginsLogicsEffectsReferece "Plugins/Logics/Effects reference"
         @copydoc PluginsLogicsEffectsReferece
     <li> Undo/Redo operations
     <li> @ref API_Documentation "API documentation"
         @copydoc API_Documentation
-    <li> Config documentation
+    <li> @ref Config "Config documentation"
 </ul>
 
 */
@@ -39,6 +37,8 @@
     <li> @ref Plugins "Plugins"
     <li> @ref NodeLogics "Logics"
     <li> @ref NodeEffects "Effects"
+    <li> @ref Cameras "Cameras"
+    <li> @ref Lights "Lights"
 	<li> @ref Presets "Presets"
 </ul>
 */
@@ -46,16 +46,14 @@
 
 /**
 @page DeveloperDocumentation Developer Documentation
-
-- Building Instruction
-- Project structure
-- Extending engine
-    - Creating Plugins
-    - Creating Logics
-    - Creating Effects
-- Regression testing
-- Benchmarks
-
+<ul>
+    <li> Building Instruction
+    <li> Project structure
+    <li> @ref ExtendingEngine "Extending engine"
+        @copydoc ExtendingEngine
+    <li> Regression testing
+    <li> Benchmarks
+</ul>
 */
 
 /**@page PluginsLogicsEffectsReferece Plugins/Logics/Effects reference
@@ -67,7 +65,13 @@
 */
 
 
-
+/**@page ExtendingEngine Extending Engine
+<ul>
+    <li> @ref ExtendingEngine_CreatingPlugins "Creating Plugins"
+    <li> @ref ExtendingEngine_CreatingLogics "Creating Logics"
+    <li> @ref ExtendingEngine_CreatingEffects "Creating Effects"
+</ul>
+*/
 
 
 
