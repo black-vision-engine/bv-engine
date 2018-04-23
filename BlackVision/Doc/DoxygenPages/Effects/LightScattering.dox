@@ -4,7 +4,7 @@
 
 Creates rays of it's node.
 
-@section Parameters
+@section EffectLightScatteringParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------

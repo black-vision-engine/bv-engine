@@ -4,7 +4,7 @@
 
 Masks node with a given texture.
 
-@section Parameters
+@section EffectImageMaskParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------

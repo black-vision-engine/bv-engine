@@ -4,7 +4,7 @@
 
 Applies color balance to node's subtree.
 
-@section Parameters
+@section EffectColorBalanceParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------

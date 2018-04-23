@@ -4,7 +4,7 @@
 
 Masks one node's child with another.
 
-@section Parameters
+@section EffectNodeMaskParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------

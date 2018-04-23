@@ -4,7 +4,7 @@
 
 Applies color correction to node's subtree.
 
-@section Parameters
+@section EffectColorCorrectionParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------

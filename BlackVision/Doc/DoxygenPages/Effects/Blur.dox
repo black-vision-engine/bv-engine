@@ -4,7 +4,7 @@
 
 Applies blur to node's subtree.
 
-@section Parameters
+@section EffectBlurParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------

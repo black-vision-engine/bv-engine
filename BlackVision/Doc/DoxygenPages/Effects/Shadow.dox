@@ -4,7 +4,7 @@
 
 Applies shadow/glow/outline to node's subtree.
 
-@section Parameters
+@section EffectShadowParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------
