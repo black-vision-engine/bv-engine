@@ -362,8 +362,10 @@ void    EngineStateHandlers::AssingChannels             ( JsonSerializeObject & 
         scene->SetRenderChannelIdx( channel );
         PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, true );
     }
-
-    PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, false );
+    else
+    {
+        PrepareResponseTemplate( response, EngineStateEvent::Command::OutputCommand, evt->EventID, false );
+    }
 }
 
 // ***********************
