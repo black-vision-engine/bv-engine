@@ -17,6 +17,7 @@
 #include "API/SceneEvent.h"
 #include "API/ProjectEvent.h"
 #include "API/InfoEvent.h"
+#include "API/CameraEvent.h"
 
 
 
@@ -357,42 +358,6 @@ public:
 DECLARE_ENUM_SERIALIZATION( LightEvent::Command )
 DEFINE_PTR_TYPE( LightEvent )
 
-
-// ************************************* CameraEvent *************************************
-class CameraEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddCamera,
-        RemoveCamera,
-        SetCurrentCamera,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType          m_sEventType;
-    static std::string              m_sEventName;
-public:
-    CameraEvent::Command            CameraCommand;
-    std::string                     SceneName;
-    UInt32                          CameraIndex;
-    //std::string                     TimelinePath;
-
-public:
-    explicit                        CameraEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-DECLARE_ENUM_SERIALIZATION( CameraEvent::Command )
-DEFINE_PTR_TYPE( CameraEvent )
 
 
 

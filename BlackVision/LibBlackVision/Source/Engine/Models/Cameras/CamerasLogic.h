@@ -18,6 +18,9 @@ Adding and removing camera using API is described @ref API_CamerasManagment "her
 
 @copydetails bv::model::CameraModel
 
+@section Cameras_CameraFunctionalities Cameras API commands
+
+@copydoc API_CamerasManagment
 
 @see bv::model::CamerasLogic, bv::model::CameraModel
 */

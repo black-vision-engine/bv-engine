@@ -112,6 +112,25 @@ Gets single Node full information.
 
 @ref InfoEvent_NodeInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_CamerasInfo CamerasInfo
+
+Gets information about cameras in Scene. Returns array of all cameras with serialized
+parameters and index of current Camera.
+
+@code{.json}
+{
+    "EventID" : "10713",
+    "Event" : "InfoEvent",
+    "Command" : "CamerasInfo",
+    "Request" : 
+    {
+        "SceneName" : "Shapes2D_Examples.scn"
+    }
+}
+@endcode
+
+@ref InfoEvent_CamerasInfo_ExampleResponse "Example Response"
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -190,6 +209,443 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+
+/**@page InfoEvent_CamerasInfo_ExampleResponse InfoEvent CamerasInfo command example response:
+
+@code{.json}
+{
+   "CurrentCamera" : "0",
+   "EventID" : "10713",
+   "Success" : "true",
+   "cameras" : [
+      {
+         "params" : [
+            {
+               "interpolator" : {
+                  "curve_type" : "point",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "true"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "IsPerspective",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "bool"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "45.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "FOV",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.100000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "NearClippingPlane",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "100.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "FarClippingPlane",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "2.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "ViewportSize",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 5.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "Position",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, -1.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "Direction",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 1.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "UpVector",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            }
+         ]
+      },
+      {
+         "params" : [
+            {
+               "interpolator" : {
+                  "curve_type" : "point",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "true"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "IsPerspective",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "bool"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "45.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "FOV",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.100000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "NearClippingPlane",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "100.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "FarClippingPlane",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "2.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "ViewportSize",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 5.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "Position",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, -1.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "Direction",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 1.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "UpVector",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            }
+         ]
+      },
+      {
+         "params" : [
+            {
+               "interpolator" : {
+                  "curve_type" : "point",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "true"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "IsPerspective",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "bool"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "45.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "FOV",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.100000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "NearClippingPlane",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "100.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "FarClippingPlane",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "2.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "ViewportSize",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 5.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "Position",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, -1.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "Direction",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 1.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "UpVector",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            }
+         ]
+      }
+   ],
+   "cmd" : "CamerasInfo"
+}
+
+@endcode
+*/
+
 
 /**@page InfoEvent_NodeInfo_ExampleResponse InfoEvent NodeInfo command example response:
 

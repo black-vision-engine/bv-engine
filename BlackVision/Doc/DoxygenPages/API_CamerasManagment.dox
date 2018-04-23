@@ -1,0 +1,8 @@
+/**@page API_CamerasManagment Cameras API commands
+
+- @ref CameraEvent_Commands_AddCamera "Adding Cameras"
+- @ref CameraEvent_Commands_RemoveCamera "Removing Cameras"
+- @ref CameraEvent_Commands_SetCurrentCamera "Setting current Camera"
+- @ref InfoEvent_Commands_CamerasInfo "Quering cameras information"
+
+*/
