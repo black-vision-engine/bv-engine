@@ -23,6 +23,9 @@ This event supports following commands:
 
 Adds @ref Lights "Light" on the end of Scene lights list.
 
+Please keep in mind the maximal number of lights per scene is 8.
+
+
 @code{.json}
 {
     "EventID" : "10811",
