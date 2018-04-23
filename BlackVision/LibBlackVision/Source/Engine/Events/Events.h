@@ -15,8 +15,10 @@
 
 // Include events headers
 #include "API/SceneEvent.h"
-
-
+#include "API/ProjectEvent.h"
+#include "API/InfoEvent.h"
+#include "API/CameraEvent.h"
+#include "API/LightEvent.h"
 
 
 
@@ -321,129 +323,6 @@ DEFINE_PTR_TYPE( AssetEvent )
 
 
 
-// ************************************* LightEvent *************************************
-class LightEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddLight,
-        RemoveLight,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType          m_sEventType;
-    static std::string              m_sEventName;
-public:
-    LightEvent::Command                SceneCommand;
-    std::string                     SceneName;
-    std::string                     LightType;
-    UInt32                            LightIndex;
-    std::string                     TimelinePath;
-
-public:
-    explicit                        LightEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-DECLARE_ENUM_SERIALIZATION( LightEvent::Command )
-DEFINE_PTR_TYPE( LightEvent )
-
-
-// ************************************* CameraEvent *************************************
-class CameraEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddCamera,
-        RemoveCamera,
-        SetCurrentCamera,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType          m_sEventType;
-    static std::string              m_sEventName;
-public:
-    CameraEvent::Command            CameraCommand;
-    std::string                     SceneName;
-    UInt32                          CameraIndex;
-    //std::string                     TimelinePath;
-
-public:
-    explicit                        CameraEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-DECLARE_ENUM_SERIALIZATION( CameraEvent::Command )
-DEFINE_PTR_TYPE( CameraEvent )
-
-
-// ************************************* SceneStructureEvent Event *************************************
-class NodeStructureEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddNode,
-        RemoveNode,
-        SetNodeVisible,
-        SetNodeInvisible,
-        SelectNode,
-        UnselectNodes,
-        RenameNode,
-        AttachNode,
-        DetachNode,
-        MoveNode,
-        CopyNode,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    
-    NodeStructureEvent::Command     SceneCommand;
-    std::string                     SceneName;
-    std::string                     NodePath;
-    std::string                     NewNodeName;
-    UInt32                            AttachIndex;
-    IDeserializer *                 Request;
-
-public:
-    explicit                        NodeStructureEvent    () { Request = nullptr; }
-                                    ~NodeStructureEvent   () { delete Request; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( NodeStructureEvent::Command )
-DEFINE_PTR_TYPE( NodeStructureEvent )
-
 
 // ************************************* PluginStructureEvent Event *************************************
 class PluginStructureEvent : public RemoteEvent
@@ -491,70 +370,6 @@ DECLARE_ENUM_SERIALIZATION( PluginStructureEvent::Command )
 DEFINE_PTR_TYPE( PluginStructureEvent )
 
 
-// ************************************* ProjectEvent Event *************************************
-class ProjectEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        NewProject,
-        LoadProject,
-        SetCurrentProject,
-        MoveProject,
-        DeleteProject,
-        RenameProject,
-
-        CreateFolder,
-        DeleteFolder,
-        RenameFolder,
-        MoveFolder,
-        CopyFolder,
-
-        AddExistingSceneToProject,
-        CreateSceneInProject,
-
-        SaveScene,
-        LoadScene,
-        RemoveScene,
-        CopyScene,
-        MoveScene,
-
-        SavePreset,
-        LoadPreset,
-        EditPreset,
-
-        CopyAsset,
-        MoveAsset,
-        RemoveAsset,
-        ImportAsset,
-
-        GenerateMeshThumbnail,//temp testing event
-
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    ProjectEvent::Command           ProjectCommand;
-    IDeserializer *                 Request;
-public:
-    explicit                        ProjectEvent   () { Request = nullptr; }
-                                    ~ProjectEvent   () { delete Request; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( ProjectEvent::Command )
-DEFINE_PTR_TYPE( ProjectEvent )
 
 
 // ************************************* Response Event *************************************
@@ -580,77 +395,6 @@ public:
 
 DEFINE_PTR_TYPE( ResponseEvent )
 
-    
-// ************************************* Information Event *************************************
-//
-class InfoEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        TreeStructure,
-        MinimalTreeStructure,
-        NodeInfo,
-        PluginInfo,
-        EffectInfo,
-        ParamInfo,
-        LogicInfo,
-        MinimalSceneInfo,
-        LightsInfo,
-        CamerasInfo,
-        ListParamDescriptors,
-        GetParamDescriptor,
-
-        ListSceneAssets,
-        ListProjectNames,
-        ListScenes,
-        ListPresets,
-        ListAssetsPaths,
-        ListCategoriesNames,
-        ListProjects,
-        ListAllScenes,
-        ListAllFolders,
-        ListResourcesInFolders,
-        ListAllResources,
-        GetAssetDescriptor,
-        GetAssetThumbnail,
-        GetSceneThumbnail,
-        GetPresetThumbnail,
-        GetPMItemStats,
-
-        Timelines,
-        CheckTimelineTime,
-        ListTimelineKeyframes,
-        ListTimelinesParams,
-
-        Performance,
-        Videocards,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    InfoEvent::Command          InfoCommand;
-    IDeserializer *             Request;
-
-public:
-    explicit                        InfoEvent   ()  { Request = nullptr; }
-                                    ~InfoEvent   () { delete Request; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( InfoEvent::Command )
-DEFINE_PTR_TYPE( InfoEvent )
 
 
 // ************************************* TimelineCmd *************************************

@@ -5576,6 +5576,12 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\SceneEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\ProjectEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\InfoEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
