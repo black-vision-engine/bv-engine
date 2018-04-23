@@ -37,7 +37,8 @@ We implement Cosine-like curves just as Bezier curves with vectors parallel to O
 
 @subsection PolynomialCurves Polynomial curves
 
-We have several pre-defined curve types that are special case of polynomial curves. They are sometimes called "easing functions".
+We have several pre-defined curve types that are special case of polynomial curves. They are sometimes called "easing functions". (see http://easings.net/en for details)
+
 We support following curves:
 - CT_CUBIC_IN,
 - CT_CUBIC_OUT,
