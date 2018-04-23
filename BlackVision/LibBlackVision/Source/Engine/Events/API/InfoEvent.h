@@ -17,7 +17,7 @@ namespace bv
 
 - @ref InfoEvent_Commands_TreeStructure "TreeStructure"
 - @ref InfoEvent_Commands_TreeStructure "MinimalTreeStructure"
-- NodeInfo
+- @ref InfoEvent_Commands_NodeInfo "NodeInfo"
 - PluginInfo
 - EffectInfo
 - ParamInfo
@@ -92,6 +92,25 @@ Query <b>MinimalSceneInfo</b>:
 @endcode
 
 @ref InforEvent_MinimalSceneStructure_ExampleResponse "Example Response"
+
+@subsection InfoEvent_Commands_NodeInfo NodeInfo
+
+Gets single Node full information.
+
+@code{.json}
+{
+    "EventID" : "10713",
+    "Event" : "InfoEvent",
+    "Command" : "NodeInfo",
+    "Request" : 
+    {
+        "SceneName" : "Shapes2D_Examples.scn",
+        "NodePath" : "#0"
+    }
+}
+@endcode
+
+@ref InfoEvent_NodeInfo_ExampleResponse "Example Response"
 
 
 */
@@ -171,6 +190,211 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+/**@page InfoEvent_NodeInfo_ExampleResponse InfoEvent NodeInfo command example response:
+
+@code{.json}
+{
+   "EventID" : "2147483647",
+   "NodePath" : "#0",
+   "SceneName" : "Shapes2D_Examples.scn",
+   "Success" : "true",
+   "cmd" : "NodeInfo",
+   "node" : {
+      "id" : "32",
+      "logic" : {
+         "params" : [],
+         "type" : "NodeVisibilityAnimation"
+      },
+      "name" : "root",
+      "plugins" : [
+         {
+            "name" : "transform",
+            "params" : [
+               {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           },
+                           {
+                              "curve_type" : "linear",
+                              "interpolations" : [],
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ],
+                              "postMethod" : "clamp",
+                              "preMethod" : "clamp"
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            ],
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "uid" : "DEFAULT_TRANSFORM"
+         }
+      ],
+      "visible" : "true"
+   }
+}
+@endcode
+
+*/
+
 
 
 /**@page InfoEvent_MinimalTreeStructure_ExampleResponse InfoEvent MinimalTreeStructure command example response:

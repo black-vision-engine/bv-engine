@@ -11,7 +11,7 @@
 - @ref API_AtachNode "Attaching detached Nodes"
 - @ref NodeStructureEvent_Commands_MoveNode "Moving Nodes"
 - @ref NodeStructureEvent_Commands_CopyNode "Coping Nodes"
-- @ref API_NodeInfo "Quering Nodes information"
+- @ref InfoEvent_Commands_NodeInfo "Quering Node information"
 
 
 
