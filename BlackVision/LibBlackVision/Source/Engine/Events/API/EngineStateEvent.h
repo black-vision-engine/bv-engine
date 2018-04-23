@@ -46,7 +46,7 @@ List mapping between @ref Scenes "Scenes" and @ref RenderChannels "Render Channe
 {
    "ChannelsMapping" : [
       {
-         "ChannelIdx" : "1",
+         "ChannelIdx" : "2",
          "SceneName" : "FlowerChannel2.scn"
       },
       {
