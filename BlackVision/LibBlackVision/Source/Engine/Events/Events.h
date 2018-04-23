@@ -19,7 +19,9 @@
 #include "API/InfoEvent.h"
 #include "API/CameraEvent.h"
 #include "API/LightEvent.h"
+#include "API/NodeStructureEvent.h"
 #include "API/NodeLogicEvent.h"
+#include "API/PluginsStructureEvent.h"
 
 
 
@@ -320,55 +322,6 @@ public:
 
 DECLARE_ENUM_SERIALIZATION( AssetEvent::Command )
 DEFINE_PTR_TYPE( AssetEvent )
-
-
-
-
-
-// ************************************* PluginStructureEvent Event *************************************
-class PluginStructureEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddPlugin,
-        RemovePlugin,
-        AttachPlugin,
-        DetachPlugin,
-        CopyPlugin,
-        MovePlugin,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    PluginStructureEvent::Command   PluginCommand;
-    std::string                     NodePath;
-    std::string                     SceneName;
-    std::string                     PluginName;
-    std::string                     PluginUID;
-    std::string                     TimelinePath;
-    unsigned int                    AttachIndex;
-    IDeserializer *                 Request;
-
-public:
-    explicit                        PluginStructureEvent    () { Request = nullptr; }
-                                    ~PluginStructureEvent   () { delete Request; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( PluginStructureEvent::Command )
-DEFINE_PTR_TYPE( PluginStructureEvent )
 
 
 

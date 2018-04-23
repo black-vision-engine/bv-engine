@@ -18,7 +18,7 @@ namespace bv
 - @ref InfoEvent_Commands_TreeStructure "TreeStructure"
 - @ref InfoEvent_Commands_TreeStructure "MinimalTreeStructure"
 - @ref InfoEvent_Commands_NodeInfo "NodeInfo"
-- PluginInfo
+- @ref InfoEvent_Commands_PluginInfo "PluginInfo"
 - EffectInfo
 - ParamInfo
 - @ref InfoEvent_Commands_LogicInfo "LogicInfo"
@@ -168,6 +168,25 @@ Gets information about logic.
 
 @ref InfoEvent_LogicInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_PluginInfo PluginInfo
+
+Gets information about single Plugin.
+
+@code{.json}
+{
+	"Event" : "InfoEvent",
+	"EventID" : "1",
+	"Command" : "PluginInfo",
+	"Request" : 
+	{
+		"SceneName" : "Shapes2D_Examples.scn",
+		"NodePath" : "#0/#0/#0",
+		"PluginName" : "circle"
+	}
+}
+@endcode
+
+@ref InfoEvent_PluginInfo_ExampleResponse "Example Response"
 
 
 */
@@ -248,6 +267,113 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 }	// bv
 
+
+/**@page InfoEvent_PluginInfo_ExampleResponse InfoEvent PluginInfo command example response:
+
+@code{.json}
+{
+   "EventID" : "1",
+   "NodePath" : "#0/#0/#0",
+   "SceneName" : "Shapes2D_Examples.scn",
+   "Success" : "true",
+   "cmd" : "PluginInfo",
+   "plugin" : {
+      "name" : "circle",
+      "params" : [
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "1.000000"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "outer radius",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "0.500000"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "inner radius",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "360.000000"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "open angle",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "point",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "78"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "tesselation",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "int"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "point",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "0"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "open angle mode",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "enum"
+         }
+      ],
+      "timeline" : "Shapes2D_Examples.scn%default",
+      "uid" : "DEFAULT_CIRCLE"
+   }
+}
+@endcode
+
+
+*/
 
 
 /**@page InfoEvent_LogicInfo_ExampleResponse InfoEvent LogicInfo command example response:

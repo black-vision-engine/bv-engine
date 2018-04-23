@@ -1,0 +1,12 @@
+/**@page API_PluginsManipulation Plugins manipulation API
+
+- @ref PluginStructureEvent_Commands_AddPlugin "Adding Plugins"
+- @ref PluginStructureEvent_Commands_RemovePlugin "Removing Plugins"
+- @ref PluginStructureEvent_Commands_AttachingDetaching "Attaching Plugins"
+- @ref PluginStructureEvent_Commands_AttachingDetaching "Detaching Plugins"
+- @ref PluginStructureEvent_Commands_CopyPlugin "Coping Plugins"
+- @ref PluginStructureEvent_Commands_MovePlugin "Moving Plugins"
+- @ref InfoEvent_LogicInfo_ExampleResponse "Quering Plugin information"
+
+
+*/

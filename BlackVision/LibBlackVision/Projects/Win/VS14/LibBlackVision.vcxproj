@@ -688,7 +688,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\AssignTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\DeleteTimelineOperation.h" />
     <ClInclude Include="..\..\..\Source\Engine\Editors\UndoRedo\Timelines\RenameTimelineOperation.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\CameraEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\InfoEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\LightEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeLogicEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeStructureEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\ProjectEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\SceneEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h" />
