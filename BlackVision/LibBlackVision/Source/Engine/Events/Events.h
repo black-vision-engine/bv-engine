@@ -395,55 +395,6 @@ DECLARE_ENUM_SERIALIZATION( CameraEvent::Command )
 DEFINE_PTR_TYPE( CameraEvent )
 
 
-// ************************************* SceneStructureEvent Event *************************************
-class NodeStructureEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddNode,
-        RemoveNode,
-        SetNodeVisible,
-        SetNodeInvisible,
-        SelectNode,
-        UnselectNodes,
-        RenameNode,
-        AttachNode,
-        DetachNode,
-        MoveNode,
-        CopyNode,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    
-    NodeStructureEvent::Command     SceneCommand;
-    std::string                     SceneName;
-    std::string                     NodePath;
-    std::string                     NewNodeName;
-    UInt32                            AttachIndex;
-    IDeserializer *                 Request;
-
-public:
-    explicit                        NodeStructureEvent    () { Request = nullptr; }
-                                    ~NodeStructureEvent   () { delete Request; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( NodeStructureEvent::Command )
-DEFINE_PTR_TYPE( NodeStructureEvent )
-
 
 // ************************************* PluginStructureEvent Event *************************************
 class PluginStructureEvent : public RemoteEvent

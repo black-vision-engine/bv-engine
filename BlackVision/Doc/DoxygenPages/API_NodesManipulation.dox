@@ -2,15 +2,15 @@
 
 @section API_NodesManipulation_NodesFunctionalitiesList Nodes API functionalities list
 
-- @ref API_AddNode "Adding Nodes"
-- @ref API_RemoveNode "Removing Nodes"
-- @ref API_SetNodeVisible "Make Node visible"
-- @ref API_SetNodeInvisible "Make Node invisible"
-- @ref API_RenameNode "Renaming Nodes"
+- @ref NodeStructureEvent_Commands_AddNode "Adding Nodes"
+- @ref NodeStructureEvent_Commands_RemoveNode "Removing Nodes"
+- @ref NodeStructureEvent_Commands_Visibility "Make Node visible"
+- @ref NodeStructureEvent_Commands_Visibility "Make Node invisible"
+- @ref NodeStructureEvent_Commands_RenameNode "Renaming Nodes"
 - @ref API_DetachNode "Detaching Nodes"
 - @ref API_AtachNode "Attaching detached Nodes"
-- @ref API_ModeNode "Moving Nodes"
-- @ref API_CopyNode "Coping Nodes"
+- @ref NodeStructureEvent_Commands_MoveNode "Moving Nodes"
+- @ref NodeStructureEvent_Commands_CopyNode "Coping Nodes"
 - @ref API_NodeInfo "Quering Nodes information"
 
 
