@@ -1,0 +1,15 @@
+/**@page EffectDefault Default Effect
+
+@section Description
+
+Renders node in a normal way.
+
+@section EffectDefaultParameters Parameters
+
+There are no parameters here.
+
+@section APIControl API control
+
+You cannot control this Effect in any way.
+
+*/

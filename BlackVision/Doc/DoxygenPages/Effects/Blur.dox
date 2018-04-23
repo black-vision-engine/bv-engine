@@ -4,7 +4,7 @@
 
 Applies blur to node's subtree.
 
-@section Parameters
+@section EffectBlurParameters Parameters
 
 Parameter name         	| Type      	| Default Value     | Description
 ----------------------- | -------------	| ----------------- | -----------
@@ -12,7 +12,7 @@ blurSize             	| float         | 0                 | Size of blur in pixe
 normalize             	| int (0 or 1)	| 1                 | Decides if we normalize after blur.
 blurKernelType			| int      		| 0               	| 0 - box, 1 - triangle, 2 - gaussian, 3 - more gauss
 
-@section API control
+@section APIControl API control
 
 You can manipulate the blur by changing parameters with @ref API_Parameters "Parameters API".
 

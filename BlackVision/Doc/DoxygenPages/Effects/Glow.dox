@@ -1,0 +1,23 @@
+/**@page EffectGlow Glow Effect
+
+@section Description
+
+Applies glow to node's subtree.
+
+@section EffectGlowParameters Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+color					| vec4			| (1,0,0,1)			| 
+blurSize				| float			| 					| 
+blurKernelType			| int			| 0-3				|
+normalize				| bool			| true				| 
+inner					| bool			| false				| 
+outer					| bool	        | true              | 
+glowStrength
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/
