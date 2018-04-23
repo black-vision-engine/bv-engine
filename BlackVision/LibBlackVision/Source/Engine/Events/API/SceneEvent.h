@@ -160,9 +160,11 @@ Assigns @ref Scenes "Scene" to one of 4 RenderChannels.
     "EventID" : "0",
     "Command" : "SetOutputChannel",
     "SceneName" : "Shapes2D_Examples.scn",
-    "AttachIndex" : "7"
+    "AttachIndex" : "1"
 }
 @endcode
+
+@todo Add maximal RenderChannel index check.
 
 */
 class SceneEvent : public RemoteEvent

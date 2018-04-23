@@ -33,7 +33,7 @@ namespace bv
 - RemoveScene
 - CopyScene
 - MoveScene
-- SavePreset
+- @ref ProjectEvent_Commands_SavePreset "SavePreset"
 - LoadPreset
 - EditPreset
 - CopyAsset
@@ -76,6 +76,70 @@ Loads scene from Project Manager directory.
     "Request" :
     {
         "sceneName" : "Shapes2D_Examples.scn"
+    }
+}
+@endcode
+
+@subsection ProjectEvent_Commands_SavePreset Creating Presets
+
+Creates preset from chosen Node.
+
+Parameter name         	| Type          | Description
+----------------------- | ------------- | -----------
+SceneName               | string        | From this Scene Node will be saved as preset.
+DestPath                | string        | Path of Preset inside ProjectManager directory.
+NodePath                | string        | Path to the Node which will be saved as preset.
+ProjectName             | string        | Add Preset to this project. Leave empty.
+
+
+
+@code{.json}
+{
+    "EventID" : "10548",
+    "Event" : "ProjectEvent",
+    "Command" : "SavePreset",
+    "Request" : 
+    {
+        "SceneName" : "Shapes2D_Examples.scn",
+        "DestPath" : "/Flower.bvpreset",
+        "NodePath" : "#0/#2",
+        "ProjectName" : ""
+    }
+}
+@endcode
+
+@subsection ProjectEvent_Commands_LoadPreset Loading Presets
+
+Loads preset and adds as child of chosen Node.
+
+@code{.json}
+{
+    "EventID" : "10566",
+    "Event" : "ProjectEvent",
+    "Command" : "LoadPreset",
+    "Request" : 
+    { 
+        "SceneName" : "Shapes2D_Examples.scn",
+        "Path" : "Flower.bvpreset",
+        "NodePath" : "#0",
+        "ProjectName" : ""
+    }
+}
+@endcode
+
+@subsection ProjectEvent_Commands_EditPreset Editting Presets
+
+Load preset as separate scene to edit it.
+
+@code{.json}
+{
+    "EventID" : "10548",
+    "Event" : "ProjectEvent",
+    "Command" : "EditPreset",
+    "Request" : 
+    {
+        "Path" : "/Flower.bvpreset",
+        "ProjectName" : ""
     }
 }
 @endcode
