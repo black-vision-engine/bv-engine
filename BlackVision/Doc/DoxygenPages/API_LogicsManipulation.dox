@@ -1,0 +1,8 @@
+/**@page API_LogicsManipulation Logics API commands
+
+- @ref NodeLogicEvent_Commands_AddNodeLogic "Adding Node Logic"
+- @ref NodeLogicEvent_Commands_DeleteNodeLogic "Removing Node Logic"
+- @ref NodeLogicEvent_Commands_LogicAction "Custom Logic Commands"
+- @ref InfoEvent_Commands_LogicInfo "Query Logic information"
+
+*/

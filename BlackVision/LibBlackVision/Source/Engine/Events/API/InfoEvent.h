@@ -21,7 +21,7 @@ namespace bv
 - PluginInfo
 - EffectInfo
 - ParamInfo
-- LogicInfo
+- @ref InfoEvent_Commands_LogicInfo "LogicInfo"
 - @ref InfoEvent_Commands_TreeStructure "MinimalSceneInfo"
 - @ref InfoEvent_Commands_LightsInfo "LightsInfo"
 - CamerasInfo
@@ -149,6 +149,26 @@ Gets information about all Lights in @ref Scenes "Scene".
 
 @ref InfoEvent_LightsInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_LogicInfo LogicInfo
+
+Gets information about logic.
+
+@code{.json}
+{
+    "EventID" : "10713",
+    "Event" : "InfoEvent",
+    "Command" : "LogicInfo",
+    "Request" : 
+    {
+        "SceneName" : "Shapes2D_Examples.scn",
+        "NodeName" : "#0/#0"
+    }
+}
+@endcode
+
+@ref InfoEvent_LogicInfo_ExampleResponse "Example Response"
+
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -227,6 +247,96 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+
+
+/**@page InfoEvent_LogicInfo_ExampleResponse InfoEvent LogicInfo command example response:
+
+@code{.json}
+{
+   "EventID" : "10713",
+   "NodePath" : "#0/#0",
+   "SceneName" : "Shapes2D_Examples.scn",
+   "Success" : "true",
+   "cmd" : "LogicInfo",
+   "logic" : {
+      "params" : [
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "5.000000"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "MaxHeight",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "5.000000"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "MaxWidth",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "5.000000"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "MaxDepth",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "point",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "false"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "IsProportional",
+            "timeline" : "Shapes2D_Examples.scn%default",
+            "type" : "bool"
+         }
+      ],
+      "type" : "MaxSize"
+   }
+}
+
+@endcode
+
+*/
 
 
 /**@page InfoEvent_LightsInfo_ExampleResponse InfoEvent LightsInfo command example response:

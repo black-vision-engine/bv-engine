@@ -19,6 +19,7 @@
 #include "API/InfoEvent.h"
 #include "API/CameraEvent.h"
 #include "API/LightEvent.h"
+#include "API/NodeLogicEvent.h"
 
 
 
@@ -539,45 +540,6 @@ public:
 
 DECLARE_ENUM_SERIALIZATION( VideoDecoderEvent::Command )
 DEFINE_PTR_TYPE( VideoDecoderEvent )
-
-
-// ************************************* NodeLogicEvent *************************************
-class NodeLogicEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddNodeLogic,
-        DeleteNodeLogic,
-        LogicAction,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    Command                     WidgetCommand;
-    std::string                 NodeName;
-    std::string                 SceneName;
-    IDeserializer *             Action;
-
-public:
-    explicit                        NodeLogicEvent            (){ Action = nullptr; }
-                                    ~NodeLogicEvent            (){ delete Action; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( NodeLogicEvent::Command )
-DEFINE_PTR_TYPE( NodeLogicEvent )
 
 
 // ************************************* VideoCardEvent *************************************

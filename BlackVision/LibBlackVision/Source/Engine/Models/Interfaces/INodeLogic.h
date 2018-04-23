@@ -48,6 +48,10 @@ Commands executed in events update phase of engine, that means that this happens
 Each Logic defines own set of parameters, which can be used like in plugins.
 Check how to set parameters through API @ref API_Parameters "here".
 
+@subsection NodeLogics_APIFunctionalities Logics API commands
+
+@copydoc API_LogicsManipulation
+
 @see LogicsList, bv::model::INodeLogic
 */
 
