@@ -23,7 +23,7 @@ namespace bv
 - ParamInfo
 - LogicInfo
 - @ref InfoEvent_Commands_TreeStructure "MinimalSceneInfo"
-- LightsInfo
+- @ref InfoEvent_Commands_LightsInfo "LightsInfo"
 - CamerasInfo
 - ListParamDescriptors
 - GetParamDescriptor
@@ -131,6 +131,24 @@ parameters and index of current Camera.
 
 @ref InfoEvent_CamerasInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_LightsInfo LightsInfo
+
+Gets information about all Lights in @ref Scenes "Scene".
+
+@code{.json}
+{
+    "EventID" : "10713",
+    "Event" : "InfoEvent",
+    "Command" : "LightsInfo",
+    "Request" : 
+    {
+        "SceneName" : "Shapes2D_Examples.scn"
+    }
+}
+@endcode
+
+@ref InfoEvent_LightsInfo_ExampleResponse "Example Response"
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -209,6 +227,235 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+
+/**@page InfoEvent_LightsInfo_ExampleResponse InfoEvent LightsInfo command example response:
+
+@code{.json}
+{
+   "EventID" : "10713",
+   "SceneName" : "Shapes2D_Examples.scn",
+   "Success" : "true",
+   "cmd" : "LightsInfo",
+   "lights" : [
+      {
+         "params" : [
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "1.000000, 1.000000, 1.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "color",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "direction",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "position",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "1.000000, 0.000000, 0.020000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "attenuation",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "100.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "cutOff",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "point",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "10"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "exponent",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "int"
+            }
+         ],
+         "type" : "spot"
+      },
+      {
+         "params" : [
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "1.000000, 1.000000, 1.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "color",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "direction",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "0.000000, 0.000000, 0.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "position",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "1.000000, 0.000000, 0.020000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "attenuation",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "vec3"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "linear",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "100.000000"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "cutOff",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "float"
+            },
+            {
+               "interpolator" : {
+                  "curve_type" : "point",
+                  "interpolations" : [],
+                  "keys" : [
+                     {
+                        "time" : "0.000000",
+                        "val" : "10"
+                     }
+                  ],
+                  "postMethod" : "clamp",
+                  "preMethod" : "clamp"
+               },
+               "name" : "exponent",
+               "timeline" : "Shapes2D_Examples.scn%default",
+               "type" : "int"
+            }
+         ],
+         "type" : "spot"
+      }
+   ]
+}
+@endcode
+*/
 
 
 /**@page InfoEvent_CamerasInfo_ExampleResponse InfoEvent CamerasInfo command example response:
