@@ -16,11 +16,16 @@
 
 /**@page NodeEffects Effects
 
+@section Description
 You may think of effect as a way to change the normal rendering procedure.
 
-You can achieve different 
-@copydoc API_EffectsManipulation
+@section Examples
+Examples of usage:
+- change order of rendering (see eg. @ref ZSortEffect)
+- use additonal Render Targets
 
+@section NodeEffectsAPIManipulation API Manipulation
+@copydoc API_EffectsManipulation
 
 @see bv::model::IModelNodeEffect
 */
