@@ -5594,6 +5594,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeLogicEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\PluginsStructureEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\GlobalEffectEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\EngineStateEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
