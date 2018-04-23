@@ -22,6 +22,7 @@
 #include "API/NodeStructureEvent.h"
 #include "API/NodeLogicEvent.h"
 #include "API/PluginsStructureEvent.h"
+#include "API/GlobalEffectEvent.h"
 
 
 
@@ -596,47 +597,6 @@ public:
 
 DECLARE_ENUM_SERIALIZATION( EngineStateEvent::Command )
 DEFINE_PTR_TYPE( EngineStateEvent )
-
-
-// ************************************* GlobalEffectEvent *************************************
-class GlobalEffectEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        SetGlobalEffect,
-        LoadGlobalEffectAsset,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-    GlobalEffectEvent::Command      EffectCommand;
-    std::string                     NodePath;
-    std::string                     SceneName;
-    std::string                     EffectName;
-    std::string                     TimelinePath;
-    IDeserializer *                 AssetData;
-    IDeserializer *                 Request;
-
-public:
-    explicit                        GlobalEffectEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( GlobalEffectEvent::Command )
-DEFINE_PTR_TYPE( GlobalEffectEvent )
 
 
 // ************************************* TimelineKeyframeEvent *************************************

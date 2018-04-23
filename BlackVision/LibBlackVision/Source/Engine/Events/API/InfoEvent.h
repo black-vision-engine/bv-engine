@@ -24,7 +24,7 @@ namespace bv
 - @ref InfoEvent_Commands_LogicInfo "LogicInfo"
 - @ref InfoEvent_Commands_TreeStructure "MinimalSceneInfo"
 - @ref InfoEvent_Commands_LightsInfo "LightsInfo"
-- CamerasInfo
+- @ref InfoEvent_CamerasInfo_ExampleResponse "CamerasInfo"
 - ListParamDescriptors
 - GetParamDescriptor
 - ListSceneAssets
@@ -188,6 +188,25 @@ Gets information about single Plugin.
 
 @ref InfoEvent_PluginInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_EffectInfo EffectInfo
+
+Gets information about @ref Effects "Effect".
+
+@code{.json}
+{
+	"Event" : "InfoEvent",
+	"EventID" : "1",
+	"Command" : "EffectInfo",
+	"Request" : 
+	{
+		"SceneName" : "BluredShapes.scn",
+		"NodePath" : "#0/#0"
+	}
+}
+@endcode
+
+@ref InfoEvent_EffectInfo_ExampleResponse "Example Response"
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -266,6 +285,95 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+
+/**@page InfoEvent_EffectInfo_ExampleResponse InfoEvent EffectInfo command example response:
+
+@code{.json}
+{
+   "EventID" : "1",
+   "NodePath" : "#0/#0",
+   "SceneName" : "BluredShapes.scn",
+   "Success" : "true",
+   "cmd" : "EffectInfo",
+   "effect" : {
+      "numRequiredAssets" : "0",
+      "params" : [
+         {
+            "interpolator" : {
+               "curve_type" : "linear",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "20.799999"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "blurSize",
+            "timeline" : "BluredShapes.scn",
+            "type" : "float"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "point",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "2"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "blurKernelType",
+            "timeline" : "BluredShapes.scn",
+            "type" : "int"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "point",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "true"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "normalize",
+            "timeline" : "BluredShapes.scn",
+            "type" : "bool"
+         },
+         {
+            "interpolator" : {
+               "curve_type" : "point",
+               "interpolations" : [],
+               "keys" : [
+                  {
+                     "time" : "0.000000",
+                     "val" : "true"
+                  }
+               ],
+               "postMethod" : "clamp",
+               "preMethod" : "clamp"
+            },
+            "name" : "effectIsEnabled",
+            "timeline" : "BluredShapes.scn",
+            "type" : "bool"
+         }
+      ],
+      "type" : "blur"
+   }
+}
+@endcode
+
+*/
 
 
 /**@page InfoEvent_PluginInfo_ExampleResponse InfoEvent PluginInfo command example response:

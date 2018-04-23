@@ -18,7 +18,7 @@
 
 You may think of effect as a way to change the normal rendering procedure.
 
-@copydoc Effect
+@copydoc API_EffectsManipulation
 
 @see bv::model::IModelNodeEffect
 */
