@@ -9,6 +9,8 @@
 
 /**@page Assets Assets
 
+[TOC]
+
 @section Assets_General General
 
 Assets are used to load external (not generated) content like:
@@ -43,8 +45,14 @@ Serialized descriptors below contain content returned by @ref InfoEvent_Commands
 Some values aren't required to load asset and exist only to inform editor about asset being loaded.
 
 @subsection Assets_List_Texture Texture Asset
-
 @copydetails bv::TextureAsset
+
+@subsection Assets_List_Font2D Font 2D Asset
+@copydetails bv::FontAsset2D
+
+@subsection Assets_List_Font3D Font 3D Asset
+@copydetails bv::FontAsset3D
+
 */
 
 
