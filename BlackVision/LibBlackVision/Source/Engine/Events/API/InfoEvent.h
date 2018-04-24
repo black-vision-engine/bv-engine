@@ -251,6 +251,28 @@ Note that <b>CategoryName</b> is Asset descriptor UID not category name like in 
 
 @ref InfoEvent_ListSceneAssets_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_GetAssetDescriptor GetAssetDescriptor
+
+Gets @ref AssetDesc "AssetDescriptor" template for choosen @ref Assets "Asset".
+Categories names can be listed with @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames" command.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "GetAssetDescriptor",
+    "Request" :
+    {
+        "categoryName" : "textures",
+        "projectName" : "",
+        "path" : "crystal.jpg"
+    }
+}
+@endcode
+
+@ref InfoEvent_GetAssetDescriptor_ExampleResponse "Example Response"
+
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -330,6 +352,31 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 }	// bv
 
+/**@page InfoEvent_GetAssetDescriptor_ExampleResponse InfoEvent GetAssetDescriptor command example response:
+
+@code{.json}
+{
+   "AssetData" : {
+      "asset" : {
+         "estimatedMemoryUsage" : "18009000",
+         "filter" : "none",
+         "height" : "2001",
+         "loading_type" : "ONLY_ORIGINAL",
+         "path" : "textures\\crystal.jpg",
+         "type" : "TEXTURE_ASSET_DESC",
+         "width" : "3000"
+      }
+   },
+   "EventID" : "213",
+   "Success" : "true",
+   "categoryName" : "textures",
+   "cmd" : "GetAssetDescriptor",
+   "path" : "crystal.jpg",
+   "projectName" : ""
+}
+@endcode
+
+*/
 
 /**@page InfoEvent_ListSceneAssets_ExampleResponse InfoEvent ListSceneAssets command example response:
 
