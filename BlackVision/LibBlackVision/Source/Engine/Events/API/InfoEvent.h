@@ -32,7 +32,7 @@ namespace bv
 - ListScenes
 - ListPresets
 - ListAssetsPaths
-- ListCategoriesNames
+- @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames"
 - ListProjects
 - ListAllScenes
 - ListAllFolders
@@ -207,6 +207,50 @@ Gets information about @ref Effects "Effect".
 
 @ref InfoEvent_EffectInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_ListCategoriesNames ListCategoriesNames
+
+Lists assets categories.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListCategoriesNames",
+    "Request" : {}
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Success" : "true",
+   "cmd" : "ListCategoriesNames",
+   "list" : [ "audio", "fonts", "meshes", "sequences", "svgs", "textures", "video" ]
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListSceneAssets ListSceneAssets
+
+Lists all assets used in loaded @ref scenes "Scenes" of selected category.
+Note that <b>CategoryName</b> is Asset descriptor UID not category name like in event @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames".
+@todo Fix this inconsistency in future versions.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListSceneAssets",
+    "Request" :
+    {
+        "CategoryName" : "TEXTURE_ASSET_DESC"
+    }
+}
+@endcode
+
+@ref InfoEvent_ListSceneAssets_ExampleResponse "Example Response"
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -285,6 +329,35 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+
+/**@page InfoEvent_ListSceneAssets_ExampleResponse InfoEvent ListSceneAssets command example response:
+
+Example created with scene <b>Textures_Example</b> loaded.
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Success" : "true",
+   "assets" : [
+      {
+         "filter" : "bilinear",
+         "loading_type" : "GENERATE_MIPMAPS",
+         "path" : "textures/ice-surface.jpg",
+         "type" : "TEXTURE_ASSET_DESC"
+      },
+      {
+         "filter" : "bilinear",
+         "loading_type" : "GENERATE_MIPMAPS",
+         "path" : "textures/snowflakes.jpg",
+         "type" : "TEXTURE_ASSET_DESC"
+      }
+   ],
+   "cmd" : "ListSceneAssets"
+}
+@endcode
+
+*/
 
 
 /**@page InfoEvent_EffectInfo_ExampleResponse InfoEvent EffectInfo command example response:

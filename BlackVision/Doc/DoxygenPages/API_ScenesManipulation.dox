@@ -19,7 +19,7 @@
 - @ref EngineStateEvent_Commands_ListChannelsMapping "List Scenes Render Channels"
 - @ref InfoEvent_Commands_TreeStructure "List Scenes with full tree structure"
 - @ref InfoEvent_Commands_TreeStructure "List Scenes with minimal tree structure info"
-- @ref API_ListSceneAssets "List assets used in all Scenes"
+- @ref InfoEvent_Commands_ListSceneAssets "List assets used in all Scenes"
 - @ref InfoEvent_Commands_TreeStructure "Return tree structure of single Scene"
 
 */
