@@ -693,6 +693,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\LightEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeLogicEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeStructureEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\ParamKeyEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\ProjectEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\SceneEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h" />

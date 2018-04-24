@@ -23,7 +23,7 @@
 #include "API/NodeLogicEvent.h"
 #include "API/PluginsStructureEvent.h"
 #include "API/GlobalEffectEvent.h"
-
+#include "API/ParamKeyEvent.h"
 
 
 namespace bv {
@@ -195,55 +195,6 @@ public:
 
 DECLARE_ENUM_SERIALIZATION( LoadAssetEvent::Command )
 DEFINE_PTR_TYPE( LoadAssetEvent )
-
-
-// ************************************* ParamKeyEvent *************************************
-class ParamKeyEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddKey,
-        RemoveKey,
-        MoveKey,
-        SetInterpolatorType,
-        SetAddedInterpolatorType,
-        SetInterpolatorPreWrapMethod,
-        SetInterpolatorPostWrapMethod,
-        AssignTimeline,
-        SampleCurve,
-        ListKeys,
-        ListParameters,
-        Fail            ///< Wrong command
-    } Command;
-
-
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    
-    ParameterAddress                ParamAddress;
-    std::string                     Value;
-
-    float                           Time;
-    ParamKeyEvent::Command          ParamCommand;
-
-public:
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-
-    virtual EventType               GetEventType        () const;
-    virtual const std::string &     GetName             () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-};
-
-DECLARE_ENUM_SERIALIZATION( ParamKeyEvent::Command )
-DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
 // ************************************* ParamDescriptorEvent *************************************

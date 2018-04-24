@@ -1,0 +1,17 @@
+/**@page API_Parameters
+
+@section API_Parameters_ParametersFunctionalitiesList Parameters Functionalities List
+
+- @ref ParamKeyEvent_Commands_AddKey "Adding or updating a key"
+- @ref ParamKeyEvent_Commands_RemoveKey "Removing a key"
+- @ref ParamKeyEvent_Commands_MoveKey "Moving a key"
+- @ref ParamKeyEvent_Commands_SetInterpolatorType "Setting an interpolator type of whole curve"
+- @ref ParamKeyEvent_Commands_SetAddedInterpolatorType "Setting next added interpolator type"
+- @ref ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod "Setting interpolator's pre-wrap method"
+- @ref ParamKeyEvent_Commands_SetInterpolatorPostWrapMethod "Setting interpolator's post-wrap method"
+- @ref ParamKeyEvent_Commands_AssignTimeline "Assigning timeline to a parameter"
+- @ref ParamKeyEvent_Commands_SampleCurve "Evaluating parameter"
+- @ref ParamKeyEvent_Commands_ListKeys "Listing all curve's keyframes"
+- @ref ParamKeyEvent_Commands_ListParameters "Listing parameters"
+
+*/

@@ -5594,6 +5594,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeLogicEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\ParamKeyEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
