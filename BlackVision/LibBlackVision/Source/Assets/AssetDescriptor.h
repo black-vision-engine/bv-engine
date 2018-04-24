@@ -13,7 +13,7 @@ namespace bv
 
 
 /**@brief Base Asset Descriptor class
-@ingroup Model*/
+@ingroup Assets*/
 class AssetDesc : public ISerializable
 {
 protected:

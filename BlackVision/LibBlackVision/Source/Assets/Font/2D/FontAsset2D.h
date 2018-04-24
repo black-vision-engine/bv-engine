@@ -15,7 +15,8 @@ DEFINE_CONST_PTR_TYPE( FontAsset2D )
 
 
 // *******************************
-// Implements font asset with full size atlas and all its mimmaps.
+/// Implements font asset with full size atlas and all its mimmaps.
+/// @ingroup Assets
 class FontAsset2D : public FontAsset, public std::enable_shared_from_this< FontAsset2D >
 {
     static const std::string		uid;

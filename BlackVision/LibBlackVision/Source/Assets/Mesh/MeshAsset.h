@@ -14,6 +14,10 @@ DEFINE_PTR_TYPE( MeshAsset )
 DEFINE_CONST_PTR_TYPE( MeshAsset )
 
 
+
+
+/**@brief Mesh asset.
+@ingroup Assets*/
 class MeshAsset : public Asset, public std::enable_shared_from_this< MeshAsset >
 {
 

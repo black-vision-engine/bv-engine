@@ -15,6 +15,7 @@ namespace bv
 
 @section InfoEvent_Commands Commands
 
+This event supports following commands:
 - @ref InfoEvent_Commands_TreeStructure "TreeStructure"
 - @ref InfoEvent_Commands_TreeStructure "MinimalTreeStructure"
 - @ref InfoEvent_Commands_NodeInfo "NodeInfo"
@@ -253,7 +254,7 @@ Note that <b>CategoryName</b> is Asset descriptor UID not category name like in 
 
 @subsection InfoEvent_Commands_GetAssetDescriptor GetAssetDescriptor
 
-Gets @ref AssetDesc "AssetDescriptor" template for choosen @ref Assets "Asset".
+Gets @ref bv::AssetDesc "AssetDescriptor" template for choosen @ref Assets "Asset".
 Categories names can be listed with @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames" command.
 
 @code{.json}

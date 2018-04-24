@@ -29,14 +29,22 @@ Assets are used to load external (not generated) content like:
 To load asset, external tool must send asset descriptor. Asset descriptor contains resource location
 and other information needed to process this asset.
 
-The best way to create @ref AssetDesc "AssetDescriptor", is to use @ref InfoEvent_Commands_GetAssetDescriptor "GetAssetDescriptor" command.
-It returns chosen @ref AssetDesc "AssetDescriptor" template. This template is filled with default values. External tool should override
+The best way to create @ref bv::AssetDesc "AssetDescriptor", is to use @ref InfoEvent_Commands_GetAssetDescriptor "GetAssetDescriptor" command.
+It returns chosen @ref bv::AssetDesc "AssetDescriptor" template. This template is filled with default values. External tool should override
 what's necessary.
 
 @subsection Assets_Loading_LoadingCommands Loading commands
 
+To load asset to @ref Plugins "Plugin", you must send @ref LoadAssetEvent_Commands_LoadAsset "LoadAsset" command.
 
+@section Assets_List List of Assets
 
+Serialized descriptors below contain content returned by @ref InfoEvent_Commands_GetAssetDescriptor "GetAssetDescriptor" command.
+Some values aren't required to load asset and exist only to inform editor about asset being loaded.
+
+@subsection Assets_List_Texture Texture Asset
+
+@copydetails bv::TextureAsset
 */
 
 
@@ -46,7 +54,8 @@ namespace bv {
 
 
 /**@brief Asset base class.
-@ingroup Model*/
+@ingroup Assets
+@see Assets*/
 class Asset
 {
 protected:

@@ -24,6 +24,7 @@
 #include "API/PluginsStructureEvent.h"
 #include "API/GlobalEffectEvent.h"
 #include "API/EngineStateEvent.h"
+#include "API/LoadAssetEvent.h"
 
 
 
@@ -160,42 +161,6 @@ public:
 
 DEFINE_PTR_TYPE( ScreenShotRenderedEvent )
 
-// ************************************* LoadAssetEvent *************************************
-class LoadAssetEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        LoadAsset,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType          m_sEventType;
-    static std::string              m_sEventName;
-public:
-    std::string                     NodeName;
-    std::string                     SceneName;
-    std::string                     PluginName;
-    IDeserializer *                 AssetData;
-    bool                            AsyncLoad;
-
-public:
-    explicit                        LoadAssetEvent      () { AssetData = nullptr; }
-                                    ~LoadAssetEvent     () { delete AssetData; }
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( LoadAssetEvent::Command )
-DEFINE_PTR_TYPE( LoadAssetEvent )
 
 
 // ************************************* ParamKeyEvent *************************************
