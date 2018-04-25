@@ -37,6 +37,7 @@
     <li> @ref Plugins "Plugins"
     <li> @ref NodeLogics "Logics"
     <li> @ref NodeEffects "Effects"
+    <li> @ref Assets "Assets"
     <li> @ref Cameras "Cameras"
     <li> @ref Lights "Lights"
 	<li> @ref Presets "Presets"

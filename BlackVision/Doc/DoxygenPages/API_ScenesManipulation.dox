@@ -13,13 +13,13 @@
 - @ref SceneEvent_Commands_AttachDetach "Move Scene"
 - @ref SceneEvent_Commands_CopyScene "Copy Scene"
 - @ref SceneEvent_Commands_SetOutputChannel "Set Render Channel"
-- @ref API_AssingChannels "Set Render Channels" !! Uwaga tu się powtarza funcjonalność
+- @ref EngineStateEvent_Commands_AssignChannel "Set Render Channel" !!! Duplicated functionality
 - @ref ProjectEvent_Commands_SaveScene "Save Scene"
 - @ref ProjectEvent_Commands_LoadScene "Load Scene"
-- @ref API_ListChannelsMapping "List Scenes Render Channels"
+- @ref EngineStateEvent_Commands_ListChannelsMapping "List Scenes Render Channels"
 - @ref InfoEvent_Commands_TreeStructure "List Scenes with full tree structure"
 - @ref InfoEvent_Commands_TreeStructure "List Scenes with minimal tree structure info"
-- @ref API_ListSceneAssets "List assets used in all Scenes"
+- @ref InfoEvent_Commands_ListSceneAssets "List assets used in all Scenes"
 - @ref InfoEvent_Commands_TreeStructure "Return tree structure of single Scene"
 
 */

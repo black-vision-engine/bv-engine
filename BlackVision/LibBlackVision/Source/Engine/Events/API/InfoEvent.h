@@ -15,6 +15,7 @@ namespace bv
 
 @section InfoEvent_Commands Commands
 
+This event supports following commands:
 - @ref InfoEvent_Commands_TreeStructure "TreeStructure"
 - @ref InfoEvent_Commands_TreeStructure "MinimalTreeStructure"
 - @ref InfoEvent_Commands_NodeInfo "NodeInfo"
@@ -32,7 +33,7 @@ namespace bv
 - ListScenes
 - ListPresets
 - ListAssetsPaths
-- ListCategoriesNames
+- @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames"
 - ListProjects
 - ListAllScenes
 - ListAllFolders
@@ -207,6 +208,72 @@ Gets information about @ref Effects "Effect".
 
 @ref InfoEvent_EffectInfo_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_ListCategoriesNames ListCategoriesNames
+
+Lists assets categories.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListCategoriesNames",
+    "Request" : {}
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Success" : "true",
+   "cmd" : "ListCategoriesNames",
+   "list" : [ "audio", "fonts", "meshes", "sequences", "svgs", "textures", "video" ]
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListSceneAssets ListSceneAssets
+
+Lists all assets used in loaded @ref scenes "Scenes" of selected category.
+Note that <b>CategoryName</b> is Asset descriptor UID not category name like in event @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames".
+@todo Fix this inconsistency in future versions.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListSceneAssets",
+    "Request" :
+    {
+        "CategoryName" : "TEXTURE_ASSET_DESC"
+    }
+}
+@endcode
+
+@ref InfoEvent_ListSceneAssets_ExampleResponse "Example Response"
+
+@subsection InfoEvent_Commands_GetAssetDescriptor GetAssetDescriptor
+
+Gets @ref bv::AssetDesc "AssetDescriptor" template for choosen @ref Assets "Asset".
+Categories names can be listed with @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames" command.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "GetAssetDescriptor",
+    "Request" :
+    {
+        "categoryName" : "textures",
+        "projectName" : "",
+        "path" : "crystal.jpg"
+    }
+}
+@endcode
+
+@ref InfoEvent_GetAssetDescriptor_ExampleResponse "Example Response"
+
+
 
 */
 class InfoEvent : public RemoteEvent
@@ -285,6 +352,60 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+/**@page InfoEvent_GetAssetDescriptor_ExampleResponse InfoEvent GetAssetDescriptor command example response:
+
+@code{.json}
+{
+   "AssetData" : {
+      "asset" : {
+         "estimatedMemoryUsage" : "18009000",
+         "filter" : "none",
+         "height" : "2001",
+         "loading_type" : "ONLY_ORIGINAL",
+         "path" : "textures\\crystal.jpg",
+         "type" : "TEXTURE_ASSET_DESC",
+         "width" : "3000"
+      }
+   },
+   "EventID" : "213",
+   "Success" : "true",
+   "categoryName" : "textures",
+   "cmd" : "GetAssetDescriptor",
+   "path" : "crystal.jpg",
+   "projectName" : ""
+}
+@endcode
+
+*/
+
+/**@page InfoEvent_ListSceneAssets_ExampleResponse InfoEvent ListSceneAssets command example response:
+
+Example created with scene <b>Textures_Example</b> loaded.
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Success" : "true",
+   "assets" : [
+      {
+         "filter" : "bilinear",
+         "loading_type" : "GENERATE_MIPMAPS",
+         "path" : "textures/ice-surface.jpg",
+         "type" : "TEXTURE_ASSET_DESC"
+      },
+      {
+         "filter" : "bilinear",
+         "loading_type" : "GENERATE_MIPMAPS",
+         "path" : "textures/snowflakes.jpg",
+         "type" : "TEXTURE_ASSET_DESC"
+      }
+   ],
+   "cmd" : "ListSceneAssets"
+}
+@endcode
+
+*/
 
 
 /**@page InfoEvent_EffectInfo_ExampleResponse InfoEvent EffectInfo command example response:

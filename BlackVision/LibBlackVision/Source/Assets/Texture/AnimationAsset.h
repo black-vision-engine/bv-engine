@@ -10,7 +10,8 @@ namespace bv
 {
 
 // *******************************
-// Implements animation asset.
+/// Implements animation asset.
+/// @ingroup Assets
 class AnimationAsset : public Asset, public std::enable_shared_from_this< AnimationAsset >
 {
 	static const std::string		uid;

@@ -14,6 +14,42 @@ DEFINE_PTR_TYPE( MeshAsset )
 DEFINE_CONST_PTR_TYPE( MeshAsset )
 
 
+
+
+/**@brief Mesh asset.
+
+Loads mesh from file.
+
+-                       | UID                       | Class
+----------------------- | ------------------------- | -----------
+Descriptor              | MESH_ASSET_DESC           | @ref bv::MeshAssetDesc
+Asset                   | MESH_ASSET                | @ref bv::MeshAsset
+
+<b>Example serialized descriptor:</b>
+
+@code{.json}
+{
+    "asset" :
+    {
+        "groupName" : "",
+        "path" : "meshes\\Computer Desk.FBX",
+        "recursive" : "true",
+        "type" : "MESH_ASSET_DESC"
+    }
+}
+@endcode
+
+<b>Parameters</b>
+
+Parameter name         	| Type                              | Required   | Description
+----------------------- | --------------------------------- | ---------- | --------------------------
+type                    | string                            | yes        | Asset descriptor UID.
+groupName               | string                            | no         | Meshes consist of many segments represented as tree. You can set group name to load only chosen segment. In most of situations leave groupName empty.
+recursive               | bool                              | no         | Load recursivly whole mesh subtree of segment chosen in parameter groupName. True by default.
+path                    | string                            | yes        | Path to asset.
+
+
+@ingroup Assets*/
 class MeshAsset : public Asset, public std::enable_shared_from_this< MeshAsset >
 {
 
