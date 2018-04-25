@@ -12,7 +12,7 @@
 
         <property name="CommandsDebugLayer">
             <property name="UseDebugLayer" value="false" />
-            <property name="FilePath" value="../../../../Logs/" />
+            <property name="FilePath" value="Logs/" />
         </property>		
 	</property>
     
