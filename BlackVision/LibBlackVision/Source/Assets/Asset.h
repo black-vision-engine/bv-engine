@@ -56,6 +56,15 @@ Some values aren't required to load asset and exist only to inform editor about 
 @subsection Assets_List_MeshAsset Mesh Asset
 @copydetails bv::MeshAsset
 
+@subsection Assets_List_SVGAsset SVG Asset
+@copydetails bv::SVGAsset
+
+@subsection Assets_List_AVAsset Audio/Video Asset
+@copydetails bv::AVAsset
+
+@subsection Assets_ListDataArrayAsset DataArrayAsset Asset
+@copydetails bv::DataArrayAsset
+
 */
 
 

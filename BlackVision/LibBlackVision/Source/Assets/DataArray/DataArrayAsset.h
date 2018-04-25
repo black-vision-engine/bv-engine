@@ -13,7 +13,42 @@ namespace bv
 
 
 
-/**@brief Assets with data.
+/**@brief Asset with data.
+@details
+
+@ref DataArrayAsset "DataArrayAsset" exist to pass data to @ref Plugins "Plugins" and @ref NodeLogics "Logics",
+like for example set of points to @ref bv::model::DefaultLineChartPlugin.
+DataArrayAsset isn't loaded from disk, instead data is passed directly in descriptor.
+
+<b>Structure</b>
+
+Data consists of multiple named and typed rows. Each row contains string <b>data</b> with serialized values separated by semicolon.
+Note that name of row is very important for Plugin, to distinguish, which row should be used.
+
+-                       | UID                       | Class
+----------------------- | ------------------------- | -----------
+Descriptor              | DATA_ARRAY_ASSET_DESC     | @ref bv::DataArrayAssetDesc
+Asset                   | DATA_ARRAY_ASSET          | @ref bv::DataArrayAsset
+
+<b>Example serialized descriptor:</b>
+
+@code{.json}
+{
+    "asset" :
+    {
+        "type" : "DATA_ARRAY_ASSET_DESC",
+        "dataRows" :
+        [
+            {
+                "name" : "Plot",
+                "type" : "vec2",
+                "data" : "-3.0, 0.3; -0.4, 1.0; 0.0, 0.5; 0.3, -0.1; 0.6, -0.4; 0.7, 0.4;"
+            }
+        ]
+    }
+}
+@endcode
+
 @ingroup Assets*/
 class DataArrayAsset : public Asset, public std::enable_shared_from_this< DataArrayAsset >
 {
