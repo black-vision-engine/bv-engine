@@ -5597,6 +5597,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\PluginsStructureEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\ParamKeyEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\API\GlobalEffectEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
