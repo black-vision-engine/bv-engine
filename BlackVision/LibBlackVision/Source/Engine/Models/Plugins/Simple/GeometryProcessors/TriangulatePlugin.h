@@ -22,7 +22,7 @@ public:
 };
 
 // ***********************
-//
+/// @ingroup PluginsList
 class TriangulatePlugin : public DefaultGeometryProcessorBase
 {
 

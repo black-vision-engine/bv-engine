@@ -1,0 +1,7 @@
+/**@page API_EffectsManipulation Effects API commands
+
+- @ref GlobalEffectEvent_Commands_SetGlobalEffect "SetGlobalEffect"
+- @ref GlobalEffectEvent_Commands_LoadGlobalEffectAsset "LoadGlobalEffectAsset"
+- @ref InfoEvent_Commands_EffectInfo "EffectInfo"
+
+*/

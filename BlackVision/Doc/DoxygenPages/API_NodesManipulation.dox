@@ -1,0 +1,18 @@
+/**@page API_NodesManipulation
+
+@section API_NodesManipulation_NodesFunctionalitiesList Nodes API functionalities list
+
+- @ref NodeStructureEvent_Commands_AddNode "Adding Nodes"
+- @ref NodeStructureEvent_Commands_RemoveNode "Removing Nodes"
+- @ref NodeStructureEvent_Commands_Visibility "Make Node visible"
+- @ref NodeStructureEvent_Commands_Visibility "Make Node invisible"
+- @ref NodeStructureEvent_Commands_RenameNode "Renaming Nodes"
+- @ref API_DetachNode "Detaching Nodes"
+- @ref API_AtachNode "Attaching detached Nodes"
+- @ref NodeStructureEvent_Commands_MoveNode "Moving Nodes"
+- @ref NodeStructureEvent_Commands_CopyNode "Coping Nodes"
+- @ref InfoEvent_Commands_NodeInfo "Quering Node information"
+
+
+
+*/

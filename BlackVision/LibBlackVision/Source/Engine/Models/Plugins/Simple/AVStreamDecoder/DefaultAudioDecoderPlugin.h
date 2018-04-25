@@ -34,6 +34,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultAudioDecoderPlugin : public BasePlugin
 {
 public:

@@ -12,8 +12,33 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/NodeEffect.h"
 
 
+
+
+/**@page NodeEffects Effects
+
+@section Description
+You may think of effect as a way to change the normal rendering procedure.
+
+@section Examples
+Examples of usage:
+- change order of rendering (see eg. @ref ZSortEffect)
+- use additonal Render Targets
+
+@section NodeEffectsAPIManipulation API Manipulation
+@copydoc API_EffectsManipulation
+
+@see bv::model::IModelNodeEffect
+*/
+
+
+
 namespace bv { namespace model {
 
+
+
+/**@brief Node effect interface.
+@copydoc NodeEffects
+@ingroup Model*/
 class IModelNodeEffect : public IUpdatable, public ISerializable
 {
 public:

@@ -35,6 +35,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultAVDecoderPlugin : public BasePlugin
 {
 public:

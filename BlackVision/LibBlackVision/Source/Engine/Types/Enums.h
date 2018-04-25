@@ -203,12 +203,12 @@ enum class LoopEventAction : int
 //
 enum class MipMapFilterType : int
 {
-    BOX = 0,
-    BILINEAR,
-    B_SPLINE,
-    BICUBIC,
-    CATMULL_ROM,
-    LANCZOS,
+    BOX = 0,        ///< box
+    BILINEAR,       ///< bilinear
+    B_SPLINE,       ///< b spline
+    BICUBIC,        ///< bicubic
+    CATMULL_ROM,    ///< catmull rom
+    LANCZOS,        ///< lanczos
 
     MMFT_TOTAL
 };

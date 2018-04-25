@@ -28,6 +28,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultColorPlugin : public BasePlugin
 {
 public:

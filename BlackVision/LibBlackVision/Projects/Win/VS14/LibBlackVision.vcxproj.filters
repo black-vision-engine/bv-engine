@@ -490,6 +490,9 @@
     <Filter Include="Assets\Input\VideoInput">
       <UniqueIdentifier>{dba6073a-1198-4210-a1b8-3757f204f5f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Events\API">
+      <UniqueIdentifier>{d3f8fca1-529a-4b99-b710-59bebe856e12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -5569,6 +5572,42 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ColorCorrectionFSEStep.h">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\SceneEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\ProjectEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\InfoEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeStructureEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\CameraEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\LightEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeLogicEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\PluginsStructureEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\ParamKeyEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\GlobalEffectEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\EngineStateEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\LoadAssetEvent.h">
+      <Filter>Engine\Events\API</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

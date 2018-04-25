@@ -26,6 +26,8 @@ public:
 
 
 
+/**@brief Plugins generated circle.
+@ingroup PluginsList*/
 class DefaultCirclePlugin : public DefaultGeometryPluginBase
 {
 public:

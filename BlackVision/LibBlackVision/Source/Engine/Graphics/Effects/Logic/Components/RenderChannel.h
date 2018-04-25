@@ -5,6 +5,11 @@
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Audio/AudioRenderChannelData.h"
 
+/**@page RenderChannels RenderChannels
+
+@see bv::RenderChannel
+*/
+
 namespace bv { 
 
 class RenderTargetStackAllocator;
@@ -29,8 +34,13 @@ enum class RenderChannelType : unsigned int
     RCT_TOTAL
 };
 
-//////////////////////////////////////
-// Class used to store currently rendered render target along with the history of already rendered frames (right now only current and previous frames are stored)
+
+
+/**
+ @brief Class used to store currently rendered render target along with the history of already rendered frames (right now only current and previous frames are stored)
+ 
+ @ingroup Engine
+ */
 class RenderChannel
 {
 private:

@@ -1,0 +1,10 @@
+/**@page API_PresetsManipulation
+
+@section API_ScenesManipulation_PresetFunctionalitiesList Preset functionalities list
+
+- @ref ProjectEvent_Commands_SavePreset "Save Preset"
+- @ref ProjectEvent_Commands_LoadPreset "Load Preset"
+- @ref ProjectEvent_Commands_EditPreset "Edit Preset"
+
+
+*/

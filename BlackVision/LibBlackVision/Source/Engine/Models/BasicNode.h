@@ -14,6 +14,63 @@
 
 
 
+/**@page Nodes Nodes
+
+@section Nodes_General General
+
+@ref Scenes "Scene" consists of hierarchical structure of nodes. Each node inherits transformation from parent and
+can have it's own tranformation if it posseses @ref bv::model::DefaultTransformPlugins "TransformPlugin".
+
+Example nodes hierarchy:
+- root (id: 12)
+    - circles (id: 13)
+        - circle1 (id: 14)
+        - circle2 (id: 19)
+        - circle3 (id: 20)
+    - cubes (id: 21)
+        - cube1 (id: 23)
+        - cube2 (id: 24)
+        - cube1 (id: 25)
+    - child3 (id: 26)
+
+Nodes are containers for @ref Plugins, @ref NodeLogics and @ref NodeEffects. Single node can contain multiple plugins
+and only one effect and one logic.
+
+@section Nodes_AccessingNodesAPI Accessing nodes through API
+
+
+There are 3 ways to reference node through API:
+- Using name path (built from node names)
+- Using indexed path (built from nodes index in subtree)
+- Using node Unique Id.
+
+@subsection Nodes_AccessingNodesAPI_NamePath Accessing using name path
+
+Each node has it's own non unique name. We can address node using path built from node names.
+For example if we want to access node <b>"circle1"</b>, we could write:
+<b>"root/circles/circle1"</b>
+
+Since node name is non unique, there's no way to distinguish between nodes named <b>"cube1"</b> in subtree of <b>"root/cubes"</b>.
+Address <b>"root/cubes/cube1"</b> will return first found child node named <b>"cube1"</b>.
+
+@subsection Nodes_AccessingNodesAPI_IndexedPath Accessing using indexed path
+
+The second way to address nodes, is to use indexed path. Indexed path consists of indicies of nodes (position in subtree counted from zero)
+prefixed by # and separated by slash. For example to access node <b>"circle3"</b> we can write:
+<b>"#0/#0/#2"</b> and to access second node <b>"cube1"</b> we can write:
+<b>"#0/#1/#2"</b>
+
+@subsection Nodes_AccessingNodesAPI_UniqueID Accessing using unique id
+
+Each node has unique id generated at creation time. We can access node using it's id prefixed with @.
+For example to access node <b>"child3"</b> we can write: <b>"@26"</b>.
+
+@copydoc API_NodesManipulation
+
+@see bv::model::BasicNode
+*/
+
+
 
 namespace bv { namespace model {
 
@@ -29,6 +86,12 @@ typedef std::vector< BasicNodePtr > TNodeVec;
 class ModelNodeEditor;
 
 
+
+/**@brief Model representation of Node.
+
+@copydoc Nodes
+
+@ingroup Model*/
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
 

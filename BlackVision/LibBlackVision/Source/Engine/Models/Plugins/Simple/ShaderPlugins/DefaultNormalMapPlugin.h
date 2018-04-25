@@ -27,6 +27,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultNormalMapPlugin : public BasePlugin
 {
 public:

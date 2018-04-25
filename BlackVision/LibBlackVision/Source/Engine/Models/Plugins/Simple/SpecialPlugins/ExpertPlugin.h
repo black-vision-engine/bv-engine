@@ -28,6 +28,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class ExpertPlugin : public BasePlugin
 {
 public:

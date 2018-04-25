@@ -23,6 +23,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultExtrudePlugin : public DefaultGeometryProcessorBase
 {
 public:

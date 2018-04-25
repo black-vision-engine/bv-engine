@@ -1,0 +1,76 @@
+/**@page API_Documentation
+<ul>
+    <li> @ref API_ScenesManipulation "Scenes manipulation"
+    <li> @ref API_PresetsManipulation "Presets manipulation"
+    <li> @ref API_NodesManipulation "Nodes manipulation"
+    <li> @ref API_PluginsManipulation "Plugins manipulation"
+    <li> @ref API_LogicsManipulation "Logics manipulation"
+    <li> @ref API_EffectsManipulation "Effects manipulation"
+    <li> @ref API_LightsManagment "Lights managment"
+    <li> @ref API_CamerasManagment "Cameras managment"
+    <li> @ref API_ProjectManagment "Project managment"
+    <li> @ref API_Timelines "Timelines"
+    <li> @ref API_Parameters "Parameters"
+    <li> @ref API_Assets "Assets"
+    <li> @ref API_Gizmos "Gizmo"
+    <li> @ref API_UndoRedo "Undo/Redo operations"
+    <li> @ref API_ConfigManagment "Config manipulation"
+    <li> @ref API_VideoCards "Video cards"
+    <li> @ref API_SceneVariables "Scene variables"
+    <li> @ref API_GridLines "Grid lines"
+    <li> @ref API_ParameterDescriptors "Parameter Descriptors"
+    <li> @ref API_AdditionalCommands "Additional Commands"
+    <li> @ref API_Timer "Timer events"
+</ul>
+
+*/
+
+
+/**@page API_Gizmos
+
+
+
+*/
+
+/**@page API_UndoRedo
+
+
+
+*/
+
+/**@page API_ConfigManagment
+
+
+
+*/
+
+/**@page API_VideoCards
+
+
+
+*/
+
+/**@page API_SceneVariables
+
+
+
+*/
+
+/**@page API_GridLines
+
+
+
+*/
+
+/**@page API_ParameterDescriptors
+
+
+
+*/
+
+
+/**@page API_Timer
+
+
+
+*/

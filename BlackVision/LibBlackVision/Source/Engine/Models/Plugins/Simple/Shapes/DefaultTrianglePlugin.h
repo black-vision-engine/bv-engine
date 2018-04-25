@@ -4,6 +4,9 @@
 
 namespace bv { namespace model {
 
+
+// ***********************
+//
 class DefaultTrianglePluginDesc : public DefaultGeometryPluginDescBase
 {
 public:
@@ -15,6 +18,10 @@ public:
     static  std::string                     UID                 ();
 };
 
+
+
+/**@brief 
+@ingroup PluginsList*/
 class DefaultTrianglePlugin : public DefaultGeometryPluginBase
 {
 public:

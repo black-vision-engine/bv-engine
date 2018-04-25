@@ -1,0 +1,29 @@
+/**@page EffectZSort ZSort Effect
+
+@section Description
+
+ZSort effect allows to disable default (based on object's z-depth and transparency) rendering order and uses an order based on tree structure.
+
+@section DefaultRenderingOrder Default rendering order
+
+Default rendering order is supposed to make transparency look right.
+First, we render non-transparent nodes, ordered from the nearest to the farthest.
+Then, we render nodes with transparency turned on, ordered from the farthest to the nearest.
+
+Z-depth of the node is calculated from the distance of the center of a node's bounding box to the screen plane.
+
+@section RenderingNodesWithEffects Rendering nodes with effects
+
+ZSort treats nodes with effects as one piece and does not go into it's children nodes.
+
+The reason is that effects have their own rendering logic which should not be altered by ZSort ordering.
+
+Effects may specify their own z-depth, which will alter their order in the rendering queue.
+
+@section ProblemsWithDefaultRenderingMode Problems with default rendering mode
+
+Consider two nodes with different z-depth, one after another. They may be rotated and begin to overlap, but the center will stay. It may be necessary to change the order of rendering manually. Then you can use ZSort Effect and turn the default ordering off.
+
+This however works only for static nodes and may not work if nodes are moving.
+
+*/

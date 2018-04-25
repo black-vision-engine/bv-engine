@@ -25,8 +25,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-
-
+/// @ingroup PluginsList
 class DefaultEnvironmentTexturePlugin : public BasePlugin
 {
 public:

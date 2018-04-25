@@ -9,6 +9,55 @@
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 
+
+/**@page Parameters Parameters
+Parameters are a way to animate some @ref Plugins "Plugin" / @ref Effects "Effect" / @ref Logics "Logic" features.
+
+They consist of two major ingredients: a @ref Curves "Curve" and @ref Timelines "Timeline".
+Timeline determines the time at which we evaluate the Curve.
+
+@section Curves Curves
+We implement one, generic class of Curves: @ref bv::CompositeInterpolator. 
+On every interval defined by consecutive key frames, you can have the following interpolators:
+- Linear (see @ref bv::LinearEvaluator)
+- Bezier and Cosine-like (see @ref bv::BezierEvaluator and subsection below)
+- (one of) Polynomial (see @ref bv::PolynomialEvaluator and subsection below)
+- Point (see @ref bv::ConstEvaluator)
+
+See @ref bv::CurveType for the complete list of supported curve types.
+
+CompositeInterpolator supports different value types (float, int, bool, int, vectors, strings, etc.), but beware that not every 
+combination of value type and interpolator type makes sense. For example, strings cannot be interpolated in any other way than point.
+
+@subsection CosineLikeCurves Bezier and Cosine-like curves
+
+Bezier curves are represented as usual, as two endpoints (which are also keyframes) and two vectors in each endpoint.
+
+We implement Cosine-like curves just as Bezier curves with vectors parallel to OX axis and length equal to 1/5 of the distance between two keyframes.
+
+@subsection PolynomialCurves Polynomial curves
+
+We have several pre-defined curve types that are special case of polynomial curves. They are sometimes called "easing functions". (see http://easings.net/en for details)
+
+We support following curves:
+- CT_CUBIC_IN,
+- CT_CUBIC_OUT,
+- CT_ELASTIC_IN,
+- CT_ELASTIC_OUT,
+- CT_ELASTIC_IN_BOUNCE,
+- CT_ELASTIC_OUT_BOUNCE,
+- CT_QUARTIC_INOUT,
+- CT_CUBIC_INTOUT.
+
+@subsection APIControl API control
+
+See @ref API_Parameters for detailed description of possible Parameter's manipulation.
+
+
+@see bv::model::IParameter
+*/
+
+
 namespace bv { namespace model {
 
     class IParameter;
@@ -17,6 +66,12 @@ namespace bv { namespace model {
     class IParameter;
     typedef std::shared_ptr< const IParameter > IParameterConstPtr;
 
+
+
+
+    /**@brief Parameter interface.
+    @copydoc Parameters
+    @ingroup Model*/
     class IParameter : public ISerializable
     {
     public:

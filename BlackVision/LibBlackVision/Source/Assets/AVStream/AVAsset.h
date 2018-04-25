@@ -12,6 +12,10 @@ namespace bv {
 class AVAsset;
 DEFINE_CONST_PTR_TYPE( AVAsset )
 
+
+
+/**@brief Audio video asset.
+@ingroup Assets*/
 class AVAsset : public Asset, public std::enable_shared_from_this< AVAsset >
 {
 private:

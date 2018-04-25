@@ -37,6 +37,9 @@ struct PN {
 	static const std::string MAPPINGTYPE;
 };
 
+
+/**@brief
+@ingroup PluginsList*/
 class Plugin : public DefaultGeometryPluginBase
 {
 public:

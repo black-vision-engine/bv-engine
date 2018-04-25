@@ -41,6 +41,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultText3DPlugin : public BasePlugin
 {
 public:

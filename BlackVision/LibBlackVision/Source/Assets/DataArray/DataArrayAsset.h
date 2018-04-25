@@ -13,6 +13,8 @@ namespace bv
 
 
 
+/**@brief Assets with data.
+@ingroup Assets*/
 class DataArrayAsset : public Asset, public std::enable_shared_from_this< DataArrayAsset >
 {
 private:

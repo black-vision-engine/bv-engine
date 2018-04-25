@@ -23,7 +23,7 @@ public:
 
 
 // ***********************
-//
+/// @ingroup PluginsList
 class DefaultCubePlugin : public DefaultGeometryPluginBase
 {
 public:

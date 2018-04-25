@@ -26,7 +26,7 @@ public:
 
 
 // ***********************
-//
+/// @ingroup PluginsList
 class DefaultRoundedRectPlugin : public DefaultGeometryPluginBase
 {
 public:

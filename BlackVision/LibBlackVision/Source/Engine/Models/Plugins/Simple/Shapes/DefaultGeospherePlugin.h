@@ -31,7 +31,8 @@ Each face will be subdivided into 4 triangles in single tesselletion step.
 
 @note UV mapping isn't made as usual for simple sphere. It isn't easy to describe.
 Better add a texture to geosphere and check it for yourself.
-*/
+
+@ingroup PluginsList*/
 class Plugin : public DefaultGeometryPluginBase
 {
 private:

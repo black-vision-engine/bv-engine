@@ -6,6 +6,10 @@
 
 namespace bv {
 
+
+
+/**@brief Vector graphics asset.
+@ingroup Assets*/
 class SVGAsset : public MeshAsset
 {
 public:

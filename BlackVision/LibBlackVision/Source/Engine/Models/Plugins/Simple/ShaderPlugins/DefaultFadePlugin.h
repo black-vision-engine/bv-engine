@@ -26,6 +26,7 @@ namespace bv { namespace model {
     };
 
     // ***************************** PLUGIN ********************************** 
+    ///@ingroup PluginsList
     class DefaultFadePlugin : public BasePlugin
     {
     public:

@@ -12,6 +12,24 @@
 namespace bv { namespace model {
 
 
+
+/**@brief Camera model.
+
+@section Camera_Parameters Cameras parameters
+
+Key                                     | Values        | Default Value         | Description
+--------------------------------------- | ------------- | --------------------- | -----------
+IsPerspective                           | bool          | true                  | Perspective or orthogonal camera.
+ViewportSize                            | float         | 2.0f                  | Size of viewport. (Orthogonal camera only)
+Direction                               | vec3          | 0.0f, 0.0f, -1.0f     | Camera view direction.
+Position                                | vec3          | 0.0f, 0.0f, 5.0f      | Camera position.
+FOV                                     | float         | 45.0f                 | Camera angle in y-axis in degrees.
+FarClippingPlane                        | float         | 100.0f                | Far camera clipping plane.
+NearClippingPlane                       | float         | 0.1f                  | Near camera clipping plane.
+UpVector                                | vec3          | 0.0f, 1.0f, 0.0f      | Camera top direction.
+
+
+@ingroup Model*/
 class CameraModel : public IUpdatable, public ISerializable, public IParamSet, public IValueSet
 {
 public:
