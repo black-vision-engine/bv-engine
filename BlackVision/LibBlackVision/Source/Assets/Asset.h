@@ -53,6 +53,9 @@ Some values aren't required to load asset and exist only to inform editor about 
 @subsection Assets_List_Font3D Font 3D Asset
 @copydetails bv::FontAsset3D
 
+@subsection Assets_List_MeshAsset Mesh Asset
+@copydetails bv::MeshAsset
+
 */
 
 
