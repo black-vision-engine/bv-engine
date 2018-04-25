@@ -62,8 +62,53 @@ Some values aren't required to load asset and exist only to inform editor about 
 @subsection Assets_List_AVAsset Audio/Video Asset
 @copydetails bv::AVAsset
 
-@subsection Assets_ListDataArrayAsset DataArrayAsset Asset
+@subsection Assets_List_DataArrayAsset DataArray Asset
 @copydetails bv::DataArrayAsset
+
+@subsection Assets_List_InputSlotsAssets Input Slots Assets
+
+Input Slots Assets allow to access global table of texture and audio sources.
+Slots can be accessed by index or by name.
+
+<b>Binding by index Example:</b>
+
+@code{.json}
+{
+    "asset" :
+    {
+        "slotBinding" :
+        {
+           "index" : "0",
+           "type" : "ByIndex"
+        },
+        "type" : "TEXTURE_INPUT_ASSET_DESC"
+    }
+}
+@endcode
+
+<b>Binding by name Example:</b>
+
+@code{.json}
+{
+    "asset" :
+    {
+        "slotBinding" :
+        {
+           "name" : "Input",
+           "type" : "ByName"
+        },
+        "type" : "TEXTURE_INPUT_ASSET_DESC"
+    }
+}
+@endcode
+
+
+-                       | UID                       | Class
+----------------------- | ------------------------- | -----------
+Descriptor              | TEXTURE_INPUT_ASSET_DESC  | @ref bv::TextureInputAssetDesc
+Asset                   | TEXTURE_INPUT_ASSET       | @ref bv::TextureInputAsset
+Descriptor              | AUDIO_INPUT_ASSET_DESC    | @ref bv::AudioInputAssetDesc
+Asset                   | AUDIO_INPUT_ASSET         | @ref bv::AudioInputAsset
 
 */
 
