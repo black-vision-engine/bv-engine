@@ -110,6 +110,67 @@ Asset                   | TEXTURE_INPUT_ASSET       | @ref bv::TextureInputAsset
 Descriptor              | AUDIO_INPUT_ASSET_DESC    | @ref bv::AudioInputAssetDesc
 Asset                   | AUDIO_INPUT_ASSET         | @ref bv::AudioInputAsset
 
+
+@subsection Assets_List_VideoInputAssets Video Input Assets
+
+There are special descriptors for @ref EngineInputs_VideoInput "Video Input".
+They use abstraction layer, which maps VideoInputIdx defined in config to Input Slots.
+
+-                       | UID                               | Class
+----------------------- | --------------------------------- | -----------
+Descriptor              | VIDEO_INPUT_TEXTURE_ASSET_DESC    | @ref bv::VideoInputTextureAssetDesc
+Asset                   | VIDEO_INPUT_TEXTURE_ASSET         | @ref bv::VideoInputTextureAsset
+Descriptor              | VIDEO_INPUT_AUDIO_ASSET_DESC      | @ref bv::VideoInputAudioAssetDesc
+Asset                   | VIDEO_INPUT_AUDIO_ASSET           | @ref bv::VideoInputAudioAsset
+Descriptor              | VIDEO_INPUT_ASSET_DESC            | @ref bv::VideoInputAssetDesc
+Asset                   | VIDEO_INPUT_ASSET                 | @ref bv::VideoInputAsset
+
+
+First two descriptors (@ref bv::VideoInputTextureAssetDesc and @ref bv::VideoInputAudioAssetDesc) can be used in all @ref Plugins "Plugins"
+that support @ref Assets_List_InputSlotsAssets "Input Slot Asset".
+@ref bv::VideoInputAsset can be used only with @ref bv::model::VideoInputPlugin and it connects Fill and Key textures
+of Video Input. Audio is taken from Fill texture.
+
+
+<b>Audio slot:</b>
+
+@code{.json}
+{
+    "asset" : 
+    {
+        "VideoInputIdx" : "0",
+        "type" : "VIDEO_INPUT_AUDIO_ASSET_DESC"
+    }
+}
+@endcode
+
+<b>Texture slot:</b>
+
+@code{.json}
+{
+    "asset" : 
+    {
+        "VideoInputIdx" : "0",
+        "VideoType" : "Fill",
+        "type" : "VIDEO_INPUT_TEXTURE_ASSET_DESC"
+    }
+}
+@endcode
+
+<b>Example of Video Input Asset descriptor used by @ref bv::model::VideoInputPlugin.</b>
+
+@code{.json}
+{
+    "asset" : 
+    {
+        "VideoFillIdx" : "0",
+        "VideoKeyIdx" : "1",
+        "type" : "VIDEO_INPUT_ASSET_DESC"
+    }
+}
+@endcode
+
+
 */
 
 

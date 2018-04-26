@@ -1,6 +1,6 @@
 /**@page EngineInputs Inputs
 
-@section InputSlots
+@section EngineInputs_InputSlots InputSlots
 
 @ref InputSlots "Input Slots" are general mechanisms for providing external texture and audio sources.
 @ref Plugins "Plugins" can access global table of slots. Each slot can contain texture or audio (or both).
@@ -9,7 +9,7 @@
 
 For now only input implemented as slots are VideoInputs.
 
-@section VideoInput
+@section EngineInputs_VideoInput VideoInput
 
 Engine can capture video and audio from video card. Check @ref Config_VideoCards "here" how to
 configure video card input channel.

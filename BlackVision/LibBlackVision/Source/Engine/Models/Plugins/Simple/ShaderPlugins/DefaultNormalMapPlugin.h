@@ -28,6 +28,7 @@ public:
 
 // ***************************** PLUGIN ********************************** 
 /// @ingroup PluginsList
+/// @todo Inherit from bv::model::TexturePluginBase.
 class DefaultNormalMapPlugin : public BasePlugin
 {
 public:
