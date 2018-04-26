@@ -27,6 +27,7 @@
 #include "API/ParamKeyEvent.h"
 #include "API/LoadAssetEvent.h"
 #include "API/UndoRedoEvent.h"
+#include "API/TimeLineEvent.h"
 
 
 namespace bv {
@@ -268,64 +269,6 @@ public:
 
 DEFINE_PTR_TYPE( ResponseEvent )
 
-
-
-// ************************************* TimelineCmd *************************************
-class TimeLineEvent : public RemoteEvent
-{
-public:
-
-    typedef enum
-    {
-        AddTimeline,
-        DeleteTimeline,
-        ForceDeleteTimeline,
-        RenameTimeline,
-        SetDuration,
-        SetWrapPreBehavior,
-        SetWrapPostBehavior,
-
-        Play,
-        Stop,
-        PlayReverse,
-        Goto,
-        GotoAndPlay,
-        Fail            ///< Wrong command
-    } Command;
-
-private:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-
-    TimeLineEvent::Command      TimelineCommand;
-    std::string                 TimelineName; //path?
-    std::string                 NewTimelineName;
-    float                       Time;
-    TimelineType                TimelineType;
-    TimeType                    Duration;
-    TimelineWrapMethod            WrapMethod;
-
-public:
-
-    explicit                        TimeLineEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer & ser ) const;
-    static IEventPtr                Create              ( IDeserializer & deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string &            Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-
-};
-
-
-DECLARE_ENUM_SERIALIZATION( TimeLineEvent::Command )
-DEFINE_PTR_TYPE( TimeLineEvent )
 
 
 // ************************************* TimerEvent *************************************

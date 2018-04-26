@@ -1,5 +1,16 @@
 /**@page API_Timelines Timelines API commands
 
+- @ref TimeLineEvent_Commands_AddTimeline "Adding timelines"
+- @ref TimeLineEvent_Commands_DeleteTimeline "Removing timelines"
+- @ref TimeLineEvent_Commands_DeleteTimeline "Force removing timelines"
+- @ref TimeLineEvent_Commands_WrapMethods "Setting pre wrap behavior"
+- @ref TimeLineEvent_Commands_WrapMethods "Setting post wrap behavior"
+- @ref TimeLineEvent_Commands_Play "Play"
+- @ref TimeLineEvent_Commands_Stop "Stop"
+- @ref TimeLineEvent_Commands_Play "PlayReverse"
+- @ref TimeLineEvent_Commands_Goto "Goto"
+- @ref TimeLineEvent_Commands_Goto "GotoAndPlay"
+
 - CheckTimelineTime
 - ListTimelinesParams
 - ListTimelineKeyframes
