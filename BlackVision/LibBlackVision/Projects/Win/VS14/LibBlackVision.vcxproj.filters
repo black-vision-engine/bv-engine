@@ -5609,6 +5609,12 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\LoadAssetEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\UndoRedoEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\TimeLineEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
