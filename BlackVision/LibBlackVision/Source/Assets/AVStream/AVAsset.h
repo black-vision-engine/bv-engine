@@ -18,6 +18,10 @@ DEFINE_CONST_PTR_TYPE( AVAsset )
 
 Loads audio or video file.
 
+<b>Supported video formats:</b> bik, mov, mp4, yuv, avi, wmv, gif
+
+<b>Supported audio formats:</b> wav, mp3
+
 -                       | UID                       | Class
 ----------------------- | ------------------------- | -----------
 Descriptor              | AV_ASSET_DESC             | @ref bv::SVGAssetDescriptor

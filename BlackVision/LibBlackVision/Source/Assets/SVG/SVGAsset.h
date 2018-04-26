@@ -12,6 +12,8 @@ namespace bv {
 
 Loads SVG files.
 
+<b>Supported formats:</b> svg
+
 -                       | UID                       | Class
 ----------------------- | ------------------------- | -----------
 Descriptor              | SVG_ASSET_DESC            | @ref bv::SVGAssetDescriptor

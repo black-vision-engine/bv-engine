@@ -26,6 +26,8 @@ Assets are used to load external (not generated) content like:
 
 @section Assets_Loading Loading Assets
 
+Assets are loaded from ProjectManager directory. This directory can be set in @ref Config "config" file as <b>PMFolder</b>.
+
 @subsection Assets_Loading_AssetsDescriptor Asset Descriptors
 
 To load asset, external tool must send asset descriptor. Asset descriptor contains resource location

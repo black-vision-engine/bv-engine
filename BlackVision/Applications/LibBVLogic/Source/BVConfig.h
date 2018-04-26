@@ -24,117 +24,11 @@ namespace bv
 
 [TOC]
 
-<b>Full example:</b>
-
-
-@code{.xml}
-<config>
-
-    <property name="PMFolder" value="../bv_media/" />
-
-    <property name="UseReadbackAPI" value="true" />
-    <property name="Resolution" value="HD" />
-
-    <property name="Debug">
-        <property name="LoadSceneFromEnv" value="false" />
-        <property name="LoadSceneFromProjectManager" value="" />
-        <property name="SceneFromEnvName" value="TWO_TEXTURED_RECTANGLES" />
-
-        <property name="CommandsDebugLayer">
-            <property name="UseDebugLayer" value="false" />
-            <property name="FilePath" value="../../../../Logs/" />
-        </property>
-    </property>
-
-    <property name="Plugins" >
-        <property name="Textures" >
-            <property name="OnFailedLoadBehavior" value="LoadChecker" />
-        </property>
-    </property>
-
-    <property name="Audio" >
-        <property name="GlobalGain" value="1.0" />
-    </property>
-
-    <property name="Renderer">
-        <property name="MaxFPS" value="5000" />
-        <property name="TimerFPS" value="50" />
-
-        <property name="FrameBufferSize">
-            <property name="Width" value="500" />
-            <property name="Height" value="600" />
-        </property>
-
-        <property name="ClearColor" value="0,0,0,0" />
-
-    </property>
-
-    <property name="SharedMemory">
-        <property name="Enable" value="true" />
-        <property name="Name" value="BV" />
-        <property name="Width" value="1920" />
-        <property name="Height" value="1080" />
-    </property>
-
-    <property name="Application">
-        <property name="VSync" value="false" />
-        <property name="Window">
-            <property name="FullScreen" value="false" />
-            <property name="Mode" value="Windowed" />        <!-- rodzaj wyswietlanego okienka MultipleScreens|Windowed -->
-            <property name="Size">
-                <property name="Width" value="1920" />
-                <property name="Height" value="1080" />
-            </property>
-        </property>
-
-        <property name="Events" >
-            <property name="MaxLoopUpdateTime" value="20" />
-            <property name="EnableLockingQueue" value="false" />
-        </property>
-    </property>
-
-    <property name="Network">
-        <property name="SocketServer">
-            <property name="Port" value="11011" />
-        </property>
-    </property>
-
-    <property name="Camera">
-        <property name="IsPerspective" value="true" />
-        <property name="FOV" value="60" />
-        <property name="Position" value="0,0,5" />
-        <property name="Direction" value="0,0,-1" />
-    </property>
-
-    <videocards>
-        <videocard name="BlueFish" deviceID="1" referenceMode="FreeRun" referenceH="0" referenceV="0" >
-            <channels>
-                <channel name="A" >
-                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" />
-                </channel>
-                <channel name="B" >
-                    <output linkedVideoOutput="1" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" />
-                </channel>
-                <channel name="A" >
-                    <input linkedVideoInput="0" type="FILL" resolution="1080" />
-                </channel>
-            </channels>
-        </videocard>
-    </videocards>
-
-    <RenderChannels>
-
-        <RenderChannel id="0" enabled="true" >
-        </RenderChannel>
-
-        <RenderChannel id="1" enabled="false" />
-        <RenderChannel id="2" enabled="false" />
-        <RenderChannel id="3" enabled="false" />
-    </RenderChannels>
-
-</config>
-@endcode
-
+Key                                     | Values        | Default Value        | Description
+--------------------------------------- | ------------- | -------------------- | -----------
+PMFolder                                | string        | bv_media             | ProjectManager directory.
+UseReadbackAPI                          | bool          | false                | Enable GPU readback.
+Resolution                              | string        | -                    | If set to SD overrides screen resolution to SD size.
 
 @section Config_Application Application
 
@@ -352,6 +246,119 @@ Default camera parameters. <b>Note that these values aren't used in implementati
 
 </config>
 @endcode
+
+<b>Full example:</b>
+
+
+@code{.xml}
+<config>
+
+    <property name="PMFolder" value="../bv_media/" />
+
+    <property name="UseReadbackAPI" value="true" />
+    <property name="Resolution" value="HD" />
+
+    <property name="Debug">
+        <property name="LoadSceneFromEnv" value="false" />
+        <property name="LoadSceneFromProjectManager" value="" />
+        <property name="SceneFromEnvName" value="TWO_TEXTURED_RECTANGLES" />
+
+        <property name="CommandsDebugLayer">
+            <property name="UseDebugLayer" value="false" />
+            <property name="FilePath" value="../../../../Logs/" />
+        </property>
+    </property>
+
+    <property name="Plugins" >
+        <property name="Textures" >
+            <property name="OnFailedLoadBehavior" value="LoadChecker" />
+        </property>
+    </property>
+
+    <property name="Audio" >
+        <property name="GlobalGain" value="1.0" />
+    </property>
+
+    <property name="Renderer">
+        <property name="MaxFPS" value="5000" />
+        <property name="TimerFPS" value="50" />
+
+        <property name="FrameBufferSize">
+            <property name="Width" value="500" />
+            <property name="Height" value="600" />
+        </property>
+
+        <property name="ClearColor" value="0,0,0,0" />
+
+    </property>
+
+    <property name="SharedMemory">
+        <property name="Enable" value="true" />
+        <property name="Name" value="BV" />
+        <property name="Width" value="1920" />
+        <property name="Height" value="1080" />
+    </property>
+
+    <property name="Application">
+        <property name="VSync" value="false" />
+        <property name="Window">
+            <property name="FullScreen" value="false" />
+            <property name="Mode" value="Windowed" />        <!-- rodzaj wyswietlanego okienka MultipleScreens|Windowed -->
+            <property name="Size">
+                <property name="Width" value="1920" />
+                <property name="Height" value="1080" />
+            </property>
+        </property>
+
+        <property name="Events" >
+            <property name="MaxLoopUpdateTime" value="20" />
+            <property name="EnableLockingQueue" value="false" />
+        </property>
+    </property>
+
+    <property name="Network">
+        <property name="SocketServer">
+            <property name="Port" value="11011" />
+        </property>
+    </property>
+
+    <property name="Camera">
+        <property name="IsPerspective" value="true" />
+        <property name="FOV" value="60" />
+        <property name="Position" value="0,0,5" />
+        <property name="Direction" value="0,0,-1" />
+    </property>
+
+    <videocards>
+        <videocard name="BlueFish" deviceID="1" referenceMode="FreeRun" referenceH="0" referenceV="0" >
+            <channels>
+                <channel name="A" >
+                    <output linkedVideoOutput="0" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" />
+                </channel>
+                <channel name="B" >
+                    <output linkedVideoOutput="1" type="FILL_KEY" resolution="1080" refresh="5000" interlaced="true" flipped="true" />
+                </channel>
+                <channel name="A" >
+                    <input linkedVideoInput="0" type="FILL" resolution="1080" />
+                </channel>
+            </channels>
+        </videocard>
+    </videocards>
+
+    <RenderChannels>
+
+        <RenderChannel id="0" enabled="true" >
+        </RenderChannel>
+
+        <RenderChannel id="1" enabled="false" />
+        <RenderChannel id="2" enabled="false" />
+        <RenderChannel id="3" enabled="false" />
+    </RenderChannels>
+
+</config>
+@endcode
+
+
 */
 
 

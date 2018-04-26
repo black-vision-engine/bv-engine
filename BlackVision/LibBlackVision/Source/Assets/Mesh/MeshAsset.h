@@ -20,6 +20,8 @@ DEFINE_CONST_PTR_TYPE( MeshAsset )
 
 Loads mesh from file.
 
+<b>Supported audio formats:</b> fbx, obj, dae
+
 -                       | UID                       | Class
 ----------------------- | ------------------------- | -----------
 Descriptor              | MESH_ASSET_DESC           | @ref bv::MeshAssetDesc
