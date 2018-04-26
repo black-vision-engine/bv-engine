@@ -247,7 +247,7 @@ Default camera parameters. <b>Note that these values aren't used in implementati
 </config>
 @endcode
 
-<b>Full example:</b>
+@section Config_FullExample Full Examples
 
 
 @code{.xml}

@@ -173,7 +173,7 @@ of Video Input. Audio is taken from Fill texture.
 @endcode
 
 
-*/
+@see Assets*/
 
 
 
@@ -182,8 +182,7 @@ namespace bv {
 
 
 /**@brief Asset base class.
-@ingroup Assets
-@see Assets*/
+@ingroup Assets*/
 class Asset
 {
 protected:

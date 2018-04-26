@@ -34,7 +34,9 @@
 
 /**@page API_UndoRedo
 
-
+- @ref UndoRedoEvent_Commands_Undo "Undo operations"
+- @ref UndoRedoEvent_Commands_Redo "Redo operations"
+- @ref UndoRedoEvent_Commands_SetOperationsBufferSize "Set operations buffer size"
 
 */
 
