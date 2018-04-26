@@ -3,6 +3,8 @@
 - @ref TimeLineEvent_Commands_AddTimeline "Adding timelines"
 - @ref TimeLineEvent_Commands_DeleteTimeline "Removing timelines"
 - @ref TimeLineEvent_Commands_DeleteTimeline "Force removing timelines"
+- @ref TimeLineEvent_Commands_RenameTimeline "Renaming timelines"
+- @ref TimeLineEvent_Commands_SetDuration "Setting timeline duration"
 - @ref TimeLineEvent_Commands_WrapMethods "Setting pre wrap behavior"
 - @ref TimeLineEvent_Commands_WrapMethods "Setting post wrap behavior"
 - @ref TimeLineEvent_Commands_Play "Play"

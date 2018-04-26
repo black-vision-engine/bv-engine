@@ -21,8 +21,8 @@ This event supports following commands:
 - @ref TimeLineEvent_Commands_AddTimeline "AddTimeline"
 - @ref TimeLineEvent_Commands_DeleteTimeline "DeleteTimeline"
 - @ref TimeLineEvent_Commands_DeleteTimeline "ForceDeleteTimeline"
-- RenameTimeline
-- SetDuration
+- @ref TimeLineEvent_Commands_RenameTimeline "RenameTimeline"
+- @ref TimeLineEvent_Commands_SetDuration "SetDuration"
 - @ref TimeLineEvent_Commands_WrapMethods "SetWrapPreBehavior"
 - @ref TimeLineEvent_Commands_WrapMethods "SetWrapPostBehavior"
 - @ref TimeLineEvent_Commands_Play "Play"
@@ -77,6 +77,27 @@ delete this timeline even then, send <b>ForceDeleteTimeline</b> command.
 
 @subsection TimeLineEvent_Commands_RenameTimeline Renaming Timelines
 
+@code{.json}
+{
+    "EventID" : "31862",
+    "Event" : "TimeLineEvent",
+    "Command" : "RenameTimeline",
+    "TimelineName" : "Shapes2D_Examples.scn%Timeline1",
+    "TimelineNewName" : "Timeline_1"
+}
+@endcode
+
+@subsection TimeLineEvent_Commands_SetDuration Setting Timelines duration
+
+@code{.json}
+{
+    "EventID" : "31862",
+    "Event" : "TimeLineEvent",
+    "Command" : "SetDuration",
+    "TimelineName" : "Shapes2D_Examples.scn%Timeline1",
+    "Duration" : "10000.0"
+}
+@endcode
 
 @subsection TimeLineEvent_Commands_WrapMethods Setting Timelines wrap methods
 
