@@ -270,13 +270,6 @@ void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeTy
     };
 
     m_prevLocalTime = m_timeEvalImpl.GetLocalTime();
-
-    //PostUpdateEventStep();
-
-    //auto prevTime = m_prevTime;
-    //m_prevTime = m_timeEvalImpl.GetLocalTime();
-
-    //TriggerEventStep( m_prevTime, prevTime );
 }
 
 // *********************************
@@ -333,14 +326,6 @@ void                                DefaultTimeline::Play               ()
         m_triggeredPlay = true;
 
     m_timeEvalImpl.Start();
-
-    //auto curTime = GetLocalTime();
-    //auto evt = CurrentEvent( curTime, m_prevTime );
-
-    //if( evt )
-    //{
-    //    DeactivateEvent( evt );
-    //}
 }
 
 // *********************************
@@ -503,23 +488,44 @@ void                                DefaultTimeline::DeactivateEvent    ( ITimel
 
 // *********************************
 //
-ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeType curTime, TimeType prevTime ) const
+ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeType curTime, TimeType nextTime ) const
 {
     if( m_timeEvalImpl.IsActive() && !m_timeEvalImpl.IsPaused() )
     {        
-        auto t0 = std::min( curTime, prevTime );
-        auto t1 = std::max( curTime, prevTime );
+        auto t0 = std::min( curTime, nextTime );
+        auto t1 = std::max( curTime, nextTime );
 
-        for( auto evt : m_keyFrameEvents )
+        bool reverseDirection = curTime > nextTime;
+
+        if( reverseDirection )
         {
-            auto eventTime = evt->GetEventTime();
-
-            if( abs( eventTime - curTime ) < 0.0001 ) // FIXME: this should be epsilon
-                continue;
-
-            if( eventTime >= t0 && eventTime <= t1 )
+            for( int i = (int)m_keyFrameEvents.size() - 1; i >= 0; --i  )
             {
-                return evt.get();
+                auto & evt = m_keyFrameEvents[ i ];
+                auto eventTime = evt->GetEventTime();
+
+                if( abs( eventTime - curTime ) < 0.0001 ) // FIXME: this should be epsilon
+                    continue;
+
+                if( eventTime >= t0 && eventTime <= t1 )
+                {
+                    return evt.get();
+                }
+            }
+        }
+        else
+        {
+            for( auto evt : m_keyFrameEvents )
+            {
+                auto eventTime = evt->GetEventTime();
+
+                if( abs( eventTime - curTime ) < 0.0001 ) // FIXME: this should be epsilon
+                    continue;
+
+                if( eventTime >= t0 && eventTime <= t1 )
+                {
+                    return evt.get();
+                }
             }
         }
     }
@@ -551,17 +557,6 @@ bool                                DefaultTimeline::CanBeInserted      ( const 
 //
 void                                DefaultTimeline::TriggerEventStep( ITimelineEvent * evt )
 {
-    //    auto evt = CurrentEvent( curTime, prevTime );
-
-    //if( evt == nullptr || evt == m_triggeredEvent || !evt->IsActive() )
-    //{
-    //    return;
-    //}
-
-    //assert( m_triggeredEvent == nullptr );
-
-    //DeactivateEvent( evt );
-
     auto curTime = m_prevLocalTime;
     auto prevTime = m_prevLocalTime;
 
@@ -570,7 +565,6 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
     {
         case TimelineEventType::TET_STOP:
         {
-            //evt->SetActive( false );
             SetLocalTime( evt->GetEventTime() );
             m_timeEvalImpl.Stop();
 
@@ -596,9 +590,6 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
                     { auto event = CurrentEvent( m_prevLocalTime - 0.0001f, m_prevLocalTime + 0.0001f ); // FIXME epsilons for the fuck's sake!
                     if( event ) TriggerEventStep( event ); }
 
-                    //m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
-                    //m_triggeredEvent = nullptr;
-
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
 
                     LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] goto keyframe [" << evt->GetName() << "] jumped to [" << evtImpl->GetTargetTime() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
@@ -607,9 +598,6 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
                     m_timeEvalImpl.Reset();
 
                     m_prevLocalTime = TimeType( 0.0 );
-
-                    //m_triggeredEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
-                    //m_triggeredEvent = nullptr;
 
                     Play(); //FIXME: really start or should we wait for the user to trigger this timeline?
 
@@ -631,8 +619,6 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
 
             evtImpl->IncLoopCount();
 
-            //printf( "Event LOOP %d\n", evtImpl->GetLoopCount() );
-
             break;
         }
         case TimelineEventType::TET_TRIGGER:
@@ -650,9 +636,6 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
         }
         case TimelineEventType::TET_NULL:
         {
-            //auto evtImpl = static_cast< TimelineEventNull * >( evt );
-//            evtImpl->SetActive( false );
-
             keyframeType = TimelineKeyframeEvent::KeyframeType::NullKeyframe;
 
             LOG_MESSAGE( SeverityLevel::debug ) << "Timeline [" << GetName() << "] null keyframe [" << evt->GetName() << "] at time [" << curTime << "], event time [" << evt->GetEventTime() << "]";
