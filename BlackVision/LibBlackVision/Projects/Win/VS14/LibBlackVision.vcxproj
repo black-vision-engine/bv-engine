@@ -701,6 +701,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\ProjectEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\SceneEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\TimeLineEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\TimelineKeyframeEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\UndoRedoEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotEventBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\InnerEvents\InputSlots\SlotAddedEvent.h" />
