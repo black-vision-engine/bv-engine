@@ -507,8 +507,8 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
 {
     if( m_timeEvalImpl.IsActive() && !m_timeEvalImpl.IsPaused() )
     {        
-        auto t0 = std::min( curTime, prevTime );
-        auto t1 = std::max( curTime, prevTime );
+        auto t0 = std::min( curTime, prevTime ) - 0.00001;
+        auto t1 = std::max( curTime, prevTime ) + 0.00001;
 
         for( auto evt : m_keyFrameEvents )
         {

@@ -409,6 +409,38 @@ SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ReverseKeyframeWithLag )
 
 // ***********************
 //
+SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, StopKeyframeReversePlay )
+{
+    auto timeline = DefaultTimeline::Create( "Timeline", bv::TimeType( 100000000000.0 ), bv::TimelineWrapMethod::TWM_CLAMP, bv::TimelineWrapMethod::TWM_CLAMP );
+    ASSERT_TRUE( timeline );
+    timeline->SetGlobalTime( 1 ); // update is needed
+
+    timeline->Play();
+    timeline->SetGlobalTime( 3 );
+    timeline->SetGlobalTime( 5 );
+    EXPECT_NEAR( timeline->GetLocalTime(), 2, epsilon );
+
+    auto stopKeyframe = TimelineEventStop::Create( "StopKeyframe", 1.8f, timeline.get() );
+    ASSERT_TRUE( timeline->AddKeyFrame( stopKeyframe ) );
+
+    timeline->Reverse();
+
+    timeline->SetGlobalTime( 5.1f );
+    
+    std::cout << "Time: " << timeline->GetLocalTime();
+
+    timeline->SetGlobalTime( 5.2f );
+
+    std::cout << "Time: " << timeline->GetLocalTime();
+
+    timeline->SetGlobalTime( 5.3f );
+
+    std::cout << "Time: " << timeline->GetLocalTime();
+
+}
+
+// ***********************
+//
 SIMPLE_FRAMEWORK_TEST_IN_SUITE( Model_Timelines, ComplexKeyframesTest )
 {
     auto timeline = Deserialize< DefaultTimeline >( "TestAssets/Keyframes/ComplexKeyframes.xml", "timeline" );
