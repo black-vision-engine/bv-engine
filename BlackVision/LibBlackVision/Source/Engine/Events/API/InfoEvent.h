@@ -28,21 +28,21 @@ This event supports following commands:
 - @ref InfoEvent_CamerasInfo_ExampleResponse "CamerasInfo"
 - ListParamDescriptors
 - GetParamDescriptor
-- ListSceneAssets
+- @ref InfoEvent_Commands_ListSceneAssets "ListSceneAssets"
 - ListProjectNames
-- ListScenes
-- ListPresets
-- ListAssetsPaths
+- @ref InfoEvent_Commands_ListScenes "ListScenes"
+- @ref InfoEvent_Commands_ListPresets "ListPresets"
+- @ref InfoEvent_Commands_ListAssetsPaths "ListAssetsPaths"
 - @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames"
 - ListProjects
 - ListAllScenes
-- ListAllFolders
+- @ref InfoEvent_Commands_ListAllFolders "ListAllFolders"
 - ListResourcesInFolders
 - ListAllResources
-- GetAssetDescriptor
-- GetAssetThumbnail
-- GetSceneThumbnail
-- GetPresetThumbnail
+- @ref InfoEvent_Commands_GetAssetDescriptor "GetAssetDescriptor"
+- @ref InfoEvent_Commands_GetAssetThumbnail "GetAssetThumbnail"
+- @ref InfoEvent_Commands_GetSceneThumbnail "GetSceneThumbnail"
+- @ref InfoEvent_Commands_GetPresetThumbnail "GetPresetThumbnail"
 - GetPMItemStats
 - @ref InfoEvent_Commands_Timelines "Timelines"
 - @ref InfoEvent_Commands_CheckTimelineTime "CheckTimelineTime"
@@ -372,6 +372,181 @@ Lists params assigned to timelines.
    "Success" : "true",
    "TimelinePath" : "TimelineKeyframes_Example.scn%ObjectTimeline",
    "cmd" : "ListTimelineKeyframes"
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListScenes List scenes
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "ListScenes",
+    "Request" : {}
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "3024",
+   "Success" : "true",
+   "cmd" : "ListScenes",
+   "list" : [
+      "BluredShapes.scn",
+      "FlowerChannel2.scn",
+      "Mesh_Exmple.scn",
+      "Shapes2D_Examples.scn",
+      "SVG_Example.scn",
+      "Textures_Example.scn",
+      "TimelineKeyframes_Example.scn"
+   ],
+   "path" : ""
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListPresets List presets
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "ListPresets",
+    "Request" : {}
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "3024",
+   "Success" : "true",
+   "cmd" : "ListPresets",
+   "list" : [ "Flower.bvpreset" ],
+   "path" : ""
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListAssetsPaths List assets path
+
+List all assets in project manager from category.
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "ListAssetsPaths",
+    "Request" :
+    {
+        "projectName" : "",
+        "categoryName" : "textures",
+        "recursive" : "true"
+    }
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "3024",
+   "Success" : "true",
+   "categoryName" : "textures",
+   "cmd" : "ListAssetsPaths",
+   "list" : [
+      "textures\\crystal.jpg",
+      "textures\\ice-surface.jpg",
+      "textures\\Meshes\\Dark-Wood-Texture-520x339.jpg",
+      "textures\\snowflakes.jpg"
+   ],
+   "path" : ""
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListAllFolders List folders
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "ListAllFolders",
+    "Request" :
+    {
+        "path" : "",
+        "categoryName" : ""
+    }
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "3024",
+   "Success" : "true",
+   "categoryName" : "",
+   "cmd" : "ListAllFolders",
+   "list" : [
+      "audio",
+      "fonts",
+      "meshes",
+      "presets",
+      "projects",
+      "scenes",
+      "sequences",
+      "svgs",
+      "textures",
+      "textures\\Meshes",
+      "video"
+   ]
+}
+@endcode
+
+@subsection InfoEvent_Commands_GetAssetThumbnail Get assets thumbnails
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "GetAssetThumbnail",
+    "Request" :
+    {
+        "path" : "crystal.jpg",
+        "categoryName" : "textures",
+        "projectName" : ""
+    }
+}
+@endcode
+
+@subsection InfoEvent_Commands_GetSceneThumbnail Get Scene thumbnail
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "GetSceneThumbnail",
+    "Request" :
+    {
+        "path" : "crystal.jpg",
+        "projectName" : ""
+    }
+}
+@endcode
+
+@subsection InfoEvent_Commands_GetPresetThumbnail Get Preset thumbnail
+
+@code{.json}
+{
+    "Event" : "InfoEvent",
+    "EventID" : "3024",
+    "Command" : "GetPresetThumbnail",
+    "Request" :
+    {
+        "path" : "crystal.jpg",
+        "projectName" : ""
+    }
 }
 @endcode
 
