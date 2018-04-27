@@ -492,8 +492,8 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
 {
     if( m_timeEvalImpl.IsActive() && !m_timeEvalImpl.IsPaused() )
     {        
-        auto t0 = std::min( curTime, nextTime );
-        auto t1 = std::max( curTime, nextTime );
+        auto t0 = std::min( curTime, prevTime ) - 0.00001;
+        auto t1 = std::max( curTime, prevTime ) + 0.00001;
 
         bool reverseDirection = curTime > nextTime;
 
