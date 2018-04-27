@@ -1,4 +1,30 @@
 /**@page API_Documentation
+
+@section API_Documentation_Connection
+
+@subsection  API_Documentation_Connection_Initialize
+
+Black Vision starts TCP server and waits for incoming connections. Multiple editors
+or other external tools can connect and send API commands. TCP port can be configured
+from @ref Config_Network "config".
+
+
+After connection is initialized, first 8 bytes are used to configure logger messages
+sent to external tool. If you don't want to get logger messages, set these bytes to zero.
+
+First 4 bytes are module filters flags (@ref bv::ModuleEnum).
+Second 4 bytes is maximal @ref bv::SeverityLevel of messages.
+
+@subsection API_Documentation_Connection_MessagesFormat Messages format
+
+All API messages are in JSON format. To properly separate messages,
+they have to be surrounded by start byte (0x2) and end byte (0x3).
+
+
+
+
+@section API_Documentation_Reference API reference
+
 <ul>
     <li> @ref API_ScenesManipulation "Scenes manipulation"
     <li> @ref API_PresetsManipulation "Presets manipulation"
