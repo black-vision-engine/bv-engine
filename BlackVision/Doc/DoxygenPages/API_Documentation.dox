@@ -1,8 +1,10 @@
-/**@page API_Documentation
+/**@page API_Documentation API Documentation
 
-@section API_Documentation_Connection
+[TOC]
 
-@subsection  API_Documentation_Connection_Initialize
+@section API_Documentation_Connection Engine Connection
+
+@subsection  API_Documentation_Connection_Initialize Initialization
 
 Black Vision starts TCP server and waits for incoming connections. Multiple editors
 or other external tools can connect and send API commands. TCP port can be configured
@@ -20,11 +22,62 @@ Second 4 bytes is maximal @ref bv::SeverityLevel of messages.
 All API messages are in JSON format. To properly separate messages,
 they have to be surrounded by start byte (0x2) and end byte (0x3).
 
+Events are sent in JSON <b>Events</b> array, which contains one or multiple commands.
+Example event looks like this:
 
+@code{.json}
+[start byte]
+{
+    "Events" : 
+    [
+        {
+            "EventID" : "1453",
+            "Event" : "InfoEvent",
+            "Command" : "ListAllFolders",
+            "Request" : 
+            {
+                "categoryName" : "scenes",
+                "path" : ""
+            }
+        }
+    ]
+}
+[end byte]
+@endcode
+
+Rest of documentation omits Events array while presenting events.
+
+@section API_Documentation_Responses Messages responses
+
+Most of commands send responses based on response template. Each command response can contain additional
+fields.
+
+<b>Response template:</b>
+
+@code{.json}
+{
+   "EventID" : "1453",
+   "Success" : "true",
+   "cmd" : "ListAllFolders",
+   "ErrorInfo" : ""
+}
+@endcode
+
+Parameter name         	| Type          | Description
+----------------------- | ------------- | -----------
+EventID                 | int           | If you send commands with EventID, you can then identify reponse, because engine resends EventID in this field.
+cmd                     | string        | Executed command name.
+Success                 | bool          | Result of command execution.
+ErrorInfo               | string        | Custom error message.
 
 
 @section API_Documentation_Reference API reference
 
+@copydoc API_Reference
+
+*/
+
+/**@page API_Reference
 <ul>
     <li> @ref API_ScenesManipulation "Scenes manipulation"
     <li> @ref API_PresetsManipulation "Presets manipulation"
@@ -48,13 +101,17 @@ they have to be surrounded by start byte (0x2) and end byte (0x3).
     <li> @ref API_AdditionalCommands "Additional Commands"
     <li> @ref API_Timer "Timer events"
 </ul>
+*/
+
+/**@page API_ProjectManagment
 
 */
 
-
 /**@page API_Gizmos
 
-
+- CreateGizmo
+- RemoveGizmo
+- ListGizmos
 
 */
 
@@ -68,37 +125,66 @@ they have to be surrounded by start byte (0x2) and end byte (0x3).
 
 /**@page API_ConfigManagment
 
-
+- ReadValue
+- SetValue
+- SaveConfig
 
 */
 
 /**@page API_VideoCards
 
-
+- EnableOutput
+- DisableOutput
+- EnableKey
+- DisableKey
+- SetReferenceMode
+- SetReferenceOffsetH
+- SetReferenceOffsetV
+- EnableInput
+- DisableInput
+- GetReferenceSignalInfo
+- IsLocked
 
 */
 
 /**@page API_SceneVariables
 
-
+- AddVariable
+- GetVariable
+- DeleteVariable
 
 */
 
 /**@page API_GridLines
 
-
+- SetGridLinePosition
+- RenameGridLine
+- RemoveGridLine
+- AlignToGridLine
+- ShowGridLines
+- HideGridLines
 
 */
 
 /**@page API_ParameterDescriptors
 
-
+- AddParamDescriptor
+- RemoveParamDescriptor
+- AddAvaibleKeyTimes
+- RemoveAvaibleKeyTimes
+- SetDescriptorParameters
 
 */
 
 
 /**@page API_Timer
 
-
+- Start
+- Stop
+- Reset
+- SetTime
+- SetTimeStart
+- SetTimeStop
+- SetTimePatern
 
 */
