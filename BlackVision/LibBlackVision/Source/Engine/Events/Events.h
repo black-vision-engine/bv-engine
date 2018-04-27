@@ -28,6 +28,7 @@
 #include "API/LoadAssetEvent.h"
 #include "API/UndoRedoEvent.h"
 #include "API/TimeLineEvent.h"
+#include "API/TimelineKeyframeEvent.h"
 
 
 namespace bv {
@@ -411,61 +412,6 @@ public:
 DECLARE_ENUM_SERIALIZATION( VideoCardEvent::Command )
 DEFINE_PTR_TYPE( VideoCardEvent )
 
-
-
-// ************************************* TimelineKeyframeEvent *************************************
-class TimelineKeyframeEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddKeyframe,
-        RemoveKeyframe,
-        Fail            ///< Wrong command
-    } Command;
-
-    typedef enum
-    {
-        StopKeyframe,
-        LoopReverseKeyframe,
-        LoopJumpKeyframe,
-        LoopRestartKeyframe,
-        TriggerEventKeyframe,
-        NullKeyframe,
-        KeyframeTypeFail
-    } KeyframeType;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    TimelineKeyframeEvent::Command      KeyframeCommand;
-    TimelineKeyframeEvent::KeyframeType NewKeyframeType;
-    std::string                         TimelinePath;
-    std::string                         KeyframeName;
-    int                                 KeyframeIndex;
-
-    float                               Time;
-    float                               JumpToTime;
-    unsigned int                        TotalLoopCount;
-    std::string                         TriggerEvents;
-
-public:
-    explicit                        TimelineKeyframeEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( TimelineKeyframeEvent::Command )
-DECLARE_ENUM_SERIALIZATION( TimelineKeyframeEvent::KeyframeType )
-DEFINE_PTR_TYPE( TimelineKeyframeEvent )
 
 
 // ************************************* MouseEvent *************************************

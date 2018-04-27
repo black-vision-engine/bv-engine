@@ -20,7 +20,7 @@ This event supports following commands:
 - @ref InfoEvent_Commands_TreeStructure "MinimalTreeStructure"
 - @ref InfoEvent_Commands_NodeInfo "NodeInfo"
 - @ref InfoEvent_Commands_PluginInfo "PluginInfo"
-- EffectInfo
+- @ref InfoEvent_Commands_EffectInfo "EffectInfo"
 - ParamInfo
 - @ref InfoEvent_Commands_LogicInfo "LogicInfo"
 - @ref InfoEvent_Commands_TreeStructure "MinimalSceneInfo"
@@ -46,7 +46,7 @@ This event supports following commands:
 - GetPMItemStats
 - @ref InfoEvent_Commands_Timelines "Timelines"
 - @ref InfoEvent_Commands_CheckTimelineTime "CheckTimelineTime"
-- ListTimelineKeyframes
+- @ref InfoEvent_Commands_ListTimelineKeyframes "ListTimelineKeyframes"
 - @ref InfoEvent_Commands_ListTimelinesParams "ListTimelinesParams"
 - Performance
 - Videocards
@@ -334,6 +334,46 @@ Lists params assigned to timelines.
 
 @ref InfoEvent_Timelines_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_ListTimelineKeyframes List timeline keyframes
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListTimelineKeyframes",
+    "Request" :
+    {
+        "TimelinePath" : "TimelineKeyframes_Example.scn%ObjectTimeline"
+    }
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Keyframes" : [
+      {
+         "name" : "stop",
+         "time" : "1.000000",
+         "type" : "stop"
+      },
+      {
+         "action" : "goto",
+         "curLoopCount" : "0",
+         "loopCount" : "9999999",
+         "name" : "jump0",
+         "targetTime" : "0.000000",
+         "time" : "3.000000",
+         "type" : "loop"
+      }
+   ],
+   "Success" : "true",
+   "TimelinePath" : "TimelineKeyframes_Example.scn%ObjectTimeline",
+   "cmd" : "ListTimelineKeyframes"
+}
+@endcode
 
 */
 class InfoEvent : public RemoteEvent

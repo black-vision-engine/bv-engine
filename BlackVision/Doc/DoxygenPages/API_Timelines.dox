@@ -12,10 +12,11 @@
 - @ref TimeLineEvent_Commands_Play "PlayReverse"
 - @ref TimeLineEvent_Commands_Goto "Goto"
 - @ref TimeLineEvent_Commands_Goto "GotoAndPlay"
-
+- @ref TimelineKeyframeEvent_Commands_AddKeyframe "Adding keyframes to timelines"
+- @ref TimelineKeyframeEvent_Commands_RemoveKeyframe "Removing keyframes from timelines"
 - @ref InfoEvent_Commands_CheckTimelineTime "Checking timeline current time"
 - @ref InfoEvent_Commands_ListTimelinesParams "List params assigned to timelines"
-- ListTimelineKeyframes
+- @ref InfoEvent_Commands_ListTimelineKeyframes "List timeline keyframes"
 - @ref InfoEvent_Commands_Timelines "Query timelines info"
 
 
