@@ -18,6 +18,8 @@ DEFINE_CONST_PTR_TYPE( FontAsset2D )
 @details
 Loads bitmap font based on atlas.
 
+<b>Supported formats:</b> ttf
+
 -                       | UID                       | Class
 ----------------------- | ------------------------- | -----------
 Descriptor              | FONT_ASSET_DESC           | @ref bv::FontAssetDesc

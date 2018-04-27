@@ -14,6 +14,8 @@ namespace bv
 @details
 Loads texture from hard drive.
 
+<b>Supported formats:</b> jpg, tga, png, bmp.
+
 -                       | UID                       | Class
 ----------------------- | ------------------------- | -----------
 Descriptor              | TEXTURE_ASSET_DESC        | @ref bv::TextureAssetDesc

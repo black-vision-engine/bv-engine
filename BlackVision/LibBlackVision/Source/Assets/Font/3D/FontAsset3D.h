@@ -18,6 +18,8 @@ DEFINE_CONST_PTR_TYPE( FontAsset3D )
 @details
 Loads geometric font.
 
+<b>Supported formats:</b> ttf
+
 -                       | UID                       | Class
 ----------------------- | ------------------------- | -----------
 Descriptor              | FONT_ASSET_3D_DESC        | @ref bv::FontAssetDesc

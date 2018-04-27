@@ -31,6 +31,7 @@ public:
 
 // ***************************** PLUGIN ********************************** 
 /// @ingroup PluginsList
+/// @todo Inherit from bv::model::TexturePluginBase.
 class DefaultBlendTexturePlugin : public BasePlugin
 {
 public:

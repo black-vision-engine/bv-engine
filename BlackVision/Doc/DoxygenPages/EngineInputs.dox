@@ -1,8 +1,27 @@
 /**@page EngineInputs Inputs
 
-@section VideoInput
+@section EngineInputs_InputSlots InputSlots
 
-Engine can capture video and audio from video card. Check @ref Config_VideoCards "here" how to
-configure video card input channel.
+@ref InputSlots "Input Slots" are general mechanisms for providing external texture and audio sources.
+@ref Plugins "Plugins" can access global table of slots. Each slot can contain texture or audio (or both).
+
+@ref Plugins "Plugins" reference slots by using their index or name.
+
+For now only input implemented as slots are @ref EngineInputs_VideoInput "VideoInputs".
+
+@section EngineInputs_VideoInput VideoInput
+
+Engine can capture video and audio from video card. Before starting engine, user must configure
+Video Inputs channels in config. Check @ref Config_VideoCards "here" how to configure video card input channels.
+
+Each Video Input channel has <b>linkedVideoInput</b> field which identifies input.
+
+@subsection EngineInputs_VideoInput_Using Using Video Inputs
+
+Since VideoInput is implemented as InputSlot, all @ref Plugins "Plugins" that support slots
+can load @ref Assets_List_VideoInputAssets "Video Input Texture and Audio assets".
+
+Moreover special bv::model::VideoInputPlugin exists, which can display two Video Input channels at the same time
+using one of them as <b>Fill</b> and second as <b>Key</b>.
 
 */

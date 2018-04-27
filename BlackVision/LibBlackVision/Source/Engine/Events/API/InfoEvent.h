@@ -20,7 +20,7 @@ This event supports following commands:
 - @ref InfoEvent_Commands_TreeStructure "MinimalTreeStructure"
 - @ref InfoEvent_Commands_NodeInfo "NodeInfo"
 - @ref InfoEvent_Commands_PluginInfo "PluginInfo"
-- EffectInfo
+- @ref InfoEvent_Commands_EffectInfo "EffectInfo"
 - ParamInfo
 - @ref InfoEvent_Commands_LogicInfo "LogicInfo"
 - @ref InfoEvent_Commands_TreeStructure "MinimalSceneInfo"
@@ -44,10 +44,10 @@ This event supports following commands:
 - GetSceneThumbnail
 - GetPresetThumbnail
 - GetPMItemStats
-- Timelines
-- CheckTimelineTime
-- ListTimelineKeyframes
-- ListTimelinesParams
+- @ref InfoEvent_Commands_Timelines "Timelines"
+- @ref InfoEvent_Commands_CheckTimelineTime "CheckTimelineTime"
+- @ref InfoEvent_Commands_ListTimelineKeyframes "ListTimelineKeyframes"
+- @ref InfoEvent_Commands_ListTimelinesParams "ListTimelinesParams"
 - Performance
 - Videocards
 
@@ -273,7 +273,107 @@ Categories names can be listed with @ref InfoEvent_Commands_ListCategoriesNames 
 
 @ref InfoEvent_GetAssetDescriptor_ExampleResponse "Example Response"
 
+@subsection InfoEvent_Commands_Timelines List timelines
 
+Lists timelines.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "TimeLines",
+    "Request" : {}
+}
+@endcode
+
+@ref InfoEvent_Timelines_ExampleResponse "Example Response"
+
+@subsection InfoEvent_Commands_CheckTimelineTime CheckTimelineTime
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "CheckTimelineTime",
+    "Request" :
+    {
+        "SceneName" : "Shapes2D_Examples.scn",
+        "TimelineName" : "Timeline1"
+    }
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "213",
+   "SceneName" : "Shapes2D_Examples.scn",
+   "Success" : "true",
+   "Time" : "0.000000",
+   "TimelineName" : "Timeline1",
+   "cmd" : "CheckTimelineTime"
+}
+@endcode
+
+@subsection InfoEvent_Commands_ListTimelinesParams ListTimelinesParams
+
+Lists params assigned to timelines.
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListTimelinesParams",
+    "Request" :
+    {
+        "SceneName" : "Shapes2D_Examples.scn"
+    }
+}
+@endcode
+
+@ref InfoEvent_Timelines_ExampleResponse "Example Response"
+
+@subsection InfoEvent_Commands_ListTimelineKeyframes List timeline keyframes
+
+@code{.json}
+{
+    "EventID" : "213",
+    "Event" : "InfoEvent",
+    "Command" : "ListTimelineKeyframes",
+    "Request" :
+    {
+        "TimelinePath" : "TimelineKeyframes_Example.scn%ObjectTimeline"
+    }
+}
+@endcode
+
+<b>Example response:</b>
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Keyframes" : [
+      {
+         "name" : "stop",
+         "time" : "1.000000",
+         "type" : "stop"
+      },
+      {
+         "action" : "goto",
+         "curLoopCount" : "0",
+         "loopCount" : "9999999",
+         "name" : "jump0",
+         "targetTime" : "0.000000",
+         "time" : "3.000000",
+         "type" : "loop"
+      }
+   ],
+   "Success" : "true",
+   "TimelinePath" : "TimelineKeyframes_Example.scn%ObjectTimeline",
+   "cmd" : "ListTimelineKeyframes"
+}
+@endcode
 
 */
 class InfoEvent : public RemoteEvent
@@ -352,6 +452,2007 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 }	// bv
+
+
+
+/**@page InfoEvent_Timelines_ExampleResponse InfoEvent Timelines command example response:
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Success" : "true",
+   "Timelines" : [
+      {
+         "Params" : [
+            {
+               "NodePath" : "root",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#0",
+               "ParamOwner" : "NodeLogicParam",
+               "ParamSubName" : "",
+               "PluginName" : "",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "5.000000"
+                        }
+                     ]
+                  },
+                  "name" : "MaxHeight",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0",
+               "ParamOwner" : "NodeLogicParam",
+               "ParamSubName" : "",
+               "PluginName" : "",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "5.000000"
+                        }
+                     ]
+                  },
+                  "name" : "MaxWidth",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0",
+               "ParamOwner" : "NodeLogicParam",
+               "ParamSubName" : "",
+               "PluginName" : "",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "5.000000"
+                        }
+                     ]
+                  },
+                  "name" : "MaxDepth",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0",
+               "ParamOwner" : "NodeLogicParam",
+               "ParamSubName" : "",
+               "PluginName" : "",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "false"
+                        }
+                     ]
+                  },
+                  "name" : "IsProportional",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "bool"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.640000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "outer radius",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.500000"
+                        }
+                     ]
+                  },
+                  "name" : "inner radius",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "360.000000"
+                        }
+                     ]
+                  },
+                  "name" : "open angle",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "78"
+                        }
+                     ]
+                  },
+                  "name" : "tesselation",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "int"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "open angle mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "true"
+                        }
+                     ]
+                  },
+                  "name" : "blend enable",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "bool"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "background blend mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.705000, 1.000000, 0.000000, 1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "color",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec4"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "-0.250000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.730000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.600000"
+                        }
+                     ]
+                  },
+                  "name" : "outer radius",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.000000"
+                        }
+                     ]
+                  },
+                  "name" : "inner radius",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "360.000000"
+                        }
+                     ]
+                  },
+                  "name" : "open angle",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "20"
+                        }
+                     ]
+                  },
+                  "name" : "tesselation",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "int"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "open angle mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "true"
+                        }
+                     ]
+                  },
+                  "name" : "blend enable",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "bool"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "background blend mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.314000, 0.560000, 1.000000, 1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "color",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec4"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "-1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "true"
+                        }
+                     ]
+                  },
+                  "name" : "blend enable",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "bool"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "background blend mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "solid color",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.000000, 1.000000, 0.000000, 1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "color",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec4"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "1.500000"
+                        }
+                     ]
+                  },
+                  "name" : "outer radius",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.000000"
+                        }
+                     ]
+                  },
+                  "name" : "inner radius",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "360.000000"
+                        }
+                     ]
+                  },
+                  "name" : "open angle",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "80"
+                        }
+                     ]
+                  },
+                  "name" : "tesselation",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "int"
+               }
+            },
+            {
+               "NodePath" : "root/#0/#2",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "circle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "open angle mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "-2.080000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.200000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "rectangle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "2.200000"
+                        }
+                     ]
+                  },
+                  "name" : "width",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "rectangle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.700000"
+                        }
+                     ]
+                  },
+                  "name" : "height",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "rectangle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "2"
+                        }
+                     ]
+                  },
+                  "name" : "weight center x",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "rectangle",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "2"
+                        }
+                     ]
+                  },
+                  "name" : "weight center y",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "true"
+                        }
+                     ]
+                  },
+                  "name" : "blend enable",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "bool"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0"
+                        }
+                     ]
+                  },
+                  "name" : "background blend mode",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "enum"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "alpha",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "float"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.000000, 0.000000"
+                        }
+                     ]
+                  },
+                  "name" : "point1",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec2"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "1.000000, 0.000000"
+                        }
+                     ]
+                  },
+                  "name" : "point2",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec2"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.934000, 0.000000, 0.000000, 1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "color1",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec4"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "interpolator" : {
+                     "keys" : [
+                        {
+                           "time" : "0.000000",
+                           "val" : "0.000000, 0.000000, 0.516000, 1.000000"
+                        }
+                     ]
+                  },
+                  "name" : "color2",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "vec4"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#0",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "linear_gradient",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.500000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.500000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "txMat",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            },
+            {
+               "NodePath" : "root/#1/#1",
+               "ParamOwner" : "PluginParam",
+               "ParamSubName" : "",
+               "PluginName" : "transform",
+               "param" : {
+                  "composite_transform" : [
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "center"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "translation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "0.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "iseuler" : "true",
+                        "kind" : "rotation"
+                     },
+                     {
+                        "interpolators" : [
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           },
+                           {
+                              "keys" : [
+                                 {
+                                    "time" : "0.000000",
+                                    "val" : "1.000000"
+                                 }
+                              ]
+                           }
+                        ],
+                        "kind" : "scale"
+                     }
+                  ],
+                  "name" : "simple_transform",
+                  "timeline" : "Shapes2D_Examples.scn%default",
+                  "type" : "transform"
+               }
+            }
+         ],
+         "TimelinePath" : "default"
+      },
+      {
+         "Params" : [],
+         "TimelinePath" : "FallbackTimeline"
+      },
+      {
+         "Params" : [],
+         "TimelinePath" : "Timeline1"
+      },
+      {
+         "Params" : [],
+         "TimelinePath" : "Shapes2D_Examples.scn"
+      }
+   ],
+   "cmd" : "ListTimelinesParams"
+}
+
+@endcode
+
+*/
+
+
+/**@page InfoEvent_Timelines_ExampleResponse InfoEvent Timelines command example response:
+
+@code{.json}
+{
+   "EventID" : "213",
+   "Success" : "true",
+   "cmd" : "TimeLines",
+   "scenes" : [
+      {
+         "name" : "Shapes2D_Examples.scn",
+         "timelines" : {
+            "timeline" : {
+               "children" : [
+                  {
+                     "duration" : "340282346638528859811704183484516925440.000000",
+                     "events" : [],
+                     "local_time" : "0.000000",
+                     "loop" : "clamp",
+                     "name" : "default",
+                     "play" : "false",
+                     "type" : "default"
+                  },
+                  {
+                     "duration" : "340282346638528859811704183484516925440.000000",
+                     "events" : [],
+                     "local_time" : "0.000000",
+                     "loop" : "clamp",
+                     "name" : "Timeline1",
+                     "play" : "false",
+                     "type" : "default"
+                  },
+                  {
+                     "duration" : "340282346638528859811704183484516925440.000000",
+                     "events" : [],
+                     "local_time" : "0.000000",
+                     "loop" : "clamp",
+                     "name" : "FallbackTimeline",
+                     "play" : "false",
+                     "type" : "default"
+                  }
+               ],
+               "name" : "Shapes2D_Examples.scn",
+               "offset" : "0.000000",
+               "scale" : "1.000000",
+               "type" : "offset"
+            }
+         }
+      }
+   ]
+}
+@endcode
+
+*/
+
 
 /**@page InfoEvent_GetAssetDescriptor_ExampleResponse InfoEvent GetAssetDescriptor command example response:
 

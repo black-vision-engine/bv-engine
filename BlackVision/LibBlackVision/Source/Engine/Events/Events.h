@@ -26,6 +26,9 @@
 #include "API/EngineStateEvent.h"
 #include "API/ParamKeyEvent.h"
 #include "API/LoadAssetEvent.h"
+#include "API/UndoRedoEvent.h"
+#include "API/TimeLineEvent.h"
+#include "API/TimelineKeyframeEvent.h"
 
 
 namespace bv {
@@ -269,64 +272,6 @@ DEFINE_PTR_TYPE( ResponseEvent )
 
 
 
-// ************************************* TimelineCmd *************************************
-class TimeLineEvent : public RemoteEvent
-{
-public:
-
-    typedef enum
-    {
-        AddTimeline,
-        DeleteTimeline,
-        ForceDeleteTimeline,
-        RenameTimeline,
-        SetDuration,
-        SetWrapPreBehavior,
-        SetWrapPostBehavior,
-
-        Play,
-        Stop,
-        PlayReverse,
-        Goto,
-        GotoAndPlay,
-        Fail            ///< Wrong command
-    } Command;
-
-private:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-
-    TimeLineEvent::Command      TimelineCommand;
-    std::string                 TimelineName; //path?
-    std::string                 NewTimelineName;
-    float                       Time;
-    TimelineType                TimelineType;
-    TimeType                    Duration;
-    TimelineWrapMethod            WrapMethod;
-
-public:
-
-    explicit                        TimeLineEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer & ser ) const;
-    static IEventPtr                Create              ( IDeserializer & deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string &            Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-
-};
-
-
-DECLARE_ENUM_SERIALIZATION( TimeLineEvent::Command )
-DEFINE_PTR_TYPE( TimeLineEvent )
-
-
 // ************************************* TimerEvent *************************************
 class TimerEvent : public RemoteEvent
 {
@@ -467,61 +412,6 @@ public:
 DECLARE_ENUM_SERIALIZATION( VideoCardEvent::Command )
 DEFINE_PTR_TYPE( VideoCardEvent )
 
-
-
-// ************************************* TimelineKeyframeEvent *************************************
-class TimelineKeyframeEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        AddKeyframe,
-        RemoveKeyframe,
-        Fail            ///< Wrong command
-    } Command;
-
-    typedef enum
-    {
-        StopKeyframe,
-        LoopReverseKeyframe,
-        LoopJumpKeyframe,
-        LoopRestartKeyframe,
-        TriggerEventKeyframe,
-        NullKeyframe,
-        KeyframeTypeFail
-    } KeyframeType;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-    TimelineKeyframeEvent::Command      KeyframeCommand;
-    TimelineKeyframeEvent::KeyframeType NewKeyframeType;
-    std::string                         TimelinePath;
-    std::string                         KeyframeName;
-    int                                 KeyframeIndex;
-
-    float                               Time;
-    float                               JumpToTime;
-    unsigned int                        TotalLoopCount;
-    std::string                         TriggerEvents;
-
-public:
-    explicit                        TimelineKeyframeEvent   () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( TimelineKeyframeEvent::Command )
-DECLARE_ENUM_SERIALIZATION( TimelineKeyframeEvent::KeyframeType )
-DEFINE_PTR_TYPE( TimelineKeyframeEvent )
 
 
 // ************************************* MouseEvent *************************************
@@ -694,48 +584,6 @@ public:
 DECLARE_ENUM_SERIALIZATION( GridLineEvent::Command )
 DEFINE_PTR_TYPE( GridLineEvent )
 
-
-
-// ************************************* UndoRedoEvent *************************************
-class UndoRedoEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        Undo,
-        Redo,
-        SetOperationsBufferSize,
-
-        Fail            ///< Wrong command
-    } Command;
-
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-public:
-
-    Command         UndoCommand;
-    std::string     SceneName;
-    UInt16          NumSteps;             
-    UInt16          Size;
-
-public:
-
-    explicit                        UndoRedoEvent       () {};
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( UndoRedoEvent::Command )
-DEFINE_PTR_TYPE( UndoRedoEvent )
 
 
 // ************************************* GenericEvent *************************************

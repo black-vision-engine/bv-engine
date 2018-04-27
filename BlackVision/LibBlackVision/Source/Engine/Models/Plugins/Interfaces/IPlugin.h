@@ -62,10 +62,12 @@ Check how to set parameters through API @ref API_Parameters "here".
 
 @section Plugins_Resources Resources
 
-Some plugins can load assets to display textures, generate geometry based on asset content or process assets in different manner.
+Some plugins can load @ref Assets "Assets" to display textures, generate geometry based on asset content or process assets in different manner.
 In current version API supports only one asset loaded at the same time.
 
-Check how to load assets through API @ref API_Assets "here".
+Check how to load @ref Assets "Assets" through API @ref API_Assets "here".
+
+@section Plugins_API Plugins API commands
 
 @copydoc API_PluginsManipulation
 

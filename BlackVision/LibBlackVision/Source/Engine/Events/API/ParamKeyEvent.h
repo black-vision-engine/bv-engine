@@ -7,9 +7,22 @@ namespace bv
 
 /**@brief Parameter manipulation API.
 
-@copydoc API_Parameters
+@section ParamKeyEvent_Commands Commands
 
-@subsection ParamKeyEvent_Commands_AddKey "Adding or updating a key"
+This event supports following commands:
+- @ref ParamKeyEvent_Commands_AddKey "AddKey"
+- @ref ParamKeyEvent_Commands_RemoveKey "RemoveKey"
+- @ref ParamKeyEvent_Commands_MoveKey "MoveKey"
+- @ref ParamKeyEvent_Commands_SetInterpolatorType "SetInterpolatorType"
+- @ref ParamKeyEvent_Commands_SetAddedInterpolatorType "SettAddedInterpolatorType"
+- @ref ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod "SetInterpolatorPreWrapMethod"
+- @ref ParamKeyEvent_Commands_SetInterpolatorPostWrapMethod "SetInterpolatorPostWrapMethod"
+- @ref ParamKeyEvent_Commands_AssignTimeline "AssignTimeline"
+- @ref ParamKeyEvent_Commands_SampleCurve "SampleCurve"
+- @ref ParamKeyEvent_Commands_ListKeys "ListKeys"
+- @ref ParamKeyEvent_Commands_ListParameters "ListParameters"
+
+@subsection ParamKeyEvent_Commands_AddKey Adding or updating a key
 
 Adds a keyframe for Parameter. If keyframe exists at given time, it updates it's value.
 

@@ -17,7 +17,7 @@
 @section NodeLogics_General General
 
 Logics add posibility to change normal Nodes update behavior. Moreover they can handle generic commands (defined by logic implementation)
-coming from API. This is main difference betwen Plugins and Logics. The only way to modify Plugin's state, is changing it's @ref Parameters "Parameters"
+coming from API. This is main difference between @ref Plugins "Plugins" and Logics. The only way to modify Plugin's state, is changing it's @ref Parameters "Parameters"
 or loading asset. Logics can implement own commands and make operations on @ref Nodes "Nodes" in their subtree.
 
 @subsection NodeLogics_Update Node update logic
@@ -45,7 +45,7 @@ Commands executed in events update phase of engine, that means that this happens
 
 @subsection NodeLogics_Parameters Parameters
 
-Each Logic defines own set of parameters, which can be used like in plugins.
+Each Logic defines own set of parameters, which can be used like in @ref Plugins "Plugins".
 Check how to set parameters through API @ref API_Parameters "here".
 
 @subsection NodeLogics_APIFunctionalities Logics API commands

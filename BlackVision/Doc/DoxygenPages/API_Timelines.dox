@@ -1,9 +1,23 @@
 /**@page API_Timelines Timelines API commands
 
-- CheckTimelineTime
-- ListTimelinesParams
-- ListTimelineKeyframes
-- Timelines
+- @ref TimeLineEvent_Commands_AddTimeline "Adding timelines"
+- @ref TimeLineEvent_Commands_DeleteTimeline "Removing timelines"
+- @ref TimeLineEvent_Commands_DeleteTimeline "Force removing timelines"
+- @ref TimeLineEvent_Commands_RenameTimeline "Renaming timelines"
+- @ref TimeLineEvent_Commands_SetDuration "Setting timeline duration"
+- @ref TimeLineEvent_Commands_WrapMethods "Setting pre wrap behavior"
+- @ref TimeLineEvent_Commands_WrapMethods "Setting post wrap behavior"
+- @ref TimeLineEvent_Commands_Play "Play"
+- @ref TimeLineEvent_Commands_Stop "Stop"
+- @ref TimeLineEvent_Commands_Play "PlayReverse"
+- @ref TimeLineEvent_Commands_Goto "Goto"
+- @ref TimeLineEvent_Commands_Goto "GotoAndPlay"
+- @ref TimelineKeyframeEvent_Commands_AddKeyframe "Adding keyframes to timelines"
+- @ref TimelineKeyframeEvent_Commands_RemoveKeyframe "Removing keyframes from timelines"
+- @ref InfoEvent_Commands_CheckTimelineTime "Checking timeline current time"
+- @ref InfoEvent_Commands_ListTimelinesParams "List params assigned to timelines"
+- @ref InfoEvent_Commands_ListTimelineKeyframes "List timeline keyframes"
+- @ref InfoEvent_Commands_Timelines "Query timelines info"
 
 
 */
