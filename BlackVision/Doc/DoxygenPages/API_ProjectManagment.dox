@@ -1,0 +1,19 @@
+/**@page API_ProjectManagment Project managment
+
+- ListProjectNames
+- @ref InfoEvent_Commands_ListScenes "ListScenes"
+- @ref InfoEvent_Commands_ListPresets "ListPresets"
+- @ref InfoEvent_Commands_ListAssetsPaths "ListAssetsPaths"
+- @ref InfoEvent_Commands_ListCategoriesNames "ListCategoriesNames"
+- ListProjects
+- ListAllScenes
+- @ref InfoEvent_Commands_ListAllFolders "ListAllFolders"
+- ListResourcesInFolders
+- ListAllResources
+- GetAssetDescriptor
+- @ref InfoEvent_Commands_GetAssetThumbnail "GetAssetThumbnail"
+- @ref InfoEvent_Commands_GetSceneThumbnail "GetSceneThumbnail"
+- @ref InfoEvent_Commands_GetPresetThumbnail "GetPresetThumbnail"
+- GetPMItemStats
+
+*/

@@ -1,3 +1,6 @@
+Release 0.52.1
+- Stopping on timeline keframe fixed
+
 Release 0.52.0
 - Colorize effects (color correction, color balance, sepia) added
 
