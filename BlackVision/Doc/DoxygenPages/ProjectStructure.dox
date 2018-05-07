@@ -1,0 +1,21 @@
+/**@page ProjectStructure Project Structure
+
+Directory           |   Description
+------------------- | --------------------------
+Applications        | Executable applications.
+Assets              | Directory with shaders and default assets. This directory will be copied to release output.
+Benchmarks          | Directory with automatic benchmarks.
+Dep                 | 3rd party libraries and visual studio projects templates.
+DevTools            | Developer tools and libraries.
+Doc                 | Documentation directory.
+LibBlackVision      | Main library.
+LibBVAL             | Audio wrapper for OpenAL.
+LibBVGL             | Wrapper for OpenGL.
+LibCore             | Libraries with core functionalities.
+LibImage            | Loading and writing images library.
+LibVideoCards       | Video cards implementation.
+Projects            | Directory for visual studio solution and common projects properties files (.props).
+Test                | Directory with regression tests.
+Tools               | Other tools used by engine.
+
+*/

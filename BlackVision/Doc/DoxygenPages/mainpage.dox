@@ -49,7 +49,7 @@
 @page DeveloperDocumentation Developer Documentation
 <ul>
     <li> @ref BuildInstruction "Building Instruction"
-    <li> Project structure
+    <li> @ref ProjectStructure "Project structure"
     <li> @ref ExtendingEngine "Extending engine"
         @copydoc ExtendingEngine
     <li> Regression testing
