@@ -16,6 +16,7 @@ There're many types of built in outputs:
 - Shared memory
 - Video Card output
 - Screenshot
+- Offscreen rendering
 - Video file
 
 @subsection EngineOutputs_Preview Preview
@@ -43,7 +44,11 @@ Check @ref Config_VideoCards "Define Video Card output channels" in config.
 
 @subsection EngineOutputs_Screenshot Screenshot
 
-Engine can make screenshot of current rendered frame.
+Engine can make screenshot of current rendered frame. To make screenshot send @ref EngineStateEvent_Commands_ScreenShot "Command".
+
+@subsection EngineOutputs_OffscreenRendering Offscreen rendering
+
+Renders sequence of images to directory. To render sequence send @ref EngineStateEvent_Commands_RenderOffscreen "Command".
 
 @subsection EngineOutputs_VideoFile Video file
 
