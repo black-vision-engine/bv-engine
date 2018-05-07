@@ -51,7 +51,7 @@ We support following curves:
 
 @subsection APIControl API control
 
-See @ref API_Parameters for detailed description of possible Parameter's manipulation.
+See @ref API_Parameters "Parameters API" for detailed description of possible Parameter's manipulation.
 
 
 @see bv::model::IParameter

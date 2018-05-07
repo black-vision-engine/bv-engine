@@ -207,43 +207,6 @@ public:
 DECLARE_ENUM_SERIALIZATION( ParamDescriptorEvent::Command )
 DEFINE_PTR_TYPE( ParamDescriptorEvent )
 
-// ************************************* AssetEvent *************************************
-class AssetEvent : public RemoteEvent
-{
-
-public:
-
-    typedef enum
-    {
-        ClearCache,
-        Fail            ///< Wrong command
-    } Command;
-
-private:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-
-    AssetEvent::Command         AssetCommand;
-
-public:
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-
-    virtual EventType               GetEventType        () const;
-    virtual const std::string &     GetName             () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-};
-
-DECLARE_ENUM_SERIALIZATION( AssetEvent::Command )
-DEFINE_PTR_TYPE( AssetEvent )
-
 
 
 

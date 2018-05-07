@@ -1,6 +1,6 @@
 /**@page API_Assets Assets API commands
 
-- @ref LoadAssetEvent_Commands_LoadAsset "LoadAsset"
-- ClearCache
+- @ref LoadAssetEvent_Commands_LoadAsset "Loading Assets"
+- @ref AssetEvent_Commands_ClearCache "Clearing Asset Cache"
 
 */

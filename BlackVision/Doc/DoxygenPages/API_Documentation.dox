@@ -112,7 +112,7 @@ ErrorInfo               | string        | Custom error message.
 
 */
 
-/**@page API_UndoRedo
+/**@page API_UndoRedo Undo/Redo operations
 
 - @ref UndoRedoEvent_Commands_Undo "Undo operations"
 - @ref UndoRedoEvent_Commands_Redo "Redo operations"
