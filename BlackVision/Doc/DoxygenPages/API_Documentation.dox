@@ -104,11 +104,11 @@ ErrorInfo               | string        | Custom error message.
 */
 
 
-/**@page API_Gizmos
+/**@page API_Gizmos Gizmo manipulation API
 
-- CreateGizmo
-- RemoveGizmo
-- ListGizmos
+- @ref GizmoEvent_Commands "CreateGizmo"
+- @ref GizmoEvent_Commands "RemoveGizmo"
+- @ref GizmoEvent_Commands "ListGizmos"
 
 */
 
@@ -120,68 +120,68 @@ ErrorInfo               | string        | Custom error message.
 
 */
 
-/**@page API_ConfigManagment
+/**@page API_ConfigManagment Config API
 
-- ReadValue
-- SetValue
-- SaveConfig
+- @ref ConfigEvent_Commands "ReadValue"
+- @ref ConfigEvent_Commands "SetValue"
+- @ref ConfigEvent_Commands "SaveConfig"
 
 */
 
 /**@page API_VideoCards
 
-- EnableOutput
-- DisableOutput
-- EnableKey
-- DisableKey
-- SetReferenceMode
-- SetReferenceOffsetH
-- SetReferenceOffsetV
-- EnableInput
-- DisableInput
-- GetReferenceSignalInfo
-- IsLocked
+- @ref VideoCardEvent_Commands "EnableOutput"
+- @ref VideoCardEvent_Commands "DisableOutput"
+- @ref VideoCardEvent_Commands "EnableKey"
+- @ref VideoCardEvent_Commands "DisableKey"
+- @ref VideoCardEvent_Commands "SetReferenceMode"
+- @ref VideoCardEvent_Commands "SetReferenceOffsetH"
+- @ref VideoCardEvent_Commands "SetReferenceOffsetV"
+- @ref VideoCardEvent_Commands "EnableInput"
+- @ref VideoCardEvent_Commands "DisableInput"
+- @ref VideoCardEvent_Commands "GetReferenceSignalInfo"
+- @ref VideoCardEvent_Commands "IsLocked"
 
 */
 
-/**@page API_SceneVariables
+/**@page API_SceneVariables Scene variables API
 
-- AddVariable
-- GetVariable
-- DeleteVariable
+- @ref SceneVariableEvent_Commands "AddVariable"
+- @ref SceneVariableEvent_Commands "GetVariable"
+- @ref SceneVariableEvent_Commands "DeleteVariable"
 
 */
 
 /**@page API_GridLines
 
-- SetGridLinePosition
-- RenameGridLine
-- RemoveGridLine
-- AlignToGridLine
-- ShowGridLines
-- HideGridLines
+- @ref GridLineEvent_Commands "SetGridLinePosition"
+- @ref GridLineEvent_Commands "RenameGridLine"
+- @ref GridLineEvent_Commands "RemoveGridLine"
+- @ref GridLineEvent_Commands "AlignToGridLine"
+- @ref GridLineEvent_Commands "ShowGridLines"
+- @ref GridLineEvent_Commands "HideGridLines"
 
 */
 
 /**@page API_ParameterDescriptors
 
-- AddParamDescriptor
-- RemoveParamDescriptor
-- AddAvaibleKeyTimes
-- RemoveAvaibleKeyTimes
-- SetDescriptorParameters
+- @ref ParamDescriptorEvent_Commands "AddParamDescriptor"
+- @ref ParamDescriptorEvent_Commands "RemoveParamDescriptor"
+- @ref ParamDescriptorEvent_Commands "AddAvaibleKeyTimes"
+- @ref ParamDescriptorEvent_Commands "RemoveAvaibleKeyTimes"
+- @ref ParamDescriptorEvent_Commands "SetDescriptorParameters"
 
 */
 
 
 /**@page API_Timer
 
-- Start
-- Stop
-- Reset
-- SetTime
-- SetTimeStart
-- SetTimeStop
-- SetTimePatern
+- @ref TimerEvent_Commands "Start"
+- @ref TimerEvent_Commands "Stop"
+- @ref TimerEvent_Commands "Reset"
+- @ref TimerEvent_Commands "SetTime"
+- @ref TimerEvent_Commands "SetTimeStart"
+- @ref TimerEvent_Commands "SetTimeStop"
+- @ref TimerEvent_Commands "SetTimePatern"
 
 */
