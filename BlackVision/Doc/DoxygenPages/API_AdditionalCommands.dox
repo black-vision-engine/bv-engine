@@ -4,7 +4,7 @@
 
 - @ref NodeStructureEvent_Commands_Selection "Selecting Nodes"
 - @ref NodeStructureEvent_Commands_Selection "Removing Nodes selection"
-- MouseDown
+- @ref MouseEvent_Commands_MouseDown "Mouse down click"
 - @ref EngineStateEvent_Commands_SwitchEditMode "SwitchEditMode"
 - @ref EngineStateEvent_Commands_RenderOffscreen "Offscreen rendering"
 - @ref EngineStateEvent_Commands_ScreenShot "Making screenshots"

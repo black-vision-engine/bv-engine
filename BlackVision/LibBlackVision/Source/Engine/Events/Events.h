@@ -29,6 +29,7 @@
 #include "API/UndoRedoEvent.h"
 #include "API/TimeLineEvent.h"
 #include "API/TimelineKeyframeEvent.h"
+#include "API/MouseEvent.h"
 
 
 namespace bv {
@@ -420,58 +421,6 @@ public:
 
 DECLARE_ENUM_SERIALIZATION( VideoCardEvent::Command )
 DEFINE_PTR_TYPE( VideoCardEvent )
-
-
-
-
-/**@brief Mouse API
-
-@section MouseEvent_Commands Commands
-
-This event supports following commands:
-- MouseUp
-- MouseDown
-- MouseMove
-
-*/
-class MouseEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        MouseUp,
-        MouseDown,
-        MouseMove,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-    MouseEvent::Command             MouseCommand;
-
-    Float32                         MouseX;
-    Float32                         MouseY;
-    bool                            AutoSelect;
-    glm::vec4                       AutoSelectColor;
-
-public:
-    explicit                        MouseEvent          () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( MouseEvent::Command )
-DEFINE_PTR_TYPE( MouseEvent )
 
 
 

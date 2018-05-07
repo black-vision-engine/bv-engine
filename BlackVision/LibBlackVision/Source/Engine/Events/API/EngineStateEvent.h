@@ -117,6 +117,8 @@ working in edit mode.
 }
 @endcode
 
+Check @ref MouseEvent_Commands_MouseDown "Mouse Click" and @ref NodeStructureEvent_Commands_Selection "selection events".
+
 */
 class EngineStateEvent : public RemoteEvent
 {
