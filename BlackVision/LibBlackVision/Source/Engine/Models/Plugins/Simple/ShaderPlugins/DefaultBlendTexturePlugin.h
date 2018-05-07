@@ -121,8 +121,6 @@ Texture to blend.
 
 @ingroup PluginsList
 @todo Inherit from bv::model::TexturePluginBase.*/
-// ***************************** PLUGIN ********************************** 
-
 class DefaultBlendTexturePlugin : public BasePlugin
 {
 public:
