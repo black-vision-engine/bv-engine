@@ -156,4 +156,4 @@ You can derive your Plugins from one of following classes:
 - @ref bv::model::TextPluginBase Base class for Plugins using text based on texture atlas.
 - @ref bv::model::DefaultGeometryPluginBase Base class for geometry generating Plugins.
 
-*/
+@see PluginsList, @ref Plugins*/

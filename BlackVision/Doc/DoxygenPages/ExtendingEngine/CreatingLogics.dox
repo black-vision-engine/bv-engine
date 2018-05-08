@@ -128,5 +128,5 @@ Example implementation of these handlers can be found in @ref bv::nodelogic::Ana
 To use Logic you have to register create function in bv::NodeLogicFactory.
 Example registrations are placed in bv::NodeLogicFactory::RegisterDefaultLogics.
 
-
+@see LogicsList, @ref NodeLogics
 */

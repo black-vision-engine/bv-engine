@@ -52,7 +52,7 @@ Check how to set parameters through API @ref API_Parameters "here".
 
 @copydoc API_LogicsManipulation
 
-@see LogicsList, bv::model::INodeLogic
+@see LogicsList, bv::model::INodeLogic, bv::model::NodeLogicBase, @ref ExtendingEngine_CreatingLogics
 */
 
 
