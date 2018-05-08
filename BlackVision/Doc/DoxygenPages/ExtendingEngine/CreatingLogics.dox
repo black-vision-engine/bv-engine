@@ -46,8 +46,13 @@ Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITim
 
 @section ExtendingEngine_CreatingLogics_HandleEvent Implement HandleEvent
 
+Logic can execute commands from API using bv::model::INodeLogic::HandleEvent function.
+Function gets bv::IDeserializer in parameter from which Logic can extract generic command parameters.
+Commands name is set in <b>Action</b> parameter. Rest of content of bv::IDeserializer is Logic specific.
 
+Logic can return response in bv::ISerializer passed as second parameter.
 
+<b>Example:</b>
 @code
 // ***********************
 //
@@ -70,6 +75,27 @@ bool                        Cloner::HandleEvent     ( IDeserializer & eventDeser
 
 
 @section ExtendingEngine_CreatingLogics_UpdateHooks Implement update hooks
+
+There are 3 update functions that Logic can reimplement:
+- @ref bv::model::INodeLogic::PreNodeUpdate
+- @ref bv::model::INodeLogic::Update
+- @ref bv::model::INodeLogic::PostChildrenUpdate
+
+Check @ref NodeLogics_Update "here", when these functions are called in update phase. You can check
+implementation of function bv::model::BasicNode::Update either.
+
+Which function to choose, depends on functionality you want to implement. For example:
+- @ref bv::model::INodeLogic::PreNodeUpdate "PreNodeUpdate" Could be used when we want update Node's transformation parameters.
+We must do it before Plugins are be updated. Example is @ref bv::nodelogic::Follow.
+- @ref bv::model::INodeLogic::Update "Update" Use when you want to manipulate Node's subtree. This function is invoked
+before children update. Example is @ref bv::nodelogic::Cloner.
+- @ref bv::model::INodeLogic::PostChildrenUpdate "PostChildrenUpdate" Use when your depends on bounding box update of node's subtree.
+Example is @ref bv::nodelogic::MaxSize.
+
+
+@section ExtendingEngine_CreatingLogics_ManipulatingNodes Manipulating nodes
+
+
 
 @section ExtendingEngine_CreatingLogics_Factory Registering Logics in factory
 
