@@ -91,15 +91,227 @@ In the latter (see third example), it may be one of the following:
 @endcode
 
 @subsection ParamKeyEvent_Commands_RemoveKey "Removing a key"
+
+@code{.json}
+{
+	"EventID": "6010",
+	"Event": "ParamKeyEvent",
+	"Command": "RemoveKey",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"ParamSubName": "translation",
+	"Time": "3",
+	"Target": "PluginParam"
+}
+@endcode
+
 @subsection ParamKeyEvent_Commands_MoveKey "Moving a key"
+
+Note that new time is sent as ParamValue attribute.
+
+@code{.json}
+{
+	"EventID": "6010",
+	"Event": "ParamKeyEvent",
+	"Command": "MoveKey",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"ParamSubName": "translation",
+	"Time": "3",
+    "ParamValue": "5",
+    "Target": "PluginParam"
+}
+@endcode
+
 @subsection ParamKeyEvent_Commands_SetInterpolatorType "Setting an interpolator type of whole curve"
+
+Possible interpolator types:
+- bezier,
+- cosine,
+- linear,
+- point,
+- cubic_in
+- cubic_out,
+- elastic_in,
+- elastic_out,
+- elastic_in_bounce,
+- elastic_out_bounce,
+- quadric_inout,
+- cubic_inout.
+
+@code{.json}
+{
+	"EventID": "6294",
+	"Event": "ParamKeyEvent",
+	"Command": "SetInterpolator",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"ParamValue": "elastic_in_bounce"
+}
+@endcode
+
 @subsection ParamKeyEvent_Commands_SetAddedInterpolatorType "Setting next added interpolator type"
+
+For the list of types see @ref ParamKeyEvent_Commands_SetInterpolatorType.
+
+@code{.json}
+{
+	"EventID": "6294",
+	"Event": "ParamKeyEvent",
+	"Command": "SetAddedInterpolatorType",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"ParamValue": "elastic_in_bounce"
+}
+@endcode
+
 @subsection ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod "Setting interpolator's pre-wrap method"
+
+Possible pre-wrap methods:
+- clamp
+- pingPong
+- repeat
+
+@code{.json}
+"EventID": "6294",
+"Event": "ParamKeyEvent",
+"Command": "SetInterpolatorPreWrapMethod",
+"SceneName": "TimelineKeyframes_Example.scn",
+"NodeName": "#0/#0",
+"PluginName": "transform",
+"ParamName": "simple_transform",
+"ParamValue": "mirror"
+@endcode
+
 @subsection ParamKeyEvent_Commands_SetInterpolatorPostWrapMethod "Setting interpolator's post-wrap method"
+
+For the list of methods see @ref ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod.
+
+@code{.json}
+"EventID": "6294",
+"Event": "ParamKeyEvent",
+"Command": "SetInterpolatorPostWrapMethod",
+"SceneName": "TimelineKeyframes_Example.scn",
+"NodeName": "#0/#0",
+"PluginName": "transform",
+"ParamName": "simple_transform",
+"ParamValue": "mirror"
+@endcode
+
 @subsection ParamKeyEvent_Commands_AssignTimeline "Assigning timeline to a parameter"
+
+@code{.json}
+{
+	"EventID": "40788",
+	"Event": "ParamKeyEvent",
+	"Command": "AssignTimeline",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"Target": "PluginParam",
+	"ParamValue": "TimelineKeyframes_Example.scn%default"
+}
+@endcode
+
 @subsection ParamKeyEvent_Commands_SampleCurve "Evaluating parameter"
+
+ParamValue attribute should be of form "start,end,steps" where start and end define sampling interval and steps is number of samples.
+
+The result is returned in an array "samples" (see example response below).
+
+@code{.json}
+{
+	"EventID": "40788",
+	"Event": "ParamKeyEvent",
+	"Command": "SampleCurve",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"Target": "PluginParam",
+	"ParamValue": "0,3,10"
+}
+@endcode
+
+Response:
+
+@code{.json}
+{
+	"samples": [{
+			"t": "0.000000",
+			"val": ""
+		}, {
+			"t": "0.300000",
+			"val": ""
+		}, {
+			"t": "0.600000",
+			"val": ""
+		}, {
+			"t": "0.900000",
+			"val": ""
+		}, {
+			"t": "1.200000",
+			"val": ""
+		}, {
+			"t": "1.500000",
+			"val": ""
+		}, {
+			"t": "1.800000",
+			"val": ""
+		}, {
+			"t": "2.100000",
+			"val": ""
+		}, {
+			"t": "2.400000",
+			"val": ""
+		}, {
+			"t": "2.700000",
+			"val": ""
+		}
+	]
+}
+@endcode
+
+
 @subsection ParamKeyEvent_Commands_ListKeys "Listing all curve's keyframes"
+
+@code{.json}
+{
+	"EventID": "40788",
+	"Event": "ParamKeyEvent",
+	"Command": "ListKeys",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+	"ParamName": "simple_transform",
+	"ParamSubName": "translation",
+    "Target": "PluginParam"
+}
+@endcode
+
 @subsection ParamKeyEvent_Commands_ListParameters "Listing parameters"
+
+@code{.json}
+{
+	"EventID": "40788",
+	"Event": "ParamKeyEvent",
+	"Command": "ListParameters",
+	"SceneName": "TimelineKeyframes_Example.scn",
+	"NodeName": "#0/#0",
+	"PluginName": "transform",
+    "Target": "PluginParam"
+}
+@endcode
+
 
 */
 class ParamKeyEvent : public RemoteEvent
