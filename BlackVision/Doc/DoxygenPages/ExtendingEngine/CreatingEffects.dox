@@ -1,5 +1,26 @@
 /**@page ExtendingEngine_CreatingEffects Creating Effects
 
+Effects consists of to parts:
+- Model part holds model with parameters.
+- Engine part implements custom rendering logic.
+
+
+@section ExtendingEngine_CreatingEffects_StepsList Creating Effect steps list
+
+1. Add new field in bv::NodeEffectType enumeration in file NodeEffect.h.
+2. Add new entry in NodeEffectSerialization.cpp file in enum serialization mapping array.
+3. Create bv::model::DefaultParamValModel with effect parameters, which will be visible through API.
+4. Create bv::model::ModelNodeEffect class instance and pass model to it.
+5. Add model Effect creation function to bv::model::ModelNodeEffectFactory::CreateModelNodeEffect implementation.
+6. Implement engine Effect creation function and add it to CreateNodeEffect function in file NodeEffectFactory.cpp.
+
+
+@section ExtendingEngine_CreatingEffects_EngineEffectImpl Engine Effect implementation
+
+Effects can consist of multiple passes, each of them can have 2 steps:
+- pre fullscreen step
+- fullscreen step
+
 
 
 */
