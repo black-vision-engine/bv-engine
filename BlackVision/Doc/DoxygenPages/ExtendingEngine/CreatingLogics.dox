@@ -1,13 +1,80 @@
 /**@page ExtendingEngine_CreatingLogics Creating Logics
 
-@section ExtendingEngine_CreatingLogics_Factory Creating using factory
+[TOC]
+
+@section ExtendingEngine_CreatingLogics_Model Logic Model
+
+Logics can use parameter model the same way as @ref ExtendingEngine_CreatingPlugins_CreatingModel_PluginModel "Plugins".
+Main difference is, that Logics have only one @ref bv::model::DefaultParamValModel. There are no models with special
+meaning and parameters aren't forwarded anywhere.
+
+Derive your Logics from bv::model::NodeLogicBase class, if you want to use @ref Parameters. This class
+implements model serialization and deserialization. Remember to call @ref bv::model::NodeLogicBase::Update
+if you override Update function.
+
+<b>Example model initialization: (@ref bv::nodelogic::Cloner)</b>
+
+@code
+// ***********************
+//
+Cloner::Cloner             ( bv::model::BasicNodeWeakPtr parent, bv::model::ITimeEvaluatorPtr timeEvaluator )
+    : m_parentNode( parent )
+    , m_updatePositionsNeeded( true )
+    , m_updateClonesNeeded( true )
+{
+    model::ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( PARAMETERS::N_ROWS, 1, true, true );
+    h.AddSimpleParam( PARAMETERS::N_COLS, 1, true, true );
+    h.AddSimpleParam( PARAMETERS::DELTA, glm::vec3( 0.f, 0.f, 0.f ), true, true );
+    h.AddSimpleParam( PARAMETERS::RENAME_SUBTREE, false, true, true );
+    h.AddSimpleParam( PARAMETERS::REMOVE_EXCESS, false, true, true );
+    h.AddEnumParam< ClonerPlaneType >( PARAMETERS::PLANE_TYPE, ClonerPlaneType::CPT_XY, true, true );
+
+    m_paramValModel = std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() );
+
+    m_numRows = model::GetValueParamState< Int32 >( m_paramValModel.get(), PARAMETERS::N_ROWS );
+    m_numCols = model::GetValueParamState< Int32 >( m_paramValModel.get(), PARAMETERS::N_COLS );
+    m_delta = model::GetValueParamState< glm::vec3 >( m_paramValModel.get(), PARAMETERS::DELTA );
+    m_renameSubtree = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::RENAME_SUBTREE );
+    m_removeExcees = model::GetValueParamState< bool >( m_paramValModel.get(), PARAMETERS::REMOVE_EXCESS );
+    m_planeType = model::GetValueParamState< ClonerPlaneType >( m_paramValModel.get(), PARAMETERS::PLANE_TYPE );
+}
+@endcode
 
 
 @section ExtendingEngine_CreatingLogics_HandleEvent Implement HandleEvent
 
+
+
+@code
+// ***********************
+//
+bool                        Cloner::HandleEvent     ( IDeserializer & eventDeser, ISerializer & /*response*/, BVProjectEditor * /*editor*/ )
+{
+    std::string action = eventDeser.GetAttribute( "Action" );
+
+    if( action == Cloner::ACTION::REGENERATE )
+        Regenerate();
+    else if( action == Cloner::ACTION::REMOVE_ONLY_EXCESS )
+        RemoveExcessNodes();
+    else if( action == Cloner::ACTION::REMOVE_ALL_CLONES )
+        RemoveClones();
+    else
+        return false;
+
+    return true;
+}
+@endcode
+
+
 @section ExtendingEngine_CreatingLogics_UpdateHooks Implement update hooks
 
+@section ExtendingEngine_CreatingLogics_Factory Registering Logics in factory
 
+To use Logic you have to register create function in bv::NodeLogicFactory.
+Example registrations are placed in bv::NodeLogicFactory::RegisterDefaultLogics.
 
 
 */
