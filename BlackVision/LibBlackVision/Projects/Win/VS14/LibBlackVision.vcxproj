@@ -694,6 +694,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\InfoEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\LightEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\LoadAssetEvent.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\MouseEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeLogicEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\NodeStructureEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\API\PluginsStructureEvent.h" />
