@@ -21,7 +21,6 @@
     <li> @ref EngineInputs "Engine inputs"
     <li> @ref PluginsLogicsEffectsReferece "Plugins/Logics/Effects reference"
         @copydoc PluginsLogicsEffectsReferece
-    <li> Undo/Redo operations
     <li> @ref API_Documentation "API documentation"
         @copydoc API_Reference
     <li> @ref Config "Config documentation"
@@ -52,8 +51,6 @@
     <li> @ref ProjectStructure "Project structure"
     <li> @ref ExtendingEngine "Extending engine"
         @copydoc ExtendingEngine
-    <li> Regression testing
-    <li> Benchmarks
 </ul>
 */
 

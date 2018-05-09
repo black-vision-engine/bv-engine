@@ -90,7 +90,7 @@ In the latter (see third example), it may be one of the following:
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_RemoveKey "Removing a key"
+@subsection ParamKeyEvent_Commands_RemoveKey Removing a key
 
 @code{.json}
 {
@@ -107,7 +107,7 @@ In the latter (see third example), it may be one of the following:
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_MoveKey "Moving a key"
+@subsection ParamKeyEvent_Commands_MoveKey Moving a key
 
 Note that new time is sent as ParamValue attribute.
 
@@ -127,7 +127,7 @@ Note that new time is sent as ParamValue attribute.
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_SetInterpolatorType "Setting an interpolator type of whole curve"
+@subsection ParamKeyEvent_Commands_SetInterpolatorType Setting an interpolator type of whole curve
 
 Possible interpolator types:
 - bezier,
@@ -156,7 +156,7 @@ Possible interpolator types:
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_SetAddedInterpolatorType "Setting next added interpolator type"
+@subsection ParamKeyEvent_Commands_SetAddedInterpolatorType Setting next added interpolator type
 
 For the list of types see @ref ParamKeyEvent_Commands_SetInterpolatorType.
 
@@ -173,7 +173,7 @@ For the list of types see @ref ParamKeyEvent_Commands_SetInterpolatorType.
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod "Setting interpolator's pre-wrap method"
+@subsection ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod Setting interpolator's pre-wrap method
 
 Possible pre-wrap methods:
 - clamp
@@ -191,7 +191,7 @@ Possible pre-wrap methods:
 "ParamValue": "mirror"
 @endcode
 
-@subsection ParamKeyEvent_Commands_SetInterpolatorPostWrapMethod "Setting interpolator's post-wrap method"
+@subsection ParamKeyEvent_Commands_SetInterpolatorPostWrapMethod Setting interpolator's post-wrap method
 
 For the list of methods see @ref ParamKeyEvent_Commands_SetInterpolatorPreWrapMethod.
 
@@ -206,7 +206,7 @@ For the list of methods see @ref ParamKeyEvent_Commands_SetInterpolatorPreWrapMe
 "ParamValue": "mirror"
 @endcode
 
-@subsection ParamKeyEvent_Commands_AssignTimeline "Assigning timeline to a parameter"
+@subsection ParamKeyEvent_Commands_AssignTimeline Assigning timeline to a parameter
 
 @code{.json}
 {
@@ -222,7 +222,7 @@ For the list of methods see @ref ParamKeyEvent_Commands_SetInterpolatorPreWrapMe
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_SampleCurve "Evaluating parameter"
+@subsection ParamKeyEvent_Commands_SampleCurve Evaluating parameter
 
 ParamValue attribute should be of form "start,end,steps" where start and end define sampling interval and steps is number of samples.
 
@@ -282,7 +282,7 @@ Response:
 @endcode
 
 
-@subsection ParamKeyEvent_Commands_ListKeys "Listing all curve's keyframes"
+@subsection ParamKeyEvent_Commands_ListKeys Listing all curve's keyframes
 
 @code{.json}
 {
@@ -298,7 +298,7 @@ Response:
 }
 @endcode
 
-@subsection ParamKeyEvent_Commands_ListParameters "Listing parameters"
+@subsection ParamKeyEvent_Commands_ListParameters Listing parameters
 
 @code{.json}
 {
