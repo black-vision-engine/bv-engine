@@ -98,8 +98,7 @@ void SetDefaultState( FullscreenEffectVisualComponentDesc * desc, FullscreenEffe
             break;
         case FullscreenEffectType::NFET_COLOR_CORRECTION:
             desc->SetBlendFlag( true );
-//            desc->AppendInputSamplerEntry( "Texture" );
-            desc->AppendInputSamplerEntry( "Mask" );
+            desc->AppendInputSamplerEntry( "Texture" );
             desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             desc->AppendIVal( ValuesFactory::CreateValueVec4( "color", glm::vec4( 0.f, 0.f, 0.f, 0.f ) ) );
             break;
