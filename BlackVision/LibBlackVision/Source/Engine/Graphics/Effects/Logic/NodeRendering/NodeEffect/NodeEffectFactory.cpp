@@ -15,6 +15,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/PreFullscreenEffectStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FullscreenEffectStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/DefaultFinalizeStep.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/DefaultPreFSEStep.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/AlphaMaskPreFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/AlphaMaskFSEStep.h"
@@ -153,33 +154,19 @@ NodeEffectPtr   CreateColorCorrectionEffect( FullscreenEffectType nnodeEffectTyp
     //RenderLogic - default
     //Passes
     // - fse - default pre
-    //    - pre step - color grade
+    //    - pre step - default rendering
     //    - fse step - color grade
-    // - fin - default rendering
-    //    - finalize step with default rendering
     // Create STEPS
 
-    //float minAlphaThreshold = 0.01f;
-    //float maxAlphaThreshold = 1.f;
-
-    //auto fseStep        = new AlphaMaskFSEStep( minAlphaThreshold, maxAlphaThreshold );
     auto fseStep        = new ColorCorrectionFSEStep( nnodeEffectType );
 
-    auto alphaVal       = ValuesFactory::CreateValueFloat( "alpha" ); //get_value( fseStep->GetState(), "alpha" );
-//    auto maskPreview    = get_value( fseStep->GetState(), "maskPreview" );
-
-//    auto preFSEStep     = new AlphaMaskPreFSEStep( fseStep->GetState(), minAlphaThreshold, maxAlphaThreshold );
-    auto preFSEStep     = new GlowPreFSEStep( alphaVal, alphaVal, alphaVal ); // FIXME this is evident shit
+    auto preFSEStep     = new DefaultPreFSEStep();
 
     auto fsePass        = new FullscreenEffectPass( preFSEStep, fseStep );
-
-    //auto finalizeStep	= new DefaultFinalizeStep(); //new NodeMaskFinalizeStep();
-    //auto finPass		= new FinalizePass( finalizeStep );
 
     std::vector< NodeEffectRenderPass * > passes( 1 );
 
     passes[ 0 ] = fsePass;
-    //passes[ 1 ] = finPass;
 
     auto nnerl = new NodeEffectRenderLogic( passes );
 

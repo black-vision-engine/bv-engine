@@ -7,7 +7,7 @@
 
 namespace bv { 
 
-class GlowPreFSEStep : public PreFullscreenEffectStep
+class DefaultPreFSEStep : public PreFullscreenEffectStep
 {
 private:
 
@@ -19,7 +19,7 @@ private:
 
 public:
 
-				                    GlowPreFSEStep			( IValuePtr blurSize, IValuePtr inner, IValuePtr outer );
+				                    DefaultPreFSEStep			();
 
     virtual unsigned int            GetNumOutputs           () const override;
 
@@ -33,10 +33,6 @@ public:
 
     virtual bool                    IsIdle                  ( SceneNodeRepr * nodeRepr ) const override;
     virtual bool                    IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
-
-	Float32                         GetBlurSize             () const;
-	bool							GetInner				() const;
-	bool							GetOuter				() const;
 };
 
 

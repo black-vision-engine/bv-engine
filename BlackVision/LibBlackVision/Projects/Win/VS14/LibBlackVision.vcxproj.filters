@@ -2194,6 +2194,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ColorCorrectionFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -5617,6 +5620,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\API\TimelineKeyframeEvent.h">
       <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

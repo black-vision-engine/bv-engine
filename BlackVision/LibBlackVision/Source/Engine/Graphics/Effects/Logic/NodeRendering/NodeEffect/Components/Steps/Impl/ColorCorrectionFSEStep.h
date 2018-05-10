@@ -31,7 +31,6 @@ public:
 
 protected:
 
-        virtual void                ReadInputState          ();
         virtual void                ApplyImpl               ( RenderContext * ctx, const RenderedData * input ) override;
         virtual void                FreeRenderTargets       ( RenderContext * ctx, const RenderedData * input );
 
@@ -40,12 +39,6 @@ public:
         virtual bool                IsIdle                  ( SceneNodeRepr * nodeRepr ) const override;
         virtual bool                IsFinal                 ( SceneNodeRepr * nodeRepr ) const override;
         virtual void                AppendRenderPasses_DIRTY_HACK   ( std::set< const RenderablePass * > * passes ) const override;
-
-private:
-
-    float                           GetAlpha                () const;
-    bool                            IsPreview               () const;
-
 };
 
 
