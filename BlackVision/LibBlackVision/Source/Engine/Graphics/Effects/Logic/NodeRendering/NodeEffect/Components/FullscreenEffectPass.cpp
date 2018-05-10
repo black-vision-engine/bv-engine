@@ -40,7 +40,7 @@ void    FullscreenEffectPass::Apply                    ( SceneNodeRepr * nodeRep
 
     if( !m_preFullscreenStep->IsIdle( nodeRepr ) )
     {
-        res = m_preFullscreenStep->Apply( nodeRepr, ctx );;
+        res = m_preFullscreenStep->Apply( nodeRepr, ctx );
     }
    
     if( !m_preFullscreenStep->IsFinal( nodeRepr ) && !m_fullscreenStep->IsIdle( nodeRepr ) )
