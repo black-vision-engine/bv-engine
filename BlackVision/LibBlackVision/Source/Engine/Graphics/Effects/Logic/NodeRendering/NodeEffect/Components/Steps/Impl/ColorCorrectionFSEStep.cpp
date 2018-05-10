@@ -55,7 +55,9 @@ void                    ColorCorrectionFSEStep::ReadInputState               ()
 //
 void                    ColorCorrectionFSEStep::ApplyImpl                    ( RenderContext * ctx, const RenderedData * input )
 {
-    assert( input );
+    //    assert( input ); // commented out due to FullscreenEffectPass::Apply behaviour, perhaphs one of those should be fixed
+    if( input == nullptr )
+        return;
 
     // FIXME: add sync here on smewhere else, where it fits
     m_colorCorrectionEffect->Render( ctx, *input );
