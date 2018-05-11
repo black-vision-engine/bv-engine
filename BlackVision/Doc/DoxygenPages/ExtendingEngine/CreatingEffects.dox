@@ -7,15 +7,25 @@ Effects consists of to parts:
 
 @section ExtendingEngine_CreatingEffects_StepsList Creating Effect steps list
 
-1. Add new field in bv::NodeEffectType enumeration in file NodeEffect.h.
-2. Add new entry in NodeEffectSerialization.cpp file in enum serialization mapping array.
-3. Create bv::model::DefaultParamValModel with effect parameters, which will be visible through API.
-4. Create bv::model::ModelNodeEffect class instance and pass model to it.
-5. Add model Effect creation function to bv::model::ModelNodeEffectFactory::CreateModelNodeEffect implementation.
-6. Implement engine Effect creation function and add it to CreateNodeEffect function in file NodeEffectFactory.cpp.
+@subsection ExtendingEngine_CreatingEffects_StepsList_ModelEnums Create Effect's enum and make it (de)serializable
 
+- Add new field in bv::NodeEffectType enumeration in file NodeEffect.h.
+- Add new entry in NodeEffectSerialization.cpp file in enum serialization mapping array.
 
-@section ExtendingEngine_CreatingEffects_EngineEffectImpl Engine Effect implementation
+@subsection ExtendingEngine_CreatingEffects_StepsList_EffectModel Create Effect's model
+
+Update ModelNodeEffectFactory::CreateModelNodeEffect(...) to handle your new effect.
+
+In particular, you need to create @ref bv::model::DefaultParamValModel with effect parameters, which will be visible through API.
+
+See @ref ExtendingEngine_CreatingPlugins_CreatingModel_PluginModel for the easiest way to do that.
+
+@subsection ExtendingEngine_CreatingEffects_StepsList_Engine Create Effect's engine (rendering) part
+
+Update CreateNodeEffect(...) function in file NodeEffectFactory.cpp to create your Effect's engine part.
+Usually you want to use @ref bv::NodeEffectImpl, which is constructed from @ref bv::NodeEffectRenderLogic.
+
+@section ExtendingEngine_CreatingEffects_EngineEffectImpl Engine Effect implementation via NodeEffectImpl
 
 Effects can consist of multiple passes, each of them can have 2 steps:
 - pre fullscreen step
