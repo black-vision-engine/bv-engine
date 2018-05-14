@@ -174,7 +174,7 @@ ReturnResult        CFifoPlayback::Init     ( BLUE_INT32 CardNumber, BLUE_UINT32
     m_pFifoBuffer = pFifoBuffer;
     m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
 
-    m_reusableFrames = CreateReusableVideoChunks( GoldenSize, BytesPerLine, 2 );
+    m_reusableFrames = CreateReusableVideoChunks( GoldenSize, BytesPerLine, 4 );
 
     return Result::Success();
 }
