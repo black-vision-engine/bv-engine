@@ -1,6 +1,7 @@
 Release 0.52.3
 - Video cards output - vsync-like bug fixed.
 - DefaultAVDecoderPlugin - loop enabled makes infinite loop, when loop count is set to zero [Bug fix].
+- Color balance effect in subtree of color correction node works properly [Bug fix]
 
 Release 0.52.2
 - Color Correction crashing BV fixed
