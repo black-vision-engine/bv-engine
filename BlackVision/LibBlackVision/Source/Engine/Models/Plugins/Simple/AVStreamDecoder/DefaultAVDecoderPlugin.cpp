@@ -152,7 +152,7 @@ DefaultAVDecoderPlugin::DefaultAVDecoderPlugin					( const std::string & name, c
     m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
 
     m_loopEnabledParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::LOOP_ENABLED ) );
-    m_loopCountParam = QueryTypedParam< ParamIntPtr >( GetParameter( PARAM::LOOP_COUNT ) );
+    m_loopCountParam = QueryTypedValue< ValueIntPtr >( GetValue( PARAM::LOOP_COUNT ) );
 
     m_muteParam = QueryTypedParam< ParamBoolPtr >( GetParameter( PARAM::MUTE ) );
 	m_gainParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::GAIN ) );
@@ -423,7 +423,7 @@ void                                DefaultAVDecoderPlugin::HandlePerfectLoops  
     else
     {
         auto loopEnabled = m_loopEnabledParam->Evaluate();
-        auto loopCount = m_loopCountParam->Evaluate();
+        auto loopCount = m_loopCountParam->GetValue();
         if( ParameterChanged( PARAM::LOOP_COUNT ) )
         {
             if( loopCount == 0 )
