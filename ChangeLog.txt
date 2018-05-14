@@ -1,3 +1,6 @@
+Release 0.52.3
+- Video cards output - vsync-like bug fixed.
+
 Release 0.52.2
 - Color Correction crashing BV fixed
 
