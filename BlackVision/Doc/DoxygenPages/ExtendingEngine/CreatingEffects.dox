@@ -14,7 +14,7 @@ Effects consists of to parts:
 
 @subsection ExtendingEngine_CreatingEffects_StepsList_EffectModel Create Effect's model
 
-Update ModelNodeEffectFactory::CreateModelNodeEffect(...) to handle your new effect.
+Update @ref bv::model::ModelNodeEffectFactory::CreateModelNodeEffect "CreateModelNodeEffect(...)" to handle your new effect.
 
 In particular, you need to create @ref bv::model::DefaultParamValModel with effect parameters, which will be visible through API.
 
@@ -22,15 +22,28 @@ See @ref ExtendingEngine_CreatingPlugins_CreatingModel_PluginModel for the easie
 
 @subsection ExtendingEngine_CreatingEffects_StepsList_Engine Create Effect's engine (rendering) part
 
-Update CreateNodeEffect(...) function in file NodeEffectFactory.cpp to create your Effect's engine part.
-Usually you want to use @ref bv::NodeEffectImpl, which is constructed from @ref bv::NodeEffectRenderLogic.
+Update @ref bv::CreateNodeEffect(...) function in file NodeEffectFactory.cpp to create your Effect's engine part.
 
-@section ExtendingEngine_CreatingEffects_EngineEffectImpl Engine Effect implementation via NodeEffectImpl
+Usually you want to use @ref bv::NodeEffectImpl, which is constructed from @ref bv::NodeEffectRenderLogic (see below for more information). 
+
+Keep in mind that @ref bv::NodeEffect also needs to implement @ref bv::NodeEffect::GetValue "GetValue(...)" method which provides a way to input parameters to rendering steps. In particular you can a value to the shader as the uniform in @ref bv::FullscreenEffectStep.
+
+@section ExtendingEngine_CreatingEffects_EngineEffectImpl Engine Effect implementation via NodeEffectImpl constructed with NodeEffectRenderLogic
+
+NodeEffectRenderLogic is basically an array of passes(@ref bv::NodeEffectRenderPass), which are abstract classes.
+
+Two type of passes are implemented right now: @ref bv::FullscreenEffectPass and @ref bv::FinalizePass. The difference is that the first one consists of two step, while the second consists of just one.
+
+@subsection 
 
 Effects can consist of multiple passes, each of them can have 2 steps:
 - pre fullscreen step
 - fullscreen step
 
+@subsection ExtendingEngine_CreatingEffects_EngineEffectImpl_Model 
 
+@subsection ExtendingEngine_CreatingEffects_EngineEffectImpl_Allocation
+
+@section ExtendingEngine_CreatingEffects_FullscreenEffect Fullscreen effects
 
 */
