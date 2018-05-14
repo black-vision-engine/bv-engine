@@ -26,6 +26,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultMaterialPlugin : public BasePlugin
 {
 public:

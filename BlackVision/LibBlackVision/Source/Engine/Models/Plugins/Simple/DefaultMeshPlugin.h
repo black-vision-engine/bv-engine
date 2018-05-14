@@ -30,6 +30,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultMeshPlugin : public BasePlugin
 {
 public:

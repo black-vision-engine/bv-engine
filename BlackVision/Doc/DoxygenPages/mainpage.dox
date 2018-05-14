@@ -1,0 +1,78 @@
+/**
+@mainpage
+
+@section MainPage_UserDocumentation User Documentation
+
+@copydoc UserDocumentation
+
+@section MainPage_DeveloperDocumentation Developer Documentation
+
+@copydoc DeveloperDocumentation
+
+*/
+
+/**
+@page UserDocumentation User Documentation
+
+<ul>
+    <li> @ref MainPage_GeneralConcepts "General Engine concepts"
+        @copydoc MainPage_GeneralConcepts
+    <li> @ref EngineOutputs "Engine outputs"
+    <li> @ref EngineInputs "Engine inputs"
+    <li> @ref PluginsLogicsEffectsReferece "Plugins/Logics/Effects reference"
+        @copydoc PluginsLogicsEffectsReferece
+    <li> Undo/Redo operations
+    <li> @ref API_Documentation "API documentation"
+        @copydoc API_Documentation
+    <li> @ref Config "Config documentation"
+</ul>
+
+*/
+
+/**@page MainPage_GeneralConcepts
+<ul>
+    <li> @ref Scenes "Scenes"
+    <li> @ref Nodes "Nodes"
+    <li> @ref Parameters "Parameters"
+    <li> @ref Plugins "Plugins"
+    <li> @ref NodeLogics "Logics"
+    <li> @ref NodeEffects "Effects"
+    <li> @ref Assets "Assets"
+    <li> @ref Cameras "Cameras"
+    <li> @ref Lights "Lights"
+	<li> @ref Presets "Presets"
+</ul>
+*/
+
+
+/**
+@page DeveloperDocumentation Developer Documentation
+<ul>
+    <li> Building Instruction
+    <li> Project structure
+    <li> @ref ExtendingEngine "Extending engine"
+        @copydoc ExtendingEngine
+    <li> Regression testing
+    <li> Benchmarks
+</ul>
+*/
+
+/**@page PluginsLogicsEffectsReferece Plugins/Logics/Effects reference
+<ul>
+    <li> @ref PluginsList "Plugins list"
+    <li> @ref EffectsList "Effects list"
+    <li> @ref LogicsList "Logics list"
+</ul>
+*/
+
+
+/**@page ExtendingEngine Extending Engine
+<ul>
+    <li> @ref ExtendingEngine_CreatingPlugins "Creating Plugins"
+    <li> @ref ExtendingEngine_CreatingLogics "Creating Logics"
+    <li> @ref ExtendingEngine_CreatingEffects "Creating Effects"
+</ul>
+*/
+
+
+

@@ -41,6 +41,9 @@ struct PN {
     static const std::string MAPPINGTYPE;
 };
 
+
+/**@brief Plugins generates rounded cone.
+@ingroup PluginsList*/
 class DefaultConePlugin : public DefaultGeometryPluginBase
 {
 public:

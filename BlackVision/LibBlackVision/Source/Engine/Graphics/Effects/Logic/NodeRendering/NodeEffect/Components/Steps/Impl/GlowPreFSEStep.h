@@ -27,7 +27,7 @@ protected:
 
     virtual void                    ReadInputState          () override;
     virtual void                    AllocateRenderTargets   ( RenderContext * ctx ) override;
-    virtual const RenderedData *   ApplyImpl               ( SceneNodeRepr * nodeRepr, RenderContext * ctx ) override;
+    virtual const RenderedData *    ApplyImpl               ( SceneNodeRepr * nodeRepr, RenderContext * ctx ) override;
 
 public:
 

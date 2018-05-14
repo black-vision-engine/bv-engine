@@ -5,9 +5,32 @@
 
 #include <vector>
 
+/**@page Cameras Cameras
+
+@section Cameras_CurrentCamera Current Camera
+
+Each @ref Scenes "Scene" has own set of cameras. One of them is used to render scene.
+You can change current camera using @ref API_CamerasManagment "API".
+
+@section Cameras_AddingRemovingCamera Adding/Removing camera
+
+Adding and removing camera using API is described @ref API_CamerasManagment "here".
+
+@copydetails bv::model::CameraModel
+
+@section Cameras_CameraFunctionalities Cameras API commands
+
+@copydoc API_CamerasManagment
+
+@see bv::model::CamerasLogic, bv::model::CameraModel
+*/
 
 namespace bv { namespace model {
 
+
+/**@brief Camera model
+@ingroup Model
+*/
 class CamerasLogic : public IUpdatable
 {
 private:

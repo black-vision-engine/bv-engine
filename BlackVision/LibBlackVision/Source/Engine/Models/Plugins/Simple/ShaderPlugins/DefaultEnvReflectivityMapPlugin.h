@@ -25,9 +25,8 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-
-
-
+/// @ingroup PluginsList
+/// @todo Inherit from bv::model::TexturePluginBase.
 class DefaultEnvReflectivityMapPlugin : public BasePlugin
 {
 private:

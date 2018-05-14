@@ -24,6 +24,58 @@
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Mathematics/Rect.h"
 
+
+
+
+/**@defgroup PluginsList
+@ingroup Model*/
+
+
+/**@page Plugins Plugins
+
+@section Plugins_General General
+
+Plugins are entities that provide engine with data needed for rendering.
+Main functionalities of plugins are:
+- Generating geometry. Examples: @ref PluginsList_GeometricShapesPlugins "Geometric Shapes"
+- Processing geometry coming from plugins standing before them in node's plugins list. Examples: @ref PluginsList_GeometryProcessorsPlugins "Geometry Processors"
+- Providing  shaders and all data necessary for rendering process, like textures or uniform variables. Examples: @ref PluginsList_ShaderPlugins "Shader Plugins"
+- Loading audio or video data from external source (assets or video input) and passing it to engine. Examples: @ref PluginsList_AssetPlugins "Audio video Plugins"
+- Controlling state of rendering pipeline (blending modes, rasterization and so on). Examples: @ref PluginsList_SpecialPlugins "Special Plugins"
+
+Each @ref Nodes "Node" contains ordered list of different plugins. Each plugin can process data from previous plugins or it can generate
+new data.
+
+From user point of view plugins' state can be controlled by using @ref Parameters or by loading Assets.
+
+@section Plugins_Parameters Plugins Parameters
+
+Plugins have multiple parameter models:
+- Main model contains all plugin's parameters that influence output data generation or are passed to shaders.
+- Each texture resource has it's own model. Such a model allows user to set openGL sampler parameters like
+wrapping modes, filtering or border color.
+
+Parameters are identified and accessed in API by their names. To access resource parameter, user must provide moreover
+resource name, which is defined by each plugin separatly.
+
+Check how to set parameters through API @ref API_Parameters "here".
+
+@section Plugins_Resources Resources
+
+Some plugins can load @ref Assets "Assets" to display textures, generate geometry based on asset content or process assets in different manner.
+In current version API supports only one asset loaded at the same time.
+
+Check how to load @ref Assets "Assets" through API @ref API_Assets "here".
+
+@section Plugins_API Plugins API commands
+
+@copydoc API_PluginsManipulation
+
+@see bv::model::IPlugin, bv::model::BasePlugin, PluginsList, bv::model::DefaultPluginParamValModel
+*/
+
+
+
 namespace bv { namespace model {
 
 class IDefaultTransformChannel;
@@ -37,6 +89,11 @@ class IPlugin;
 DEFINE_PTR_TYPE(IPlugin)
 DEFINE_CONST_PTR_TYPE(IPlugin)
 
+
+
+
+/**@brief Plugin interface.
+@ingroup Model*/
 class IPlugin : public IUpdatable
 {
 public:

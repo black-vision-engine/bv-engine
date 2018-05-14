@@ -34,6 +34,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class VideoInputPlugin : public TexturePluginBase
 {
 public:

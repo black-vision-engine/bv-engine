@@ -1,0 +1,22 @@
+/**@page EffectLightScattering Light Scattering Effect
+
+@section Description
+
+Creates rays of it's node.
+
+@section EffectLightScatteringParameters Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+exposure				| float			| 0.005				| -
+weight					| float			| 2.65				| -
+decay					| float			| 1					| -
+density					| float			| 0.2				| -
+lightPositionOnScreen	| vec2	        | -	                | -
+numSamples				| int			| 100				| -
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

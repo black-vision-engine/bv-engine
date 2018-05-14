@@ -129,7 +129,8 @@ void     NodeRenderLogic::RenderImpl      ( SceneNode * node, RenderContext * ct
 				nEffect->GetType() == NodeEffectType::NET_SHADOW ||
                 nEffect->GetType() == NodeEffectType::NET_Z_SORT ||
 				nEffect->GetType() == NodeEffectType::NET_GLOW || 
-				nEffect->GetType() == NodeEffectType::NET_SOFT_MASK
+				nEffect->GetType() == NodeEffectType::NET_SOFT_MASK ||
+                nEffect->GetType() == NodeEffectType::NET_COLOR_CORRECTION
 				);
 
         nEffect->Render( repr, ctx ); //FIXME: test and implement

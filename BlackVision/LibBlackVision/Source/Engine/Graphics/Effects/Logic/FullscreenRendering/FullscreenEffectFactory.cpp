@@ -66,6 +66,9 @@ void SetDefaultState( FullscreenEffectVisualComponentDesc * desc, FullscreenEffe
 			nfseType == FullscreenEffectType::NFET_SHADOW ||
 			nfseType == FullscreenEffectType::NFET_GLOW ||
 			nfseType == FullscreenEffectType::NFET_SOFT_MASK ||
+			nfseType == FullscreenEffectType::NFET_COLOR_CORRECTION ||
+			nfseType == FullscreenEffectType::NFET_COLOR_BALANCE ||
+			nfseType == FullscreenEffectType::NFET_SEPIA ||
 			nfseType == FullscreenEffectType::NFET_MIX_CHANNELS );
 
     desc->SetBlendFlag( false );
@@ -93,7 +96,30 @@ void SetDefaultState( FullscreenEffectVisualComponentDesc * desc, FullscreenEffe
             desc->AppendInputSamplerEntry( "Texture" );
 			desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
             break;
-		case FullscreenEffectType::NFET_BLUR:
+        case FullscreenEffectType::NFET_COLOR_CORRECTION:
+            desc->SetBlendFlag( true );
+            desc->AppendInputSamplerEntry( "Texture" );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueVec4( "color", glm::vec4( 0.f, 0.f, 0.f, 0.f ) ) );
+            break;
+        case FullscreenEffectType::NFET_COLOR_BALANCE:
+            desc->AppendInputSamplerEntry( "Texture" );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "alpha", 1.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "brightness", 1.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "contrast", 0.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "saturation", 0.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "hue", 0.f ) );
+            break;
+        case FullscreenEffectType::NFET_SEPIA:
+            desc->AppendInputSamplerEntry( "Texture" );
+            desc->AppendIVal( ValuesFactory::CreateValueVec4( "color1", glm::vec4( 0.f, 0.f, 0.f, 1.f ) ) );
+            desc->AppendIVal( ValuesFactory::CreateValueVec4( "color2", glm::vec4( 1.f, 1.f, 1.f, 1.f ) ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "strength1", 1.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "strength2", 1.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "desaturation", 0.f ) );
+            desc->AppendIVal( ValuesFactory::CreateValueFloat( "tone", 0.f ) );
+            break;
+        case FullscreenEffectType::NFET_BLUR:
 			desc->SetBlendFlag( true );
 			desc->AppendInputSamplerEntry( "Tex0", TextureWrappingMode::TWM_CLAMP, TextureWrappingMode::TWM_CLAMP, TextureFilteringMode::TFM_LINEAR );
 			desc->AppendIVal( ValuesFactory::CreateValueVec2( "textureSize" ) );

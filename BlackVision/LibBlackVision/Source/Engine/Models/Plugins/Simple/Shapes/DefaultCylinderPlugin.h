@@ -37,6 +37,8 @@ struct PN {
 
 
 
+/**@brief Plugins generate cylinder.
+@ingroup PluginsList*/
 class DefaultPlugin : public DefaultGeometryPluginBase
 {
 public:

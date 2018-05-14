@@ -5,12 +5,20 @@
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 
+/**@page Timelines Timelines
+@see bv::model::ITimeline
+*/
+
 namespace bv { namespace model {
 
 class ITimelineEvent;
 DEFINE_PTR_TYPE(ITimelineEvent)
 class IParameter;
 
+
+/**@brief Timeline interface
+@ingroup Model
+*/
 class ITimeline : public ITimeEvaluator
 {
 public:

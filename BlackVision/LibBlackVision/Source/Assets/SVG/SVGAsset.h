@@ -6,6 +6,39 @@
 
 namespace bv {
 
+
+
+/**@brief Vector graphics asset.
+
+Loads SVG files.
+
+<b>Supported formats:</b> svg
+
+-                       | UID                       | Class
+----------------------- | ------------------------- | -----------
+Descriptor              | SVG_ASSET_DESC            | @ref bv::SVGAssetDescriptor
+Asset                   | MESH_ASSET                | @ref bv::SVGAsset
+
+<b>Example serialized descriptor:</b>
+
+@code{.json}
+{
+    "asset" :
+    {
+        "path" : "svgs\\heart.svg",
+        "type" : "SVG_ASSET_DESC"
+    }
+}
+@endcode
+
+<b>Parameters</b>
+
+Parameter name         	| Type                              | Required   | Description
+----------------------- | --------------------------------- | ---------- | --------------------------
+type                    | string                            | yes        | Asset descriptor UID.
+path                    | string                            | yes        | Path to asset. 
+
+@ingroup Assets*/
 class SVGAsset : public MeshAsset
 {
 public:

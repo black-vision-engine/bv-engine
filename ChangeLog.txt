@@ -1,4 +1,18 @@
-Release 0.5x.x
+Release 0.52.2
+- Color Correction crashing BV fixed
+
+Release 0.52.1
+- Stopping on timeline keframe fixed
+
+Release 0.52.0
+- Colorize effects (color correction, color balance, sepia) added
+
+Release 0.51.0
+- Follow logic changes
+    - Enable/disable following along chosen axis.
+    - Parameters for choosing point on BB which is aligned to target node.
+    - Logic can align to recursive BB of node.
+- Sequence loader sends progress events during animation loading.
 - Changes in config - referenceV, referenceH and referenceMode are set once per video card.
 - Video Cards - Setting H and V phase and synchronization signal reference mode. Quering these informations through API (+IsLocked command).
 - Audio input delay relative to video fixed.

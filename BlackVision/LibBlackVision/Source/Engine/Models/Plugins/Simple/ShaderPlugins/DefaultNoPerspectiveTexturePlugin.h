@@ -24,8 +24,8 @@ public:
 };
 
 
-/**
-Plugin uses shaders, that don't do perspective interpolation of UVs coordinates.*/
+/**Plugin uses shaders, that don't do perspective interpolation of UVs coordinates.
+@ingroup PluginsList*/
 class DefaultNoPerspectiveTexturePlugin :	public DefaultTexturePlugin
 {
 public:

@@ -29,6 +29,8 @@ DEFINE_CONST_PTR_TYPE( MaxSize );
 
 
 
+/**@brief Limits maximal size of node bounding box. Scales node if it exceeds this max size.
+@ingroup LogicsList*/
 class MaxSize : public model::NodeLogicBase, public std::enable_shared_from_this< MaxSize >
 {
 private:

@@ -1,0 +1,20 @@
+/**@page EffectColorBalance Color Balance Effect
+
+@section Description
+
+Applies color balance to node's subtree.
+
+@section EffectColorBalanceParameters Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+brightness				| float			| 1					| brightness factor
+contrast				| float			| 0					| contrast
+saturation				| float	[-1,1]	| 0					| saturation addition (may be negative)
+hue						| float [0,360] | 0					| hue rotation (range)
+
+@section APIControl API control
+
+You can manipulate this effect by changing parameters with @ref API_Parameters "Parameters API".
+
+*/

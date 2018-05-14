@@ -25,10 +25,13 @@ enum class FullscreenEffectType : int
     NFET_MIX_CHANNELS,
     NFET_VIDEO_OUTPUT,
     NFET_BLUR,
-	NFET_LIGHT_SCATTERING,
+    NFET_LIGHT_SCATTERING,
     NFET_SHADOW,
-	NFET_GLOW,
-	NFET_SOFT_MASK,
+    NFET_GLOW,
+    NFET_SOFT_MASK,
+    NFET_COLOR_CORRECTION,
+    NFET_COLOR_BALANCE,
+    NFET_SEPIA,
     //NFET_OUTLINE
     //TODO: and so on
 
@@ -36,19 +39,22 @@ enum class FullscreenEffectType : int
 };
 
 const std::string GFetFile[] = {
-								"blit_no_alpha.frag",
+                                "blit_no_alpha.frag",
                                 "blit_preview_alpha_and_rgb.frag",
-								"blit_alpha.frag",
-								"blit_mask_alpha.frag",
-								"interlace.frag",
-								"mixchannels.frag",
-								"videooutput.frag",
-								"blur.frag",
-								"light_scattering.frag",
-								"shadow.frag",
-								"glow.frag",
-								"soft_mask.frag"
-							   };
+                                "blit_alpha.frag",
+                                "blit_mask_alpha.frag",
+                                "interlace.frag",
+                                "mixchannels.frag",
+                                "videooutput.frag",
+                                "blur.frag",
+                                "light_scattering.frag",
+                                "shadow.frag",
+                                "glow.frag",
+                                "soft_mask.frag",
+                                "color_correction.frag",
+                                "color_balance.frag",
+                                "sepia.frag"
+                               };
 
 class FullscreenEffectInstance;
 class RenderedData;

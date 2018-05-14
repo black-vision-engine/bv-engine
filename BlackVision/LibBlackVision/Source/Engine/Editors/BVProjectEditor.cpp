@@ -1615,7 +1615,12 @@ bool                        BVProjectEditor::SetNodeEffect   ( const std::string
 
     if( timeEval )
     {
-        auto effect = Convert::String2T< NodeEffectType >( effectName , NodeEffectType::NET_DEFAULT );
+        auto effect = Convert::String2T< NodeEffectType >( effectName );
+        if( effect.IsValid() == false )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Node effect type not recognized. Falling back to NET_DEFAULT.";
+            effect = NodeEffectType::NET_DEFAULT;
+        }
         auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( effect, effectName, timeEval );
         auto node = QueryTyped( GetNode( sceneName, nodePath ) );
 

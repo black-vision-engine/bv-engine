@@ -12,6 +12,41 @@ namespace bv {
 class AVAsset;
 DEFINE_CONST_PTR_TYPE( AVAsset )
 
+
+
+/**@brief Audio video asset.
+
+Loads audio or video file.
+
+<b>Supported video formats:</b> bik, mov, mp4, yuv, avi, wmv, gif
+
+<b>Supported audio formats:</b> wav, mp3
+
+-                       | UID                       | Class
+----------------------- | ------------------------- | -----------
+Descriptor              | AV_ASSET_DESC             | @ref bv::SVGAssetDescriptor
+Asset                   | AV_ASSET                  | @ref bv::SVGAsset
+
+<b>Example serialized descriptor:</b>
+
+@code{.json}
+{
+    "asset" :
+    {
+        "path" : "\\video\\",
+        "type" : "SVG_ASSET_DESC"
+    }
+}
+@endcode
+
+<b>Parameters</b>
+
+Parameter name         	| Type                              | Required   | Description
+----------------------- | --------------------------------- | ---------- | --------------------------
+type                    | string                            | yes        | Asset descriptor UID.
+path                    | string                            | yes        | Path to asset.
+
+@ingroup Assets*/
 class AVAsset : public Asset, public std::enable_shared_from_this< AVAsset >
 {
 private:

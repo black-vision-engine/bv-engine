@@ -1,7 +1,6 @@
 <config>
 
-	<property name="PMFolder" value="media/media/media" />
-    <!-- <property name="PMFolder" value="D:\Production\Basketball\bv_media" /> -->
+	<property name="PMFolder" value="../bv_media/" />
     
 	<property name="UseReadbackAPI" value="true" />
 	<property name="Resolution" value="SD" />

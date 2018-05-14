@@ -25,6 +25,9 @@ DEFINE_PTR_TYPE( Arrange );
 DEFINE_CONST_PTR_TYPE( Arrange );
 
 
+
+/**@brief Arranges child nodes.
+@ingroup LogicsList*/
 class Arrange : public model::NodeLogicBase, public std::enable_shared_from_this< Arrange >
 {
 public:

@@ -34,7 +34,7 @@ struct PN
 };
 
 // *******************************
-//
+/// @ingroup PluginsList
 class Plugin : public DefaultGeometryPluginBase
 {
 public:

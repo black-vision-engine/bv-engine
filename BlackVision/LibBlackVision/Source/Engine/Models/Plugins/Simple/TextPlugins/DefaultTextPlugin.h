@@ -33,6 +33,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
 class DefaultTextPlugin : public TextPluginBase
 {
 public:

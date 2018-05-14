@@ -15,6 +15,7 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/PreFullscreenEffectStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/FullscreenEffectStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/DefaultFinalizeStep.h"
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/DefaultPreFSEStep.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/AlphaMaskPreFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/AlphaMaskFSEStep.h"
@@ -22,6 +23,8 @@
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NodeMaskPreFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NodeMaskFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/NodeMaskFinalizeStep.h"
+
+#include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/ColorCorrectionFSEStep.h"
 
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/BlurPreFSEStep.h"
 #include "Engine/Graphics/Effects/Logic/NodeRendering/NodeEffect/Components/Steps/Impl/BlurFSEStep.h"
@@ -142,6 +145,32 @@ NodeEffectPtr       CreateNodeMaskNodeEffect   ()
 	auto nnerl = new NodeEffectRenderLogic( passes );
 
     return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_NODE_MASK );
+}
+
+// **************************
+//
+NodeEffectPtr   CreateColorCorrectionEffect( FullscreenEffectType nnodeEffectType ) // FIXME this code is intentionally left as shit to be double-checked
+{
+    //RenderLogic - default
+    //Passes
+    // - fse - default pre
+    //    - pre step - default rendering
+    //    - fse step - color grade
+    // Create STEPS
+
+    auto fseStep        = new ColorCorrectionFSEStep( nnodeEffectType );
+
+    auto preFSEStep     = new DefaultPreFSEStep();
+
+    auto fsePass        = new FullscreenEffectPass( preFSEStep, fseStep );
+
+    std::vector< NodeEffectRenderPass * > passes( 1 );
+
+    passes[ 0 ] = fsePass;
+
+    auto nnerl = new NodeEffectRenderLogic( passes );
+
+    return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_COLOR_CORRECTION );
 }
 
 // **************************
@@ -375,8 +404,12 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nnodeEffectType )
 			//Interlace and so on
             assert( false );
             break;
-        case NodeEffectType::NET_COLOR_GRADE:
-            return CreateColorGradeEffect();
+        case NodeEffectType::NET_COLOR_CORRECTION:
+            return CreateColorCorrectionEffect( FullscreenEffectType::NFET_COLOR_CORRECTION );
+        case NodeEffectType::NET_COLOR_BALANCE:
+            return CreateColorCorrectionEffect( FullscreenEffectType::NFET_COLOR_BALANCE );
+        case NodeEffectType::NET_SEPIA:
+            return CreateColorCorrectionEffect( FullscreenEffectType::NFET_SEPIA );
         default:
             assert( false );
     }

@@ -27,6 +27,8 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
+/// @ingroup PluginsList
+/// @todo Inherit from bv::model::TexturePluginBase.
 class DefaultParallaxMapPlugin : public BasePlugin
 {
 public:

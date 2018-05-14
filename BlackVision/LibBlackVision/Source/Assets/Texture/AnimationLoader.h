@@ -22,6 +22,10 @@ public:
 
 private:
 
+    void                SendProgress        ( AnimationAssetDescConstPtr desc, SizeType frame, SizeType numFrames ) const;
+
+private:
+
 	TextureAssetConstPtr	LoadFrame		( const TextureAssetDescConstPtr & frameDesc ) const;
 
 };

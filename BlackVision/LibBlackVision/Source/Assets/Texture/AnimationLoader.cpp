@@ -2,6 +2,11 @@
 
 #include "AnimationLoader.h"
 
+// Progress
+#include "Engine/Events/EventManager.h"
+#include "Engine/Events/EventHandlerHelpers.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+
 #include "Assets/Assets.h"
 #include "Assets/Thumbnail/Impl/AnimationAssetThumbnail.h"
 #include "Assets/Texture/TextureUtils.h"
@@ -79,7 +84,10 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 	for( auto f : framesDesc )
 	{
 		framesAssets.push_back( LoadFrame( f ) );
+
+        SendProgress( typedDesc, i, framesDesc.size() );
 		printf( "\rLoaded %d out of %lld total frames                ", i + 1, ( Int64 ) framesDesc.size() );
+
 		++i;
 	}
 
@@ -211,6 +219,22 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
     ser.Save( thumbFileName.Str() );
 
     return thumb;
+}
+
+// ***********************
+//
+void                AnimationLoader::SendProgress       ( AnimationAssetDescConstPtr desc, SizeType frame, SizeType numFrames ) const
+{
+    JsonSerializeObject ser( BVSerializeContext::CreateContextFromEmptiness() );
+    
+    ser.SetAttribute( COMMAND_TYPE_STRING, "LoadingProgress" );
+    ser.SetAttribute( "assetType", AnimationAssetDesc::UID() );
+    ser.SetAttribute( "assetPath", desc->GetPath() );
+
+    double progress = ( double )frame / ( double )numFrames;
+    ser.SetAttribute( "progress", Convert::T2String( progress ) );
+
+    SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
 
 

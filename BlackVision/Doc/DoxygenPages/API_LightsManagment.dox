@@ -1,0 +1,7 @@
+/**@page API_LightsManagment Lights API commands
+
+- @ref LightEvent_Commands_AddLight "Adding Lights"
+- @ref LightEvent_Commands_RemoveLight "Removing Lights"
+- @ref InfoEvent_Commands_LightsInfo "Quering Lights informations"
+
+*/

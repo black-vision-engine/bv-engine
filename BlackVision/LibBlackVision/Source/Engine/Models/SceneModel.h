@@ -12,6 +12,36 @@
 #include "Engine/Editors/UndoRedo/OperationHistory.h"
 
 
+/**@defgroup Model*/
+
+
+
+/**@page Scenes Scenes
+
+A scene is a fundamental entity that can be rendered onto a screen or any other @ref RenderChannels "RenderChannel".
+
+Every other entity (node, plugin etc.) is a part of some scene and you need a scene name to access them.
+
+Scene is container of:
+    - @ref Nodes "Nodes", ordered in a tree fashion,
+    - @ref Timelines "Timelines", stored as children of the scene timeline,
+    - @ref Cameras "Cameras",
+    - @ref Lights "Lights".
+
+@copydoc API_ScenesManipulation
+
+@see bv::model::SceneModel
+*/
+
+
+/**@page Presets Presets
+
+Presets allow to create and save reusable parts of @ref Scenes "Scenes". To create preset, user chooses
+node's subtree which will be saved to file. Then preset can be loaded and pinned to any other node as subtree.
+
+@copydoc API_PresetsManipulation
+*/
+
 namespace bv { 
 
 class EndUserParamsLogic;
@@ -24,6 +54,11 @@ class SceneModel;
 DEFINE_PTR_TYPE( SceneModel );
 DEFINE_CONST_PTR_TYPE( SceneModel );
 
+/**@brief Model representation of Scene.
+
+@copydoc Scenes
+
+@ingroup Model*/
 class SceneModel : public IUpdatable, public ISerializable
 {
 	static const UInt32				MAX_LIGTHS;
