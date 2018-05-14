@@ -12,7 +12,11 @@ To use engine without downloading video cards libraries, you can use following s
 - Release-No-VideoCards
 
 <b>Debug</b> and <b>Release</b> configurations require Bluefish and BlackMagic libraries to link properly.
-Directory structure should look like this:
+You can download libraries from producent sites:
+- https://bluefish444.com/
+- https://www.blackmagicdesign.com/
+
+Copy libraries to 3rdParty folder in BlackVision directories. Directory structure should look like this:
 
 - BlackVision/Dep/3rdParty/VideoCards
     - BlackMagic
