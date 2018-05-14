@@ -22,7 +22,31 @@ This event supports following commands:
 
 @subsection TimelineKeyframeEvent_Commands_AddKeyframe Adding keyframes to Timelines
 
+@code{.json}
+{
+    "EventID": "136396",
+    "Event": "TimelineKeyframeEvent",
+    "Command": "AddKeyframe",
+    "KeyframeName": "jump",
+    "TimelineName": "blad_timeline_stop.scn%nowy",
+    "NewKeyframeType": "LoopJumpKeyframe",
+    "Time": "7",
+    "JumpToTime": "8",
+    "TotalLoopCount": "9999999"
+}
+@endcode
+
 @subsection TimelineKeyframeEvent_Commands_RemoveKeyframe Removing keyframes from Timelines
+
+@code{.json}
+{
+	"EventID": "136473",
+	"Event": "TimelineKeyframeEvent",
+	"Command": "RemoveKeyframe",
+	"KeyframeIndex": "6",
+	"TimelineName": "blad_timeline_stop.scn%nowy"
+}
+@endcode
 
 */
 class TimelineKeyframeEvent : public RemoteEvent

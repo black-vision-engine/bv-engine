@@ -29,6 +29,7 @@
 #include "API/UndoRedoEvent.h"
 #include "API/TimeLineEvent.h"
 #include "API/TimelineKeyframeEvent.h"
+#include "API/MouseEvent.h"
 
 
 namespace bv {
@@ -166,7 +167,20 @@ DEFINE_PTR_TYPE( ScreenShotRenderedEvent )
 
 
 
-// ************************************* ParamDescriptorEvent *************************************
+
+/**@brief Parameters descriptors API
+
+@section ParamDescriptorEvent_Commands Commands
+
+This event supports following commands:
+- AddParamDescriptor
+- RemoveParamDescriptor
+- AddAvaibleKeyTimes
+- RemoveAvaibleKeyTimes
+- SetDescriptorParameters
+
+
+*/
 class ParamDescriptorEvent : public RemoteEvent
 {
 public:
@@ -207,43 +221,6 @@ public:
 DECLARE_ENUM_SERIALIZATION( ParamDescriptorEvent::Command )
 DEFINE_PTR_TYPE( ParamDescriptorEvent )
 
-// ************************************* AssetEvent *************************************
-class AssetEvent : public RemoteEvent
-{
-
-public:
-
-    typedef enum
-    {
-        ClearCache,
-        Fail            ///< Wrong command
-    } Command;
-
-private:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-
-    AssetEvent::Command         AssetCommand;
-
-public:
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-
-    virtual EventType               GetEventType        () const;
-    virtual const std::string &     GetName             () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-};
-
-DECLARE_ENUM_SERIALIZATION( AssetEvent::Command )
-DEFINE_PTR_TYPE( AssetEvent )
-
 
 
 
@@ -272,7 +249,22 @@ DEFINE_PTR_TYPE( ResponseEvent )
 
 
 
-// ************************************* TimerEvent *************************************
+
+/**@brief Timer Plugin API
+
+@section TimerEvent_Commands Commands
+
+This event supports following commands:
+- Start
+- Stop
+- Reset
+- SetTime
+- SetTimeStart
+- SetTimeStop
+- SetTimePatern
+
+
+*/
 class TimerEvent : public RemoteEvent
 {
 public:
@@ -358,7 +350,25 @@ DECLARE_ENUM_SERIALIZATION( VideoDecoderEvent::Command )
 DEFINE_PTR_TYPE( VideoDecoderEvent )
 
 
-// ************************************* VideoCardEvent *************************************
+
+/**@brief Video cards API
+
+@section VideoCardEvent_Commands Commands
+
+This event supports following commands:
+- EnableOutput
+- DisableOutput
+- EnableKey
+- DisableKey
+- SetReferenceMode
+- SetReferenceOffsetH
+- SetReferenceOffsetV
+- EnableInput
+- DisableInput
+- GetReferenceSignalInfo
+- IsLocked
+
+*/
 class VideoCardEvent : public RemoteEvent
 {
 public:
@@ -414,48 +424,16 @@ DEFINE_PTR_TYPE( VideoCardEvent )
 
 
 
-// ************************************* MouseEvent *************************************
-class MouseEvent : public RemoteEvent
-{
-public:
-    typedef enum
-    {
-        MouseUp,
-        MouseDown,
-        MouseMove,
-        Fail            ///< Wrong command
-    } Command;
-private:
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
+/**@brief Scene Variables API
 
-public:
-    MouseEvent::Command             MouseCommand;
+@section SceneVariableEvent_Commands Commands
 
-    Float32                         MouseX;
-    Float32                         MouseY;
-    bool                            AutoSelect;
-    glm::vec4                       AutoSelectColor;
+This event supports following commands:
+- AddVariable
+- GetVariable
+- DeleteVariable
 
-public:
-    explicit                        MouseEvent          () {}
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-
-    static EventType                Type                ();
-    static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
-    virtual EventType               GetEventType        () const;
-};
-
-
-DECLARE_ENUM_SERIALIZATION( MouseEvent::Command )
-DEFINE_PTR_TYPE( MouseEvent )
-
-
-// ************************************* SceneVariableEvent *************************************
+*/
 class SceneVariableEvent : public RemoteEvent
 {
 public:
@@ -498,7 +476,17 @@ DEFINE_PTR_TYPE( SceneVariableEvent )
 
 
 
-// ************************************* ConfigEvent *************************************
+
+/**@brief Config API
+
+@section ConfigEvent_Commands Commands
+
+This event supports following commands:
+- ReadValue
+- SetValue
+- SaveConfig
+
+*/
 class ConfigEvent : public RemoteEvent
 {
 public:
@@ -537,7 +525,20 @@ DECLARE_ENUM_SERIALIZATION( ConfigEvent::Command )
 DEFINE_PTR_TYPE( ConfigEvent )
 
 
-// ************************************* GridLineEvent *************************************
+
+/**@brief Grid Lines API
+
+@section GridLineEvent_Commands Commands
+
+This event supports following commands:
+- SetGridLinePosition
+- RenameGridLine
+- RemoveGridLine
+- AlignToGridLine
+- ShowGridLines
+- HideGridLines
+
+*/
 class GridLineEvent : public RemoteEvent
 {
 public:
@@ -713,7 +714,18 @@ public:
 DEFINE_PTR_TYPE( AssetTrackerInternalEvent )
 
 
-// ************************************* GizmoEvent *************************************
+
+/**@brief Gizmo API
+
+
+@section GizmoEvent_Commands Commands
+
+This event supports following commands:
+- CreateGizmo
+- RemoveGizmo
+- ListGizmos
+
+*/
 class GizmoEvent : public RemoteEvent
 {
 public:

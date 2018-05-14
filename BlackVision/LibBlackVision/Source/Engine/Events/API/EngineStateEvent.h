@@ -17,13 +17,35 @@ namespace bv
 @section EngineStateEvent_Commands Commands
 
 This event supports following commands:
-- RenderOffscreen
-- ScreenShot
+- @ref EngineStateEvent_Commands_RenderOffscreen "RenderOffscreen"
+- @ref EngineStateEvent_Commands_ScreenShot "ScreenShot"
 - CloseApplication
 - LockEventQueue
 - SetGain
-- @ref EngineStateEvent_Commands_ListChannelsMapping OutputCommand
-- SwitchEditMode
+- @ref EngineStateEvent_Commands_ListChannelsMapping "OutputCommand"
+- @ref EngineStateEvent_Commands_SwitchEditMode "SwitchEditMode"
+
+@subsection EngineStateEvent_Commands_RenderOffscreen RenderOffscreen
+
+@code{.json}
+{
+	"Event" : "EngineStateEvent",
+	"Command" : "RenderOffscreen",
+	"FilePath" : "render/Sequence",
+	"FPS" : "50",
+	"NumberFrames" : "100"
+}
+@endcode
+
+@subsection EngineStateEvent_Commands_ScreenShot ScreenShot
+
+@code{.json}
+{
+	"Event" : "EngineStateEvent",
+	"Command" : "ScreenShot",
+	"FilePath" : "screenshots/Test"
+}
+@endcode
 
 @subsection EngineStateEvent_Commands_ListChannelsMapping List Channels Mapping
 
@@ -81,7 +103,21 @@ Assign @ref RenderChannels "Render Channel" for Scene.
 }
 @endcode
 
+@subsection EngineStateEvent_Commands_SwitchEditMode Switch edit mode
 
+In edit mode engine renders bounding boxes, grid lines and other helpers for editor.
+To properly render these helpers with fullscreen effects, engine must make some additional
+depth buffer passes (effects override depth in render target). This causes performance penalty for
+working in edit mode.
+
+@code{.json}
+{
+	"Event" : "EngineStateEvent",
+	"Command" : "SwitchEditMode"
+}
+@endcode
+
+Check @ref MouseEvent_Commands_MouseDown "Mouse Click" and @ref NodeStructureEvent_Commands_Selection "selection events".
 
 */
 class EngineStateEvent : public RemoteEvent

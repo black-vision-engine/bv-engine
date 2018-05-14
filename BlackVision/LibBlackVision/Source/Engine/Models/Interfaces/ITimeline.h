@@ -6,7 +6,25 @@
 
 
 /**@page Timelines Timelines
-@see bv::model::ITimeline
+
+A timeline's purpose is to handle time change. The most important Timeline is @ref DefaultTimeline, which also has keyframe events, that get triggered in the right moment.
+
+@section KeyframeEvents Keyframe Events
+
+We have a following list of keyframe events:
+- stop events
+- loop events
+- null events (which just send notification to the editor)
+- trigger events (which may trigger any action)
+
+@subsection LoopEvents Loop events
+
+Loop events may be of the following type:
+- jump events (jump to the specified time)
+- restart events (jump to time 0)
+- reverse events (change the direction of playing)
+
+@see bv::model::ITimeline, bv::model::DefaultTimeline
 */
 
 namespace bv { namespace model {

@@ -191,7 +191,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     }
     else if( command == ParamKeyEvent::Command::ListKeys )
     {
-        SimpleJsonSerializeObject responseJSON;
+        JsonSerializeObject responseJSON( BVSerializeContext::CreateContextFromEmptiness() );
         PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
 
         setParamEvent->ParamAddress.Serialize( responseJSON );
@@ -216,7 +216,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
         if( paramsList.IsValid() )
         {
-            SimpleJsonSerializeObject responseJSON;
+            JsonSerializeObject responseJSON( BVSerializeContext::CreateContextFromEmptiness() );
             PrepareResponseTemplate( responseJSON, command, setParamEvent->EventID, true );
 
             setParamEvent->ParamAddress.Serialize( responseJSON );

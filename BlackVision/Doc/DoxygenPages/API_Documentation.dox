@@ -1,4 +1,83 @@
-/**@page API_Documentation
+/**@page API_Documentation API Documentation
+
+[TOC]
+
+@section API_Documentation_Connection Engine Connection
+
+@subsection  API_Documentation_Connection_Initialize Initialization
+
+Black Vision starts TCP server and waits for incoming connections. Multiple editors
+or other external tools can connect and send API commands. TCP port can be configured
+from @ref Config_Network "config".
+
+
+After connection is initialized, first 8 bytes are used to configure logger messages
+sent to external tool. If you don't want to get logger messages, set these bytes to zero.
+
+First 4 bytes are module filters flags (@ref bv::ModuleEnum).
+Second 4 bytes is maximal @ref bv::SeverityLevel of messages.
+
+@subsection API_Documentation_Connection_MessagesFormat Messages format
+
+All API messages are in JSON format. To properly separate messages,
+they have to be surrounded by start byte (0x2) and end byte (0x3).
+
+Events are sent in JSON <b>Events</b> array, which contains one or multiple commands.
+Example event looks like this:
+
+@code{.json}
+[start byte]
+{
+    "Events" : 
+    [
+        {
+            "EventID" : "1453",
+            "Event" : "InfoEvent",
+            "Command" : "ListAllFolders",
+            "Request" : 
+            {
+                "categoryName" : "scenes",
+                "path" : ""
+            }
+        }
+    ]
+}
+[end byte]
+@endcode
+
+Rest of documentation omits Events array while presenting events.
+
+@section API_Documentation_Responses Messages responses
+
+Most of commands send responses based on response template. Each command response can contain additional
+fields.
+
+<b>Response template:</b>
+
+@code{.json}
+{
+   "EventID" : "1453",
+   "Success" : "true",
+   "cmd" : "ListAllFolders",
+   "ErrorInfo" : ""
+}
+@endcode
+
+Parameter name         	| Type          | Description
+----------------------- | ------------- | -----------
+EventID                 | int           | If you send commands with EventID, you can then identify reponse, because engine resends EventID in this field.
+cmd                     | string        | Executed command name.
+Success                 | bool          | Result of command execution.
+ErrorInfo               | string        | Custom error message.
+
+
+@section API_Documentation_Reference API reference
+
+@copydoc API_Reference
+
+*/
+
+/**@page API_Reference
 <ul>
     <li> @ref API_ScenesManipulation "Scenes manipulation"
     <li> @ref API_PresetsManipulation "Presets manipulation"
@@ -22,17 +101,18 @@
     <li> @ref API_AdditionalCommands "Additional Commands"
     <li> @ref API_Timer "Timer events"
 </ul>
-
 */
 
 
-/**@page API_Gizmos
+/**@page API_Gizmos Gizmo manipulation API
 
-
+- @ref GizmoEvent_Commands "CreateGizmo"
+- @ref GizmoEvent_Commands "RemoveGizmo"
+- @ref GizmoEvent_Commands "ListGizmos"
 
 */
 
-/**@page API_UndoRedo
+/**@page API_UndoRedo Undo/Redo operations
 
 - @ref UndoRedoEvent_Commands_Undo "Undo operations"
 - @ref UndoRedoEvent_Commands_Redo "Redo operations"
@@ -40,39 +120,68 @@
 
 */
 
-/**@page API_ConfigManagment
+/**@page API_ConfigManagment Config API
 
-
+- @ref ConfigEvent_Commands "ReadValue"
+- @ref ConfigEvent_Commands "SetValue"
+- @ref ConfigEvent_Commands "SaveConfig"
 
 */
 
 /**@page API_VideoCards
 
-
+- @ref VideoCardEvent_Commands "EnableOutput"
+- @ref VideoCardEvent_Commands "DisableOutput"
+- @ref VideoCardEvent_Commands "EnableKey"
+- @ref VideoCardEvent_Commands "DisableKey"
+- @ref VideoCardEvent_Commands "SetReferenceMode"
+- @ref VideoCardEvent_Commands "SetReferenceOffsetH"
+- @ref VideoCardEvent_Commands "SetReferenceOffsetV"
+- @ref VideoCardEvent_Commands "EnableInput"
+- @ref VideoCardEvent_Commands "DisableInput"
+- @ref VideoCardEvent_Commands "GetReferenceSignalInfo"
+- @ref VideoCardEvent_Commands "IsLocked"
 
 */
 
-/**@page API_SceneVariables
+/**@page API_SceneVariables Scene variables API
 
-
+- @ref SceneVariableEvent_Commands "AddVariable"
+- @ref SceneVariableEvent_Commands "GetVariable"
+- @ref SceneVariableEvent_Commands "DeleteVariable"
 
 */
 
 /**@page API_GridLines
 
-
+- @ref GridLineEvent_Commands "SetGridLinePosition"
+- @ref GridLineEvent_Commands "RenameGridLine"
+- @ref GridLineEvent_Commands "RemoveGridLine"
+- @ref GridLineEvent_Commands "AlignToGridLine"
+- @ref GridLineEvent_Commands "ShowGridLines"
+- @ref GridLineEvent_Commands "HideGridLines"
 
 */
 
 /**@page API_ParameterDescriptors
 
-
+- @ref ParamDescriptorEvent_Commands "AddParamDescriptor"
+- @ref ParamDescriptorEvent_Commands "RemoveParamDescriptor"
+- @ref ParamDescriptorEvent_Commands "AddAvaibleKeyTimes"
+- @ref ParamDescriptorEvent_Commands "RemoveAvaibleKeyTimes"
+- @ref ParamDescriptorEvent_Commands "SetDescriptorParameters"
 
 */
 
 
 /**@page API_Timer
 
-
+- @ref TimerEvent_Commands "Start"
+- @ref TimerEvent_Commands "Stop"
+- @ref TimerEvent_Commands "Reset"
+- @ref TimerEvent_Commands "SetTime"
+- @ref TimerEvent_Commands "SetTimeStart"
+- @ref TimerEvent_Commands "SetTimeStop"
+- @ref TimerEvent_Commands "SetTimePatern"
 
 */

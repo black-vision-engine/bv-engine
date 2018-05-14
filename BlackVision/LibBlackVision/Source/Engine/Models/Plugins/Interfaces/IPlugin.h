@@ -71,7 +71,7 @@ Check how to load @ref Assets "Assets" through API @ref API_Assets "here".
 
 @copydoc API_PluginsManipulation
 
-@see bv::model::IPlugin, bv::model::BasePlugin, PluginsList, bv::model::DefaultPluginParamValModel
+@see bv::model::IPlugin, bv::model::BasePlugin, PluginsList, bv::model::DefaultPluginParamValModel, @ref ExtendingEngine_CreatingPlugins
 */
 
 

@@ -5624,6 +5624,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultPreFSEStep.h">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\API\MouseEvent.h">
+      <Filter>Engine\Events\API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

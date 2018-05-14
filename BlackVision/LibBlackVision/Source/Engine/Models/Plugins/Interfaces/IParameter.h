@@ -11,7 +11,7 @@
 
 
 /**@page Parameters Parameters
-Parameters are a way to animate some @ref Plugins "Plugin" / @ref Effects "Effect" / @ref Logics "Logic" features.
+Parameters are a way to animate some @ref Plugins "Plugin" / @ref NodeEffects "Effect" / @ref NodeLogics "Logic" features.
 
 They consist of two major ingredients: a @ref Curves "Curve" and @ref Timelines "Timeline".
 Timeline determines the time at which we evaluate the Curve.
@@ -51,7 +51,7 @@ We support following curves:
 
 @subsection APIControl API control
 
-See @ref API_Parameters for detailed description of possible Parameter's manipulation.
+See @ref API_Parameters "Parameters API" for detailed description of possible Parameter's manipulation.
 
 
 @see bv::model::IParameter

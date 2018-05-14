@@ -53,7 +53,6 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
 
     //Create all models
     auto model  = helper.GetModel();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     helper.SetOrCreatePluginModel();
     helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );

@@ -20,8 +20,8 @@ namespace bv
 - @ref NodeStructureEvent_Commands_RemoveNode "RemoveNode"
 - @ref NodeStructureEvent_Commands_Visibility "SetNodeVisible"
 - @ref NodeStructureEvent_Commands_Visibility "SetNodeInvisible"
-- SelectNode
-- UnselectNodes
+- @ref NodeStructureEvent_Commands_Selection "SelectNode"
+- @ref NodeStructureEvent_Commands_Selection "UnselectNodes"
 - @ref NodeStructureEvent_Commands_RenameNode "RenameNode"
 - AttachNode
 - DetachNode
@@ -82,6 +82,34 @@ Make Node and whole subtree visible. If some Nodes in subtree where invisible th
     "EventID" : "10715",
     "Event" : "NodeStructureEvent",
     "Command" : "SetNodeVisible",
+    "SceneName" : "Shapes2D_Examples.scn",
+    "NodeName" : "#0/#1"
+}
+@endcode
+
+@subsection NodeStructureEvent_Commands_Selection Nodes selection
+
+Displays bounding box around selected node. <b>NewNodeName</b> contains BB color. Don't ask why.
+This works in @ref EngineStateEvent_Commands_SwitchEditMode "edit mode" only.
+
+@code{.json}
+{
+    "EventID" : "10715",
+    "Event" : "NodeStructureEvent",
+    "Command" : "SelectNode",
+    "SceneName" : "Shapes2D_Examples.scn",
+    "NodeName" : "#0/#1",
+    "NewNodeName" : "1,0,0,1"
+}
+@endcode
+
+Unselect node.
+
+@code{.json}
+{
+    "EventID" : "10715",
+    "Event" : "NodeStructureEvent",
+    "Command" : "UnselectNodes",
     "SceneName" : "Shapes2D_Examples.scn",
     "NodeName" : "#0/#1"
 }

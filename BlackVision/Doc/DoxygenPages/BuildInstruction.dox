@@ -1,0 +1,64 @@
+/**@page BuildInstruction Building Instruction
+
+BlackVision works under Visual Studio 2015 (toolset 140). You need to download boost libraries to compile engine.
+
+@section CompilingBoost Compiling boost libraries
+
+Download boost version 1.61.0 and unzip. Go into boost folder and execute:
+
+@code 
+bootstrap.bat --with-libraries=thread,filesystem,serialization,log
+@endcode
+
+This commands will create compilation script named <b>b2</b>.
+
+<b>64-bit version</b>
+
+Debug:
+
+@code
+b2 variant=debug --stagedir=stage/debug32 -j4 link=static --layout=system --with-thread --with-filesystem --with-serialization --with-log toolset=msvc-14.0
+@endcode
+
+Release:
+
+@code
+b2 variant=release --stagedir=stage/release32 -j4 link=static --layout=system --with-thread --with-filesystem --with-serialization --with-log toolset=msvc-14.0
+@endcode
+
+<b>32-bit version</b>
+
+Debug:
+
+@code
+b2 variant=debug --stagedir=stage/debug64 -j4 link=static --layout=system --with-thread --with-filesystem --with-serialization --with-log address-model=64 toolset=msvc-14.0
+@endcode
+
+Release:
+
+@code
+b2 variant=release --stagedir=stage/release64 -j4 link=static --layout=system --with-thread --with-filesystem --with-serialization --with-log address-model=64 toolset=msvc-14.0
+@endcode
+
+@section ConfigureBoost Configuring boost
+
+BlackVision needs environment variables to reference boost:
+- BOOST_INC_1_61 - should point to folder <b>boost_1_61_0</b>
+- BOOST_LIB_1_61 - should point to folder containing compiled libraries
+
+In libraries subdirectories create folders:
+- msvc-14-x64-debug
+- msvc-14-x64-release
+- msvc-14-Win32-debug
+- msvc-14-Win32-debug
+
+and place compiled libraries there.
+
+@section LaunchingEngine Launching Engine
+
+All visual studio projects building to executable should have working directory set to $(OutDir) instead of default $(ProjectDir).
+Copy config.xml to the same directory as BlackVision.exe file.
+
+
+
+*/

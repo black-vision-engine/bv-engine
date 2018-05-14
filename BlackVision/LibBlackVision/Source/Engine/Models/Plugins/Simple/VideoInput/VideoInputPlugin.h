@@ -33,8 +33,40 @@ public:
 
 };
 
-// ***************************** PLUGIN ********************************** 
-/// @ingroup PluginsList
+
+
+/**@brief Video input plugin
+
+Plugin can load video and audio input from video card.
+
+<b>Name</b>: video input
+
+<b>Name abbreviation</b>: vidin
+
+<b>UID:</b> VIDEO_INPUT_PLUGIN
+
+@section VideoInputPlugin_Parameters Parameters
+
+Parameter name         	| Type      	| Default Value     | Description
+----------------------- | -------------	| ----------------- | -----------
+alpha                   | float         | 1.0f              | Alpha to attenuate loaded texture.
+txMat                   | transform     |                   | Asset transformation applied only to texture loaded by this plugin.
+gain                    | float         | 1.0f              | Audio from video input gain.
+enableKey               | bool          | false             | Enable/Disable video input key texture.
+
+@section VideoInputPlugin_Assets Assets
+
+- <b>VideoInput0</b>
+
+    VideoInputAsset to display.
+
+@subsection VideoInputPlugin_Assets_Loading Asset Loading
+
+Set <b>VideoFillIdx</b> and <b>VideoKeyIdx</b> field to input index configured as <b>linkedVideoInput</b> in config file.
+@ref Assets_List_VideoInputAssets "Video input assets"
+
+
+@ingroup PluginsList*/
 class VideoInputPlugin : public TexturePluginBase
 {
 public:

@@ -1,5 +1,159 @@
 /**@page ExtendingEngine_CreatingPlugins Creating Plugins
 
+[TOC]
 
 
-*/
+@section ExtendingEngine_CreatingPlugins_CreatingModel Creating Model
+
+Plugin Model is set of parameters that can be modified by user through @ref API_Documentation "API".
+
+@subsection ExtendingEngine_CreatingPlugins_CreatingModel_ParamsValuesState Params, Values, State
+
+@ref Parameters "Parameter" is set of keys, which can be evaluated thanks to @ref Timelines "Timeline" attached to them.
+In each frame we can get Timeline's time and evaluate Parameter at this point in time.
+Parameter can be evaluated manually by user in update function or it can be evaluated automatically. Automatic evaluation
+happens when Parameter has Value attached to it. Value contains value of parameter evaluated in frame.
+Sometimes we want to know that parameter value changed to make some action. For that purpose we can use State.
+
+@subsection ExtendingEngine_CreatingPlugins_CreatingModel_PluginModel Creating Plugin Parameter Model
+
+Plugin Parameter model is created in Plugin descriptor. @ref bv::model::DefaultPluginParamValModel class
+contains multiple @ref bv::model::DefaultParamValModel objects for different purposes.
+- <b>VertexShaderChannelModel and PixelShaderChannelModel</b> are used to pass parameters to shaders
+as uniforms.
+- <b>TransformChannelModel</b> contains Node's local transformation. (Used only by @ref bv::model::DefaultTransformPlugin "TransformPlugin")
+- <b>VertexAttributesChannelModel</b> contains geometry parameters.
+- <b>GeometryShaderChannelModel</b> is for future use with geometry shaders.
+- <b>PluginModel</b> contains other parameters not connected to any of functionalities above.
+
+To create model use @ref bv::model::ModelHelper class, which helps create @ref Parameters "Parameters", Values and States.
+It is initialized with default timeline that will be attached to all parameters.
+
+ModelHelper has set of functions to create Parameters of different types. Parameters are added to current model channel.
+To choose current model use one of functions:
+- @ref bv::model::ModelHelper::SetOrCreateVacModel "SetOrCreateVacModel"
+- @ref bv::model::ModelHelper::SetOrCreateVSModel "SetOrCreateVSModel"
+- @ref bv::model::ModelHelper::SetOrCreatePSModel "SetOrCreatePSModel"
+- @ref bv::model::ModelHelper::SetOrCreateGSModel "SetOrCreateGSModel"
+- @ref bv::model::ModelHelper::SetOrCreatePluginModel "SetOrCreatePluginModel"
+
+After choosing model, you can add parameters with (for example) template function @ref bv::model::ModelHelper::AddSimpleParam "AddSimpleParam".
+Function takes:
+- parameter name
+- default value
+- flag indicating that we want create Value
+- flag indicating that we want create State
+
+Note that if we create State, we always need to add Value too.
+
+To access Parameters, Values and States in Plugin we can declare bv::model::ValueParamState field in class and assign
+parameter with function bv::model::GetValueParamState (for example in constructor).
+
+<b>Example:</b>
+
+@code
+namespace bv {
+namespace model
+{
+
+// *******************************
+//
+DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+{
+    ModelHelper helper( timeEvaluator );
+
+    //Create all models
+    auto model  = helper.GetModel();
+
+    helper.SetOrCreatePluginModel();
+    helper.AddSimpleParam( BlendHelper::PARAM::BLEND_ENABLE, true, true, true );
+	helper.AddEnumParam( BlendHelper::PARAM::BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
+
+    helper.SetOrCreatePSModel();
+    helper.AddSimpleParam( DefaultTexturePlugin::PARAM::ALPHA, 1.f, true );
+
+    helper.SetOrCreateVSModel();
+    helper.AddTransformParam( DefaultTexturePlugin::PARAM::TX_MAT, true );
+
+    auto param = helper.GetModel()->GetVertexShaderChannelModel()->GetParameter( DefaultTexturePlugin::PARAM::TX_MAT );
+    SetParameterCenterMass( param, 0.0f, glm::vec3( 0.5, 0.5, 0.0 ) );
+
+    return model;
+}
+
+// *************************************
+// 
+DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+    : TexturePluginBase( name, uid, prev, model )
+    , m_vsc( nullptr )
+    , m_vaChannel( nullptr )
+{
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+
+	m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+	m_blendMode = GetValueParamState< BlendHelper::BlendMode >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_MODE );
+
+    SetPrevPlugin( prev );
+
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+
+    m_blendEnabled = GetValueParamState< bool >( GetPluginParamValModel()->GetPluginModel().get(), BlendHelper::PARAM::BLEND_ENABLE );
+}
+
+} // model
+} // bv
+@endcode
+
+
+@section ExtendingEngine_CreatingPlugins_RegisterDescriptor Register Plugin Descriptor
+
+To create plugin, we must first register it's descriptor in @ref bv::model::PluginsManager.
+Example registration can be found in function bv::model::DefaultBVPluginDescriptors in file DefaultPlugins.cpp.
+
+@section ExtendingEngine_CreatingPlugins_Channels Plugin Channels
+
+Plugins generate their output to channels:
+- TransformChannel
+- VertexAttributesChannel
+- PixelShaderChannel
+- VertexShaderChannel
+- AudioChannel
+
+In most cases only <b>VertexAttributesChannel</b> and <b>PixelShaderChannel</b> are important.
+
+- <b>VertexAttributesChannel</b> contains geometry generated by @ref Plugins "Plugin".
+To process geometry, Plugin can take content of this channel from previous Plugin 
+and generate own geometry based on it.
+- <b>PixelShaderChannel</b> contains textures.
+
+Check example in @ref bv::model::DefaultTexturePlugin. TexturePlugin loads texture to <b>PixelShaderChannel</b> and
+adds UV coordinates to geometry generated by previous Plugin if they didn't exist.
+
+@section ExtendingEngine_CreatingPlugins_RendererContext Renderer Context
+
+@ref bv::model::RendererContext gives Plugin access to OpenGL piepline state like:
+- Blending settings
+- Culling
+- Depth buffer settings
+- Polygons Filling
+
+You can get @ref bv::model::RendererContext from PixelShaderChannel.
+
+In most cases you don't care about RendererContext, so you can just copy values from previous Plugins by using
+@ref bv::model::HelperPixelShaderChannel::CloneRenderContext.
+
+
+@section ExtendingEngine_CreatingPlugins_Update Update function
+
+Each frame Update function for all Plugins is called. This is main place when you should implement your logic.
+In most cases you need to update Plugin Model, so the best way to do this is to call @ref bv::model::BasePlugin::Update function.
+
+@section ExtendingEngine_CreatingPlugins_BaseClasses Plugins base classes
+
+You can derive your Plugins from one of following classes:
+- @ref bv::model::TexturePluginBase Provides helper functions for texture loading.
+- @ref bv::model::DefaultGeometryProcessorBase Base class for geometry processing Plugins.
+- @ref bv::model::TextPluginBase Base class for Plugins using text based on texture atlas.
+- @ref bv::model::DefaultGeometryPluginBase Base class for geometry generating Plugins.
+
+@see PluginsList, @ref Plugins*/
