@@ -108,7 +108,7 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
     auto components = vaChannel->GetComponents();
     auto geomDesc   = vaChannel->GetDescriptor();
 
-    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+    char * vbData = vb->Data(); //FIXME: THIS SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!!
     unsigned int currentOffset = 0;
 
     unsigned int k = 0;
@@ -139,7 +139,7 @@ inline  void    UpdatePositionsImpl     ( RenderableEntity * m_renderable, model
 //    VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
 //    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
 //
-//    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+//    char * vbData = vb->Data(); //FIXME: THIS SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!!
 //
 //    //This is update only, so the number of vertices must match
 //    assert( cc->GetNumVertices() == vao->GetNumVertices( 0 ) );
@@ -202,7 +202,7 @@ inline void UpdateTopologyImpl( RenderableEntity * renderable, model::IVertexAtt
     vao->SetVertexDescriptor( vd );
 
 
-    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
+    char * vbData = vb->Data(); //FIXME: THIS SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!!
     unsigned int currentOffset = 0;
 
     for( auto cc : components )

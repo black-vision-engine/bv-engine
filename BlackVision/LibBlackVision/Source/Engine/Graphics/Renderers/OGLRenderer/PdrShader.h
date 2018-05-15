@@ -59,7 +59,7 @@ private:
     inline void SetUniformParam     ( const GenericShaderParam * param );
     void        InitSetUniformParam ( const GenericShaderParam * param );
 
-    //FIXME: this API should  be moved to some helper class as it looks shitty ang pretty uglu over here (as if PdrShader was responsible mostly for enabling samplers and textures)
+    //FIXME: this API should  be moved to some helper class as it looks ugly over here (as if PdrShader was responsible mostly for enabling samplers and textures)
     int     EnableTextureSamplers   ( Renderer * renderer );
     int     EnableTextureSamplers   ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex );
 

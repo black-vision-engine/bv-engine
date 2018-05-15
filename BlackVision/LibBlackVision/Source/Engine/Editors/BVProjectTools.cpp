@@ -420,7 +420,7 @@ BVProjectTools::RADASVB * BVProjectTools::CreateRenderableArrayDataArrays   ( co
     VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor );
     RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
 
-    char * vbData = vertexBuffer->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
+    char * vbData = vertexBuffer->Data(); //FIXME: THIS SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!!
 
     unsigned int currentOffset = 0;
 

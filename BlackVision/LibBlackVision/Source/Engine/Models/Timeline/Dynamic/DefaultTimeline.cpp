@@ -52,6 +52,8 @@ namespace model {
 namespace {
 
 const TimeType GEvtTimeSeparation = TimeType( 0.02 ); //FIXME: some config (default) parameters should be used here - engine should expose it's connfiguration defaults for overriding
+const TimeType GEpsilon = 0.00001f;
+
 
 // *********************************
 //
@@ -400,8 +402,8 @@ bool                                DefaultTimeline::AddKeyFrame        ( const 
 
     std::sort( m_keyFrameEvents.begin(), m_keyFrameEvents.end(), timelineEventComparator );
 
-    if( abs( m_prevLocalTime - evt->GetEventTime() ) < 0.00001 ) // FIXME: use generic epsilon
-        TriggerEventStep( evt.get() ); // FIXME so effing much
+    if( abs( m_prevLocalTime - evt->GetEventTime() ) < GEpsilon )
+        TriggerEventStep( evt.get() );
 
     return true;
 }
@@ -492,8 +494,8 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
 {
     if( m_timeEvalImpl.IsActive() && !m_timeEvalImpl.IsPaused() )
     {        
-        auto t0 = std::min( curTime, nextTime ) - 0.00001;
-        auto t1 = std::max( curTime, nextTime ) + 0.00001;
+        auto t0 = std::min( curTime, nextTime ) - GEpsilon;
+        auto t1 = std::max( curTime, nextTime ) + GEpsilon;
 
         bool reverseDirection = curTime > nextTime;
 
@@ -504,7 +506,7 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
                 auto & evt = m_keyFrameEvents[ i ];
                 auto eventTime = evt->GetEventTime();
 
-                if( abs( eventTime - curTime ) < 0.0001 ) // FIXME: this should be epsilon
+                if( abs( eventTime - curTime ) < GEpsilon )
                     continue;
 
                 if( eventTime >= t0 && eventTime <= t1 )
@@ -519,7 +521,7 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
             {
                 auto eventTime = evt->GetEventTime();
 
-                if( abs( eventTime - curTime ) < 0.0001 ) // FIXME: this should be epsilon
+                if( abs( eventTime - curTime ) < GEpsilon )
                     continue;
 
                 if( eventTime >= t0 && eventTime <= t1 )
@@ -587,7 +589,7 @@ void                                DefaultTimeline::TriggerEventStep( ITimeline
 
                     m_prevLocalTime = evtImpl->GetTargetTime();
 
-                    { auto event = CurrentEvent( m_prevLocalTime - 0.0001f, m_prevLocalTime + 0.0001f ); // FIXME epsilons for the fuck's sake!
+                    { auto event = CurrentEvent( m_prevLocalTime - GEpsilon, m_prevLocalTime + GEpsilon );
                     if( event ) TriggerEventStep( event ); }
 
                     keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;

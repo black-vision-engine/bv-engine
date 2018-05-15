@@ -149,7 +149,7 @@ NodeEffectPtr       CreateNodeMaskNodeEffect   ()
 
 // **************************
 //
-NodeEffectPtr   CreateColorCorrectionEffect( FullscreenEffectType nnodeEffectType ) // FIXME this code is intentionally left as shit to be double-checked
+NodeEffectPtr   CreateColorCorrectionEffect( FullscreenEffectType nnodeEffectType )
 {
     //RenderLogic - default
     //Passes
