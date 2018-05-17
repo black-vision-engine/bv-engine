@@ -22,6 +22,12 @@ This event supports following commands:
 - @ref UndoRedoEvent_Commands_Redo "Redo"
 - @ref UndoRedoEvent_Commands_SetOperationsBufferSize "SetOperationsBufferSize"
 
+Note that Undo/Redo functionality is devided into parts:
+- @ref Nodes, @ref Plugins, @ref NodeEffects "Effects", @ref NodeLogics "Logics", @ref Timelines and @ref Lights structure is engine responsibility.
+- Setting @ref Parameters, handling @ref NodeLogics "Logics" commands, loading assets are resposibility of external tools.
+
+Check @ref IRevertable interface and derived classes to see which undo/redo operations are implemented in engine.
+
 @subsection UndoRedoEvent_Commands_Undo Undo operation
 
 Undo last operations on @ref Scenes "Scene".
