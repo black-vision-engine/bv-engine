@@ -1,6 +1,6 @@
 /**@page ExtendingEngine_CreatingEffects Creating Effects
 
-Effects consists of to parts:
+Effects consists of two parts:
 - Model part holds model with parameters.
 - Engine part implements custom rendering logic.
 
@@ -20,30 +20,103 @@ In particular, you need to create @ref bv::model::DefaultParamValModel with effe
 
 See @ref ExtendingEngine_CreatingPlugins_CreatingModel_PluginModel for the easiest way to do that.
 
+<b>Example:</b>
+@code
+IModelNodeEffectPtr         CreateColorCorrectionModelNodeEffect( const std::string &, ITimeEvaluatorPtr timeEvaluator )
+{
+    ModelHelper h( timeEvaluator );
+    h.SetOrCreatePluginModel();
+
+    h.AddSimpleParam( "color", glm::vec4( 0, 0, 0, 0 ), true );
+
+    return ModelNodeEffect::Create( NodeEffectType::NET_COLOR_CORRECTION, std::static_pointer_cast< model::DefaultParamValModel >( h.GetModel()->GetPluginModel() ) );
+}
+@endcode
+
 @subsection ExtendingEngine_CreatingEffects_StepsList_Engine Create Effect's engine (rendering) part
 
 Update @ref bv::CreateNodeEffect(...) function in file NodeEffectFactory.cpp to create your Effect's engine part.
 
 Usually you want to use @ref bv::NodeEffectImpl, which is constructed from @ref bv::NodeEffectRenderLogic (see below for more information). 
 
-Keep in mind that @ref bv::NodeEffect also needs to implement @ref bv::NodeEffect::GetValue "GetValue(...)" method which provides a way to input parameters to rendering steps. In particular you can a value to the shader as the uniform in @ref bv::FullscreenEffectStep.
+Keep in mind that @ref bv::NodeEffect also needs to implement @ref bv::NodeEffect::GetValue "GetValue(...)" method which provides a way to input parameters to rendering steps. In particular you can pass a value to the pixel shader as the uniform in @ref bv::FullscreenEffectStep.
+Those values are automatically filled from corresponding parameters in Effect's model. 
 
 @section ExtendingEngine_CreatingEffects_EngineEffectImpl Engine Effect implementation via NodeEffectImpl constructed with NodeEffectRenderLogic
 
 NodeEffectRenderLogic is basically an array of passes(@ref bv::NodeEffectRenderPass), which are abstract classes.
 
-Two type of passes are implemented right now: @ref bv::FullscreenEffectPass and @ref bv::FinalizePass. The difference is that the first one consists of two step, while the second consists of just one.
+Two type of passes are implemented right now: @ref bv::FullscreenEffectPass and @ref bv::FinalizePass. 
+First one consists of two - specific (see below) - steps and the other runs one @ref bv::FinalizeStep.
 
-@subsection 
+<b>Example:</b>
+@code
+NodeEffectPtr       CreateBlurNodeEffect   ()
+{
+	auto fseStep = new BlurFSEStep();
+	auto blurSizeVal = get_value( fseStep->GetState(), "blurSize" );
 
-Effects can consist of multiple passes, each of them can have 2 steps:
-- pre fullscreen step
-- fullscreen step
+	auto preFSEStep = new BlurPreFSEStep( blurSizeVal );
 
-@subsection ExtendingEngine_CreatingEffects_EngineEffectImpl_Model 
+	auto fsePass = new FullscreenEffectPass ( preFSEStep, fseStep );
 
-@subsection ExtendingEngine_CreatingEffects_EngineEffectImpl_Allocation
+	auto finalizeStep = new DefaultFinalizeStep();
+	auto finPass = new FinalizePass( finalizeStep );
 
-@section ExtendingEngine_CreatingEffects_FullscreenEffect Fullscreen effects
+	std::vector< NodeEffectRenderPass * > passes( 2 );
+
+	passes[ 0 ] = fsePass;
+	passes[ 1 ] = finPass;
+
+	auto nnerl = new NodeEffectRenderLogic( passes );
+
+	return std::make_shared< NodeEffectImpl >( nnerl, NodeEffectType::NET_BLUR );
+}
+@endcode
+
+@subsection ExtendingEngine_CreatingEffects_EngineEffectImpl_FullscreenPass Fullscreen pass
+
+This pass abstracts very common rendering procedure:
+1. You render (some part of) subtree into additional render target.
+2. You take this target as a texture and blit it in some way on the output target.
+
+Those two steps are abstracted as @ref bv::PreFullscreenEffectStep and @ref bv::FullscreenEffectStep.
+
+@subsubsection ExtendingEngine_CreatingEffects_EngineEffectImpl_FullscreenPass_PreFullscreenEffectStep PreFullscreenEffectStep and RT allocation
+
+PreFullscreenEffectStep is responsible, in particular, for render targets allocation.
+
+<b>Example:</b>
+@code
+void                    DefaultPreFSEStep::AllocateRenderTargets       ( RenderContext * ctx )
+{
+    auto rt0 = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+    m_renderResult.SetLastRenderTargetIdx( allocator( ctx )->GetTopIndex() );
+    m_renderResult.SetEntry( 0, rt0 );
+}
+@endcode
+
+@subsection ExtendingEngine_CreatingEffects_EngineEffectImpl_FullscreenPass_FullscreenEffectStep FullscreenEffectStep and Fullscreen effects
+
+FullscreenEffectStep's job is to free allocated render targets (see @ref bv::RenderTargetStackAllocator::Free) and do the actual rendering job.
+
+To do the latter it usually employs @ref bv::FullscreenEffect created by @ref bv::CreateFullscreenEffect from FullscreenEffectFactory.cpp.
+
+@section ExtendingEngine_CreatingEffects_FullscreenEffect Fullscreen effects created by CreateFullscreenEffect
+
+To create @ref bv::FullscreenEffect by @ref bv::CreateFullscreenEffect you need to do following steps:
+1. Add new field in @ref bv::FullscreenEffectType enumeration.
+2. Update @ref bv::SetDefaultState in FullscreenEffectFactory.cpp to create appropriate @ref bv::FullscreenEffectVisualComponentDesc. Please keep in mind that @ref bv::model::IValue "Values" in this descriptor are passed to the pixel shader as uniforms.
+
+<b>Example:</b>
+@code
+	FullscreenEffectVisualComponentDesc * desc;
+[...]	
+        case FullscreenEffectType::NFET_COLOR_CORRECTION:
+            desc->SetBlendFlag( true );
+            desc->AppendInputSamplerEntry( "Texture" );
+            desc->AppendIVal( ValuesFactory::CreateValueVec4( "color", glm::vec4( 0.f, 0.f, 0.f, 0.f ) ) );
+            break;
+@endcode
 
 */
