@@ -93,6 +93,9 @@ AVFramePtr              VideoOutputsPreprocessor::PrepareAVFrame        ( Render
     }
 
     auto avFrame = m_avFramesBuffer[ vic ].front();
+    m_avFramesBuffer[ vic ].pop_front();
+    m_avFramesBuffer[ vic ].push_back( avFrame );
+
     m_currentAVFrames[ vic ] = avFrame;
 
     auto videoFrame = vic->ReadColorTexture( ctx );

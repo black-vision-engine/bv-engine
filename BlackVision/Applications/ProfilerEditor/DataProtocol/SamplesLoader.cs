@@ -34,7 +34,7 @@ namespace ProfilerEditor.DataProtocol
 		private static ProfilerSample[] LoadSamples( ReadDataObject data, ref Int32 offset, UInt16 numSamples )
 		{
 			ProfilerSample[] samples;
-			ProfilerSample sam = new ProfilerSample();		// This shit is created only to obtain size of ProfilerSample;
+			ProfilerSample sam = new ProfilerSample();		// This object is created only to obtain size of ProfilerSample;
 			int sampleSize = Marshal.SizeOf( sam );
 
 			samples = new ProfilerSample[ numSamples ];

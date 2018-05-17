@@ -13,11 +13,11 @@ void main()
 {
 	vec4 col = texture( Texture, uvCoord );
 
-	col += color;
+	col += color * col.a;
 	
 	col = clamp( col, 0, 1 );
 	
-	col *= col.a;
+//	col *= col.a;
 
 	FragColor = col;
 }

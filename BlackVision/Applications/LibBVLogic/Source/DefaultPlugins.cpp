@@ -46,7 +46,7 @@
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/DefaultExtrudePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultLineChartPlugin.h"
 #include "Engine/Models/Plugins/Simple/GeometryProcessors/TriangulatePlugin.h"
-#include "Engine/Models/Plugins/Simple/SpecialPlugins/ExpertPlugin.h"
+#include "Engine/Models/Plugins/Simple/SpecialPlugins/AdvancedPlugin.h"
 #include "Engine/Models/Plugins/Simple/Shapes/LinesPlugin.h"
 #include "Engine/Models/Plugins/Simple/VideoInput/VideoInputPlugin.h"
 
@@ -104,7 +104,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultLineChartPluginDesc() );
     descriptors.push_back( new TriangulatePluginDesc() );
     descriptors.push_back( new DefaultText3DPluginDesc() );
-    descriptors.push_back( new ExpertPluginDesc() );
+    descriptors.push_back( new AdvancedPluginDesc() );
     descriptors.push_back( new LinesPluginDesc() );
     descriptors.push_back( new VideoInputPluginDesc() );
 

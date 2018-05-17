@@ -18,7 +18,7 @@ enum class TextureType : int
     T_TOTAL
 };
 
-//FIXME: there so many dependencies on this type that it they all should be kept in one place (adding PT_MAT2 required a shitload of changes in the code)
+//FIXME: there so many dependencies on this type that it they all should be kept in one place
 enum class ParamType : int
 {
     PT_FLOAT1 = 0,

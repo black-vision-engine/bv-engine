@@ -58,7 +58,7 @@ void    UpdatersHelpers::UpdateRenderableBuffer     ( RenderableEntity * rendera
     VertexArraySingleVertexBuffer * vao = rad->VAO(); 
     VertexBuffer * vb                   = vao->GetVertexBuffer();
 
-    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+    char * vbData = vb->Data(); //FIXME: THIS SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!!
 
     //This is update only, so the number of vertices must match
     assert( cc->GetNumVertices() == vao->GetNumVertices( 0 ) );
@@ -89,7 +89,7 @@ void    UpdatersHelpers::RecreateRenderableBuffer    ( RenderableEntity * render
     vb->Reinitialize( cc->GetNumVertices(), entrySize, vbSemantic );
     vao->ResetState();
 
-    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
+    char * vbData = vb->Data(); //FIXME: THIS SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!!
 
     assert( !cc->GetAttributeChannels().empty() );
 

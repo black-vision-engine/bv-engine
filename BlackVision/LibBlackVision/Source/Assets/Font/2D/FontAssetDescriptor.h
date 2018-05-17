@@ -8,7 +8,7 @@
 namespace bv {
 
 
-#define SUPPROTED_CHARS_FILE L"fonts/SupportedChars.txt" // FIXME: Sucks as a vacuum
+#define SUPPROTED_CHARS_FILE L"fonts/SupportedChars.txt" // FIXME
 
 class FontAssetDesc;
 DEFINE_CONST_PTR_TYPE( FontAssetDesc )

@@ -2038,14 +2038,8 @@
     <ClCompile Include="..\..\..\Source\Assets\AsyncLoading\LoadBarrier.cpp">
       <Filter>Assets\AsyncLoading</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.cpp">
       <Filter>Engine\Models\Gizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.cpp">
-      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\EngineGizmoContainer.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
@@ -2193,6 +2187,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\ColorCorrectionFSEStep.cpp">
       <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultPreFSEStep.cpp">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.cpp">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\AdvancedPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5372,12 +5375,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IGizmoLogic.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\ExpertPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h">
-      <Filter>Engine\Models\Plugins\Simple\ShaderPlugins</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Gizmos\GizmoContainer.h">
       <Filter>Engine\Models\Gizmos</Filter>
     </ClInclude>
@@ -5618,8 +5615,17 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\API\TimelineKeyframeEvent.h">
       <Filter>Engine\Events\API</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl\DefaultPreFSEStep.h">
+      <Filter>Engine\Graphics\Effects\Logic\NodeRendering\NodeEffect\Components\Steps\Impl</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\API\MouseEvent.h">
       <Filter>Engine\Events\API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\BlendHelper.h">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\AdvancedPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,8 +7,8 @@
 #include "ProjectManager.h"
 
 #include "Serialization/BV/XML/BVXMLDeserializer.h"
-#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h" // FIXME: this is...
-#include "Assets/AssetDescsWithUIDs.h" // FIXME: ...just shit
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h" // FIXME: this shouldn't be here
+#include "Assets/AssetDescsWithUIDs.h" // FIXME: ...as well as this
 
 #pragma warning( disable : 4996 )
 

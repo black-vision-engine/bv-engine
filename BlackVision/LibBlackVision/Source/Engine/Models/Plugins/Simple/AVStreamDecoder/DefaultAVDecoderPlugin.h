@@ -79,7 +79,7 @@ private:
     ParamFloatPtr                       m_offsetParam;                 
 
     ParamBoolPtr                        m_loopEnabledParam;                 
-    ParamIntPtr                         m_loopCountParam;
+    ValueIntPtr                         m_loopCountParam;
     UInt32                              m_loopCount;
 
     ParamBoolPtr                        m_muteParam;                 

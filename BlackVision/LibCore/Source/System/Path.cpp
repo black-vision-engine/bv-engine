@@ -21,7 +21,7 @@
 #include <sys/stat.h>
 
 // *********************************
-// a shity fragment of source code implemting getting relative path in boost. (http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path)
+// Fragment of source code implemting getting relative path in boost. (http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path)
 template < >
 boost::filesystem::path & boost::filesystem::path::append< typename boost::filesystem::path::iterator >( typename boost::filesystem::path::iterator begin, typename boost::filesystem::path::iterator end, const codecvt_type & )
 { 

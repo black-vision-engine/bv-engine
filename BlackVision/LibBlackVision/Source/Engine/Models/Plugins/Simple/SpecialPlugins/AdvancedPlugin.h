@@ -15,11 +15,11 @@ namespace bv {
 namespace model {
 
 // ***************************** DESCRIPTOR **********************************
-class ExpertPluginDesc : public BasePluginDescriptor
+class AdvancedPluginDesc : public BasePluginDescriptor
 {
 public:
 
-    ExpertPluginDesc                               				();
+    AdvancedPluginDesc                               				();
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
@@ -29,7 +29,7 @@ public:
 
 // ***************************** PLUGIN ********************************** 
 /// @ingroup PluginsList
-class ExpertPlugin : public BasePlugin
+class AdvancedPlugin : public BasePlugin
 {
 public:
 
@@ -69,8 +69,8 @@ protected:
 
 public:
 
-    explicit                                    ExpertPlugin   ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-    virtual                                     ~ExpertPlugin  ();
+    explicit                                    AdvancedPlugin   ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+    virtual                                     ~AdvancedPlugin  ();
 
     virtual bool                                IsValid						() const override;
 

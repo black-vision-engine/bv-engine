@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "ExpertPlugin.h"
+#include "AdvancedPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Interfaces/IValue.h"
@@ -20,13 +20,13 @@ namespace bv {
 namespace model {
 
 
-const std::string        ExpertPlugin::PARAMS::CULLING_ENABLE           = "enable culling";
-const std::string        ExpertPlugin::PARAMS::CC_CULL_ORDER            = "cc order";
-const std::string        ExpertPlugin::PARAMS::ENABLE_DEPTH_TEST        = "enable depth test";
-const std::string        ExpertPlugin::PARAMS::ENABLE_DEPTH_WRITE       = "enable depth write";
-const std::string        ExpertPlugin::PARAMS::FILL_MODE                = "fill mode";
+const std::string        AdvancedPlugin::PARAMS::CULLING_ENABLE           = "enable culling";
+const std::string        AdvancedPlugin::PARAMS::CC_CULL_ORDER            = "cc order";
+const std::string        AdvancedPlugin::PARAMS::ENABLE_DEPTH_TEST        = "enable depth test";
+const std::string        AdvancedPlugin::PARAMS::ENABLE_DEPTH_WRITE       = "enable depth write";
+const std::string        AdvancedPlugin::PARAMS::FILL_MODE                = "fill mode";
 
-const std::string        ExpertPlugin::PARAMS::RESET_SETTINGS           = "reset settings";
+const std::string        AdvancedPlugin::PARAMS::RESET_SETTINGS           = "reset settings";
 
 
 
@@ -36,21 +36,21 @@ const std::string        ExpertPlugin::PARAMS::RESET_SETTINGS           = "reset
 
 // *******************************
 //
-ExpertPluginDesc::ExpertPluginDesc                          ()
+AdvancedPluginDesc::AdvancedPluginDesc                          ()
     : BasePluginDescriptor( UID(), "expert" )
 {
 }
 
 // *******************************
 //
-IPluginPtr              ExpertPluginDesc::CreatePlugin              ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              AdvancedPluginDesc::CreatePlugin              ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< ExpertPlugin >( name, prev, timeEvaluator );
+    return CreatePluginTyped< AdvancedPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModelPtr   ExpertPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   AdvancedPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper helper( timeEvaluator );
 
@@ -62,20 +62,20 @@ DefaultPluginParamValModelPtr   ExpertPluginDesc::CreateDefaultModel( ITimeEvalu
     helper.AddEnumParam( BlendHelper::PARAM::COLOR_BLEND_MODE, BlendHelper::BlendMode::BM_Alpha, true, true );
     helper.AddEnumParam( BlendHelper::PARAM::ALPHA_BLEND_MODE, BlendHelper::BlendMode::BM_None, true, true );
 
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::CULLING_ENABLE, true, true, true );
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::ENABLE_DEPTH_TEST, true, true, true );
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::ENABLE_DEPTH_WRITE, true, true, true );
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::CC_CULL_ORDER, true, true, true );
-    helper.AddEnumParam( ExpertPlugin::PARAMS::FILL_MODE, FillContext::Mode::M_POLYGONS, true, true );
+    helper.AddSimpleParam( AdvancedPlugin::PARAMS::CULLING_ENABLE, true, true, true );
+    helper.AddSimpleParam( AdvancedPlugin::PARAMS::ENABLE_DEPTH_TEST, true, true, true );
+    helper.AddSimpleParam( AdvancedPlugin::PARAMS::ENABLE_DEPTH_WRITE, true, true, true );
+    helper.AddSimpleParam( AdvancedPlugin::PARAMS::CC_CULL_ORDER, true, true, true );
+    helper.AddEnumParam( AdvancedPlugin::PARAMS::FILL_MODE, FillContext::Mode::M_POLYGONS, true, true );
 
-    helper.AddSimpleParam( ExpertPlugin::PARAMS::RESET_SETTINGS, true, true, true );
+    helper.AddSimpleParam( AdvancedPlugin::PARAMS::RESET_SETTINGS, true, true, true );
 
     return model;
 }
 
 // *******************************
 //
-std::string             ExpertPluginDesc::UID                       ()
+std::string             AdvancedPluginDesc::UID                       ()
 {
     return "EXPERT";
 }
@@ -86,7 +86,7 @@ std::string             ExpertPluginDesc::UID                       ()
 
 // *************************************
 // 
-ExpertPlugin::ExpertPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+AdvancedPlugin::AdvancedPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, model )
     , m_psc( nullptr )
     , m_firstAttach( true )
@@ -112,13 +112,13 @@ ExpertPlugin::ExpertPlugin         ( const std::string & name, const std::string
 
 // *************************************
 // 
-ExpertPlugin::~ExpertPlugin         ()
+AdvancedPlugin::~AdvancedPlugin         ()
 {}
 
 
 // *************************************
 // 
-bool                ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
+bool                AdvancedPlugin::SetPrevPlugin( IPluginPtr prev )
 {
     if( BasePlugin::SetPrevPlugin( prev ) )
     {
@@ -130,34 +130,34 @@ bool                ExpertPlugin::SetPrevPlugin( IPluginPtr prev )
 
 // *************************************
 // 
-bool							    ExpertPlugin::IsValid     () const
+bool							    AdvancedPlugin::IsValid     () const
 {
     return ( GetPrevPlugin()->IsValid() );
 }
 
 // *************************************
 // 
-bool                                ExpertPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
+bool                                AdvancedPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {    return false;  }
 
 
 // *************************************
 // 
-IPixelShaderChannelPtr              ExpertPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              AdvancedPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }
 
 // *************************************
 // 
-IVertexShaderChannelConstPtr        ExpertPlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr        AdvancedPlugin::GetVertexShaderChannel      () const
 {
     return GetPrevPlugin()->GetVertexShaderChannel();
 }
 
 // *************************************
 // 
-void                                ExpertPlugin::Update                      ( TimeType t )
+void                                AdvancedPlugin::Update                      ( TimeType t )
 {
     BasePlugin::Update( t );
 
@@ -177,7 +177,7 @@ void                                ExpertPlugin::Update                      ( 
 
 // ***********************
 //
-void                                ExpertPlugin::ApplyFromPrevious()
+void                                AdvancedPlugin::ApplyFromPrevious()
 {
     auto prevPlugin = GetPrevPlugin();
     auto ctx = prevPlugin->GetRendererContext();
@@ -196,7 +196,7 @@ void                                ExpertPlugin::ApplyFromPrevious()
 
 // ***********************
 //
-void                                ExpertPlugin::UpdateContext()
+void                                AdvancedPlugin::UpdateContext()
 {
     bool changed = false;
     auto ctx = m_psc->GetRendererContext();

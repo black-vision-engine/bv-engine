@@ -13,7 +13,7 @@ struct OutputStaticDataHash
 {
     size_t operator()( const OutputStaticData & in ) const
     {
-        // FIXME: nrl - this kinda suck
+        // FIXME: nrl
         UInt64 w = ( (UInt64) in.width ) & 0xFFFFFF;
         UInt64 h = ( (UInt64) in.height ) & 0xFFFFFF;
         UInt64 i = ( (UInt64) in.selectedRenderedChannel ) & 0xFFFF;

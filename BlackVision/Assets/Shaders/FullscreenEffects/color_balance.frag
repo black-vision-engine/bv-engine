@@ -73,7 +73,7 @@ void main()
 	
 	vec3 rgb = HSLToRGB( hsl );
 
-	FragColor.rgb = rgb;
+	FragColor = vec4( rgb, col.a );
 }
 
 

@@ -1,6 +1,101 @@
 /**@page BuildInstruction Building Instruction
 
+[TOC]
+
 BlackVision works under Visual Studio 2015 (toolset 140). You need to download boost libraries to compile engine.
+Moreover to use video cards you must download Bluefish and BlackMagic libraries by yourself.
+
+@section VideoCardsLibraries Video cards libraries
+
+To use engine without downloading video cards libraries, you can use following solution configurations:
+- Debug-No-VideoCards
+- Release-No-VideoCards
+
+<b>Debug</b> and <b>Release</b> configurations require Bluefish and BlackMagic libraries to link properly.
+You can download libraries from producent sites:
+- https://bluefish444.com/
+- https://www.blackmagicdesign.com/
+
+Copy libraries to 3rdParty folder in BlackVision directories. Directory structure should look like this:
+
+- BlackVision/Dep/3rdParty/VideoCards
+    - BlackMagic
+        - DeckLinkAPI.idl
+        - DeckLinkAPIConfiguration.idl
+        - DeckLinkAPIDeckControl.idl
+        - DeckLinkAPIDiscovery.idl
+        - DeckLinkAPIModes.idl
+        - DeckLinkAPIStreaming.idl
+        - DeckLinkAPITypes.idl
+        - DeckLinkAPIVersion.h
+        - DeckLinkAPI_h.h
+        - DeckLinkAPI_i.c
+        - DeckLinkAPI_v10_2.idl
+        - DeckLinkAPI_v10_4.idl
+        - DeckLinkAPI_v10_5.idl
+        - DeckLinkAPI_v10_6.idl
+        - DeckLinkAPI_v7_1.idl
+        - DeckLinkAPI_v7_3.idl
+        - DeckLinkAPI_v7_6.idl
+        - DeckLinkAPI_v7_9.idl
+        - DeckLinkAPI_v8_0.idl
+        - DeckLinkAPI_v8_1.idl
+        - DeckLinkAPI_v9_2.idl
+        - DeckLinkAPI_v9_9.idl
+    - BlueFish
+        - bin
+            - win32
+                - Debug
+                    - BlueGpuDirect_d.dll
+                    - BlueHancUtils_d.dll
+                    - BlueVelvet3_d.dll
+                - Release
+                    - BlueGpuDirect.dll
+                    - BlueHancUtils.dll
+                    - BlueVelvet3.dll
+                - dvp.dll
+            - x64
+                - Debug
+                    - BlueGpuDirect_d.dll
+                    - BlueHancUtils_d.dll
+                    - BlueVelvet3_d.dll
+                - Release
+                    - BlueGpuDirect.dll
+                    - BlueHancUtils.dll
+                    - BlueVelvet3.dll
+                - dvp.dll
+        - inc
+            - BlueC_Api.h
+            - BlueDriver_p.h
+            - BlueGpuDirect.h
+            - BlueHANC.h
+            - BlueHancUtils.h
+            - BlueTypes.h
+            - BlueVelvet.h
+            - BlueVelvet4.h
+            - BlueVelvetC.h
+            - BlueVelvetCUtils.h
+            - BlueVelvet_c.h
+        - lib
+            - Win32
+                - Debug
+                    - BlueGpuDirect.lib
+                    - BlueHancUtils.lib
+                    - BlueVelvet3.lib
+                - Release
+                    - BlueGpuDirect.lib
+                    - BlueHancUtils.lib
+                    - BlueVelvet3.lib
+                - dvp.dll
+            - x64
+                - Debug
+                    - BlueGpuDirect.lib
+                    - BlueHancUtils.lib
+                    - BlueVelvet3.lib
+                - Release
+                    - BlueGpuDirect.lib
+                    - BlueHancUtils.lib
+                    - BlueVelvet3.lib
 
 @section CompilingBoost Compiling boost libraries
 
