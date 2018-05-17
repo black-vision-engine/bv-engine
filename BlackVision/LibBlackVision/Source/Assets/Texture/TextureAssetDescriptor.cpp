@@ -104,23 +104,31 @@ void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
 ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& deser )
 {
     auto path = deser.GetAttribute( "path" );
+    auto loadingType = deser.GetAttribute( "loading_type" );
 
-    if( deser.EnterChild( "mipmaps" ) )
+    if( loadingType == "LOAD_WITH_MIPMAPS" )
     {
-        deser.EnterChild( "asset" );
-        do
+        if( deser.EnterChild( "mipmaps" ) )
         {
-        } while( deser.NextChild() );
-        deser.ExitChild(); // asset
+            deser.EnterChild( "asset" );
+            do
+            {
+            } while( deser.NextChild() );
+            deser.ExitChild(); // asset
 
-        deser.ExitChild(); // mipmaps
+            deser.ExitChild(); // mipmaps
+        }
     }
 
     auto filterS = deser.GetAttribute( "filter" );
-    if( filterS == "none" )
-        return Create( path, true );
-    else
+    if( loadingType == "GENERATE_MIPMAPS" && filterS != "none" )
+    {
         return Create( path, Convert::String2T( filterS, MipMapFilterType::BILINEAR ), true );
+    }
+    else
+    {
+        return Create( path, true );
+    }
 }
 
 
