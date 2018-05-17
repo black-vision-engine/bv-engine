@@ -1,3 +1,8 @@
+Release 0.52.4
+- Problem with loading tetures without mipmaps fixed
+- Additional documentation
+- Bad words removed
+
 Release 0.52.3
 - Video cards output - vsync-like bug fixed.
 - DefaultAVDecoderPlugin - loop enabled makes infinite loop, when loop count is set to zero [Bug fix].
