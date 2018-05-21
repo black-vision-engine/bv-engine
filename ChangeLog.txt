@@ -1,3 +1,6 @@
+Release 0.52.5
+- Screenshots names don't contain 0. User should provide full file name in event.
+
 Release 0.52.4
 - Problem with loading tetures without mipmaps fixed
 - Additional documentation

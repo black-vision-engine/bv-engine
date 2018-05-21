@@ -375,6 +375,18 @@ Path            Path::Absolute          () const
     return boost::filesystem::absolute( m_path ).string();
 }
 
+// ***********************
+//
+std::string     Path::GetExtension      () const
+{
+    return boost::filesystem::path( m_path ).extension().string();
+}
+
+std::string     Path::Stem              () const
+{
+    return boost::filesystem::path( m_path ).stem().string();
+}
+
 // *********************************
 //
 std::ostream & operator << ( std::ostream & os, const Path & p )

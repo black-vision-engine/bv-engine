@@ -52,7 +52,7 @@ void    OutputScreenshot::ProcessFrameData  ( ScreenshotInfo & screenshotInfo, R
 {
     if( ReadbackNeeded( screenshotInfo ) )
     {
-        std::string newFilePath = screenshotInfo.FilePath + std::to_string( screenshotInfo.AllFrames - screenshotInfo.RemainingFrames ) + ".bmp";
+        std::string newFilePath = GenerateFileName( screenshotInfo );
 
         assert( channel->IsActive() );
 
@@ -101,6 +101,7 @@ void    OutputScreenshot::RequestScreenshot ( const std::string & filePath, Rend
     desc.SaveToFileAsync = saveImgAsync;
     desc.RemainingFrames = numFrames;
     desc.AllFrames = numFrames;
+    desc.IsSequence = numFrames > 1;
 
     // Create directory for future use if not exists.
     Path file( filePath );
@@ -133,6 +134,28 @@ void    OutputScreenshot::RemoveFinalizedRequests()
         {
             ++iter;
         }
+    }
+}
+
+// ***********************
+//
+std::string         OutputScreenshot::GenerateFileName      ( ScreenshotInfo & screenshotInfo )
+{
+    if( screenshotInfo.IsSequence )
+    {
+        auto frameNumStr = std::to_string( screenshotInfo.AllFrames - screenshotInfo.RemainingFrames );
+        
+        Path filePath = screenshotInfo.FilePath;
+        Path parentPath = filePath.ParentPath();
+        std::string stemName = filePath.Stem();
+        std::string extension = ".bmp";
+
+        Path finalPath = parentPath / ( stemName + frameNumStr + extension );
+        return finalPath.Str();
+    }
+    else
+    {
+        return screenshotInfo.FilePath;
     }
 }
 

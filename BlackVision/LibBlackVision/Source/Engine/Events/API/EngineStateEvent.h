@@ -43,7 +43,7 @@ This event supports following commands:
 {
 	"Event" : "EngineStateEvent",
 	"Command" : "ScreenShot",
-	"FilePath" : "screenshots/Test"
+	"FilePath" : "screenshots/Test.bmp"
 }
 @endcode
 

@@ -25,6 +25,8 @@ struct ScreenshotInfo
     bool                OnRenderedEvent;
     bool                SaveToFileAsync;
 
+    bool                IsSequence;
+
     std::string         FilePath;
 };
 
@@ -46,6 +48,8 @@ private:
 
     bool            ReadbackNeeded          ( ScreenshotInfo & screenshotInfo );
     void            RemoveFinalizedRequests ();
+
+    std::string     GenerateFileName        ( ScreenshotInfo & screenshotInfo );
 
     void            ProcessFrameData        ( ScreenshotInfo & screenshotInfo, RenderContext * ctx, const RenderChannel * channel );
 };
