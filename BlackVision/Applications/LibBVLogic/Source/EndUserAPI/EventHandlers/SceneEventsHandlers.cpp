@@ -1021,8 +1021,8 @@ void        SceneEventsHandlers::RequestThumbnail       ( model::SceneModelPtr s
 
     Path sceneScreenShot( saveTo );
     auto parentPath = sceneScreenShot.ParentPath();     // Extract directory
-    sceneScreenShot = File::GetFileName( sceneScreenShot.Str(), true );   
-    sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / parentPath /sceneScreenShot;
+    sceneScreenShot = File::GetFileName( sceneScreenShot.Str(), true ) + ".bmp";   
+    sceneScreenShot = ProjectManager::GetInstance()->GetRootDir() / prefixDir / parentPath / sceneScreenShot;
 
     m_thumbnailTypeMap[ sceneScreenShot.Str() ] = thumbnailType;
 
@@ -1052,9 +1052,9 @@ void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
         auto resizedChunk = image::MakeThumbnai( chunk, width, height, bpp, 128 );
         auto compresed = image::SaveTGAToHandle( resizedChunk, 128, 128, 32 );
 
-        std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( "0.bmp" ) - 4 ));
+        std::string thumbName = std::string( screenShotEvent->FilePath.begin(), screenShotEvent->FilePath.begin() + ( screenShotEvent->FilePath.find_last_of( ".bmp" ) - 3 ));
 
-        auto thumbnailType = m_thumbnailTypeMap[ thumbName ];
+        auto thumbnailType = m_thumbnailTypeMap[ screenShotEvent->FilePath ];
 
         //image::SaveBMPImage( screenShotEvent->FilePath, resizedChunk, 128, 128, bpp );
 
