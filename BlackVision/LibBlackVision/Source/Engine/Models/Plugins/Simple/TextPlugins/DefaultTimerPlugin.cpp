@@ -258,10 +258,11 @@ TimeValue::TimeValue( TimeType time, int accuracy )
 //
 DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : TextPluginBase( name, uid, prev, model )
-    , m_timePatern( L"HH:MM:SS" )
+    , m_timePatern( L"MM:SS" )
     , m_globalStartTime( 0 )
     , m_localStartTime( 0 )
     , m_currentTimeValue( 0.0 )
+    , m_currentLocalTime( 0 )
     , m_defaultSeparator(L':')
     , m_secSeparator(L'.')
     , m_widestGlyph( L'0' ) 
@@ -295,7 +296,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
         //FIXME: use some better API to handle resources in general and textures in this specific case
         m_zerosTimeString = L""; // force reseting zeros time patern. New font's loading.
 
-        SetTimePatern( L"h:m:s.dd" );
+        SetTimePatern( L"MM:SS" );
 
         SetTime( m_currentLocalTime / 1000.f, true );
 
