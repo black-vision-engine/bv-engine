@@ -1,3 +1,8 @@
+Release 0.52.6
+- Saving scenes fixed.
+- TimerPlugin - better numbers arranging
+- TimerPlugin - default format set to MM:SS
+
 Release 0.52.5
 - Screenshots names don't contain 0. User should provide full file name in event.
 
