@@ -258,7 +258,7 @@ TimeValue::TimeValue( TimeType time, int accuracy )
 //
 DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : TextPluginBase( name, uid, prev, model )
-    , m_timePatern( )
+    , m_timePatern( L"HH:MM:SS" )
     , m_globalStartTime( 0 )
     , m_localStartTime( 0 )
     , m_currentTimeValue( 0.0 )
@@ -483,7 +483,7 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 		auto uvsWidestGlyph = TextHelper::GetAtlasCoordsForGlyph( widestGlyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
 		auto uvsHighestGlyph = TextHelper::GetAtlasCoordsForGlyph( highestGlyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
 
-		glm::vec2 wWH = uvsWidestGlyph[ 1 ] - uvsWidestGlyph[ 2 ];
+        glm::vec2 wWH = uvsWidestGlyph[ 1 ] - uvsWidestGlyph[ 2 ];
 		glm::vec2 hWH = uvsHighestGlyph[ 1 ] - uvsHighestGlyph[ 2 ];
 
         if( connComp < comps.size() )
@@ -499,10 +499,13 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
                 auto uvs = TextHelper::GetAtlasCoordsForGlyph( glyph, m_atlas->GetWidth(), m_atlas->GetHeight(), ( Float32 ) m_blurSize );
 
-                verts[ 0 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y );
-                verts[ 1 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y );
-                verts[ 2 ] = glm::vec2( uvs[ 1 ].x - wWH.x, uvs[ 1 ].y - hWH.y );
-                verts[ 3 ] = glm::vec2( uvs[ 1 ].x, uvs[ 1 ].y - hWH.y );
+                auto glyphWidth = uvs[ 1 ].x - uvs[ 0 ].x;
+                auto halfWidthExcess = ( wWH.x - glyphWidth ) / 2.0f;
+
+                verts[ 0 ] = glm::vec2( uvs[ 0 ].x - halfWidthExcess, uvs[ 1 ].y );
+                verts[ 1 ] = glm::vec2( uvs[ 1 ].x + halfWidthExcess, uvs[ 1 ].y );
+                verts[ 2 ] = glm::vec2( uvs[ 0 ].x - halfWidthExcess, uvs[ 1 ].y - hWH.y );
+                verts[ 3 ] = glm::vec2( uvs[ 1 ].x + halfWidthExcess, uvs[ 1 ].y - hWH.y );
             }
         }
     }
