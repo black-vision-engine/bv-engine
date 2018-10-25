@@ -2,6 +2,7 @@
 
 #include "ConstFunction.h"
 #include "LinearFunction.h"
+#include "LinearRevFunction.h"
 #include "BezierFunction.h"
 #include "PolynomialFunction.h"
 
@@ -89,8 +90,10 @@ inline bool                     IsValidEvaluatorType    ( EvaluatorType type )
     {
     case EvaluatorType::ET_CONSTANT:
         return IsValidEvaluator< ValueT, EvaluatorType::ET_CONSTANT >();
-    case EvaluatorType::ET_LINEAR:
-        return IsValidEvaluator< ValueT, EvaluatorType::ET_LINEAR >();
+	case EvaluatorType::ET_LINEAR:
+		return IsValidEvaluator< ValueT, EvaluatorType::ET_LINEAR >();
+	case EvaluatorType::ET_LINEAR_REV:
+		return IsValidEvaluator< ValueT, EvaluatorType::ET_LINEAR_REV >();
     case EvaluatorType::ET_BEZIER:
         return IsValidEvaluator< ValueT, EvaluatorType::ET_BEZIER >();
     case EvaluatorType::ET_POLYNOMIAL:
@@ -113,8 +116,10 @@ inline EvaluatorType            GetEvaluatorType        ( CurveType curve )
     {
     case CurveType::CT_POINT:
         return EvaluatorType::ET_CONSTANT;
-    case CurveType::CT_LINEAR:
-        return EvaluatorType::ET_LINEAR;
+	case CurveType::CT_LINEAR:
+		return EvaluatorType::ET_LINEAR;
+	case CurveType::CT_LINEAR_REV:
+		return EvaluatorType::ET_LINEAR_REV;
     case CurveType::CT_BEZIER:
     case CurveType::CT_COSINE_LIKE:
         return EvaluatorType::ET_BEZIER;

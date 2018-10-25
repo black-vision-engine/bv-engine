@@ -103,9 +103,12 @@ inline bool             ParamComparator::CompareEvaluators      ( const IEvaluat
         case EvaluatorType::ET_CONSTANT:
             equal = TEST_ACCESSOR( ConstEvaluator )::Compare( static_cast< const ConstEvaluator< TimeType, ParamType > & >( expected ), static_cast< const ConstEvaluator< TimeType, ParamType > & >( actual ) );
             break;
-        case EvaluatorType::ET_LINEAR:
-            equal = TEST_ACCESSOR( LinearEvaluator )::Compare( static_cast< const LinearEvaluator< TimeType, ParamType > & >( expected ), static_cast< const LinearEvaluator< TimeType, ParamType > & >( actual ) );
-            break;
+		case EvaluatorType::ET_LINEAR:
+			equal = TEST_ACCESSOR(LinearEvaluator)::Compare(static_cast< const LinearEvaluator< TimeType, ParamType > & >(expected), static_cast< const LinearEvaluator< TimeType, ParamType > & >(actual));
+			break;
+		case EvaluatorType::ET_LINEAR_REV:
+			equal = TEST_ACCESSOR(LinearRevEvaluator)::Compare(static_cast< const LinearRevEvaluator< TimeType, ParamType > & >(expected), static_cast< const LinearRevEvaluator< TimeType, ParamType > & >(actual));
+			break;
         case EvaluatorType::ET_POLYNOMIAL:
             equal = TEST_ACCESSOR( PolynomialEvaluator )::Compare( static_cast< const PolynomialEvaluator< TimeType, ParamType > & >( expected ), static_cast< const PolynomialEvaluator< TimeType, ParamType > & >( actual ) );
             break;

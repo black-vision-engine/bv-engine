@@ -279,7 +279,7 @@ inline void UpdateInterpolator( std::vector< std::shared_ptr< IEvaluator<TimeVal
     auto iType = interpolators[ i ]->GetType();
     auto cType = interpolators[ i ]->GetCurveType();
 
-    if( iType == EvaluatorType::ET_CONSTANT || iType == EvaluatorType::ET_LINEAR || iType == EvaluatorType::ET_POLYNOMIAL )
+    if( iType == EvaluatorType::ET_CONSTANT || iType == EvaluatorType::ET_LINEAR || iType == EvaluatorType::ET_LINEAR_REV || iType == EvaluatorType::ET_POLYNOMIAL )
         return;
 
     assert( iType == EvaluatorType::ET_BEZIER );
@@ -327,8 +327,10 @@ inline std::shared_ptr< IEvaluator< TimeValueT, ValueT > > CreateDummyInterpolat
 {
     if( type == CurveType::CT_POINT )
         return std::make_shared< ConstEvaluator< TimeValueT, ValueT > >(  k1.val );
-    else if( type == CurveType::CT_LINEAR )
-        return std::make_shared< LinearEvaluator< TimeValueT, ValueT > >( k1, k2, tolerance );
+	else if (type == CurveType::CT_LINEAR)
+		return std::make_shared< LinearEvaluator< TimeValueT, ValueT > >(k1, k2, tolerance);
+	else if (type == CurveType::CT_LINEAR_REV)
+		return std::make_shared< LinearRevEvaluator< TimeValueT, ValueT > >(k1, k2, tolerance);
     else if( type == CurveType::CT_BEZIER )
         return std::make_shared< BezierEvaluator< TimeValueT, ValueT > >( type, k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
     else if( type == CurveType::CT_COSINE_LIKE )

@@ -24,6 +24,7 @@ static const std::pair< CurveType, const char* > ct2s_data [] =
 , std::make_pair( CurveType::CT_ELASTIC_OUT_BOUNCE, "elastic_out_bounce" )
 , std::make_pair( CurveType::CT_QUARTIC_INOUT, "quadric_inout" )
 , std::make_pair( CurveType::CT_CUBIC_INTOUT, "cubic_inout" )
+, std::make_pair(CurveType::CT_LINEAR_REV, "linear_rev")
 , std::make_pair( CurveType::CT_BEZIER, "" )        // default
 };
 

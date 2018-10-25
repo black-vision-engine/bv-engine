@@ -140,9 +140,16 @@ void                    BVAppLogic::LoadScenes          ( const PathVec & pathVe
 
 // *********************************
 //
-void                    BVAppLogic::UnloadScenes        ()
+void                    BVAppLogic::UnloadScenes()
 {
-    m_bvProject->GetProjectEditor()->RemoveAllScenes();
+	m_bvProject->GetProjectEditor()->RemoveAllScenes();
+}
+
+// *********************************
+//
+void                    BVAppLogic::UnloadScenes(const UInt32 index)
+{
+	m_bvProject->GetProjectEditor()->RemoveAllScenes(index);
 }
 
 // *********************************

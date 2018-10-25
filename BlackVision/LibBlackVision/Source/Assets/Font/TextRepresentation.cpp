@@ -70,6 +70,7 @@ UInt32              TextRepresentation::ComputeMaxWidth() const
 
     for( auto& glyph : m_glyphs )
     {
+		if (glyph.second != NULL)
         if( glyph.second->width > maxWidth )
             maxWidth = glyph.second->width;
     }
@@ -85,6 +86,7 @@ UInt32              TextRepresentation::ComputetMaxHeight() const
 
     for( auto& glyph : m_glyphs )
     {
+		if (glyph.second != NULL)
         if( glyph.second->height > maxHeight )
             maxHeight = glyph.second->height;
     }
@@ -100,6 +102,7 @@ Int32              TextRepresentation::ComputeMaxAdvanceX() const
 
     for( auto& glyph : m_glyphs )
     {
+		if (glyph.second != NULL)
         if( glyph.second->advanceX > maxWidth )
             maxWidth = glyph.second->advanceX;
     }
@@ -115,6 +118,7 @@ Int32              TextRepresentation::ComputetMaxAdvanceY() const
 
     for( auto& glyph : m_glyphs )
     {
+		if(glyph.second!=NULL)
         if( glyph.second->advanceY > maxWidth )
             maxWidth = glyph.second->advanceY;
     }

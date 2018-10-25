@@ -93,7 +93,8 @@ public:
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     virtual void    LoadScene       ( void );
-    void            UnloadScenes    ();
+	void            UnloadScenes();
+	void            UnloadScenes(const UInt32 index);
     void            ResetScene      ();
     void            ReloadScene     ();
 

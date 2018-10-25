@@ -5627,6 +5627,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\SpecialPlugins\AdvancedPlugin.h">
       <Filter>Engine\Models\Plugins\Simple\SpecialPlugins</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\LinearRevFunction.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

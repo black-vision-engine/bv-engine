@@ -77,7 +77,8 @@ public:
 
     bool                    RemoveScene         ( const std::string & sceneName );
     bool                    RemoveScene         ( model::SceneModelPtr scene );
-    void                    RemoveAllScenes     ();
+	void                    RemoveAllScenes		();
+	void                    RemoveAllScenes		( const UInt32 ChannelIndex);
 
     /** Insert scene at the end. */
     bool                    AttachScene         ( const std::string & sceneName );

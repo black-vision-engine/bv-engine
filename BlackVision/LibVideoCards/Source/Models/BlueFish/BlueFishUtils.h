@@ -23,8 +23,8 @@ enum class ChannelName : int
 {
     A = 0,
     B,
-    C,
-    D
+    C=6,
+    D=7
 };
 
 

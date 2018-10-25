@@ -137,6 +137,7 @@ void    BVProjectEditor::AddScene       ( model::SceneModelPtr modelScene )
 {
     auto idx = ( UInt32 )m_project->m_sceneModelVec.size();
     
+	
     AddModelScene( modelScene, idx );
     InitDefaultScene( modelScene );
 
@@ -168,12 +169,28 @@ bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr modelScene )
 
 // *******************************
 //
-void    BVProjectEditor::RemoveAllScenes		()
+void    BVProjectEditor::RemoveAllScenes()
 {
-    while( !m_project->m_sceneModelVec.empty() )
-    {
-        RemoveScene( m_project->m_sceneModelVec[ 0 ] );
-    }
+	while (!m_project->m_sceneModelVec.empty())
+	{
+		RemoveScene(m_project->m_sceneModelVec[0]);
+	}
+}
+
+// *******************************
+//
+void    BVProjectEditor::RemoveAllScenes(const UInt32 ChannelIndex)
+{
+	int size = (int)m_project->m_sceneModelVec.size();
+	if(size>0)
+	for (int i = size - 1;i >= 0;i--)
+	{
+		if (m_project->m_sceneModelVec[i]->GetRenderChannelIdx() == ChannelIndex)
+		{
+			RemoveScene(m_project->m_sceneModelVec[i]);
+		}
+	}
+	
 }
 
 // *******************************

@@ -3,6 +3,7 @@
 #include "Mathematics/Interpolators/Functions/BezierFunction.h"
 #include "Mathematics/Interpolators/Functions/ConstFunction.h"
 #include "Mathematics/Interpolators/Functions/LinearFunction.h"
+#include "Mathematics/Interpolators/Functions/LinearRevFunction.h"
 #include "Mathematics/Interpolators/Functions/PolynomialFunction.h"
 
 
@@ -37,12 +38,21 @@ public:
 
 // ***********************
 //
-class TEST_ACCESSOR( LinearEvaluator )
+class TEST_ACCESSOR(LinearEvaluator)
 {
 public:
 
-    template< typename ParamType >
-    static bool         Compare         ( const LinearEvaluator< TimeType, ParamType > & expected, const LinearEvaluator< TimeType, ParamType > & actual );
+	template< typename ParamType >
+	static bool         Compare(const LinearEvaluator< TimeType, ParamType > & expected, const LinearEvaluator< TimeType, ParamType > & actual);
+};
+// ***********************
+//
+class TEST_ACCESSOR(LinearRevEvaluator)
+{
+public:
+
+	template< typename ParamType >
+	static bool         Compare(const LinearRevEvaluator< TimeType, ParamType > & expected, const LinearRevEvaluator< TimeType, ParamType > & actual);
 };
 
 // ***********************
@@ -189,21 +199,40 @@ bool        TEST_ACCESSOR( ConstEvaluator )::Compare        ( const ConstEvaluat
 // ***********************
 //
 template< typename ParamType >
-bool        TEST_ACCESSOR( LinearEvaluator )::Compare       ( const LinearEvaluator< TimeType, ParamType > & expected, const LinearEvaluator< TimeType, ParamType > & actual )
+bool        TEST_ACCESSOR(LinearEvaluator)::Compare(const LinearEvaluator< TimeType, ParamType > & expected, const LinearEvaluator< TimeType, ParamType > & actual)
 {
-    if( expected.GetCurveType() != actual.GetCurveType() )
-        return false;
+	if (expected.GetCurveType() != actual.GetCurveType())
+		return false;
 
-    if( expected.key1 != actual.key1 )
-        return false;
+	if (expected.key1 != actual.key1)
+		return false;
 
-    if( expected.key2 != actual.key2 )
-        return false;
+	if (expected.key2 != actual.key2)
+		return false;
 
-    if( expected.m_tolerance != actual.m_tolerance )
-        return false;
+	if (expected.m_tolerance != actual.m_tolerance)
+		return false;
 
-    return true;
+	return true;
+}
+// ***********************
+//
+template< typename ParamType >
+bool        TEST_ACCESSOR(LinearRevEvaluator)::Compare(const LinearRevEvaluator< TimeType, ParamType > & expected, const LinearRevEvaluator< TimeType, ParamType > & actual)
+{
+	if (expected.GetCurveType() != actual.GetCurveType())
+		return false;
+
+	if (expected.key1 != actual.key1)
+		return false;
+
+	if (expected.key2 != actual.key2)
+		return false;
+
+	if (expected.m_tolerance != actual.m_tolerance)
+		return false;
+
+	return true;
 }
 
 // ***********************

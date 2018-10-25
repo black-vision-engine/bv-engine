@@ -91,7 +91,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
     ser.SetAttribute( "type", "default" );
 
     SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.GetLocalTime(), "local_time" );
-    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.IsActive(), "play" );
+    SerializationHelper::SerializeAttribute( ser, !m_timeEvalImpl.IsPaused(), "play" );
 
     ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
     if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() )

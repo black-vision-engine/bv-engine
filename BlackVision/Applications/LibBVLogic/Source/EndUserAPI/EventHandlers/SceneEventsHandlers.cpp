@@ -76,7 +76,13 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
             result = editor->RemoveScene( sceneName );
             break;
         case SceneEvent::Command::RemoveAllScenes:
-            editor->RemoveAllScenes();
+			if (sceneName != "")
+			{
+				editor->RemoveAllScenes(attachIndex);
+			}
+			else {
+				editor->RemoveAllScenes();
+			}
             break;
         case SceneEvent::Command::SetSceneVisible:
             result = editor->SetSceneVisible( sceneName, true );
@@ -501,12 +507,24 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::LoadScene )
     {
-        auto sceneName = request.GetAttribute( "sceneName" );
+		auto sceneName = request.GetAttribute("sceneName");
+		auto sceneNameTarget = request.GetAttribute("sceneNameTarget");
+		auto destIdx = Convert::String2T< UInt32 >(request.GetAttribute("destIndex"), 0);
+	
 
         auto scene = pm->LoadScene( "", sceneName );
 
+		
+
         if( scene.IsValid() )
         {
+			model::SceneModelPtr modelScene = scene;
+			if (sceneNameTarget != "")
+			{
+				
+				modelScene->SetName(sceneNameTarget);
+			}
+			modelScene->SetRenderChannelIdx(destIdx);
             m_appLogic->GetBVProject()->GetProjectEditor()->AddScene( scene );
             SendSimpleResponse( command, projectEvent->EventID, senderID, true );
         }

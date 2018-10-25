@@ -41,7 +41,7 @@ enum CurveType
 
     CT_QUARTIC_INOUT,
     CT_CUBIC_INTOUT,
-
+	CT_LINEAR_REV,
     CT_TOTAL
 };
 
@@ -54,7 +54,8 @@ enum class EvaluatorType : int
     ET_CONSTANT, 
     ET_LINEAR, 
     ET_BEZIER,
-    ET_POLYNOMIAL
+    ET_POLYNOMIAL,
+	ET_LINEAR_REV,
 };
 
 
